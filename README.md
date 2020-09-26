@@ -5,7 +5,7 @@ Hello I am Lukas and I created this plugin :).
 It gets updated very frequently and I always try to make it as stable as possible!
 
 ## Plugin
-The Vapecord-ACNL-Plugin is an Animal Crossing New Leaf Plugin as the name already tells, it works for every Region of the game (besides KOR WA PRE).
+The Vapecord-ACNL-Plugin is an Animal Crossing New Leaf Plugin as the name already tells, it works for every Region of the game.
 You can even use it for the Rom Hack [Welcome Luxury](https://gitlab.com/Kyusetzu/ACWL)!! 
 #### Plugin Features
 The Plugin can do various things like Text2Item, AutoDrop, Animation Modifier, Room Warping and much much more!!
