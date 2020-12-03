@@ -12,6 +12,9 @@ You can even use it for the Rom Hack [Welcome Luxury](https://gitlab.com/Kyusetz
 The Plugin can do various things like Text2Item, AutoDrop, Animation Modifier, Room Warping and much much more!!
 If you feel like the Plugin is missing something feel free to suggest things on the official [Vapecord Discord Server](https://discord.gg/w9nvqjW).
 
+## Download
+The download of the plugin is present in the [releases page](https://github.com/RedShyGuy/Vapecord-ACNL-Plugin/releases)!
+
 ## Help
 If you need any help with the plugin features or don't understand how to install it, read the [Wiki of the Plugin](https://github.com/RedShyGuy/Vapecord-ACNL-Plugin/wiki)!
 
