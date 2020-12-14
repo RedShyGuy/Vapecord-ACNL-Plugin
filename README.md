@@ -1,5 +1,5 @@
 # Vapecord-ACNL-Plugin
-![](https://cdn.discordapp.com/attachments/635194808859623444/780453717518450788/Snickerstream_-_29_FPS_23_11_2020_16_23_24.png)
+![](https://cdn.discordapp.com/attachments/635194808859623444/787825102841970728/Snickerstream_-_23_FPS_14_12_2020_00_35_21.png)
 
 ## Introduction
 Hello I am Lukas and I created this plugin :).
