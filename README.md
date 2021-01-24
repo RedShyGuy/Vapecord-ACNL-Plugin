@@ -18,4 +18,7 @@ The download of the plugin is present in the [releases page](https://github.com/
 ## Help
 If you need any help with the plugin features or don't understand how to install it, read the [Wiki of the Plugin](https://github.com/RedShyGuy/Vapecord-ACNL-Plugin/wiki)!
 
-If you still don't understand some things you can get immediate help on the [Vapecord Discord Server](https://discord.gg/w9nvqjW)!!
+~~If you still don't understand some things you can get immediate help on the [Vapecord Discord Server](https://discord.gg/w9nvqjW)!!~~
+
+EDIT:
+The server got banned off of discord due to a troll mass reporting it, while we are working on fixing this issue you can ask all your questions in the Discussions Section
