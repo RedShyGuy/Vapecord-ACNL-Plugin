@@ -21,4 +21,4 @@ If you need any help with the plugin features or don't understand how to install
 ~~If you still don't understand some things you can get immediate help on the [Vapecord Discord Server](https://discord.gg/w9nvqjW)!!~~
 
 EDIT:
-The server got banned off of discord due to a troll mass reporting it, while we are working on fixing this issue you can ask all your questions in the Discussions Section
+The server (+ my discord account) got banned off of discord due to a troll mass reporting it, while we are working on fixing this issue you can ask all your questions in the [Discussions Section](https://github.com/RedShyGuy/Vapecord-ACNL-Plugin/discussions)!
