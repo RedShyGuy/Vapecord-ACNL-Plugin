@@ -10,7 +10,7 @@ The Vapecord-ACNL-Plugin is an Animal Crossing New Leaf Plugin as the name alrea
 You can even use it for the Rom Hack [Welcome Luxury](https://gitlab.com/Kyusetzu/ACWL)!! 
 #### Plugin Features
 The Plugin can do various things like Text2Item, AutoDrop, Animation Modifier, Room Warping and much much more!!
-If you feel like the Plugin is missing something feel free to suggest things on the official [Vapecord Discord Server](https://discord.gg/qJNhVhQGpg).
+If you feel like the Plugin is missing something feel free to suggest things on the official [Vapecord Discord Server](https://discord.gg/QwqdBpKWf3).
 
 ## Download
 The download of the plugin is present in the [releases page](https://github.com/RedShyGuy/Vapecord-ACNL-Plugin/releases)!
