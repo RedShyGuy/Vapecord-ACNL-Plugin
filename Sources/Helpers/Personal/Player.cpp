@@ -184,7 +184,7 @@ Get Player Save Offset for loaded players
 		static FUNCT func(pSOffset);
 		return func.Call<u32>(pIndex);
 	}
-/*
+
 //get current selected mail slot
 	int Player::GetMailSlot() {	
 		if(GameHelper::BaseInvPointer() == 0) 
@@ -196,7 +196,7 @@ Get Player Save Offset for loaded players
 		
 		return 0xFF;
 	}
-
+/*
 //Clear Mail in inv
 	void Player::ClearMail(int slot) {
 		if(Player::GetSaveOffset(4) == 0)
