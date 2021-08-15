@@ -25,7 +25,7 @@
 #include "RegionCodes.hpp"
 #include "TextFileParser.hpp"
 #include "MenuPointers.hpp"
-#include "QRCodeGen.hpp"
+#include "Helpers/QRCodeGen.hpp"
 #include "Helpers/CustomButton.hpp"
 
 #define PATH_PRESET		"Vapecord/PreSet"
