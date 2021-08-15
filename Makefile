@@ -29,8 +29,11 @@ SOURCES 	:= 	Sources \
 #---------------------------------------------------------------------------------
 ARCH		:=	-march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
 
+FALSEPOSITIVES := -Wno-array-bounds -Wno-stringop-overflow -Wno-stringop-overread
+
 CFLAGS		:=	$(ARCH) -Os -mword-relocations \
-				-fomit-frame-pointer -ffunction-sections -fno-strict-aliasing
+				-fomit-frame-pointer -ffunction-sections -fno-strict-aliasing \
+				$(FALSEPOSITIVES)
 
 CFLAGS		+=	$(INCLUDE) -DARM11 -D_3DS 
 
