@@ -142,7 +142,7 @@ namespace CTRPluginFramework {
 	}
 
 	u32 Wrap::GetBranchTarget(u32 PC, u32 instruction) {
-		u32 target = instruction;
+		u32 target = instruction & 0xFFFFFF;
 		
 		target += 2;
 		target = target << 2;

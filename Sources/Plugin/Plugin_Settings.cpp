@@ -87,89 +87,26 @@ namespace CTRPluginFramework {
         file.Close();
 		return DEVC->IsVisible();
 	}
-	
-	u32 decrypt(u64 money) {
-        u32 enc = (money & 0xFFFFFFFF);
-        u16 adjust = ((money >> 32) & 0xFFFF);
-        u8 shift_val = ((money >> 48) & 0xFF);
-        u8 chk = ((money >> 56) & 0xFF);
 
-        if((((enc >> 0) + (enc >> 8) + (enc >> 16) + (enc >> 24) + 0xBA) & 0xFF) != chk) 
-			return 0;
-        
-        u8 left_shift = ((0x1C - shift_val) & 0xFF);
-        u8 right_shift = 0x20 - left_shift;
-
-        if(left_shift >= 0x20) 
-            return 0 + (enc << right_shift) - (adjust + 0x8F187432);
-
-        return(enc << left_shift) + (enc >> right_shift) - (adjust + 0x8F187432);
-    }
-	
-	static bool isOpenDev = false;
-	
 	void devcallback(void) {
-		bool passwordcorrect = false;
-	//Now that the source code is public you can finally see what a impossible check I made to access the dev menu lol
-		if(Controller::IsKeysPressed(Key::L + Key::ZL + Key::DPadLeft + Key::A + Key::DPadDown)) {
-			if(GameHelper::IsInRoom(0x5B)) { 
-				if(*PlayerClass::GetInstance()->GetAnimation() == 6) {
-					if(Inventory::ReadSlot(0) == 0x4000335B) {
-						Sleep(Milliseconds(100));
-						GameHelper::OpenMenu(0x35);
-						
-						yay:
-						if(passwordcorrect) {
-							Animation::ExecuteAnimationWrapper(4, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-							Sleep(Milliseconds(100));
-							if((MessageBox("Yay you found the secret menu", "Do you want to launch the developer mode?\nDev-Mode will enable new Cheats that are meant for developers or are still in developement!", DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
-								Sleep(Milliseconds(100));
-								MessageBox("Dev-Mode is now active!").SetClear(ClearScreen::Top)();	
-								
-								u8 u_byte = 0;
-								File file(CONFIGNAME, File::WRITE);
-								file.Seek((s64)CONFIG::DevMode, File::SeekPos::SET);
-								u_byte = DEV_V;
-								file.Write(&u_byte, 1);
-								file.Flush();			
-								file.Close();
-								
-								IsDevModeUsable();
-							}	
-						}
-					}
-				}
-			}
-		}	
+		static KeySequence buttoncombo({ Key::DPadUp, Key::DPadUp, Key::DPadDown, Key::DPadDown, Key::DPadLeft, Key::DPadRight, Key::DPadLeft, Key::DPadRight, Key::B, Key::A });
 
-		if(Inventory::GetCurrent() == 0x35 && GameHelper::IsInRoom(0x5A)) { //if menu opened
-			UIntVector Position = Touch::GetPosition();
-			//If Press A Button is clicked
-			if(Position.x >= 200 && Position.x <= 300 && Position.y >= 205 && Position.y <= 235) {
-				u32 PassWord = *(u32 *)(*(u32 *)Code::InvMenu + 0x45C);
-				if((int)PassWord == decrypt(0xD1070029C3E0FC78)) {
-					Sleep(Milliseconds(100));
-					MessageBox("Password correct!").SetClear(ClearScreen::Top)();
-					passwordcorrect = true;
-					goto yay;
-				}
-				else {
-					Sleep(Milliseconds(100));
-					MessageBox("Password incorrect!").SetClear(ClearScreen::Top)();
-					passwordcorrect = false;
-					Animation::ExecuteAnimationWrapper(4, 0xF, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-					Sleep(Seconds(1));
-					GameHelper::OpenMenu(0x35);
-				}						
-			}
-		}
-		
-		if(Inventory::GetCurrent() == 0x35 && !isOpenDev) 
-			isOpenDev = true;
-		
-		if(Inventory::GetCurrent() != 0x35 && isOpenDev) {
-			Animation::Idle();
-			isOpenDev = false;				
+		if(buttoncombo()) {
+			Sleep(Milliseconds(100));
+			if((MessageBox("Yay you found the secret menu", "Do you want to launch the developer mode?\nDev-Mode will enable new Cheats that are meant for developers or are still in developement!", DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
+				Sleep(Milliseconds(100));
+				MessageBox("Dev-Mode is now active!").SetClear(ClearScreen::Top)();	
+				
+				u8 u_byte = 0;
+				File file(CONFIGNAME, File::WRITE);
+				file.Seek((s64)CONFIG::DevMode, File::SeekPos::SET);
+				u_byte = DEV_V;
+				file.Write(&u_byte, 1);
+				file.Flush();			
+				file.Close();
+				
+				IsDevModeUsable();
+			}	
 		}
 	}		
 	

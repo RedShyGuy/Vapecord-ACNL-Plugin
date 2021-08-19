@@ -27,6 +27,7 @@
 #include "MenuPointers.hpp"
 #include "Helpers/QRCodeGen.hpp"
 #include "Helpers/CustomButton.hpp"
+#include "Helpers/KeySequence.hpp"
 
 #define PATH_PRESET		"Vapecord/PreSet"
 #define PATH_LOGO		"Vapecord/logo.bin"
