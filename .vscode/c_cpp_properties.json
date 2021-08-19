@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "Windows",
+            "defines": [
+            ],
+            "compilerPath": "C:/devkitPro/devkitARM/bin/arm-none-eabi-g++.exe",
+            "cStandard": "c11",
+            "cppStandard": "gnu++11",
+            "intelliSenseMode": "gcc-arm",
+            "includePath": [
+                "${default}",
+                "C:/devkitPro/devkitARM/arm-none-eabi/include/**",
+                "C:/devkitPro/devkitARM/lib/**",
+                "C:/devkitPro/libctru/include",
+                "C:/devkitPro/libctrpf/include",
+                "C:/devkitPro/portlibs/3ds/bin",
+                "${workspaceFolder}/includes"
+            ]
+        }
+    ],
+    "version": 4
+}
