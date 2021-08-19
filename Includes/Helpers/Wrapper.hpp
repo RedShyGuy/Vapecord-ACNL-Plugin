@@ -25,6 +25,7 @@ namespace CTRPluginFramework {
 		ExHandler	Delete(const std::string& path, const std::string& filetype);
 		//bool 		SetIcon(CustomIcon::Pixel* pixel, const std::string& path, CustomIcon &icon);
 		//int 		ParseTXT(const std::string& filename, std::vector<std::string>& output);
+		u32 		CalculateBL(u32 PC, u32 target);
 
 		template<typename T>
 		bool 		KB(const std::string &msg, bool hex, const int length, T &output, T def, OnChangeCallback cb = nullptr) {

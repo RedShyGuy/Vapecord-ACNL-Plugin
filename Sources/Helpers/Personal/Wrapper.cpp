@@ -132,6 +132,12 @@ namespace CTRPluginFramework {
 		return ExHandler::SUCCESS; //success
 	}
 
+	u32 Wrap::CalculateBL(u32 PC, u32 target) {
+		u32 val = ((target - PC) >> 2) - 2;
+		val += 0xEB000000;
+		return val;
+	}
+
 	void DrawQrCode(const Screen& screen, u32 posX, u32 posY, const u8* qrcode) {
 		const u32 size_qr = qrcodegen_getSize(qrcode);
 		u32 size_qr_s = size_qr;
