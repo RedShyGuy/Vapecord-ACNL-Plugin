@@ -1,0 +1,7 @@
+*.o
+*.d
+*.lst
+Build/
+*.3gx
+*.elf
+*.lnk

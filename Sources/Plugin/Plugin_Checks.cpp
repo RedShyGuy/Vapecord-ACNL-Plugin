@@ -281,7 +281,7 @@ namespace CTRPluginFramework {
 	//needed cause of bug in CTRPF p.p
 		Process::Write8(IndoorsBool, Player::IsIndoors());
 		
-		if(!DropPatternON) 
+		if(!DropPatternON || !Player::IsIndoors()) 
 			return;
 		
 		RestoreDropPattern();
