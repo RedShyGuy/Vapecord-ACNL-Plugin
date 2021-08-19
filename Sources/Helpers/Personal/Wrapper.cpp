@@ -132,10 +132,23 @@ namespace CTRPluginFramework {
 		return ExHandler::SUCCESS; //success
 	}
 
-	u32 Wrap::CalculateBL(u32 PC, u32 target) {
-		u32 val = ((target - PC) >> 2) - 2;
-		val += 0xEB000000;
-		return val;
+	u32 Wrap::CalculateBranchInstruction(u32 PC, u32 target) {
+		u32 instruction = ((target - PC) >> 2) - 2;
+
+		if(PC > target)
+			instruction -= 0x3F000000;
+
+		return instruction;
+	}
+
+	u32 Wrap::GetBranchTarget(u32 PC, u32 instruction) {
+		u32 target = instruction;
+		
+		target += 2;
+		target = target << 2;
+		target += PC;
+
+		return (target & 0xFFFFFF);
 	}
 
 	void DrawQrCode(const Screen& screen, u32 posX, u32 posY, const u8* qrcode) {
