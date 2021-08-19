@@ -91,7 +91,7 @@ namespace CTRPluginFramework {
 	void devcallback(void) {
 		static KeySequence buttoncombo({ Key::DPadUp, Key::DPadUp, Key::DPadDown, Key::DPadDown, Key::DPadLeft, Key::DPadRight, Key::DPadLeft, Key::DPadRight, Key::B, Key::A });
 
-		if(buttoncombo()) {
+		if(buttoncombo() && !DEVC->IsVisible()) {
 			Sleep(Milliseconds(100));
 			if((MessageBox("Yay you found the secret menu", "Do you want to launch the developer mode?\nDev-Mode will enable new Cheats that are meant for developers or are still in developement!", DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
 				Sleep(Milliseconds(100));
