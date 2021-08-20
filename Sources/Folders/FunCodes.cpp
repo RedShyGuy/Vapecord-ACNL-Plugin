@@ -191,7 +191,7 @@ namespace CTRPluginFramework {
 			hook2.SetFlags(USE_LR_TO_RETURN);
 		}
 
-		if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) 
+		if(entry->Hotkeys[0].IsPressed()) 
 			Wrap::KB<u16>(Language->Get("ULTIMATE_PARTY_POPPER_ENTER_EFFECT"), true, 3, PartyEffectID, PartyEffectID);
 
 		if(Player::GetTool() == 0x336A) {

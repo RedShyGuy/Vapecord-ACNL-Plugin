@@ -55,7 +55,7 @@ namespace CTRPluginFramework {
 		u32 i = PlayerClass::GetInstance()->Offset(0x8C6);
 		if(entry->Hotkeys[0].IsDown()) 
 			Process::Write32(i, 0x7FFFFF); 
-		if(entry->Hotkeys[1].IsDown()) 
+		else if(entry->Hotkeys[1].IsDown()) 
 			Process::Write32(i, 0x19D5D);
 	}
 	
@@ -121,7 +121,7 @@ namespace CTRPluginFramework {
             { 0x0A000094, 0x0A000052, 0x0A000001, 0xDA000014, 0xED841A05, 0xED840A07, 0x0A000026, 0x0A000065 }
         };
 		
-		if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {//L + DPadUp	  
+		if(entry->Hotkeys[0].IsPressed()) {//L + DPadUp	  
 			bool index = *(u32 *)walkover1 == 0x0A000094 ? 0 : 1;
 
             OSD::Notify("Walk Over Things " << (index ? (Color::Red << "OFF") : (Color::Green << "ON")));
@@ -152,7 +152,7 @@ namespace CTRPluginFramework {
 		
 		bool index = *(u32 *)move2 == 0xE3A00000 ? 0 : 1;
 	
-		if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
+		if(entry->Hotkeys[0].IsPressed()) {
 			if(index) 
                 OSD::Notify("Movement Mode: Walking", Color::Green);	
 		    else 
@@ -183,7 +183,7 @@ namespace CTRPluginFramework {
 		static int options = 0;
 		static u8 playerselected = 0;
 		static bool allforce = false;
-		if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
+		if(entry->Hotkeys[0].IsPressed()) {
 			switch(options) {
 				default: break;
 				case 0: {
@@ -217,7 +217,7 @@ namespace CTRPluginFramework {
 				OSD::Notify(Utils::Format("Teleport: Player %02X", playerselected));
 		}
 		
-		if(Controller::IsKeysPressed(entry->Hotkeys[1].GetKeys())) {//Key::R + Key::DPadRight
+		else if(entry->Hotkeys[1].IsPressed()) {//Key::R + Key::DPadRight
 			u32 x, y;
 			if(PlayerClass::GetInstance()->GetWorldCoords(&x, &y)) {
 				if(!allforce) {
@@ -247,7 +247,7 @@ namespace CTRPluginFramework {
 			{ 0xE3A01017, 0xE1A07002, 0x1BFF021A }
         };
 		
-		if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
+		if(entry->Hotkeys[0].IsPressed()) {
 			int mode = 0;
 			
 			switch(*(u32 *)visi2) {
@@ -331,7 +331,7 @@ namespace CTRPluginFramework {
 	}
 //Room Warper
 	void roomWarp(MenuEntry *entry) {	
-		if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
+		if(entry->Hotkeys[0].IsPressed()) {
 			if(!PlayerClass::GetInstance()->IsLoaded()) {
 				OSD::Notify("Player needs to be loaded to use room teleport!");
 				return;

@@ -141,7 +141,7 @@ namespace CTRPluginFramework {
 //Text to Item
 	void t2i(MenuEntry *entry) {
 		static u32 val = 0;
-		if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
+		if(entry->Hotkeys[0].IsPressed()) {
 			if(Player::GetSaveOffset(4) == 0) {
 				OSD::Notify("Error: Player needs to be loaded!", Color::Red);
 				return;
@@ -152,7 +152,7 @@ namespace CTRPluginFramework {
 				Inventory::WriteSlot(0, val);
 		}
 		
-		if(Controller::IsKeysPressed(entry->Hotkeys[1].GetKeys())) {
+		else if(entry->Hotkeys[1].IsPressed()) {
 			if(Player::GetSaveOffset(4) == 0) {
 				OSD::Notify("Error: Player needs to be loaded!", Color::Red);
 				return;
@@ -164,7 +164,7 @@ namespace CTRPluginFramework {
 			}
 		} 
 		
-		if(Controller::IsKeysPressed(entry->Hotkeys[2].GetKeys())) {
+		else if(entry->Hotkeys[2].IsPressed()) {
 			if(Player::GetSaveOffset(4) == 0) {
 				OSD::Notify("Error: Player needs to be loaded!", Color::Red);
 				return;
@@ -180,7 +180,7 @@ namespace CTRPluginFramework {
 			}
 		}
 
-		if(Controller::IsKeysPressed(entry->Hotkeys[3].GetKeys())) {
+		else if(entry->Hotkeys[3].IsPressed()) {
 			if(Player::GetSaveOffset(4) == 0) {
 				OSD::Notify("Error: Player needs to be loaded!", Color::Red);
 				return;
@@ -198,11 +198,11 @@ namespace CTRPluginFramework {
 	}
 //Duplicate Items
 	void duplication(MenuEntry *entry) {	
-		if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
+		if(entry->Hotkeys[0].IsPressed()) {
 			u32 dupe = Inventory::ReadSlot(0);
 			Inventory::WriteSlot(1, dupe, Inventory::GetLock(0));
 		}
-		if(Controller::IsKeysPressed(entry->Hotkeys[1].GetKeys())) {
+		else if(entry->Hotkeys[1].IsPressed()) {
 			u32 dupe = Inventory::ReadSlot(0);
 			for(int i = 0; i <= 0xF; ++i) 
 				Inventory::WriteSlot(i, dupe, Inventory::GetLock(0));
@@ -233,7 +233,7 @@ namespace CTRPluginFramework {
 		if(entry->WasJustActivated()) 
 			OSD::Run(catalogosd);
 		
-		if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
+		if(entry->Hotkeys[0].IsPressed()) {
 			if(!PlayerClass::GetInstance()->IsLoaded()) {
 				OSD::Notify("Player needs to be loaded!");
 				return;
@@ -264,7 +264,7 @@ namespace CTRPluginFramework {
 			isCatalogOpen = false;
 		}
 		
-		if(Controller::IsKeysPressed(entry->Hotkeys[1].GetKeys())) {
+		if(entry->Hotkeys[1].IsPressed()) {
 			if(catact) {
 				OSD::Stop(catalogosd);
 				catact = false;
@@ -282,7 +282,7 @@ namespace CTRPluginFramework {
 	}
 //Chat Text2Item
 	void chatt2i(MenuEntry *entry) {
-		if(!Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys()))
+		if(!entry->Hotkeys[0].IsPressed())
 			return;
 		
 		if(!PlayerClass::GetInstance()->IsLoaded()) {

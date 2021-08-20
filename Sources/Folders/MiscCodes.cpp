@@ -23,23 +23,14 @@ namespace CTRPluginFramework {
 			Language->Get("VECTOR_EMOT_COMM"),
 			Language->Get("VECTOR_SNAK_COMM"),
 			Language->Get("VECTOR_MUSI_COMM"),
-			#if SEEDING_MODE
 			Language->Get("VECTOR_ITEM_COMM"),
-			#endif
 			Language->Get("VECTOR_ALL_COMM")
 		};
 
-		#if SEEDING_MODE
 		for(int i = 0; i < 5; ++i) 
 			noncommands[i] = (NonHacker::Accessible[i] ? Color(pGreen) : Color(pRed)) << noncommands[i];
 
 		noncommands[5] = (AllOFF ? Color(pGreen) : Color(pRed)) << noncommands[5];
-		#elif !SEEDING_MODE
-		for(int i = 0; i < 4; ++i) 
-			noncommands[i] = (NonHacker::Accessible[i] ? Color(pGreen) : Color(pRed)) << noncommands[i];
-
-		noncommands[4] = (AllOFF ? Color(pGreen) : Color(pRed)) << noncommands[4];
-		#endif
 
 		Keyboard keyboard(Language->Get("COMM_CHOOSE"));
 		keyboard.Populate(noncommands);
@@ -48,11 +39,7 @@ namespace CTRPluginFramework {
         if(choice < 0)
 			return;
 
-		#if SEEDING_MODE
 		if(choice == 5) {
-		#elif !SEEDING_MODE
-		if(choice == 4) {
-		#endif
 			PluginMenu *menu = PluginMenu::GetRunningInstance();
 			if(AllOFF) {
 				*menu += NonHackerCallBack;
@@ -213,64 +200,6 @@ namespace CTRPluginFramework {
 		Musicchange(entry);
 	}
 	
-	/*std::string Days[7] = {
-		"Monday",
-		"Tuesday",
-		"Wednesday",
-		"Thursday",
-		"Friday",
-		"Saturday",
-		"Sunday",
-	};
-	
-	std::string State[2] = {
-		"AM", "PM",
-	};
-	
-	bool Time(const Screen &screen) {
-		if(!screen.IsTop)
-			return 0;
-			
-	//Get Time Data 
-		u32 TimeData;	
-		Process::Write32((u32)&pfunction00, 0x2FB394);
-		TimeData = pfunction00();
-		
-		u16 Year = *(u16 *)(TimeData) & 0xFFFF;
-		u8 Month = *(u8 *)(TimeData + 0x4) & 0xFF; 
-		u8 Day = *(u8 *)(TimeData + 0x5) & 0xFF;
-		u8 WeekDay = (*(u8 *)(TimeData + 0x6)) - 1;
-		u8 Hour = *(u8 *)(TimeData + 0x7) & 0xFF;
-		u8 Minute = *(u8 *)(TimeData + 0x8) & 0xFF;
-		u8 Second = *(u8 *)(TimeData + 0x9) & 0xFF;
-		
-		u8 ActualHour;
-		if(Hour > 13) {
-			ActualHour = Hour - 12;
-		}
-		
-		bool TimeState = false;
-		if(Hour > 11 && Hour < 24) {
-			TimeState = true;
-		}	
-		
-		screen.Draw("Year: " << std::to_string(Year), 0, 0);
-		screen.Draw("Month: " << std::to_string(Month), 0, 10);
-		screen.Draw("Day: " << std::to_string(Day) << " | " << Days[WeekDay], 0, 20);
-		screen.Draw("Time: " << std::to_string(ActualHour) << ":" << std::to_string(Minute) << "." << std::to_string(Second) << " " << State[TimeState], 0, 20);
-		
-		//res = FUN_0x2FB394(); 
-		//res + 0x0; = Current Year
-		//res + 0x5; = Current Day
-		//res + 0x4; = Current Month
-		//res + 0x6; = Current Day of the week (1 is monday, etc)
-		//res + 0x7; = Current Hour
-		//res + 0x8; = Current Minute
-		//res + 0x9; = Current Second
-		//res + 0xA; = Current Millseconds?
-		return 1;
-	}*/
-	
 //InputChangeEvent For Quick Menu
 	void onBuildingChange(Keyboard &k, KeyboardEvent &e) {
 		if(e.type == KeyboardEvent::CharacterRemoved || e.type == KeyboardEvent::CharacterAdded) {
@@ -317,8 +246,7 @@ namespace CTRPluginFramework {
 			OSD::Notify("Your player needs to be loaded!", Color::Red);
 			return;
 		}
-		
-		Sleep(Milliseconds(100));
+
 		u32 x = 0, y = 0;
 		u32 count = 0;
 		u32 ItemToSearch = 0;
@@ -327,60 +255,25 @@ namespace CTRPluginFramework {
 		if(!Wrap::KB<u32>(Language->Get("QUICK_MENU_SEARCH_REPLACE_SEARCH"), true, 8, ItemToSearch, 0x7FFE)) 
 			return;
 		
-		Sleep(Milliseconds(100));
-		
 		if(!Wrap::KB<u32>(Language->Get("QUICK_MENU_SEARCH_REPLACE_REPLACE"), true, 8, ItemToReplace, ItemToReplace)) 
 			return;
-		
-		Sleep(Milliseconds(100));
 		
 		if(!IDList::ItemValid(ItemToReplace)) {
 			OSD::Notify("Item Is Invalid!", Color::Red);
 			return;
 		}
-		
-		if(!bypassing) 
-			GameHelper::DropItemLock(true);
-		
-		if(!Player::IsIndoors()) {
-			x = 0x10;
-			y = 0x10;
-		}
-		else {
-			x = 0;
-			y = 0;
-		}
-		
-		bool res = true;
-		while(res) {
-			while(res) {
-				if((u32)GameHelper::GetItemAtWorldCoords(x, y) != 0) {
-					if(Dropper::PlaceItemWrapper(1, ItemToSearch, &ItemToReplace, &ItemToReplace, x, y, 0, 0, 0, 0, 0, 0x3D, 0xA5)) {
-						count++;
-						if(count % 300 == 0) 
-							Sleep(Milliseconds(500));
-					}
-				}
-				else {
-					res = false;
-				}
-				y++;
-			}
 			
-			res = true;
-			if(!Player::IsIndoors()) 
-				y = 0x10;
-			else 
-				y = 0;
-			x++;
-			if((u32)GameHelper::GetItemAtWorldCoords(x, y) == 0) 
-				res = false;
+		//int res = Dropper::Search_Replace(size, { 0x7C, 0x7D, 0x7E, 0x7F, 0xCC, 0xF8 }, Code::Pointer7FFE, 0x3D, false, "Weed Removed!", true);
+			
+		int res = Dropper::Search_Replace(300, { ItemToSearch }, ItemToReplace, 0x3D, true, "items replaced!", true);
+		if(res == -1) {
+			OSD::Notify("Your player needs to be loaded!", Color::Red);
+			return;
 		}
-		
-		OSD::Notify(Utils::Format("%d items replaced!", count));
-		
-		if(!bypassing) 
-			GameHelper::DropItemLock(false);
+		else if(res == -2) {
+			OSD::Notify("Only works outside!", Color::Red);
+			return;
+		}
 	}
 
 //Quick Menu
@@ -389,9 +282,7 @@ namespace CTRPluginFramework {
 			Language->Get("VECTOR_QUICK_BUILDING"),
 			Language->Get("VECTOR_QUICK_REMOVE"),
 			Language->Get("VECTOR_COMMANDS_CLEAR_INV"),
-			#if SEEDING_MODE 
 			Language->Get("VECTOR_QUICK_S_A_R"),
-			#endif
 			Language->Get("VECTOR_QUICK_RELOAD"),
 			Language->Get("VECTOR_QUICK_LOCK_SPOT"),
 			Language->Get("VECTOR_QUICK_UNLOCK_SPOT"),
@@ -433,28 +324,18 @@ namespace CTRPluginFramework {
 					}
 				} break;
 
-				#if SEEDING_MODE
 			//Search and replace
 				case 3: {
 					SearchReplace(entry);
 				} break;
-				#endif
 				
 			//Reload Room
-				#if !SEEDING_MODE
-				case 3:
-				#elif SEEDING_MODE
 				case 4:
-				#endif
 					GameHelper::ReloadRoom();	
 				break;
 			
 			//Lock Spot
-				#if !SEEDING_MODE
-				case 4: {
-				#elif SEEDING_MODE
 				case 5: {
-				#endif
 					PlayerClass::GetInstance()->GetWorldCoords(&x, &y);
 					
 					if(bypassing) 
@@ -472,11 +353,7 @@ namespace CTRPluginFramework {
 				} break;
 			
 			//Unlock Spot
-				#if !SEEDING_MODE
-				case 5: {
-				#elif SEEDING_MODE
 				case 6: {
-				#endif
 					if(bypassing) 
 						GameHelper::DropItemLock(false);
 					
@@ -492,11 +369,7 @@ namespace CTRPluginFramework {
 				} break;
 			
 			//create lock spots on whole map
-				#if !SEEDING_MODE
-				case 6: {
-				#elif SEEDING_MODE
 				case 7: {
-				#endif
 					if(bypassing) 
 						GameHelper::DropItemLock(false);
 
@@ -521,11 +394,7 @@ namespace CTRPluginFramework {
 				} break;
 			
 			//unlock lock spots on whole map
-				#if !SEEDING_MODE
-				case 7: {
-				#elif SEEDING_MODE
 				case 8: {
-				#endif
 					if(bypassing) 
 						GameHelper::DropItemLock(false);
 
@@ -575,17 +444,17 @@ namespace CTRPluginFramework {
 	}
 //Large FOV	
 	void fovlarge(MenuEntry *entry) {
-		static u32 OnOff = 0x3F800000;
+		static float OnOff = 1.0;
 		
-		Process::Patch(Code::fov, OnOff); 
+		Process::WriteFloat(Code::fov, OnOff); 
 		
 		if(GameHelper::RoomCheck() == 1 || fovbool) 
-			OnOff = 0x3F800000; 
+			OnOff = 1.0; 
 		else 
-			OnOff = 0x3F400000; 
+			OnOff = 0.75; 
 		
 		if(!entry->IsActivated()) 
-			Process::Patch(Code::fov, 0x3F800000); 
+			Process::WriteFloat(Code::fov, 1.0);
 	}
 //Move Furniture
 	void roomSeeder(MenuEntry *entry) {
@@ -716,7 +585,7 @@ namespace CTRPluginFramework {
 	}
 //Fast Mode	
 	void fast(MenuEntry *entry) {
-		if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) { //Key::R + Key::DPadDown
+		if(entry->Hotkeys[0].IsPressed()) { //Key::R + Key::DPadDown
 			turbo = !turbo;
 			OSD::Notify("Fast mode " << (turbo ? Color::Green << "ON" : Color::Red << "OFF"));
 		}

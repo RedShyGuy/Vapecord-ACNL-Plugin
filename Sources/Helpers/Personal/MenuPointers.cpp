@@ -31,9 +31,7 @@ namespace CTRPluginFramework {
 		Color(220, 20, 60, 0),
 		Color(220, 20, 60, 0),
 		Color(220, 20, 60, 0),
-	#if SEEDING_MODE
 		Color(220, 20, 60, 0),
-	#endif
 		Color(220, 20, 60, 0),
 		Color(220, 20, 60, 0),
 		Color(220, 20, 60, 0),
@@ -50,23 +48,17 @@ namespace CTRPluginFramework {
 		if(menu == nullptr) //if menu didn't load yet
 			return;
 
-		int index = 6;
-
 		SaveCodesUpdate(FolderColors[0]);
 		MovementCodesUpdate(FolderColors[1]);
 		InventoryCodesUpdate(FolderColors[2]);
 		PlayerCodesUpdate(FolderColors[3]);
 		AnimationCodesUpdate(FolderColors[4]);
-	#if SEEDING_MODE
 		SeedingCodesUpdate(FolderColors[5]);
-	#elif !SEEDING_MODE
-		index--;
-	#endif
-		MoneyCodesUpdate(FolderColors[index]);
-		IslandCodesUpdate(FolderColors[index + 1]);
-		FunCodesUpdate(FolderColors[index + 2]);
-		ExtraCodesUpdate(FolderColors[index + 3]);
-		MiscCodesUpdate(FolderColors[index + 4]);
+		MoneyCodesUpdate(FolderColors[6]);
+		IslandCodesUpdate(FolderColors[7]);
+		FunCodesUpdate(FolderColors[8]);
+		ExtraCodesUpdate(FolderColors[9]);
+		MiscCodesUpdate(FolderColors[10]);
 	}
 //Update only text
 	void UpdateAll(void) {
@@ -76,23 +68,17 @@ namespace CTRPluginFramework {
 
 		std::vector<MenuFolder *> Folders = menu->GetFolderList();
 
-		int index = 6;
-
 		SaveCodesUpdate(GetColorFromString(Folders[0]->Name()));
 		MovementCodesUpdate(GetColorFromString(Folders[1]->Name()));
 		InventoryCodesUpdate(GetColorFromString(Folders[2]->Name()));
 		PlayerCodesUpdate(GetColorFromString(Folders[3]->Name()));
 		AnimationCodesUpdate(GetColorFromString(Folders[4]->Name()));
-	#if SEEDING_MODE
 		SeedingCodesUpdate(GetColorFromString(Folders[5]->Name()));
-	#elif !SEEDING_MODE
-		index--;
-	#endif
-		MoneyCodesUpdate(GetColorFromString(Folders[index]->Name()));
-		IslandCodesUpdate(GetColorFromString(Folders[index + 1]->Name()));
-		FunCodesUpdate(GetColorFromString(Folders[index + 2]->Name()));
-		ExtraCodesUpdate(GetColorFromString(Folders[index + 3]->Name()));
-		MiscCodesUpdate(GetColorFromString(Folders[index + 4]->Name()));
+		MoneyCodesUpdate(GetColorFromString(Folders[6]->Name()));
+		IslandCodesUpdate(GetColorFromString(Folders[7]->Name()));
+		FunCodesUpdate(GetColorFromString(Folders[8]->Name()));
+		ExtraCodesUpdate(GetColorFromString(Folders[9]->Name()));
+		MiscCodesUpdate(GetColorFromString(Folders[10]->Name()));
 	}
 
 	void SetVapecordStandardTheme(FwkSettings &settings) {

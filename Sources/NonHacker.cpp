@@ -200,7 +200,7 @@ namespace CTRPluginFramework {
 			}
 			else return;
 		}
-	#if SEEDING_MODE
+
 		else if(Command == "i:") {
 			nHack.itemID = StringToHex<u16>(ID_16Bit, 0x2001); //sets item
 			if(IDList::ItemValid(nHack.itemID)) {
@@ -240,7 +240,7 @@ namespace CTRPluginFramework {
 
 			nHack.Item();
 		}
-	#endif
+
 		else 
 			return;
 

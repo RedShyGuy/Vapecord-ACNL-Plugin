@@ -15,7 +15,7 @@ namespace CTRPluginFramework {
 		static const u32 shopnooks = Region::AutoRegion(0x71F654, 0x71E99C, 0x71E65C, 0x71E634, 0x71DE08, 0x71DDE0, 0x71D9B0, 0x71D9B0);
 		static const u32 shopkatrina = Region::AutoRegion(0x718098, 0x717548, 0x7170A0, 0x717078, 0x71684C, 0x716824, 0x7163F4 ,0x7163F4);
 		static const u32 shopredd = Region::AutoRegion(0x718444, 0x7178F4, 0x71744C, 0x717424, 0x716BF8, 0x716BD0, 0x7167A0, 0x7167A0);
-		
+
 		const u32 ShopOpen[9] = { shopretail, shopnookling, shopgarden, shopables, shopshampoodle, shopkicks, shopnooks, shopkatrina, shopredd };
 
         std::vector<std::string> cmnOpt =  { "" };
@@ -115,7 +115,7 @@ namespace CTRPluginFramework {
 	}
 //Water All Flowers	
 	void WaterAllFlowers(MenuEntry *entry) {	
-		if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
+		if(entry->Hotkeys[0].IsPressed()) {
 			u32 x = 0x10, y = 0x10;
 			bool res = true;
 			
@@ -146,7 +146,7 @@ namespace CTRPluginFramework {
 		};
 		
 		static int size = 400;
-		if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
+		if(entry->Hotkeys[0].IsPressed()) {
 			Sleep(Milliseconds(100));
 			Keyboard KB(Language->Get("WEED_REMOVER_KEY"));
 			KB.Populate(weedopt);
@@ -157,8 +157,8 @@ namespace CTRPluginFramework {
 			}
 		}
 		
-		if(Controller::IsKeysPressed(entry->Hotkeys[1].GetKeys())) {
-			int res = Dropper::Search_Replace(size, { 0x7C, 0x7D, 0x7E, 0x7F, 0xCC, 0xF8 }, Code::Pointer7FFE, 0x3D, false, "Weed Removed!", true);
+		else if(entry->Hotkeys[1].IsPressed()) {
+			int res = Dropper::Search_Replace(size, { 0x7C, 0x7D, 0x7E, 0x7F, 0xCC, 0xF8 }, 0x7FFE, 0x3D, false, "Weed Removed!", true);
 			if(res == -1)
 				OSD::Notify("Your player needs to be loaded!", Color::Red);
 			else if(res == -2) 
@@ -232,7 +232,7 @@ namespace CTRPluginFramework {
 		static bool opt = false;
 		static u8 type = 0;
 
-		if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
+		if(entry->Hotkeys[0].IsPressed()) {
 			if(!GameHelper::IsInRoom(0)) {
 				OSD::Notify("Error: Only Works In Town!", Color::Red);
 				return;
@@ -245,10 +245,10 @@ namespace CTRPluginFramework {
 			}
 		}
 		
-		if(Controller::IsKeysPressed(entry->Hotkeys[1].GetKeys())) 
+		else if(entry->Hotkeys[1].IsPressed()) 
 			GameHelper::ReloadRoom();
 		
-		if(Controller::IsKeysPressed(entry->Hotkeys[2].GetKeys())) {
+		else if(entry->Hotkeys[2].IsPressed()) {
 			switch(opt) {
 				case 0:
 					type = 0xFF;
@@ -321,13 +321,13 @@ namespace CTRPluginFramework {
 		static u32 PressedTicks = 0;
 		int minute = 1;
 		
-		if(Controller::IsKeysDown(entry->Hotkeys[0].GetKeys()) || Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
+		if(entry->Hotkeys[0].IsDown() || entry->Hotkeys[0].IsPressed()) {
 			PressedTicks++;
 			if((PressedTicks < 50 ? (PressedTicks % 8) == 1 : (PressedTicks % 3) == 1) || PressedTicks > 100) 
 				GameHelper::SetCurrentTime(true, minute, 0, 0, 0, 0);
 		}
 		
-		if(Controller::IsKeysDown(entry->Hotkeys[1].GetKeys()) || Controller::IsKeysPressed(entry->Hotkeys[1].GetKeys())) {
+		else if(entry->Hotkeys[1].IsDown() || entry->Hotkeys[1].IsPressed()) {
 			PressedTicks++;
 			if((PressedTicks < 50 ? (PressedTicks % 8) == 1 : (PressedTicks % 3) == 1) || PressedTicks > 100) 
 				GameHelper::SetCurrentTime(false, minute, 0, 0, 0, 0);

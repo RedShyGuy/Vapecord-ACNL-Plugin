@@ -8,7 +8,6 @@ namespace CTRPluginFramework {
 /*
 Custom Buttons are currently unused
 */
-
     void CustomButton::WrapItem(u32 ItemData) {
 	//writes present lock onto item
 		Inventory::WriteLock(Inventory::GetSelectedSlot(), 1);

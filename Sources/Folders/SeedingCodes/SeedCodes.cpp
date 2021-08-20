@@ -82,7 +82,7 @@ namespace CTRPluginFramework {
         }	
 		
 	//Switches Seed Item to Remove Item
-		if(Controller::IsKeysPressed(entry->Hotkeys[1].GetKeys())) {
+		if(entry->Hotkeys[1].IsPressed()) {
 			if(!pickItemHook.IsEnabled()) {
 				pickItemHook.Enable();
 				closeholeItemHook.Enable();
@@ -96,7 +96,7 @@ namespace CTRPluginFramework {
         }
 		
 	//Pickup Speed Part
-		if(Controller::IsKeysPressed(entry->Hotkeys[2].GetKeys())) {
+		if(entry->Hotkeys[2].IsPressed()) {
 			if(!speedHook.IsEnabled()) {
 				Process::Patch(HoleSpeedPatch, 0xEA000015);
 				speedHook.Enable();	
@@ -110,7 +110,7 @@ namespace CTRPluginFramework {
 		}
 		
 	//Switches Modes of Pickup
-		if(Controller::IsKeysPressed(entry->Hotkeys[3].GetKeys())) {
+		if(entry->Hotkeys[3].IsPressed()) {
 			static int Mode = 0, Index = 0;
 			
 			switch(Mode) {
@@ -147,7 +147,7 @@ namespace CTRPluginFramework {
 		}	
 		
 	//toggles Auto Pickup
-		if(Controller::IsKeysPressed(entry->Hotkeys[4].GetKeys()))	{
+		if(entry->Hotkeys[4].IsPressed())	{
 			bool IsON = *(u32 *)PickupAuto1 == 0x0A000039 ? 0 : 1;
 			
 			for(int i = 0; i < 3; ++i)
@@ -181,7 +181,7 @@ namespace CTRPluginFramework {
 //Walking Seeder
 	void Walkseeder(MenuEntry *entry) {
 		static bool set = false;
-		if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {	
+		if(entry->Hotkeys[0].IsPressed()) {	
 			set = !set;
 			OSD::Notify("Delete Items " << (set ? Color::Green << "ON" : Color::Red << "OFF"));
 			Process::Patch(Code::UnbreakableFlower, set ? 0x1A000015 : Code::v_UnbreakableFlower);
@@ -255,7 +255,7 @@ namespace CTRPluginFramework {
 		if(!MapEditorActive) //If Map Editor is OFF get Coords
 			PlayerClass::GetInstance()->GetWorldCoords(&selectedX, &selectedY);
 		
-		if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
+		if(entry->Hotkeys[0].IsPressed()) {
 			if(!MapEditorActive) { //Map Editor ON
 				PluginMenu *menu = PluginMenu::GetRunningInstance();
 				*menu += ParticleCallBack;
@@ -296,7 +296,7 @@ namespace CTRPluginFramework {
 		}
 		
 		if(MapEditorActive) {	
-			if(Controller::IsKeysDown(entry->Hotkeys[1].GetKeys()) || Controller::IsKeysPressed(entry->Hotkeys[1].GetKeys())) {
+			if(entry->Hotkeys[1].IsDown() || entry->Hotkeys[1].IsPressed()) {
 				DPadKeyPressedTicks++;
 				if((DPadKeyPressedTicks < 50 ? (DPadKeyPressedTicks % 8) == 1 : (DPadKeyPressedTicks % 3) == 1) || DPadKeyPressedTicks > 100) {
 					selectedX += 1;
@@ -304,7 +304,7 @@ namespace CTRPluginFramework {
 				}
 			}
 			
-			if(Controller::IsKeysDown(entry->Hotkeys[2].GetKeys()) || Controller::IsKeysPressed(entry->Hotkeys[2].GetKeys())) {
+			if(entry->Hotkeys[2].IsDown() || entry->Hotkeys[2].IsPressed()) {
 				DPadKeyPressedTicks++;
 				if((DPadKeyPressedTicks < 50 ? (DPadKeyPressedTicks % 8) == 1 : (DPadKeyPressedTicks % 3) == 1) || DPadKeyPressedTicks > 100) {
 					selectedX -= 1;
@@ -312,7 +312,7 @@ namespace CTRPluginFramework {
 				}
 			}
 			
-			if(Controller::IsKeysDown(entry->Hotkeys[3].GetKeys()) || Controller::IsKeysPressed(entry->Hotkeys[3].GetKeys())) {
+			if(entry->Hotkeys[3].IsDown() || entry->Hotkeys[3].IsPressed()) {
 				DPadKeyPressedTicks++;
 				if((DPadKeyPressedTicks < 50 ? (DPadKeyPressedTicks % 8) == 1 : (DPadKeyPressedTicks % 3) == 1) || DPadKeyPressedTicks > 100) {
 					selectedY += 1;
@@ -320,7 +320,7 @@ namespace CTRPluginFramework {
 				}
 			}
 			
-			if(Controller::IsKeysDown(entry->Hotkeys[4].GetKeys()) || Controller::IsKeysPressed(entry->Hotkeys[4].GetKeys())) {
+			if(entry->Hotkeys[4].IsDown() || entry->Hotkeys[4].IsPressed()) {
 				DPadKeyPressedTicks++;
 				if((DPadKeyPressedTicks < 50 ? (DPadKeyPressedTicks % 8) == 1 : (DPadKeyPressedTicks % 3) == 1) || DPadKeyPressedTicks > 100) {
 					selectedY -= 1;
@@ -334,33 +334,33 @@ namespace CTRPluginFramework {
 			if(Controller::IsKeysReleased(entry->Hotkeys[1].GetKeys()) || Controller::IsKeysReleased(entry->Hotkeys[2].GetKeys()) || Controller::IsKeysReleased(entry->Hotkeys[3].GetKeys()) || Controller::IsKeysReleased(entry->Hotkeys[4].GetKeys())) 
 				DPadKeyPressedTicks = 0;
 			
-			if(Controller::IsKeysDown(entry->Hotkeys[5].GetKeys())) {
+			if(entry->Hotkeys[5].IsDown()) {
 				keyPressedTicks++;
 				if((keyPressedTicks < 90 ? (keyPressedTicks % 10) == 1 : (keyPressedTicks % 3) == 1) || keyPressedTicks > 220)
 					dropitem = (dropitem - 1 == 0x1FFF ? 0xFD : dropitem - 1) % 0x4000;
 			}
 			
-			if(Controller::IsKeysDown(entry->Hotkeys[6].GetKeys())) {
+			if(entry->Hotkeys[6].IsDown()) {
 				keyPressedTicks++;
 				if((keyPressedTicks < 90 ? (keyPressedTicks % 10) == 1 : (keyPressedTicks % 3) == 1) || keyPressedTicks > 220) 
 					dropitem = (dropitem + 1 == 0xFE ? 0x2000 : dropitem + 1) % 0x4000;
 			}
 			
-			if(Controller::IsKeysPressed(entry->Hotkeys[7].GetKeys())) {
+			if(entry->Hotkeys[7].IsPressed()) {
 				size++;
 				if(size >= 4) 
 					size = 0;
 				
-				OSD::Notify("Size set to " << std::to_string(size));
+				OSD::Notify(Utils::Format("Size set to %d", size));
 			}
 			
-			if(Controller::IsKeysPressed(entry->Hotkeys[8].GetKeys())) {
+			if(entry->Hotkeys[8].IsPressed()) {
 				removal = !removal;
 
 				OSD::Notify("Removal mode " << (removal ? Color::Green << "ON" : Color::Red << "OFF")); 
 			}
 			
-			if(turbo ? Controller::IsKeysDown(entry->Hotkeys[9].GetKeys()) : Controller::IsKeysPressed(entry->Hotkeys[9].GetKeys())) {//Key::A
+			if(turbo ? entry->Hotkeys[9].IsDown() : entry->Hotkeys[9].IsPressed()) {//Key::A
 				u32 pItem = (u32)GameHelper::GetItemAtWorldCoords(selectedX, selectedY);
 				
 				if(pItem == 0) 
@@ -376,7 +376,7 @@ namespace CTRPluginFramework {
 				}
 			}
 			
-			if(Controller::IsKeysPressed(entry->Hotkeys[10].GetKeys())) 
+			if(entry->Hotkeys[10].IsPressed()) 
 				Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, dropitem, dropitem, ItemChange);
 		}
 		

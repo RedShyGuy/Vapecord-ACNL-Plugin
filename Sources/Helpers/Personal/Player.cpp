@@ -186,15 +186,15 @@ Get Player Save Offset for loaded players
 	}
 
 //get current selected mail slot
-	int Player::GetMailSlot() {	
+	s8 Player::GetMailSlot() {	
 		if(GameHelper::BaseInvPointer() == 0) 
-			return 0xFF;
+			return -1;
 		
-		u8 slot = *(u8 *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0xCC);
-		if(slot != 0xFF && slot < 0x1E && slot > 0x13) 
-			return (int)slot - 19;
+		s8 slot = *(s8 *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0xCC);
+		if(slot != -1 && slot < 0x1E && slot > 0x13) 
+			return slot - 19;
 		
-		return 0xFF;
+		return -1;
 	}
 /*
 //Clear Mail in inv

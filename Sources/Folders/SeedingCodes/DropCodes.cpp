@@ -264,7 +264,7 @@ namespace CTRPluginFramework {
 		if(entry->Hotkeys[0].IsPressed()) 
 			Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, dropitem, dropitem, ItemChange);
 		
-		if(turbo ? Controller::IsKeysDown(entry->Hotkeys[1].GetKeys()) : Controller::IsKeysPressed(entry->Hotkeys[1].GetKeys())) {//Key::L + Key::DPadDown
+		if(turbo ? entry->Hotkeys[1].IsDown() : entry->Hotkeys[1].IsPressed()) {//Key::L + Key::DPadDown
 			u32 wX, wY, u0;
 			if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !GameHelper::GameSaving()) 
 				Dropper::PlaceItemWrapper(DropType, ItemIDToReplace, &dropitem, &dropitem, wX, wY, 0, 0, 0, 0, 0, waitAnim, 0xA5);
@@ -280,7 +280,7 @@ namespace CTRPluginFramework {
 		if(entry->Hotkeys[0].IsPressed()) 
 			Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, dropitem, dropitem, ItemChange);
 		
-		if(Controller::IsKeysPressed(entry->Hotkeys[1].GetKeys())) {
+		else if(entry->Hotkeys[1].IsPressed()) {
 			enabled = !enabled;
 			OSD::Notify("Auto drop " << (enabled ? Color::Green << "ON" : Color::Red << "OFF"));
 		}
@@ -328,7 +328,7 @@ namespace CTRPluginFramework {
 		static u32 dropitemid = 0x7FFE;
 		
 	//Auto Drop Hotkeys
-		if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
+		if(entry->Hotkeys[0].IsPressed()) {
 			enabled = !enabled;
 			OSD::Notify("Multi Slot Drop " << (enabled ? Color::Green << "ON" : Color::Red << "OFF"));
 		}
@@ -346,7 +346,7 @@ namespace CTRPluginFramework {
 			}
 			
 		//Single Drop
-			if(turbo ? Controller::IsKeysDown(entry->Hotkeys[1].GetKeys()) : Controller::IsKeysPressed(entry->Hotkeys[1].GetKeys())) {
+			if(turbo ? entry->Hotkeys[1].IsDown() : entry->Hotkeys[1].IsPressed()) {
 				if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !GameHelper::GameSaving()) 
 					Dropper::PlaceItemWrapper(DropType, ItemIDToReplace, &dropitemid, &dropitemid, wX, wY, 0, 0, 0, 0, 0, waitAnim, 0xA5);
 			}

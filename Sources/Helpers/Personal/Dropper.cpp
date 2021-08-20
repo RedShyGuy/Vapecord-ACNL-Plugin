@@ -40,7 +40,7 @@ namespace CTRPluginFramework {
 			while(res) {
 				if((u32)GameHelper::GetItemAtWorldCoords(x, y) != 0) {
 					for(int i = 0; i < ItemToSearch.size(); i++) {
-						if(Dropper::PlaceItemWrapper(1, ItemToSearch[i], (u32 *)ItemToPlace, (u32 *)ItemToPlace, x, y, 0, 0, 0, 0, 0, AnimID, 0xA5, ItemSequenceUsage)) {
+						if(Dropper::PlaceItemWrapper(1, ItemToSearch[i], &ItemToPlace, &ItemToPlace, x, y, 0, 0, 0, 0, 0, AnimID, 0xA5, ItemSequenceUsage)) {
 							count++;
 							if(count % ItemsPerRun == 0) 
 								Sleep(Milliseconds(500));
@@ -61,7 +61,7 @@ namespace CTRPluginFramework {
 		}		
 		
 		if(DisplayMSG)
-			OSD::Notify(std::to_string(count) << " " << msg);
+			OSD::Notify(Utils::Format("%d %s", count, msg.c_str()));
 
 	//OFF
 		if(!bypassing) 

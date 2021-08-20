@@ -52,7 +52,7 @@ namespace CTRPluginFramework {
 			Color::Silver << "-Empty-",
 		};	
 		
-		if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
+		if(entry->Hotkeys[0].IsPressed()) {
 			for(int i = 0; i <= 3; ++i) {
 				if(PlayerClass::GetInstance(i)->IsLoaded()) 
 					pV[i] = pColor[i] << "Player: " << std::to_string(i);
@@ -72,7 +72,7 @@ namespace CTRPluginFramework {
 			}
 		}
 		
-		if(Controller::IsKeysPressed(entry->Hotkeys[1].GetKeys())) {
+		else if(entry->Hotkeys[1].IsPressed()) {
 			if(PSelector_ON()) {
 				OSD::Notify(Utils::Format("Controlling Player: %02X Disabled!", *(u8 *)(Code::playselector + 0x10)));
 				PSelector_OFF();
@@ -107,7 +107,7 @@ namespace CTRPluginFramework {
 			IfForceAllowed = false;
 		}
 		
-		if(!entry->IsActivated()) {
+		else if(!entry->IsActivated()) {
 			AntiHook.Disable();
 			IfForceAllowed = true;
         }
@@ -153,7 +153,7 @@ namespace CTRPluginFramework {
 		
 		static int mode = 0;
 		
-		if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {	
+		if(entry->Hotkeys[0].IsPressed()) {	
 			switch(mode) {
 				default: break;
 				case 0:
@@ -189,7 +189,7 @@ namespace CTRPluginFramework {
 			}
 		}
 		
-		if(Controller::IsKeysPressed(entry->Hotkeys[1].GetKeys())) {	
+		else if(entry->Hotkeys[1].IsPressed()) {	
 			switch(setmode) {
 				case 0: return;
 				case 1: 
@@ -218,16 +218,16 @@ namespace CTRPluginFramework {
 			}
 		}
 		
-		if(Controller::IsKeysPressed(entry->Hotkeys[2].GetKeys())) {
+		else if(entry->Hotkeys[2].IsPressed()) {
 			speedmode = !speedmode;
 			OSD::Notify("Speed Mode " << (speedmode ? Color::Green << "ON" : Color::Red << "OFF"));
 			
 		}
 		
-		if(Controller::IsKeysPressed(entry->Hotkeys[3].GetKeys())) 
+		else if(entry->Hotkeys[3].IsPressed()) 
 			PlayerClass::GetInstance(GameHelper::GetOnlinePlayerIndex())->GetWorldCoords(&wX, &wY);
 		
-		if(speedmode ? Controller::IsKeysDown(entry->Hotkeys[3].GetKeys()) : Controller::IsKeysPressed(entry->Hotkeys[3].GetKeys())) {//Key::A + B
+		else if(speedmode ? entry->Hotkeys[3].IsDown() :entry->Hotkeys[3].IsPressed()) {//Key::A + B
 			animExecuting = true;
 			
 			switch(setmode) {
@@ -293,7 +293,7 @@ namespace CTRPluginFramework {
             { 0x0A000004, 0x3F800000, 0x3F800000 }
         };
 		
-		if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {//Key::L + Key::DPadLeft
+		if(entry->Hotkeys[0].IsPressed()) {//Key::L + Key::DPadLeft
 			bool index = *(u32 *)slo1 == 0x0A000004 ? 0 : 1;
 
 			Animation::Idle();
@@ -302,6 +302,7 @@ namespace CTRPluginFramework {
 			for(int i = 0; i < 3; ++i)
                 Process::Patch(SlowAnim[i], SlowAnimPatch[index][i]);
 		}
+
 		if(!entry->IsActivated()) {
 			for(int i = 0; i < 3; ++i)
                 Process::Patch(SlowAnim[i], SlowAnimPatch[1][i]);
@@ -312,10 +313,10 @@ namespace CTRPluginFramework {
 		u8 DATAIndexRandom = Utils::Random(0, 3);
 		static u32 wX, wY;
 		
-		if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) 
+		if(entry->Hotkeys[0].IsPressed()) 
 			PlayerClass::GetInstance()->GetWorldCoords(&wX, &wY);
 		
-		if(speedmode ? Controller::IsKeysDown(entry->Hotkeys[0].GetKeys()) : Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {		
+		if(speedmode ? entry->Hotkeys[0].IsDown() : entry->Hotkeys[0].IsPressed()) {		
 			animExecuting = true;
 			for(u8 i = 0; i < 4; i++) {
 				switch(setmode) {
@@ -346,7 +347,7 @@ namespace CTRPluginFramework {
 			}
 		}
 		
-		if(speedmode ? Controller::IsKeysDown(entry->Hotkeys[1].GetKeys()) : Controller::IsKeysPressed(entry->Hotkeys[1].GetKeys())) {
+		if(speedmode ? entry->Hotkeys[1].IsDown() : entry->Hotkeys[1].IsPressed()) {
 			for(u8 i = 0; i < 4; ++i) 
 				Animation::ExecuteAnimationWrapper(i, 6, 0, 0, 0, 0, 0, 0, 0, 1, 0);
 		}

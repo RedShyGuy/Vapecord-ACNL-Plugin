@@ -69,9 +69,6 @@
 #define TID_KORWA 		0x0004000000199000
 #define TID_EURWL 		0x00040000004C5700
 
-#define RELEASE_MODE 	0
-#define SEEDING_MODE 	1
-
 extern u32 PickupSeederItemID;
 
 namespace CTRPluginFramework {

@@ -178,7 +178,7 @@ namespace CTRPluginFramework {
 			Hotkey(Key::R | Key::Y, "Key3") 
 		})),
 		menu->Append(ANIMC);
-	#if SEEDING_MODE
+
 	////////////////////////
 	/*Seeding Codes Folder*/
 	////////////////////////
@@ -254,7 +254,7 @@ namespace CTRPluginFramework {
 		TREEC->Append(new MenuEntry(FolderColors[5] << "Instant Tree Chop", instantchop, "note")),
 		SEEDC->Append(TREEC);
 		menu->Append(SEEDC);
-	#endif
+
 	//////////////////////
 	/*Money Codes Folder*/
 	//////////////////////
@@ -404,7 +404,7 @@ namespace CTRPluginFramework {
 		DEVC->Append(new MenuEntry(Color::Red << "MSG Box", msgboxtest, "")),
 		//DEVC->Append(new MenuEntry(Color::Red << "Unused Fall Down", falldownfishing, "")),
 		//DEVC->Append(new MenuEntry(Color::Red << "Analyze Fossils", Analyzer, "")),
-		//DEVC->Append(new MenuEntry(Color::Red << "Island Item Code", nullptr, islanditems, "R or L to store or get memory inv")),
+		DEVC->Append(new MenuEntry(Color::Red << "Test Cheat", islanditems, "")),
 		DEVC->Append(new MenuEntry(Color::Red << "ACNH Cheat", acnh, "")),
 		//DEVC->Append(new MenuEntry(Color::Red << "Friend Code Test", PlayerLoader, "")),
 		DEVC->Append(new MenuEntry(Color::Red << "Player Dumper", nullptr, player_dumper, "")),

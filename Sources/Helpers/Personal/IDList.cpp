@@ -155,14 +155,6 @@ namespace CTRPluginFramework {
 		if((item & 0xFFFF) >> 12 == 4 || (item & 0xFFFF) >> 12 == 5) //if present
 			item = item - 0x2000; //convert present to standard Item ID to know if it is valid
 
-		#if !SEEDING_MODE
-			if(RANGE(item, 0x9F, 0xCB))
-				return true; //flowers are okay
-
-			if(RANGE(item, 0, 0xFD))
-				return false;
-		#endif
-
 	//If player is outdoors or doesnt drop item
 		if(!*(bool *)IndoorsBool || !IsDropped) {
 			if(IS(item, 0x7FFE) || RANGE(item, 0, 0xFD)) 

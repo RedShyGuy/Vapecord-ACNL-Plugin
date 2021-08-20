@@ -97,12 +97,15 @@ prevent any issues with freezing of the plugin
 		delete[] logoArray;
 	}
 
+	void func(void) {
+		FriendKey key;
+		FRD_GetMyFriendKey(&key);
+
+		OSD::Notify(Utils::Format("FriendCode: %ld", key.localFriendCode));
+	}
+
 	int	main(void) {
-	#if SEEDING_MODE
 		PluginMenu *menu = new PluginMenu("ACNL Vapecord Plugin " << GetRegionName(), majorV, minorV, revisV, Note);
-	#elif !SEEDING_MODE
-		PluginMenu *menu = new PluginMenu("ACNL Vapecord Plugin Lite " << GetRegionName(), majorV, minorV, revisV, Note);
-	#endif
 
 		menu->SynchronizeWithFrame(true);
 
@@ -134,9 +137,6 @@ prevent any issues with freezing of the plugin
 
 		menu->OnFirstOpening = StartingMsg;
 
-	#if RELEASE_MODE
-		menu->SetHexEditorState(false);
-	#endif	
 	//Load Callbacks
 		menu->Callback(devcallback);
 		menu->Callback(IndoorsSeedItemCheck);

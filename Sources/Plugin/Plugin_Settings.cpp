@@ -42,9 +42,7 @@ namespace CTRPluginFramework {
 		file.Read(&u_byte, 1);
         if(u_byte != 1) {
 			static const std::string question = "Note:\n"
-												#if SEEDING_MODE 
 												"This Plugin can use seeding cheats, which can be used to make games of others unplayable, be wise and respectful using those."
-												#endif
 												"This Plugin is still in developement, be aware that you might find bugs/glitches."
 												"It is recommended to make a backup of your save game before using this plugin.\n"
 												"Do you want to backup your save game now?";
