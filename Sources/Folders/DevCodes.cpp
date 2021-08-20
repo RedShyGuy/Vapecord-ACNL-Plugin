@@ -484,9 +484,9 @@ namespace CTRPluginFramework {
 	};
 
 	struct TimeChar {
-		char* Date;
-		char* Time;
-		char* WeekDay;
+		std::string Date;
+		std::string Time;
+		std::string WeekDay;
 	};
 	
 //AM = 0 | PM = 1
@@ -514,13 +514,13 @@ namespace CTRPluginFramework {
 		static FUNCT func(0x2FB394);
 		TimeData *data = func.Call<TimeData *>();
 
-		char* date = Utils::Format("%02d|%02d|%04d", data->Day, data->Month, data->Year);
+		std::string date = Utils::Format("%02d|%02d|%04d", data->Day, data->Month, data->Year);
 
 		s8 res = ConvertToAM_PM(data->Hour);
 
-		char* time = Utils::Format("%02d:%02d:%02d %s", data->Hour, data->Minute, data->Second, res ? "PM" : "AM");
+		std::string time = Utils::Format("%02d:%02d:%02d %s", data->Hour, data->Minute, data->Second, res ? "PM" : "AM");
 
-		char* weekday = WeekDay[data->WeekDay-1];
+		std::string weekday = WeekDay[data->WeekDay-1];
 
 		return TimeChar{ date, time, weekday };
 	}
