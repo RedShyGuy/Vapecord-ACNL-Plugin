@@ -468,84 +468,9 @@ namespace CTRPluginFramework {
 		}
 */
 
-	static const char* WeekDay[7] = {
-		"Monday", "Tuesday", "Wednesday", "Thursday", 
-		"Friday", "Saturday", "Sunday"
-	};
-
-	struct TimeData {
-		u16 Year;
-		u8 Month; 
-		u8 Day;
-		u8 WeekDay;
-		u8 Hour;
-		u8 Minute;
-		u8 Second;
-	};
-
-	struct TimeChar {
-		std::string Date;
-		std::string Time;
-		std::string WeekDay;
-	};
-	
-//AM = 0 | PM = 1
-	s8 ConvertToAM_PM(u8& hour) {
-		if(hour == 0 && hour != 12) {
-			hour = 12; 
-			return 0;
-		}
-		else if(hour == 12 && hour != 0) {
-			hour = 12; 
-			return 1;
-		}
-		else if(hour < 12 && hour != 0) {
-			return 0;
-		}
-		else if(hour > 12 && hour != 0) {
-			hour -= 12;
-			return 1;
-		}
-
-		return -1;
-	}
-
-	TimeChar GetGameTime(void) {
-		static FUNCT func(0x2FB394);
-		TimeData *data = func.Call<TimeData *>();
-
-		std::string date = Utils::Format("%02d|%02d|%04d", data->Day, data->Month, data->Year);
-
-		s8 res = ConvertToAM_PM(data->Hour);
-
-		std::string time = Utils::Format("%02d:%02d:%02d %s", data->Hour, data->Minute, data->Second, res ? "PM" : "AM");
-
-		std::string weekday = WeekDay[data->WeekDay-1];
-
-		return TimeChar{ date, time, weekday };
-	}
-
-	bool Clock(const Screen &screen) {
-		if(!screen.IsTop)
-			return false;
-
-		TimeChar tchar = GetGameTime();
-
-		screen.Draw(tchar.Date, 00, 00, Color(0xFA0ABEFF));
-		screen.Draw(tchar.Time, 00, 10, Color(0x00BFCCFF));
-		screen.Draw(tchar.WeekDay, 00, 20, Color(0x023583FF));
-
-		return true;
-	}
-
 //Item Island Code
 	void islanditems(MenuEntry *entry) {
-		if(entry->WasJustActivated()) {
-			OSD::Run(Clock);
-		}
-		else if(!entry->IsActivated()) {
-			OSD::Stop(Clock);
-		}
+
 		return;
 		/*if(Controller::IsKeysPressed(Key::R + Key::DPadUp)) {
 			AnimationData<u8, u8, u8, u8, u8, u16, u8> *globalData = new AnimationData<u8, u8, u8, u8, u8, u16, u8>();

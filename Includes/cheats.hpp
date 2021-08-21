@@ -376,7 +376,7 @@ namespace CTRPluginFramework {
 	void Check_Color_Language(void);
 	
 //Callbacks
-	void RainbowEntrys(Time time);
+	void OnNewFrameCallback(Time ttime);
   //Located in NonHacker.cpp
 	void NonHackerCallBack(void);
   //Located in Plugin_Setting.cpp

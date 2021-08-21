@@ -97,13 +97,6 @@ prevent any issues with freezing of the plugin
 		delete[] logoArray;
 	}
 
-	void func(void) {
-		FriendKey key;
-		FRD_GetMyFriendKey(&key);
-
-		OSD::Notify(Utils::Format("FriendCode: %ld", key.localFriendCode));
-	}
-
 	int	main(void) {
 		PluginMenu *menu = new PluginMenu("ACNL Vapecord Plugin " << GetRegionName(), majorV, minorV, revisV, Note);
 
@@ -143,7 +136,7 @@ prevent any issues with freezing of the plugin
 		menu->Callback(NonHackerCallBack);
 		menu->Callback(UpdateInstance);
 
-		menu->OnNewFrame = RainbowEntrys;
+		menu->OnNewFrame = OnNewFrameCallback;
 
 		Process::exceptionCallback = CustomExceptionHandler;
 

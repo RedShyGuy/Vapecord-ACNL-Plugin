@@ -1,4 +1,5 @@
 #include <CTRPluginFramework.hpp>
+#include <cstdarg>
 #include "cheats.hpp"
 #include "RegionCodes.hpp"
 #include "TextFileParser.hpp"
@@ -123,6 +124,127 @@ Randomizes colors of Menu Folders
 			MiscCodesUpdate(Rainbow());
 			timer.Restart();
 		}
+	}
+
+	/*static const char* WeekDay[7] = { "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su" };
+
+	struct TimeData {
+		u32 Year;
+		u8 Month; 
+		u8 Day;
+		u8 WeekDay;
+		u8 Hour;
+		u8 Minute;
+		u8 Second;
+	};
+
+	struct TimeChar {
+		std::string Date;
+		std::string Time;
+		std::string WeekDay;
+	};
+
+//AM = 0 | PM = 1
+	s8 ConvertToAM_PM(u8& hour) {
+		if(hour == 0 && hour != 12) {
+			hour = 12; 
+			return 0;
+		}
+		else if(hour == 12 && hour != 0) {
+			hour = 12; 
+			return 1;
+		}
+		else if(hour < 12 && hour != 0) {
+			return 0;
+		}
+		else if(hour > 12 && hour != 0) {
+			hour -= 12; 
+			return 1;
+		}
+
+		return -1;
+	}
+
+	TimeChar GetGameTime(void) {
+		static FUNCT func(0x2FB394);
+		TimeData *data = func.Call<TimeData *>();
+
+		std::string date = Utils::Format("%02d|%02d|%04d", data->Day, data->Month, data->Year);
+
+		s8 res = ConvertToAM_PM(data->Hour);
+
+		std::string time = Utils::Format("%02d:%02d:%02d %s", data->Hour, data->Minute, data->Second, res ? "PM" : "AM");
+
+		std::string weekday = WeekDay[data->WeekDay-1];
+
+		return TimeChar{ date, time, weekday };
+	}*/
+
+	static bool FCLoaded = false;
+
+	void StoreFC(std::string &FC) {
+		frdInit();
+
+		FriendKey key;
+		FRD_GetMyFriendKey(&key);
+
+		u64 localFriendCode = 0;
+		FRD_PrincipalIdToFriendCode(key.principalId, &localFriendCode);
+
+		char buffer[13];
+		sprintf(buffer, "%012lld", localFriendCode);
+		std::string str = (std::string(buffer));
+		FC = Utils::Format("FC: %s - %s - %s", str.substr(0, 4).c_str(), str.substr(4, 4).c_str(), str.substr(8, 4).c_str());
+
+		frdExit();
+	}
+
+	void StoreBatteryPercentage(float &percentage) {
+		u8 data[4];
+		mcuHwcInit();
+		MCUHWC_ReadRegister(0xA, data, 4);
+
+		percentage = data[1] + data[2] / 256.0f;
+        percentage = (u32)((percentage + 0.05f) * 10.0f) / 10.0f;
+
+		mcuHwcExit();
+	}
+
+	void OnNewFrameCallback(Time ttime) {
+		RainbowEntrys(ttime);
+
+		static std::string FC = "";
+
+		if(!FCLoaded) {
+			StoreFC(FC);
+			FCLoaded = true;
+		}
+
+		const FwkSettings &settings = FwkSettings::Get();
+		const Screen& TopScreen = OSD::GetTopScreen();
+		time_t rawtime;
+		struct tm * timeinfo;
+		char timestamp[80];
+
+		time(&rawtime);
+		timeinfo = localtime(&rawtime);
+		strftime(timestamp, 80, "%r | %F", timeinfo);
+
+		float percentage = 0;
+		StoreBatteryPercentage(percentage);
+
+		int coordx = 30, coordy1 = 0, coordy2 = 218;
+
+ 		TopScreen.DrawRect(coordx, coordy1, 340, 20, settings.BackgroundMainColor, true);
+		TopScreen.DrawRect(coordx + 2, coordy1 + 2, 340 - 4, 20 - 2, settings.BackgroundBorderColor, false);
+
+		TopScreen.DrawRect(coordx, coordy2, 340, 22, settings.BackgroundMainColor, true);
+		TopScreen.DrawRect(coordx + 2, coordy2 + 2, 340 - 4, 20 - 2, settings.BackgroundBorderColor, false);
+
+		TopScreen.DrawSysfont(timestamp, coordx + 5, coordy1 + 3);
+		TopScreen.DrawSysfont(Utils::Format("%d%%", (u32)percentage), coordx + 280, coordy1 + 3);
+
+		TopScreen.DrawSysfont(FC, coordx + 5, coordy2 + 3);
 	}
 
 /*
