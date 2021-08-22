@@ -136,8 +136,7 @@ namespace CTRPluginFramework {
 		Process::Write32(NonSeed, 0xE3A00001);
 
 	//patches npc from moving back to their fixed position
-	//TODO: port addresses
-		static const u32 patchNPCMovingBack = Region::AutoRegion(0x57B9C0, 0, 0, 0, 0, 0, 0, 0);
+		static const u32 patchNPCMovingBack = Region::AutoRegion(0x57B9C0, 0x57AED8, 0x57AA08, 0x57AA08, 0x57A2F8, 0x57A2F8, 0x57A018, 0x57A018);
 		Process::Write32(patchNPCMovingBack, 0xE1A00000);
 	}
 }

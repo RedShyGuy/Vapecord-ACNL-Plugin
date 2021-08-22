@@ -130,8 +130,7 @@ namespace CTRPluginFramework {
 	}
 
 	void SetCustomOnlineStack(u32 address, const std::string& str) {
-	//TODO: port addresses
-		static const u32 point = Region::AutoRegion(0x90B38C, 0, 0, 0, 0, 0, 0, 0);
+		static const u32 point = Region::AutoRegion(0x90B38C, 0x90A260, 0x90A20C, 0x90A20C, 0x904644, 0x903644, 0x9035B0, 0x9035B0);
 
 		Process::Write32(address, address + 0x6C);
 		Process::Write32(address + 0x6C, point);
@@ -144,13 +143,12 @@ namespace CTRPluginFramework {
 	}
 
 	void GameKeyboard::SendMessage(const std::string& str) {
-	//TODO: port addresses
-		static const u32 func1 = Region::AutoRegion(0x81F9D0, 0, 0, 0, 0, 0, 0, 0);
-		static const u32 func2 = Region::AutoRegion(0x56DE5C, 0, 0, 0, 0, 0, 0, 0);
-		static const u32 func3 = Region::AutoRegion(0x5FD774, 0, 0, 0, 0, 0, 0, 0);
-		static const u32 func4 = Region::AutoRegion(0x5E3920, 0, 0, 0, 0, 0, 0, 0);
-		static const u32 func5 = Region::AutoRegion(0x300838, 0, 0, 0, 0, 0, 0, 0);
-		static const u32 func6 = Region::AutoRegion(0x625C04, 0, 0, 0, 0, 0, 0, 0);
+		static const u32 func1 = Region::AutoRegion(0x81F9D0, 0x81E8D0, 0x81E9D8, 0x81E9B0, 0x81E150, 0x81E128, 0x81DD10, 0x81DCE8);
+		static const u32 func2 = Region::AutoRegion(0x56DE5C, 0x56D374, 0x56CEA4, 0x56CEA4, 0x56C794, 0x56C794, 0x56C4B4, 0x56C4B4);
+		static const u32 func3 = Region::AutoRegion(0x5FD774, 0x5FCCA4, 0x5FC7AC, 0x5FC7AC, 0x5FC02C, 0x5FC02C, 0x5FBCB4, 0x5FBCB4);
+		static const u32 func4 = Region::AutoRegion(0x5E3920, 0x5E2E50, 0x5E2958, 0x5E2958, 0x5E21D8, 0x5E21D8, 0x5E1E60, 0x5E1E60);
+		static const u32 func5 = Region::AutoRegion(0x300838, 0x300904, 0x3008C0, 0x3008C0, 0x300914, 0x300914, 0x300AF4, 0x300AF4);
+		static const u32 func6 = Region::AutoRegion(0x625C04, 0x62512C, 0x624C3C, 0x624C3C, 0x6246FC, 0x6246FC, 0x6242A4, 0x6242A4);
 
 		u32 msgData = *(u32 *)Code::chatpointer;
 		if(msgData == 0)

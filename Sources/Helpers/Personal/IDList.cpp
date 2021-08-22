@@ -238,8 +238,8 @@ namespace CTRPluginFramework {
 	}*/
 
 	std::string IDList::GetNNPCName(u16 VID) {
-		static const u32 StoreFunc = Region::AutoRegion(0x81F9D0, 0, 0, 0, 0, 0, 0, 0); 
-		static const u32 SetFunc = Region::AutoRegion(0x56E35C, 0, 0, 0, 0, 0, 0, 0); 
+		static const u32 StoreFunc = Region::AutoRegion(0x81F9D0, 0x81E8D0, 0x81E9D8, 0x81E9B0, 0x81E150, 0x81E128, 0x81DD10, 0x81DCE8);
+		static const u32 SetFunc = Region::AutoRegion(0x56E35C, 0x56D874, 0x56D3A4, 0x56D3A4, 0x56CC94, 0x56CC94, 0x56C9B4, 0x56C9B4); 
 
 		u32* add = FUNCT(StoreFunc).Call<u32*>(0xA00000);
 		FUNCT(SetFunc).Call<void>(add, &VID, 0);
@@ -252,7 +252,7 @@ namespace CTRPluginFramework {
 	}
 
 	std::string IDList::GetSPNPCName(u32 npcData) {
-		static const u32 StoreFunc = Region::AutoRegion(0x81F9D0, 0, 0, 0, 0, 0, 0, 0); 
+		static const u32 StoreFunc = Region::AutoRegion(0x81F9D0, 0x81E8D0, 0x81E9D8, 0x81E9B0, 0x81E150, 0x81E128, 0x81DD10, 0x81DCE8);
 
 		if(npcData == 0)
 			return "???";
