@@ -119,6 +119,7 @@ Randomizes colors of Menu Folders
 			SeedingCodesUpdate(Rainbow());
 			MoneyCodesUpdate(Rainbow());
 			IslandCodesUpdate(Rainbow());
+			NPCCodesUpdate(Rainbow());
 			FunCodesUpdate(Rainbow());
 			ExtraCodesUpdate(Rainbow());
 			MiscCodesUpdate(Rainbow());
@@ -222,6 +223,7 @@ Randomizes colors of Menu Folders
 
 		const FwkSettings &settings = FwkSettings::Get();
 		const Screen& TopScreen = OSD::GetTopScreen();
+		const Screen& BottomScreen = OSD::GetBottomScreen();
 		time_t rawtime;
 		struct tm * timeinfo;
 		char timestamp[80];
@@ -245,6 +247,18 @@ Randomizes colors of Menu Folders
 		TopScreen.DrawSysfont(Utils::Format("%d%%", (u32)percentage), coordx + 280, coordy1 + 3);
 
 		TopScreen.DrawSysfont(FC, coordx + 5, coordy2 + 3);
+
+		coordx = 20, coordy1 = 0, coordy2 = 218;
+
+		BottomScreen.DrawRect(coordx, coordy1, 280, 20, settings.BackgroundMainColor, true);
+		BottomScreen.DrawRect(coordx + 2, coordy1 + 2, 280 - 4, 20 - 2, settings.BackgroundBorderColor, false);
+	
+		BottomScreen.DrawRect(coordx, coordy2, 280, 22, settings.BackgroundMainColor, true);
+		BottomScreen.DrawRect(coordx + 2, coordy2 + 2, 280 - 4, 20 - 2, settings.BackgroundBorderColor, false);
+		
+		BottomScreen.DrawSysfont("Discord: " + std::string(DISCORDINV), coordx + 5, coordy1 + 3);
+
+		BottomScreen.DrawSysfont("Plugin made by Lukas#4444", coordx + 5, coordy2 + 3);
 	}
 
 /*

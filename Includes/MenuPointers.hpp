@@ -17,6 +17,7 @@ namespace CTRPluginFramework {
 	extern MenuFolder *TREEC; //TREE_CODES
 	extern MenuFolder *MONC; //MONEY_CODES
 	extern MenuFolder *ISLC; //ISLAND_CODES
+	extern MenuFolder *NPCC; //NPC_CODES
 	extern MenuFolder *FUNC; //FUN_CODES
 	extern MenuFolder *EXTC; //EXTRA_CODES
 	extern MenuFolder *FISC; //FISH_CODES
@@ -24,7 +25,7 @@ namespace CTRPluginFramework {
 	extern MenuFolder *MISC; //MISC_CODES
 	extern MenuFolder *DEVC; //DEV_CODES
 
-	extern Color FolderColors[11];
+	extern Color FolderColors[12];
 
 	struct HotkeyDat {
 		std::vector<std::string> Name;
@@ -36,7 +37,7 @@ namespace CTRPluginFramework {
 	Color GetColorFromString(const std::string &str);
 	void SetVapecordStandardTheme(FwkSettings &settings);
 	void SetFWK(FwkSettings &settings, const Color arr[25]);
-	void UpdateAll(const Color arr[11]);
+	void UpdateAll(const Color arr[12]);
 	void UpdateAll(void);
 	void SaveCodesUpdate(Color color);
 	void MovementCodesUpdate(Color color);
@@ -46,6 +47,7 @@ namespace CTRPluginFramework {
 	void SeedingCodesUpdate(Color color);
 	void MoneyCodesUpdate(Color color);
 	void IslandCodesUpdate(Color color);
+	void NPCCodesUpdate(Color color);
 	void FunCodesUpdate(Color color);
 	void ExtraCodesUpdate(Color color);
 	void MiscCodesUpdate(Color color);

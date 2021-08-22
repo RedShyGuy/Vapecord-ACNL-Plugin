@@ -21,6 +21,7 @@ namespace CTRPluginFramework {
 			screen.Draw(Utils::Format("Y | %f", coord[1]), 0, 10);
 			screen.Draw(Utils::Format("Z | %f", coord[2]), 0, 20);
 			screen.Draw(Utils::Format("R | %04X", rotation), 0, 30);
+			screen.Draw(Utils::Format("A | %08X", CurrAddress), 0, 40);
 			return 1;
 		}
 		return 0;
@@ -37,7 +38,7 @@ namespace CTRPluginFramework {
 	}
 
 	void NPCFunction(MenuEntry *entry) {
-		if(!Controller::IsKeysPressed(Key::L + Key::A))
+		if(!entry->Hotkeys[0].IsPressed()) //Key::L + Key::A
 			return;
 
 		static const std::vector<std::string> option = {
@@ -110,11 +111,11 @@ namespace CTRPluginFramework {
 		if(CurrAddress == 0)
 			return;
 
-		if(turbo ? Controller::IsKeysDown(Key::L + Key::B) : Controller::IsKeysPressed(Key::L + Key::B)) {
+		if(turbo ? entry->Hotkeys[0].IsDown() : entry->Hotkeys[0].IsPressed()) { //L + B
 			u32 null[]{ 0 };
 			switch(mode) {
 				case 0:
-					FUNCT(func1).Call<void>(CurrAddress + 0x78, npcID, 0, data1, (u32)null, (u32)null, 0, data2); //Animation	
+					FUNCT(func1).Call<void>(CurrAddress + 0x78, npcID, 0, data1, null, null, 0, data2); //Animation	
 				break;
 				case 1:
 					FUNCT(func2).Call<void>(CurrAddress + 0x78, 0, npcID, 0, 0); //Snake
@@ -123,7 +124,7 @@ namespace CTRPluginFramework {
 					FUNCT(func3).Call<void>(CurrAddress + 0x78, 0, npcID); //Emote
 				break;
 				case 3:
-					FUNCT(func4).Call<void>(CurrAddress + 0x78, 0, (u32)&npcID); //Item
+					FUNCT(func4).Call<void>(CurrAddress + 0x78, 0, &npcID); //Item
 				break;
 			}
 		}
@@ -133,16 +134,16 @@ namespace CTRPluginFramework {
 		if(CurrAddress == 0)
 			return;
 
-		if(Controller::IsKeyDown(Key::L)) {
+		if(entry->Hotkeys[0].IsDown()) { //L
 			float *pCoords = (float *)(CurrAddress + 0x14);
 			if(pCoords != nullptr && !MapEditorActive) { //if not in tile selection mo
-				if(Controller::IsKeyDown(Key::DPadRight)) 
+				if(entry->Hotkeys[1].IsDown()) //DPadRight
 					pCoords[0] += 5.0;
-				if(Controller::IsKeyDown(Key::DPadLeft)) 
+				if(entry->Hotkeys[2].IsDown()) //DPadLeft
 					pCoords[0] -= 5.0;
-				if(Controller::IsKeyDown(Key::DPadDown)) 
+				if(entry->Hotkeys[3].IsDown()) //DPadDown
 					pCoords[2] += 5.0;
-				if(Controller::IsKeyDown(Key::DPadUp)) 
+				if(entry->Hotkeys[4].IsDown()) //DPadUp
 					pCoords[2] -= 5.0;
 			}
 		}
@@ -152,7 +153,7 @@ namespace CTRPluginFramework {
 		if(CurrAddress == 0)
 			return;
 
-		if(!Controller::IsKeysPressed(Key::L + Key::Y))
+		if(!entry->Hotkeys[0].IsPressed()) //L + Y
 			return;
 
 		float *pCoords = (float *)(CurrAddress + 0x14);
@@ -204,7 +205,7 @@ namespace CTRPluginFramework {
 		if(CurrAddress == 0)
 			return;
 
-		if(Controller::IsKeyDown(Key::CPad)) {
+		if(entry->Hotkeys[0].IsDown() && Controller::IsKeyDown(Key::CPad)) { //L
 			*(u16 *)(CurrAddress + 0x2E) = GetRawRotationData();
 		}
 	}

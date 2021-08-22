@@ -3,22 +3,22 @@
 #include "RegionCodes.hpp"
 
 namespace CTRPluginFramework {
-    static const Color c_Colorful[] = {
+    static const Color c_Colorful[12] = {
 		Color(0xDC143CFF), Color(0x98FB98FF), Color(0xFF7F50FF), Color(0x8A2BE2FF), 
 		Color(0x1E90FFFF), Color(0x00FA9AFF), Color(0xFF69B4FF), Color(0xDAA520FF), 
-		Color(0xD2691EFF), Color(0xE10034FF), Color(0x20B2AAFF)
+		Color(0x00FA9AFF), Color(0xD2691EFF), Color(0xE10034FF), Color(0x20B2AAFF)
 	};
 
-	static const Color c_Luxury[] = {
+	static const Color c_Luxury[12] = {
 		Color(0xFFAA00FF), Color(0xFFFFFFFF), Color(0xFFAA00FF), Color(0xFFFFFFFF),
 		Color(0xFFAA00FF), Color(0xFFFFFFFF), Color(0xFFAA00FF), Color(0xFFFFFFFF), 
-		Color(0xFFAA00FF), Color(0xFFFFFFFF), Color(0xFFAA00FF)
+		Color(0xFFAA00FF), Color(0xFFFFFFFF), Color(0xFFAA00FF), Color(0xFFFFFFFF)
 	};
 
-	static const Color c_Lite[] = {
+	static const Color c_Lite[12] = {
 		Color(0xFFFFFFFF), Color(0xFFFFFFFF), Color(0xFFFFFFFF), Color(0xFFFFFFFF), 
 		Color(0xFFFFFFFF), Color(0xFFFFFFFF), Color(0xFFFFFFFF), Color(0xFFFFFFFF), 
-		Color(0xFFFFFFFF), Color(0xFFFFFFFF), Color(0xFFFFFFFF)
+		Color(0xFFFFFFFF), Color(0xFFFFFFFF), Color(0xFFFFFFFF), Color(0xFFFFFFFF)
 	};
 
     enum f_Color {
@@ -122,8 +122,8 @@ namespace CTRPluginFramework {
                     Color(std::stoul(colorparser->Get("INVENTORYCODES"), 0, 16)), Color(std::stoul(colorparser->Get("PLAYERCODES"), 0, 16)), 
                     Color(std::stoul(colorparser->Get("ANIMATIONCODES"), 0, 16)), Color(std::stoul(colorparser->Get("SEEDINGCODES"), 0, 16)), 
                     Color(std::stoul(colorparser->Get("MONEYCODES"), 0, 16)), Color(std::stoul(colorparser->Get("ISLANDCODES"), 0, 16)), 
-                    Color(std::stoul(colorparser->Get("FUNCODES"), 0, 16)), Color(std::stoul(colorparser->Get("EXTRACODES"), 0, 16)), 
-                    Color(std::stoul(colorparser->Get("MISCCODES"), 0, 16))
+                    Color(std::stoul(colorparser->Get("NPCCODES"), 0, 16)), Color(std::stoul(colorparser->Get("FUNCODES"), 0, 16)), 
+					Color(std::stoul(colorparser->Get("EXTRACODES"), 0, 16)), Color(std::stoul(colorparser->Get("MISCCODES"), 0, 16))
                 };
                 UpdateAll(c_Custom);
             break;  

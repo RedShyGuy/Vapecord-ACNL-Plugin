@@ -124,10 +124,6 @@ prevent any issues with freezing of the plugin
 
 		ReserveItemData(ItemList);
 
-		static const std::string MadeBy = FormatColor("Plugin made by %cLukas%c#%c4%c4%c4%c4\n%cJoin my Discord for updates and help on the plugin: ", Rainbow(), Rainbow(), Rainbow(), Rainbow(), Rainbow(), Rainbow(), Color::White) << Color::Red << DISCORDINV;								
-
-		MessageBox("BETA VERSION", MadeBy).SetClear(ClearScreen::Top)();
-
 		menu->OnFirstOpening = StartingMsg;
 
 	//Load Callbacks

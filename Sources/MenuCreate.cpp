@@ -283,70 +283,95 @@ namespace CTRPluginFramework {
 		ISLC->Append(new MenuEntry(FolderColors[7] << "Island Building Modifier", buildingMod, menuBuildingMod, "note")),
 		menu->Append(ISLC);
 
+	//////////////
+	/*NPC Folder*/
+	//////////////
+		NPCC = new MenuFolder(FolderColors[8] << "NPC Codes");
+		NPCC->Append(EntryWithHotkey(new MenuEntry(FolderColors[8] << "NPC Selector", NPCFunction, "note"), { 
+			Hotkey(Key::L | Key::A, "Key") 
+		})),
+		NPCC->Append(EntryWithHotkey(new MenuEntry(FolderColors[8] << "NPC Animation Modifier",  NPCAnimation, NPCSetAnim, "note"), { 
+			Hotkey(Key::L | Key::B, "Key") 
+		})),
+		NPCC->Append(EntryWithHotkey(new MenuEntry(FolderColors[8] << "NPC Coordinates Modifier", NPCCoordinates, "note"), { 
+			Hotkey(Key::L, "Key"),
+			Hotkey(Key::DPadRight, "Key2"), 
+			Hotkey(Key::DPadLeft, "Key3"), 
+			Hotkey(Key::DPadDown, "Key4"), 
+			Hotkey(Key::DPadUp, "Key5")
+		})),
+		NPCC->Append(EntryWithHotkey(new MenuEntry(FolderColors[8] << "NPC Teleport To You", NPCTeleportToYou, "note"), { 
+			Hotkey(Key::L | Key::Y, "Key") 
+		})),
+		NPCC->Append(EntryWithHotkey(new MenuEntry(FolderColors[8] << "NPC Rotation Modifier", NPCRotate, "note"), { 
+			Hotkey(Key::L, "Key") 
+		})),
+		menu->Append(NPCC);
+
 	////////////////////
 	/*Fun Codes Folder*/
 	////////////////////
-		FUNC = new MenuFolder(FolderColors[8] << "Fun Codes"); 
-		FUNC->Append(new MenuEntry(FolderColors[8] << "Size Codes", nullptr, sizecodes, "note")),
-		FUNC->Append(new MenuEntry(FolderColors[8] << "T-Pose", nullptr, tposeentry, "note")),
-		FUNC->Append(EntryWithHotkey(new MenuEntry(FolderColors[8] << "Take TPC Pic", freezeframe, "note"), { 
+		FUNC = new MenuFolder(FolderColors[9] << "Fun Codes"); 
+		FUNC->Append(new MenuEntry(FolderColors[9] << "Size Codes", nullptr, sizecodes, "note")),
+		FUNC->Append(new MenuEntry(FolderColors[9] << "T-Pose", nullptr, tposeentry, "note")),
+		FUNC->Append(EntryWithHotkey(new MenuEntry(FolderColors[9] << "Take TPC Pic", freezeframe, "note"), { 
 			Hotkey(Key::L, "Key"), 
 			Hotkey(Key::A, "Key2") 
 		})),
-		FUNC->Append(new MenuEntry(FolderColors[8] << "Max Turbo Presses", maxturbo, "note")),
+		FUNC->Append(new MenuEntry(FolderColors[9] << "Max Turbo Presses", maxturbo, "note")),
 		FUNC->Append(new MenuEntry(FolderColors[9] << "Multi-Presses", asmpresses, "note")),
-		FUNC->Append(EntryWithHotkey(new MenuEntry(FolderColors[8] << "Ultimate Party Popper", partypopper, "note"), { 
+		FUNC->Append(EntryWithHotkey(new MenuEntry(FolderColors[9] << "Ultimate Party Popper", partypopper, "note"), { 
 			Hotkey(Key::B | Key::DPadLeft, "Key") 
 		})),
-	    FUNC->Append(new MenuEntry(FolderColors[8] << "Camera Mod", cameramod, "note")),
+	    FUNC->Append(new MenuEntry(FolderColors[9] << "Camera Mod", cameramod, "note")),
 		menu->Append(FUNC);
 
 	//////////////////////
 	/*Extra Codes Folder*/
 	//////////////////////
-		EXTC = new MenuFolder(FolderColors[9] << "Extra Codes");
+		EXTC = new MenuFolder(FolderColors[10] << "Extra Codes");
 	/////////////////////
 	/*Fish Codes Folder*/
 	/////////////////////
-		FISC = new MenuFolder(FolderColors[9] << "Fish Codes");
-		FISC->Append(new MenuEntry(FolderColors[9] << "Fish Bite Always", FishAlwaysBiteRightAway, "note")),
-		FISC->Append(new MenuEntry(FolderColors[9] << "Fish Can't Be Scared", FishCantBeScared, "note")),
+		FISC = new MenuFolder(FolderColors[10] << "Fish Codes");
+		FISC->Append(new MenuEntry(FolderColors[10] << "Fish Bite Always", FishAlwaysBiteRightAway, "note")),
+		FISC->Append(new MenuEntry(FolderColors[10] << "Fish Can't Be Scared", FishCantBeScared, "note")),
 		EXTC->Append(FISC);
 	/////////////////////
 	/*Chat Codes Folder*/
 	/////////////////////
-		CHAC = new MenuFolder(FolderColors[9] << "Chat Codes");
-		CHAC->Append(new MenuEntry(FolderColors[9] << "Chat Bubbles Don't Disappear", bubblesDisappear, "note")),
-		CHAC->Append(EntryWithHotkey(new MenuEntry(FolderColors[9] << "Chat Copy/Paste", ChatCopyPaste, "note"), {
+		CHAC = new MenuFolder(FolderColors[10] << "Chat Codes");
+		CHAC->Append(new MenuEntry(FolderColors[10] << "Chat Bubbles Don't Disappear", bubblesDisappear, "note")),
+		CHAC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "Chat Copy/Paste", ChatCopyPaste, "note"), {
 			Hotkey(Key::L | Key::DPadRight, "Key"),
 			Hotkey(Key::L | Key::DPadUp, "Key2"),
 			Hotkey(Key::L | Key::DPadDown, "Key3"),
 			Hotkey(Key::L | Key::DPadLeft, "Key4")
 		})),
-		CHAC->Append(EntryWithHotkey(new MenuEntry(FolderColors[9] << "Force Send Chat", Forcesendchat, "note"), { 
+		CHAC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "Force Send Chat", Forcesendchat, "note"), { 
 			Hotkey(Key::R, "Key") 
 		})),
 		EXTC->Append(CHAC);
-		EXTC->Append(new MenuEntry(FolderColors[9] << "Shops Always Open", nullptr, ShopsAlwaysOpen, "note")),
-		EXTC->Append(new MenuEntry(FolderColors[9] << "Disable Save Menus", nullptr, nonesave, "note")),
-		EXTC->Append(new MenuEntry(FolderColors[9] << "Disable Item Locks", nullptr, bypass, "note")),
-		EXTC->Append(new MenuEntry(FolderColors[9] << "Can't Fall In Holes Or Pitfalls", nullptr, noTrap, "note")),
-		EXTC->Append(new MenuEntry(FolderColors[9] << "Show Mail Text", mailtext, "note")),
-	    EXTC->Append(EntryWithHotkey(new MenuEntry(FolderColors[9] << "Water All Flowers", WaterAllFlowers, "note"), { 
+		EXTC->Append(new MenuEntry(FolderColors[10] << "Shops Always Open", nullptr, ShopsAlwaysOpen, "note")),
+		EXTC->Append(new MenuEntry(FolderColors[10] << "Disable Save Menus", nullptr, nonesave, "note")),
+		EXTC->Append(new MenuEntry(FolderColors[10] << "Disable Item Locks", nullptr, bypass, "note")),
+		EXTC->Append(new MenuEntry(FolderColors[10] << "Can't Fall In Holes Or Pitfalls", nullptr, noTrap, "note")),
+		EXTC->Append(new MenuEntry(FolderColors[10] << "Show Mail Text", mailtext, "note")),
+	    EXTC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "Water All Flowers", WaterAllFlowers, "note"), { 
 			Hotkey(Key::R | Key::DPadLeft, "Key") 
 		})),
-		EXTC->Append(EntryWithHotkey(new MenuEntry(FolderColors[9] << "Weed Remover", weedremover, "note"), { 
+		EXTC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "Weed Remover", weedremover, "note"), { 
 			Hotkey(Key::L | Key::DPadRight, "Key"), 
 			Hotkey(Key::L | Key::DPadLeft, "Key2") 
 		})),
-		EXTC->Append(new MenuEntry(FolderColors[9] << "Edit Every Pattern", editpattern, "note")),
-		EXTC->Append(EntryWithHotkey(new MenuEntry(FolderColors[9] << "Grass Editor", grasseditor, grasscomplete, "note"), { 
+		EXTC->Append(new MenuEntry(FolderColors[10] << "Edit Every Pattern", editpattern, "note")),
+		EXTC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "Grass Editor", grasseditor, grasscomplete, "note"), { 
 			Hotkey(Key::R | Key::DPadDown, "Key"), 
 			Hotkey(Key::R | Key::DPadUp, "Key2"), 
 			Hotkey(Key::R | Key::DPadRight, "Key3") 
 		})),
-		EXTC->Append(new MenuEntry(FolderColors[9] << "Amiibo Spoofer", AmiiboSpoofer, "note")),
-		EXTC->Append(EntryWithHotkey(new MenuEntry(FolderColors[9] << "Time Travel", TimeTravel, TTKeyboard, "note"), { 
+		EXTC->Append(new MenuEntry(FolderColors[10] << "Amiibo Spoofer", AmiiboSpoofer, "note")),
+		EXTC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "Time Travel", TimeTravel, TTKeyboard, "note"), { 
 			Hotkey(Key::R | Key::DPadRight, "Key"), 
 			Hotkey(Key::R | Key::DPadLeft, "Key2") 
 		})),
@@ -355,42 +380,32 @@ namespace CTRPluginFramework {
 	/////////////////////
 	/*Misc Codes Folder*/
 	/////////////////////
-		MISC = new MenuFolder(FolderColors[10] << "Misc Codes");		
-		MISC->Append(new MenuEntry(FolderColors[10] << "Change Tool Animation", nullptr, tooltype, "note")),
-		MISC->Append(new MenuEntry(FolderColors[10] << "Change Gametype", nullptr, mgtype, "note")),
-		MISC->Append(new MenuEntry(FolderColors[10] << "Unbreakable Flowers", nullptr, unbreakableflower, "note")),
-		MISC->Append(new MenuEntry(FolderColors[10] << "Weather Modifier", nullptr, Weathermod , "note")),
-		MISC->Append(new MenuEntry(FolderColors[10] << "Music Speed Modifier", nullptr, Musicchange, "note")),
-		MISC->Append(new MenuEntry(FolderColors[10] << "Disable Non-Hacker Commands", nullptr, disablecommands, "note")),
-		MISC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "Quick Menu", miscFunctions, "note"), {
+		MISC = new MenuFolder(FolderColors[11] << "Misc Codes");		
+		MISC->Append(new MenuEntry(FolderColors[11] << "Change Tool Animation", nullptr, tooltype, "note")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "Change Gametype", nullptr, mgtype, "note")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "Unbreakable Flowers", nullptr, unbreakableflower, "note")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "Weather Modifier", nullptr, Weathermod , "note")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "Music Speed Modifier", nullptr, Musicchange, "note")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "Disable Non-Hacker Commands", nullptr, disablecommands, "note")),
+		MISC->Append(EntryWithHotkey(new MenuEntry(FolderColors[11] << "Quick Menu", miscFunctions, "note"), {
 			Hotkey(Key::Y | Key::DPadDown, "Key")
 		})),
-		MISC->Append(new MenuEntry(FolderColors[10] << "More Than 3 Number On Island",  morenumberisland, "note")),
-		MISC->Append(new MenuEntry(FolderColors[10] << "Large FOV", fovlarge, "note")),
-		MISC->Append(new MenuEntry(FolderColors[10] << "Move Furniture", roomSeeder, "note")),
-		MISC->Append(new MenuEntry(FolderColors[10] << "Can Walk When Talk", walktalkentry, "note")),
-		MISC->Append(new MenuEntry(FolderColors[10] << "Keyboard Extender", key_limit, "note")),
-		MISC->Append(new MenuEntry(FolderColors[10] << "Custom Keyboard Symbols", CustomKeyboard, "note")),
-		MISC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "Beans Particle Changer", Beans, "note"), { 
+		MISC->Append(new MenuEntry(FolderColors[11] << "More Than 3 Number On Island",  morenumberisland, "note")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "Large FOV", fovlarge, "note")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "Move Furniture", roomSeeder, "note")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "Can Walk When Talk", walktalkentry, "note")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "Keyboard Extender", key_limit, "note")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "Custom Keyboard Symbols", CustomKeyboard, "note")),
+		MISC->Append(EntryWithHotkey(new MenuEntry(FolderColors[11] << "Beans Particle Changer", Beans, "note"), { 
 			Hotkey(Key::L | Key::DPadLeft, "Key") 
 		})),
-		MISC->Append(new MenuEntry(FolderColors[10] << "Always Daytime", Daytime, "note")),    
-		MISC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "Fast Mode", fast, "note"), { 
+		MISC->Append(new MenuEntry(FolderColors[11] << "Always Daytime", Daytime, "note")),    
+		MISC->Append(EntryWithHotkey(new MenuEntry(FolderColors[11] << "Fast Mode", fast, "note"), { 
 			Hotkey(Key::R | Key::DPadDown, "Key")
 		})),
-		MISC->Append(new MenuEntry(FolderColors[10] << "Fast Text Speed", fasttalk, "note")),
-		MISC->Append(new MenuEntry(FolderColors[10] << "Fast Game Speed", speedentry, "note")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "Fast Text Speed", fasttalk, "note")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "Fast Game Speed", speedentry, "note")),
 		menu->Append(MISC);
-
-	//TODO: translate + set up correctly
-		MenuFolder *beta;
-		beta = new MenuFolder(FormatColor("%cNPC Codes%c : %cBETA", Color(0x00FA9AFF), Color::White, Color::Red));
-		beta->Append(new MenuEntry(Color(0x00FA9AFF) << "NPC Selector", NPCFunction, "Press L + A to select a loaded NPC.")),	
-		beta->Append(new MenuEntry(Color(0x00FA9AFF) << "NPC Animation",  NPCAnimation, NPCSetAnim, "Set ID, then press L + B to execute.")),
-		beta->Append(new MenuEntry(Color(0x00FA9AFF) << "NPC Coordinates", NPCCoordinates, "Press L + DPad to move NPC.")),
-		beta->Append(new MenuEntry(Color(0x00FA9AFF) << "NPC Teleport", NPCTeleportToYou, "Press L + Y to teleport NPC to your position.")),
-		beta->Append(new MenuEntry(Color(0x00FA9AFF) << "NPC Rotation", NPCRotate, "Press CPad to rotate NPC.")),
-		menu->Append(beta);
 
 	////////////////////
 	/*Dev Codes Folder*/

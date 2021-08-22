@@ -17,6 +17,7 @@ namespace CTRPluginFramework {
 	MenuFolder *TREEC; //TREE_CODES
 	MenuFolder *MONC; //MONEY_CODES
 	MenuFolder *ISLC; //ISLAND_CODES
+	MenuFolder *NPCC; //NPC_CODES
 	MenuFolder *FUNC; //FUN_CODES
 	MenuFolder *EXTC; //EXTRA_CODES
 	MenuFolder *FISC; //FISH_CODES
@@ -25,7 +26,8 @@ namespace CTRPluginFramework {
 //Dev Codes Folder
 	MenuFolder *DEVC; //DEV_CODES
 
-	Color FolderColors[] = {
+	Color FolderColors[12] = {
+		Color(220, 20, 60, 0),
 		Color(220, 20, 60, 0),
 		Color(220, 20, 60, 0),
 		Color(220, 20, 60, 0),
@@ -40,7 +42,7 @@ namespace CTRPluginFramework {
 	};
 
 //Functions for easier color changes
-	void UpdateAll(const Color arr[11]) {
+	void UpdateAll(const Color arr[12]) {
 		for(int i = 0; i < (sizeof(FolderColors) / sizeof(FolderColors[0])); ++i)
 			FolderColors[i] = arr[i];
 
@@ -56,9 +58,10 @@ namespace CTRPluginFramework {
 		SeedingCodesUpdate(FolderColors[5]);
 		MoneyCodesUpdate(FolderColors[6]);
 		IslandCodesUpdate(FolderColors[7]);
-		FunCodesUpdate(FolderColors[8]);
-		ExtraCodesUpdate(FolderColors[9]);
-		MiscCodesUpdate(FolderColors[10]);
+		NPCCodesUpdate(FolderColors[8]);
+		FunCodesUpdate(FolderColors[9]);
+		ExtraCodesUpdate(FolderColors[10]);
+		MiscCodesUpdate(FolderColors[11]);
 	}
 //Update only text
 	void UpdateAll(void) {
@@ -76,9 +79,10 @@ namespace CTRPluginFramework {
 		SeedingCodesUpdate(GetColorFromString(Folders[5]->Name()));
 		MoneyCodesUpdate(GetColorFromString(Folders[6]->Name()));
 		IslandCodesUpdate(GetColorFromString(Folders[7]->Name()));
-		FunCodesUpdate(GetColorFromString(Folders[8]->Name()));
-		ExtraCodesUpdate(GetColorFromString(Folders[9]->Name()));
-		MiscCodesUpdate(GetColorFromString(Folders[10]->Name()));
+		NPCCodesUpdate(GetColorFromString(Folders[8]->Name()));
+		FunCodesUpdate(GetColorFromString(Folders[9]->Name()));
+		ExtraCodesUpdate(GetColorFromString(Folders[10]->Name()));
+		MiscCodesUpdate(GetColorFromString(Folders[11]->Name()));
 	}
 
 	void SetVapecordStandardTheme(FwkSettings &settings) {
@@ -463,6 +467,34 @@ namespace CTRPluginFramework {
 			UpdateEntry(Entrys[i], Color(color) << Language->Get(Names[0][i]), Language->Get(Names[1][i]));
 
 		ISLC->Name() = Color(color) << Language->Get("ISLAND_CODES");
+	}
+
+	void NPCCodesUpdate(Color color) {
+		std::vector<MenuEntry *> Entrys = NPCC->GetEntryList();
+
+		const static std::string Names[2][5] = {
+			{ "NPC_SELECTOR", "NPC_ANIMATION", "NPC_COORDINATE", 
+			"NPC_TELEPORT", "NPC_ROTATION" },
+
+			{ "NPC_SELECTOR_NOTE", "NPC_ANIMATION_NOTE", "NPC_COORDINATE_NOTE", 
+			"NPC_TELEPORT_NOTE", "NPC_ROTATION_NOTE" },
+		};
+
+		const static HotkeyDat Hotkeys[5] = {
+			{ { "NPC_SELECTOR_KEY1" }, 0 },
+			{ { "NPC_ANIMATION_KEY1" }, 1 },
+			{ { "NPC_COORDINATE_KEY1", "NPC_COORDINATE_KEY2", "NPC_COORDINATE_KEY3", "NPC_COORDINATE_KEY4", "NPC_COORDINATE_KEY5" }, 2 },
+			{ { "NPC_TELEPORT_KEY1" }, 3 },
+			{ { "NPC_ROTATION_KEY1" }, 4 }
+		};
+
+		for(int i = 0; i < Entrys.size(); ++i)
+			UpdateEntry(Entrys[i], Color(color) << Language->Get(Names[0][i]), Language->Get(Names[1][i]));
+
+		for(int i = 0; i < 5; ++i) 
+			UpdateHotkey(NPCC, Hotkeys[i]);
+
+		NPCC->Name() = Color(color) << Language->Get("NPC_CODES");
 	}
 	
 	void FunCodesUpdate(Color color) {
