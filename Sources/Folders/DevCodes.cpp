@@ -471,9 +471,8 @@ namespace CTRPluginFramework {
 //Item Island Code
 	void islanditems(MenuEntry *entry) {
 
-		return;
 		/*if(Controller::IsKeysPressed(Key::R + Key::DPadUp)) {
-			AnimationData<u8, u8, u8, u8, u8, u16, u8> *globalData = new AnimationData<u8, u8, u8, u8, u8, u16, u8>();
+			AnimationData *globalData = new AnimationData(); //<u8, u8, u8, u8, u8, u16, u8>
 
 			u32 player = PlayerClass::GetInstance()->Offset();
 
@@ -483,16 +482,16 @@ namespace CTRPluginFramework {
 			globalData->zCoordSH = Calculate16BitFloat(*(float *)(player + 0x1C));
 			globalData->rotationSH = PlayerClass::GetInstance()->GetRotation();
 
-			globalData->data1 = 0x10;
-			globalData->data2 = 0;
+			*(u8 *)globalData->data = 0x10;
+			*(u8 *)(globalData->data + 1) = 0;
 
-			globalData->data3 = 3;
-			globalData->data4 = 3;
-			globalData->data5 = 3;
+			*(u8 *)(globalData->data + 2) = 3;
+			*(u8 *)(globalData->data + 3) = 3;
+			*(u8 *)(globalData->data + 4) = 3;
 
-			globalData->data6 = 0x7FFE;
+			*(u16 *)(globalData->data + 5) = 0x7FFE;
 
-			globalData->data7 = 0;
+			*(u8 *)(globalData->data + 7) = 0;
 
 			static FUNCT func(Code::AnimFunction);
 			func.Call<bool>(player, 0xB9, globalData, 0);

@@ -44,7 +44,7 @@ namespace CTRPluginFramework {
 		
 		static const u32 sizer[10] = { player, bug, npc, effect, shadow, town, horplayer, vertplayer, head, corrupt };
 		
-		static constexpr u32 sizes[3] = { 0x40000000, 0x3F800000, 0x3F000000 };
+		static constexpr float sizes[3] = { 2.0, 1.0, 0.5 };
 
 		bool IsON;
 
@@ -59,7 +59,7 @@ namespace CTRPluginFramework {
 			
 		if(op <= 9) {
 			for(int i = 0; i < 3; ++i) {
-				IsON = *(u32 *)sizer[op] == sizes[i];
+				IsON = *(float *)sizer[op] == sizes[i];
 				sizesopt[i] = IsON ? (Color(pGreen) << sizesopt[i]) : (Color(pRed) << sizesopt[i]);	
 			}
 			
@@ -73,7 +73,7 @@ namespace CTRPluginFramework {
 					Process::WriteFloat(sizer[op], size);
 			}
 			else
-				Process::Patch(sizer[op], sizes[op2]);
+				Process::WriteFloat(sizer[op], sizes[op2]);
 
 			sizecodes(entry);
 			return;
@@ -81,7 +81,7 @@ namespace CTRPluginFramework {
 		
 		if(op == 10) 
 			for(int i = 0; i < 10; i++) 
-				Process::Patch(sizer[i], sizes[1]);
+				Process::WriteFloat(sizer[i], sizes[1]);
     }
 //T-Pose
 	void tposeentry(MenuEntry *entry) { 
@@ -178,9 +178,9 @@ namespace CTRPluginFramework {
 		
 		static const u32 PartyPop[3] = { PartySnakeSpeed, party2, party3 };
 		
-		static const u32 PartyPopPatch[2][3] = {
-            { 0x50000000, 0x40000000, 0x40000000 },
-            { 0x3F800000, 0x3F800000, 0x3F800000 }
+		static const float PartyPopPatch[2][3] = {
+            { 8.0, 2.0, 2.0 },
+            { 1.0, 1.0, 1.0 }
         };
 
 		if(entry->WasJustActivated()) {
@@ -199,7 +199,7 @@ namespace CTRPluginFramework {
 			Process::Patch(PartyEffect, PartyEffectID);
 
 			for(int i = 0; i < 3; ++i)
-            	Process::Patch(PartyPop[i], PartyPopPatch[0][i]);
+            	Process::WriteFloat(PartyPop[i], PartyPopPatch[0][i]);
 
 			hook1.Enable();
 			hook2.Enable();
@@ -208,7 +208,7 @@ namespace CTRPluginFramework {
 			Process::Patch(PartyEffect, 0x20A);
 
 			for(int i = 0; i < 3; ++i)
-            	Process::Patch(PartyPop[i], PartyPopPatch[1][i]);
+            	Process::WriteFloat(PartyPop[i], PartyPopPatch[1][i]);
 
 			hook1.Disable();
 			hook2.Disable();
@@ -216,7 +216,7 @@ namespace CTRPluginFramework {
    
 		if(!entry->IsActivated()) {
 			for(int i = 0; i < 3; ++i)
-               Process::Patch(PartyPop[i], PartyPopPatch[1][i]);	
+               Process::WriteFloat(PartyPop[i], PartyPopPatch[1][i]);	
 			
 			Process::Patch(PartyEffect, 0x20A);
 

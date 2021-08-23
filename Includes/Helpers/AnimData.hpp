@@ -43,7 +43,6 @@ namespace CTRPluginFramework {
 		data.unknown1 = bVar3;
 	}*/
 
-	template <typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7> 
 	struct AnimationData {
 		u8 roomID;
         u8 animID;
@@ -56,13 +55,7 @@ namespace CTRPluginFramework {
         u8 unknown2 = 8; //standard anim func makes it always 8
         u16 unknown3 = 0; //seems to be always 0 written to it
 
-        T1 data1 = 0;
-        T2 data2 = 0;
-        T3 data3 = 0;
-        T4 data4 = 0;
-        T5 data5 = 0;
-        T6 data6 = 0;
-		T7 data7 = 0;
+		u8 data[0x20];
 	};
 
 	class AnimData {

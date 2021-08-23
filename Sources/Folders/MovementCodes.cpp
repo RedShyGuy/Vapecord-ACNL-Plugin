@@ -121,7 +121,7 @@ namespace CTRPluginFramework {
             { 0x0A000094, 0x0A000052, 0x0A000001, 0xDA000014, 0xED841A05, 0xED840A07, 0x0A000026, 0x0A000065 }
         };
 		
-		if(entry->Hotkeys[0].IsPressed()) {//L + DPadUp	  
+		if(entry->Hotkeys[0].IsPressed()) {
 			bool index = *(u32 *)walkover1 == 0x0A000094 ? 0 : 1;
 
             OSD::Notify("Walk Over Things " << (index ? (Color::Red << "OFF") : (Color::Green << "ON")));

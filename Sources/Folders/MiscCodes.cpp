@@ -172,14 +172,14 @@ namespace CTRPluginFramework {
 			Language->Get("VECTOR_DISABLE")
 		};
 		
-		static constexpr u32 Sounds[4] = {
-			0x3F950000, 0x3FA0C000, 0x3F680000, 0x3F4C8000
+		static constexpr float Sounds[4] = {
+			1.50, 1.25, 0.90, 0.80
 		};
 
 		bool IsON;
 		
 		for(int i = 0; i < 4; ++i) { 
-			IsON = *(u32 *)musicch == Sounds[i];
+			IsON = *(float *)musicch == Sounds[i];
 			musicopt[i] = (IsON ? Color(pGreen) : Color(pRed)) << musicopt[i];
 		}
 		
@@ -192,11 +192,11 @@ namespace CTRPluginFramework {
 			return;
 		
 		if(op == 4) {
-			Process::Patch(musicch, 0x3F800000);
+			Process::WriteFloat(musicch, 1.0);
 			return;
 		}
 		
-		Process::Patch(musicch, Sounds[op]);
+		Process::WriteFloat(musicch, Sounds[op]);
 		Musicchange(entry);
 	}
 	
@@ -262,8 +262,6 @@ namespace CTRPluginFramework {
 			OSD::Notify("Item Is Invalid!", Color::Red);
 			return;
 		}
-			
-		//int res = Dropper::Search_Replace(size, { 0x7C, 0x7D, 0x7E, 0x7F, 0xCC, 0xF8 }, Code::Pointer7FFE, 0x3D, false, "Weed Removed!", true);
 			
 		int res = Dropper::Search_Replace(300, { ItemToSearch }, ItemToReplace, 0x3D, true, "items replaced!", true);
 		if(res == -1) {
@@ -567,20 +565,24 @@ namespace CTRPluginFramework {
 		static const u32 day3 = Region::AutoRegion(0x4B10AC, 0x4B0A24, 0x4B00F4, 0x4B00F4, 0x4AFD8C, 0x4AFD8C, 0x4AFC4C, 0x4AFC4C);
 		static const u32 day4 = Region::AutoRegion(0x4B10C8, 0x4B0A40, 0x4B0110, 0x4B0110, 0x4AFDA8, 0x4AFDA8, 0x4AFC68, 0x4AFC68);
 		
-		static const u32 DayTime[4] = { day1, day2, day3, day4 };
+		static const u32 DayTime[3] = { day1, day3, day4 };
 		
-		static constexpr u32 DayTimePatch[2][4] = {
-            { 0xE3A01788, 0x3FA00000, 0xE3A00000, 0xE8871015 },
-			{ 0xE1A01521, 0x3F800000, 0xE3A06000, 0xE8871004 }
+		static constexpr u32 DayTimePatch[2][3] = {
+            { 0xE3A01788, 0xE3A00000, 0xE8871015 },
+			{ 0xE1A01521, 0xE3A06000, 0xE8871004 }
 		};
 		
 		if(entry->WasJustActivated()) {
-			for(int i = 0; i < 4; ++i)
+			for(int i = 0; i < 3; ++i)
                 Process::Patch(DayTime[i], DayTimePatch[0][i]);
+
+			Process::WriteFloat(day2, 1.25);
 		}
 		else if(!entry->IsActivated()) {
-			for(int i = 0; i < 4; ++i)
+			for(int i = 0; i < 3; ++i)
                 Process::Patch(DayTime[i], DayTimePatch[1][i]);
+
+			Process::WriteFloat(day2, 1.0);
 		}
 	}
 //Fast Mode	

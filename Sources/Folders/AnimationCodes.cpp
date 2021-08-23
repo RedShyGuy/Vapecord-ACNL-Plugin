@@ -224,10 +224,10 @@ namespace CTRPluginFramework {
 			
 		}
 		
-		else if(entry->Hotkeys[3].IsPressed()) 
+		if(entry->Hotkeys[3].IsPressed()) 
 			PlayerClass::GetInstance(GameHelper::GetOnlinePlayerIndex())->GetWorldCoords(&wX, &wY);
 		
-		else if(speedmode ? entry->Hotkeys[3].IsDown() :entry->Hotkeys[3].IsPressed()) {//Key::A + B
+		if(speedmode ? entry->Hotkeys[3].IsDown() :entry->Hotkeys[3].IsPressed()) {//Key::A + B
 			animExecuting = true;
 			
 			switch(setmode) {
@@ -286,26 +286,30 @@ namespace CTRPluginFramework {
 		static const u32 slo1 = Region::AutoRegion(0x654578, 0x653AA0, 0x6535B0, 0x6535B0, 0x653070, 0x653070, 0x652C18, 0x652C18);
 		static const u32 slo2 = Region::AutoRegion(0x652C10, 0x652138, 0x651C48, 0x651C48, 0x651708, 0x651708, 0x6512B0, 0x6512B0);
 		static const u32 slo3 = Region::AutoRegion(0x887880, 0x886878, 0x88670C, 0x88670C, 0x880B2C, 0x87FB2C, 0x87FBE0, 0x87FBE0);
-		const u32 SlowAnim[3] = { slo1, slo2, slo3 };
+		const u32 SlowAnim[2] = { slo2, slo3 };
 		
-		static const u32 SlowAnimPatch[2][3] = {
-            { 0xE3A00001, 0x40FF0000, 0x40C00000 },
-            { 0x0A000004, 0x3F800000, 0x3F800000 }
+		static const float SlowAnimPatch[2][2] = {
+            { 8.0, 6.0 },
+            { 1.0, 1.0 }
         };
 		
 		if(entry->Hotkeys[0].IsPressed()) {//Key::L + Key::DPadLeft
-			bool index = *(u32 *)slo1 == 0x0A000004 ? 0 : 1;
+			bool index = *(u32 *)slo1 == 0x0A000004 ? false : true;
 
 			Animation::Idle();
 			OSD::Notify("Slow Animations " << (index ? Color::Red << "OFF" : Color::Green << "ON"));
 			
-			for(int i = 0; i < 3; ++i)
-                Process::Patch(SlowAnim[i], SlowAnimPatch[index][i]);
+			for(int i = 0; i < 2; ++i)
+                Process::WriteFloat(SlowAnim[i], SlowAnimPatch[index][i]);
+
+			Process::Patch(slo1, index ? 0x0A000004 : 0xE3A00001);
 		}
 
 		if(!entry->IsActivated()) {
-			for(int i = 0; i < 3; ++i)
-                Process::Patch(SlowAnim[i], SlowAnimPatch[1][i]);
+			for(int i = 0; i < 2; ++i)
+                Process::WriteFloat(SlowAnim[i], SlowAnimPatch[1][i]);
+
+			Process::Patch(slo1, 0x0A000004);
         }
 	}
 //Set Animation On Everyone
