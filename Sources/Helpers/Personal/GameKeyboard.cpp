@@ -146,7 +146,6 @@ namespace CTRPluginFramework {
 	}
 
 	void GameKeyboard::SendMessage(const std::string& str) {
-		static const u32 func1 = Region::AutoRegion(0x81F9D0, 0x81E8D0, 0x81E9D8, 0x81E9B0, 0x81E150, 0x81E128, 0x81DD10, 0x81DCE8);
 		static const u32 func2 = Region::AutoRegion(0x56DE5C, 0x56D374, 0x56CEA4, 0x56CEA4, 0x56C794, 0x56C794, 0x56C4B4, 0x56C4B4);
 		static const u32 func3 = Region::AutoRegion(0x5FD774, 0x5FCCA4, 0x5FC7AC, 0x5FC7AC, 0x5FC02C, 0x5FC02C, 0x5FBCB4, 0x5FBCB4);
 		static const u32 func4 = Region::AutoRegion(0x5E3920, 0x5E2E50, 0x5E2958, 0x5E2958, 0x5E21D8, 0x5E21D8, 0x5E1E60, 0x5E1E60);
@@ -169,7 +168,7 @@ namespace CTRPluginFramework {
 			*(u8 *)(msgData + 0x85A) = 0;
 		}
 
-		u32 var = FUNCT(func1).Call<u32>(Stack); //Makes temporary "Stack" ready to be written to
+		u32 var = FUNCT(Code::SetupStackData).Call<u32>(Stack); //Makes temporary "Stack" ready to be written to
 		FUNCT(func2).Call<void>(var, pIndex); //Gets Player Name Data and writes it to temporary "Stack"
 
 		FUNCT(func3).Call<void>((int *)(msgData + 0x47C), var); //Finished Player Name Data in Chat Box Data (?)

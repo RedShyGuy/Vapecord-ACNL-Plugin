@@ -59,6 +59,8 @@ namespace CTRPluginFramework {
 
 		AnimFunction = Region::AutoRegion(0x64DB90, 0x64D0B8, 0x64CBC8, 0x64CBC8, 0x64C688, 0x64C688, 0x64C230, 0x64C230);
 
+		SetupStackData = Region::AutoRegion(0x81F9D0, 0x81E8D0, 0x81E9D8, 0x81E9B0, 0x81E150, 0x81E128, 0x81DD10, 0x81DCE8);
+
 	//Island Pointers
 		IslPointer = Region::AutoRegion(0x953708, 0x9526F8, 0x952704, 0x952704, 0x94C704, 0x94B704, 0x94B704, 0x94B704);
 		Isl2ndPointer = Region::AutoRegion(0x94FD58, 0x94ED48, 0x94ED58, 0x94ED58, 0x948D58, 0x947D58, 0x947D58, 0x947D58);
@@ -122,4 +124,5 @@ namespace CTRPluginFramework {
 	u32		Code::a_GetOnlinePlayerIndex = 0;
 	u32		Code::v_GetOnlinePlayerIndex = 0;
 	u32		Code::AnimFunction = 0;
+	u32		Code::SetupStackData = 0;
 }

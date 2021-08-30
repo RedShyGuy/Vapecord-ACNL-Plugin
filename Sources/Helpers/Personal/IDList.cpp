@@ -238,36 +238,34 @@ namespace CTRPluginFramework {
 	}*/
 
 	std::string IDList::GetNNPCName(u16 VID) {
-		static const u32 StoreFunc = Region::AutoRegion(0x81F9D0, 0x81E8D0, 0x81E9D8, 0x81E9B0, 0x81E150, 0x81E128, 0x81DD10, 0x81DCE8);
 		static const u32 SetFunc = Region::AutoRegion(0x56E35C, 0x56D874, 0x56D3A4, 0x56D3A4, 0x56CC94, 0x56CC94, 0x56C9B4, 0x56C9B4); 
 
-		u32* add = FUNCT(StoreFunc).Call<u32*>(0xA00000);
+		u32 Stack[44];
+
+		u32 add = FUNCT(Code::SetupStackData).Call<u32>(Stack);
 		FUNCT(SetFunc).Call<void>(add, &VID, 0);
 
 		std::string NNPCName = "";
-		Process::ReadString(*(u32 *)(0xA00000 + 4), NNPCName, 0x20, StringFormat::Utf16);
+		Process::ReadString(Stack[1], NNPCName, 0x20, StringFormat::Utf16);
 
-		std::memset((void *)0xA00000, 0, 0x60);
 		return NNPCName == "" ? "???" : NNPCName;
 	}
 
 	std::string IDList::GetSPNPCName(u32 npcData) {
-		static const u32 StoreFunc = Region::AutoRegion(0x81F9D0, 0x81E8D0, 0x81E9D8, 0x81E9B0, 0x81E150, 0x81E128, 0x81DD10, 0x81DCE8);
-
 		if(npcData == 0)
 			return "???";
 
-		u8 arr[4];
+		u32 Stack[44];
 
-		u32* add = FUNCT(StoreFunc).Call<u32*>(0xA00000);
+		u32 add = FUNCT(Code::SetupStackData).Call<u32>(Stack);
 		u32 var = *(u32 *)(npcData + 0x660);
 
+		u8 arr[4];
 		FUNCT(*(u32 *)(*(u32 *)(var) + 0x138)).Call<void>(var, add, arr);
 
 		std::string NNPCName = "";
-		Process::ReadString(*(u32 *)(0xA00000 + 4), NNPCName, 0x20, StringFormat::Utf16);
+		Process::ReadString(Stack[1], NNPCName, 0x20, StringFormat::Utf16);
 
-		std::memset((void *)0xA00000, 0, 0x60);
 		return NNPCName == "" ? "???" : NNPCName;
 	}
 
