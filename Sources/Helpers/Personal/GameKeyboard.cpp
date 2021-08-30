@@ -129,17 +129,20 @@ namespace CTRPluginFramework {
 		return true;
 	}
 
-	void SetCustomOnlineStack(u32 address, const std::string& str) {
+	struct OnlineStack {
+		u32** 			unknownPointer1; 	//address + 0x6C
+		u32*  			unknownPointer2; 	//0x90B38C
+		char*	 		message;			//string of message
+	};
+
+	void SetCustomOnlineStack(OnlineStack *stack, const std::string& str) {
 		static const u32 point = Region::AutoRegion(0x90B38C, 0x90A260, 0x90A20C, 0x90A20C, 0x904644, 0x903644, 0x9035B0, 0x9035B0);
 
-		Process::Write32(address, address + 0x6C);
-		Process::Write32(address + 0x6C, point);
-		Process::Write32(address + 0x70, address + 0x84);
-		Process::Write32(address + 0x74, 0x41);
-		Process::Write32(address + 0x78, 4);
-		Process::Write32(address + 0x7C, 0xFFFFFFFF);
-		Process::Write32(address + 0x80, 0xFFFFFFFF);
-		Process::WriteString(address + 0x84, str, 0x30, StringFormat::Utf16);
+		stack->unknownPointer1 = &stack->unknownPointer2;
+		stack->unknownPointer2 = (u32 *)point;
+
+		std::vector<char> cstr(str.c_str(), str.c_str() + str.size() + 1);
+		stack->message = &cstr[0];
 	}
 
 	void GameKeyboard::SendMessage(const std::string& str) {
@@ -156,8 +159,8 @@ namespace CTRPluginFramework {
 
 		u8 pIndex = GameHelper::GetOnlinePlayerIndex();
 
-		u32 Stack = 0xA00000;
-		u32 onlineStack = 0xA00030;
+		u32 Stack[12];
+		OnlineStack *onlineStack = new OnlineStack();
 
 		SetCustomOnlineStack(onlineStack, str);
 
@@ -187,10 +190,6 @@ namespace CTRPluginFramework {
 		if(val != 0) 
 			FUNCT(func6).Call<void>(0x8C + pIndex, onlineStack, 1); //Sends temporary Online "Stack" to others
 
-	//Clears temporary Player Name "Stack"
-		std::memset((void *)Stack, 0, 0x30);
-	//Clears temporary Online "Stack"
-		Process::Write32(onlineStack, 0);
-		std::memset((void *)(onlineStack + 0x6C), 0, 0x30);
+		delete[] onlineStack;
 	}
 }

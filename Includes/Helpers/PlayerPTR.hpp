@@ -16,27 +16,8 @@ namespace CTRPluginFramework {
 		public:	
 			template <typename T> 
 			bool Write(u32 add, T val) {
-				if(std::is_same<T, std::string>::value) {
+				if(std::is_same<T, std::string>::value) 
 					return Process::WriteString(m_PlayerOffset + add, (const std::string&)val, StringFormat::Utf16);
-				}
-				else if(std::is_same<T, float>::value) {
-					return Process::WriteFloat(m_PlayerOffset + add, val);
-				}
-				else if(std::is_same<T, double>::value) {
-					return Process::WriteDouble(m_PlayerOffset + add, val);
-				}
-				else if(std::is_same<T, u8>::value) {
-					return Process::Write8(m_PlayerOffset + add, val);
-				}
-				else if(std::is_same<T, u16>::value) {
-					return Process::Write16(m_PlayerOffset + add, val);
-				}
-				else if(std::is_same<T, u32>::value) {
-					return Process::Write32(m_PlayerOffset + add, val);
-				}
-				else if(std::is_same<T, u64>::value) {
-						return Process::Write64(m_PlayerOffset + add, val);
-				}	
 				else {
 					if(!Process::CheckAddress(m_PlayerOffset + add, MEMPERM_WRITE))
 						return 0;
@@ -52,25 +33,6 @@ namespace CTRPluginFramework {
 			bool Read(u32 add, T& buff, int size = -1) {
 				if(std::is_same<T, std::string>::value) 
 					return Process::ReadString(m_PlayerOffset + add, (std::string&)buff, size, StringFormat::Utf16);
-				
-				else if(std::is_same<T, float>::value) 
-					return Process::ReadFloat(m_PlayerOffset + add, buff);
-				
-				else if(std::is_same<T, double>::value) 
-					return Process::ReadDouble(m_PlayerOffset + add, buff);
-				
-				else if(std::is_same<T, u8>::value) 
-					return Process::Read8(m_PlayerOffset + add, buff);
-				
-				else if(std::is_same<T, u16>::value) 
-					return Process::Read16(m_PlayerOffset + add, buff);
-				
-				else if(std::is_same<T, u32>::value) 
-					return Process::Read32(m_PlayerOffset + add, buff);
-				
-				else if(std::is_same<T, u64>::value)
-					return Process::Read64(m_PlayerOffset + add, buff);
-				
 				else {
 					if(!Process::CheckAddress(m_PlayerOffset + add, MEMPERM_WRITE))
 						return 0;

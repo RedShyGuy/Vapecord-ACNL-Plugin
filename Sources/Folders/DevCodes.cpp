@@ -468,9 +468,36 @@ namespace CTRPluginFramework {
 		}
 */
 
+	//FUN_00584d88(int param_1,undefined4 param_2) Sets shampoodle sound?
+	
+	/*void SetMusic(u32 *data0x98B018, u32 soundID0x10000B2) {
+		FUNCT(0x2FD0BC).Call<void>(0x2C, data[1], 4);
+
+		u32 **var = FUNCT(0x586744).Call<u32 **>(data);
+		
+		var[8] = (u32 *)soundID;
+		*(u8 *)(var + 9) = 1;
+		*(u8 *)(var + 0x25) = 1;
+		*(u8 *)(var + 0x26) = 3;
+		var[0] = (u32 *)0x907BBC;
+	}
+
+	FUN_00584D88(0x98B018, uVar3, 0, 0x94F494);
+
+	struct OnlineGameDat {
+		u32 *unknown0;
+		u32 unknown1;
+		u32 unknown2;
+
+		//0x1329D, Game Type
+
+		//0x132B8, END
+	};*/
+
 //Item Island Code
 	void islanditems(MenuEntry *entry) {
-
+		if(Controller::IsKeysPressed(Key::R + Key::DPadUp))
+			GameKeyboard::SendMessage("Test Message");
 		/*if(Controller::IsKeysPressed(Key::R + Key::DPadUp)) {
 			AnimationData *globalData = new AnimationData(); //<u8, u8, u8, u8, u8, u16, u8>
 
