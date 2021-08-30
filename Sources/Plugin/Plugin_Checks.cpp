@@ -21,6 +21,8 @@ extern "C" bool __IsPlayerHouse() {
 	return 0;
 }
 
+bool IsIndoorsBool = false;
+
 namespace CTRPluginFramework {
 //Hook invalid pickup
 	u32 InvalidPickStop(u8 ID, u32 *ItemToReplace, u32 *ItemToPlace, u32 *ItemToShow, u8 worldx, u8 worldy) {	
@@ -76,7 +78,7 @@ namespace CTRPluginFramework {
 	}
 //Hook for hole check
 	bool InvalidHoleStop(u32* Item, u32 Hole) {
-		if(*(bool *)IndoorsBool) 
+		if(IsIndoorsBool) 
 			return true;
 		
 		return((*Item & 0xFFFF7FFF) == Hole);
@@ -278,10 +280,9 @@ namespace CTRPluginFramework {
 	
 //check for indoor items	
 	void IndoorsSeedItemCheck(void) {
-	//needed cause of bug in CTRPF p.p
-		Process::Write8(IndoorsBool, Player::IsIndoors());
-		
-		if(!DropPatternON || !Player::IsIndoors()) 
+		IsIndoorsBool = Player::IsIndoors();
+
+		if(!DropPatternON || !IsIndoorsBool) 
 			return;
 		
 		RestoreDropPattern();

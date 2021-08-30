@@ -92,7 +92,7 @@ namespace CTRPluginFramework {
 //If animation is valid
 	bool IDList::AnimationValid(u8 animID) {
 		if(animID > 0 && animID < 0xEB) {
-			if(Player::IsIndoors()) {
+			if(IsIndoorsBool) {
 				switch(animID) {
 				//those would be fixed but they crash others indoors :/
 					case 0x5F:
@@ -138,7 +138,7 @@ namespace CTRPluginFramework {
 
 	bool FlagValid(u16 flagID, bool IsDropped) {
 	//If player is indoors and drops item
-		if(*(bool *)IndoorsBool && IsDropped) {
+		if(IsIndoorsBool && IsDropped) {
 			if(flagID >= 0x8000)
 				return false;
 		}
@@ -156,7 +156,7 @@ namespace CTRPluginFramework {
 			item = item - 0x2000; //convert present to standard Item ID to know if it is valid
 
 	//If player is outdoors or doesnt drop item
-		if(!*(bool *)IndoorsBool || !IsDropped) {
+		if(!IsIndoorsBool || !IsDropped) {
 			if(IS(item, 0x7FFE) || RANGE(item, 0, 0xFD)) 
 				return true;
 		}
@@ -225,15 +225,15 @@ namespace CTRPluginFramework {
 
 	/*std::string IDList::GetItemName(u16 ItemID) {
 		static const u32 ItemFunc = Region::AutoRegion(0x2FEA78, 0, 0, 0, 0, 0, 0, 0); 
-		u32 item[1] = { ItemID };
+
+		u32 Stack[44];
 		
 		static FUNCT func(ItemFunc);
-		func.Call<void>(0xA00000, item, 0);
+		func.Call<void>(Stack, &ItemID, 0);
 
 		std::string ItemName = "";
-		Process::ReadString(*(u32 *)(0xA00000 + 4), ItemName, 0x20, StringFormat::Utf16);
+		Process::ReadString(Stack[1], ItemName, 0x20, StringFormat::Utf16);
 
-		std::memset((void *)0xA00000, 0, 0x60);
 		return ItemName == "" ? "???" : ItemName;
 	}*/
 

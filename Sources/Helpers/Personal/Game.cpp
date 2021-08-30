@@ -541,7 +541,7 @@ namespace CTRPluginFramework {
 		static const u32 rem3 = Region::AutoRegion(0x597FAC, 0x5974C4, 0x596FF4, 0x596FF4, 0x5968E4, 0x5968E4, 0x5965B8, 0x5965B8);
 		
 		if(removeEverything) {
-			if(!Player::IsIndoors()) {
+			if(!IsIndoorsBool) {
 				x = 0x10;
 				y = 0x10;
 			}
@@ -584,7 +584,7 @@ namespace CTRPluginFramework {
 			}
 			res = true;
 			if(removeEverything) {
-				if(!Player::IsIndoors()) y = 0x10;
+				if(!IsIndoorsBool) y = 0x10;
 				else y = 0;
 			}
 			else y = wY;

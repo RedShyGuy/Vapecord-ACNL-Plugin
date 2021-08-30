@@ -264,7 +264,7 @@ namespace CTRPluginFramework {
 	
         if(Camera::GetInstance() != 0) {
         //check if you're outside
-            if(!Player::IsIndoors()) {
+            if(!IsIndoorsBool) {
                 if(GameHelper::RoomCheck() == 1) {
                     Process::Patch(rotationAsm, 0xE18020B4);
                     Process::Patch(rotationAsm + 0xC, 0xE18020B4);

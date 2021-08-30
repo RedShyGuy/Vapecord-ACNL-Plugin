@@ -49,7 +49,6 @@
 #define CONFIGNAME		"Vapecord/plugin.bin"
 
 #define DISCORDINV		"discord.gg/QwqdBpKWf3"
-#define IndoorsBool 	0xA00008
 
 #define SAVE_GARDENPLUS 0x89B00  //0x95CF94
 #define SAVE_MAIL 		0x1C208  //0x983050
@@ -69,6 +68,7 @@
 #define TID_KORWA 		0x0004000000199000
 #define TID_EURWL 		0x00040000004C5700
 
+extern bool IsIndoorsBool;
 extern u32 PickupSeederItemID;
 
 namespace CTRPluginFramework {

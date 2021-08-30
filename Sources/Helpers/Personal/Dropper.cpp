@@ -19,7 +19,7 @@ namespace CTRPluginFramework {
 		if(!PlayerClass::GetInstance()->IsLoaded()) 
 			return -1; //Player not loaded
 
-		if(Player::IsIndoors())
+		if(IsIndoorsBool)
 			return -2; //Only works outdoors
 
 		bool ItemSequenceWasON = false;
@@ -97,7 +97,7 @@ namespace CTRPluginFramework {
 		u8 autoWaitAnim = waitAnim;
 		
 		if(ID == 0xB || ID == 0x13) {
-			if(Player::IsIndoors()) {
+			if(IsIndoorsBool) {
 				ID = 0xA;
 				autoWaitAnim = 0x53;
 			}
@@ -135,7 +135,7 @@ namespace CTRPluginFramework {
 		if(*actualItemToReplace != *actualItemAtCoords) 
 			return 0;
 
-		u32 crashPreventItem = *(bool *)IndoorsBool ? 0x2001 : 0x80007FFE;
+		u32 crashPreventItem = IsIndoorsBool ? 0x2001 : 0x80007FFE;
 
 		u32 *ItemReplace = (*actualItemToReplace & 0x7FFE) == 0x7FFE ? &crashPreventItem : actualItemToReplace;
 		u32 *ItemPlace = (*actualItemToPlace & 0x7FFE) == 0x7FFE ? &crashPreventItem : actualItemToPlace;

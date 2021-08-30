@@ -29,7 +29,7 @@ FUNCTION    BGRHook
     BX          LR                  @return
 
 FUNCTION    MoveFurn
-    LDR         R0, =0xA00008       @pointer which holds check for if indoors
+    LDR         R0, =IsIndoorsBool  @data which holds check for if indoors
     LDRSB       R0, [R0]   
     BX          LR
 

@@ -68,7 +68,7 @@ namespace CTRPluginFramework {
 
 	//Modify Drop Radius
 		if(entry->Hotkeys[1].IsPressed()) {
-			if(Player::IsIndoors()) {
+			if(IsIndoorsBool) {
 				OSD::Notify("Drop Radius Modifier is not usable indoors!", Color::Red);
 				return;
 			}
