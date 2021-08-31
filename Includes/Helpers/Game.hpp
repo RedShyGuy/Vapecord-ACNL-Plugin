@@ -143,11 +143,24 @@ namespace CTRPluginFramework {
 	};
 
 	struct AmiiboInfo {
-		const char* Name; //Name of NPC for populating keyboard
 		u32 ID0; //Amiibo ID0 for spoofing
 		u32 ID1; //Amiibo ID1 for spoofing
 		u16 VID; //VID for Caravan and other stuff
 		SpecieID Species; //ID of NPC's species to differentiate NPCs
+	};
+
+	struct SPAmiiboInfo {
+		u32 ID0; //Amiibo ID0 for spoofing
+		u32 ID1; //Amiibo ID1 for spoofing
+		u16 VID; //VID for Caravan and other stuff
+		u8  SPVID;
+	};
+
+	struct PACKED_AmiiboInfo {
+		std::string Name;
+		u32 ID0; //Amiibo ID0 for spoofing
+		u32 ID1; //Amiibo ID1 for spoofing
+		u16 VID; //VID for Caravan and other stuff
 	};
 
 	template <typename A, typename V>

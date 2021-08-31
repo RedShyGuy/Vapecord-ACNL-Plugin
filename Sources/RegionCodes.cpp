@@ -79,6 +79,8 @@ namespace CTRPluginFramework {
 		cioffset = Region::AutoRegion(0x95033C, 0x94F32C, 0x94F33C, 0x94F33C, 0x94933C, 0x94833C, 0x94833C, 0x94833C);
 
 		ChatPoint = Region::AutoRegion(0x95F11C, 0x95E0FC, 0x95E114, 0x95E114, 0x958114, 0x957114, 0x957114, 0x957114);
+
+		DataPointer = Region::AutoRegion(0x95EEDC, 0x95DEBC, 0x95DED4, 0x95DED4, 0x957ED4, 0x956ED4, 0x956ED4, 0x956ED4);
 	}
 	
 	u32		Code::IslPointer = 0;
@@ -125,4 +127,5 @@ namespace CTRPluginFramework {
 	u32		Code::v_GetOnlinePlayerIndex = 0;
 	u32		Code::AnimFunction = 0;
 	u32		Code::SetupStackData = 0;
+	u32		Code::DataPointer = 0;
 }

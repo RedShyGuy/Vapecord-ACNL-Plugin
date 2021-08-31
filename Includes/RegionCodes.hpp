@@ -52,6 +52,7 @@ namespace CTRPluginFramework {
 		static u32		v_GetOnlinePlayerIndex;
 		static u32		AnimFunction;
 		static u32		SetupStackData;
+		static u32		DataPointer;
 	};
 }
 

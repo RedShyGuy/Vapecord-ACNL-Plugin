@@ -130,9 +130,9 @@ namespace CTRPluginFramework {
 	}
 
 	struct OnlineStack {
-		u32** 			unknownPointer1; 	//address + 0x6C
-		u32*  			unknownPointer2; 	//0x90B38C
-		char*	 		message;			//string of message
+		u32** 	unknownPointer1; 	//address + 0x6C
+		u32*  	unknownPointer2; 	//0x90B38C
+		char*	message;			//string of message
 	};
 
 	void SetCustomOnlineStack(OnlineStack *stack, const std::string& str) {

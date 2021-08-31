@@ -27,16 +27,9 @@ namespace CTRPluginFramework {
             keyboard.GetMessage() = std::string(Language->Get("AMIIBO_SPOOFER_VILLAGER"));
             keyVec.clear();
 
-            std::vector<AmiiboInfo> amiiboVec;
-            for(const AmiiboInfo& amiibo : amiiboVillagers) {
-                if(amiibo.ID0 == 0) //Holden and Filly get skipped
-                    continue;
+            std::vector<PACKED_AmiiboInfo> amiiboVec;
 
-                if(amiibo.Species == (SpecieID)res) {
-                    amiiboVec.push_back(amiibo);
-                    keyVec.push_back(std::string(amiibo.Name));
-                }
-            }
+            IDList::PopulateNPCAmiibo((SpecieID)res, keyVec, amiiboVec);
 
             keyboard.Populate(keyVec);
             res = keyboard.Open(); //Pick villager based on species
@@ -46,7 +39,7 @@ namespace CTRPluginFramework {
                 Process::Write32(offset + 0xA8, 2); //"Successfully read tag" nfc flag
                 Process::Write32(offset + 0xAC, 0); //success 3ds nfc result code
 
-                const AmiiboInfo& amiibo = amiiboVec[res];
+                const PACKED_AmiiboInfo& amiibo = amiiboVec[res];
 
                 //Setup NFC Info into Amiibo buffer
                 Process::Write32(offset + 0x38C, (amiibo.ID0 >> 8)); //amiibo ID (3 bytes, converted to 4)

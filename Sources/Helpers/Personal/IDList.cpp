@@ -172,17 +172,6 @@ namespace CTRPluginFramework {
 		return (toolsID == 0x2001 || (toolsID == 0x3729) || (toolsID > 0x334B && toolsID < 0x33A3));
 	}
 
-	std::string GetNPCName(u16 VID) {
-		for(const AmiiboInfo& amiibo : amiiboVillagers) {
-			if(amiibo.VID == 0xFFFF) //non villager get skipped
-				continue;
-
-			if(amiibo.VID == VID) 
-				return ("NPC " + std::string(amiibo.Name));
-		}
-		return "NPC ???";
-	}
-
 //Get Building Name
 	std::string IDList::GetBuildingName(u8 ID) {
 		if(ID >= 8 && ID <= 0x11) {
@@ -192,7 +181,7 @@ namespace CTRPluginFramework {
 			u32 Address = VillagerBase + (0x2518 * Index);
 			u16 VID = *(u16 *)(Address + 0x2C);
 
-			return GetNPCName(VID);
+			return "NPC " + GetNNPCName(VID);
 		}
 
 		for(const IDS1& buildings : Buildings) {
@@ -238,35 +227,71 @@ namespace CTRPluginFramework {
 	}*/
 
 	std::string IDList::GetNNPCName(u16 VID) {
-		static const u32 SetFunc = Region::AutoRegion(0x56E35C, 0x56D874, 0x56D3A4, 0x56D3A4, 0x56CC94, 0x56CC94, 0x56C9B4, 0x56C9B4); 
+		static const u32 SetUp = Region::AutoRegion(0x308210, 0x3083E4, 0x308298, 0x308298, 0x30822C, 0x30822C, 0x308240, 0x308240);
+		static const u32 NNPCModelData = Region::AutoRegion(0xA84AF0, 0xA83AF0, 0xA83AF0, 0xA83AF0, 0xA7DAF0, 0xA7CAF0, 0xA7CAF0, 0xA7CAF0);
 
 		u32 Stack[44];
-
 		u32 add = FUNCT(Code::SetupStackData).Call<u32>(Stack);
-		FUNCT(SetFunc).Call<void>(add, &VID, 0);
+
+		u32 npcModel = *(u32 *)(NNPCModelData) + VID * 0x22;
+		FUNCT(SetUp).Call<void>(*(u32 *)Code::DataPointer, add, (char *)"STR_NNpc_name", npcModel + 10);
 
 		std::string NNPCName = "";
 		Process::ReadString(Stack[1], NNPCName, 0x20, StringFormat::Utf16);
-
 		return NNPCName == "" ? "???" : NNPCName;
 	}
 
-	std::string IDList::GetSPNPCName(u32 npcData) {
-		if(npcData == 0)
-			return "???";
+	std::string IDList::GetSPNPCName(u8 SPVID) {
+		static const u32 SetUp = Region::AutoRegion(0x75D108, 0x75C0EC, 0x75C110, 0x75C0E8, 0x75B8A8, 0x75B880, 0x75B450, 0x75B428);
 
 		u32 Stack[44];
-
 		u32 add = FUNCT(Code::SetupStackData).Call<u32>(Stack);
-		u32 var = *(u32 *)(npcData + 0x660);
 
-		u8 arr[4];
-		FUNCT(*(u32 *)(*(u32 *)(var) + 0x138)).Call<void>(var, add, arr);
+		FUNCT(SetUp).Call<void>(*(u32 *)Code::DataPointer, add, (char *)"STR_SPNpc_name", SPVID);
 
-		std::string NNPCName = "";
-		Process::ReadString(Stack[1], NNPCName, 0x20, StringFormat::Utf16);
+		std::string SPNPCName = "";
+		Process::ReadString(Stack[1], SPNPCName, 0x20, StringFormat::Utf16);
+		return SPNPCName == "" ? "???" : SPNPCName;
+	}
 
-		return NNPCName == "" ? "???" : NNPCName;
+	bool IDList::PopulateNPCAmiibo(SpecieID specieID, std::vector<std::string> &vec, std::vector<PACKED_AmiiboInfo> &info, bool HoldenFillyAllowed, bool NonCaravanAllowed) {
+		if(specieID == SpecieID::Special) {
+			vec.clear();
+			info.clear();
+
+			for(const SPAmiiboInfo& amiibo : amiiboSPVillagers) {
+				if(!NonCaravanAllowed && amiibo.VID == 0xFFFF) //Non Caravan get skipped
+					continue;
+
+				std::string Name = "";
+				if(amiibo.SPVID == 0xFE) Name = "Villager";
+				else if(amiibo.SPVID == 0xFF) Name = "Timmy&Tommy";
+				else Name = GetSPNPCName(amiibo.SPVID);
+
+				info.push_back(PACKED_AmiiboInfo{Name, amiibo.ID0, amiibo.ID1, amiibo.VID});
+				vec.push_back(Name);
+			}
+
+			return true;
+		}
+
+		else if(specieID >= (SpecieID)0) {
+			vec.clear();
+			info.clear();
+
+			for(const AmiiboInfo& amiibo : amiiboVillagers) {
+				if(!HoldenFillyAllowed && amiibo.ID0 == 0) //Holden and Filly get skipped
+					continue;
+
+				if(amiibo.Species == specieID) {
+					std::string Name = GetNNPCName(amiibo.VID);
+					info.push_back(PACKED_AmiiboInfo{Name, amiibo.ID0, amiibo.ID1, amiibo.VID});
+					vec.push_back(Name);
+				}
+			}
+			return true;
+		}
+		return false;
 	}
 
 //Get Room Name

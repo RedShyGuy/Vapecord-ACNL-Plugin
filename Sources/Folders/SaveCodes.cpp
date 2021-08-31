@@ -239,16 +239,8 @@ namespace CTRPluginFramework {
 		keyboard.GetMessage() = std::string(Language->Get("AMIIBO_SPOOFER_VILLAGER"));
 		keyVec.clear();
 
-		std::vector<AmiiboInfo> amiiboVec;
-		for(const AmiiboInfo& amiibo : amiiboVillagers) {
-			if(amiibo.VID == 0xFFFF) //non caravan villager get skipped
-				continue;
-
-			if(amiibo.Species == (SpecieID)res) {
-				amiiboVec.push_back(amiibo);
-				keyVec.push_back(std::string(amiibo.Name));
-			}
-		}
+		std::vector<PACKED_AmiiboInfo> amiiboVec;
+		IDList::PopulateNPCAmiibo((SpecieID)res, keyVec, amiiboVec, true, false);
 
 		keyboard.Populate(keyVec);
 		res = keyboard.Open(); //Pick villager based on species
@@ -256,10 +248,10 @@ namespace CTRPluginFramework {
 		if(res < 0)
 			return;
 
-		const AmiiboInfo& amiibo = amiiboVec[res];
+		const PACKED_AmiiboInfo& amiibo = amiiboVec[res];
 
 		Save::GetInstance()->Write<u16>(0x6AE60 + (2 * caravan), amiibo.VID);
-		OSD::Notify(Utils::Format("Set %s in caravan %1d", amiibo.Name, caravan));
+		OSD::Notify(Utils::Format("Set %s in caravan %1d", amiibo.Name.c_str(), caravan));
 	}
 
 	void SetCampingVillager(MenuEntry *entry) {
@@ -303,16 +295,8 @@ namespace CTRPluginFramework {
 			keyboard.GetMessage() = std::string(Language->Get("AMIIBO_SPOOFER_VILLAGER"));
 			keyVec.clear();
 
-			std::vector<AmiiboInfo> amiiboVec;
-			for(const AmiiboInfo& amiibo : amiiboVillagers) {
-				if(amiibo.VID == 0xFFFF || amiibo.VID == 0x00C6 || amiibo.VID == 0x00DC) //non caravan villager get skipped
-					continue;
-
-				if(amiibo.Species == (SpecieID)res) {
-					amiiboVec.push_back(amiibo);
-					keyVec.push_back(std::string(amiibo.Name));
-				}
-			}
+			std::vector<PACKED_AmiiboInfo> amiiboVec;
+			IDList::PopulateNPCAmiibo((SpecieID)res, keyVec, amiiboVec, false, false);
 
 			keyboard.Populate(keyVec);
 			res = keyboard.Open(); //Pick villager based on species
@@ -320,7 +304,7 @@ namespace CTRPluginFramework {
 			if(res < 0)
 				return;
 
-			const AmiiboInfo& amiibo = amiiboVec[res];
+			const PACKED_AmiiboInfo& amiibo = amiiboVec[res];
 
 			for(int i = 0; i < 56; ++i) {
 				if(*(u8 *)(B_Removal + (i * 4)) == 0xC6)
@@ -332,7 +316,7 @@ namespace CTRPluginFramework {
 
 			static FUNCT func(SetNPCFunc);
 			func.Call<void>(Save::GetInstance()->Address(0x292A4 + 0x17676), VID, null, Save::GetInstance()->Address(0x621B8)); 
-			OSD::Notify(Utils::Format("Set %s!", amiibo.Name), Color::Green);
+			OSD::Notify(Utils::Format("Set %s!", amiibo.Name.c_str()), Color::Green);
 
 			if(GameHelper::IsInRoom(0))
 				GameHelper::ReloadRoom();

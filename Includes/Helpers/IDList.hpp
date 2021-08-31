@@ -45,24 +45,25 @@ namespace CTRPluginFramework {
 	void ItemChange(Keyboard& keyboard, KeyboardEvent& event);
 
 	namespace IDList {
-		bool			IsHalfAcre(u8 acreID);
-		bool 			RoomValid(u8 roomID);
-		bool 			MenuValid(u8 MenuID);
-		bool			BuildingValid(u8 buildingID);
-		bool			ToolsValid(u16 toolsID);
-		bool 			ItemValid(u32 itemID, bool IsDropped = true);
-		bool 			MusicValid(u16 musicID);
-		bool 			AnimationValid(u8 animID);
-		bool 			SnakeValid(u16 snakeID);
-		bool 			EmotionValid(u8 emotionID);
-		std::string 	GetSeedName(u16 itemID);
-		std::string  	SetCountryName(u8 country);
-		std::string 	GetBuildingName(u8 ID);
-		std::string 	GetRoomName(u8 ID);
-		std::string		GetItemName(u16 ItemID);
-		std::string 	GetNNPCName(u16 VID);
-		std::string 	GetSPNPCName(u32 npcData);
-		bool		 	ValidID(u16 ID, u16 StardID, u16 EndID);
+		bool						IsHalfAcre(u8 acreID);
+		bool 						RoomValid(u8 roomID);
+		bool 						MenuValid(u8 MenuID);
+		bool						BuildingValid(u8 buildingID);
+		bool						ToolsValid(u16 toolsID);
+		bool 						ItemValid(u32 itemID, bool IsDropped = true);
+		bool 						MusicValid(u16 musicID);
+		bool 						AnimationValid(u8 animID);
+		bool 						SnakeValid(u16 snakeID);
+		bool 						EmotionValid(u8 emotionID);
+		std::string 				GetSeedName(u16 itemID);
+		std::string  				SetCountryName(u8 country);
+		std::string 				GetBuildingName(u8 ID);
+		std::string 				GetRoomName(u8 ID);
+		std::string					GetItemName(u16 ItemID);
+		std::string 				GetNNPCName(u16 VID);
+		std::string 				GetSPNPCName(u8 SPVID);
+		bool		 				ValidID(u16 ID, u16 StardID, u16 EndID);
+		bool 						PopulateNPCAmiibo(SpecieID specieID, std::vector<std::string> &vec, std::vector<PACKED_AmiiboInfo> &info, bool HoldenFillyAllowed = false, bool NonCaravanAllowed = true);
 	}
 }
 #endif

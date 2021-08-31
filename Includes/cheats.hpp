@@ -92,7 +92,8 @@ namespace CTRPluginFramework {
 	extern const IDS1 Buildings[205];
 	extern const IDS1 Countrys[134];
 	extern const char* const amiiboSpecies[36];
-    extern const AmiiboInfo amiiboVillagers[454];
+	extern const SPAmiiboInfo amiiboSPVillagers[55];
+    extern const AmiiboInfo amiiboVillagers[399];
 
 	extern bool DropPatternON;
 	extern bool turbo;

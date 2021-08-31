@@ -46,6 +46,13 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 		return FUNCT(func1).Call<u16>(npcData);
 	}
 
+//0x01 to 0x34
+	u8 NPC::GetSPVID(u32 npcData) {
+		u32 var = *(u32 *)(npcData + 0x660);
+		var = *(u8 *)(var + 0x260);
+		return var;
+	}
+
 	s8 NPC::IsPlayer(u32 npcData) {
 		for(int i = 0; i < 8; ++i) {
     		if(*(u32 *)(npcData + 0x9AC) == Player::GetSpecificSave(i))
@@ -61,11 +68,13 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
   	void NPC::GetLoadedSPNPC(std::vector<NPCdata> &vec) {
 		vec.clear();
 		u32 data = 0;
+		u8 SPVID = 0;
 
 		for(u16 i = 0x0196; i < 0x200; ++i) {
 			data = GetData(i);
 			if(data != 0) {
-				vec.push_back(NPCdata{ IDList::GetSPNPCName(data), data });
+				SPVID = GetSPVID(data);
+				vec.push_back(NPCdata{ IDList::GetSPNPCName(SPVID), data });
 			}
 		}
 	}

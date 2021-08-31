@@ -496,8 +496,11 @@ namespace CTRPluginFramework {
 
 //Item Island Code
 	void islanditems(MenuEntry *entry) {
-		if(Controller::IsKeysPressed(Key::R + Key::DPadUp))
-			GameKeyboard::SendMessage("Test Message");
+		static u8 SPVID = 0;
+		if(Controller::IsKeysPressed(Key::R + Key::DPadUp)) {
+			OSD::Notify(IDList::GetSPNPCName(SPVID));
+			SPVID++;
+		}
 		/*if(Controller::IsKeysPressed(Key::R + Key::DPadUp)) {
 			AnimationData *globalData = new AnimationData(); //<u8, u8, u8, u8, u8, u16, u8>
 
@@ -523,7 +526,7 @@ namespace CTRPluginFramework {
 			static FUNCT func(Code::AnimFunction);
 			func.Call<bool>(player, 0xB9, globalData, 0);
 
-			delete globalData;
+			delete[] globalData;
 		}*/
 	}
 	
