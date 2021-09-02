@@ -3,44 +3,57 @@
 #include "RegionCodes.hpp"
 
 namespace CTRPluginFramework {
-	static constexpr int CONFIG_V = 0xC3; //config revs
-	static constexpr int DEV_V = 0xE3; //devmode 
+	static const u8 CONFIG_V = 0xC8;
+
+	void WriteConfig(CONFIG config, u8 byte) {
+		File file(CONFIGNAME, File::WRITE);
+		file.Seek((s64)config, File::SeekPos::SET);
+		file.Write(&byte, 1);
+	}
+
+	void ReadConfig(CONFIG config, u8 &byte) {
+		File file(CONFIGNAME, File::READ);
+		file.Seek((s64)config, File::SeekPos::SET);
+		file.Read(&byte, 1);
+	}
+
+	void ResetConfig(void) {
+		u8 save[8] = { 0, 0, 0, 0, 0, 0, 0, CONFIG_V };
+
+		File w_file(CONFIGNAME, File::WRITE);
+		w_file.Write(save, sizeof(save));
+	}
+
+	void ClearConfig(void) {
+		File file(CONFIGNAME, File::TRUNCATE);
+	}
 
 //check for config file
 	void CheckForCONFIG(void) {
-		u8 u_byte = 0;
+		if(!Directory::IsExists(V_DIRECTORY))
+			Directory::Create(V_DIRECTORY);
+
 		if(File::Exists(CONFIGNAME)) {
-			File r_file(CONFIGNAME, File::READ);
-			r_file.Seek((s64)CONFIG::Version, File::SeekPos::SET);
-			r_file.Read(&u_byte, 1);
+			u8 u_byte = 0;
+			ReadConfig(CONFIG::Version, u_byte);
+
 			if(u_byte != CONFIG_V) {//if not new config
 				OSD::Notify("plugin.bin version mismatch | file will now be updated", Color::Orange);
-				File::Remove(CONFIGNAME);
-				r_file.Flush();
-        		r_file.Close();
+				ClearConfig();
 			}
-			else {
-				r_file.Flush();
-        		r_file.Close();
-				return;
-			}
+			else return;
 		}
+
 		File::Create(CONFIGNAME);
-		File w_file(CONFIGNAME, File::WRITE);
-		w_file.Seek((s64)CONFIG::Version, File::SeekPos::SET);
-		u_byte = CONFIG_V;
-		w_file.Write(&u_byte, 1);
-		w_file.Flush();
-        w_file.Close();
+		ResetConfig();
 	}
 	
 //Start Message to ask to backup
 	void StartingMsg(void) {
-        u8 u_byte = 0;
-		File file(CONFIGNAME, File::RW);
-		file.Seek((s64)CONFIG::Info, File::SeekPos::SET);
-		file.Read(&u_byte, 1);
-        if(u_byte != 1) {
+        u8 u_byte = false;
+		ReadConfig(CONFIG::Info, u_byte);
+
+        if(!u_byte) {
 			static const std::string question = "Note:\n"
 												"This Plugin can use seeding cheats, which can be used to make games of others unplayable, be wise and respectful using those."
 												"This Plugin is still in developement, be aware that you might find bugs/glitches."
@@ -56,24 +69,17 @@ namespace CTRPluginFramework {
 
 				Wrap::Dump(PATH_SAVE, filename, ".dat", WrapLoc{ Save::GetInstance()->Address(), 0x89B00 }, WrapLoc{ (u32)-1, (u32)-1 }); 
             }
-			u_byte = 1;
-			file.Seek((s64)CONFIG::Info, File::SeekPos::SET);
-			file.Write(&u_byte, 1);
-			file.Flush();
-			file.Close();
-			return;
+
+			WriteConfig(CONFIG::Info, true);
         }
-        file.Flush();
-        file.Close();
     }
 
 //Dev Folder
 	bool IsDevModeUsable(void) {
-		u8 u_byte = 0;
-		File file(CONFIGNAME, File::READ);
-		file.Seek((s64)CONFIG::DevMode, File::SeekPos::SET);
-		file.Read(&u_byte, 1);
-		if(u_byte == DEV_V) {
+		u8 u_byte = false;
+		ReadConfig(CONFIG::DevMode, u_byte);
+
+		if(u_byte) {
 			if(!DEVC->IsVisible()) 
 				DEVC->Show();
 		}
@@ -81,8 +87,6 @@ namespace CTRPluginFramework {
 			if(DEVC->IsVisible()) 
 				DEVC->Hide();	
 		}
-		file.Flush();
-        file.Close();
 		return DEVC->IsVisible();
 	}
 
@@ -94,14 +98,8 @@ namespace CTRPluginFramework {
 			if((MessageBox("Yay you found the secret menu", "Do you want to launch the developer mode?\nDev-Mode will enable new Cheats that are meant for developers or are still in developement!", DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
 				Sleep(Milliseconds(100));
 				MessageBox("Dev-Mode is now active!").SetClear(ClearScreen::Top)();	
-				
-				u8 u_byte = 0;
-				File file(CONFIGNAME, File::WRITE);
-				file.Seek((s64)CONFIG::DevMode, File::SeekPos::SET);
-				u_byte = DEV_V;
-				file.Write(&u_byte, 1);
-				file.Flush();			
-				file.Close();
+
+				WriteConfig(CONFIG::DevMode, true);
 				
 				IsDevModeUsable();
 			}	
@@ -132,13 +130,7 @@ namespace CTRPluginFramework {
 				if(DEVC->IsVisible()) 
 					DEVC->Hide();	
 
-				File w_file(CONFIGNAME, File::RW);
-
-				int save[5] = { 0, 0, 0, 0, CONFIG_V };
-
-				w_file.Write(save, sizeof(save) / sizeof(int));
-				w_file.Flush();
-				w_file.Close();
+				ResetConfig();
 
 				MessageBox("Settings resetted!").SetClear(ClearScreen::Top)();
 			} break;

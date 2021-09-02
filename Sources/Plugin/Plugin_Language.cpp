@@ -3,17 +3,6 @@
 #include "RegionCodes.hpp"
 
 namespace CTRPluginFramework {
-    enum f_Language {
-        NoLang = 0, //If no language was chosen yet
-        JapaneseLang,
-        EnglishLang,
-        FrenchLang,
-		GermanLang,	
-		ItalianLang,
-		SpanishLang,
-		MaxLang
-	};
-
 	const std::string LanguageTXT[6] {
 		"Vapecord/Language/japanese.txt",
 		"Vapecord/Language/english.txt",
@@ -33,10 +22,8 @@ namespace CTRPluginFramework {
             "Spanish"
 		};
 
-        u8 u_byte = 0;
-        File file(CONFIGNAME, File::RW);
-        file.Seek((s64)CONFIG::Language, File::SeekPos::SET);
-        file.Read(&u_byte, 1);
+		u8 u_byte = f_Language::NoLang;
+		ReadConfig(CONFIG::Language, u_byte);
 
 		if(u_byte >= f_Language::MaxLang) //If byte is no language reset
 			u_byte = f_Language::NoLang;
@@ -87,8 +74,7 @@ namespace CTRPluginFramework {
                 break;
             }
 
-			file.Seek((s64)CONFIG::Language, File::SeekPos::SET);
-            file.Write(&u_byte, 1); //write language mode
+			WriteConfig(CONFIG::Language, u_byte); //write language mode
         }
 
 		int pos = (u_byte - 1);
@@ -96,16 +82,11 @@ namespace CTRPluginFramework {
 		if(!File::Exists(LanguageTXT[pos])) {
 			Sleep(Milliseconds(100));
 			MessageBox(Utils::Format("Error 404\nYou need the correct language text file for the plugin to work\nGet more info and help on the Discord Server: %s", DISCORDINV)).SetClear(ClearScreen::Top)();
-			file.Seek((s64)CONFIG::Language, File::SeekPos::SET);
-			u_byte = 0;
-            file.Write(&u_byte, 1); //write language mode
-            file.Flush();
-            file.Close();
+
+			WriteConfig(CONFIG::Language, f_Language::NoLang); 
+
 			SetupLanguage(true); //redo language choosing
 		}
-
-		file.Flush();
-        file.Close();
 
 		Language->Parse(LanguageTXT[pos]);
 

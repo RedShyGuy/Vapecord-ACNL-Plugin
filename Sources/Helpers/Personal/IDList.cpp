@@ -224,7 +224,7 @@ namespace CTRPluginFramework {
 		Process::ReadString(Stack[1], ItemName, 0x20, StringFormat::Utf16);
 
 		return ItemName == "" ? "???" : ItemName;
-	}*/
+	}*/ 
 
 	std::string IDList::GetNNPCName(u16 VID) {
 		static const u32 SetUp = Region::AutoRegion(0x308210, 0x3083E4, 0x308298, 0x308298, 0x30822C, 0x30822C, 0x308240, 0x308240);

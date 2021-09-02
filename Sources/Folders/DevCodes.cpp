@@ -496,10 +496,9 @@ namespace CTRPluginFramework {
 
 //Item Island Code
 	void islanditems(MenuEntry *entry) {
-		static u8 SPVID = 0;
 		if(Controller::IsKeysPressed(Key::R + Key::DPadUp)) {
-			OSD::Notify(IDList::GetSPNPCName(SPVID));
-			SPVID++;
+			std::string str = "";
+			Region::IsNewestVersion(str, "");
 		}
 		/*if(Controller::IsKeysPressed(Key::R + Key::DPadUp)) {
 			AnimationData *globalData = new AnimationData(); //<u8, u8, u8, u8, u8, u16, u8>

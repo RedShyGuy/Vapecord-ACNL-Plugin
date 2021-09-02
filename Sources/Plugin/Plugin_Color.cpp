@@ -21,15 +21,6 @@ namespace CTRPluginFramework {
 		Color(0xFFFFFFFF), Color(0xFFFFFFFF), Color(0xFFFFFFFF), Color(0xFFFFFFFF)
 	};
 
-    enum f_Color {
-        NoMode = 0, //If No mode was chosen yet
-        ColorMode,
-        LiteMode,     
-        LuxuryMode,
-		CustomMode,
-        MaxColor
-	};
-
     void ColorChange(Keyboard& keyboard, KeyboardEvent& event) {
         std::string& input = keyboard.GetMessage();
         
@@ -63,10 +54,8 @@ namespace CTRPluginFramework {
 			"Custom Mode", //todo: set language
 		};
 
-        u8 u_byte = 0;
-        File file(CONFIGNAME, File::RW);
-        file.Seek((s64)CONFIG::Color, File::SeekPos::SET);
-        file.Read(&u_byte, 1);
+        u8 u_byte = f_Color::NoMode;
+		ReadConfig(CONFIG::Color, u_byte);
 
         if(u_byte >= f_Color::MaxColor) //If byte is no mode reset
 			u_byte = f_Color::NoMode;
@@ -92,10 +81,7 @@ namespace CTRPluginFramework {
                 break;  
             }
 
-            file.Seek((s64)CONFIG::Color, File::SeekPos::SET);
-            file.Write(&u_byte, 1); //write color mode
-            file.Flush();
-            file.Close();
+			WriteConfig(CONFIG::Color, u_byte); //write color mode
         }
 
     //loads mode to entrys
@@ -167,17 +153,9 @@ namespace CTRPluginFramework {
 		return 1;
 	}
 
-    enum fwk_Color {
-        NoFWK = 0, //If No mode was chosen yet
-		FWK_Custom,
-        MaxFWK
-	};
-
 	void CustomFWK(bool SetInMenu) {
-        u8 u_byte = 0;
-		File file(CONFIGNAME, File::RW);
-		file.Seek((s64)CONFIG::FWKColor, File::SeekPos::SET);
-		file.Read(&u_byte, 1);
+        u8 u_byte = fwk_Color::NoFWK;
+		ReadConfig(CONFIG::FWKColor, u_byte);
 
         if(u_byte >= fwk_Color::MaxFWK) //If byte is no mode reset
 			u_byte = fwk_Color::NoFWK;
@@ -205,26 +183,18 @@ namespace CTRPluginFramework {
 			if(!WrapFWK()) {
 				Sleep(Milliseconds(100));
 				MessageBox(Utils::Format("Error 101\nYou need the FWKColors.txt for the custom main color mode to work!\nGet more info and help on the Discord Server: %s\nStandard Colors will load now!", DISCORDINV)).SetClear(ClearScreen::Top)();
-				
-				file.Seek((s64)CONFIG::FWKColor, File::SeekPos::SET);
-				u_byte = fwk_Color::NoFWK;
-				file.Write(&u_byte, 1);
+
+				WriteConfig(CONFIG::FWKColor, fwk_Color::NoFWK);
 			}
 			else {
-				file.Seek((s64)CONFIG::FWKColor, File::SeekPos::SET);
-				u_byte = fwk_Color::FWK_Custom;
-				file.Write(&u_byte, 1);
+				WriteConfig(CONFIG::FWKColor, fwk_Color::FWK_Custom);
 			}
 		}
 		else {
 			FwkSettings &settings = FwkSettings::Get();
 			SetVapecordStandardTheme(settings);
-			file.Seek((s64)CONFIG::FWKColor, File::SeekPos::SET);
-			u_byte = 0;
-			file.Write(&u_byte, 1);
-		}
 
-		file.Flush();
-        file.Close();
+			WriteConfig(CONFIG::FWKColor, fwk_Color::NoFWK);
+		}
     }
 }

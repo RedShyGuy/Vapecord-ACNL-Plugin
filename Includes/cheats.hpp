@@ -48,6 +48,8 @@
 #define ITEMLIST		"Vapecord/item.txt"
 #define CONFIGNAME		"Vapecord/plugin.bin"
 
+#define V_DIRECTORY		"Vapecord"
+
 #define DISCORDINV		"discord.gg/QwqdBpKWf3"
 
 #define SAVE_GARDENPLUS 0x89B00  //0x95CF94
@@ -82,8 +84,48 @@ namespace CTRPluginFramework {
 		FWKColor,
 		Language,
 		Info,
+		GameID,
+		GameVer,
 		DevMode,
 		Version
+	};
+
+	enum f_Language {
+        NoLang = 0, //If no language was chosen yet
+        JapaneseLang,
+        EnglishLang,
+        FrenchLang,
+		GermanLang,	
+		ItalianLang,
+		SpanishLang,
+		MaxLang
+	};
+
+	enum f_Color {
+        NoMode = 0, //If No mode was chosen yet
+        ColorMode,
+        LiteMode,     
+        LuxuryMode,
+		CustomMode,
+        MaxColor
+	};
+
+	enum fwk_Color {
+        NoFWK = 0, //If No mode was chosen yet
+		FWK_Custom,
+        MaxFWK
+	};
+
+	enum f_GameVer {
+		NoneVer = 0, //Message never appeared
+		Declined, //Message appeared and "No" was selected
+		Accepted //Message appeared and "Yes" was selected
+	};
+
+	enum f_GameID {
+		NoneID = 0, 
+		WrongID, 
+		CorrectID 
 	};
 
 	extern Result retcode;
@@ -375,6 +417,8 @@ namespace CTRPluginFramework {
 	void SetupLanguage(bool SetInMenu);
 	void CheckForCONFIG(void);
 	void Check_Color_Language(void);
+	void WriteConfig(CONFIG config, u8 byte);
+	void ReadConfig(CONFIG config, u8 &byte);
 	
 //Callbacks
 	void OnNewFrameCallback(Time ttime);

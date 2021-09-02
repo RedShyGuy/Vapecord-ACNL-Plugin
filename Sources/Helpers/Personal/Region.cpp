@@ -24,9 +24,19 @@ namespace CTRPluginFramework {
 		}
 	}
 
-	u32 Region::GetPatternAddress(const std::vector<u32>& pattern, u32 add, int pos) {
-		u32* found = (u32 *)Utils::Search<u32>(0x00100000, Process::GetTextSize(), pattern);
-		return (found[pos] + add);
+	s8 Region::IsNewestVersion(std::string& versionSTR, const std::string& gameVersion) {
+		versionSTR.clear();
+
+		static const std::vector<u16> Pattern = { 0x0056, 0x0065, 0x0072, 0x002E, 0x0020 };
+		u16* found = (u16 *)Utils::Search<u16>(0x00800000, 0x00100000, Pattern);
+		if(found == nullptr)
+			return -1;
+
+		versionSTR = Utils::Format("%c.%c", (char)found[5], (char)found[7]);
+		if(versionSTR != gameVersion)
+			return -2;
+
+		return 0;
 	}
 	
 	bool Range(u32 value, u32 low, u32 high) {

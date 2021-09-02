@@ -63,6 +63,61 @@ Gets region name to append to plugin title | also sets current region
 		}
 	}
 
+	static const std::string GameVersion = "1.5";
+
+	bool CheckGameVersion(void) {
+		u8 u_byte = f_GameVer::NoneVer;
+		ReadConfig(CONFIG::GameVer, u_byte);
+		if(u_byte == f_GameVer::Accepted)
+			return true;
+		else if(u_byte == f_GameVer::Declined)
+			return false;
+
+		std::string currentVersion = "";
+		s8 res = Region::IsNewestVersion(currentVersion, GameVersion);
+
+		if(res == -2) {
+			Sleep(Seconds(5));
+			static const std::string str = Utils::Format("Your game has the version %s\nThis plugin only supports the game version %s. Make sure you have the correct game version before you use this plugin!\nIgnore this warning?", currentVersion.c_str(), GameVersion.c_str());
+            if(!(MessageBox(Color(0xDC143CFF) << "Warning, wrong game version!", str, DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
+				WriteConfig(CONFIG::GameVer, f_GameVer::Declined);
+				return false;
+			}
+			else {
+				WriteConfig(CONFIG::GameVer, f_GameVer::Accepted);
+				return true;
+			}
+		}
+
+		else if(res == -1) {
+			OSD::Notify("Game Version Not Found!");
+			WriteConfig(CONFIG::GameVer, f_GameVer::Declined);
+			return false;
+		}
+
+		WriteConfig(CONFIG::GameVer, f_GameVer::Accepted);
+		return true;
+	}
+
+	bool CheckGameTitleID(void) {
+		u8 u_byte = f_GameID::NoneID;
+		ReadConfig(CONFIG::GameID, u_byte);
+		if(u_byte == f_GameID::CorrectID)
+			return true;
+		else if(u_byte == f_GameID::WrongID)
+			return false;
+
+		if(!GameHelper::IsACNL()) {
+			Sleep(Seconds(5));
+			MessageBox("Error 999", "Game Not Supported!\nCheats will not load\nPlugin Main Features are still usable!").SetClear(ClearScreen::Top)();
+			WriteConfig(CONFIG::GameID, f_GameID::WrongID);
+			return false;
+		}
+
+		WriteConfig(CONFIG::GameID, f_GameID::CorrectID);
+		return true;
+	}
+
 	extern bool logoExists;
 	extern int UI_Pos;
 	extern c_RGBA* logoArray;
@@ -99,14 +154,18 @@ prevent any issues with freezing of the plugin
 
 	int	main(void) {
 		PluginMenu *menu = new PluginMenu("ACNL Vapecord Plugin " << GetRegionName(), majorV, minorV, revisV, Note);
-
 		menu->SynchronizeWithFrame(true);
 
-	  //If title isn't ACNL
-		if(!GameHelper::IsACNL()) {
-			Sleep(Seconds(5));
-			InitMenu(menu);
-			MessageBox("Error 999", "Game Not Supported!\nCheats will not load\nPlugin Main Features are still usable!").SetClear(ClearScreen::Both)();
+		CheckForCONFIG();
+
+	//If title isn't ACNL
+		if(!CheckGameTitleID()) {
+			menu->Run();
+			return 0;
+		}
+
+	//Check if the game has the correct version
+		if(!CheckGameVersion()) {
 			menu->Run();
 			return 0;
 		}
@@ -119,8 +178,6 @@ prevent any issues with freezing of the plugin
 		RCO();
 	//Load MenuFolders and Entrys (located in MenuCreate.cpp)
 		InitMenu(menu);
-	
-		CheckForCONFIG();
 
 		ReserveItemData(ItemList);
 
