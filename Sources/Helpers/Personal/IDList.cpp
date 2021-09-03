@@ -305,13 +305,14 @@ namespace CTRPluginFramework {
 	}
 
 	std::string IDList::GetNPCRace(u8 ID) {
+		static const u32 SetUpStack = Region::AutoRegion(0x3081E8, 0x3083BC, 0x308270, 0x308270, 0x308204, 0x308204, 0x308218, 0x308218);
 		static const u32 SetUp = Region::AutoRegion(0x312610, 0x312A4C, 0x3127EC, 0x3127EC, 0x3126F8, 0x3126F8, 0x312B3C, 0x312B3C);
 
 	//No clue why, but the USA and EUR version have some formatting string parts at the beginning of the NPC race string which we need to skip
 		static const u8 Fix = Region::AutoRegion(0xC, 0xC, 0xC, 0xC, 0, 0, 0, 0);
 
 		u32 Stack[44];
-		u32 add = FUNCTION(Code::SetupStackData).Call<u32>(Stack);
+		u32 add = FUNCTION(SetUpStack).Call<u32>(Stack, Stack + 0x18, 0x10);
 
 		/*
 		//Way to get race ID by VID

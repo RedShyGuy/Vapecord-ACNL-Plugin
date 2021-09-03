@@ -138,8 +138,5 @@ namespace CTRPluginFramework {
 	//patches npc from moving back to their fixed position
 		static const u32 patchNPCMovingBack = Region::AutoRegion(0x57B9C0, 0x57AED8, 0x57AA08, 0x57AA08, 0x57A2F8, 0x57A2F8, 0x57A018, 0x57A018);
 		Process::Patch(patchNPCMovingBack, 0xE1A00000);
-
-	//Sets max character lenght of stackdata to higher amount (shouldn't cause any issues)
-		Process::Patch(Code::SetupStackData, 0xE3A02010);
 	}
 }
