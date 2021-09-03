@@ -282,14 +282,14 @@ namespace CTRPluginFramework {
 		TopScreen.Draw("the Vapecord Discord", 15, 55);
 		TopScreen.Draw("by sending the QR-Code!", 15, 65);
 	
-		if(!WasSaved) TopScreen.Draw("A | Save Crash Dump", 15, 105, Color::DimGrey);
-		else if(WasSaved) TopScreen.Draw("Crash dump saved!", 15, 105, Color::DarkGrey);
+		if(WasSaved == 0) TopScreen.Draw("A | Save Crash Dump", 15, 105, Color::DimGrey);
+		else if(WasSaved == 1) TopScreen.Draw("Crash dump saved!", 15, 105, Color::DarkGrey);
 		else TopScreen.Draw("Error!", 15, 105, Color::Red);
 
 		TopScreen.Draw("B | Return To Home", 15, 115, Color::DimGrey);
 
-		if(!QRSaved) TopScreen.Draw("X | Save QR-Code", 15, 125, Color::DimGrey);
-		else if(QRSaved) TopScreen.Draw("QR-Code saved!", 15, 125, Color::DarkGrey); 
+		if(QRSaved == 0) TopScreen.Draw("X | Save QR-Code", 15, 125, Color::DimGrey);
+		else if(QRSaved == 1) TopScreen.Draw("QR-Code saved!", 15, 125, Color::DarkGrey); 
 		else TopScreen.Draw("Error!", 15, 125, Color::Red); 
 
 		if(!ShowInfo) TopScreen.Draw("Y | Show Crash Info", 15, 135, Color::DimGrey);

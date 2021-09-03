@@ -28,7 +28,7 @@ namespace CTRPluginFramework {
 		versionSTR.clear();
 
 		static const std::vector<u16> Pattern = { 0x0056, 0x0065, 0x0072, 0x002E, 0x0020 };
-		u16* found = (u16 *)Utils::Search<u16>(0x00800000, 0x00100000, Pattern);
+		u16* found = (u16 *)Utils::Search<u16>(0x00800000, 0x00200000, Pattern);
 		if(found == nullptr)
 			return -1;
 

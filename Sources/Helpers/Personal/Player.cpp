@@ -12,12 +12,12 @@ loads specific player
 	//This will load the players save data
 		static const u32 pLoad = Region::AutoRegion(0x5C441C, 0x5C394C, 0x5C3464, 0x5C3464, 0x5C2D54, 0x5C2D54, 0x5C2A28, 0x5C2A28);
 
-		static FUNCT func1(pLoad);
+		static FUNCTION func1(pLoad);
 		func1.Call<void>(0, pIndex, 0);
 		
 	//This will port the player to his home
 		static const u32 pReload = Region::AutoRegion(0x5B66FC, 0x5B5C14, 0x5B5744, 0x5B5744, 0x5B5034, 0x5B5034, 0x5B4D08, 0x5B4D08);
-		static FUNCT func2(pReload);
+		static FUNCTION func2(pReload);
 		func2.Call<void>(GameHelper::GetRoomData(), pIndex, 1, 0);
 	}
 /*
@@ -35,7 +35,7 @@ reload design
 		u32 Data2 = Data1 + 0x6BC;
 		
 		static const u32 ReloadOffset = Region::AutoRegion(0x320DE0, 0x3207F4, 0x320134, 0x320134, 0x31FDE8, 0x31FDE8, 0x31FCA0, 0x31FCA0);
-		static FUNCT func(ReloadOffset);
+		static FUNCTION func(ReloadOffset);
 		func.Call<void>(Data2);
 	}
 
@@ -97,7 +97,7 @@ Update Tan
 		
 		static const u32 GetTanDataOffset = Region::AutoRegion(0x713798, 0x712C48, 0x7127A0, 0x712778, 0x711F4C, 0x711F24, 0x711AF4, 0x711ACC);
 
-		static FUNCT func1(GetTanDataOffset);
+		static FUNCTION func1(GetTanDataOffset);
 		u8 Tan = func1.Call<u8>(Player::GetSaveOffset(4) + 4);
 		
 		Process::Write8(GetStoredData + 0x1C0, Tan);
@@ -105,7 +105,7 @@ Update Tan
 	//This Updates the Tan
 		static const u32 UpdateTanOffset = Region::AutoRegion(0x1D0B90, 0x1D05D4, 0x1D0BB0, 0x1D0BB0, 0x1D0AEC, 0x1D0AEC, 0x1D0AEC, 0x1D0AEC);
 
-		static FUNCT func2(UpdateTanOffset);
+		static FUNCTION func2(UpdateTanOffset);
 		func2.Call<void>(GetStoredData);
 	}
 /*
@@ -118,7 +118,7 @@ update appearance
 	//This Updates the Outfit	
 		static const u32 update = Region::AutoRegion(0x68B2E4, 0x68A80C, 0x68A31C, 0x68A31C, 0x689DDC, 0x689DDC, 0x689984, 0x689984);
 
-		static FUNCT func(update);
+		static FUNCTION func(update);
 		func.Call<void>(PlayerClass::GetInstance()->Offset());
 	}
 /*
@@ -162,7 +162,7 @@ get status of specific player
 	PlayerStatus Player::GetPlayerStatus(u8 pPlayer) {
 		static const u32 pPOffset = Region::AutoRegion(0x2FF6CC, 0x2FF8B0, 0x2FF754, 0x2FF754, 0x2FF92C, 0x2FF92C, 0x2FF978, 0x2FF978);
 
-		static FUNCT func(pPOffset);
+		static FUNCTION func(pPOffset);
 		return func.Call<PlayerStatus>(pPlayer);
 	}
 
@@ -172,7 +172,7 @@ Get player save offset for any player
 	u32 Player::GetSpecificSave(u8 pPlayer) {
 		static const u32 pPOffset = Region::AutoRegion(0x2FBA60, 0x2FB96C, 0x2FBAE8, 0x2FBAE8, 0x2FB920, 0x2FB920, 0x2FB8F8, 0x2FB8F8);
 
-		static FUNCT func(pPOffset);
+		static FUNCTION func(pPOffset);
 		return func.Call<u32>(pPlayer);
 	}
 /*
@@ -181,7 +181,7 @@ Get Player Save Offset for loaded players
 	u32 Player::GetSaveOffset(u8 pIndex) {
 		static const u32 pSOffset = Region::AutoRegion(0x2FEB2C, 0x2FE8A8, 0x2FEBB4, 0x2FEBB4, 0x2FEB60, 0x2FEB60, 0x2FEA98, 0x2FEA98);
 
-		static FUNCT func(pSOffset);
+		static FUNCTION func(pSOffset);
 		return func.Call<u32>(pIndex);
 	}
 
@@ -277,7 +277,7 @@ If player exitst
 */
 	bool Player::Exists(u8 PlayerIndex) {
 		static const u32 existsFunction = Region::AutoRegion(0x75F84C, 0x75E830, 0x75E854, 0x75E82C, 0x75DFEC, 0x75DFC4, 0x75DB94, 0x75DB6C);
-		static FUNCT func(existsFunction);
+		static FUNCTION func(existsFunction);
 		u8 room = func.Call<u8>(*(u32 *)Code::GamePointer + 0x1C1, PlayerIndex);
 		return room == 0xA5 ? 0 : 1;
 	}
@@ -287,7 +287,7 @@ get location
 	bool Player::IsIndoors() {
 		static const u32 getlocation = Region::AutoRegion(0x1E890C, 0x1E8350, 0x1E892C, 0x1E892C, 0x1E8868, 0x1E8868, 0x1E8834, 0x1E8834);
 
-		static FUNCT func(getlocation);
+		static FUNCTION func(getlocation);
 		return func.Call<bool>();
 	}
 /*
@@ -296,7 +296,7 @@ get room
 	u8 Player::GetRoom(u8 PlayerIndex) {
 		static const u32 getroom = Region::AutoRegion(0x5C3DDC, 0x5C330C, 0x5C2E24, 0x5C2E24, 0x5C2714, 0x5C2714, 0x5C23E8, 0x5C23E8); 
 
-		static FUNCT func(getroom);
+		static FUNCTION func(getroom);
 		u32 animObjPtr = func.Call<u32>(PlayerIndex);
 		return animObjPtr == 0 ? 0xFF : *(u8 *)animObjPtr;
 	}

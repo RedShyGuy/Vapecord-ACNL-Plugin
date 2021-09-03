@@ -12,9 +12,9 @@ Custom Buttons are currently unused
 	//writes present lock onto item
 		Inventory::WriteLock(Inventory::GetSelectedSlot(), 1);
 	//Loads Item Icon | present icon
-		FUNCT(Code::LoadIcon).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x1EC0, Inventory::GetSelectedSlot());
+		FUNCTION(Code::LoadIcon).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x1EC0, Inventory::GetSelectedSlot());
 
-		FUNCT(0x19B380).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		FUNCTION(0x19B380).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}
 
 	void CustomButton::DuplicateItem(u32 ItemData) {
@@ -25,7 +25,7 @@ Custom Buttons are currently unused
 		else 
 			Inventory::WriteSlot(Inventory::GetSelectedSlot() + 1, itemslotid);
 		
-		FUNCT(0x19B380).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		FUNCTION(0x19B380).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}
 	
 	void CustomButton::PutItemToStorage(u32 ItemData) {
@@ -37,13 +37,13 @@ Custom Buttons are currently unused
 			PlayerPTR::Write32(0x92F0 + (0x4 * slot), itemslotid);
 		}
 
-		FUNCT(0x19B380).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		FUNCTION(0x19B380).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}
 	
 	void CustomButton::PayDebt(u32 ItemData) {	
 		u32 itemslotid = Inventory::ReadSlot(Inventory::GetSelectedSlot());
 		if(IDList::ValidID(itemslotid, 0x20AC, 0x2117)) {  
-			int money = FUNCT(0x3055C8).Call<int>(PlayerPTR::Pointer(0x6BD0 + (0x4 * Inventory::GetSelectedSlot())));
+			int money = FUNCTION(0x3055C8).Call<int>(PlayerPTR::Pointer(0x6BD0 + (0x4 * Inventory::GetSelectedSlot())));
 				
 			int debt = GameHelper::GetMoney((u64 *)PlayerPTR::Pointer(0x6B94));
 		//if you try to store more money than you need to, the rest will be set to your bank acc
@@ -67,16 +67,228 @@ Custom Buttons are currently unused
 			}
 
 			GameHelper::SetMoney(PlayerPTR::Pointer(0x6B94), debt - money);
-			
+
+			while(itemslotid > 0x20AC) {
+				FUNCTION(0x58DDF8).Call<void>(0x1000491);
+				Inventory::WriteSlot(Inventory::GetSelectedSlot(), itemslotid--);		
+			}
+
+			GameHelper::PlaySound(0x492);
+
 			Inventory::WriteSlot(Inventory::GetSelectedSlot(), 0x7FFE);
 		}
 		
-		FUNCT(0x19B380).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		FUNCTION(0x19B380).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}
 	
 	void CustomButton::RandomOutfit(u32 ItemData) {
 		Player::WriteOutfit(4, Utils::Random(0x280B, 0x28F3), Utils::Random(0x28F5, 0x295B), Utils::Random(0x2493, 0x26F5), Utils::Random(0x26F8, 0x2776), Utils::Random(0x2777, 0x279E), Utils::Random(0x279F, 0x27E5));
 		
-		FUNCT(0x19D2A0).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		FUNCTION(0x19D2A0).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+	}
+
+	/*void claim(void) {
+		u32 DesignData = *(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x464; //0x32DC4E1C
+		
+		const u32 GetSlot = 0x724214;
+		Process::Write32((u32)&FUN, GetSlot);
+		u8 DesignSlot = FUN(DesignData);
+		
+		u32 Design = Player::GetSaveOffset(4) + 0x548C;		
+		u8 correctslot = *(u8 *)(Design + (0x1 * DesignSlot));
+		
+		std::string PlayerName = "", TownName = "";
+		Process::ReadString(PlayerPTR::Pointer(0x55A8), PlayerName, 0x10, StringFormat::Utf16);
+		Process::ReadString(PlayerPTR::Pointer(0x55BE), TownName, 0x10, StringFormat::Utf16);
+		
+		Player::SetDesign(correctslot, "", *(u16 *)PlayerPTR::Pointer(0x55A6), PlayerName, *(u8 *)PlayerPTR::Pointer(0x55BA), *(u16 *)PlayerPTR::Pointer(0x55BC), TownName, *(u32 *)PlayerPTR::Pointer(0x55D0), 0xFF, 0xFF);
+	
+		FUN_008188a0(iParm1 + 0xa4,PTR_FUN_00852d64,DAT_00852d68);
+	}
+
+	void claimdesignbutton(MenuEntry *entry) {
+		static Hook hook;
+		
+		const u32 AlwaysWear = 0x258E58;
+		const u32 AlwaysUmbrella = 0x2585B8;
+		
+		if(entry->WasJustActivated()) {	
+			Process::Write32(AlwaysWear, 0xE1A00000);
+			Process::Write32(AlwaysUmbrella, 0xE1A00000);
+		
+			u32 HookOff = 0x25A0A4;
+			hook.Initialize(HookOff, (u32)claim);
+			hook.SetFlags(0);
+			hook.Enable();
+		}
+		
+		if(GameHelper::BaseInvPointer() != 0) {
+			if(!Inventory::Opened())
+				return;
+			
+			u32 Designs = *(u32 *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x22C0);
+			
+			for(int i = 0; i < 6; i++) {
+				u32 CurrDesign = Designs + (0xAC * i);
+			//If ID is Wear
+				if(*(u8 *)(CurrDesign + 0xA8) == 0)
+					Process::WriteString((CurrDesign + 0x20), "Claim Design", 0x28, StringFormat::Utf16);
+			}
+		}
+		
+		if(!entry->IsActivated()) {	
+			Process::Write32(AlwaysWear, 0x1A000010);
+			Process::Write32(AlwaysUmbrella, 0x0A000009);
+		    hook.Disable();
+		}
+	}
+	*/	
+
+	static int itemsetting1 = 0;
+	static int itemsetting2 = 0;
+	static int itemsetting3 = 0;
+
+	static const std::vector<std::string> citemsettings = {
+		"Duplicate", "Wrap it!", "Put in Storage", "Pay Debt", "Disable",
+	};
+	static const std::vector<std::string> coutfitsettings = { 
+		"Random Outfit", "Disable", 
+	};
+
+	u32 SetNameCall(u32 DataPointer, u32 *stack, char *SYS_2D_UI, u8 sysID) {
+		u32 res = FUNCTION(0x312610).Call<u32>(DataPointer, stack, SYS_2D_UI, sysID);
+
+		if(sysID == 0x2A)
+			Process::WriteString(stack[1], citemsettings[itemsetting1], 0x20, StringFormat::Utf16);
+		else if(sysID == 0x0C) 
+			Process::WriteString(stack[1], citemsettings[itemsetting2], 0x20, StringFormat::Utf16);
+		else if(sysID == 0x26)
+			Process::WriteString(stack[1], coutfitsettings[itemsetting3], 0x20, StringFormat::Utf16);
+
+		return res;
+	}
+
+	using FuncType = void(*)(u32);
+
+	static const FuncType ItemButtonArr[4] = {
+		CustomButton::DuplicateItem, CustomButton::WrapItem, CustomButton::PutItemToStorage, CustomButton::PayDebt
+	};
+	static const FuncType OutfitButtonArr[1] = {
+		CustomButton::RandomOutfit
+	};
+
+	struct ItemFuncData {
+		u32 FunctionPointer;
+		u32 Null;
+	};
+	
+//put item into storage
+	void SettingsButton(MenuEntry *entry) {
+		static const std::vector<std::string> cbuttons = { 
+			"Item Button 1", "Item Button 2", "Outfit Button 1",
+		};
+
+		ItemFuncData* FuncPointer = (ItemFuncData *)Region::AutoRegion(0x9509FC, 0, 0, 0, 0, 0, 0, 0);
+
+		static const u32 SYSNameFunc = Region::AutoRegion(0x5D5860, 0, 0, 0, 0, 0, 0, 0);
+		static Hook NameHook;
+		NameHook.Initialize(SYSNameFunc, (u32)SetNameCall);
+		NameHook.SetFlags(USE_LR_TO_RETURN);
+
+		static const u32 Undo1 = FuncPointer[24].FunctionPointer;
+		static const u32 Undo2 = FuncPointer[15].FunctionPointer;
+		static const u32 Undo3 = FuncPointer[5].FunctionPointer;
+
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
+		optKb.Populate(cbuttons);
+		s8 op = optKb.Open();
+		if(op < 0)
+			return;
+
+	//1st Custom button | replaces medicine button
+		if(op == 0) {
+			optKb.Populate(citemsettings);
+			op = optKb.Open();
+			if(op < 0)
+				return;
+
+			static const u32 AlwaysMedicine = Region::AutoRegion(0x19BC04, 0, 0, 0, 0, 0, 0, 0);
+
+			if(op == 4) {
+				Process::Patch(AlwaysMedicine, 0x1A000020); //Unpatch
+
+				FuncPointer[24].FunctionPointer = Undo1;
+
+				NameHook.Disable();
+				return;
+			}
+
+			NameHook.Enable();
+
+			Process::Patch(AlwaysMedicine, 0xE1A00000); //Always Take Medicine
+
+			FuncPointer[24].FunctionPointer = (u32)ItemButtonArr[op];
+
+			itemsetting1 = op;
+		}
+	//2nd Custom button | replaces release button
+		else if(op == 1) {
+			optKb.Populate(citemsettings);
+			op = optKb.Open();
+			if(op < 0)
+				return;
+			
+			static const u32 AlwaysRelease = Region::AutoRegion(0x19BD60, 0, 0, 0, 0, 0, 0, 0);
+			static const u32 NeverToss = Region::AutoRegion(0x19BD80, 0, 0, 0, 0, 0, 0, 0);
+
+			if(op == 4) {
+				Process::Patch(AlwaysRelease, 0x0A000013);
+				Process::Patch(NeverToss, 0xE3A02037);
+
+				FuncPointer[15].FunctionPointer = Undo2;
+
+				NameHook.Disable();
+				return;
+			}
+
+			NameHook.Enable();
+				
+			Process::Patch(AlwaysRelease, 0xE1A00000); //Enables Always Release
+			Process::Patch(NeverToss, 0xE3A0200C); //Changes Toss if Cicada Shell to release
+
+			FuncPointer[15].FunctionPointer = (u32)ItemButtonArr[op];
+
+			itemsetting2 = op;
+		}
+		
+	//3rd Custom button | replaces remove wet suit button
+		else if(op == 2) {
+			optKb.Populate(coutfitsettings);
+			op = optKb.Open();
+			if(op < 0)
+				return;
+			
+			static const u32 WetSuitButton = Region::AutoRegion(0x19DBA4, 0, 0, 0, 0, 0, 0, 0);
+			static const u32 SocksButton = Region::AutoRegion(0x19DC78, 0, 0, 0, 0, 0, 0, 0);
+
+			if(op == 1) {
+				Process::Patch(WetSuitButton, 0x1A000009);
+				Process::Patch(SocksButton, 0x1A000009);
+
+				FuncPointer[5].FunctionPointer = Undo3;
+
+				NameHook.Disable();
+				return;
+			}
+
+			NameHook.Enable();
+			
+			Process::Patch(WetSuitButton, 0xE1A00000); //Always Remove Wet Suit
+			Process::Patch(SocksButton, 0xEA000009); //Disable Remove Socks
+
+			FuncPointer[5].FunctionPointer = (u32)OutfitButtonArr[op];
+
+			itemsetting3 = op;
+		}
 	}
 }

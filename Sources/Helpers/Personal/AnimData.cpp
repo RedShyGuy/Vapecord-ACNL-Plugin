@@ -17,13 +17,13 @@ namespace CTRPluginFramework {
 
     void AnimData::AppendCoordData(u32 animInst, u32 pos, float *Coord) {
         static const u32 coordoffset = Region::AutoRegion(0x5D4C88, 0x5D41B8, 0x5D3CD0, 0x5D3CD0, 0x5D3504, 0x5D3504, 0x5D31D8, 0x5D31D8);
-        static FUNCT func(coordoffset);
+        static FUNCTION func(coordoffset);
 		func.Call<void>(animInst + pos, Coord);
     }
     
 //Animation Function
 	bool AnimData::ExecuteAnimation(u8 animID) {
-		static FUNCT func(Code::AnimFunction);
+		static FUNCTION func(Code::AnimFunction);
 		return func.Call<bool>(playerInst, animID, animInst, 0);
 	}
 

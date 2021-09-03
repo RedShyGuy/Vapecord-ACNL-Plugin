@@ -20,7 +20,7 @@ namespace CTRPluginFramework {
 
 		const u16* hex = (const u16 *)buffer;
 		u8 i = *(u8 *)(*(u32 *)(Code::ChatPoint) + 0x14);
-		static FUNCT func(WriteFunc);
+		static FUNCTION func(WriteFunc);
 
 		while(*hex) {
 			u16 character = (u16)*hex++;
@@ -65,7 +65,7 @@ namespace CTRPluginFramework {
 		u8	CurrentPos = *(u8 *)(*(u32 *)(Code::ChatPoint) + 0x14);
 		u8	SelectStart = *(u8 *)(*(u32 *)(Code::ChatPoint) + 0x1C);
 
-		static FUNCT func(DeleteFunc);
+		static FUNCTION func(DeleteFunc);
 
 		if(CurrentPos < SelectStart) {
 			func.Call<void>(*(u32 *)Code::ChatPoint, CurrentPos, SelectStart - CurrentPos);
@@ -81,7 +81,7 @@ namespace CTRPluginFramework {
 //If keyboard is opened 32DE75BC
 	bool GameKeyboard::IsOpen() {
 		static const u32 KeyBool = Region::AutoRegion(0x523F48, 0x52389C, 0x522F90, 0x522F90, 0x52287C, 0x52287C, 0x52256C, 0x52256C); 
-		static FUNCT func(KeyBool);	
+		static FUNCTION func(KeyBool);	
 		bool res = func.Call<bool>();
 		if(res) {
 			if(*(u32 *)(*(u32 *)(*(u32 *)(Code::ChatPoint) + 4) + 0x50) == 0)
@@ -168,26 +168,26 @@ namespace CTRPluginFramework {
 			*(u8 *)(msgData + 0x85A) = 0;
 		}
 
-		u32 var = FUNCT(Code::SetupStackData).Call<u32>(Stack); //Makes temporary "Stack" ready to be written to
-		FUNCT(func2).Call<void>(var, pIndex); //Gets Player Name Data and writes it to temporary "Stack"
+		u32 var = FUNCTION(Code::SetupStackData).Call<u32>(Stack); //Makes temporary "Stack" ready to be written to
+		FUNCTION(func2).Call<void>(var, pIndex); //Gets Player Name Data and writes it to temporary "Stack"
 
-		FUNCT(func3).Call<void>((int *)(msgData + 0x47C), var); //Finished Player Name Data in Chat Box Data (?)
+		FUNCTION(func3).Call<void>((int *)(msgData + 0x47C), var); //Finished Player Name Data in Chat Box Data (?)
 
 		Process::WriteString(msgData + 0x870, str, 0x30, StringFormat::Utf16);
 
 		*(u8 *)(msgData + 0x84C) = 8;
 		*(u8 *)(msgData + 0x850) = pIndex;
 
-		FUNCT(func4).Call<void>(msgData + 0x6A0, msgData + 0x47C); //Actually writes Player Name Data to Chat Box Data
+		FUNCTION(func4).Call<void>(msgData + 0x6A0, msgData + 0x47C); //Actually writes Player Name Data to Chat Box Data
 
 		*(u32 *)(msgData + 0x784) = (msgData + pIndex * 0x28 + 0x2AC);
 		*(u16 *)(msgData + 0x856) = 300;
 		*(u8 *)(msgData + 0x85A) = 1;
 		*(u8 *)(msgData + 0x858) = 1;
 
-		u32 val = FUNCT(func5).Call<u32>(); //Checks if playing online
+		u32 val = FUNCTION(func5).Call<u32>(); //Checks if playing online
 		if(val != 0) 
-			FUNCT(func6).Call<void>(0x8C + pIndex, onlineStack, 1); //Sends temporary Online "Stack" to others
+			FUNCTION(func6).Call<void>(0x8C + pIndex, onlineStack, 1); //Sends temporary Online "Stack" to others
 
 		delete[] onlineStack;
 	}

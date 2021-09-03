@@ -59,15 +59,15 @@ namespace CTRPluginFramework {
 
 		u32 mData = PlayerClass::GetInstance()->Offset(0x5750);
 
-		FUNCT(func1).Call<void>(mData + 0x458, *(u32 *)(mData + 0x44C), 0);
+		FUNCTION(func1).Call<void>(mData + 0x458, *(u32 *)(mData + 0x44C), 0);
 
 		SetMSGData(mData + 0x51C, str);
 		
 		u32 uVar2 = mData + 0x458;
-		FUNCT(func2).Call<void>(uVar2, mData + 0x51C);
-		FUNCT(func3).Call<void>(uVar2);
+		FUNCTION(func2).Call<void>(uVar2, mData + 0x51C);
+		FUNCTION(func3).Call<void>(uVar2);
 
-		float fVar8 = FUNCT(func4).Call<float>(uVar2);
+		float fVar8 = FUNCTION(func4).Call<float>(uVar2);
 
 		uVar2 = *(u32 *)(mData + 0x44C);
 		fVar8 = fVar8 + 0.5;
@@ -92,7 +92,7 @@ namespace CTRPluginFramework {
 		*(u32 *)(uVar2 + 0x30) = uVar7;
 		*(u8 *)(uVar2 + 0xB7) = *(u8 *)(uVar2 + 0xB7) & 0xCF;
 
-		FUNCT(func5).Call<void>(mData + 0x14, *(u32 *)point, *(u32 *)(point + 4));
+		FUNCTION(func5).Call<void>(mData + 0x14, *(u32 *)point, *(u32 *)(point + 4));
 
 		static PluginMenu *menu = PluginMenu::GetRunningInstance();
 		*menu += StopMSGCallBack;

@@ -43,7 +43,7 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
  	u16 NPC::GetVID(u32 npcData) {
 		static const u32 func1 = Region::AutoRegion(0x51D288, 0x51CBDC, 0x51C2D0, 0x51C2D0, 0x51BBEC, 0x51BBEC, 0x51B580, 0x51B580);
 
-		return FUNCT(func1).Call<u16>(npcData);
+		return FUNCTION(func1).Call<u16>(npcData);
 	}
 
 //0x01 to 0x34

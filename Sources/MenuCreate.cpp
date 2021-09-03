@@ -423,7 +423,7 @@ namespace CTRPluginFramework {
 		DEVC->Append(new MenuEntry(Color::Red << "ACNH Cheat", acnh, "")),
 		//DEVC->Append(new MenuEntry(Color::Red << "Friend Code Test", PlayerLoader, "")),
 		DEVC->Append(new MenuEntry(Color::Red << "Player Dumper", nullptr, player_dumper, "")),
-		//DEVC->Append(new MenuEntry(Color::Red << "Button Test", nullptr, SettingsButton, "")),
+		DEVC->Append(new MenuEntry(Color::Red << "Button Test", nullptr, SettingsButton, "")),
 		//DEVC->Append(new MenuEntry(Color::Red << "Test", valuedisplayer, "")),
 		//DEVC->Append(new MenuEntry(Color::Red << "Extra Save Restore", nullptr, RestoreAll, "")),
 		DEVC->Append(new MenuEntry(Color::Red << "Fish Thrower", FishThrower, "")),

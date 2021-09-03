@@ -115,16 +115,16 @@ namespace CTRPluginFramework {
 			u32 null[]{ 0 };
 			switch(mode) {
 				case 0:
-					FUNCT(func1).Call<void>(CurrAddress + 0x78, npcID, 0, data1, null, null, 0, data2); //Animation	
+					FUNCTION(func1).Call<void>(CurrAddress + 0x78, npcID, 0, data1, null, null, 0, data2); //Animation	
 				break;
 				case 1:
-					FUNCT(func2).Call<void>(CurrAddress + 0x78, 0, npcID, 0, 0); //Snake
+					FUNCTION(func2).Call<void>(CurrAddress + 0x78, 0, npcID, 0, 0); //Snake
 				break;
 				case 2:
-					FUNCT(func3).Call<void>(CurrAddress + 0x78, 0, npcID); //Emote
+					FUNCTION(func3).Call<void>(CurrAddress + 0x78, 0, npcID); //Emote
 				break;
 				case 3:
-					FUNCT(func4).Call<void>(CurrAddress + 0x78, 0, &npcID); //Item
+					FUNCTION(func4).Call<void>(CurrAddress + 0x78, 0, &npcID); //Item
 				break;
 			}
 		}
@@ -177,7 +177,7 @@ namespace CTRPluginFramework {
 		u8 uVar91C = 0;
 		u8 uVar91D = 0;
 
-		float *coord = FUNCT(addr1).Call<float *>();
+		float *coord = FUNCTION(addr1).Call<float *>();
 		
 		float fVar1 = coord[1];
 		fVar914 = coord[0];
@@ -189,12 +189,12 @@ namespace CTRPluginFramework {
           fVar914 = 1.0;
         }
 
-		uVar918 = FUNCT(addr2).Call<u16>(coord[0], coord[1]);
+		uVar918 = FUNCTION(addr2).Call<u16>(coord[0], coord[1]);
 
 		u32 iVar2 = *(u32 *)point1;
 		if(iVar2 != 0) {
         	int iVar9 = *(int *)(iVar2 + 0x1A4);
-        	u16 sVar5 = FUNCT(addr3).Call<u16>(iVar9 + 0x24, iVar9 + 0x30);
+        	u16 sVar5 = FUNCTION(addr3).Call<u16>(iVar9 + 0x24, iVar9 + 0x30);
         	uVar918 = sVar5 + uVar918;
         }
 

@@ -124,7 +124,7 @@ namespace CTRPluginFramework {
 			static const u32 CreateTPC = Region::AutoRegion(0x5B3594, 0x5B2AAC, 0x5B25DC, 0x5B25DC, 0x5B1ECC, 0x5B1ECC, 0x5B1BA0, 0x5B1BA0);
 			static const u32 TPCPoint = Region::AutoRegion(0x954F10, 0x953EF0, 0x953F08, 0x953F08, 0x94DF08, 0x94CF08, 0x94CF08, 0x94CF08);
 
-			static FUNCT func(CreateTPC);
+			static FUNCTION func(CreateTPC);
 			func.Call<void>(*(u32 *)TPCPoint, PlayerPTR::Pointer(0x5734));
 			GameHelper::PlaySound(0x4A7);
 		}

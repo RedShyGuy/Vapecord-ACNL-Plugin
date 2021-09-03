@@ -3,6 +3,7 @@
 
 #include <3ds.h>
 #include <CTRPluginFramework.hpp>
+
 #include "Helpers/Game.hpp"
 #include "Helpers/AnimData.hpp"
 #include "Helpers/Animation.hpp"
@@ -21,13 +22,15 @@
 #include "Helpers/Town.hpp"
 #include "Helpers/Save.hpp"
 #include "Helpers/NPC.hpp"
+#include "Helpers/QRCodeGen.hpp"
+#include "Helpers/CustomButton.hpp"
+#include "Helpers/KeySequence.hpp"
+
 #include "NonHacker.hpp"
 #include "RegionCodes.hpp"
 #include "TextFileParser.hpp"
 #include "MenuPointers.hpp"
-#include "Helpers/QRCodeGen.hpp"
-#include "Helpers/CustomButton.hpp"
-#include "Helpers/KeySequence.hpp"
+#include "Config.hpp"
 
 #define PATH_PRESET		"Vapecord/PreSet"
 #define PATH_LOGO		"Vapecord/logo.bin"
@@ -79,61 +82,8 @@ namespace CTRPluginFramework {
 	extern const u32 revisV;
 	extern const std::string fullV;
 
-	enum class CONFIG : s64 {
-		Color = 0,
-		FWKColor,
-		Language,
-		Info,
-		GameID,
-		GameVer,
-		DevMode,
-		Version
-	};
-
-	enum f_Language {
-        NoLang = 0, //If no language was chosen yet
-        JapaneseLang,
-        EnglishLang,
-        FrenchLang,
-		GermanLang,	
-		ItalianLang,
-		SpanishLang,
-		MaxLang
-	};
-
-	enum f_Color {
-        NoMode = 0, //If No mode was chosen yet
-        ColorMode,
-        LiteMode,     
-        LuxuryMode,
-		CustomMode,
-        MaxColor
-	};
-
-	enum fwk_Color {
-        NoFWK = 0, //If No mode was chosen yet
-		FWK_Custom,
-        MaxFWK
-	};
-
-	enum f_GameVer {
-		NoneVer = 0, //Message never appeared
-		Declined, //Message appeared and "No" was selected
-		Accepted //Message appeared and "Yes" was selected
-	};
-
-	enum f_GameID {
-		NoneID = 0, 
-		WrongID, 
-		CorrectID 
-	};
-
-	extern Result retcode;
-	extern int res;
-
 	extern const IDS1 Buildings[205];
 	extern const IDS1 Countrys[134];
-	extern const char* const amiiboSpecies[36];
 	extern const SPAmiiboInfo amiiboSPVillagers[55];
     extern const AmiiboInfo amiiboVillagers[399];
 
@@ -409,16 +359,6 @@ namespace CTRPluginFramework {
 	void GetPlayerInfoData(void);
   //Located in MenuCreate.cpp
 	void InitMenu(PluginMenu *menu);
-
-	bool IsDevModeUsable(void);
-	void StartingMsg(void);
-	void CustomFWK(bool SetInMenu);
-	void SetupColors(bool SetInMenu);
-	void SetupLanguage(bool SetInMenu);
-	void CheckForCONFIG(void);
-	void Check_Color_Language(void);
-	void WriteConfig(CONFIG config, u8 byte);
-	void ReadConfig(CONFIG config, u8 &byte);
 	
 //Callbacks
 	void OnNewFrameCallback(Time ttime);

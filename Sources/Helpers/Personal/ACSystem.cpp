@@ -6,7 +6,7 @@
 namespace CTRPluginFramework {
     bool ACSystem::IsKeyDown(GameKey::GameKey key) {
 		static const u32 ControllerInputCheck = Region::AutoRegion(0x304A14, 0x304C1C, 0x304AA4, 0x304AA4, 0x304A44, 0x304A44, 0x3049F4, 0x3049F4);
-		static FUNCT func(ControllerInputCheck);
+		static FUNCTION func(ControllerInputCheck);
 		return func.Call<bool>(key);
 	}
 
@@ -25,7 +25,7 @@ namespace CTRPluginFramework {
 
 	u16 ACSystem::GetGameCoins() {
 		static const u32 GetGCoins = Region::AutoRegion(0x6C9D58, 0, 0, 0, 0, 0, 0, 0);
-		static FUNCT func(GetGCoins);
+		static FUNCTION func(GetGCoins);
 		return func.Call<u16>();
 	}
 	//something with anim stage
@@ -52,7 +52,7 @@ namespace CTRPluginFramework {
 		Process::Write32(SubGC, 0xE0400004);
 		return res; //0x953AE8
 		static const u32 SetGCoins = Region::AutoRegion(0x6C9DA8, 0, 0, 0, 0, 0, 0, 0);
-		static FUNCT func(SetGCoins);
+		static FUNCTION func(SetGCoins);
 		return func.Call<bool>(gamecoins);
 	}*/
 //32DF6790
@@ -83,21 +83,21 @@ Light Switch cheats I made for fun
 		if(switchData == 0)
 			return;
 
-		FUNCT func(data1);
+		FUNCTION func(data1);
 		func.Call<void>(switchData + 0x38, switchData + 0x3F4, *(u32 *)(switchData + 0x488), 0);
 
 		FUN_0056A2C8(switchData + 0x3F4, ON ? 0x3F800000 : 0);
 
-		func = FUNCT(data2);
+		func = FUNCTION(data2);
 		func.Call<void>(switchData + 0x38);
 
-		func = FUNCT(data3);
+		func = FUNCTION(data3);
 		func.Call<void>(switchData + 0x38, switchData + 0x3F4, *(u32 *)(switchData + 0x488), 0);
 	}
 
 	void LightSwitch::ON(u8 roomID) {
 		static const u32 lightON = Region::AutoRegion(0x1E6844, 0x1E6288, 0x1E6864, 0x1E6864, 0x1E67A0, 0x1E67A0, 0x1E676C, 0x1E676C);
-		static FUNCT func(lightON);
+		static FUNCTION func(lightON);
 		func.Call<void>(0, roomID);
 		SetData(true);
 
@@ -107,7 +107,7 @@ Light Switch cheats I made for fun
 
 	void LightSwitch::OFF(u8 roomID) {
 		static const u32 lightOFF = Region::AutoRegion(0x1E7514, 0x1E6F58, 0x1E7534, 0x1E7534, 0x1E7470, 0x1E7470, 0x1E743C, 0x1E743C);
-		static FUNCT func(lightOFF);
+		static FUNCTION func(lightOFF);
 		func.Call<void>(0, roomID);
 		SetData(false);
 
@@ -117,13 +117,13 @@ Light Switch cheats I made for fun
 
 	bool LightSwitch::IsON(u8 roomID) {
 		static const u32 lightIsON = Region::AutoRegion(0x1E7AC0, 0x1E7504, 0x1E7AE0, 0x1E7AE0, 0x1E7A1C, 0x1E7A1C, 0x1E79E8, 0x1E79E8);
-		static FUNCT func(lightIsON);
+		static FUNCTION func(lightIsON);
 		return func.Call<bool>(roomID);
 	}
 
 	bool LightSwitch::IsBasement(u8 roomID) {
 		static const u32 lightBasement = Region::AutoRegion(0x1E8400, 0x1E7E44, 0x1E8420, 0x1E8420, 0x1E835C, 0x1E835C, 0x1E8328, 0x1E8328);
-		static FUNCT func(lightBasement);
+		static FUNCTION func(lightBasement);
 		return func.Call<bool>(roomID);
 	}
 

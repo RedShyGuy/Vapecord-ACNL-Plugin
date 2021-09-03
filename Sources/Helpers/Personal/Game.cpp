@@ -56,7 +56,7 @@ namespace CTRPluginFramework {
 
 	void GameHelper::PlaySound(u16 soundID) {
 		static const u32 soundfunc = Region::AutoRegion(0x58DE9C, 0x58D3B4, 0x58CEE4, 0x58CEE4, 0x58C7D4, 0x58C7D4, 0x58C4A8, 0x58C4A8);
-		static FUNCT func(soundfunc);	
+		static FUNCTION func(soundfunc);	
 		func.Call<void>(0x1000000 + soundID);
 	}
 
@@ -69,7 +69,7 @@ namespace CTRPluginFramework {
 	bool GameHelper::SetValueDisplay(u8 type) {
 	//TODO: port addresses
 		static const u32 disp = Region::AutoRegion(0x2912B8, 0, 0, 0, 0, 0, 0, 0); 
-		static FUNCT func(disp);	
+		static FUNCTION func(disp);	
 		return func.Call<bool>(type);
 	}
 //Item Locks Switch
@@ -96,7 +96,7 @@ namespace CTRPluginFramework {
 //returns current grass state of coordinates
 	u8 GrassState(u8 wX, u8 wY) {	
 		static const u32 gState = Region::AutoRegion(0x6C92FC, 0x6C87AC, 0x6C8334, 0x6C830C, 0x6C7C2C, 0x6C7C04, 0x6C77D4, 0x6C77AC); 
-		static FUNCT func(gState);	
+		static FUNCTION func(gState);	
 		return func.Call<u8>(wX, wY);
 	}
 //Water flower
@@ -105,7 +105,7 @@ namespace CTRPluginFramework {
 			return 0;
 		
 		static const u32 WFlower = Region::AutoRegion(0x765B14, 0x764AF8, 0x764B1C, 0x764AF4, 0x7642B4, 0x76428C, 0x763E5C, 0x763E34); 
-		static FUNCT func(WFlower);	
+		static FUNCTION func(WFlower);	
 		func.Call<void>(PlayerClass::GetInstance()->Offset(), wX, wY);
 		return 1;
 	}
@@ -114,20 +114,20 @@ namespace CTRPluginFramework {
 		static const u32 u0Data = Region::AutoRegion(0x976C0E, 0x975BEE, 0x975C06, 0x975C06, 0x96FC06, 0x96EC06, 0x96EC06, 0x96EC06);
 
 		static const u32 ReloadFunc = Region::AutoRegion(0x5B6660, 0x5B5B78, 0x5B56A8, 0x5B56A8, 0x5B4F98, 0x5B4F98, 0x5B4C6C, 0x5B4C6C); 
-		static FUNCT func(ReloadFunc);
+		static FUNCTION func(ReloadFunc);
 		func.Call<void>(GetRoomData(), RoomCheck(), PlayerClass::GetInstance()->GetCoordinates(), (u32 *)u0Data, 6, 0, 0, 1, 1);
 	}
 	
 //Get Room Reload Data
 	u32 GameHelper::GetRoomData() {
 		static const u32 RoomDat = Region::AutoRegion(0x308154, 0x308340, 0x3081F4, 0x3081F4, 0x308110, 0x308110, 0x308198, 0x308198); 
-		static FUNCT func(RoomDat);	
+		static FUNCTION func(RoomDat);	
 		return func.Call<u32>();
 	}
 //check if save screen is active 
 	bool GameHelper::GameSaving() {
 		static const u32 saving = Region::AutoRegion(0x126568, 0x125E54, 0x12658C, 0x12658C, 0x126554, 0x126554, 0x126554, 0x126554); 
-		static FUNCT func(saving);	
+		static FUNCTION func(saving);	
 		return func.Call<bool>();
 	}
 	
@@ -153,26 +153,26 @@ namespace CTRPluginFramework {
 //get GameType
 	u8 GameHelper::GetGameType() {
 		static const u32 gtype = Region::AutoRegion(0x305ED8, 0x305F2C, 0x305ED8, 0x305ED8, 0x305F54, 0x305F54, 0x305F24, 0x305F24);
-		static FUNCT func(gtype);	
+		static FUNCTION func(gtype);	
 		return func.Call<u8>();
 	}
 //Change GameType
 	void GameHelper::ChangeGameType(u8 GameType) {
 		static const u32 gtype = Region::AutoRegion(0x625B88, 0x6250B0, 0x624BC0, 0x624BC0, 0x624680, 0x624680, 0x624228, 0x624228);
-		static FUNCT func(gtype);	
+		static FUNCTION func(gtype);	
 		func.Call<void>(GameType);
 	}
 //call menu
 	void GameHelper::OpenMenu(u8 menuID, bool NoMenCall) {
 		static const u32 SetupMenu = Region::AutoRegion(0x5C5398, 0x5C48C8, 0x5C43E0, 0x5C43E0, 0x5C3CD0, 0x5C3CD0, 0x5C39A4, 0x5C39A4);
-		static FUNCT func1(SetupMenu);	
+		static FUNCTION func1(SetupMenu);	
 		func1.Call<void>(1);
 
 		if(NoMenCall)
 			return;
 		
 		static const u32 OpenMenu = Region::AutoRegion(0x6D3F8C, 0x6D343C, 0x6D2FC4, 0x6D2F9C, 0x6D2ADC, 0x6D2AB4, 0x6D2AE8, 0x6D2AC0); 
-		static FUNCT func2(OpenMenu);	
+		static FUNCTION func2(OpenMenu);	
 		func2.Call<void>(menuID, 0, 0);
 	}
 
@@ -364,7 +364,7 @@ namespace CTRPluginFramework {
 			return 0;
 		
 		static const u32 moneyget = Region::AutoRegion(0x3037DC, 0x30366C, 0x303870, 0x303870, 0x30353C, 0x30353C, 0x3035F8, 0x3035F8);
-		static FUNCT func(moneyget);
+		static FUNCTION func(moneyget);
 		return func.Call<int>(position);
 	}
 //set money	
@@ -373,7 +373,7 @@ namespace CTRPluginFramework {
 			return;
 		
 		static const u32 moneyset = Region::AutoRegion(0x3036A4, 0x303534, 0x303738, 0x303738, 0x303404, 0x303404, 0x3034C0, 0x3034C0); 
-		static FUNCT func(moneyset);
+		static FUNCTION func(moneyset);
 		func.Call<void>(position, (u32)moneyamount);
 	}
 
@@ -404,7 +404,7 @@ namespace CTRPluginFramework {
 		static PluginMenu *menu = PluginMenu::GetRunningInstance();
 
 		static const u32 LoadBadges = Region::AutoRegion(0x6AD730, 0, 0, 0, 0, 0, 0, 0);
-		static FUNCT func(LoadBadges);
+		static FUNCTION func(LoadBadges);
 		func.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x800, PlayerPTR::Pointer(0x569C)); //32DC50B8, 31F2C6BC
 		*menu += InjectTouchCallBack;
 	}
@@ -415,7 +415,7 @@ namespace CTRPluginFramework {
 //get country name
 	std::string GameHelper::GetCountryName() {
 		static const u32 countryfunc = Region::AutoRegion(0x350AE8, 0x3504FC, 0x34FC30, 0x34FC30, 0x34F8C8, 0x34F8C8, 0x34F78C, 0x34F78C);
-		static FUNCT func(countryfunc);
+		static FUNCTION func(countryfunc);
 		u8 country = func.Call<u8>();
 		return IDList::SetCountryName(country);
 	}
@@ -449,7 +449,7 @@ namespace CTRPluginFramework {
 		}
 		
 		static const u32 cfunction = Region::AutoRegion(0x6D33D8, 0x6D2888, 0x6D2410, 0x6D23E8, 0x6D1BBC, 0x6D1B94, 0x6D1764, 0x6D173C); 
-		static FUNCT func(cfunction);
+		static FUNCTION func(cfunction);
 		func.Call<void>(0);
 	}
 //get base inventory pointer
@@ -465,19 +465,19 @@ namespace CTRPluginFramework {
 			return -2;
 
 		static const u32 roomfunc = Region::AutoRegion(0x304A60, 0x304C68, 0x304AEC, 0x304AEC, 0x304A94, 0x304A94, 0x304A3C, 0x304A3C);	
-		static FUNCT func(roomfunc);
+		static FUNCTION func(roomfunc);
 		return func.Call<u32>(room, u0, u1, u2);
 	}
 //get room ID
 	u8 GameHelper::RoomCheck() {
 		static const u32 GetRoom = Region::AutoRegion(0x2F7384, 0x2F74C8, 0x2F73AC, 0x2F73AC, 0x2F75CC, 0x2F75CC, 0x2F7488, 0x2F7488);
-		static FUNCT func(GetRoom);
+		static FUNCTION func(GetRoom);
 		return func.Call<u8>();
 	}
 //get next loaded room ID
 	u8 GameHelper::NextRoomCheck() {
 		static const u32 GetNextRoom = Region::AutoRegion(0x5B4C08, 0x5B4120, 0x5B3C50, 0x5B3C50, 0x5B3540, 0x5B3540, 0x5B3214, 0x5B3214);
-		static FUNCT func(GetNextRoom);
+		static FUNCTION func(GetNextRoom);
 		return func.Call<u8>();
 	}
 //If loading screen is active
@@ -491,7 +491,7 @@ namespace CTRPluginFramework {
 	}
 //Get online index	
 	u8 GameHelper::GetOnlinePlayerIndex() {
-		static FUNCT func(Code::a_GetOnlinePlayerIndex);
+		static FUNCTION func(Code::a_GetOnlinePlayerIndex);
 		return func.Call<u8>();
 	}
 //Get actual index	
@@ -506,26 +506,26 @@ namespace CTRPluginFramework {
 	u8 GameHelper::GetOnlinePlayerCount() {
 		static const u32 getplayer2 = Region::AutoRegion(0x75EFF8, 0x75DFDC, 0x75E000, 0x75DFD8, 0x75D798, 0x75D770, 0x75D340, 0x75D340);
 		
-		static FUNCT func(getplayer2);
+		static FUNCTION func(getplayer2);
 		return func.Call<u8>(*(u32 *)Code::GamePointer);
 	}
 //Get item at world coords
 	u32 *GameHelper::GetItemAtWorldCoords(u32 x, u32 y) {
 		static const u32 WorlditemCoords = Region::AutoRegion(0x2FEF9C, 0x2FEB00, 0x2FEF0C, 0x2FEF0C, 0x2FEE38, 0x2FEE38, 0x2FECF0, 0x2FECF0);
 		
-		static FUNCT func(WorlditemCoords);
+		static FUNCTION func(WorlditemCoords);
 		return func.Call<u32 *>(GetCurrentMap(), x, y, 0);
 	}
 //Get current map
 	u32 GameHelper::GetCurrentMap(void) {
 		static const u32 Currentmap = Region::AutoRegion(0x6A690C, 0x6A5E34, 0x6A5944, 0x6A5944, 0x6A53DC, 0x6A53DC, 0x6A4F84, 0x6A4F84);
-		static FUNCT func(Currentmap);
+		static FUNCTION func(Currentmap);
 		return func.Call<u32>();
 	}
 //Building Update Collision	
 	void GameHelper::PlaceBuildingUpdateCollisions(u32 x, u32 y, u16 buildingID) {
 		static const u32 PlaceBuilding = Region::AutoRegion(0x2425D8, 0x24201C, 0x2425D4, 0x2425D4, 0x2424F4, 0x2424F4, 0x2424C0, 0x2424C0);
-		static FUNCT func(PlaceBuilding);
+		static FUNCTION func(PlaceBuilding);
 		func.Call<void>(x, y, buildingID);
 	}
 //Remove items with trample
@@ -621,14 +621,14 @@ namespace CTRPluginFramework {
 		if(*(u32 *)(pInstance + 0x1B4) == 0)
 			return;
 
-		static FUNCT func(particleclass);
+		static FUNCTION func(particleclass);
 		func.Call<void>(particleID, floats, u0, u1);
 	}
 //Clear a locked spot	
 	void GameHelper::ClearLockedSpot(u8 wX, u8 wY, u8 roomID, u32 param_4) {
 		static const u32 clearLocked = Region::AutoRegion(0x5A1278, 0x5A0790, 0x5A02C0, 0x5A02C0, 0x59E634, 0x59E634, 0x59F884, 0x59F884);
 
-		static FUNCT func(clearLocked);
+		static FUNCTION func(clearLocked);
 		func.Call<void>(wX, wY, roomID, param_4);
 	}
 //Create a locked spot
@@ -637,7 +637,7 @@ namespace CTRPluginFramework {
 		static const u32 lockspot1 = Region::AutoRegion(0x5A13C8, 0x5A08E0, 0x5A0410, 0x5A0410, 0x59FD00, 0x59FD00, 0x59F9D4, 0x59F9D4);
 		u32 lockspot2 = lockspot1 + 4;
 		u32 index;
-		static FUNCT func(createLocked);
+		static FUNCTION func(createLocked);
 		
 		if(*(u32 *)lockspot1 != 0xE3A00000) 
 			return func.Call<u32>(DropID, wX, wY, roomID, sendPkt);
@@ -653,7 +653,7 @@ namespace CTRPluginFramework {
 	u32 GameHelper::GetLockedSpotIndex(u8 wX, u8 wY, u8 roomID) {
 		static const u32 getlocked = Region::AutoRegion(0x5A11BC, 0x5A06D4, 0x5A0204, 0x5A0204, 0x59FAF4, 0x59FAF4, 0x59F7C8, 0x59F7C8);
 
-		static FUNCT func(getlocked);
+		static FUNCTION func(getlocked);
 		return func.Call<u32>(wX, wY, roomID);
 	}
 //Trample at specific position	
@@ -669,24 +669,24 @@ namespace CTRPluginFramework {
 			
 			static const u32 trample = Region::AutoRegion(0x625488, 0x6249B0, 0x6244C0, 0x6244C0, 0x623F80, 0x623F80, 0x623B28, 0x623B28);
 
-			static FUNCT func1(trample);
+			static FUNCTION func1(trample);
 			func1.Call<void>(0x47, 4, &data, 8);
 		}
 		
 		static const u32 trample1 = Region::AutoRegion(0x168E20, 0x168868, 0x168E40, 0x168E40, 0x168E08, 0x168E08, 0x168E08, 0x168E08); 
-		static FUNCT func2(trample1);
+		static FUNCTION func2(trample1);
 		func2.Call<void>(wX, wY, 0, room, Code::Pointer7FFE);
 
 		static const u32 trample3 = Region::AutoRegion(0x59F144, 0x59E65C, 0x59E18C, 0x59E18C, 0x59DA7C, 0x59DA7C, 0x59D750, 0x59D750);
 
-		static FUNCT func3(trample3);
+		static FUNCTION func3(trample3);
 		func3.Call<void>(wX, wY, 1);
 	}
 //checks if inv is full
 	bool GameHelper::InvFull() {
 		static const u32 fullinv = Region::AutoRegion(0x7631EC, 0x7621D0, 0x7621F4, 0x7621CC, 0x76198C, 0x761964, 0x761534, 0x76150C);
 	
-		static FUNCT func(fullinv);
+		static FUNCTION func(fullinv);
 		return func.Call<bool>(PlayerClass::GetInstance()->Offset());
 	}
 //sets first empty slot
@@ -699,7 +699,7 @@ namespace CTRPluginFramework {
 
 		static const u32 writeitem = Region::AutoRegion(0x64FDEC, 0x64F314, 0x64EE24, 0x64EE24, 0x64E8E4, 0x64E8E4, 0x64E48C, 0x64E48C);
 
-		static FUNCT func(writeitem);
+		static FUNCTION func(writeitem);
 		return func.Call<bool>(PlayerClass::GetInstance()->Offset(), item);
 	}
 

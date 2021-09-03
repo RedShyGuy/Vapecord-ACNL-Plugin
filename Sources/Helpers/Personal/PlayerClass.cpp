@@ -22,7 +22,7 @@ namespace CTRPluginFramework {
 
 		m_PlayerIndex = pIndex;
 
-		static FUNCT func(Code::PlayerInstance);
+		static FUNCTION func(Code::PlayerInstance);
 		m_PlayerOffset = func.Call<u32>(pIndex, 1);
 
 		return m_Instance;
@@ -75,7 +75,7 @@ namespace CTRPluginFramework {
 	bool PlayerClass::GetWorldCoords(u32 *wX, u32 *wY) {
 		if(m_PlayerOffset != 0) {
 			static const u32 WorldCoords = Region::AutoRegion(0x5C13AC, 0x5C08DC, 0x5C03F4, 0x5C03F4, 0x5BFCE4, 0x5BFCE4, 0x5BF9B8, 0x5BF9B8);
-			static FUNCT func(WorldCoords);
+			static FUNCTION func(WorldCoords);
 			return func.Call<bool>(wX, wY, m_PlayerIndex, 1);
 		}
 		return 0;

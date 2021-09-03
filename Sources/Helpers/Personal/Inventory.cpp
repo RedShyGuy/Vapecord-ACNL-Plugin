@@ -172,7 +172,7 @@ namespace CTRPluginFramework {
 		if(!Opened())
 			return;
 		
-		static FUNCT func(Code::LoadIcon);
+		static FUNCTION func(Code::LoadIcon);
 
 		for(int i = 0; i < 16; ++i)
 			func.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + GetAddData(), i);

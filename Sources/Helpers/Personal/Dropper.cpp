@@ -74,13 +74,13 @@ namespace CTRPluginFramework {
 	}
 //Place Item	
 	u32 Dropper::PlaceItem(u8 ID, u32 *ItemToReplace, u32 *ItemToPlace, u32 *ItemToShow, u8 worldx, u8 worldy, bool u0, bool u1, bool u2, bool u3, bool u4) {
-		static FUNCT func(Code::PlaceItemOffset);
+		static FUNCTION func(Code::PlaceItemOffset);
 		return func.Call<u32>(ID, (u32)ItemToReplace, (u32)ItemToPlace, (u32)ItemToShow, worldx, worldy, u0, u1, u2, u3, u4);
 	}
 //Drop Check	
 	bool Dropper::DropCheck(u32 *wX, u32 *wY, u32 *u0, bool disallowConcrete, bool u1) {
 		static const u32 dropcheck = Region::AutoRegion(0x5990AC, 0x5985C4, 0x5980F4, 0x5980F4, 0x5979E4, 0x5979E4, 0x5976B8, 0x5976B8);
-		static FUNCT func(dropcheck);
+		static FUNCTION func(dropcheck);
 		return func.Call<bool>((u32)wX, (u32)wY, (u32)u0, disallowConcrete, u1);
 	}
 //Drop Item Wrapper	

@@ -15,8 +15,7 @@ namespace CTRPluginFramework {
         Keyboard keyboard(Language->Get("AMIIBO_SPOOFER_SPECIES"));
         std::vector<std::string> keyVec;
 
-        for(const char* specie : amiiboSpecies) 
-            keyVec.push_back(std::string(specie));
+        IDList::PopulateNPCRace(keyVec);
 
         keyboard.Populate(keyVec);
         s8 res = keyboard.Open(); //Pick a species

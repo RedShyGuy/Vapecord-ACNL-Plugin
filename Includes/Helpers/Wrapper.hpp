@@ -41,9 +41,9 @@ namespace CTRPluginFramework {
 		}
 	}
 
-	class FUNCT {
+	class FUNCTION {
     	public:
-        	FUNCT(u32 Address) {
+        	FUNCTION(u32 Address) {
 				ItemFunc = Address;
 			};
 

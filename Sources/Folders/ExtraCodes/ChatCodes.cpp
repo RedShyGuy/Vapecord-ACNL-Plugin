@@ -97,7 +97,7 @@ namespace CTRPluginFramework {
 //Force Send Chat
 	void Forcesendchat(MenuEntry *entry) {
 		static const u32 callchat = Region::AutoRegion(0x52440C, 0x523D60, 0x523454, 0x523454, 0x522D40, 0x522D40, 0x522A48, 0x522A48);
-		static FUNCT func(callchat);
+		static FUNCTION func(callchat);
 		if(entry->WasJustActivated())
 			Process::Patch(Code::DisableChatRemoval, 0xE1A00000);
 

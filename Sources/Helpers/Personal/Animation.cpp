@@ -7,7 +7,7 @@ namespace CTRPluginFramework {
 //Get Animation Instance
 	u32 Animation::GetAnimationInstance(u32 playerInstance, u8 someVal1, u8 someVal2, u32 encVal) {
 		static const u32 getaniminst = Region::AutoRegion(0x6576F8, 0x656C20, 0x656730, 0x656730, 0x6561F0, 0x6561F0, 0x655D98, 0x655D98);
-		static FUNCT func(getaniminst);
+		static FUNCTION func(getaniminst);
 		return func.Call<u32>(playerInstance, someVal1, someVal2, encVal);
 	} 
 //Animation Wrapper	
@@ -40,7 +40,7 @@ namespace CTRPluginFramework {
 	//Gets used to write the coordinates of the animation
 		float coords[3];
 		static const u32 coordoffset = Region::AutoRegion(0x5D4C88, 0x5D41B8, 0x5D3CD0, 0x5D3CD0, 0x5D3504, 0x5D3504, 0x5D31D8, 0x5D31D8);
-		static FUNCT func(coordoffset);
+		static FUNCTION func(coordoffset);
 		func.Call<void>(animInstance + 2, PlayerClass::GetInstance(pIndex)->GetCoordinates(wX, wY)); 
 		
 	//Knock Door patch
@@ -323,7 +323,7 @@ namespace CTRPluginFramework {
 		Sleep(Milliseconds(5));
 
 		static const u32 SendPacketFunc = Region::AutoRegion(0x5C3C7C, 0x5C31AC, 0x5C2CC4, 0x5C2CC4, 0x5C25B4, 0x5C25B4, 0x5C2288, 0x5C2288);
-		static FUNCT func(SendPacketFunc);
+		static FUNCTION func(SendPacketFunc);
 		func.Call<void>(targetPlayerIndex, animObj); 
 
 		Sleep(Milliseconds(5));

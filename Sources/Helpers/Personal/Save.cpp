@@ -10,7 +10,7 @@ namespace CTRPluginFramework {
 	Save::Save() {
 		if(s_SaveAddress == 0) {
 			static const u32 d_garden = Region::AutoRegion(0x2FB344, 0x2FB328, 0x2FB340, 0x2FB340, 0x2FB354, 0x2FB354, 0x2FB360, 0x2FB360); 
-			static FUNCT func(d_garden);	
+			static FUNCTION func(d_garden);	
 			s_SaveAddress = func.Call<u32>();
 		}
 

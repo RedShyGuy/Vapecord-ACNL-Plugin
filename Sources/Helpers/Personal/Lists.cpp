@@ -347,68 +347,8 @@ namespace CTRPluginFramework {
 		{ "Hacker Island", 0xFF }
 	};
 
-	const char* const amiiboSpecies[36] = {
-        "Alligator", "Anteater", "Bear", "Bird", "Bull", "Cat", "Chicken", "Cow", "Cub", //0x0, 0x1, 0x2, etc
-        "Deer", "Dog", "Duck", "Eagle", "Elephant", "Frog", "Goat", "Gorilla", "Hamster", //0x9, 0xA, 0xB, etc
-        "Hippo", "Horse", "Koala", "Kangaroo", "Lion", "Monkey", "Mouse", "Octopus", "Ostrich", //0x12, 0x13, 0x14, etc
-        "Penguin", "Pig", "Rabbit", "Rhino", "Sheep", "Squirrel", "Tiger", "Wolf", "Special Characters" //0x1B, 0x1C, 0x1D, etc
-    };
-
 //Based on: https://docs.google.com/spreadsheets/d/19E7pMhKN6x583uB6bWVBeaTMyBPtEAC-Bk59Y6cfgxA/edit#gid=95881524
     const AmiiboInfo amiiboVillagers[399] = {
-        {0x02C30001, 0x00DC0502, 0x005D, SpecieID::Alligator}, //Filename: crd00
-        {0x02C40001, 0x00670502, 0x005E, SpecieID::Alligator}, //Filename: crd01
-        {0x02C50001, 0x03080502, 0x005F, SpecieID::Alligator}, //Filename: crd02
-        {0x02C70001, 0x01220502, 0x0060, SpecieID::Alligator}, //Filename: crd04
-        {0x02CB0001, 0x01360502, 0x0063, SpecieID::Alligator}, //Filename: crd08
-        {0x02CA0001, 0x01CA0502, 0x0062, SpecieID::Alligator}, //Filename: crd07
-        {0x02C90001, 0x00CD0502, 0x0061, SpecieID::Alligator}, //Filename: crd06
-
-        {0x02030001, 0x019A0502, 0x0003, SpecieID::Anteater}, //Filename: ant03
-        {0x02080001, 0x00960502, 0x0005, SpecieID::Anteater}, //Filename: ant08
-        {0x02010001, 0x016A0502, 0x0001, SpecieID::Anteater}, //Filename: ant01
-        {0x02000001, 0x00A10502, 0x0000, SpecieID::Anteater}, //Filename: ant00
-        {0x02090001, 0x019F0502, 0x0006, SpecieID::Anteater}, //Filename: ant09
-        {0x02020001, 0x01030502, 0x0002, SpecieID::Anteater}, //Filename: ant02
-        {0x02060001, 0x03120502, 0x0004, SpecieID::Anteater}, //Filename: ant06
-
-        {0x02210001, 0x013C0502, 0x0013, SpecieID::Bear}, //Filename: bea13
-        {0x02200001, 0x00FD0502, 0x0012, SpecieID::Bear}, //Filename: bea12
-        {0x02170001, 0x01B30502, 0x000A, SpecieID::Bear}, //Filename: bea03
-        {0x02160001, 0x00570502, 0x0009, SpecieID::Bear}, //Filename: bea02
-        {0x021D0001, 0x01CD0502, 0x000F, SpecieID::Bear}, //Filename: bea09
-        {0x021A0001, 0x00DA0502, 0x000C, SpecieID::Bear}, //Filename: bea06
-        {0x021F0001, 0x03170502, 0x0011, SpecieID::Bear}, //Filename: bea11
-        {0x02220001, 0x01440502, 0x0014, SpecieID::Bear}, //Filename: bea14
-        {0x02190001, 0x007E0502, 0x000B, SpecieID::Bear}, //Filename: bea05
-        {0x021E0001, 0x01230502, 0x0010, SpecieID::Bear}, //Filename: bea10
-        {0x02150001, 0x01820502, 0x0008, SpecieID::Bear}, //Filename: bea01
-        {0x02140001, 0x00E40502, 0x0007, SpecieID::Bear}, //Filename: bea00
-        {0x021B0001, 0x00800502, 0x000D, SpecieID::Bear}, //Filename: bea07
-        {0x021C0001, 0x02F70502, 0x000E, SpecieID::Bear}, //Filename: bea08
-
-        {0x02330001, 0x03060502, 0x001B, SpecieID::Bird}, //Filename: brd06
-        {0x022F0001, 0x011E0502, 0x0017, SpecieID::Bird}, //Filename: brd02
-        {0x023D0001, 0x01B50502, 0x001F, SpecieID::Bird}, //Filename: brd16
-        {0x02380001, 0x02F80502, 0x001D, SpecieID::Bird}, //Filename: brd11
-        {0x022D0001, 0x00F20502, 0x0015, SpecieID::Bird}, //Filename: brd00
-        {0x02310001, 0x006A0502, 0x0019, SpecieID::Bird}, //Filename: brd04
-        {0x023C0001, 0x00BD0502, 0x001E, SpecieID::Bird}, //Filename: brd15
-        {0x01000100, 0x03500902, 0x0022, SpecieID::Bird}, //Filename: brd19
-        {0x02350001, 0x00840502, 0x001C, SpecieID::Bird}, //Filename: brd08
-        {0x023E0001, 0x00D10502, 0x0020, SpecieID::Bird}, //Filename: brd17
-        {0x02320001, 0x02EA0502, 0x001A, SpecieID::Bird}, //Filename: brd05
-        {0x022E0001, 0x01D30502, 0x0016, SpecieID::Bird}, //Filename: brd01
-        {0x023F0001, 0x01660502, 0x0021, SpecieID::Bird}, //Filename: brd18
-        {0x02300001, 0x01D20502, 0x0018, SpecieID::Bird}, //Filename: brd03
-
-        {0x024A0001, 0x01D10502, 0x0023, SpecieID::Bull}, //Filename: bul00
-        {0x02510001, 0x00C10502, 0x0027, SpecieID::Bull}, //Filename: bul07
-        {0x024B0001, 0x01260502, 0x0024, SpecieID::Bull}, //Filename: bul01
-        {0x024D0001, 0x02F60502, 0x0025, SpecieID::Bull}, //Filename: bul03
-        {0x024F0001, 0x00810502, 0x0026, SpecieID::Bull}, //Filename: bul05
-        {0x02520001, 0x00FE0502, 0x0028, SpecieID::Bull}, //Filename: bul08
-
         {0x02700001, 0x00FF0502, 0x003C, SpecieID::Cat}, //Filename: cat19
         {0x025D0001, 0x00550502, 0x0029, SpecieID::Cat}, //Filename: cat00
         {0x026E0001, 0x00BA0502, 0x003A, SpecieID::Cat}, //Filename: cat17
@@ -433,49 +373,46 @@ namespace CTRPluginFramework {
         {0x02620001, 0x01370502, 0x002E, SpecieID::Cat}, //Filename: cat05
         {0x026C0001, 0x00C30502, 0x0038, SpecieID::Cat}, //Filename: cat15
 
-        {0x029E0001, 0x013D0502, 0x0053, SpecieID::Chicken}, //Filename: chn05
-        {0x02A20001, 0x01BA0502, 0x0054, SpecieID::Chicken}, //Filename: chn09
-        {0x029A0001, 0x00EE0502, 0x0051, SpecieID::Chicken}, //Filename: chn01
-        {0x02A50001, 0x018C0502, 0x0057, SpecieID::Chicken}, //Filename: chn12
-        {0x029B0001, 0x00CB0502, 0x0052, SpecieID::Chicken}, //Filename: chn02
-        {0x02990001, 0x00950502, 0x0050, SpecieID::Chicken}, //Filename: chn00
-        {0x02A60001, 0x01240502, 0x0058, SpecieID::Chicken}, //Filename: chn13
-        {0x02A40001, 0x00720502, 0x0056, SpecieID::Chicken}, //Filename: chn11
-        {0x02A30001, 0x02FF0502, 0x0055, SpecieID::Chicken}, //Filename: chn10
+        {0x03290001, 0x009D0502, 0x0096, SpecieID::Elephant}, //Filename: elp06
+        {0x03250001, 0x010A0502, 0x0092, SpecieID::Elephant}, //Filename: elp02
+        {0x032E0101, 0x031C0502, 0x009A, SpecieID::Elephant}, //Filename: elp11
+        {0x03240001, 0x01890502, 0x0091, SpecieID::Elephant}, //Filename: elp01
+        {0x032A0001, 0x03070502, 0x0097, SpecieID::Elephant}, //Filename: elp07
+        {0x03260001, 0x01390502, 0x0093, SpecieID::Elephant}, //Filename: elp03
+        {0x03270001, 0x01C30502, 0x0094, SpecieID::Elephant}, //Filename: elp04
+        {0x03230001, 0x00760502, 0x0090, SpecieID::Elephant}, //Filename: elp00
+        {0x03280001, 0x02EB0502, 0x0095, SpecieID::Elephant}, //Filename: elp05
+        {0x032D0001, 0x00BC0502, 0x0099, SpecieID::Elephant}, //Filename: elp10
+        {0x032C0001, 0x01480502, 0x0098, SpecieID::Elephant}, //Filename: elp09
 
-        {0x02B80001, 0x019C0502, 0x005C, SpecieID::Cow}, //Filename: cow07
-        {0x02B70001, 0x030F0502, 0x005B, SpecieID::Cow}, //Filename: cow06
-        {0x02B10001, 0x00690502, 0x0059, SpecieID::Cow}, //Filename: cow00
-        {0x02B20001, 0x00C40502, 0x005A, SpecieID::Cow}, //Filename: cow01
+        {0x04C60001, 0x01670502, 0x015D, SpecieID::Sheep}, //Filename: shp01
+        {0x04C90001, 0x030D0502, 0x0160, SpecieID::Sheep}, //Filename: shp04
+        {0x04CD0001, 0x01520502, 0x0162, SpecieID::Sheep}, //Filename: shp08
+        {0x04D30101, 0x031B0502, 0x0168, SpecieID::Sheep}, //Filename: shp14
+        {0x04C70001, 0x00940502, 0x015E, SpecieID::Sheep}, //Filename: shp02
+        {0x04D00001, 0x01960502, 0x0165, SpecieID::Sheep}, //Filename: shp11
+        {0x04D10001, 0x009E0502, 0x0166, SpecieID::Sheep}, //Filename: shp12
+        {0x04D20001, 0x01A70502, 0x0167, SpecieID::Sheep}, //Filename: shp13
+        {0x04C80001, 0x02ED0502, 0x015F, SpecieID::Sheep}, //Filename: shp03
+        {0x04CF0001, 0x00E10502, 0x0164, SpecieID::Sheep}, //Filename: shp10
+        {0x04C50001, 0x01010502, 0x015C, SpecieID::Sheep}, //Filename: shp00
+        {0x04CE0001, 0x00DB0502, 0x0163, SpecieID::Sheep}, //Filename: shp09
+        {0x04CC0001, 0x00A40502, 0x0161, SpecieID::Sheep}, //Filename: shp07
 
-        {0x028D0001, 0x01BD0502, 0x004D, SpecieID::Cub}, //Filename: cbr16
-        {0x027D0001, 0x00630502, 0x0040, SpecieID::Cub}, //Filename: cbr00
-        {0x02870001, 0x005A0502, 0x0049, SpecieID::Cub}, //Filename: cbr10
-        {0x028C0001, 0x013E0502, 0x004C, SpecieID::Cub}, //Filename: cbr15
-        {0x028A0001, 0x02E90502, 0x004A, SpecieID::Cub}, //Filename: cbr13
-        {0x02810001, 0x01200502, 0x0044, SpecieID::Cub}, //Filename: cbr04
-        {0x027E0001, 0x01690502, 0x0041, SpecieID::Cub}, //Filename: cbr01
-        {0x028F0101, 0x031A0502, 0x004F, SpecieID::Cub}, //Filename: cbr18
-        {0x02840001, 0x02FE0502, 0x0047, SpecieID::Cub}, //Filename: cbr07
-        {0x02860001, 0x03130502, 0x0048, SpecieID::Cub}, //Filename: cbr09
-        {0x028B0001, 0x00E30502, 0x004B, SpecieID::Cub}, //Filename: cbr14
-        {0x027F0001, 0x00B90502, 0x0042, SpecieID::Cub}, //Filename: cbr02
-        {0x02800001, 0x00830502, 0x0043, SpecieID::Cub}, //Filename: cbr03
-        {0x02820001, 0x01D60502, 0x0045, SpecieID::Cub}, //Filename: cbr05
-        {0x028E0001, 0x019E0502, 0x004E, SpecieID::Cub}, //Filename: cbr17
-        {0x02830001, 0x00C70502, 0x0046, SpecieID::Cub}, //Filename: cbr06
-
-        {0x02D70001, 0x01300502, 0x0065, SpecieID::Deer}, //Filename: der01
-        {0x02DD0001, 0x00EA0502, 0x006B, SpecieID::Deer}, //Filename: der07
-        {0x02D90001, 0x01C80502, 0x0067, SpecieID::Deer}, //Filename: der03
-        {0x02E00101, 0x031D0502, 0x006E, SpecieID::Deer}, //Filename: der10
-        {0x02DA0001, 0x01330502, 0x0068, SpecieID::Deer}, //Filename: der04
-        {0x02DE0001, 0x009C0502, 0x006C, SpecieID::Deer}, //Filename: der08
-        {0x02DF0001, 0x01910502, 0x006D, SpecieID::Deer}, //Filename: der09
-        {0x02D60001, 0x00560502, 0x0064, SpecieID::Deer}, //Filename: der00
-        {0x02DC0001, 0x00BE0502, 0x006A, SpecieID::Deer}, //Filename: der06
-        {0x02DB0001, 0x005E0502, 0x0069, SpecieID::Deer}, //Filename: der05
-        {0x02D80001, 0x00E20502, 0x0066, SpecieID::Deer}, //Filename: der02
+        {0x02210001, 0x013C0502, 0x0013, SpecieID::Bear}, //Filename: bea13
+        {0x02200001, 0x00FD0502, 0x0012, SpecieID::Bear}, //Filename: bea12
+        {0x02170001, 0x01B30502, 0x000A, SpecieID::Bear}, //Filename: bea03
+        {0x02160001, 0x00570502, 0x0009, SpecieID::Bear}, //Filename: bea02
+        {0x021D0001, 0x01CD0502, 0x000F, SpecieID::Bear}, //Filename: bea09
+        {0x021A0001, 0x00DA0502, 0x000C, SpecieID::Bear}, //Filename: bea06
+        {0x021F0001, 0x03170502, 0x0011, SpecieID::Bear}, //Filename: bea11
+        {0x02220001, 0x01440502, 0x0014, SpecieID::Bear}, //Filename: bea14
+        {0x02190001, 0x007E0502, 0x000B, SpecieID::Bear}, //Filename: bea05
+        {0x021E0001, 0x01230502, 0x0010, SpecieID::Bear}, //Filename: bea10
+        {0x02150001, 0x01820502, 0x0008, SpecieID::Bear}, //Filename: bea01
+        {0x02140001, 0x00E40502, 0x0007, SpecieID::Bear}, //Filename: bea00
+        {0x021B0001, 0x00800502, 0x000D, SpecieID::Bear}, //Filename: bea07
+        {0x021C0001, 0x02F70502, 0x000E, SpecieID::Bear}, //Filename: bea08
 
         {0x02F40001, 0x03050502, 0x0079, SpecieID::Dog}, //Filename: dog10
         {0x02FA0001, 0x00970502, 0x007C, SpecieID::Dog}, //Filename: dog16
@@ -494,217 +431,26 @@ namespace CTRPluginFramework {
         {0x02FC0001, 0x018F0502, 0x007E, SpecieID::Dog}, //Filename: dog18
         {0x02F00001, 0x00A70502, 0x0075, SpecieID::Dog}, //Filename: dog06
 
-        {0x03070001, 0x00640502, 0x007F, SpecieID::Duck}, //Filename: duk00
-        {0x030B0001, 0x00790502, 0x0083, SpecieID::Duck}, //Filename: duk04
-        {0x030F0001, 0x016D0502, 0x0087, SpecieID::Duck}, //Filename: duk08
-        {0x03100001, 0x00F80502, 0x0088, SpecieID::Duck}, //Filename: duk09
-        {0x030E0001, 0x012F0502, 0x0086, SpecieID::Duck}, //Filename: duk07
-        {0x03160001, 0x01C00502, 0x008D, SpecieID::Duck}, //Filename: duk15
-        {0x03080001, 0x014D0502, 0x0080, SpecieID::Duck}, //Filename: duk01
-        {0x03140001, 0x02F40502, 0x008C, SpecieID::Duck}, //Filename: duk13
-        {0x030A0001, 0x01C70502, 0x0082, SpecieID::Duck}, //Filename: duk03
-        {0x030D0001, 0x01840502, 0x0085, SpecieID::Duck}, //Filename: duk06
-        {0x03130001, 0x01210502, 0x008B, SpecieID::Duck}, //Filename: duk12
-        {0x03170001, 0x00A60502, 0x008E, SpecieID::Duck}, //Filename: duk16
-        {0x03090001, 0x00C60502, 0x0081, SpecieID::Duck}, //Filename: duk02
-        {0x030C0001, 0x01B80502, 0x0084, SpecieID::Duck}, //Filename: duk05
-        {0x03180001, 0x006C0502, 0x008F, SpecieID::Duck}, //Filename: duk17
-        {0x03110001, 0x00D60502, 0x0089, SpecieID::Duck}, //Filename: duk10
-        {0x03120001, 0x03090502, 0x008A, SpecieID::Duck}, //Filename: duk11
-
-        {0x044C0001, 0x008E0502, 0x011C, SpecieID::Eagle}, //Filename: pbr01
-        {0x044B0001, 0x016C0502, 0x011B, SpecieID::Eagle}, //Filename: pbr00
-        {0x04500001, 0x00CF0502, 0x011F, SpecieID::Eagle}, //Filename: pbr05
-        {0x044E0001, 0x03150502, 0x011E, SpecieID::Eagle}, //Filename: pbr03
-        {0x04540001, 0x01AE0502, 0x0123, SpecieID::Eagle}, //Filename: pbr09
-        {0x04510001, 0x015E0502, 0x0120, SpecieID::Eagle}, //Filename: pbr06
-        {0x04530001, 0x01040502, 0x0122, SpecieID::Eagle}, //Filename: pbr08
-        {0x044D0001, 0x01930502, 0x011D, SpecieID::Eagle}, //Filename: pbr02
-        {0x04520001, 0x00730502, 0x0121, SpecieID::Eagle}, //Filename: pbr07
-
-        {0x03290001, 0x009D0502, 0x0096, SpecieID::Elephant}, //Filename: elp06
-        {0x03250001, 0x010A0502, 0x0092, SpecieID::Elephant}, //Filename: elp02
-        {0x032E0101, 0x031C0502, 0x009A, SpecieID::Elephant}, //Filename: elp11
-        {0x03240001, 0x01890502, 0x0091, SpecieID::Elephant}, //Filename: elp01
-        {0x032A0001, 0x03070502, 0x0097, SpecieID::Elephant}, //Filename: elp07
-        {0x03260001, 0x01390502, 0x0093, SpecieID::Elephant}, //Filename: elp03
-        {0x03270001, 0x01C30502, 0x0094, SpecieID::Elephant}, //Filename: elp04
-        {0x03230001, 0x00760502, 0x0090, SpecieID::Elephant}, //Filename: elp00
-        {0x03280001, 0x02EB0502, 0x0095, SpecieID::Elephant}, //Filename: elp05
-        {0x032D0001, 0x00BC0502, 0x0099, SpecieID::Elephant}, //Filename: elp10
-        {0x032C0001, 0x01480502, 0x0098, SpecieID::Elephant}, //Filename: elp09
-
-        {0x033B0001, 0x00FA0502, 0x009E, SpecieID::Frog}, //Filename: flg03
-        {0x03420001, 0x01280502, 0x00A4, SpecieID::Frog}, //Filename: flg10
-        {0x03490001, 0x018D0502, 0x00AA, SpecieID::Frog}, //Filename: flg17
-        {0x034A0001, 0x01430502, 0x00AB, SpecieID::Frog}, //Filename: flg18
-        {0x033C0001, 0x01000502, 0x009F, SpecieID::Frog}, //Filename: flg04
-        {0x033A0001, 0x01CC0502, 0x009D, SpecieID::Frog}, //Filename: flg02
-        {0x03480001, 0x006B0502, 0x00A9, SpecieID::Frog}, //Filename: flg16
-        {0x034B0001, 0x009F0502, 0x00AC, SpecieID::Frog}, //Filename: flg19
-        {0x03430001, 0x02EF0502, 0x00A5, SpecieID::Frog}, //Filename: flg11
-        {0x03450001, 0x005F0502, 0x00A7, SpecieID::Frog}, //Filename: flg13
-        {0x033F0001, 0x008F0502, 0x00A2, SpecieID::Frog}, //Filename: flg07
-        {0x03380001, 0x011D0502, 0x009B, SpecieID::Frog}, //Filename: flg00
-        {0x03440001, 0x00C50502, 0x00A6, SpecieID::Frog}, //Filename: flg12
-        {0x033E0001, 0x01A20502, 0x00A1, SpecieID::Frog}, //Filename: flg06
-        {0x03470001, 0x03020502, 0x00A8, SpecieID::Frog}, //Filename: flg15
-        {0x03390001, 0x01B10502, 0x009C, SpecieID::Frog}, //Filename: flg01
-        {0x03410001, 0x030E0502, 0x00A3, SpecieID::Frog}, //Filename: flg09
-        {0x033D0001, 0x013A0502, 0x00A0, SpecieID::Frog}, //Filename: flg05
-
-        {0x03580001, 0x02FA0502, 0x00AF, SpecieID::Goat}, //Filename: goa02
-        {0x03560001, 0x01350502, 0x00AD, SpecieID::Goat}, //Filename: goa00
-        {0x03580001, 0x02FA0502, 0x00B0, SpecieID::Goat}, //Filename: goa04
-        {0x035D0001, 0x00C90502, 0x00B2, SpecieID::Goat}, //Filename: goa07
-        {0x03570001, 0x00EB0502, 0x00AE, SpecieID::Goat}, //Filename: goa01
-        {0x035E0001, 0x018E0502, 0x00B3, SpecieID::Goat}, //Filename: goa08
-        {0x035C0001, 0x01290502, 0x00B1, SpecieID::Goat}, //Filename: goa06
-
-        {0x03710001, 0x005C0502, 0x00BA, SpecieID::Gorilla}, //Filename: gor08
-        {0x036B0001, 0x018B0502, 0x00B6, SpecieID::Gorilla}, //Filename: gor02
-        {0x036E0001, 0x02FB0502, 0x00B8, SpecieID::Gorilla}, //Filename: gor05
-        {0x03690001, 0x00D30502, 0x00B4, SpecieID::Gorilla}, //Filename: gor00
-        {0x03730001, 0x01340502, 0x00BC, SpecieID::Gorilla}, //Filename: gor10
-        {0x036D0001, 0x03040502, 0x00B7, SpecieID::Gorilla}, //Filename: gor04
-        {0x036A0001, 0x019D0502, 0x00B5, SpecieID::Gorilla}, //Filename: gor01
-        {0x03740101, 0x03190502, 0x00BD, SpecieID::Gorilla}, //Filename: gor11
-        {0x03720001, 0x010B0502, 0x00BB, SpecieID::Gorilla}, //Filename: gor09
-        {0x03700001, 0x015D0502, 0x00B9, SpecieID::Gorilla}, //Filename: gor07
-
-        {0x037F0001, 0x01AA0502, 0x00BF, SpecieID::Hamster}, //Filename: ham01
-        {0x03830001, 0x009B0502, 0x00C3, SpecieID::Hamster}, //Filename: ham05
-        {0x03840001, 0x00860502, 0x00C4, SpecieID::Hamster}, //Filename: ham06
-        {0x03800001, 0x01870502, 0x00C0, SpecieID::Hamster}, //Filename: ham02
-        {0x037E0001, 0x01560502, 0x00BE, SpecieID::Hamster}, //Filename: ham00
-        {0x03850001, 0x01060502, 0x00C5, SpecieID::Hamster}, //Filename: ham07
-    /*Non Amiibo*/ {0x00000000, 0x00000000, 0x00C6, SpecieID::Hamster}, //Filename: ham08
-        {0x03810001, 0x00D50502, 0x00C1, SpecieID::Hamster}, //Filename: ham03
-        {0x03820001, 0x016B0502, 0x00C2, SpecieID::Hamster}, //Filename: ham04
-
-        {0x03930001, 0x00A00502, 0x00C9, SpecieID::Hippo}, //Filename: hip03
-        {0x03940001, 0x00890502, 0x00CA, SpecieID::Hippo}, //Filename: hip04
-        {0x03950001, 0x02FC0502, 0x00CB, SpecieID::Hippo}, //Filename: hip05
-        {0x03920001, 0x01270502, 0x00C8, SpecieID::Hippo}, //Filename: hip02
-        {0x03980001, 0x00BF0502, 0x00CC, SpecieID::Hippo}, //Filename: hip08
-        {0x03990001, 0x01C20502, 0x00CD, SpecieID::Hippo}, //Filename: hip09
-        {0x03900001, 0x01850502, 0x00C7, SpecieID::Hippo}, //Filename: hip00
-
-        {0x03AD0001, 0x01B20502, 0x00D7, SpecieID::Horse}, //Filename: hrs09
-        {0x03A40001, 0x014F0502, 0x00CE, SpecieID::Horse}, //Filename: hrs00
-        {0x03AB0001, 0x03160502, 0x00D5, SpecieID::Horse}, //Filename: hrs07
-        {0x03AE0001, 0x00870502, 0x00D8, SpecieID::Horse}, //Filename: hrs10
-        {0x03AF0001, 0x012C0502, 0x00D9, SpecieID::Horse}, //Filename: hrs11
-        {0x03AA0001, 0x00E60502, 0x00D4, SpecieID::Horse}, //Filename: hrs06
-        {0x03A70001, 0x01A10502, 0x00D1, SpecieID::Horse}, //Filename: hrs03
-        {0x01010100, 0x00170002, 0x00DD, SpecieID::Horse}, //Filename: hrs15
-    /*Non Amiibo*/ {0x00000000, 0x00000000, 0x00DC, SpecieID::Horse}, //Filename: hrs14
-        {0x03B10001, 0x00F00502, 0x00DB, SpecieID::Horse}, //Filename: hrs13
-        {0x03B00001, 0x01A90502, 0x00DA, SpecieID::Horse}, //Filename: hrs12
-        {0x03AC0001, 0x01880502, 0x00D6, SpecieID::Horse}, //Filename: hrs08
-        {0x03A80001, 0x00910502, 0x00D2, SpecieID::Horse}, //Filename: hrs04
-        {0x03A60001, 0x00C80502, 0x00D0, SpecieID::Horse}, //Filename: hrs02
-        {0x03A50001, 0x015B0502, 0x00CF, SpecieID::Horse}, //Filename: hrs01
-        {0x03A90001, 0x00710502, 0x00D3, SpecieID::Horse}, //Filename: hrs05
-
-        {0x03BD0001, 0x00F90502, 0x00DF, SpecieID::Koala}, //Filename: kal01
-        {0x03C40001, 0x012B0502, 0x00E4, SpecieID::Koala}, //Filename: kal08
-        {0x03C60001, 0x00930502, 0x00E6, SpecieID::Koala}, //Filename: kal10
-        {0x03C00001, 0x03100502, 0x00E2, SpecieID::Koala}, //Filename: kal04
-        {0x03C50001, 0x015C0502, 0x00E5, SpecieID::Koala}, //Filename: kal09
-        {0x03BE0001, 0x01980502, 0x00E0, SpecieID::Koala}, //Filename: kal02
-        {0x03C10001, 0x00BB0502, 0x00E3, SpecieID::Koala}, //Filename: kal05
-        {0x03BF0001, 0x01BC0502, 0x00E1, SpecieID::Koala}, //Filename: kal03
-        {0x03BC0001, 0x008A0502, 0x00DE, SpecieID::Koala}, //Filename: kal00
-
-        {0x03D60001, 0x01570502, 0x00EA, SpecieID::Kangaroo}, //Filename: kgr05
-        {0x03D30001, 0x02F30502, 0x00E9, SpecieID::Kangaroo}, //Filename: kgr02
-        {0x03D10001, 0x00C20502, 0x00E7, SpecieID::Kangaroo}, //Filename: kgr00
-        {0x03DB0001, 0x006D0502, 0x00EE, SpecieID::Kangaroo}, //Filename: kgr10
-        {0x03D20001, 0x00E50502, 0x00E8, SpecieID::Kangaroo}, //Filename: kgr01
-        {0x03DA0001, 0x01510502, 0x00ED, SpecieID::Kangaroo}, //Filename: kgr09
-        {0x03D70001, 0x01B40502, 0x00EB, SpecieID::Kangaroo}, //Filename: kgr06
-        {0x03D90001, 0x01A50502, 0x00EC, SpecieID::Kangaroo}, //Filename: kgr08
-
-        {0x03D60001, 0x01570502, 0x00EF, SpecieID::Lion}, //Filename: lon00
-        {0x03E70001, 0x012A0502, 0x00F0, SpecieID::Lion}, //Filename: lon01
-        {0x03EA0001, 0x030B0502, 0x00F2, SpecieID::Lion}, //Filename: lon04
-        {0x03EE0001, 0x008B0502, 0x00F5, SpecieID::Lion}, //Filename: lon08
-        {0x03EC0001, 0x01830502, 0x00F3, SpecieID::Lion}, //Filename: lon06
-        {0x03E80001, 0x02F50502, 0x00F1, SpecieID::Lion}, //Filename: lon02
-        {0x03ED0001, 0x01A30502, 0x00F4, SpecieID::Lion}, //Filename: lon07
-
-        {0x04010001, 0x00660502, 0x00FD, SpecieID::Monkey}, //Filename: mnk08
-        {0x03FE0001, 0x01A40502, 0x00FA, SpecieID::Monkey}, //Filename: mnk05
-        {0x03FF0001, 0x00F40502, 0x00FB, SpecieID::Monkey}, //Filename: mnk06
-        {0x03FD0001, 0x01580502, 0x00F9, SpecieID::Monkey}, //Filename: mnk04
-        {0x03FA0001, 0x00D00502, 0x00F6, SpecieID::Monkey}, //Filename: mnk01
-        {0x04000001, 0x006F0502, 0x00Fc, SpecieID::Monkey}, //Filename: mnk07
-        {0x03FB0001, 0x01CF0502, 0x00F7, SpecieID::Monkey}, //Filename: mnk02
-        {0x03FC0001, 0x01470502, 0x00F8, SpecieID::Monkey}, //Filename: mnk03
-
-        {0x04160001, 0x00FB0502, 0x0106, SpecieID::Mouse}, //Filename: mus10
-        {0x040E0001, 0x00880502, 0x0100, SpecieID::Mouse}, //Filename: mus02
-        {0x041B0001, 0x00F10502, 0x0109, SpecieID::Mouse}, //Filename: mus15
-        {0x040F0001, 0x01500502, 0x0101, SpecieID::Mouse}, //Filename: mus03
-        {0x04180001, 0x00D80502, 0x0107, SpecieID::Mouse}, //Filename: mus12
-        {0x04140001, 0x030A0502, 0x0104, SpecieID::Mouse}, //Filename: mus08
-        {0x041E0001, 0x015F0502, 0x010C, SpecieID::Mouse}, //Filename: mus18
-        {0x040C0001, 0x01590502, 0x00FE, SpecieID::Mouse}, //Filename: mus00
-        {0x041C0001, 0x01410502, 0x010A, SpecieID::Mouse}, //Filename: mus16
-        {0x040D0001, 0x00780502, 0x00FF, SpecieID::Mouse}, //Filename: mus01
-        {0x041A0001, 0x00E00502, 0x0108, SpecieID::Mouse}, //Filename: mus14
-        {0x041D0001, 0x018A0502, 0x010B, SpecieID::Mouse}, //Filename: mus17
-        {0x04150001, 0x01BB0502, 0x0105, SpecieID::Mouse}, //Filename: mus09
-        {0x04110001, 0x01AB0502, 0x0103, SpecieID::Mouse}, //Filename: mus05
-        {0x04100001, 0x007F0502, 0x0102, SpecieID::Mouse}, //Filename: mus04
-
-        {0x08000300, 0x00400402, 0x0110, SpecieID::Octopus}, //Filename: oct03
-        {0x042A0001, 0x012D0502, 0x010E, SpecieID::Octopus}, //Filename: oct01
-        {0x04290001, 0x00700502, 0x010D, SpecieID::Octopus}, //Filename: oct00
-        {0x042B0001, 0x01AF0502, 0x010F, SpecieID::Octopus}, //Filename: oct02
-
-        {0x043E0001, 0x01490502, 0x0118, SpecieID::Ostrich}, //Filename: ost08
-        {0x043C0001, 0x01CB0502, 0x0116, SpecieID::Ostrich}, //Filename: ost06
-        {0x043F0001, 0x01550502, 0x0119, SpecieID::Ostrich}, //Filename: ost09
-        {0x04370001, 0x01050502, 0x0112, SpecieID::Ostrich}, //Filename: ost01
-        {0x043B0001, 0x03030502, 0x0115, SpecieID::Ostrich}, //Filename: ost05
-        {0x043D0001, 0x007C0502, 0x0117, SpecieID::Ostrich}, //Filename: ost07
-        {0x04400001, 0x00CA0502, 0x011A, SpecieID::Ostrich}, //Filename: ost10
-        {0x04360001, 0x01940502, 0x0111, SpecieID::Ostrich}, //Filename: ost00
-        {0x04380001, 0x03000502, 0x0113, SpecieID::Ostrich}, //Filename: ost02
-        {0x04390001, 0x03110502, 0x0114, SpecieID::Ostrich}, //Filename: ost03
-
-        {0x045F0001, 0x01A80502, 0x0124, SpecieID::Penguin}, //Filename: pgn00
-        {0x04690001, 0x01640502, 0x012C, SpecieID::Penguin}, //Filename: pgn10
-        {0x04610001, 0x01610502, 0x0126, SpecieID::Penguin}, //Filename: pgn02
-        {0x046C0001, 0x008C0502, 0x012F, SpecieID::Penguin}, //Filename: pgn13
-        {0x04630001, 0x01310502, 0x0128, SpecieID::Penguin}, //Filename: pgn04
-        {0x04640001, 0x00C00502, 0x0129, SpecieID::Penguin}, //Filename: pgn05
-        {0x04620001, 0x00F60502, 0x0127, SpecieID::Penguin}, //Filename: pgn03
-        {0x046A0001, 0x01D00502, 0x012D, SpecieID::Penguin}, //Filename: pgn11
-        {0x04650001, 0x006E0502, 0x012A, SpecieID::Penguin}, //Filename: pgn06
-        {0x04600001, 0x00A50502, 0x0125, SpecieID::Penguin}, //Filename: pgn01
-        {0x046D0001, 0x00F30502, 0x0130, SpecieID::Penguin}, //Filename: pgn14
-        {0x046B0001, 0x01970502, 0x012E, SpecieID::Penguin}, //Filename: pgn12
-        {0x04680001, 0x02F20502, 0x012B, SpecieID::Penguin}, //Filename: pgn09
-
-        {0x04890001, 0x00EF0502, 0x013F, SpecieID::Pig}, //Filename: pig17
-        {0x04810001, 0x02F10502, 0x0138, SpecieID::Pig}, //Filename: pig09
-        {0x04860001, 0x00FC0502, 0x013C, SpecieID::Pig}, //Filename: pig14
-        {0x04800001, 0x008D0502, 0x0137, SpecieID::Pig}, //Filename: pig08
-        {0x04780001, 0x01630502, 0x0131, SpecieID::Pig}, //Filename: pig00
-        {0x047D0001, 0x012E0502, 0x0136, SpecieID::Pig}, //Filename: pig05
-        {0x04850001, 0x014C0502, 0x013B, SpecieID::Pig}, //Filename: pig13
-        {0x01020100, 0x001B0002, 0x0140, SpecieID::Pig}, //Filename: pig18
-        {0x047B0001, 0x00F50502, 0x0134, SpecieID::Pig}, //Filename: pig03
-        {0x04870001, 0x01BF0502, 0x013D, SpecieID::Pig}, //Filename: pig15
-        {0x047C0001, 0x01A00502, 0x0135, SpecieID::Pig}, //Filename: pig04
-        {0x04820001, 0x02FD0502, 0x0139, SpecieID::Pig}, //Filename: pig10
-        {0x04880001, 0x00980502, 0x013E, SpecieID::Pig}, //Filename: pig16
-        {0x04830001, 0x01B00502, 0x013A, SpecieID::Pig}, //Filename: pig11
-        {0x047A0001, 0x00600502, 0x0133, SpecieID::Pig}, //Filename: pig02
-        {0x04790001, 0x00920502, 0x0132, SpecieID::Pig}, //Filename: pig01
+        {0x04E20001, 0x01090502, 0x016E, SpecieID::Squirrel}, //Filename: squ05
+        {0x04DE0001, 0x00CE0502, 0x016A, SpecieID::Squirrel}, //Filename: squ01
+        {0x04E80001, 0x01CE0502, 0x0174, SpecieID::Squirrel}, //Filename: squ11
+        {0x04E30001, 0x01650502, 0x016F, SpecieID::Squirrel}, //Filename: squ06
+        {0x08010000, 0x025D0402, 0x017B, SpecieID::Squirrel}, //Filename: squ19
+        {0x04DF0001, 0x00E80502, 0x016B, SpecieID::Squirrel}, //Filename: squ02
+        {0x04EF0001, 0x013B0502, 0x017A, SpecieID::Squirrel}, //Filename: squ18
+        {0x04EE0001, 0x014B0502, 0x0179, SpecieID::Squirrel}, //Filename: squ17
+        {0x04E60001, 0x00820502, 0x0172, SpecieID::Squirrel}, //Filename: squ09
+        {0x04E10001, 0x01BE0502, 0x016D, SpecieID::Squirrel}, //Filename: squ04
+        {0x04DD0001, 0x00A20502, 0x0169, SpecieID::Squirrel}, //Filename: squ00
+        {0x04E00001, 0x00F70502, 0x016C, SpecieID::Squirrel}, //Filename: squ03
+        {0x04EC0001, 0x00770502, 0x0177, SpecieID::Squirrel}, //Filename: squ15
+        {0x04E70001, 0x01320502, 0x0173, SpecieID::Squirrel}, //Filename: squ10
+        {0x04E40001, 0x01B60502, 0x0170, SpecieID::Squirrel}, //Filename: squ07
+        {0x04ED0001, 0x00620502, 0x0178, SpecieID::Squirrel}, //Filename: squ16
+        {0x04E50001, 0x01AD0502, 0x0171, SpecieID::Squirrel}, //Filename: squ08
+        {0x04EB0001, 0x02F00502, 0x0176, SpecieID::Squirrel}, //Filename: squ14
+        {0x04EA0001, 0x03180502, 0x0175, SpecieID::Squirrel}, //Filename: squ13
+        {0x08020000, 0x025E0402, 0x017C, SpecieID::Squirrel}, //Filename: squ20
 
         {0x04A50001, 0x00740502, 0x0152, SpecieID::Rabbit}, //Filename: rbt17
         {0x04940001, 0x009A0502, 0x0141, SpecieID::Rabbit}, //Filename: rbt00
@@ -728,55 +474,31 @@ namespace CTRPluginFramework {
         {0x049B0001, 0x00610502, 0x0148, SpecieID::Rabbit}, //Filename: rbt07
         {0x04A80101, 0x031E0502, 0x0155, SpecieID::Rabbit}, //Filename: rbt20
 
-        {0x04B60001, 0x02EC0502, 0x0159, SpecieID::Rhino}, //Filename: rhn04
-        {0x04B90001, 0x01600502, 0x015A, SpecieID::Rhino}, //Filename: rhn07
-        {0x04BA0001, 0x005D0502, 0x015B, SpecieID::Rhino}, //Filename: rhn08
-        {0x04B30001, 0x00DD0502, 0x0157, SpecieID::Rhino}, //Filename: rhn01
-        {0x04B40001, 0x030C0502, 0x0158, SpecieID::Rhino}, //Filename: rhn02
-        {0x04B20001, 0x01B90502, 0x0156, SpecieID::Rhino}, //Filename: rhn00
+        {0x03070001, 0x00640502, 0x007F, SpecieID::Duck}, //Filename: duk00
+        {0x030B0001, 0x00790502, 0x0083, SpecieID::Duck}, //Filename: duk04
+        {0x030F0001, 0x016D0502, 0x0087, SpecieID::Duck}, //Filename: duk08
+        {0x03100001, 0x00F80502, 0x0088, SpecieID::Duck}, //Filename: duk09
+        {0x030E0001, 0x012F0502, 0x0086, SpecieID::Duck}, //Filename: duk07
+        {0x03160001, 0x01C00502, 0x008D, SpecieID::Duck}, //Filename: duk15
+        {0x03080001, 0x014D0502, 0x0080, SpecieID::Duck}, //Filename: duk01
+        {0x03140001, 0x02F40502, 0x008C, SpecieID::Duck}, //Filename: duk13
+        {0x030A0001, 0x01C70502, 0x0082, SpecieID::Duck}, //Filename: duk03
+        {0x030D0001, 0x01840502, 0x0085, SpecieID::Duck}, //Filename: duk06
+        {0x03130001, 0x01210502, 0x008B, SpecieID::Duck}, //Filename: duk12
+        {0x03170001, 0x00A60502, 0x008E, SpecieID::Duck}, //Filename: duk16
+        {0x03090001, 0x00C60502, 0x0081, SpecieID::Duck}, //Filename: duk02
+        {0x030C0001, 0x01B80502, 0x0084, SpecieID::Duck}, //Filename: duk05
+        {0x03180001, 0x006C0502, 0x008F, SpecieID::Duck}, //Filename: duk17
+        {0x03110001, 0x00D60502, 0x0089, SpecieID::Duck}, //Filename: duk10
+        {0x03120001, 0x03090502, 0x008A, SpecieID::Duck}, //Filename: duk11
 
-        {0x04C60001, 0x01670502, 0x015D, SpecieID::Sheep}, //Filename: shp01
-        {0x04C90001, 0x030D0502, 0x0160, SpecieID::Sheep}, //Filename: shp04
-        {0x04CD0001, 0x01520502, 0x0162, SpecieID::Sheep}, //Filename: shp08
-        {0x04D30101, 0x031B0502, 0x0168, SpecieID::Sheep}, //Filename: shp14
-        {0x04C70001, 0x00940502, 0x015E, SpecieID::Sheep}, //Filename: shp02
-        {0x04D00001, 0x01960502, 0x0165, SpecieID::Sheep}, //Filename: shp11
-        {0x04D10001, 0x009E0502, 0x0166, SpecieID::Sheep}, //Filename: shp12
-        {0x04D20001, 0x01A70502, 0x0167, SpecieID::Sheep}, //Filename: shp13
-        {0x04C80001, 0x02ED0502, 0x015F, SpecieID::Sheep}, //Filename: shp03
-        {0x04CF0001, 0x00E10502, 0x0164, SpecieID::Sheep}, //Filename: shp10
-        {0x04C50001, 0x01010502, 0x015C, SpecieID::Sheep}, //Filename: shp00
-        {0x04CE0001, 0x00DB0502, 0x0163, SpecieID::Sheep}, //Filename: shp09
-        {0x04CC0001, 0x00A40502, 0x0161, SpecieID::Sheep}, //Filename: shp07
-
-        {0x04E20001, 0x01090502, 0x016E, SpecieID::Squirrel}, //Filename: squ05
-        {0x04DE0001, 0x00CE0502, 0x016A, SpecieID::Squirrel}, //Filename: squ01
-        {0x04E80001, 0x01CE0502, 0x0174, SpecieID::Squirrel}, //Filename: squ11
-        {0x04E30001, 0x01650502, 0x016F, SpecieID::Squirrel}, //Filename: squ06
-        {0x08010000, 0x025D0402, 0x017B, SpecieID::Squirrel}, //Filename: squ19
-        {0x04DF0001, 0x00E80502, 0x016B, SpecieID::Squirrel}, //Filename: squ02
-        {0x04EF0001, 0x013B0502, 0x017A, SpecieID::Squirrel}, //Filename: squ18
-        {0x04EE0001, 0x014B0502, 0x0179, SpecieID::Squirrel}, //Filename: squ17
-        {0x04E60001, 0x00820502, 0x0172, SpecieID::Squirrel}, //Filename: squ09
-        {0x04E10001, 0x01BE0502, 0x016D, SpecieID::Squirrel}, //Filename: squ04
-        {0x04DD0001, 0x00A20502, 0x0169, SpecieID::Squirrel}, //Filename: squ00
-        {0x04E00001, 0x00F70502, 0x016C, SpecieID::Squirrel}, //Filename: squ03
-        {0x04EC0001, 0x00770502, 0x0177, SpecieID::Squirrel}, //Filename: squ15
-        {0x04E70001, 0x01320502, 0x0173, SpecieID::Squirrel}, //Filename: squ10
-        {0x04E40001, 0x01B60502, 0x0170, SpecieID::Squirrel}, //Filename: squ07
-        {0x04ED0001, 0x00620502, 0x0178, SpecieID::Squirrel}, //Filename: squ16
-        {0x04E50001, 0x01AD0502, 0x0171, SpecieID::Squirrel}, //Filename: squ08
-        {0x04EB0001, 0x02F00502, 0x0176, SpecieID::Squirrel}, //Filename: squ14
-        {0x04EA0001, 0x03180502, 0x0175, SpecieID::Squirrel}, //Filename: squ13
-        {0x08020000, 0x025E0402, 0x017C, SpecieID::Squirrel}, //Filename: squ20
-
-        {0x04FD0001, 0x007B0502, 0x0180, SpecieID::Tiger}, //Filename: tig03
-        {0x05000001, 0x00E70502, 0x0183, SpecieID::Tiger}, //Filename: tig06
-        {0x04FF0001, 0x01620502, 0x0182, SpecieID::Tiger}, //Filename: tig05
-        {0x04FE0001, 0x00590502, 0x0181, SpecieID::Tiger}, //Filename: tig04
-        {0x04FA0001, 0x01680502, 0x017D, SpecieID::Tiger}, //Filename: tig00
-        {0x04FB0001, 0x01C60502, 0x017E, SpecieID::Tiger}, //Filename: tig01
-        {0x04FC0001, 0x02EE0502, 0x017F, SpecieID::Tiger}, //Filename: tig02
+        {0x03930001, 0x00A00502, 0x00C9, SpecieID::Hippo}, //Filename: hip03
+        {0x03940001, 0x00890502, 0x00CA, SpecieID::Hippo}, //Filename: hip04
+        {0x03950001, 0x02FC0502, 0x00CB, SpecieID::Hippo}, //Filename: hip05
+        {0x03920001, 0x01270502, 0x00C8, SpecieID::Hippo}, //Filename: hip02
+        {0x03980001, 0x00BF0502, 0x00CC, SpecieID::Hippo}, //Filename: hip08
+        {0x03990001, 0x01C20502, 0x00CD, SpecieID::Hippo}, //Filename: hip09
+        {0x03900001, 0x01850502, 0x00C7, SpecieID::Hippo}, //Filename: hip00
 
         {0x050B0001, 0x00990502, 0x0184, SpecieID::Wolf}, //Filename: wol00
         {0x050F0001, 0x03140502, 0x0188, SpecieID::Wolf}, //Filename: wol04
@@ -789,6 +511,277 @@ namespace CTRPluginFramework {
         {0x050E0001, 0x00D70502, 0x0187, SpecieID::Wolf}, //Filename: wol03
         {0x050D0001, 0x01420502, 0x0186, SpecieID::Wolf}, //Filename: wol02
         {0x01030000, 0x024F0902, 0x018E, SpecieID::Wolf}, //Filename: wol11
+
+        {0x04160001, 0x00FB0502, 0x0106, SpecieID::Mouse}, //Filename: mus10
+        {0x040E0001, 0x00880502, 0x0100, SpecieID::Mouse}, //Filename: mus02
+        {0x041B0001, 0x00F10502, 0x0109, SpecieID::Mouse}, //Filename: mus15
+        {0x040F0001, 0x01500502, 0x0101, SpecieID::Mouse}, //Filename: mus03
+        {0x04180001, 0x00D80502, 0x0107, SpecieID::Mouse}, //Filename: mus12
+        {0x04140001, 0x030A0502, 0x0104, SpecieID::Mouse}, //Filename: mus08
+        {0x041E0001, 0x015F0502, 0x010C, SpecieID::Mouse}, //Filename: mus18
+        {0x040C0001, 0x01590502, 0x00FE, SpecieID::Mouse}, //Filename: mus00
+        {0x041C0001, 0x01410502, 0x010A, SpecieID::Mouse}, //Filename: mus16
+        {0x040D0001, 0x00780502, 0x00FF, SpecieID::Mouse}, //Filename: mus01
+        {0x041A0001, 0x00E00502, 0x0108, SpecieID::Mouse}, //Filename: mus14
+        {0x041D0001, 0x018A0502, 0x010B, SpecieID::Mouse}, //Filename: mus17
+        {0x04150001, 0x01BB0502, 0x0105, SpecieID::Mouse}, //Filename: mus09
+        {0x04110001, 0x01AB0502, 0x0103, SpecieID::Mouse}, //Filename: mus05
+        {0x04100001, 0x007F0502, 0x0102, SpecieID::Mouse}, //Filename: mus04
+
+        {0x04890001, 0x00EF0502, 0x013F, SpecieID::Pig}, //Filename: pig17
+        {0x04810001, 0x02F10502, 0x0138, SpecieID::Pig}, //Filename: pig09
+        {0x04860001, 0x00FC0502, 0x013C, SpecieID::Pig}, //Filename: pig14
+        {0x04800001, 0x008D0502, 0x0137, SpecieID::Pig}, //Filename: pig08
+        {0x04780001, 0x01630502, 0x0131, SpecieID::Pig}, //Filename: pig00
+        {0x047D0001, 0x012E0502, 0x0136, SpecieID::Pig}, //Filename: pig05
+        {0x04850001, 0x014C0502, 0x013B, SpecieID::Pig}, //Filename: pig13
+        {0x01020100, 0x001B0002, 0x0140, SpecieID::Pig}, //Filename: pig18
+        {0x047B0001, 0x00F50502, 0x0134, SpecieID::Pig}, //Filename: pig03
+        {0x04870001, 0x01BF0502, 0x013D, SpecieID::Pig}, //Filename: pig15
+        {0x047C0001, 0x01A00502, 0x0135, SpecieID::Pig}, //Filename: pig04
+        {0x04820001, 0x02FD0502, 0x0139, SpecieID::Pig}, //Filename: pig10
+        {0x04880001, 0x00980502, 0x013E, SpecieID::Pig}, //Filename: pig16
+        {0x04830001, 0x01B00502, 0x013A, SpecieID::Pig}, //Filename: pig11
+        {0x047A0001, 0x00600502, 0x0133, SpecieID::Pig}, //Filename: pig02
+        {0x04790001, 0x00920502, 0x0132, SpecieID::Pig}, //Filename: pig01
+
+        {0x029E0001, 0x013D0502, 0x0053, SpecieID::Chicken}, //Filename: chn05
+        {0x02A20001, 0x01BA0502, 0x0054, SpecieID::Chicken}, //Filename: chn09
+        {0x029A0001, 0x00EE0502, 0x0051, SpecieID::Chicken}, //Filename: chn01
+        {0x02A50001, 0x018C0502, 0x0057, SpecieID::Chicken}, //Filename: chn12
+        {0x029B0001, 0x00CB0502, 0x0052, SpecieID::Chicken}, //Filename: chn02
+        {0x02990001, 0x00950502, 0x0050, SpecieID::Chicken}, //Filename: chn00
+        {0x02A60001, 0x01240502, 0x0058, SpecieID::Chicken}, //Filename: chn13
+        {0x02A40001, 0x00720502, 0x0056, SpecieID::Chicken}, //Filename: chn11
+        {0x02A30001, 0x02FF0502, 0x0055, SpecieID::Chicken}, //Filename: chn10
+
+        {0x024A0001, 0x01D10502, 0x0023, SpecieID::Bull}, //Filename: bul00
+        {0x02510001, 0x00C10502, 0x0027, SpecieID::Bull}, //Filename: bul07
+        {0x024B0001, 0x01260502, 0x0024, SpecieID::Bull}, //Filename: bul01
+        {0x024D0001, 0x02F60502, 0x0025, SpecieID::Bull}, //Filename: bul03
+        {0x024F0001, 0x00810502, 0x0026, SpecieID::Bull}, //Filename: bul05
+        {0x02520001, 0x00FE0502, 0x0028, SpecieID::Bull}, //Filename: bul08
+
+        {0x02B80001, 0x019C0502, 0x005C, SpecieID::Cow}, //Filename: cow07
+        {0x02B70001, 0x030F0502, 0x005B, SpecieID::Cow}, //Filename: cow06
+        {0x02B10001, 0x00690502, 0x0059, SpecieID::Cow}, //Filename: cow00
+        {0x02B20001, 0x00C40502, 0x005A, SpecieID::Cow}, //Filename: cow01
+
+        {0x02330001, 0x03060502, 0x001B, SpecieID::Bird}, //Filename: brd06
+        {0x022F0001, 0x011E0502, 0x0017, SpecieID::Bird}, //Filename: brd02
+        {0x023D0001, 0x01B50502, 0x001F, SpecieID::Bird}, //Filename: brd16
+        {0x02380001, 0x02F80502, 0x001D, SpecieID::Bird}, //Filename: brd11
+        {0x022D0001, 0x00F20502, 0x0015, SpecieID::Bird}, //Filename: brd00
+        {0x02310001, 0x006A0502, 0x0019, SpecieID::Bird}, //Filename: brd04
+        {0x023C0001, 0x00BD0502, 0x001E, SpecieID::Bird}, //Filename: brd15
+        {0x01000100, 0x03500902, 0x0022, SpecieID::Bird}, //Filename: brd19
+        {0x02350001, 0x00840502, 0x001C, SpecieID::Bird}, //Filename: brd08
+        {0x023E0001, 0x00D10502, 0x0020, SpecieID::Bird}, //Filename: brd17
+        {0x02320001, 0x02EA0502, 0x001A, SpecieID::Bird}, //Filename: brd05
+        {0x022E0001, 0x01D30502, 0x0016, SpecieID::Bird}, //Filename: brd01
+        {0x023F0001, 0x01660502, 0x0021, SpecieID::Bird}, //Filename: brd18
+        {0x02300001, 0x01D20502, 0x0018, SpecieID::Bird}, //Filename: brd03
+
+        {0x033B0001, 0x00FA0502, 0x009E, SpecieID::Frog}, //Filename: flg03
+        {0x03420001, 0x01280502, 0x00A4, SpecieID::Frog}, //Filename: flg10
+        {0x03490001, 0x018D0502, 0x00AA, SpecieID::Frog}, //Filename: flg17
+        {0x034A0001, 0x01430502, 0x00AB, SpecieID::Frog}, //Filename: flg18
+        {0x033C0001, 0x01000502, 0x009F, SpecieID::Frog}, //Filename: flg04
+        {0x033A0001, 0x01CC0502, 0x009D, SpecieID::Frog}, //Filename: flg02
+        {0x03480001, 0x006B0502, 0x00A9, SpecieID::Frog}, //Filename: flg16
+        {0x034B0001, 0x009F0502, 0x00AC, SpecieID::Frog}, //Filename: flg19
+        {0x03430001, 0x02EF0502, 0x00A5, SpecieID::Frog}, //Filename: flg11
+        {0x03450001, 0x005F0502, 0x00A7, SpecieID::Frog}, //Filename: flg13
+        {0x033F0001, 0x008F0502, 0x00A2, SpecieID::Frog}, //Filename: flg07
+        {0x03380001, 0x011D0502, 0x009B, SpecieID::Frog}, //Filename: flg00
+        {0x03440001, 0x00C50502, 0x00A6, SpecieID::Frog}, //Filename: flg12
+        {0x033E0001, 0x01A20502, 0x00A1, SpecieID::Frog}, //Filename: flg06
+        {0x03470001, 0x03020502, 0x00A8, SpecieID::Frog}, //Filename: flg15
+        {0x03390001, 0x01B10502, 0x009C, SpecieID::Frog}, //Filename: flg01
+        {0x03410001, 0x030E0502, 0x00A3, SpecieID::Frog}, //Filename: flg09
+        {0x033D0001, 0x013A0502, 0x00A0, SpecieID::Frog}, //Filename: flg05
+
+        {0x02C30001, 0x00DC0502, 0x005D, SpecieID::Alligator}, //Filename: crd00
+        {0x02C40001, 0x00670502, 0x005E, SpecieID::Alligator}, //Filename: crd01
+        {0x02C50001, 0x03080502, 0x005F, SpecieID::Alligator}, //Filename: crd02
+        {0x02C70001, 0x01220502, 0x0060, SpecieID::Alligator}, //Filename: crd04
+        {0x02CB0001, 0x01360502, 0x0063, SpecieID::Alligator}, //Filename: crd08
+        {0x02CA0001, 0x01CA0502, 0x0062, SpecieID::Alligator}, //Filename: crd07
+        {0x02C90001, 0x00CD0502, 0x0061, SpecieID::Alligator}, //Filename: crd06
+
+        {0x03580001, 0x02FA0502, 0x00AF, SpecieID::Goat}, //Filename: goa02
+        {0x03560001, 0x01350502, 0x00AD, SpecieID::Goat}, //Filename: goa00
+        {0x03580001, 0x02FA0502, 0x00B0, SpecieID::Goat}, //Filename: goa04
+        {0x035D0001, 0x00C90502, 0x00B2, SpecieID::Goat}, //Filename: goa07
+        {0x03570001, 0x00EB0502, 0x00AE, SpecieID::Goat}, //Filename: goa01
+        {0x035E0001, 0x018E0502, 0x00B3, SpecieID::Goat}, //Filename: goa08
+        {0x035C0001, 0x01290502, 0x00B1, SpecieID::Goat}, //Filename: goa06
+
+        {0x04FD0001, 0x007B0502, 0x0180, SpecieID::Tiger}, //Filename: tig03
+        {0x05000001, 0x00E70502, 0x0183, SpecieID::Tiger}, //Filename: tig06
+        {0x04FF0001, 0x01620502, 0x0182, SpecieID::Tiger}, //Filename: tig05
+        {0x04FE0001, 0x00590502, 0x0181, SpecieID::Tiger}, //Filename: tig04
+        {0x04FA0001, 0x01680502, 0x017D, SpecieID::Tiger}, //Filename: tig00
+        {0x04FB0001, 0x01C60502, 0x017E, SpecieID::Tiger}, //Filename: tig01
+        {0x04FC0001, 0x02EE0502, 0x017F, SpecieID::Tiger}, //Filename: tig02
+
+        {0x02030001, 0x019A0502, 0x0003, SpecieID::Anteater}, //Filename: ant03
+        {0x02080001, 0x00960502, 0x0005, SpecieID::Anteater}, //Filename: ant08
+        {0x02010001, 0x016A0502, 0x0001, SpecieID::Anteater}, //Filename: ant01
+        {0x02000001, 0x00A10502, 0x0000, SpecieID::Anteater}, //Filename: ant00
+        {0x02090001, 0x019F0502, 0x0006, SpecieID::Anteater}, //Filename: ant09
+        {0x02020001, 0x01030502, 0x0002, SpecieID::Anteater}, //Filename: ant02
+        {0x02060001, 0x03120502, 0x0004, SpecieID::Anteater}, //Filename: ant06
+
+        {0x03BD0001, 0x00F90502, 0x00DF, SpecieID::Koala}, //Filename: kal01
+        {0x03C40001, 0x012B0502, 0x00E4, SpecieID::Koala}, //Filename: kal08
+        {0x03C60001, 0x00930502, 0x00E6, SpecieID::Koala}, //Filename: kal10
+        {0x03C00001, 0x03100502, 0x00E2, SpecieID::Koala}, //Filename: kal04
+        {0x03C50001, 0x015C0502, 0x00E5, SpecieID::Koala}, //Filename: kal09
+        {0x03BE0001, 0x01980502, 0x00E0, SpecieID::Koala}, //Filename: kal02
+        {0x03C10001, 0x00BB0502, 0x00E3, SpecieID::Koala}, //Filename: kal05
+        {0x03BF0001, 0x01BC0502, 0x00E1, SpecieID::Koala}, //Filename: kal03
+        {0x03BC0001, 0x008A0502, 0x00DE, SpecieID::Koala}, //Filename: kal00
+
+        {0x03AD0001, 0x01B20502, 0x00D7, SpecieID::Horse}, //Filename: hrs09
+        {0x03A40001, 0x014F0502, 0x00CE, SpecieID::Horse}, //Filename: hrs00
+        {0x03AB0001, 0x03160502, 0x00D5, SpecieID::Horse}, //Filename: hrs07
+        {0x03AE0001, 0x00870502, 0x00D8, SpecieID::Horse}, //Filename: hrs10
+        {0x03AF0001, 0x012C0502, 0x00D9, SpecieID::Horse}, //Filename: hrs11
+        {0x03AA0001, 0x00E60502, 0x00D4, SpecieID::Horse}, //Filename: hrs06
+        {0x03A70001, 0x01A10502, 0x00D1, SpecieID::Horse}, //Filename: hrs03
+        {0x01010100, 0x00170002, 0x00DD, SpecieID::Horse}, //Filename: hrs15
+    /*Non Amiibo*/ {0x00000000, 0x00000000, 0x00DC, SpecieID::Horse}, //Filename: hrs14
+        {0x03B10001, 0x00F00502, 0x00DB, SpecieID::Horse}, //Filename: hrs13
+        {0x03B00001, 0x01A90502, 0x00DA, SpecieID::Horse}, //Filename: hrs12
+        {0x03AC0001, 0x01880502, 0x00D6, SpecieID::Horse}, //Filename: hrs08
+        {0x03A80001, 0x00910502, 0x00D2, SpecieID::Horse}, //Filename: hrs04
+        {0x03A60001, 0x00C80502, 0x00D0, SpecieID::Horse}, //Filename: hrs02
+        {0x03A50001, 0x015B0502, 0x00CF, SpecieID::Horse}, //Filename: hrs01
+        {0x03A90001, 0x00710502, 0x00D3, SpecieID::Horse}, //Filename: hrs05
+
+        {0x08000300, 0x00400402, 0x0110, SpecieID::Octopus}, //Filename: oct03
+        {0x042A0001, 0x012D0502, 0x010E, SpecieID::Octopus}, //Filename: oct01
+        {0x04290001, 0x00700502, 0x010D, SpecieID::Octopus}, //Filename: oct00
+        {0x042B0001, 0x01AF0502, 0x010F, SpecieID::Octopus}, //Filename: oct02
+
+        {0x03D60001, 0x01570502, 0x00EF, SpecieID::Lion}, //Filename: lon00
+        {0x03E70001, 0x012A0502, 0x00F0, SpecieID::Lion}, //Filename: lon01
+        {0x03EA0001, 0x030B0502, 0x00F2, SpecieID::Lion}, //Filename: lon04
+        {0x03EE0001, 0x008B0502, 0x00F5, SpecieID::Lion}, //Filename: lon08
+        {0x03EC0001, 0x01830502, 0x00F3, SpecieID::Lion}, //Filename: lon06
+        {0x03E80001, 0x02F50502, 0x00F1, SpecieID::Lion}, //Filename: lon02
+        {0x03ED0001, 0x01A30502, 0x00F4, SpecieID::Lion}, //Filename: lon07    
+
+        {0x028D0001, 0x01BD0502, 0x004D, SpecieID::Bearcub}, //Filename: cbr16
+        {0x027D0001, 0x00630502, 0x0040, SpecieID::Bearcub}, //Filename: cbr00
+        {0x02870001, 0x005A0502, 0x0049, SpecieID::Bearcub}, //Filename: cbr10
+        {0x028C0001, 0x013E0502, 0x004C, SpecieID::Bearcub}, //Filename: cbr15
+        {0x028A0001, 0x02E90502, 0x004A, SpecieID::Bearcub}, //Filename: cbr13
+        {0x02810001, 0x01200502, 0x0044, SpecieID::Bearcub}, //Filename: cbr04
+        {0x027E0001, 0x01690502, 0x0041, SpecieID::Bearcub}, //Filename: cbr01
+        {0x028F0101, 0x031A0502, 0x004F, SpecieID::Bearcub}, //Filename: cbr18
+        {0x02840001, 0x02FE0502, 0x0047, SpecieID::Bearcub}, //Filename: cbr07
+        {0x02860001, 0x03130502, 0x0048, SpecieID::Bearcub}, //Filename: cbr09
+        {0x028B0001, 0x00E30502, 0x004B, SpecieID::Bearcub}, //Filename: cbr14
+        {0x027F0001, 0x00B90502, 0x0042, SpecieID::Bearcub}, //Filename: cbr02
+        {0x02800001, 0x00830502, 0x0043, SpecieID::Bearcub}, //Filename: cbr03
+        {0x02820001, 0x01D60502, 0x0045, SpecieID::Bearcub}, //Filename: cbr05
+        {0x028E0001, 0x019E0502, 0x004E, SpecieID::Bearcub}, //Filename: cbr17
+        {0x02830001, 0x00C70502, 0x0046, SpecieID::Bearcub}, //Filename: cbr06
+
+        {0x04B60001, 0x02EC0502, 0x0159, SpecieID::Rhinocero}, //Filename: rhn04
+        {0x04B90001, 0x01600502, 0x015A, SpecieID::Rhinocero}, //Filename: rhn07
+        {0x04BA0001, 0x005D0502, 0x015B, SpecieID::Rhinocero}, //Filename: rhn08
+        {0x04B30001, 0x00DD0502, 0x0157, SpecieID::Rhinocero}, //Filename: rhn01
+        {0x04B40001, 0x030C0502, 0x0158, SpecieID::Rhinocero}, //Filename: rhn02
+        {0x04B20001, 0x01B90502, 0x0156, SpecieID::Rhinocero}, //Filename: rhn00
+
+        {0x03710001, 0x005C0502, 0x00BA, SpecieID::Gorilla}, //Filename: gor08
+        {0x036B0001, 0x018B0502, 0x00B6, SpecieID::Gorilla}, //Filename: gor02
+        {0x036E0001, 0x02FB0502, 0x00B8, SpecieID::Gorilla}, //Filename: gor05
+        {0x03690001, 0x00D30502, 0x00B4, SpecieID::Gorilla}, //Filename: gor00
+        {0x03730001, 0x01340502, 0x00BC, SpecieID::Gorilla}, //Filename: gor10
+        {0x036D0001, 0x03040502, 0x00B7, SpecieID::Gorilla}, //Filename: gor04
+        {0x036A0001, 0x019D0502, 0x00B5, SpecieID::Gorilla}, //Filename: gor01
+        {0x03740101, 0x03190502, 0x00BD, SpecieID::Gorilla}, //Filename: gor11
+        {0x03720001, 0x010B0502, 0x00BB, SpecieID::Gorilla}, //Filename: gor09
+        {0x03700001, 0x015D0502, 0x00B9, SpecieID::Gorilla}, //Filename: gor07
+
+        {0x043E0001, 0x01490502, 0x0118, SpecieID::Ostrich}, //Filename: ost08
+        {0x043C0001, 0x01CB0502, 0x0116, SpecieID::Ostrich}, //Filename: ost06
+        {0x043F0001, 0x01550502, 0x0119, SpecieID::Ostrich}, //Filename: ost09
+        {0x04370001, 0x01050502, 0x0112, SpecieID::Ostrich}, //Filename: ost01
+        {0x043B0001, 0x03030502, 0x0115, SpecieID::Ostrich}, //Filename: ost05
+        {0x043D0001, 0x007C0502, 0x0117, SpecieID::Ostrich}, //Filename: ost07
+        {0x04400001, 0x00CA0502, 0x011A, SpecieID::Ostrich}, //Filename: ost10
+        {0x04360001, 0x01940502, 0x0111, SpecieID::Ostrich}, //Filename: ost00
+        {0x04380001, 0x03000502, 0x0113, SpecieID::Ostrich}, //Filename: ost02
+        {0x04390001, 0x03110502, 0x0114, SpecieID::Ostrich}, //Filename: ost03
+
+        {0x03D60001, 0x01570502, 0x00EA, SpecieID::Kangaroo}, //Filename: kgr05
+        {0x03D30001, 0x02F30502, 0x00E9, SpecieID::Kangaroo}, //Filename: kgr02
+        {0x03D10001, 0x00C20502, 0x00E7, SpecieID::Kangaroo}, //Filename: kgr00
+        {0x03DB0001, 0x006D0502, 0x00EE, SpecieID::Kangaroo}, //Filename: kgr10
+        {0x03D20001, 0x00E50502, 0x00E8, SpecieID::Kangaroo}, //Filename: kgr01
+        {0x03DA0001, 0x01510502, 0x00ED, SpecieID::Kangaroo}, //Filename: kgr09
+        {0x03D70001, 0x01B40502, 0x00EB, SpecieID::Kangaroo}, //Filename: kgr06
+        {0x03D90001, 0x01A50502, 0x00EC, SpecieID::Kangaroo}, //Filename: kgr08
+
+        {0x044C0001, 0x008E0502, 0x011C, SpecieID::Eagle}, //Filename: pbr01
+        {0x044B0001, 0x016C0502, 0x011B, SpecieID::Eagle}, //Filename: pbr00
+        {0x04500001, 0x00CF0502, 0x011F, SpecieID::Eagle}, //Filename: pbr05
+        {0x044E0001, 0x03150502, 0x011E, SpecieID::Eagle}, //Filename: pbr03
+        {0x04540001, 0x01AE0502, 0x0123, SpecieID::Eagle}, //Filename: pbr09
+        {0x04510001, 0x015E0502, 0x0120, SpecieID::Eagle}, //Filename: pbr06
+        {0x04530001, 0x01040502, 0x0122, SpecieID::Eagle}, //Filename: pbr08
+        {0x044D0001, 0x01930502, 0x011D, SpecieID::Eagle}, //Filename: pbr02
+        {0x04520001, 0x00730502, 0x0121, SpecieID::Eagle}, //Filename: pbr07
+
+        {0x045F0001, 0x01A80502, 0x0124, SpecieID::Penguin}, //Filename: pgn00
+        {0x04690001, 0x01640502, 0x012C, SpecieID::Penguin}, //Filename: pgn10
+        {0x04610001, 0x01610502, 0x0126, SpecieID::Penguin}, //Filename: pgn02
+        {0x046C0001, 0x008C0502, 0x012F, SpecieID::Penguin}, //Filename: pgn13
+        {0x04630001, 0x01310502, 0x0128, SpecieID::Penguin}, //Filename: pgn04
+        {0x04640001, 0x00C00502, 0x0129, SpecieID::Penguin}, //Filename: pgn05
+        {0x04620001, 0x00F60502, 0x0127, SpecieID::Penguin}, //Filename: pgn03
+        {0x046A0001, 0x01D00502, 0x012D, SpecieID::Penguin}, //Filename: pgn11
+        {0x04650001, 0x006E0502, 0x012A, SpecieID::Penguin}, //Filename: pgn06
+        {0x04600001, 0x00A50502, 0x0125, SpecieID::Penguin}, //Filename: pgn01
+        {0x046D0001, 0x00F30502, 0x0130, SpecieID::Penguin}, //Filename: pgn14
+        {0x046B0001, 0x01970502, 0x012E, SpecieID::Penguin}, //Filename: pgn12
+        {0x04680001, 0x02F20502, 0x012B, SpecieID::Penguin}, //Filename: pgn09
+
+        {0x04010001, 0x00660502, 0x00FD, SpecieID::Monkey}, //Filename: mnk08
+        {0x03FE0001, 0x01A40502, 0x00FA, SpecieID::Monkey}, //Filename: mnk05
+        {0x03FF0001, 0x00F40502, 0x00FB, SpecieID::Monkey}, //Filename: mnk06
+        {0x03FD0001, 0x01580502, 0x00F9, SpecieID::Monkey}, //Filename: mnk04
+        {0x03FA0001, 0x00D00502, 0x00F6, SpecieID::Monkey}, //Filename: mnk01
+        {0x04000001, 0x006F0502, 0x00Fc, SpecieID::Monkey}, //Filename: mnk07
+        {0x03FB0001, 0x01CF0502, 0x00F7, SpecieID::Monkey}, //Filename: mnk02
+        {0x03FC0001, 0x01470502, 0x00F8, SpecieID::Monkey}, //Filename: mnk03
+
+        {0x037F0001, 0x01AA0502, 0x00BF, SpecieID::Hamster}, //Filename: ham01
+        {0x03830001, 0x009B0502, 0x00C3, SpecieID::Hamster}, //Filename: ham05
+        {0x03840001, 0x00860502, 0x00C4, SpecieID::Hamster}, //Filename: ham06
+        {0x03800001, 0x01870502, 0x00C0, SpecieID::Hamster}, //Filename: ham02
+        {0x037E0001, 0x01560502, 0x00BE, SpecieID::Hamster}, //Filename: ham00
+        {0x03850001, 0x01060502, 0x00C5, SpecieID::Hamster}, //Filename: ham07
+    /*Non Amiibo*/ {0x00000000, 0x00000000, 0x00C6, SpecieID::Hamster}, //Filename: ham08
+        {0x03810001, 0x00D50502, 0x00C1, SpecieID::Hamster}, //Filename: ham03
+        {0x03820001, 0x016B0502, 0x00C2, SpecieID::Hamster}, //Filename: ham04
+
+        {0x02D70001, 0x01300502, 0x0065, SpecieID::Deer}, //Filename: der01
+        {0x02DD0001, 0x00EA0502, 0x006B, SpecieID::Deer}, //Filename: der07
+        {0x02D90001, 0x01C80502, 0x0067, SpecieID::Deer}, //Filename: der03
+        {0x02E00101, 0x031D0502, 0x006E, SpecieID::Deer}, //Filename: der10
+        {0x02DA0001, 0x01330502, 0x0068, SpecieID::Deer}, //Filename: der04
+        {0x02DE0001, 0x009C0502, 0x006C, SpecieID::Deer}, //Filename: der08
+        {0x02DF0001, 0x01910502, 0x006D, SpecieID::Deer}, //Filename: der09
+        {0x02D60001, 0x00560502, 0x0064, SpecieID::Deer}, //Filename: der00
+        {0x02DC0001, 0x00BE0502, 0x006A, SpecieID::Deer}, //Filename: der06
+        {0x02DB0001, 0x005E0502, 0x0069, SpecieID::Deer}, //Filename: der05
+        {0x02D80001, 0x00E20502, 0x0066, SpecieID::Deer}, //Filename: der02
     };
 
     const SPAmiiboInfo amiiboSPVillagers[55] = {

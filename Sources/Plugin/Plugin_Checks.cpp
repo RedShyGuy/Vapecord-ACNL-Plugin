@@ -34,7 +34,7 @@ namespace CTRPluginFramework {
 				}
 			}
 
-			static FUNCT func(Code::PlaceItemOffset);
+			static FUNCTION func(Code::PlaceItemOffset);
 			return func.Call<u32>(ID, (u32)ItemToReplace, (u32)ItemToPlace, (u32)ItemToShow, worldx, worldy, 0, 0, 0, 0, 0);
 		}
 		return 0xFFFFFFFF;
@@ -42,7 +42,7 @@ namespace CTRPluginFramework {
 //Hook invalid drop
 	u32 InvalidDropStop(u8 ID, u32 *ItemToReplace, u32 *ItemToPlace, u32 *ItemToShow) {
 		if(IDList::ItemValid((*ItemToPlace & 0xFFFFFFFF))) {
-			static FUNCT func(Code::PlaceItemOffset);
+			static FUNCTION func(Code::PlaceItemOffset);
 			return func.Call<u32>(ID, (u32)ItemToReplace, (u32)ItemToPlace, (u32)ItemToShow);
 		}
 
@@ -53,7 +53,7 @@ namespace CTRPluginFramework {
 	u32 InvalidShowOffStop(u32 pOffset, u32 ItemOffset) {
 		if(IDList::ItemValid(*(u32 *)ItemOffset)) {
 			static const u32 ShowOffFunc = Region::AutoRegion(0x6523B0, 0x6518D8, 0x6513E8, 0x6513E8, 0x650EA8, 0x650EA8, 0x650A50, 0x650A50);
-			static FUNCT func(ShowOffFunc);
+			static FUNCTION func(ShowOffFunc);
 			return func.Call<u32>(pOffset, ItemOffset);
 		}
 		return 0;
@@ -64,7 +64,7 @@ namespace CTRPluginFramework {
 		if(IDList::ItemValid(*(u32 *)ItemOffset)) {
 			static const u32 EatFunc = Region::AutoRegion(0x650E88, 0x6503B0, 0x64FEC0, 0x64FEC0, 0x64F980, 0x64F980, 0x64F528, 0x64F528);
 
-			static FUNCT func(EatFunc);
+			static FUNCTION func(EatFunc);
 			return func.Call<u32>(pOffset, ItemOffset, InvData, u0);
 		}
 		return 0;
@@ -72,7 +72,7 @@ namespace CTRPluginFramework {
 //Hook to initialize	
 	void InvalidSpriteStop(u32 pData, u32 SpriteItem) {
 		if(IDList::ItemValid(*(u32 *)SpriteItem)) {
-			static FUNCT func(Code::CopyPasteFunc);
+			static FUNCTION func(Code::CopyPasteFunc);
 			func.Call<void>(pData, SpriteItem);
 		}
 	}
@@ -129,7 +129,7 @@ namespace CTRPluginFramework {
 	//loads box
 		static const u32 OpenBox = Region::AutoRegion(0x5D5548, 0x5D4A78, 0x5D4590, 0x5D4590, 0x5D3DC4, 0x5D3DC4, 0x5D3A98, 0x5D3A98);
 
-		static FUNCT func(OpenBox);
+		static FUNCTION func(OpenBox);
 		func.Call<void>(u0, u1, u2);
 	}
 
@@ -144,7 +144,7 @@ namespace CTRPluginFramework {
 			return true;
 
 		static const u32 O_IsItemDroppable = Region::AutoRegion(0x26FEA0, 0x26F8E4, 0x26FE9C, 0x26FE9C, 0x26FDA8, 0x26FDA8, 0x26FD74, 0x26FD74);
-		static FUNCT func(O_IsItemDroppable);
+		static FUNCTION func(O_IsItemDroppable);
 		return func.Call<bool>(ItemData, ItemID, SecondaryItemFlag);
 	}
 
@@ -156,7 +156,7 @@ namespace CTRPluginFramework {
 			return true;
 
 		static const u32 Plant = Region::AutoRegion(0x26FE64, 0x26F8A8, 0x26FE60, 0x26FE60, 0x26FD6C, 0x26FD6C, 0x26FD38, 0x26FD38);
-		static FUNCT func(Plant);
+		static FUNCTION func(Plant);
 		return func.Call<bool>(ItemData, ItemID);
 	}
 
@@ -167,7 +167,7 @@ namespace CTRPluginFramework {
 		}
 
 		static const u32 address = Region::AutoRegion(0x52A32C, 0x529C80, 0x529374, 0x529374, 0x528C60, 0x528C60, 0x528984, 0x528984);
-		static FUNCT func(address);
+		static FUNCTION func(address);
 		return func.Call<int>(u0, u1, u2);
 	} 
 //basically "forces" a B press directly for the search function to break
@@ -369,7 +369,7 @@ namespace CTRPluginFramework {
 
 		static const u32 KeyCheck = Region::AutoRegion(0x5CF1AC, 0, 0, 0, 0, 0, 0, 0);
 
-		static FUNCT func = FUNCT(KeyCheck);
+		static FUNCTION func(KeyCheck);
 		iVar1 = func.Call<int>();
 		
 		if(iVar1 == 0) {

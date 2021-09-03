@@ -44,7 +44,7 @@ namespace CTRPluginFramework {
 			case 1: {
 				if(Wrap::Restore(PATH_SAVE, ".dat", Language->Get("SAVE_RESTORE_SELECT"), nullptr, true, WrapLoc{ Save::GetInstance()->Address(), 0x89B00 }, WrapLoc{ (u32)-1, (u32)-1 }) == ExHandler::SUCCESS) {
 					static const u32 fixfurno = Region::AutoRegion(0x6A6EE0, 0x6A6408, 0x6A5F18, 0x6A5F18, 0x6A59B0, 0x6A59B0, 0x6A5558, 0x6A5558);	
-					static FUNCT func(fixfurno);
+					static FUNCTION func(fixfurno);
 					u32 orig[1] = { 0 };
 
 					Process::Patch(fixfurno + 0x41C, 0xE1A00000, orig);
@@ -226,8 +226,7 @@ namespace CTRPluginFramework {
 		keyboard.GetMessage() = std::string(Language->Get("AMIIBO_SPOOFER_SPECIES"));
 		keyVec.clear();
 
-        for(const char* specie : amiiboSpecies) 
-            keyVec.push_back(std::string(specie));	
+		IDList::PopulateNPCRace(keyVec);
 
         keyboard.Populate(keyVec);
         res = keyboard.Open(); //Pick a species
@@ -278,12 +277,8 @@ namespace CTRPluginFramework {
 			keyboard.GetMessage() = std::string(Language->Get("AMIIBO_SPOOFER_SPECIES"));
 			keyVec.clear();
 
-			for(const char* specie : amiiboSpecies) {
-				if(specie == "Special Characters")
-					continue;
-
-				keyVec.push_back(std::string(specie));	
-			}
+			IDList::PopulateNPCRace(keyVec);
+			keyVec.pop_back(); //Removes Special Characters from vec
 
 			keyboard.Populate(keyVec);
 			s8 res = keyboard.Open(); //Pick a species
@@ -314,7 +309,7 @@ namespace CTRPluginFramework {
 			u32 null[]{ 0 };
 			u16 VID[]{ amiibo.VID };
 
-			static FUNCT func(SetNPCFunc);
+			static FUNCTION func(SetNPCFunc);
 			func.Call<void>(Save::GetInstance()->Address(0x292A4 + 0x17676), VID, null, Save::GetInstance()->Address(0x621B8)); 
 			OSD::Notify(Utils::Format("Set %s!", amiibo.Name.c_str()), Color::Green);
 
@@ -328,7 +323,7 @@ namespace CTRPluginFramework {
 					*(u8 *)(B_Removal + (i * 4)) = 0xC6;
 			}
 
-			static FUNCT func(DeleteNPCFunc);
+			static FUNCTION func(DeleteNPCFunc);
 			func.Call<void>(Save::GetInstance()->Address(0x292A4 + 0x17676));
 			OSD::Notify("Camping Villager Removed!", Color::Red);
 
