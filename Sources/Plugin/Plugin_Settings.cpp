@@ -109,7 +109,7 @@ namespace CTRPluginFramework {
 	const std::vector<std::string> pluginstgns = {
 		"Set Color Mode",
 		"Set Language",
-		"Set Standard Colors",
+		"Set Plugin Colors",
 		"Reset Settings",
 	};
 //Plugin settings which can be used any time

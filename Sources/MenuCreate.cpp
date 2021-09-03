@@ -410,37 +410,37 @@ namespace CTRPluginFramework {
 	////////////////////
 	/*Dev Codes Folder*/
 	////////////////////
-		DEVC = new MenuFolder(Color::Red << "Dev Codes");
-		DEVC->Append(new MenuEntry(Color::Red << "Custom Dump", nullptr, customdump, "Lets you dump/restore custom dumps.")),
-		DEVC->Append(EntryWithHotkey(new MenuEntry(Color::Red << "Call Function", FunctionsCaller, FunctionsCallerSettings, "Lets you call functions"), { 
+		DEVC = new MenuFolder(Color(0xFF1A69FF) << "Dev Codes");
+		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Custom Dump", nullptr, customdump, "Lets you dump/restore custom dumps.")),
+		DEVC->Append(EntryWithHotkey(new MenuEntry(Color(0xFF1A69FF) << "Call Function", FunctionsCaller, FunctionsCallerSettings, "Lets you call functions"), { 
 			Hotkey(Key::R | Key::DPadRight, "Open Menu"), 
 			Hotkey(Key::R | Key::DPadDown, "Execute Function") 
 		})),
-		DEVC->Append(new MenuEntry(Color::Red << "MSG Box", msgboxtest, "")),
-		//DEVC->Append(new MenuEntry(Color::Red << "Unused Fall Down", falldownfishing, "")),
-		//DEVC->Append(new MenuEntry(Color::Red << "Analyze Fossils", Analyzer, "")),
-		DEVC->Append(new MenuEntry(Color::Red << "Test Cheat", islanditems, "")),
-		DEVC->Append(new MenuEntry(Color::Red << "ACNH Cheat", acnh, "")),
-		//DEVC->Append(new MenuEntry(Color::Red << "Friend Code Test", PlayerLoader, "")),
-		DEVC->Append(new MenuEntry(Color::Red << "Player Dumper", nullptr, player_dumper, "")),
-		DEVC->Append(new MenuEntry(Color::Red << "Button Test", nullptr, SettingsButton, "")),
-		//DEVC->Append(new MenuEntry(Color::Red << "Test", valuedisplayer, "")),
-		//DEVC->Append(new MenuEntry(Color::Red << "Extra Save Restore", nullptr, RestoreAll, "")),
-		DEVC->Append(new MenuEntry(Color::Red << "Fish Thrower", FishThrower, "")),
-		DEVC->Append(new MenuEntry(Color::Red << "Wand Ability", wandability, "Gives the different wands abilitys.\n" +
+		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "MSG Box", msgboxtest, "")),
+		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Unused Fall Down", falldownfishing, "")),
+		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Analyze Fossils", Analyzer, "")),
+		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Test Cheat", islanditems, "")),
+		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "ACNH Cheat", acnh, "")),
+		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Friend Code Test", PlayerLoader, "")),
+		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Player Dumper", nullptr, player_dumper, "")),
+		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Button Test", nullptr, SettingsButton, "")),
+		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Test", valuedisplayer, "")),
+		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Extra Save Restore", nullptr, RestoreAll, "")),
+		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Fish Thrower", FishThrower, "")),
+		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Wand Ability", wandability, "Gives the different wands abilitys.\n" +
 																			  FormatColor("%cBlue Wand: %cNULL\n", Color(0x0089FFFF), Color::White) +
 																			  FormatColor("%cGreen Wand: %cRestores wilted flowers instantly\n", Color(0x2BFF00FF), Color::White) +
 																			  FormatColor("%cPink Wand: %cNULL\n", Color(0xFF00E6FF), Color::White) +
 																			  FormatColor("%cYellow Wand: %cNULL\n", Color(0xEFFF00FF), Color::White) +
 																			  FormatColor("%cFlower Fairy Wand: %cGrows Tree instantly\n", Color(0xCD00FFFF), Color::White) +
 																			  FormatColor("%cKiki and Lala Wand: %cNULL", Color(0xFF7700FF), Color::White))),
-		DEVC->Append(new MenuEntry(Color::Red << "Light Switch Toggler", lightswitch, "Lets you toggle the light switch.\nHotkeys are:\nL + DPadUp : Toggle light in current room\nL + DPadRight : Set Room ID\nL + DPadLeft : Toggle light in set room")),
-		//DEVC->Append(new MenuEntry(Color::Red << "Custom Save Settings", CustomSaveScreen, "")),
+		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Light Switch Toggler", lightswitch, "Lets you toggle the light switch.\nHotkeys are:\nL + DPadUp : Toggle light in current room\nL + DPadRight : Set Room ID\nL + DPadLeft : Toggle light in set room")),
+		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Custom Save Settings", CustomSaveScreen, "")),
 		menu->Append(DEVC);
 
 	/*Other Cheats*/
 		menu->Append(new MenuEntry("Plugin Settings", nullptr, pluginsettings)),
 		//menu->Append(new MenuEntry("Game Settings", nullptr, gamesettings)),
-		menu->Append(new MenuEntry("Random Colors", rainbow, "This will randomize the cheat folders colors.\nNote: If you randomize the color and reset the plugin, the color will not be the randomized one, it will instead stay at the color option you selected!"));
+		menu->Append(new MenuEntry("Random Folder Colors", rainbow, "This will randomize the cheat folders colors.\nNote: If you randomize the color and reset the plugin, the color will not be the randomized one, it will instead stay at the color option you selected!"));
 	}
 }
