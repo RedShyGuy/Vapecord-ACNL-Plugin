@@ -110,7 +110,9 @@ namespace CTRPluginFramework {
 	}
 
 	void NameFunc(u32 u0, u32 u1, u32 u2) {		
-		u16 itemslotid = Inventory::ReadSlot(Inventory::GetSelectedSlot());
+		u32 itemslotid = 0x7FFE;
+		Inventory::ReadSlot(Inventory::GetSelectedSlot(), itemslotid);
+		itemslotid = itemslotid & 0xFFFF;
 		if(GameHelper::IsOutdoorItem(itemslotid) || itemslotid == 0x3729) {
 			std::string name = IDList::GetSeedName(itemslotid);
 			if(name != "error") {

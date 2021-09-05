@@ -18,7 +18,8 @@ Custom Buttons are currently unused
 	}
 
 	void CustomButton::DuplicateItem(u32 ItemData) {
-		u32 itemslotid = Inventory::ReadSlot(Inventory::GetSelectedSlot());		
+		u32 itemslotid = 0x7FFE;
+		Inventory::ReadSlot(Inventory::GetSelectedSlot(), itemslotid);		
 		
 		if(Inventory::GetSelectedSlot() == 0xF) 
 			Inventory::WriteSlot(0, itemslotid);
@@ -29,7 +30,8 @@ Custom Buttons are currently unused
 	}
 	
 	void CustomButton::PutItemToStorage(u32 ItemData) {
-		u32 itemslotid = Inventory::ReadSlot(Inventory::GetSelectedSlot());		
+		u32 itemslotid = 0x7FFE;
+		Inventory::ReadSlot(Inventory::GetSelectedSlot(), itemslotid);		
 		u8 slot = 0;
 		
 		if(Inventory::GetNextClosetItem(0x7FFE, slot) != 0xFFFFFFFF) {
@@ -41,7 +43,8 @@ Custom Buttons are currently unused
 	}
 	
 	void CustomButton::PayDebt(u32 ItemData) {	
-		u32 itemslotid = Inventory::ReadSlot(Inventory::GetSelectedSlot());
+		u32 itemslotid = 0x7FFE;
+		Inventory::ReadSlot(Inventory::GetSelectedSlot(), itemslotid);
 		if(IDList::ValidID(itemslotid, 0x20AC, 0x2117)) {  
 			int money = FUNCTION(0x3055C8).Call<int>(PlayerPTR::Pointer(0x6BD0 + (0x4 * Inventory::GetSelectedSlot())));
 				

@@ -6,7 +6,7 @@
 namespace CTRPluginFramework {
 	namespace TownName {
 		void	Set(const std::string& name);
-		void	UpdateReference(const std::string& tName, s8 tID1, s8 tID2 = -1);
+		void	UpdateReference(const std::string& tName, u8 tID1, u8 tID2 = -1);
 	}
 }
 #endif

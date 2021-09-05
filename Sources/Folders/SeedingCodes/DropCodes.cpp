@@ -334,7 +334,7 @@ namespace CTRPluginFramework {
 		}
 		
 		if(Inventory::GetSelectedSlot() != -1 && Inventory::Opened()) {
-			dropitemid = Inventory::ReadSlot(Inventory::GetSelectedSlot());
+			Inventory::ReadSlot(Inventory::GetSelectedSlot(), dropitemid);
 			if(IDList::ValidID(dropitemid, 0x295B, 0x292F)) 
 				GameHelper::ToOutdoorFlowers(dropitemid);
 

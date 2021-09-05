@@ -35,7 +35,7 @@ namespace CTRPluginFramework {
 		void			SetDesign(int slot, std::string DesignName, u16 PlayerID, std::string PlayerName, u8 PlayerGender, u16 PlayerTownID, std::string PlayerTownName, u32 DesignCheck1, u8 DesignCheck2, u8 DesignType);
 		void			UpdateStyle();
 		void			UpdateTan();
-		s8				GetMailSlot();
+		u8				GetMailSlot();
 		PlayerStatus 	GetPlayerStatus(u8 pPlayer);
 		u32				GetSpecificSave(u8 pPlayer);
 		u32				GetSaveOffset(u8 pIndex);
@@ -51,7 +51,7 @@ namespace CTRPluginFramework {
 	};
 
 	namespace PlayerName {
-		void 				UpdateReference(u8 pIndex, const std::string& pName, s8 pGender);
+		void 				UpdateReference(u8 pIndex, const std::string& pName, u8 pGender);
 		void				Set(const std::string& name);
 		void 				SetDesigns(const std::string& name);
 		void				SetLetters(const std::string& name);

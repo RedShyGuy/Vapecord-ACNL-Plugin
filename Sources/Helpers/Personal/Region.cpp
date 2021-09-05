@@ -24,7 +24,7 @@ namespace CTRPluginFramework {
 		}
 	}
 
-	s8 Region::IsNewestVersion(std::string& versionSTR, const std::string& gameVersion) {
+	u8 Region::IsNewestVersion(std::string& versionSTR, const std::string& gameVersion) {
 		versionSTR.clear();
 
 		static const std::vector<u16> Pattern = { 0x0056, 0x0065, 0x0072, 0x002E, 0x0020 };

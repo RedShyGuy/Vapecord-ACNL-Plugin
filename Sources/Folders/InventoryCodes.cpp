@@ -147,8 +147,8 @@ namespace CTRPluginFramework {
 				return;
 			}
 
-			val = Inventory::ReadSlot(0);
-			if(Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, val, Inventory::ReadSlot(0), TextItemChange)) 		
+			Inventory::ReadSlot(0, val);
+			if(Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, val, val, TextItemChange)) 		
 				Inventory::WriteSlot(0, val);
 		}
 		
@@ -198,12 +198,13 @@ namespace CTRPluginFramework {
 	}
 //Duplicate Items
 	void duplication(MenuEntry *entry) {	
+		u32 dupe = 0x7FFE;
 		if(entry->Hotkeys[0].IsPressed()) {
-			u32 dupe = Inventory::ReadSlot(0);
+			Inventory::ReadSlot(0, dupe);
 			Inventory::WriteSlot(1, dupe, Inventory::GetLock(0));
 		}
 		else if(entry->Hotkeys[1].IsPressed()) {
-			u32 dupe = Inventory::ReadSlot(0);
+			Inventory::ReadSlot(0, dupe);
 			for(int i = 0; i <= 0xF; ++i) 
 				Inventory::WriteSlot(i, dupe, Inventory::GetLock(0));
 		}

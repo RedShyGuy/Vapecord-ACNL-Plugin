@@ -148,7 +148,7 @@ namespace CTRPluginFramework {
 	
 //Animation Modifier
 	void execAnim(MenuEntry *entry) {	
-		static s8 offsetX, offsetY;
+		static u8 offsetX, offsetY;
 		static u32 wX, wY;
 		
 		static int mode = 0;

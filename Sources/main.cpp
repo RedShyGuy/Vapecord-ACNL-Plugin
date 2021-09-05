@@ -74,7 +74,7 @@ Gets region name to append to plugin title | also sets current region
 			return false;
 
 		std::string currentVersion = "";
-		s8 res = Region::IsNewestVersion(currentVersion, GameVersion);
+		u8 res = Region::IsNewestVersion(currentVersion, GameVersion);
 
 		if(res == -2) {
 			Sleep(Seconds(5));

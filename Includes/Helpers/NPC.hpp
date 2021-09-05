@@ -14,7 +14,7 @@ namespace CTRPluginFramework {
     u32 GetData(u16 ID, int count = -1);
     u8 GetSPVID(u32 npcData);
     u16 GetVID(u32 npcData);
-    s8 IsPlayer(u32 npcData);
+    u8 IsPlayer(u32 npcData);
     u32 GetPlayerSave(u32 npcData);
     
     void GetLoadedSPNPC(std::vector<NPCdata> &vec);

@@ -37,14 +37,14 @@ namespace CTRPluginFramework {
 
 	//gets inv item
 		if(Inventory::GetSelectedSlot() != -1 && Inventory::Opened()) 
-			itemslotid = Inventory::ReadSlot(Inventory::GetSelectedSlot());
+			Inventory::ReadSlot(Inventory::GetSelectedSlot(), itemslotid);
 		else 
-			itemslotid = 0xFFFF;
+			itemslotid = 0xFFFFFFFF;
 		
 		strings2[0] = (Utils::Format("Pickup: %08X", PickupSeederItemID));
 		strings2[1] = (Utils::Format("Drop: %08X", dropitem));
 		strings2[2] = ("Replace: " << (ItemIDToReplace == 0xFFFFFFFF ? "everything" : Utils::Format("%08X", ItemIDToReplace)));
-		strings2[3] = (itemslotid != 0xFFFF) ? Utils::Format("Item ID: %04X", itemslotid) : "No Slot Selected";
+		strings2[3] = (itemslotid != 0xFFFFFFFF) ? Utils::Format("Item ID: %04X", itemslotid) : "No Slot Selected";
 	}
 //debug OSD
 	bool debugOSD(const Screen &screen) {

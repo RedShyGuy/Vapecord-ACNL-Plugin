@@ -53,7 +53,7 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 		return var;
 	}
 
-	s8 NPC::IsPlayer(u32 npcData) {
+	u8 NPC::IsPlayer(u32 npcData) {
 		for(int i = 0; i < 8; ++i) {
     		if(*(u32 *)(npcData + 0x9AC) == Player::GetSpecificSave(i))
 				return i;

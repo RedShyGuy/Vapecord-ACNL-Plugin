@@ -186,11 +186,11 @@ Get Player Save Offset for loaded players
 	}
 
 //get current selected mail slot
-	s8 Player::GetMailSlot() {	
+	u8 Player::GetMailSlot() {	
 		if(GameHelper::BaseInvPointer() == 0) 
 			return -1;
 		
-		s8 slot = *(s8 *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0xCC);
+		u8 slot = *(u8 *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0xCC);
 		if(slot != -1 && slot < 0x1E && slot > 0x13) 
 			return slot - 19;
 		
@@ -302,7 +302,7 @@ get room
 	}
 
 
-	void PlayerName::UpdateReference(u8 pIndex, const std::string& pName, s8 pGender) {
+	void PlayerName::UpdateReference(u8 pIndex, const std::string& pName, u8 pGender) {
 		u32 pAddress = Player::GetSaveOffset(pIndex >= 4 ? GameHelper::GetOnlinePlayerIndex() : pIndex);
 
 	//search all player ID references

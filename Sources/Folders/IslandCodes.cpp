@@ -177,7 +177,7 @@ namespace CTRPluginFramework {
 				break;
 		}
 	}
-//Island Shop	
+//Island Shop
 	void IslandShop(MenuEntry *entry) {	
 		static const u32 IslandShopPointer = Region::AutoRegion(0x954238, 0x953228, 0x953238, 0x953238, 0x94D238, 0x94C238, 0x94C238, 0x94C238);
 		if(*(u32 *)IslandShopPointer == 0)
@@ -191,24 +191,31 @@ namespace CTRPluginFramework {
 	}
 //All Tours
 	void alltour(MenuEntry *entry) {
-		if(!GameHelper::IsInRoom(0x67)) 
-			return;
-		
-		static const u32 toury = Region::AutoRegion(0x95D734, 0x95C714, 0x95C72C, 0x95C72C, 0x95672C, 0x95572C, 0x95572C, 0x95572C);
-		if(*(u32 *)toury == 0) 
-			return;
-		
-		for(int i = 0; i < 64; ++i)					
-			Process::Write8(*(u32 *)toury + 0x10 + (1 * i), 1);
-		
-		entry->Disable();
+		static const u32 TourPatch = Region::AutoRegion(0x76FCC0, 0x76ECA4, 0x76ECC8, 0x76ECA0, 0x76E460, 0x76E438, 0x76E008, 0x76DFE0);
+		if(entry->WasJustActivated()) {
+			Process::Patch(TourPatch, 0xE1A00000); //unsure? (still keeping it for safety)
+			Process::Patch(TourPatch + 0x54, 0xE1A00000);  //Adds tour difficulty
+			Process::Patch(TourPatch + 0xD0, 0xE1A00000); //Adds tour names and tour infos
+			Process::Patch(TourPatch + 0x138, 0xE1A00000); //Adds tour time
+
+			Process::Patch(TourPatch + 0xA8, 0xE2800001); //Adds all tours to be selectable
+		}
+		else if(!entry->IsActivated()) {
+			Process::Patch(TourPatch, 0x0A000004);
+			Process::Patch(TourPatch + 0x54, 0x0A000004);
+			Process::Patch(TourPatch + 0xD0, 0x0A000004);
+			Process::Patch(TourPatch + 0x138, 0x0A000004); 
+
+			Process::Patch(TourPatch + 0xA8, 0x12800001);
+		}
     }
+
 //Island Acre Mod	
 	void acreMod(MenuEntry *entry) {
 		if(*(u32 *)Code::IslPointer == 0)
 			return;
 		
-		u32 IslAcreOffset = *(u32 *)Code::IslPointer + 0x2;
+		u32 IslAcreOffset = *(u32 *)Code::IslPointer + 2;
 		
 		for(u8 i = 0; i < 16; ++i) 
 			Process::Write8(IslAcreOffset + i * 2, isl.acres[i]);

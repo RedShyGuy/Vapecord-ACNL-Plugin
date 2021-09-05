@@ -6,13 +6,13 @@
 namespace CTRPluginFramework {
 	u32 Inventory::GetCurrentItemData(int i) {
 		if(GameHelper::BaseInvPointer() == 0)
-			return 0xFFFFFFFF;
+			return -1;
 		
 		if(!Opened())
-			return 0xFFFFFFFF;
+			return -1;
 			
 		if(GetCurrent() != 0)
-			return 0xFFFFFFFF;
+			return -1;
 			
 		u32 Items = *(u32 *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0xEC); //0x20 32DCEC10
 		
@@ -21,7 +21,7 @@ namespace CTRPluginFramework {
 //Get inv lock
 	u8 Inventory::GetLock(int slot) {
 		if(Player::GetSaveOffset(4) == 0)
-			return 0xFF;
+			return -1;
 		
 		return *(u8 *)(PlayerPTR::Pointer(0x6C10) + slot);
 	}
@@ -40,22 +40,22 @@ namespace CTRPluginFramework {
 		return *(u8 *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x24);
 	}
 //get current selected inventory slot
-	s8 Inventory::GetSelectedSlot() {
+	u8 Inventory::GetSelectedSlot() {
 		if(GameHelper::BaseInvPointer() == 0) 
 			return -1;
 		
-		s8 slot = *(s8 *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0xCC);
+		u8 slot = *(u8 *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0xCC);
 		if(slot != -1 && slot < 0x10) 
 			return slot;
 		
 		return -1;
 	}
 //get hovered inv slot
-	s8 Inventory::GetHoveredSlot() {
+	u8 Inventory::GetHoveredSlot() {
 		if(GameHelper::BaseInvPointer() == 0) 
 			return -1;
 		
-		s8 slot = *(s8 *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0xD4);
+		u8 slot = *(u8 *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0xD4);
 		if(slot != -1 && slot < 0x10) 
 			return slot;
 		
@@ -64,7 +64,7 @@ namespace CTRPluginFramework {
 //get correct inv addition data
 	u16 Inventory::GetAddData() {
 		if(GameHelper::BaseInvPointer() == 0) 
-			return 0xFFFF;
+			return -1;
 		
 		switch(GetCurrent()) {
 			//Base Inventory
@@ -98,40 +98,45 @@ namespace CTRPluginFramework {
 		return *(u8 *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + (0x8419 + GetAddData())) == 1;
 	}
 //Write Inventory Slot
-	void Inventory::WriteSlot(int slot, u32 item, u8 lock) {
+	bool Inventory::WriteSlot(int slot, u32 item, u8 lock) {
 		if(Player::GetSaveOffset(4) == 0)
-			return;
+			return false;
 			
 		if(!IDList::ItemValid(item, false)) 
-			return;
+			return false;
 		
 	//Writes item and fixes lock if needed
 		PlayerPTR::Write32(0x6BD0 + (0x4 * slot), item);
 		WriteLock(slot, lock);
 		
 		ReloadIcons();
+
+		return true;
 	}
 //Read Inventory Slot	
-	u32 Inventory::ReadSlot(int slot, u8 inv) {
+	bool Inventory::ReadSlot(int slot, u32& item, u8 inv) {
 		if(Player::GetSaveOffset(4) == 0) 
-			return 0xFFFFFFFF;
+			return false;
 			
 		switch(inv) {
-			case 0: //If Standard Inventory
-				return *(u32 *)PlayerPTR::Pointer(0x6BD0 + (0x4 * slot));
+			case 0: { //If Standard Inventory
+				item = *(u32 *)PlayerPTR::Pointer(0x6BD0 + (0x4 * slot));
+			} return true;
 				
-			case 0x3D: //If Closet
-				return *(u32 *)PlayerPTR::Pointer(0x92F0 + (0x4 * slot));
+			case 0x3D: { //If Closet
+				item = *(u32 *)PlayerPTR::Pointer(0x92F0 + (0x4 * slot));
+			} return true;
 				
-			case 0x89: //If Secret Closet
-				return *(u32 *)PlayerPTR::Pointer(0x7A6D8 + (0x4 * slot));
+			case 0x89: { //If Secret Closet
+				item = *(u32 *)PlayerPTR::Pointer(0x7A6D8 + (0x4 * slot));
+			} return true;
 		}	
-		return 0xFFFFFFFF;
+		return false;
 	}
 //Get asked item
 	u32 Inventory::GetNextItem(u16 itemID, u8 &slot) {
 		if(Player::GetSaveOffset(4) == 0) 
-			return 0xFFFFFFFF;
+			return -1;
 		
 		slot = 0;
 		while(true) {
@@ -142,13 +147,13 @@ namespace CTRPluginFramework {
 			slot++; //goto next slot
 			
 			if(15 < slot) //If item not found return
-				return 0xFFFFFFFF;			
+				return -1;			
 		}
 	}
 //Get asked closet item	
 	u32 Inventory::GetNextClosetItem(u32 itemID, u8 &slot) {
 		if(Player::GetSaveOffset(4) == 0) 
-			return 0xFFFFFFFF;
+			return -1;
 		
 		slot = 0;
 		while(true) {
@@ -159,7 +164,7 @@ namespace CTRPluginFramework {
 			slot++; //goto next slot
 			
 			if(179 < slot) //If item not found return
-				return 0xFFFFFFFF;			
+				return -1;			
 		}
 	}
 

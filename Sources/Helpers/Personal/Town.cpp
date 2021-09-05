@@ -4,7 +4,7 @@
 #include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
-	void TownName::UpdateReference(const std::string& tName, s8 tID1, s8 tID2) {
+	void TownName::UpdateReference(const std::string& tName, u8 tID1, u8 tID2) {
 		u32 tAddress = Save::GetInstance()->Address();
 
 	//search all town ID references

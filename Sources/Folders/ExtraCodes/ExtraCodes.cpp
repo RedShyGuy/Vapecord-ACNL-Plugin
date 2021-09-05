@@ -103,14 +103,14 @@ namespace CTRPluginFramework {
 //Show Mail Text	
 	void mailtext(MenuEntry *entry) {
 		if(!wasFF) {
-			if(Player::GetMailSlot() != 0xFF) {
+			if(Player::GetMailSlot() != -1) {
                 MessageBox(GameHelper::GetMailText(Player::GetMailSlot())).SetClear(ClearScreen::Top)();
                 wasFF = true;
 			}
 		}
 		
 		if(wasFF) 
-			if(Player::GetMailSlot() == 0xFF) 
+			if(Player::GetMailSlot() == -1) 
 				wasFF = false;
 	}
 //Water All Flowers	
@@ -216,7 +216,7 @@ namespace CTRPluginFramework {
 		KB.Populate(GrassKB);
 		switch(KB.Open()) {
 			case 0:
-				std::memset((void *)GrassStart, 0xFFFFFFFF, 0x2800);
+				std::memset((void *)GrassStart, -1, 0x2800);
 				GameHelper::ReloadRoom();
 			break;
 			case 1:
