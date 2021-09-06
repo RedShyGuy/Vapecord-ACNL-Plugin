@@ -273,7 +273,7 @@ namespace CTRPluginFramework {
 		ISLC = new MenuFolder(FolderColors[7] << "Island Codes");
 		ISLC->Append(new MenuEntry(FolderColors[7] << "Unlock Island", nullptr, UnlockIsland, "note")),
 		ISLC->Append(new MenuEntry(FolderColors[7] << "Fill Inv With Bonus Ore", nullptr, bonusOre, "note")),
-		ISLC->Append(new MenuEntry(FolderColors[7] << "Fill Inv With Needed Fruit", nullptr, instantFruit, "note")),
+		ISLC->Append(new MenuEntry(FolderColors[7] << "Instant Fruit Finish", instantFruit, "note")),
 		ISLC->Append(new MenuEntry(FolderColors[7] << "Hacker Island Spoof", nullptr, Hackerisland, "note")),
 		ISLC->Append(new MenuEntry(FolderColors[7] << "Island Country Spoof", nullptr, Countryspoof, "note")),
 		ISLC->Append(new MenuEntry(FolderColors[7] << "Free Kappn Rides", FreeKappn, "note")),

@@ -96,25 +96,25 @@ namespace CTRPluginFramework {
 		MessageBox(Language->Get("BONUS_ORE_SPAWNED")).SetClear(ClearScreen::Top)();
 	}
 //Instant Fruit
-	void instantFruit(MenuEntry *entry) {	
-		if(!GameHelper::IsInRoom(0x77)) {
-			MessageBox(Language->Get("ORE_FRUIT_ERROR")).SetClear(ClearScreen::Top)();
-			return;
+	void instantFruit(MenuEntry *entry) {
+		static const u32 InstantFruitPatch1 = Region::AutoRegion(0x76FBBC, 0x76EBA0, 0x76EBC4, 0x76EB9C, 0x76E35C, 0x76E334, 0x76DF04, 0x76DEDC);
+		static const u32 InstantFruitPatch2 = Region::AutoRegion(0x76FC14, 0x76EBF8, 0x76EC1C, 0x76EBF4, 0x76E3B4, 0x76E38C, 0x76DF5C, 0x76DF34);
+
+		if(entry->WasJustActivated()) {
+		//This makes the amount of different fruits needed to 0 (example: peaches, lemon, apple)
+			Process::Patch(InstantFruitPatch1, 0xE3A00000);
+			Process::Patch(InstantFruitPatch1 + 4, 0xEA000002);
+		//This makes the amount of fruits needed to 0 (example: 5 peaches)
+			Process::Patch(InstantFruitPatch2, 0xE3A00000);
+			Process::Patch(InstantFruitPatch2 + 4, 0xE1A00000);
 		}
-		
-		if(*(u32 *)Code::Isl2ndPointer == 0)
-			return;
-		
-		u32 Fruit = *(u32 *)Code::Isl2ndPointer + 0xC0;
-		u32 val = GameHelper::GetOnlinePlayerIndex();
-		if(val <= 3 && val >= 0) {
-			for(int i = 0; i < 5; ++i) {
-				for(int j = 0; j < 5; ++j) {
-					Inventory::WriteSlot((i * 3 + j), *(u16 *)(Fruit + 2 * (val * 3 + i)));
-				}
-			}
+		else if(!entry->IsActivated()) {
+			Process::Patch(InstantFruitPatch1, 0xE3A00001);
+			Process::Patch(InstantFruitPatch1 + 4, 0x0A000002);
+
+			Process::Patch(InstantFruitPatch2, 0x13A00003);
+			Process::Patch(InstantFruitPatch2 + 4, 0x03A00005);
 		}
-		MessageBox(Language->Get("FRUIT_SPAWNED")).SetClear(ClearScreen::Top)();
 	}
 //Hacker Island Spoof	
 	void Hackerisland(MenuEntry *entry)	{ 
@@ -131,7 +131,7 @@ namespace CTRPluginFramework {
 		if(op == -1)
 			return;
 		
-		Process::Write32(Code::country, IsON ? 0xE1A00C20 : 0xE3A000FF);
+		Process::Patch(Code::country, IsON ? 0xE1A00C20 : 0xE3A000FF);
 		Hackerisland(entry);
 	}
 //InputChangeEvent For Country Spoof
@@ -155,10 +155,10 @@ namespace CTRPluginFramework {
 			default: break;	
 			case 0: 
 				if(Wrap::KB<u8>(Language->Get("ISLAND_COUNTRY_SET_ID"), true, 2, input, 0, onCountryChange)) 
-					Process::Write32(Code::country, 0xE3A00000 + input); 
+					Process::Patch(Code::country, 0xE3A00000 + input); 
 			break;	
 			case 1: 
-				Process::Write32(Code::country, 0xE1A00C20); 
+				Process::Patch(Code::country, 0xE1A00C20); 
 			break;	
 		}
 	}

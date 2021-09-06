@@ -496,9 +496,6 @@ namespace CTRPluginFramework {
 
 //Item Island Code
 	void islanditems(MenuEntry *entry) {
-		if(Controller::IsKeysPressed(Key::R + Key::DPadUp)) {
-			OSD::Notify(IDList::GetNPCRace(5));
-		}
 		/*if(Controller::IsKeysPressed(Key::R + Key::DPadUp)) {
 			AnimationData *globalData = new AnimationData(); //<u8, u8, u8, u8, u8, u16, u8>
 
