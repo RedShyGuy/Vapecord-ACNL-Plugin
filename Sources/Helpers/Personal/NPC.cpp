@@ -39,7 +39,7 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 
 		return 0;
 	}
-  
+
  	u16 NPC::GetVID(u32 npcData) {
 		static const u32 func1 = Region::AutoRegion(0x51D288, 0x51CBDC, 0x51C2D0, 0x51C2D0, 0x51BBEC, 0x51BBEC, 0x51B580, 0x51B580);
 
@@ -69,13 +69,25 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 		vec.clear();
 		u32 data = 0;
 		u8 SPVID = 0;
-
-		for(u16 i = 0x0196; i < 0x200; ++i) {
+	//SPNPC
+		for(u16 i = 0x0196; i < 0x1FC; ++i) {
 			data = GetData(i);
 			if(data != 0) {
 				SPVID = GetSPVID(data);
 				vec.push_back(NPCdata{ IDList::GetSPNPCName(SPVID), data });
 			}
+		}
+
+	//Special Case (Boat SPNPC (Kappn))	
+		data = GetData(0x18C);
+		if(data != 0) {
+			vec.push_back(NPCdata{ IDList::GetSPNPCName(0x15), data }); //0x15 is Kappn's SPVID (it isn't in the RAM when he is loaded there)
+		}
+
+	//Special Case (Tour Tortimer (specifically at the tour results))	
+		data = GetData(0x18B);
+		if(data != 0) {
+			vec.push_back(NPCdata{ IDList::GetSPNPCName(0x41), data }); //0x41 is Tortimers's SPVID (it isn't in the RAM when he is loaded there)
 		}
 	}
 
@@ -100,6 +112,15 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 				vec.push_back(NPCdata{ IDList::GetNNPCName(VID), data });
 			}
 		}
+
+	//Special Case (Tour NNPC (specifically the Hide and Seek Tour))
+		for(int i = 0; i < 5; ++i) {
+			data = GetData(0x1FC, i);
+			if(data != 0) {
+				VID = GetVID(data);
+				vec.push_back(NPCdata{ IDList::GetNNPCName(VID), data });
+			}
+		}
 	}
 
 	void NPC::GetLoadedPNPC(std::vector<NPCdata> &vec) {
@@ -110,6 +131,28 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 	//PNPC
 		for(int i = 0; i < 8; ++i) {
 			data = GetData(0x193, i);
+			if(data != 0) {
+				save = GetPlayerSave(data);
+				str = "";
+				Process::ReadString(save + 0x55A8, str, 16, StringFormat::Utf16); 
+				vec.push_back(NPCdata{ str, data });
+			}
+		}
+
+	//Special Case (Tour PNPC (specifically at the tour results))
+		for(int i = 0; i < 5; ++i) {
+			data = GetData(0x189, i);
+			if(data != 0) {
+				save = GetPlayerSave(data);
+				str = "";
+				Process::ReadString(save + 0x55A8, str, 16, StringFormat::Utf16); 
+				vec.push_back(NPCdata{ str, data });
+			}
+		}
+
+	//Special Case (Boat PNPC (When going to the island/leaving island))
+		for(int i = 0; i < 5; ++i) {
+			data = GetData(0x18D, i);
 			if(data != 0) {
 				save = GetPlayerSave(data);
 				str = "";

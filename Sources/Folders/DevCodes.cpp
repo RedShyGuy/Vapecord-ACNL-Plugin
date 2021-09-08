@@ -133,7 +133,7 @@ namespace CTRPluginFramework {
 
 		if(Turbo_Call ? Controller::IsKeysDown(entry->Hotkeys[1].GetKeys()) : Controller::IsKeysPressed(entry->Hotkeys[1].GetKeys())) {
 			if(!Process::CheckAddress(funcaddress))
-				return;
+				return;	
 
 			Sleep(Milliseconds(100));
 			static FUNCTION func(funcaddress);
@@ -492,10 +492,22 @@ namespace CTRPluginFramework {
 		//0x1329D, Game Type
 
 		//0x132B8, END
-	};*/
+	};
+
+	3238AE8 = nothing
+
+	32238C68 = ModuleEventNpc.cro
+	32238D94 = ModuleTour.cro
+
+	32239378 = ModuleKotobuki.cro
+	*/
 
 //Item Island Code
 	void islanditems(MenuEntry *entry) {
+		if(Controller::IsKeysPressed(Key::R + Key::DPadUp)) {
+
+		}
+
 		/*if(Controller::IsKeysPressed(Key::R + Key::DPadUp)) {
 			AnimationData *globalData = new AnimationData(); //<u8, u8, u8, u8, u8, u16, u8>
 

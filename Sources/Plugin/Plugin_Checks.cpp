@@ -185,7 +185,7 @@ namespace CTRPluginFramework {
 	}
 
 	void SetHook(Hook &hook, u32 address, u32 callback, u32 flags) {
-		hook.Initialize(address, (u32)callback);
+		hook.Initialize(address, callback);
 		hook.SetFlags(flags);
 		hook.Enable();
 	}

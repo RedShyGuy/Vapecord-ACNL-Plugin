@@ -25,6 +25,7 @@
 #include "Helpers/QRCodeGen.hpp"
 #include "Helpers/CustomButton.hpp"
 #include "Helpers/KeySequence.hpp"
+#include "Helpers/CROEditing.hpp"
 
 #include "NonHacker.hpp"
 #include "RegionCodes.hpp"

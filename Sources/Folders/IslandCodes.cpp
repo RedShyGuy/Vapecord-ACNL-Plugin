@@ -95,25 +95,12 @@ namespace CTRPluginFramework {
 
 		MessageBox(Language->Get("BONUS_ORE_SPAWNED")).SetClear(ClearScreen::Top)();
 	}
-//Instant Fruit
+//Instant Fruit | CRO Patch
 	void instantFruit(MenuEntry *entry) {
-		static const u32 InstantFruitPatch1 = Region::AutoRegion(0x76FBBC, 0x76EBA0, 0x76EBC4, 0x76EB9C, 0x76E35C, 0x76E334, 0x76DF04, 0x76DEDC);
-		static const u32 InstantFruitPatch2 = Region::AutoRegion(0x76FC14, 0x76EBF8, 0x76EC1C, 0x76EBF4, 0x76E3B4, 0x76E38C, 0x76DF5C, 0x76DF34);
+		CRO::Write("Kotobuki", 0x17F4, 0xE1500000);
 
-		if(entry->WasJustActivated()) {
-		//This makes the amount of different fruits needed to 0 (example: peaches, lemon, apple)
-			Process::Patch(InstantFruitPatch1, 0xE3A00000);
-			Process::Patch(InstantFruitPatch1 + 4, 0xEA000002);
-		//This makes the amount of fruits needed to 0 (example: 5 peaches)
-			Process::Patch(InstantFruitPatch2, 0xE3A00000);
-			Process::Patch(InstantFruitPatch2 + 4, 0xE1A00000);
-		}
-		else if(!entry->IsActivated()) {
-			Process::Patch(InstantFruitPatch1, 0xE3A00001);
-			Process::Patch(InstantFruitPatch1 + 4, 0x0A000002);
-
-			Process::Patch(InstantFruitPatch2, 0x13A00003);
-			Process::Patch(InstantFruitPatch2 + 4, 0x03A00005);
+		if(!entry->IsActivated()) {
+			CRO::Write("Kotobuki", 0x17F4, 0xE1500005);
 		}
 	}
 //Hacker Island Spoof	
@@ -163,7 +150,7 @@ namespace CTRPluginFramework {
 		}
 	}
 //Defined u32 items for Island Shop Slot Mod
-	static u32 ShopItem[4] = { 0x2018, 0x2018, 0x2018, 0x2018 };
+	u32 ShopItem[4] = { 0x2018, 0x2018, 0x2018, 0x2018 };
 //Keyboard for Island Shop Slot Mod
 	void IslandSettings(MenuEntry *entry) {
 		Keyboard SetItem("a");
@@ -189,6 +176,7 @@ namespace CTRPluginFramework {
 			}
 		}
 	}
+	
 //All Tours
 	void alltour(MenuEntry *entry) {
 		static const u32 TourPatch = Region::AutoRegion(0x76FCC0, 0x76ECA4, 0x76ECC8, 0x76ECA0, 0x76E460, 0x76E438, 0x76E008, 0x76DFE0);
@@ -215,7 +203,7 @@ namespace CTRPluginFramework {
 		if(*(u32 *)Code::IslPointer == 0)
 			return;
 		
-		u32 IslAcreOffset = *(u32 *)Code::IslPointer + 2;
+		u32 IslAcreOffset = *(u32 *)Code::IslPointer + 2; //0x953708
 		
 		for(u8 i = 0; i < 16; ++i) 
 			Process::Write8(IslAcreOffset + i * 2, isl.acres[i]);
@@ -260,7 +248,7 @@ namespace CTRPluginFramework {
 
 	void FreeKappn(MenuEntry *entry) {
 		static Hook hook1, hook2;
-		static const u32 kappn1 = Region::AutoRegion(0x5DC048, 0x5DBD94, 0x5DB8AC, 0x5DB8AC, 0x5DB12C, 0x5DB12C, 0x5DADB4, 0x5DADB4);
+		static const u32 kappn1 = Region::AutoRegion(0x5DC048, 0x5DB578, 0x5DB090, 0x5DB090, 0x5DA910, 0x5DA910, 0x5DA598, 0x5DA598);
 		static const u32 kappn2 = Region::AutoRegion(0x5DAF98, 0x5DA4C8, 0x5D9FE0, 0x5D9FE0, 0x5D9814, 0x5D9814, 0x5D94E8, 0x5D94E8);
 
 		if(entry->WasJustActivated()) {

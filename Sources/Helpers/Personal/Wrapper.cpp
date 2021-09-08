@@ -249,7 +249,7 @@ namespace CTRPluginFramework {
 		return vec;
 	}
 
-	bool QRCodeSave(void) {
+	int QRCodeSave(void) {
 		return -1;
 	}
 

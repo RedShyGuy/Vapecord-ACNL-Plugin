@@ -32,6 +32,7 @@ namespace CTRPluginFramework {
 			PluginMenu *menu = PluginMenu::GetRunningInstance();
 			*menu -= checkloadstate;
 			OSD::Stop(ShowCoords);
+			return;
 		}
 
 		OSD::Run(ShowCoords);

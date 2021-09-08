@@ -36,6 +36,8 @@ namespace CTRPluginFramework {
 	int FUN_006a6660(uint param_1)
 	void FUN_00133a20(int param_1,undefined4 param_2,undefined4 param_3,undefined4 param_4)
 
+	0BFB420
+
 
 	bool ACSystem::SetGameCoins(int gamecoins) {
 		

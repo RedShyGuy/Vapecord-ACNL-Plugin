@@ -135,7 +135,7 @@ namespace CTRPluginFramework {
 			return;
 		}	
 		Inventory::WriteSlot(slot, match.ID[kres]);
-		OSD::Notify(Utils::Format("Set Item %4x to slot %d", match.ID[kres], slot));
+		OSD::Notify(Utils::Format("Set Item %04X to slot %d", match.ID[kres], slot));
 	}
 
 //Text to Item
