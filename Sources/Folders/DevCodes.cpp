@@ -504,8 +504,24 @@ namespace CTRPluginFramework {
 
 //Item Island Code
 	void islanditems(MenuEntry *entry) {
-		if(Controller::IsKeysPressed(Key::R + Key::DPadUp)) {
+		static std::string str = "";
+		static u32 buffer = 0;
 
+		if(Controller::IsKeysPressed(Key::R + Key::DPadUp)) {
+			if(Wrap::KB<std::string>("Enter Cro Name:", false, 15, str, str)) {
+				if(CRO::GetMemAddress(str.c_str(), buffer)) {
+					if(CRO::WritePermToggle(buffer, true)) {
+						OSD::Notify(Utils::Format("Unlocked %s | Address: %08X", str.c_str(), buffer));
+					}
+				}
+			}
+		}
+		else if(Controller::IsKeysPressed(Key::R + Key::DPadDown)) {
+			if(CRO::GetMemAddress(str.c_str(), buffer)) {
+				if(CRO::WritePermToggle(buffer, false)) {
+					OSD::Notify(Utils::Format("Locked %s | Address: %08X", str.c_str(), buffer));
+				}
+			}
 		}
 
 		/*if(Controller::IsKeysPressed(Key::R + Key::DPadUp)) {

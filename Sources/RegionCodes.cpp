@@ -63,7 +63,6 @@ namespace CTRPluginFramework {
 
 	//Island Pointers
 		IslPointer = Region::AutoRegion(0x953708, 0x9526F8, 0x952704, 0x952704, 0x94C704, 0x94B704, 0x94B704, 0x94B704);
-		Isl2ndPointer = Region::AutoRegion(0x94FD58, 0x94ED48, 0x94ED58, 0x94ED58, 0x948D58, 0x947D58, 0x947D58, 0x947D58);
 	//7FFE Pointer
 		Pointer7FFE = Region::AutoRegion(0x95CFFC, 0x95BFDC, 0x95BFF4, 0x95BFF4, 0x955FF4, 0x954FF4, 0x954FF4, 0x954FF4); 
 	//Game/Chat/Inv Pointers
@@ -84,7 +83,6 @@ namespace CTRPluginFramework {
 	}
 	
 	u32		Code::IslPointer = 0;
-	u32		Code::Isl2ndPointer = 0;
 	u32		Code::Pointer7FFE = 0;
 	u32		Code::GamePointer = 0;
 	u32		Code::chatpointer = 0;

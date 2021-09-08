@@ -6,25 +6,22 @@ namespace CTRPluginFramework {
         static const u32 CroData = Region::AutoRegion(0x95269C, 0x95168C, 0x951698, 0x951698, 0x94B698, 0x94A698, 0x94A698, 0x94A698);
         u32 data = *(u32 *)CroData;
 
-        u32 iVar3 = 0;
-        u32 iVar2 = *(u32 *)(*(u32 *)(data + 0x14) + 4);
         u32 iVar1 = *(u32 *)(data + 0x14);
 
         std::string output = "";
 
-        while(iVar3 = iVar2, iVar1 - 0x124 != data - 0x114) {
-            output.clear();
-
-        //Reads .cro file name
-            if(Process::ReadString(*(u32 *)(*(u32 *)iVar1 - 0x34), output, 20, StringFormat::Utf8)) {
-                if(output == croFileName) {
-                    buffer = *(u32 *)(*(u32 *)iVar1 - 0xC); //.cro mem region
-                    return true;
+        while((iVar1 - 0x124) != (data - 0x114)) {
+            if(*(u8 *)(iVar1 - 4) == 2) {   
+            //Reads .cro file name
+                output.clear();
+                if(Process::ReadString(*(u32 *)(iVar1 - 0x34), output, 13, StringFormat::Utf8)) {
+                    if(output == croFileName) {
+                        buffer = *(u32 *)(iVar1 - 0xC); //.cro mem region
+                        return true;
+                    }
                 }
             }
-
-            iVar2 = *(u32 *)(iVar3 + 4);
-            iVar1 = iVar3;
+            iVar1 = *(u32 *)(iVar1 + 4);
         }
         return false;
     }
@@ -53,23 +50,5 @@ namespace CTRPluginFramework {
 		}
 
 		return out;
-	}
-
-	bool CRO::Write(const char* croFileName, u32 address, u32 value) {
-        u32 buffer = 0;
-        if(!CRO::GetMemAddress(croFileName, buffer))
-            return false;
-
-        u32 val = 0;
-        Process::Read32(buffer + address, val);
-		if(val == value)
-            return false;
-
-		if(WritePermToggle(buffer, true)) {
-            *(u32 *)(buffer + address) = value;
-            WritePermToggle(buffer, false);
-            return true;
-        }
-		return false;
 	}
 }

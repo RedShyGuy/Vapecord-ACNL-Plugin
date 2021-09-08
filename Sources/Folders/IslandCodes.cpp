@@ -78,29 +78,22 @@ namespace CTRPluginFramework {
 		}
 	}
 
-//Fill Inv With Bonus Ore
+//Instant Bonus Ore | CRO Patch
 	void bonusOre(MenuEntry *entry) {
-		if(!GameHelper::IsInRoom(0x79) && !GameHelper::IsInRoom(0x73)) {
-			MessageBox(Language->Get("ORE_FRUIT_ERROR")).SetClear(ClearScreen::Top)();
-			return;
-		}
-		
-		if(*(u32 *)Code::Isl2ndPointer == 0)
-			return;
-		
-		u32 BonusOre = *(u32 *)Code::Isl2ndPointer + 0xC0;
-		
-		for(int i = 0; i < 16; ++i) 
-			Inventory::WriteSlot(i, *(u16 *)BonusOre);
+		CRO::Write<u16>("Tour", 0x424, 0x4600); //Disables check if Item is Ore
+		CRO::Write<u16>("Tour", 0x444, 0x4600); //Disables check if Item is secret ore
 
-		MessageBox(Language->Get("BONUS_ORE_SPAWNED")).SetClear(ClearScreen::Top)();
+		if(!entry->IsActivated()) {
+			CRO::Write<u16>("Tour", 0x424, 0xD124);
+        	CRO::Write<u16>("Tour", 0x444, 0xD001);
+		}
 	}
 //Instant Fruit | CRO Patch
 	void instantFruit(MenuEntry *entry) {
-		CRO::Write("Kotobuki", 0x17F4, 0xE1500000);
+		CRO::Write<u32>("Kotobuki", 0x17F4, 0xE1500000);
 
 		if(!entry->IsActivated()) {
-			CRO::Write("Kotobuki", 0x17F4, 0xE1500005);
+			CRO::Write<u32>("Kotobuki", 0x17F4, 0xE1500005);
 		}
 	}
 //Hacker Island Spoof	

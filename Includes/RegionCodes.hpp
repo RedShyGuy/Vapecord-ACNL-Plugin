@@ -9,7 +9,6 @@ namespace CTRPluginFramework {
 		static void     Load(void);
 		
 		static u32		IslPointer;
-		static u32		Isl2ndPointer;
 		static u32		Pointer7FFE;
 		static u32		GamePointer;
 		static u32		chatpointer;
