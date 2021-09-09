@@ -64,16 +64,16 @@ FUNCTION    PATCH_KappnBypass2      @0x005DAF98 (0xEB06211D)
     BX          LR
 
 FUNCTION    PATCH_EverythingSeed
-    LDR     R1, =EverythingSeederItemID
-	BX      LR
+    LDR         R1, =EverythingSeederItemID
+	BX          LR
 
 FUNCTION    PATCH_PickupSeed        @0x59A22C | 0x598D7C
-    LDR     R3, =PickupSeederItemID
-    BX      LR
+    LDR         R3, =PickupSeederItemID
+    BX          LR
 
 FUNCTION    PATCH_PartyPop          @0x671694 | 0x6716C0
-    LDR     R1, =PartyPopperTool
-    BX      LR
+    LDR         R1, =PartyPopperTool
+    BX          LR
 
 FUNCTION    PATCH_SnakeSpeed        @0x68E614
     PUSH        {R0-R4, LR}
@@ -121,3 +121,12 @@ FUNCTION    SetPlayerIconCoordinates
 
     MOV         R0, R5
     POP         {PC}
+
+FUNCTION    SetWalkParticleID
+    PUSH        {LR}
+
+    LDR         R4, =WalkParticleID
+    LDR         R4, [R4]
+
+    POP         {PC}
+

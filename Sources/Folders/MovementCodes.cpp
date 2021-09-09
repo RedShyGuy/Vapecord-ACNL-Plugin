@@ -3,6 +3,10 @@
 #include "RegionCodes.hpp"
 #include "TextFileParser.hpp"
 
+extern "C" void SetWalkParticleID(void);
+
+u32 WalkParticleID = 0;
+
 namespace CTRPluginFramework {
 //Players can't push you
 	void noPush(MenuEntry *entry) { 
@@ -169,60 +173,47 @@ namespace CTRPluginFramework {
     }
 //Walk Particle	
 	void Walkparticle(MenuEntry *entry) {
-		static const u32 walkpart = Region::AutoRegion(0x843A04, 0x842A04, 0x842A04, 0x842A04, 0x842A04, 0x841A04, 0x841A04, 0x841A04);  
-        u16 input = 0;
-        if(entry->Hotkeys[0].IsDown()) 
-			if(Wrap::KB<u16>(Language->Get("WALK_PARTICLE_CHANGE_ENTER_ID"), true, 3, input, 0))		
-				Process::CopyMemory((void *)(walkpart), std::vector<u32>({ input, input, input, input, input, input, input, input, input }).data(), 0x24); 
+		static const u32 WalkParticlePatch = Region::AutoRegion(0x652694, 0x651BBC, 0x6516CC, 0x6516CC, 0x65118C, 0x65118C, 0x650D34, 0x650D34);
+		static Hook hook;
+
+		if(entry->WasJustActivated()) {
+			hook.Initialize(WalkParticlePatch, (u32)SetWalkParticleID);
+			hook.SetFlags(USE_LR_TO_RETURN);
+		}
+
+        if(entry->Hotkeys[0].IsPressed()) {
+			if(Wrap::KB<u32>(Language->Get("WALK_PARTICLE_CHANGE_ENTER_ID"), true, 3, WalkParticleID, WalkParticleID)) {
+				hook.Enable();
+			}
+		}
 			
 		if(!entry->IsActivated()) 
-			Process::CopyMemory((void *)(walkpart), std::vector<u32>({ 0x13A, 0x13A, 0x13C, 0x13B, 0x138, 0x137, 0x13D, 0x13D, 0x139 }).data(), 0x24); 
+			hook.Disable();
     }  
-//Stalker/Player Teleporter	
+//Player Teleporter	
 	void stalk(MenuEntry *entry) {
-		static int options = 0;
-		static u8 playerselected = 0;
+		static s8 pos = -1;
 		static bool allforce = false;
+
 		if(entry->Hotkeys[0].IsPressed()) {
-			switch(options) {
-				default: break;
-				case 0: {
-					options++;
-					playerselected = 0; 
-					allforce = false; 	
-				} break;
-				case 1: {
-					options++;
-					playerselected = 1; 
-					allforce = false;
-				} break;
-				case 2: {
-					options++;
-					playerselected = 2; 
-					allforce = false;
-				} break;
-				case 3: {
-					options++;
-					playerselected = 3; 
-					allforce = false;	
-				} break;
-				case 4: {
-					options = options - 4;
-					allforce = true;
-				} break;
-			}			
-			if(allforce) 
-				OSD::Notify("Teleport: All Players");
-			else 
-				OSD::Notify(Utils::Format("Teleport: Player %02X", playerselected));
+			if(pos < 3) {
+				allforce = false;
+				pos++;
+			}
+			else {
+				allforce = true;
+				pos = -1;
+			}
+				
+			OSD::Notify(allforce ? "Teleport: all players" : Utils::Format("Teleport: player %02X", pos));
 		}
 		
-		else if(entry->Hotkeys[1].IsPressed()) {//Key::R + Key::DPadRight
+		else if(entry->Hotkeys[1].IsPressed()) {
 			u32 x, y;
 			if(PlayerClass::GetInstance()->GetWorldCoords(&x, &y)) {
-				if(!allforce) {
-					Animation::ExecuteAnimationWrapper(playerselected, 0x34, 1, 1, 1, 1, 0, x, y, true);
-					OSD::Notify("Teleported players to you");
+				if(!allforce && pos >= 0) {
+					Animation::ExecuteAnimationWrapper(pos, 0x34, 1, 1, 1, 1, 0, x, y, true);
+					OSD::Notify(Utils::Format("Teleported player %02X to you", pos));
 				}
 				else {
 					for(u8 i = 0; i < 4; ++i) {

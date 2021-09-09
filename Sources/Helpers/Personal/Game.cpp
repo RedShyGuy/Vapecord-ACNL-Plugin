@@ -454,7 +454,8 @@ namespace CTRPluginFramework {
 	}
 //get base inventory pointer
 	u32 GameHelper::BaseInvPointer() {
-		return *(u32 *)Code::InvMenu; 
+		static const u32 InvMenu = Region::AutoRegion(0x98D500, 0x98C500, 0x98C500, 0x98C500, 0x986500, 0x985500, 0x985500, 0x985500);
+		return *(u32 *)InvMenu; 
 	}
 //room function
 	u32 GameHelper::RoomFunction(u8 room, bool u0, bool u1, bool u2) {
@@ -533,6 +534,8 @@ namespace CTRPluginFramework {
 		bool res = false;
 		u8 x = wX, y = wY;
 		u32 count = 0;
+		u32 Empty = 0x7FFE;
+
 		if(!PlayerClass::GetInstance()->IsLoaded()) 
 			return res;
 		
@@ -568,7 +571,7 @@ namespace CTRPluginFramework {
 						if(trample) 
 							GameHelper::TrampleAt(x, y);
 						else 
-							Dropper::PlaceItemWrapper(6, 0xFFFFFFFF, (u32 *)Code::Pointer7FFE, (u32 *)Code::Pointer7FFE, x, y, 0, 0, 0, 0, 0, 0x3C, 0xA5);
+							Dropper::PlaceItemWrapper(6, 0xFFFFFFFF, &Empty, &Empty, x, y, 0, 0, 0, 0, 0, 0x3C, 0xA5);
 
 						Controller::Update();
 						if(Controller::IsKeyPressed(Key::B) && allowAbort) {
@@ -583,11 +586,12 @@ namespace CTRPluginFramework {
 				y++;
 			}
 			res = true;
-			if(removeEverything) {
-				if(!IsIndoorsBool) y = 0x10;
-				else y = 0;
-			}
-			else y = wY;
+			
+			if(removeEverything) 
+				y = !IsIndoorsBool ? 0x10 : 0;
+			else 
+				y = wY;
+
 			x++;
 			if((u32)GameHelper::GetItemAtWorldCoords(x, y) == 0) 
 				res = false;
@@ -598,8 +602,6 @@ namespace CTRPluginFramework {
 			Process::Patch(rem2, 0x0A000056);
 			Process::Patch(rem1, 0x0A00004F);
 		}
-		else 
-			Process::Write32(Code::PickupItem, Code::Pointer7FFE);
 		
 		if(counting)
 			OSD::Notify(std::to_string(count) << " items removed!");
@@ -659,6 +661,7 @@ namespace CTRPluginFramework {
 //Trample at specific position	
 	void GameHelper::TrampleAt(u8 wX, u8 wY) {		
 		u32 pItem = (u32)GameHelper::GetItemAtWorldCoords(wX, wY);
+		u32 Empty = 0x7FFE;
 		
 		if(pItem == 0) 
 			return;
@@ -675,7 +678,7 @@ namespace CTRPluginFramework {
 		
 		static const u32 trample1 = Region::AutoRegion(0x168E20, 0x168868, 0x168E40, 0x168E40, 0x168E08, 0x168E08, 0x168E08, 0x168E08); 
 		static FUNCTION func2(trample1);
-		func2.Call<void>(wX, wY, 0, room, Code::Pointer7FFE);
+		func2.Call<void>(wX, wY, 0, room, &Empty);
 
 		static const u32 trample3 = Region::AutoRegion(0x59F144, 0x59E65C, 0x59E18C, 0x59E18C, 0x59DA7C, 0x59DA7C, 0x59D750, 0x59D750);
 

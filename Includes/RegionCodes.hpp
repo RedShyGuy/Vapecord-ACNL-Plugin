@@ -9,14 +9,10 @@ namespace CTRPluginFramework {
 		static void     Load(void);
 		
 		static u32		IslPointer;
-		static u32		Pointer7FFE;
 		static u32		GamePointer;
 		static u32		chatpointer;
-		static u32		InvMenu;
 		static u32		max;
 		static u32		MapBool;
-		static u32		cooffset;
-		static u32		cioffset;
 		static u32		country;
 		static u32		UnbreakableFlower;
 		static u32		v_UnbreakableFlower;

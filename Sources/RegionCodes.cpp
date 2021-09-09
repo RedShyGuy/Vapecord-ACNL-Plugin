@@ -63,34 +63,24 @@ namespace CTRPluginFramework {
 
 	//Island Pointers
 		IslPointer = Region::AutoRegion(0x953708, 0x9526F8, 0x952704, 0x952704, 0x94C704, 0x94B704, 0x94B704, 0x94B704);
-	//7FFE Pointer
-		Pointer7FFE = Region::AutoRegion(0x95CFFC, 0x95BFDC, 0x95BFF4, 0x95BFF4, 0x955FF4, 0x954FF4, 0x954FF4, 0x954FF4); 
 	//Game/Chat/Inv Pointers
 		GamePointer = Region::AutoRegion(0x954648, 0x953630, 0x953648, 0x953648, 0x94D648, 0x94C648, 0x94C648, 0x94C648);
 		chatpointer = Region::AutoRegion(0x94FD84, 0x94ED74, 0x94ED84, 0x94ED84, 0x948D84, 0x947D84, 0x947D84, 0x947D84);
-		InvMenu = Region::AutoRegion(0x98D500, 0x98C500, 0x98C500, 0x98C500, 0x986500, 0x985500, 0x985500, 0x985500);
 	//Max Turbo Pointer	
 		max = Region::AutoRegion(0x95D3FC, 0x95C3DC, 0x95C3F4, 0x95C3F4, 0x9563F4, 0x9553F4, 0x9553F4, 0x9553F4);
 	//Map Boolean
 		MapBool = Region::AutoRegion(0x950C30, 0x94FC20, 0x94FC30, 0x94FC30, 0x949C30, 0x948C30, 0x948C30, 0x948C30); 
-	//Catalog To Pockets Offset		
-		cooffset = Region::AutoRegion(0x950D1F, 0x94FD0F, 0x94FD1C, 0x94FD1F, 0x949D1C, 0x948D1F, 0x948D1F, 0x948D1F);
-		cioffset = Region::AutoRegion(0x95033C, 0x94F32C, 0x94F33C, 0x94F33C, 0x94933C, 0x94833C, 0x94833C, 0x94833C);
-
+	
 		ChatPoint = Region::AutoRegion(0x95F11C, 0x95E0FC, 0x95E114, 0x95E114, 0x958114, 0x957114, 0x957114, 0x957114);
 
 		DataPointer = Region::AutoRegion(0x95EEDC, 0x95DEBC, 0x95DED4, 0x95DED4, 0x957ED4, 0x956ED4, 0x956ED4, 0x956ED4);
 	}
 	
 	u32		Code::IslPointer = 0;
-	u32		Code::Pointer7FFE = 0;
 	u32		Code::GamePointer = 0;
 	u32		Code::chatpointer = 0;
-	u32		Code::InvMenu = 0;
 	u32		Code::max = 0;
 	u32		Code::MapBool = 0;
-	u32		Code::cooffset = 0;
-	u32		Code::cioffset = 0;
 	u32		Code::country = 0;
 	u32		Code::UnbreakableFlower = 0;
 	u32		Code::v_UnbreakableFlower = 0;
