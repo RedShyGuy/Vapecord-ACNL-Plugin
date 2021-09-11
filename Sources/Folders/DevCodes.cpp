@@ -502,8 +502,22 @@ namespace CTRPluginFramework {
 	32239378 = ModuleKotobuki.cro
 	*/
 
+	bool AuroraTest(u8* param1, u8* param2) {
+		param1[0] = 0x15;
+		param2[0] = 0x1E;
+		return 1;
+	}
+
 //Item Island Code
 	void islanditems(MenuEntry *entry) {
+		/*static Hook hook;
+
+		hook.Initialize(0x6302D0, (u32)AuroraTest);
+		hook.SetFlags(USE_LR_TO_RETURN);
+		hook.Enable();
+
+		return;*/
+
 		static std::string str = "";
 		static u32 buffer = 0;
 

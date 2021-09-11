@@ -115,4 +115,105 @@ namespace CTRPluginFramework {
 		
 		return nullptr;
 	}
+
+	void PlayerClass::CalculateMapCoordinates(u32& x, u32& y) {
+		bool IsInfoOpen = *(bool *)(*(u32 *)(Code::MapBool + 0x1C) + 0x5D8);
+		float* coords = GetCoordinates();
+
+	//Town Map | Can open info menu
+		if(GameHelper::RoomCheck() == 0) {
+			if(IsInfoOpen) {
+				x = (u32)(-33.0 + (coords[0] / 14.2f)), y = (u32)(6.0 + (coords[2] / 14.2f));
+				if(x < 12) x = 12;
+				else if(x > 174) x = 174;
+
+				if(y < 40) y = 40;
+				else if(y > 185) y = 185;
+			}
+			else {
+				x = (u32)(30.0f + (coords[0] / 14.2f)), y = (u32)(5.0f + (coords[2] / 14.2f));
+				if(x < 75) x = 75;
+				else if(x > 237) x = 237;
+
+				if(y < 40) y = 40;
+				else if(y > 185) y = 185;
+			}
+		}
+
+	//Island Map | Can't open info menu
+		else if(GameHelper::RoomCheck() == 0x68) {
+			x = (u32)(72.0f + (coords[0] / 12.1f)), y = (u32)(23.0f + (coords[2] / 12.1f));
+			if(x < 75) x = 75;
+			else if(x > 235) x = 235;
+
+			if(y < 27) y = 27;
+			else if(y > 187) y = 187;
+		}
+
+	//Mainstreet Map | Can't open info menu
+		else if(GameHelper::RoomCheck() == 1) {
+			x = (u32)(-16.0 + (coords[0] / 6.2)), y = (u32)(55.0 + (coords[2] / 6.2));
+			if(x < 10) x = 10;
+			else if(x > 303) x = 303;
+
+			if(y < 38) y = 38;
+			else if(y > 182) y = 182;
+		}
+
+	//Tour Map | Can't open info menu
+		else if(GameHelper::RoomCheck() >= 0x69 && GameHelper::RoomCheck() < 0x80) {
+			x = (u32)(24.0 + (coords[0] / 13.5)), y = (u32)(-7.0 + (coords[2] / 13.5));
+			if(x < 65) x = 65;
+			else if(x > 247) x = 247;
+
+			if(y < 25) y = 25;
+			else if(y > 187) y = 187;
+		}
+	}
+
+	void PlayerClass::CalculateCoordinates(UIntVector touchPos, float* coords) {
+		static UIntRect Town_InfoClosed(70, 32, 180, 175);
+		static UIntRect Town_InfoOpened(7, 32, 180, 175);
+		static UIntRect Island(76, 36, 168, 168);
+		static UIntRect MainStreet(4, 43, 312, 159);
+		static UIntRect Tour(65, 34, 190, 170);
+
+		bool IsInfoOpen = *(bool *)(*(u32 *)(Code::MapBool + 0x1C) + 0x5D8);
+		FloatVector fPos(touchPos);
+
+		float x = 0, y = 0;
+
+	//Town Map | Can open info menu
+		if(GameHelper::RoomCheck() == 0) {
+			if(IsInfoOpen) {
+				if(Town_InfoOpened.Contains(touchPos))
+					x = (fPos.x - -33.0) * 14.2f, y = (fPos.y - 6.0) * 14.2f;
+			}
+			else {
+				if(Town_InfoClosed.Contains(touchPos))
+					x = (fPos.x - 30.0f) * 14.2f, y = (fPos.y - 5.0f) * 14.2f;
+			}
+		}
+
+	//Island Map | Can't open info menu
+		else if(GameHelper::RoomCheck() == 0x68) {
+			if(Island.Contains(touchPos))
+				x = (fPos.x - 72.0f) * 12.1f, y = (fPos.y - 23.0f) * 12.1f;
+		}
+
+	//Mainstreet Map | Can't open info menu
+		else if(GameHelper::RoomCheck() == 1) {
+			if(MainStreet.Contains(touchPos))
+				x = (fPos.x - -16.0) * 6.2, y = (fPos.y - 55.0) * 6.2;
+		}
+
+	//Tour Map | Can't open info menu
+		else if(GameHelper::RoomCheck() >= 0x69 && GameHelper::RoomCheck() < 0x80) {
+			if(Tour.Contains(touchPos))
+				x = (fPos.x - 24.0) * 13.5, y = (fPos.y - -7.0) * 13.5;
+		}
+
+		coords[0] = x;
+		coords[2] = y;
+	}
 }

@@ -160,6 +160,25 @@ namespace CTRPluginFramework {
 		Process::Patch(weather, Weathers[op]);
 		Weathermod(entry);
 	}
+
+	void auroralights(MenuEntry *entry) {
+		static u32 auroraPatch = Region::AutoRegion(0x62FD4C, 0x62F274, 0x62ED84, 0x62ED84, 0x62E844, 0x62E844, 0x62E3EC, 0x62E3EC);
+
+		if(entry->WasJustActivated()) {
+			Process::Patch(auroraPatch, 0xEA000023);
+			Process::WriteFloat(auroraPatch + 0xA4, 1.0); //Brightness of aurora lights
+		}
+
+		CRO::Write<u32>("Outdoor", 0x1DB44, 0xE1A00000);
+
+		if(!entry->IsActivated()) {
+			CRO::Write<u32>("Outdoor", 0x1DB44, 0x1A000002);
+
+			Process::Patch(auroraPatch, 0x0A000023);
+			Process::WriteFloat(auroraPatch + 0xA4, 0.0);
+		}
+	}
+
 //Music Speed Modifier	
 	void Musicchange(MenuEntry *entry) { 
 		static const u32 musicch = Region::AutoRegion(0x4C4B4C, 0x4C44C4, 0x4C3B94, 0x4C3B94, 0x4C382C, 0x4C382C, 0x4C36EC, 0x4C36EC);

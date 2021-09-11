@@ -271,7 +271,6 @@ namespace CTRPluginFramework {
 
 		const char* data = datastr.c_str();	
 		qrcodegen_encodeText(data, temp, qrcode, qrcodegen_Ecc_LOW, qrcodegen_VERSION_MIN, qrcodegen_VERSION_MAX, qrcodegen_Mask_AUTO, true);
-
 	
 		DrawQrCode(TopScreen, 175, 15, qrcode);
 

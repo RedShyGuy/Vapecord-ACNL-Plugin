@@ -147,7 +147,6 @@ namespace CTRPluginFramework {
 
 //Max Turbo Presses
 	void maxturbo(MenuEntry *entry) { 
-		//max = Region::AutoRegion(0x95D3FC, 0x95C3DC, 0x95C3F4, 0x95C3F4, 0x9563F4, 0x9553F4, 0x9553F4, 0x9553F4);
 		u32 maxT = *(u32 *)Code::max - 0x31C;
 
         Sleep(Seconds(0.0085F));

@@ -294,6 +294,7 @@ namespace CTRPluginFramework {
 	void mgtype(MenuEntry *entry);
 	void unbreakableflower(MenuEntry *entry);
 	void Weathermod(MenuEntry *entry);
+	void auroralights(MenuEntry *entry);
 	void Musicchange(MenuEntry *entry);
 	void miscFunctions(MenuEntry *entry);
 	void morenumberisland(MenuEntry *entry);

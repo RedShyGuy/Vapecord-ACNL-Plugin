@@ -18,6 +18,9 @@ namespace CTRPluginFramework {
 		u16* 				GetSnake();	
 		u32 				Offset(u32 add = 0);
 		bool 				IsLoaded();
+
+		void				CalculateMapCoordinates(u32& x, u32& y);
+		static void			CalculateCoordinates(UIntVector touchPos, float* coords);
 		
 	private:
 		PlayerClass(void);

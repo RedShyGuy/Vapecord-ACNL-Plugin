@@ -306,60 +306,11 @@ namespace CTRPluginFramework {
 		if(screen.IsTop || !GameHelper::MapBoolCheck())
 			return 0;
 
-		int XPos, YPos;
-
-		bool IsInfoOpen = *(bool *)(*(u32 *)(Code::MapBool + 0x1C) + 0x5D8);
+		u32 XPos, YPos;
 
 		for(int i = 0; i < 4; ++i) {
 			if(PlayerClass::GetInstance(i)->IsLoaded()) {
-				float *coords = PlayerClass::GetInstance(i)->GetCoordinates();
-			//Town Map | Can open info menu
-				if(GameHelper::RoomCheck() == 0) {
-					if(IsInfoOpen) {
-						XPos = (u32)(-33.0 + (coords[0] / 14.2f)), YPos = (u32)(6.0 + (coords[2] / 14.2f));
-						if(XPos < 12) XPos = 12;
-						else if(XPos > 174) XPos = 174;
-
-						if(YPos < 40) YPos = 40;
-						else if(YPos > 185) YPos = 185;
-					}
-					else {
-						XPos = (u32)(30.0f + (coords[0] / 14.2f)), YPos = (u32)(5.0f + (coords[2] / 14.2f));
-						if(XPos < 75) XPos = 75;
-						else if(XPos > 237) XPos = 237;
-
-						if(YPos < 40) YPos = 40;
-						else if(YPos > 185) YPos = 185;
-					}
-				}
-			//Island Map | Can't open info menu
-				else if(GameHelper::RoomCheck() == 0x68) {
-					XPos = (u32)(72.0f + (coords[0] / 12.1f)), YPos = (u32)(23.0f + (coords[2] / 12.1f));
-					if(XPos < 75) XPos = 75;
-					else if(XPos > 235) XPos = 235;
-
-					if(YPos < 27) YPos = 27;
-					else if(YPos > 187) YPos = 187;
-				}
-
-			//Mainstreet Map | Can't open info menu
-				else if(GameHelper::RoomCheck() == 1) {
-					XPos = (u32)(-16.0 + (coords[0] / 6.2)), YPos = (u32)(55.0 + (coords[2] / 6.2));
-					if(XPos < 10) XPos = 10;
-					else if(XPos > 303) XPos = 303;
-
-					if(YPos < 38) YPos = 38;
-					else if(YPos > 182) YPos = 182;
-				}
-			//Tour Map | Can't open info menu
-				else if(GameHelper::RoomCheck() >= 0x69 && GameHelper::RoomCheck() < 0x80) {
-					XPos = (u32)(24.0 + (coords[0] / 13.5)), YPos = (u32)(-7.0 + (coords[2] / 13.5));
-					if(XPos < 65) XPos = 65;
-					else if(XPos > 247) XPos = 247;
-
-					if(YPos < 25) YPos = 25;
-					else if(YPos > 187) YPos = 187;
-				}
+				PlayerClass::GetInstance(i)->PlayerClass::CalculateMapCoordinates(XPos, YPos);
 
 				if(playerIcon[i] != nullptr) {	
 					int Pixels = 0, XResult = 9 + XPos, YResult = 15 + YPos;

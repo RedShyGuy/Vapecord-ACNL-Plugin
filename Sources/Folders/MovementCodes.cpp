@@ -65,47 +65,17 @@ namespace CTRPluginFramework {
 	
 //Touch Warp
 	void tch_warp(MenuEntry *entry) {
-		static UIntRect Town(70, 50, 175, 155);
-		static UIntRect MainStreet(15, 40, 285, 140);
-		static UIntRect Island(70, 30, 170, 170);
-		//static UIntRect Tour(65, 35, 185, 165);
-		
-        UIntVector touchPos = Touch::GetPosition();
-		float xCoord;
-		float zCoord;
-		
 		float *pCoords = PlayerClass::GetInstance()->GetCoordinates();
 		if(pCoords == nullptr)
 			return;
 		
 		if(!GameHelper::MapBoolCheck()) 
 			return;
-		
-		FloatVector  fPos(touchPos);
-		if((GameHelper::RoomCheck() == 0 || (GameHelper::RoomCheck() >= 0x69 && GameHelper::RoomCheck() < 0x80))) {
-			if(Town.Contains(touchPos)) {
-				xCoord = (fPos.x - 77.f) * 14.94f + 526.f;
-				zCoord = (fPos.y - 50.f) * 15.21f + 526.f;
-				pCoords[0] = xCoord;
-				pCoords[2] = zCoord;
-			}
-		}
-		else if(GameHelper::RoomCheck() == 1) {
-			if(MainStreet.Contains(touchPos)) {
-				xCoord = (fPos.x - 15.f) * 6.5f + 150.f;
-				zCoord = (fPos.y - 40.f) * 6.5f - 117.f;
-				pCoords[0] = xCoord;
-				pCoords[2] = zCoord;
-			}
-		}
-		else if(GameHelper::RoomCheck() == 0x68) {
-			if(Island.Contains(touchPos)) {
-				xCoord = (fPos.x - 75.f) * 12.2f;
-				zCoord = (fPos.y - 30.f) * 12.2f;
-				pCoords[0] = xCoord;
-				pCoords[2] = zCoord;
-			}
-		}
+
+		if(!Touch::IsDown())
+			return;
+
+		PlayerClass::CalculateCoordinates(Touch::GetPosition(), pCoords);
     }
 //Walk Over Things
 	void walkOver(MenuEntry *entry) {		
@@ -255,7 +225,7 @@ namespace CTRPluginFramework {
 					OSD::Notify("Visibility: Default", Color::Green);
 				break;
 			}
-			
+
 			for(int i = 0; i < 3; ++i)
                 Process::Patch(VisiMod[i], VisiModPatch[mode][i]);
         }
