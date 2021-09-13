@@ -656,15 +656,13 @@ UNLOCK_ISLAND_CLUB :: オン島を解除
 LOCK_ISLAND_ISL :: 船をロック
 LOCK_ISLAND_CLUB :: オン島をロック
 
-#Fill Ore
-FILL_INV_ORE :: ポケットを鉱石で埋め尽くす
-FILL_INV_ORE_NOTE :: ツアー時にポケットを鉱石で埋め尽くします。
-BONUS_ORE_SPAWNED :: 鉱石を配置しました。
+#Instant Ore Hunt Finish
+FILL_INV_ORE :: Max Ore Hunting Points
+FILL_INV_ORE_NOTE :: Makes the game think you have a inventory filled with the bonus ore, therefore receiving max points at the tour results.
 
-#Fill Fruit
-FILL_INV_FRUIT :: ポケットをフルーツで埋め尽くす
-FILL_INV_FRUIT_NOTE :: ツアー時にポケットをフルーツで埋め尽くします。
-FRUIT_SPAWNED :: フルーツを配置しました。
+#Instant Labyrinth Tour Finish
+FILL_INV_FRUIT :: Instant Labyrinth Tour
+FILL_INV_FRUIT_NOTE :: Makes the game think you already have all the needed fruits for the tour to finish.
 
 #Hacker Island
 HACKER_ISLAND :: チーター島に変更
@@ -927,14 +925,9 @@ VECTOR_WEATHER_RAINY :: 雨
 VECTOR_WEATHER_STORMY :: 大雨
 VECTOR_WEATHER_SNOWY :: 雪
 
-#Music Speed
-MUSIC_SPEED_MOD :: 音楽の速さ/音程変更
-MUSIC_SPEED_MOD_NOTE :: 音楽の速さ、音程を変更できます。
-KEY_CHANGE_SOUND :: BGMや効果音の音程を変更します。
-VECTOR_MUSIC_HYPER :: 音程 : 高
-VECTOR_MUSIC_FAST :: 音程 : 高②
-VECTOR_MUSIC_SLOW :: 音程 : 低
-VECTOR_MUSIC_SLOWER :: 音程 : 低②
+#Always Aurora Lights
+ALWAYS_AURORA_MOD :: Always Aurora Lights
+ALWAYS_AURORA_MOD_NOTE :: Will make aurora lights always appear no matter the time or date!
 
 #Quick Menu
 QUICK_MENU :: クイックメニュー

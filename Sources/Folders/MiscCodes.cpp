@@ -160,13 +160,18 @@ namespace CTRPluginFramework {
 		Process::Patch(weather, Weathers[op]);
 		Weathermod(entry);
 	}
-
+//always aurora lights
 	void auroralights(MenuEntry *entry) {
-		static u32 auroraPatch = Region::AutoRegion(0x62FD4C, 0x62F274, 0x62ED84, 0x62ED84, 0x62E844, 0x62E844, 0x62E3EC, 0x62E3EC);
+		static u32 auroraPatch1 = Region::AutoRegion(0x62FD4C, 0x62F274, 0x62ED84, 0x62ED84, 0x62E844, 0x62E844, 0x62E3EC, 0x62E3EC);
+		static u32 auroraPatch2 = Region::AutoRegion(0x630590, 0x62FAB8, 0x62F5C8, 0x62F5C8, 0x62F088, 0x62F088, 0x62EC30, 0x62EC30);
 
 		if(entry->WasJustActivated()) {
-			Process::Patch(auroraPatch, 0xEA000023);
-			Process::WriteFloat(auroraPatch + 0xA4, 1.0); //Brightness of aurora lights
+			Process::Patch(auroraPatch2, 0xE3A00001); //Makes aurora appear in every season and weather
+			Process::Patch(auroraPatch1, 0xEA000023); //Makes aurora appear no matter the date or time
+			Process::WriteFloat(auroraPatch1 + 0xA4, 1.0); //Brightness of aurora lights
+
+			if(PlayerClass::GetInstance()->IsLoaded())
+				OSD::Notify("Reload the room to see changes!", Color(0xC430BAFF));
 		}
 
 		CRO::Write<u32>("Outdoor", 0x1DB44, 0xE1A00000);
@@ -174,51 +179,12 @@ namespace CTRPluginFramework {
 		if(!entry->IsActivated()) {
 			CRO::Write<u32>("Outdoor", 0x1DB44, 0x1A000002);
 
-			Process::Patch(auroraPatch, 0x0A000023);
-			Process::WriteFloat(auroraPatch + 0xA4, 0.0);
+			Process::Patch(auroraPatch2, 0xE3A00000);
+			Process::Patch(auroraPatch1, 0x0A000023);
+			Process::WriteFloat(auroraPatch1 + 0xA4, 0.0);
 		}
 	}
 
-//Music Speed Modifier	
-	void Musicchange(MenuEntry *entry) { 
-		static const u32 musicch = Region::AutoRegion(0x4C4B4C, 0x4C44C4, 0x4C3B94, 0x4C3B94, 0x4C382C, 0x4C382C, 0x4C36EC, 0x4C36EC);
-		
-		std::vector<std::string> musicopt = {
-			Language->Get("VECTOR_MUSIC_HYPER"),
-			Language->Get("VECTOR_MUSIC_FAST"),
-			Language->Get("VECTOR_MUSIC_SLOW"),
-			Language->Get("VECTOR_MUSIC_SLOWER"),
-			Language->Get("VECTOR_DISABLE")
-		};
-		
-		static constexpr float Sounds[4] = {
-			1.50, 1.25, 0.90, 0.80
-		};
-
-		bool IsON;
-		
-		for(int i = 0; i < 4; ++i) { 
-			IsON = *(float *)musicch == Sounds[i];
-			musicopt[i] = (IsON ? Color(pGreen) : Color(pRed)) << musicopt[i];
-		}
-		
-		Keyboard musickb(Language->Get("KEY_CHANGE_SOUND"));
-		musickb.Populate(musicopt);
-		Sleep(Milliseconds(100));
-		s8 op = musickb.Open();
-		
-		if(op < 0)
-			return;
-		
-		if(op == 4) {
-			Process::WriteFloat(musicch, 1.0);
-			return;
-		}
-		
-		Process::WriteFloat(musicch, Sounds[op]);
-		Musicchange(entry);
-	}
-	
 //InputChangeEvent For Quick Menu
 	void onBuildingChange(Keyboard &k, KeyboardEvent &e) {
 		if(e.type == KeyboardEvent::CharacterRemoved || e.type == KeyboardEvent::CharacterAdded) {

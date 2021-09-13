@@ -652,15 +652,13 @@ UNLOCK_ISLAND_CLUB :: Débloque le club Tortimer
 LOCK_ISLAND_ISL :: Bloquer Amiral
 LOCK_ISLAND_CLUB :: Bloquer le club Tortimer
 
-#Fill Ore
-FILL_INV_ORE :: Remplir l'inventaire de l'île avec des minerais bonus.
-FILL_INV_ORE_NOTE :: Rempli votre inventaire avec les minerais bonus du voyage actuel de l'île.
-BONUS_ORE_SPAWNED :: Les minerais bonus sont apparût!
+#Instant Ore Hunt Finish
+FILL_INV_ORE :: Max Ore Hunting Points
+FILL_INV_ORE_NOTE :: Makes the game think you have a inventory filled with the bonus ore, therefore receiving max points at the tour results.
 
-#Fill Fruit
-FILL_INV_FRUIT :: Remplir l'inventaire avec les fruit
-FILL_INV_FRUIT_NOTE :: Rempli votre inventaire avec le fruit du voyage vers l'île actuel.
-FRUIT_SPAWNED :: Le fruit est apparût!
+#Instant Labyrinth Tour Finish
+FILL_INV_FRUIT :: Instant Labyrinth Tour
+FILL_INV_FRUIT_NOTE :: Makes the game think you already have all the needed fruits for the tour to finish.
 
 #Hacker Island
 HACKER_ISLAND :: L'île des Hackeur
@@ -923,14 +921,9 @@ VECTOR_WEATHER_RAINY :: Pluie
 VECTOR_WEATHER_STORMY :: Orageux
 VECTOR_WEATHER_SNOWY :: Enneigé
 
-#Music Speed
-MUSIC_SPEED_MOD :: Modifieur de la vitesse de la musique
-MUSIC_SPEED_MOD_NOTE :: Vous permet de changer la vitesse de la musique.
-KEY_CHANGE_SOUND :: Changez les vitesse de la musique.
-VECTOR_MUSIC_HYPER :: Hyper musique
-VECTOR_MUSIC_FAST :: Musique rapide
-VECTOR_MUSIC_SLOW :: Musique lente
-VECTOR_MUSIC_SLOWER :: Musique plus lente
+#Always Aurora Lights
+ALWAYS_AURORA_MOD :: Always Aurora Lights
+ALWAYS_AURORA_MOD_NOTE :: Will make aurora lights always appear no matter the time or date!
 
 #Quick Menu
 QUICK_MENU :: Menu rapide

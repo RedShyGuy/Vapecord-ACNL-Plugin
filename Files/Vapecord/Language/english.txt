@@ -56,7 +56,7 @@ NATIVE_FRUIT_APPLE :: Apple
 NATIVE_FRUIT_ORANGE :: Orange
 NATIVE_FRUIT_PEAR :: Pear
 NATIVE_FRUIT_PEACH :: Peach
-NATIVE_FRUIT_CHERRIE :: Cherrie
+NATIVE_FRUIT_CHERRIE :: Cherry
 NATIVE_FRUIT_COCONUT :: Coconut
 NATIVE_FRUIT_DURIAN :: Durian
 NATIVE_FRUIT_LEMON :: Lemon
@@ -652,15 +652,13 @@ UNLOCK_ISLAND_CLUB :: Unlock Club Tortimer
 LOCK_ISLAND_ISL :: Lock Kappn
 LOCK_ISLAND_CLUB :: Lock Club Tortimer
 
-#Fill Ore
-FILL_INV_ORE :: Fill Inv With Bonus Ore
-FILL_INV_ORE_NOTE :: Fills your inventory with the bonus ore of the current island trip.
-BONUS_ORE_SPAWNED :: Spawned Bonus Ore!
+#Instant Ore Hunt Finish
+FILL_INV_ORE :: Max Ore Hunting Points
+FILL_INV_ORE_NOTE :: Makes the game think you have a inventory filled with the bonus ore, therefore receiving max points at the tour results.
 
-#Fill Fruit
-FILL_INV_FRUIT :: Fill Inv With Needed Fruit
-FILL_INV_FRUIT_NOTE :: Fills your inventory with the needed fruit of the current island trip.
-FRUIT_SPAWNED :: Spawned Fruit!
+#Instant Labyrinth Tour Finish
+FILL_INV_FRUIT :: Instant Labyrinth Tour
+FILL_INV_FRUIT_NOTE :: Makes the game think you already have all the needed fruits for the tour to finish.
 
 #Hacker Island
 HACKER_ISLAND :: Hacker Island Spoof
@@ -922,14 +920,9 @@ VECTOR_WEATHER_RAINY :: Rainy
 VECTOR_WEATHER_STORMY :: Stormy
 VECTOR_WEATHER_SNOWY :: Snowy
 
-#Music Speed
-MUSIC_SPEED_MOD :: Sound Speed Modifier
-MUSIC_SPEED_MOD_NOTE :: Lets you change the speed of some sounds.
-KEY_CHANGE_SOUND :: Change the speed of game sounds:
-VECTOR_MUSIC_HYPER :: Hyper Music
-VECTOR_MUSIC_FAST :: Fast Music
-VECTOR_MUSIC_SLOW :: Slow Music
-VECTOR_MUSIC_SLOWER :: Slower Music
+#Always Aurora Lights
+ALWAYS_AURORA_MOD :: Always Aurora Lights
+ALWAYS_AURORA_MOD_NOTE :: Will make aurora lights always appear no matter the time or date!
 
 #Quick Menu
 QUICK_MENU :: Quick Menu

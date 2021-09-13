@@ -385,7 +385,7 @@ namespace CTRPluginFramework {
 		MISC->Append(new MenuEntry(FolderColors[11] << "Change Gametype", nullptr, mgtype, "note")),
 		MISC->Append(new MenuEntry(FolderColors[11] << "Unbreakable Flowers", nullptr, unbreakableflower, "note")),
 		MISC->Append(new MenuEntry(FolderColors[11] << "Weather Modifier", nullptr, Weathermod , "note")),
-		MISC->Append(new MenuEntry(FolderColors[11] << "Music Speed Modifier", nullptr, Musicchange, "note")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "Always Aurora Lights", auroralights , "note")),
 		MISC->Append(new MenuEntry(FolderColors[11] << "Disable Non-Hacker Commands", nullptr, disablecommands, "note")),
 		MISC->Append(EntryWithHotkey(new MenuEntry(FolderColors[11] << "Quick Menu", miscFunctions, "note"), {
 			Hotkey(Key::Y | Key::DPadDown, "Key")
