@@ -1,7 +1,4 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
     
@@ -21,9 +18,7 @@ namespace CTRPluginFramework {
 			m_Instance = new PlayerClass;
 
 		m_PlayerIndex = pIndex;
-
-		static FUNCTION func(Code::PlayerInstance);
-		m_PlayerOffset = func.Call<u32>(pIndex, 1);
+		m_PlayerOffset = Code::PlayerInstance.Call<u32>(pIndex, 1);
 
 		return m_Instance;
 	}
@@ -74,9 +69,8 @@ namespace CTRPluginFramework {
 
 	bool PlayerClass::GetWorldCoords(u32 *wX, u32 *wY) {
 		if(m_PlayerOffset != 0) {
-			static const u32 WorldCoords = Region::AutoRegion(0x5C13AC, 0x5C08DC, 0x5C03F4, 0x5C03F4, 0x5BFCE4, 0x5BFCE4, 0x5BF9B8, 0x5BF9B8);
-			static FUNCTION func(WorldCoords);
-			return func.Call<bool>(wX, wY, m_PlayerIndex, 1);
+			static Address WorldCoords(0x5C13AC, 0x5C08DC, 0x5C03F4, 0x5C03F4, 0x5BFCE4, 0x5BFCE4, 0x5BF9B8, 0x5BF9B8);
+			return WorldCoords.Call<bool>(wX, wY, m_PlayerIndex, 1);
 		}
 		return 0;
 	}
@@ -117,7 +111,7 @@ namespace CTRPluginFramework {
 	}
 
 	void PlayerClass::CalculateMapCoordinates(u32& x, u32& y) {
-		bool IsInfoOpen = *(bool *)(*(u32 *)(Code::MapBool + 0x1C) + 0x5D8);
+		bool IsInfoOpen = *(bool *)(*(u32 *)(Code::MapBool.addr + 0x1C) + 0x5D8);
 		float* coords = GetCoordinates();
 
 	//Town Map | Can open info menu
@@ -178,7 +172,7 @@ namespace CTRPluginFramework {
 		static UIntRect MainStreet(4, 43, 312, 159);
 		static UIntRect Tour(65, 34, 190, 170);
 
-		bool IsInfoOpen = *(bool *)(*(u32 *)(Code::MapBool + 0x1C) + 0x5D8);
+		bool IsInfoOpen = *(bool *)(*(u32 *)(Code::MapBool.addr + 0x1C) + 0x5D8);
 		FloatVector fPos(touchPos);
 
 		float x = 0, y = 0;

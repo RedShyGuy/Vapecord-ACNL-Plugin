@@ -1,7 +1,4 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
 //Wrapper Stuff
@@ -16,15 +13,15 @@ namespace CTRPluginFramework {
 	static bool speedmode = false;
 
 	void PSelector_Set(u8 pIndex) {
-		Process::Patch(Code::a_GetOnlinePlayerIndex + 4, 0xE3A00000 + pIndex);
-		Process::Patch(Code::a_GetOnlinePlayerIndex + 8, 0xE12FFF1E);
+		Process::Patch(Code::a_GetOnlinePlayerIndex.addr, 0xE3A00000 + pIndex);
+		Process::Patch(Code::a_GetOnlinePlayerIndex.addr + 4, 0xE12FFF1E);
 	}
 	void PSelector_OFF(void) {
-		Process::Patch(Code::a_GetOnlinePlayerIndex + 4, 0xE5900000);
-		Process::Patch(Code::a_GetOnlinePlayerIndex + 8, Code::v_GetOnlinePlayerIndex);
+		Process::Patch(Code::a_GetOnlinePlayerIndex.addr, 0xE59F0004);
+		Process::Patch(Code::a_GetOnlinePlayerIndex.addr + 4, 0xE5900000);
 	}
 	bool PSelector_ON(void) {
-		return (*(u32 *)Code::a_GetOnlinePlayerIndex != 0xE5900000);
+		return (*(u32 *)Code::a_GetOnlinePlayerIndex.addr != 0xE59F0004);
 	}
 
 //check to make player selector better
@@ -74,7 +71,7 @@ namespace CTRPluginFramework {
 		
 		else if(entry->Hotkeys[1].IsPressed()) {
 			if(PSelector_ON()) {
-				OSD::Notify(Utils::Format("Controlling Player: %02X Disabled!", *(u8 *)(Code::playselector + 0x10)));
+				OSD::Notify(Utils::Format("Controlling Player: %02X Disabled!", *(u8 *)(Code::playselector.addr + 0x10)));
 				PSelector_OFF();
 				return;
 			}
@@ -100,8 +97,8 @@ namespace CTRPluginFramework {
 	void anticheat(MenuEntry *entry) { 
 		static Hook AntiHook;
 		if(entry->WasJustActivated()) {	
-			static const u32 AntiAddress = Region::AutoRegion(0x6786D4, 0x677BFC, 0x67770C, 0x67770C, 0x6771CC, 0x6771CC, 0x676D74, 0x676D74);
-			AntiHook.Initialize(AntiAddress, (u32)AntiAnimCheck);
+			static const Address AntiAddress(0x6786D4, 0x677BFC, 0x67770C, 0x67770C, 0x6771CC, 0x6771CC, 0x676D74, 0x676D74);
+			AntiHook.Initialize(AntiAddress.addr, (u32)AntiAnimCheck);
 			AntiHook.SetFlags(USE_LR_TO_RETURN);
 			AntiHook.Enable();
 			IfForceAllowed = false;
@@ -270,11 +267,11 @@ namespace CTRPluginFramework {
 	}
 //Emotion Loop
 	void inf_expression(MenuEntry *entry) {
-		static const u32 infex = Region::AutoRegion(0x65E9B0, 0x65DED8, 0x65D9E8, 0x65D9E8, 0x65D4A8, 0x65D4A8, 0x65D050, 0x65D050);
+		static const Address infex(0x65E9B0, 0x65DED8, 0x65D9E8, 0x65D9E8, 0x65D4A8, 0x65D4A8, 0x65D050, 0x65D050);
         if(entry->Hotkeys[0].IsDown()) 
-			Process::Patch(infex, 0xE3A010FF);
+			Process::Patch(infex.addr, 0xE3A010FF);
 		if(!entry->Hotkeys[0].IsDown()) 
-			Process::Patch(infex, 0xE1D010B0);
+			Process::Patch(infex.addr, 0xE1D010B0);
 	}
 //Idle Animation 
 	void idle(MenuEntry *entry) {
@@ -283,10 +280,10 @@ namespace CTRPluginFramework {
 	}
 //Slow Motion Animations
 	void slmoanms(MenuEntry *entry) {
-		static const u32 slo1 = Region::AutoRegion(0x654578, 0x653AA0, 0x6535B0, 0x6535B0, 0x653070, 0x653070, 0x652C18, 0x652C18);
-		static const u32 slo2 = Region::AutoRegion(0x652C10, 0x652138, 0x651C48, 0x651C48, 0x651708, 0x651708, 0x6512B0, 0x6512B0);
-		static const u32 slo3 = Region::AutoRegion(0x887880, 0x886878, 0x88670C, 0x88670C, 0x880B2C, 0x87FB2C, 0x87FBE0, 0x87FBE0);
-		const u32 SlowAnim[2] = { slo2, slo3 };
+		static const Address slo1(0x654578, 0x653AA0, 0x6535B0, 0x6535B0, 0x653070, 0x653070, 0x652C18, 0x652C18);
+		static const Address slo2(0x652C10, 0x652138, 0x651C48, 0x651C48, 0x651708, 0x651708, 0x6512B0, 0x6512B0);
+		static const Address slo3(0x887880, 0x886878, 0x88670C, 0x88670C, 0x880B2C, 0x87FB2C, 0x87FBE0, 0x87FBE0);
+		const u32 SlowAnim[2] = { slo2.addr, slo3.addr };
 		
 		static const float SlowAnimPatch[2][2] = {
             { 8.0, 6.0 },
@@ -294,7 +291,7 @@ namespace CTRPluginFramework {
         };
 		
 		if(entry->Hotkeys[0].IsPressed()) {//Key::L + Key::DPadLeft
-			bool index = *(u32 *)slo1 == 0x0A000004 ? false : true;
+			bool index = *(u32 *)slo1.addr == 0x0A000004 ? false : true;
 
 			Animation::Idle();
 			OSD::Notify("Slow Animations " << (index ? Color::Red << "OFF" : Color::Green << "ON"));
@@ -302,14 +299,14 @@ namespace CTRPluginFramework {
 			for(int i = 0; i < 2; ++i)
                 Process::WriteFloat(SlowAnim[i], SlowAnimPatch[index][i]);
 
-			Process::Patch(slo1, index ? 0x0A000004 : 0xE3A00001);
+			Process::Patch(slo1.addr, index ? 0x0A000004 : 0xE3A00001);
 		}
 
 		if(!entry->IsActivated()) {
 			for(int i = 0; i < 2; ++i)
                 Process::WriteFloat(SlowAnim[i], SlowAnimPatch[1][i]);
 
-			Process::Patch(slo1, 0x0A000004);
+			Process::Patch(slo1.addr, 0x0A000004);
         }
 	}
 //Set Animation On Everyone
@@ -360,8 +357,8 @@ namespace CTRPluginFramework {
 			if(!PlayerClass::GetInstance()->IsLoaded())
 				return;
 
-			Process::Patch(Code::AnimConditionPatch, 0xE1A00000); 
-			Process::Patch(Code::IndexChange, 0xE3A01000 + DATAIndexRandom);
+			Process::Patch(Code::AnimConditionPatch.addr, 0xE1A00000); 
+			Process::Patch(Code::IndexChange.addr, 0xE3A01000 + DATAIndexRandom);
 			
 			for(u8 i = 0; i < 4; ++i) {
 				u32 playerInstance = PlayerClass::GetInstance()->Offset();
@@ -377,8 +374,8 @@ namespace CTRPluginFramework {
 			}
         } 
 		if(!entry->Hotkeys[2].IsDown()) {
-            Process::Patch(Code::AnimConditionPatch, 0x1A000017);
-			Process::Patch(Code::IndexChange, 0xE5D11268);
+            Process::Patch(Code::AnimConditionPatch.addr, 0x1A000017);
+			Process::Patch(Code::IndexChange.addr, 0xE5D11268);
 		}
 	}
 }

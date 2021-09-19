@@ -1,22 +1,19 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
 //Shops Always Open
 	void ShopsAlwaysOpen(MenuEntry *entry) {
-		static const u32 shopretail = Region::AutoRegion(0x309348, 0x309430, 0x309344, 0x309344, 0x3093BC, 0x3093BC, 0x30935C, 0x30935C);
-		static const u32 shopnookling = Region::AutoRegion(0x711B14, 0x710FC4, 0x710B1C, 0x710AF4, 0x7102C8, 0x7102A0, 0x70FE70, 0x70FE70);
-		static const u32 shopgarden = Region::AutoRegion(0x711BCC, 0x71107C, 0x710BD4, 0x710BAC, 0x710380, 0x710358, 0x70FF28, 0x70FF28);
-		static const u32 shopables = Region::AutoRegion(0x713EB0, 0x713360, 0x712EB8, 0x712E90, 0x712664, 0x71263C, 0x71220C, 0x71220C);
-		static const u32 shopshampoodle = Region::AutoRegion(0x71D42C, 0x71C774, 0x71C434, 0x71C40C, 0x71BBE0, 0x71BBB8, 0x71B788, 0x71B788);
-		static const u32 shopkicks = Region::AutoRegion(0x71184C, 0x710CFC, 0x710854, 0x71082C, 0x710000, 0x70FFD8, 0x70FBA8, 0x70FBA8);   
-		static const u32 shopnooks = Region::AutoRegion(0x71F654, 0x71E99C, 0x71E65C, 0x71E634, 0x71DE08, 0x71DDE0, 0x71D9B0, 0x71D9B0);
-		static const u32 shopkatrina = Region::AutoRegion(0x718098, 0x717548, 0x7170A0, 0x717078, 0x71684C, 0x716824, 0x7163F4 ,0x7163F4);
-		static const u32 shopredd = Region::AutoRegion(0x718444, 0x7178F4, 0x71744C, 0x717424, 0x716BF8, 0x716BD0, 0x7167A0, 0x7167A0);
+		static const Address shopretail(0x309348, 0x309430, 0x309344, 0x309344, 0x3093BC, 0x3093BC, 0x30935C, 0x30935C);
+		static const Address shopnookling(0x711B14, 0x710FC4, 0x710B1C, 0x710AF4, 0x7102C8, 0x7102A0, 0x70FE70, 0x70FE70);
+		static const Address shopgarden(0x711BCC, 0x71107C, 0x710BD4, 0x710BAC, 0x710380, 0x710358, 0x70FF28, 0x70FF28);
+		static const Address shopables(0x713EB0, 0x713360, 0x712EB8, 0x712E90, 0x712664, 0x71263C, 0x71220C, 0x71220C);
+		static const Address shopshampoodle(0x71D42C, 0x71C774, 0x71C434, 0x71C40C, 0x71BBE0, 0x71BBB8, 0x71B788, 0x71B788);
+		static const Address shopkicks(0x71184C, 0x710CFC, 0x710854, 0x71082C, 0x710000, 0x70FFD8, 0x70FBA8, 0x70FBA8);   
+		static const Address shopnooks(0x71F654, 0x71E99C, 0x71E65C, 0x71E634, 0x71DE08, 0x71DDE0, 0x71D9B0, 0x71D9B0);
+		static const Address shopkatrina(0x718098, 0x717548, 0x7170A0, 0x717078, 0x71684C, 0x716824, 0x7163F4 ,0x7163F4);
+		static const Address shopredd(0x718444, 0x7178F4, 0x71744C, 0x717424, 0x716BF8, 0x716BD0, 0x7167A0, 0x7167A0);
 
-		const u32 ShopOpen[9] = { shopretail, shopnookling, shopgarden, shopables, shopshampoodle, shopkicks, shopnooks, shopkatrina, shopredd };
+		const u32 ShopOpen[9] = { shopretail.addr, shopnookling.addr, shopgarden.addr, shopables.addr, shopshampoodle.addr, shopkicks.addr, shopnooks.addr, shopkatrina.addr, shopredd.addr };
 
         std::vector<std::string> cmnOpt =  { "" };
 
@@ -41,7 +38,7 @@ namespace CTRPluginFramework {
 	void nonesave(MenuEntry *entry) {
 		std::vector<std::string> cmnOpt =  { "" };
 
-		bool IsON = *(u32 *)Code::nosave == 0xE1A00000;
+		bool IsON = *(u32 *)Code::nosave.addr == 0xE1A00000;
 
 		cmnOpt[0] = IsON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
 		
@@ -52,7 +49,7 @@ namespace CTRPluginFramework {
 		if(op < 0)
 			return;
 
-		Process::Patch(Code::nosave, IsON ? 0xE8900006 : 0xE1A00000);
+		Process::Patch(Code::nosave.addr, IsON ? 0xE8900006 : 0xE1A00000);
 		save = !save;
 		nonesave(entry);
 	}
@@ -77,12 +74,12 @@ namespace CTRPluginFramework {
 	}
 //Can't Fall In Holes Or Pitfalls /*Credits to Nico*/
 	void noTrap(MenuEntry *entry) {
-		static const u32 notraps1 = Region::AutoRegion(0x65A668, 0x659B90, 0x6596A0, 0x6596A0, 0x659160, 0x659160, 0x658D08, 0x658D08);
-		static const u32 notraps2 = Region::AutoRegion(0x6789E4, 0x677F0C, 0x677A1C, 0x677A1C, 0x6774DC, 0x6774DC, 0x677084, 0x677084);
+		static const Address notraps1(0x65A668, 0x659B90, 0x6596A0, 0x6596A0, 0x659160, 0x659160, 0x658D08, 0x658D08);
+		static const Address notraps2(0x6789E4, 0x677F0C, 0x677A1C, 0x677A1C, 0x6774DC, 0x6774DC, 0x677084, 0x677084);
 		
 		std::vector<std::string> cmnOpt =  { "" };
 
-		bool IsON = *(u32 *)notraps1 == 0xEA000014;
+		bool IsON = *(u32 *)notraps1.addr == 0xEA000014;
 
 		cmnOpt[0] = IsON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
 		
@@ -94,8 +91,8 @@ namespace CTRPluginFramework {
 		if(op < 0)
 			return;
 			
-		Process::Patch(notraps1, *(u32 *)notraps1 == 0xEA000014 ? 0x1A000014 : 0xEA000014);
-		Process::Patch(notraps2, *(u32 *)notraps2 == 0xEA00002D ? 0x1A00002D : 0xEA00002D);
+		Process::Patch(notraps1.addr, *(u32 *)notraps1.addr == 0xEA000014 ? 0x1A000014 : 0xEA000014);
+		Process::Patch(notraps2.addr, *(u32 *)notraps2.addr == 0xEA00002D ? 0x1A00002D : 0xEA00002D);
 		noTrap(entry);
 	}
 

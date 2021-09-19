@@ -1,9 +1,4 @@
-#include <CTRPluginFramework.hpp>
-#include <fstream>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
-#include "MenuPointers.hpp"
 
 #define MAXCOUNT 25
 
@@ -330,10 +325,10 @@ namespace CTRPluginFramework {
 	}
 //Item Settings	
 	void itemsettings(MenuEntry *entry) {
-		static const u32 showoff = Region::AutoRegion(0x19BA78, 0x19B4C0, 0x19BA98, 0x19BA98, 0x19B9D8, 0x19B9D8, 0x19B9D8, 0x19B9D8);
-		static const u32 infinite1 = Region::AutoRegion(0x19C574, 0x19BFBC, 0x19C594, 0x19C594, 0x19C4D4, 0x19C4D4, 0x19C4D4, 0x19C4D4);
-		static const u32 infinite2 = Region::AutoRegion(0x19C4D0, 0x19BF18, 0x19C4F0, 0x19C4F0, 0x19C430, 0x19C430, 0x19C430, 0x19C430);
-		static const u32 eat = Region::AutoRegion(0x19C1F0, 0x19BC38, 0x19C210, 0x19C210, 0x19C150, 0x19C150, 0x19C150, 0x19C150);
+		static const Address showoff(0x19BA78, 0x19B4C0, 0x19BA98, 0x19BA98, 0x19B9D8, 0x19B9D8, 0x19B9D8, 0x19B9D8);
+		static const Address infinite1(0x19C574, 0x19BFBC, 0x19C594, 0x19C594, 0x19C4D4, 0x19C4D4, 0x19C4D4, 0x19C4D4);
+		static const Address infinite2(0x19C4D0, 0x19BF18, 0x19C4F0, 0x19C4F0, 0x19C430, 0x19C430, 0x19C430, 0x19C430);
+		static const Address eat(0x19C1F0, 0x19BC38, 0x19C210, 0x19C210, 0x19C150, 0x19C150, 0x19C150, 0x19C150);
 		
 		std::vector<std::string> itemsettopt = {
 			Language->Get("VECTOR_ITEMSETTINGS_SHOWOFF"),
@@ -342,7 +337,7 @@ namespace CTRPluginFramework {
 		};
 		
 		static const u32 settings[3] = {
-			showoff, infinite1, eat
+			showoff.addr, infinite1.addr, eat.addr
 		};
 		
 		static constexpr u32 settingsvalue[2][3] = {
@@ -365,8 +360,8 @@ namespace CTRPluginFramework {
 			return;
 			
 		if(op == 1) {
-			Process::Patch(infinite1, *(u32 *)infinite1 == 0xE2805A06 ? 0xE2805A00 : 0xE2805A06);
-			Process::Patch(infinite2, *(u32 *)infinite2 == 0xE2805A06 ? 0xE2805A00 : 0xE2805A06);
+			Process::Patch(infinite1.addr, *(u32 *)infinite1.addr == 0xE2805A06 ? 0xE2805A00 : 0xE2805A06);
+			Process::Patch(infinite2.addr, *(u32 *)infinite2.addr == 0xE2805A06 ? 0xE2805A00 : 0xE2805A06);
 			itemsettings(entry);
 			return;
 		}
@@ -427,7 +422,7 @@ namespace CTRPluginFramework {
 		if(dChoice < 0)
 			return;
 
-		hook.Initialize(Code::nosave + 8, (u32)Hook_MenuPatch);
+		hook.Initialize(Code::nosave.addr + 8, (u32)Hook_MenuPatch);
 		hook.SetFlags(USE_LR_TO_RETURN);
 
 	//If Custom Menu is chosen

@@ -1,7 +1,4 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
 	u32 Save::s_SaveAddress = 0;
@@ -9,9 +6,8 @@ namespace CTRPluginFramework {
 
 	Save::Save() {
 		if(s_SaveAddress == 0) {
-			static const u32 d_garden = Region::AutoRegion(0x2FB344, 0x2FB328, 0x2FB340, 0x2FB340, 0x2FB354, 0x2FB354, 0x2FB360, 0x2FB360); 
-			static FUNCTION func(d_garden);	
-			s_SaveAddress = func.Call<u32>();
+			static CTRPluginFramework::Address d_garden(0x2FB344, 0x2FB328, 0x2FB340, 0x2FB340, 0x2FB354, 0x2FB354, 0x2FB360, 0x2FB360); 
+			s_SaveAddress = d_garden.Call<u32>();
 		}
 
 		if(s_Instance != nullptr)

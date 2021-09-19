@@ -1,7 +1,4 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
 //Town Name Changer | player specific save code	
@@ -43,15 +40,14 @@ namespace CTRPluginFramework {
 			} break;
 			case 1: {
 				if(Wrap::Restore(PATH_SAVE, ".dat", Language->Get("SAVE_RESTORE_SELECT"), nullptr, true, WrapLoc{ Save::GetInstance()->Address(), 0x89B00 }, WrapLoc{ (u32)-1, (u32)-1 }) == ExHandler::SUCCESS) {
-					static const u32 fixfurno = Region::AutoRegion(0x6A6EE0, 0x6A6408, 0x6A5F18, 0x6A5F18, 0x6A59B0, 0x6A59B0, 0x6A5558, 0x6A5558);	
-					static FUNCTION func(fixfurno);
+					static Address fixfurno(0x6A6EE0, 0x6A6408, 0x6A5F18, 0x6A5F18, 0x6A59B0, 0x6A59B0, 0x6A5558, 0x6A5558);	
 					u32 orig[1] = { 0 };
 
-					Process::Patch(fixfurno + 0x41C, 0xE1A00000, orig);
+					Process::Patch(fixfurno.addr + 0x41C, 0xE1A00000, orig);
 								
-					func.Call<void>();
+					fixfurno.Call<void>();
 
-					Process::Patch(fixfurno + 0x41C, orig[0]);
+					Process::Patch(fixfurno.addr + 0x41C, orig[0]);
 				} 
 			} break;
 			case 2: 
@@ -268,9 +264,9 @@ namespace CTRPluginFramework {
 		if(res < 0)
 			return;
 		
-		const u32 B_Removal = Save::GetInstance()->Address(0x4BE88);
-		const u32 SetNPCFunc = Region::AutoRegion(0x3081A8, 0x308380, 0x308234, 0x308234, 0x3081C8, 0x3081C8, 0x3081DC, 0x3081DC);
-		const u32 DeleteNPCFunc = Region::AutoRegion(0x30836C, 0x3084D0, 0x308384, 0x308384, 0x308474, 0x308474, 0x30832C, 0x30832C);
+		static const u32 B_Removal = Save::GetInstance()->Address(0x4BE88);
+		static Address SetNPCFunc(0x3081A8, 0x308380, 0x308234, 0x308234, 0x3081C8, 0x3081C8, 0x3081DC, 0x3081DC);
+		static Address DeleteNPCFunc(0x30836C, 0x3084D0, 0x308384, 0x308384, 0x308474, 0x308474, 0x30832C, 0x30832C);
 
 		if(res == 0) {
 			Keyboard keyboard("a");
@@ -309,8 +305,7 @@ namespace CTRPluginFramework {
 			u32 null[]{ 0 };
 			u16 VID[]{ amiibo.VID };
 
-			static FUNCTION func(SetNPCFunc);
-			func.Call<void>(Save::GetInstance()->Address(0x292A4 + 0x17676), VID, null, Save::GetInstance()->Address(0x621B8)); 
+			SetNPCFunc.Call<void>(Save::GetInstance()->Address(0x292A4 + 0x17676), VID, null, Save::GetInstance()->Address(0x621B8)); 
 			OSD::Notify(Utils::Format("Set %s!", amiibo.Name.c_str()), Color::Green);
 
 			if(GameHelper::IsInRoom(0))
@@ -323,8 +318,7 @@ namespace CTRPluginFramework {
 					*(u8 *)(B_Removal + (i * 4)) = 0xC6;
 			}
 
-			static FUNCTION func(DeleteNPCFunc);
-			func.Call<void>(Save::GetInstance()->Address(0x292A4 + 0x17676));
+			DeleteNPCFunc.Call<void>(Save::GetInstance()->Address(0x292A4 + 0x17676));
 			OSD::Notify("Camping Villager Removed!", Color::Red);
 
 			if(GameHelper::IsInRoom(0))

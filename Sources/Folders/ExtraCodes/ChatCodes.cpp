@@ -1,16 +1,13 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
 //Chat Bubbles Don't Disappear /*Credits to Levi*/
 	void bubblesDisappear(MenuEntry *entry) { 
-		static const u32 bubble = Region::AutoRegion(0x2145F8, 0x21403C, 0x214618, 0x214618, 0x214538, 0x214538, 0x214504, 0x214504);
+		static const Address bubble(0x2145F8, 0x21403C, 0x214618, 0x214618, 0x214538, 0x214538, 0x214504, 0x214504);
 		if(entry->WasJustActivated()) 
-			Process::Patch(bubble, 0xE1A00000); 
+			Process::Patch(bubble.addr, 0xE1A00000);
 		else if(!entry->IsActivated()) 
-			Process::Patch(bubble, 0x0A000006); 
+			Process::Patch(bubble.addr, 0x0A000006);
 	}
 
 	static std::string Holder = "";
@@ -96,19 +93,18 @@ namespace CTRPluginFramework {
 
 //Force Send Chat
 	void Forcesendchat(MenuEntry *entry) {
-		static const u32 callchat = Region::AutoRegion(0x52440C, 0x523D60, 0x523454, 0x523454, 0x522D40, 0x522D40, 0x522A48, 0x522A48);
-		static FUNCTION func(callchat);
+		static Address callchat(0x52440C, 0x523D60, 0x523454, 0x523454, 0x522D40, 0x522D40, 0x522A48, 0x522A48);
 		if(entry->WasJustActivated())
-			Process::Patch(Code::DisableChatRemoval, 0xE1A00000);
+			Process::Patch(Code::DisableChatRemoval.addr, 0xEA000000);
 
 		if(entry->Hotkeys[0].IsDown()) {
 			if(!GameKeyboard::IsOpen())
 				return;
 
-			func.Call<void>(1, 2);
+			callchat.Call<void>(1, 2);
 		}
 
 		if(!entry->IsActivated())
-			Process::Patch(Code::DisableChatRemoval, Code::DisableChatRemovalVal);
+			Process::Patch(Code::DisableChatRemoval.addr, 0xE5900000);
 	}
 }

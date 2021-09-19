@@ -1,8 +1,5 @@
-#include <CTRPluginFramework.hpp>
 #include <cmath>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
     static u32 CurrAddress = 0;
@@ -102,12 +99,12 @@ namespace CTRPluginFramework {
 	}
 
 	void NPCAnimation(MenuEntry *entry) {
-        static const u32 func1 = Region::AutoRegion(0x6E7D54, 0x6E7204, 0x6E6D74, 0x6E6D4C, 0x6E6520, 0x6E64F8, 0x6E60C8, 0x6E60A0);
-        static const u32 func2 = Region::AutoRegion(0x6EB384, 0x6EA834, 0x6EA3A4, 0x6EA37C, 0x6E9B50, 0x6E9B28, 0x6E96F8, 0x6E96D0);
-        static const u32 func3 = Region::AutoRegion(0x6EC4E0, 0x6EB990, 0x6EB500, 0x6EB4D8, 0x6EACAC, 0x6EAC84, 0x6EA854, 0x6EA82C);
-        static const u32 func4 = Region::AutoRegion(0x6EE778, 0x6EDC28, 0x6ED798, 0x6ED770, 0x6ECF44, 0x6ECF1C, 0x6ECAEC, 0x6ECAC4);
-        static const u32 data1 = Region::AutoRegion(0xAE6864, 0xAE5658, 0xAE5864, 0xAE5864, 0xADF864, 0xADE864, 0xADE864, 0xADE864);
-        static const u32 data2 = Region::AutoRegion(0x8816C4, 0x8806BC, 0x880550, 0x880550, 0x87A970, 0x879970, 0x879920, 0x879920);
+        static Address func1(0x6E7D54, 0x6E7204, 0x6E6D74, 0x6E6D4C, 0x6E6520, 0x6E64F8, 0x6E60C8, 0x6E60A0);
+        static Address func2(0x6EB384, 0x6EA834, 0x6EA3A4, 0x6EA37C, 0x6E9B50, 0x6E9B28, 0x6E96F8, 0x6E96D0);
+        static Address func3(0x6EC4E0, 0x6EB990, 0x6EB500, 0x6EB4D8, 0x6EACAC, 0x6EAC84, 0x6EA854, 0x6EA82C);
+        static Address func4(0x6EE778, 0x6EDC28, 0x6ED798, 0x6ED770, 0x6ECF44, 0x6ECF1C, 0x6ECAEC, 0x6ECAC4);
+        static Address data1(0xAE6864, 0xAE5658, 0xAE5864, 0xAE5864, 0xADF864, 0xADE864, 0xADE864, 0xADE864);
+        static Address data2(0x8816C4, 0x8806BC, 0x880550, 0x880550, 0x87A970, 0x879970, 0x879920, 0x879920);
 
 		if(CurrAddress == 0)
 			return;
@@ -116,16 +113,16 @@ namespace CTRPluginFramework {
 			u32 null[]{ 0 };
 			switch(mode) {
 				case 0:
-					FUNCTION(func1).Call<void>(CurrAddress + 0x78, npcID, 0, data1, null, null, 0, data2); //Animation	
+					func1.Call<void>(CurrAddress + 0x78, npcID, 0, data1, null, null, 0, data2); //Animation	
 				break;
 				case 1:
-					FUNCTION(func2).Call<void>(CurrAddress + 0x78, 0, npcID, 0, 0); //Snake
+					func2.Call<void>(CurrAddress + 0x78, 0, npcID, 0, 0); //Snake
 				break;
 				case 2:
-					FUNCTION(func3).Call<void>(CurrAddress + 0x78, 0, npcID); //Emote
+					func3.Call<void>(CurrAddress + 0x78, 0, npcID); //Emote
 				break;
 				case 3:
-					FUNCTION(func4).Call<void>(CurrAddress + 0x78, 0, &npcID); //Item
+					func4.Call<void>(CurrAddress + 0x78, 0, &npcID); //Item
 				break;
 			}
 		}
@@ -168,17 +165,17 @@ namespace CTRPluginFramework {
 	}
 
 	u16 GetRawRotationData(void) {
-        static const u32 addr1 = Region::AutoRegion(0x522520, 0x521E74, 0x521568, 0x521568, 0x520E84, 0x520E84, 0x520818, 0x520818);
-        static const u32 addr2 = Region::AutoRegion(0x5667A8, 0x565CC0, 0x5657F0, 0x5657F0, 0x5650E0, 0x5650E0, 0x564E00, 0x564E00);
-        static const u32 addr3 = Region::AutoRegion(0x57C4F0, 0x57BA08, 0x57B538, 0x57B538, 0x57AE28, 0x57AE28, 0x57AB48, 0x57AB48);
-        static const u32 point1 = Region::AutoRegion(0x94FDE8, 0x94EDD8, 0x94EDE8, 0x94EDE8, 0x948DE8, 0x947DE8, 0x947DE8, 0x947DE8);
+        static Address addr1(0x522520, 0x521E74, 0x521568, 0x521568, 0x520E84, 0x520E84, 0x520818, 0x520818);
+        static Address addr2(0x5667A8, 0x565CC0, 0x5657F0, 0x5657F0, 0x5650E0, 0x5650E0, 0x564E00, 0x564E00);
+        static Address addr3(0x57C4F0, 0x57BA08, 0x57B538, 0x57B538, 0x57AE28, 0x57AE28, 0x57AB48, 0x57AB48);
+        static const Address point1(0x94FDE8, 0x94EDD8, 0x94EDE8, 0x94EDE8, 0x948DE8, 0x947DE8, 0x947DE8, 0x947DE8);
 
 		float fVar914 = 0;
 		u16 uVar918 = 0;
 		u8 uVar91C = 0;
 		u8 uVar91D = 0;
 
-		float *coord = FUNCTION(addr1).Call<float *>();
+		float *coord = addr1.Call<float *>();
 		
 		float fVar1 = coord[1];
 		fVar914 = coord[0];
@@ -190,12 +187,12 @@ namespace CTRPluginFramework {
           fVar914 = 1.0;
         }
 
-		uVar918 = FUNCTION(addr2).Call<u16>(coord[0], coord[1]);
+		uVar918 = addr2.Call<u16>(coord[0], coord[1]);
 
-		u32 iVar2 = *(u32 *)point1;
+		u32 iVar2 = *(u32 *)point1.addr;
 		if(iVar2 != 0) {
         	int iVar9 = *(int *)(iVar2 + 0x1A4);
-        	u16 sVar5 = FUNCTION(addr3).Call<u16>(iVar9 + 0x24, iVar9 + 0x30);
+        	u16 sVar5 = addr3.Call<u16>(iVar9 + 0x24, iVar9 + 0x30);
         	uVar918 = sVar5 + uVar918;
         }
 

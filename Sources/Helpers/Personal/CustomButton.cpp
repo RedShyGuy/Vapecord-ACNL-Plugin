@@ -1,7 +1,4 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
 
@@ -12,9 +9,10 @@ Custom Buttons are currently unused
 	//writes present lock onto item
 		Inventory::WriteLock(Inventory::GetSelectedSlot(), 1);
 	//Loads Item Icon | present icon
-		FUNCTION(Code::LoadIcon).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x1EC0, Inventory::GetSelectedSlot());
+		Code::LoadIcon.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x1EC0, Inventory::GetSelectedSlot());
 
-		FUNCTION(0x19B380).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		static Address restore(0x19B380);
+		restore.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}
 
 	void CustomButton::DuplicateItem(u32 ItemData) {
@@ -26,7 +24,8 @@ Custom Buttons are currently unused
 		else 
 			Inventory::WriteSlot(Inventory::GetSelectedSlot() + 1, itemslotid);
 		
-		FUNCTION(0x19B380).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		static Address restore(0x19B380);
+		restore.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}
 	
 	void CustomButton::PutItemToStorage(u32 ItemData) {
@@ -39,14 +38,19 @@ Custom Buttons are currently unused
 			PlayerPTR::Write32(0x92F0 + (0x4 * slot), itemslotid);
 		}
 
-		FUNCTION(0x19B380).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		static Address restore(0x19B380);
+		restore.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}
 	
 	void CustomButton::PayDebt(u32 ItemData) {	
+		static Address get(0x3055C8);
+		static Address sound(0x58DDF8);
+		static Address restore(0x19B380);
+
 		u32 itemslotid = 0x7FFE;
 		Inventory::ReadSlot(Inventory::GetSelectedSlot(), itemslotid);
-		if(IDList::ValidID(itemslotid, 0x20AC, 0x2117)) {  
-			int money = FUNCTION(0x3055C8).Call<int>(PlayerPTR::Pointer(0x6BD0 + (0x4 * Inventory::GetSelectedSlot())));
+		if(IDList::ValidID(itemslotid, 0x20AC, 0x2117)) { 
+			int money = get.Call<int>(PlayerPTR::Pointer(0x6BD0 + (0x4 * Inventory::GetSelectedSlot())));
 				
 			int debt = GameHelper::GetMoney((u64 *)PlayerPTR::Pointer(0x6B94));
 		//if you try to store more money than you need to, the rest will be set to your bank acc
@@ -72,7 +76,7 @@ Custom Buttons are currently unused
 			GameHelper::SetMoney(PlayerPTR::Pointer(0x6B94), debt - money);
 
 			while(itemslotid > 0x20AC) {
-				FUNCTION(0x58DDF8).Call<void>(0x1000491);
+				sound.Call<void>(0x1000491);
 				Inventory::WriteSlot(Inventory::GetSelectedSlot(), itemslotid--);		
 			}
 
@@ -81,13 +85,15 @@ Custom Buttons are currently unused
 			Inventory::WriteSlot(Inventory::GetSelectedSlot(), 0x7FFE);
 		}
 		
-		FUNCTION(0x19B380).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		restore.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}
 	
 	void CustomButton::RandomOutfit(u32 ItemData) {
+		static Address restore(0x19D2A0);
+
 		Player::WriteOutfit(4, Utils::Random(0x280B, 0x28F3), Utils::Random(0x28F5, 0x295B), Utils::Random(0x2493, 0x26F5), Utils::Random(0x26F8, 0x2776), Utils::Random(0x2777, 0x279E), Utils::Random(0x279F, 0x27E5));
 		
-		FUNCTION(0x19D2A0).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		restore.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}
 
 	/*void claim(void) {
@@ -159,7 +165,9 @@ Custom Buttons are currently unused
 	};
 
 	u32 SetNameCall(u32 DataPointer, u32 *stack, char *SYS_2D_UI, u8 sysID) {
-		u32 res = FUNCTION(0x312610).Call<u32>(DataPointer, stack, SYS_2D_UI, sysID);
+		static Address set(0x312610);
+
+		u32 res = set.Call<u32>(DataPointer, stack, SYS_2D_UI, sysID);
 
 		if(sysID == 0x2A)
 			Process::WriteString(stack[1], citemsettings[itemsetting1], 0x20, StringFormat::Utf16);
@@ -191,11 +199,11 @@ Custom Buttons are currently unused
 			"Item Button 1", "Item Button 2", "Outfit Button 1",
 		};
 
-		ItemFuncData* FuncPointer = (ItemFuncData *)Region::AutoRegion(0x9509FC, 0, 0, 0, 0, 0, 0, 0);
+		ItemFuncData* FuncPointer = (ItemFuncData *)0x9509FC;
 
-		static const u32 SYSNameFunc = Region::AutoRegion(0x5D5860, 0, 0, 0, 0, 0, 0, 0);
+		static const Address SYSNameFunc(0x5D5860, 0, 0, 0, 0, 0, 0, 0);
 		static Hook NameHook;
-		NameHook.Initialize(SYSNameFunc, (u32)SetNameCall);
+		NameHook.Initialize(SYSNameFunc.addr, (u32)SetNameCall);
 		NameHook.SetFlags(USE_LR_TO_RETURN);
 
 		static const u32 Undo1 = FuncPointer[24].FunctionPointer;
@@ -215,10 +223,10 @@ Custom Buttons are currently unused
 			if(op < 0)
 				return;
 
-			static const u32 AlwaysMedicine = Region::AutoRegion(0x19BC04, 0, 0, 0, 0, 0, 0, 0);
+			static const Address AlwaysMedicine(0x19BC04, 0, 0, 0, 0, 0, 0, 0);
 
 			if(op == 4) {
-				Process::Patch(AlwaysMedicine, 0x1A000020); //Unpatch
+				Process::Patch(AlwaysMedicine.addr, 0x1A000020); //Unpatch
 
 				FuncPointer[24].FunctionPointer = Undo1;
 
@@ -228,7 +236,7 @@ Custom Buttons are currently unused
 
 			NameHook.Enable();
 
-			Process::Patch(AlwaysMedicine, 0xE1A00000); //Always Take Medicine
+			Process::Patch(AlwaysMedicine.addr, 0xE1A00000); //Always Take Medicine
 
 			FuncPointer[24].FunctionPointer = (u32)ItemButtonArr[op];
 
@@ -241,12 +249,12 @@ Custom Buttons are currently unused
 			if(op < 0)
 				return;
 			
-			static const u32 AlwaysRelease = Region::AutoRegion(0x19BD60, 0, 0, 0, 0, 0, 0, 0);
-			static const u32 NeverToss = Region::AutoRegion(0x19BD80, 0, 0, 0, 0, 0, 0, 0);
+			static const Address AlwaysRelease(0x19BD60, 0, 0, 0, 0, 0, 0, 0);
+			static const Address NeverToss(0x19BD80, 0, 0, 0, 0, 0, 0, 0);
 
 			if(op == 4) {
-				Process::Patch(AlwaysRelease, 0x0A000013);
-				Process::Patch(NeverToss, 0xE3A02037);
+				Process::Patch(AlwaysRelease.addr, 0x0A000013);
+				Process::Patch(NeverToss.addr, 0xE3A02037);
 
 				FuncPointer[15].FunctionPointer = Undo2;
 
@@ -256,8 +264,8 @@ Custom Buttons are currently unused
 
 			NameHook.Enable();
 				
-			Process::Patch(AlwaysRelease, 0xE1A00000); //Enables Always Release
-			Process::Patch(NeverToss, 0xE3A0200C); //Changes Toss if Cicada Shell to release
+			Process::Patch(AlwaysRelease.addr, 0xE1A00000); //Enables Always Release
+			Process::Patch(NeverToss.addr, 0xE3A0200C); //Changes Toss if Cicada Shell to release
 
 			FuncPointer[15].FunctionPointer = (u32)ItemButtonArr[op];
 
@@ -271,12 +279,12 @@ Custom Buttons are currently unused
 			if(op < 0)
 				return;
 			
-			static const u32 WetSuitButton = Region::AutoRegion(0x19DBA4, 0, 0, 0, 0, 0, 0, 0);
-			static const u32 SocksButton = Region::AutoRegion(0x19DC78, 0, 0, 0, 0, 0, 0, 0);
+			static const Address WetSuitButton(0x19DBA4, 0, 0, 0, 0, 0, 0, 0);
+			static const Address SocksButton(0x19DC78, 0, 0, 0, 0, 0, 0, 0);
 
 			if(op == 1) {
-				Process::Patch(WetSuitButton, 0x1A000009);
-				Process::Patch(SocksButton, 0x1A000009);
+				Process::Patch(WetSuitButton.addr, 0x1A000009);
+				Process::Patch(SocksButton.addr, 0x1A000009);
 
 				FuncPointer[5].FunctionPointer = Undo3;
 
@@ -286,8 +294,8 @@ Custom Buttons are currently unused
 
 			NameHook.Enable();
 			
-			Process::Patch(WetSuitButton, 0xE1A00000); //Always Remove Wet Suit
-			Process::Patch(SocksButton, 0xEA000009); //Disable Remove Socks
+			Process::Patch(WetSuitButton.addr, 0xE1A00000); //Always Remove Wet Suit
+			Process::Patch(SocksButton.addr, 0xEA000009); //Disable Remove Socks
 
 			FuncPointer[5].FunctionPointer = (u32)OutfitButtonArr[op];
 

@@ -3,6 +3,7 @@
 
 #include <3ds.h>
 #include <CTRPluginFramework.hpp>
+#include <cstdarg>
 
 #include "Helpers/Game.hpp"
 #include "Helpers/AnimData.hpp"
@@ -13,7 +14,7 @@
 #include "Helpers/Player.hpp"
 #include "Helpers/PlayerPTR.hpp"
 #include "Helpers/ItemSequence.hpp"
-#include "Helpers/Region.hpp"
+#include "Helpers/Address.hpp"
 #include "Helpers/ACSystem.hpp"
 #include "Helpers/ACMessageBox.hpp"
 #include "Helpers/GameKeyboard.hpp"

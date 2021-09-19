@@ -1,6 +1,4 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
 
 namespace CTRPluginFramework {
 	static const u8 CONFIG_V = 0xC8;

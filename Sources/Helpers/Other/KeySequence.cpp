@@ -1,5 +1,4 @@
 #include "cheats.hpp"
-#include <CTRPluginFramework.hpp>
 
 namespace CTRPluginFramework
 {

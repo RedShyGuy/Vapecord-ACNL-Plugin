@@ -1,7 +1,4 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
 
 extern "C" void PATCH_KappnBypass1(void);
 extern "C" void PATCH_KappnBypass2(void);
@@ -100,7 +97,7 @@ namespace CTRPluginFramework {
 	void Hackerisland(MenuEntry *entry)	{ 
 		std::vector<std::string> cmnOpt =  { "" };
 
-		bool IsON = *(u32 *)Code::country == 0xE3A000FF;
+		bool IsON = *(u32 *)Code::country.addr == 0xE3A000FF;
 
 		cmnOpt[0] = IsON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
 		
@@ -111,14 +108,14 @@ namespace CTRPluginFramework {
 		if(op == -1)
 			return;
 		
-		Process::Patch(Code::country, IsON ? 0xE1A00C20 : 0xE3A000FF);
+		Process::Patch(Code::country.addr, IsON ? 0xE1A00C20 : 0xE3A000FF);
 		Hackerisland(entry);
 	}
 //InputChangeEvent For Country Spoof
 	void onCountryChange(Keyboard &k, KeyboardEvent &e) {
 		if(e.type == KeyboardEvent::CharacterRemoved || e.type == KeyboardEvent::CharacterAdded) {
 			std::string s = k.GetInput();
-			k.GetMessage() = "ID:\n\n" << IDList::SetCountryName(s != "" ? std::stoi(s, nullptr, 16) : 0);
+			k.GetMessage() = "ID:\n\n" << IDList::SetCountryName(!s.empty() ? std::stoi(s, nullptr, 16) : 0);
 		}
 	}
 //Country Spoof	
@@ -135,10 +132,10 @@ namespace CTRPluginFramework {
 			default: break;	
 			case 0: 
 				if(Wrap::KB<u8>(Language->Get("ISLAND_COUNTRY_SET_ID"), true, 2, input, 0, onCountryChange)) 
-					Process::Patch(Code::country, 0xE3A00000 + input); 
+					Process::Patch(Code::country.addr, 0xE3A00000 + input); 
 			break;	
 			case 1: 
-				Process::Patch(Code::country, 0xE1A00C20); 
+				Process::Patch(Code::country.addr, 0xE1A00C20); 
 			break;	
 		}
 	}
@@ -159,44 +156,44 @@ namespace CTRPluginFramework {
 	}
 //Island Shop
 	void IslandShop(MenuEntry *entry) {	
-		static const u32 IslandShopPointer = Region::AutoRegion(0x954238, 0x953228, 0x953238, 0x953238, 0x94D238, 0x94C238, 0x94C238, 0x94C238);
-		if(*(u32 *)IslandShopPointer == 0)
+		static const Address IslandShopPointer(0x954238, 0x953228, 0x953238, 0x953238, 0x94D238, 0x94C238, 0x94C238, 0x94C238);
+		if(*(u32 *)IslandShopPointer.addr == 0)
 			return;
 		
 		if(GameHelper::NextRoomCheck() == 0xA5 && GameHelper::RoomCheck() == 0x65) {
 			for(int i = 0; i < 4; ++i) {
-				Process::Write32(*(u32 *)IslandShopPointer + 0x10 + (i * 4), IDList::ItemValid(ShopItem[i], false) ? ShopItem[i] : 0x2018);
+				Process::Write32(*(u32 *)IslandShopPointer.addr + 0x10 + (i * 4), IDList::ItemValid(ShopItem[i], false) ? ShopItem[i] : 0x2018);
 			}
 		}
 	}
 	
 //All Tours
 	void alltour(MenuEntry *entry) {
-		static const u32 TourPatch = Region::AutoRegion(0x76FCC0, 0x76ECA4, 0x76ECC8, 0x76ECA0, 0x76E460, 0x76E438, 0x76E008, 0x76DFE0);
+		static const Address TourPatch(0x76FCC0, 0x76ECA4, 0x76ECC8, 0x76ECA0, 0x76E460, 0x76E438, 0x76E008, 0x76DFE0);
 		if(entry->WasJustActivated()) {
-			Process::Patch(TourPatch, 0xE1A00000); //unsure? (still keeping it for safety)
-			Process::Patch(TourPatch + 0x54, 0xE1A00000);  //Adds tour difficulty
-			Process::Patch(TourPatch + 0xD0, 0xE1A00000); //Adds tour names and tour infos
-			Process::Patch(TourPatch + 0x138, 0xE1A00000); //Adds tour time
+			Process::Patch(TourPatch.addr, 0xE1A00000); //unsure? (still keeping it for safety)
+			Process::Patch(TourPatch.addr + 0x54, 0xE1A00000);  //Adds tour difficulty
+			Process::Patch(TourPatch.addr + 0xD0, 0xE1A00000); //Adds tour names and tour infos
+			Process::Patch(TourPatch.addr + 0x138, 0xE1A00000); //Adds tour time
 
-			Process::Patch(TourPatch + 0xA8, 0xE2800001); //Adds all tours to be selectable
+			Process::Patch(TourPatch.addr + 0xA8, 0xE2800001); //Adds all tours to be selectable
 		}
 		else if(!entry->IsActivated()) {
-			Process::Patch(TourPatch, 0x0A000004);
-			Process::Patch(TourPatch + 0x54, 0x0A000004);
-			Process::Patch(TourPatch + 0xD0, 0x0A000004);
-			Process::Patch(TourPatch + 0x138, 0x0A000004); 
+			Process::Patch(TourPatch.addr, 0x0A000004);
+			Process::Patch(TourPatch.addr + 0x54, 0x0A000004);
+			Process::Patch(TourPatch.addr + 0xD0, 0x0A000004);
+			Process::Patch(TourPatch.addr + 0x138, 0x0A000004); 
 
-			Process::Patch(TourPatch + 0xA8, 0x12800001);
+			Process::Patch(TourPatch.addr + 0xA8, 0x12800001);
 		}
     }
 
 //Island Acre Mod	
 	void acreMod(MenuEntry *entry) {
-		if(*(u32 *)Code::IslPointer == 0)
+		if(*(u32 *)Code::IslPointer.addr == 0)
 			return;
 		
-		u32 IslAcreOffset = *(u32 *)Code::IslPointer + 2; //0x953708
+		u32 IslAcreOffset = *(u32 *)Code::IslPointer.addr + 2; //0x953708
 		
 		for(u8 i = 0; i < 16; ++i) 
 			Process::Write8(IslAcreOffset + i * 2, isl.acres[i]);
@@ -213,10 +210,10 @@ namespace CTRPluginFramework {
 	}
 //Island Building Mod	
 	void buildingMod(MenuEntry *entry) {
-		if(*(u32 *)Code::IslPointer == 0)
+		if(*(u32 *)Code::IslPointer.addr == 0)
 			return;
 		
-		u32 islandBuildings = *(u32 *)Code::IslPointer + 0x1022;
+		u32 islandBuildings = *(u32 *)Code::IslPointer.addr + 0x1022;
 		
 		for(u8 i = 0; i < 2; ++i) {
 			Process::Write16(islandBuildings + i * 4, isl.b[i].id);
@@ -241,12 +238,12 @@ namespace CTRPluginFramework {
 
 	void FreeKappn(MenuEntry *entry) {
 		static Hook hook1, hook2;
-		static const u32 kappn1 = Region::AutoRegion(0x5DC048, 0x5DB578, 0x5DB090, 0x5DB090, 0x5DA910, 0x5DA910, 0x5DA598, 0x5DA598);
-		static const u32 kappn2 = Region::AutoRegion(0x5DAF98, 0x5DA4C8, 0x5D9FE0, 0x5D9FE0, 0x5D9814, 0x5D9814, 0x5D94E8, 0x5D94E8);
+		static const Address kappn1(0x5DC048, 0x5DB578, 0x5DB090, 0x5DB090, 0x5DA910, 0x5DA910, 0x5DA598, 0x5DA598);
+		static const Address kappn2(0x5DAF98, 0x5DA4C8, 0x5D9FE0, 0x5D9FE0, 0x5D9814, 0x5D9814, 0x5D94E8, 0x5D94E8);
 
 		if(entry->WasJustActivated()) {
-			hook1.Initialize(kappn1, (u32)PATCH_KappnBypass1);
-			hook2.Initialize(kappn2, (u32)PATCH_KappnBypass2);
+			hook1.Initialize(kappn1.addr, (u32)PATCH_KappnBypass1);
+			hook2.Initialize(kappn2.addr, (u32)PATCH_KappnBypass2);
 
 		  	hook1.SetFlags(USE_LR_TO_RETURN);
 			hook2.SetFlags(USE_LR_TO_RETURN);

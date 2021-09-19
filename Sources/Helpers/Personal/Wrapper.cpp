@@ -1,8 +1,4 @@
-#include <CTRPluginFramework.hpp>
-#include <cstdarg>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
 //Dump File	

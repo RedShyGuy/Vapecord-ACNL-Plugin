@@ -1,5 +1,3 @@
-#include <CTRPluginFramework.hpp>
-#include "TextFileParser.hpp"
 #include "cheats.hpp"
 
 /*All credits goes to PabloMK7*/

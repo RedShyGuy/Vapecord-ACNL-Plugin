@@ -1,8 +1,4 @@
-#include <CTRPluginFramework.hpp>
-#include <cstdarg>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
 	const u32 majorV = 1;
@@ -88,7 +84,7 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 */
 	void RestoreDropPattern(void) {
 		for(int i = 0; i < 77; ++i)
-			Process::Write32(Code::DropPattern + (i * 4), ReValues[i]);
+			Process::Write32(Code::DropPattern.addr + (i * 4), ReValues[i]);
 	}
 
 /*

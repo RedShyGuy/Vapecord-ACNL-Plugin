@@ -1,7 +1,4 @@
-#include <CTRPluginFramework.hpp>
-#include <vector>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
 
 namespace CTRPluginFramework {
     static MenuEntry *EntryWithHotkey(MenuEntry *entry, const std::vector<Hotkey> &hotkeys) {

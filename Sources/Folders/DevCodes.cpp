@@ -1,7 +1,4 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
 //Integer For Custom Dumper
@@ -136,7 +133,7 @@ namespace CTRPluginFramework {
 				return;	
 
 			Sleep(Milliseconds(100));
-			static FUNCTION func(funcaddress);
+			static Address func(funcaddress);
 			switch(size) {
 				case 0: result = func.Call<u32>(); break;
 				case 1: result = func.Call<u32>(p[0]); break;
@@ -301,7 +298,7 @@ namespace CTRPluginFramework {
 */
 
 /*
-//u32 Currentmap = Region::AutoRegion(0x9B5A24, 0x9B4A24, 0x9B4A24, 0x9B4A24, 0x9AEA04, 0x9ADA04, 0x9ADA24, 0x9ADA24);
+//u32 Currentmap(0x9B5A24, 0x9B4A24, 0x9B4A24, 0x9B4A24, 0x9AEA04, 0x9ADA04, 0x9ADA24, 0x9ADA24);
 	void ItemPlacer(u32* ItemID) {
 		static FUNCT func(0x581E3C);
 		func.Call<void>(GameHelper::GetCurrentMap(), ItemID, PlayerClass::GetInstance()->GetCoordinates(), 0);
@@ -502,22 +499,8 @@ namespace CTRPluginFramework {
 	32239378 = ModuleKotobuki.cro
 	*/
 
-	bool AuroraTest(u8* param1, u8* param2) {
-		param1[0] = 0x15;
-		param2[0] = 0x1E;
-		return 1;
-	}
-
 //Item Island Code
 	void islanditems(MenuEntry *entry) {
-		/*static Hook hook;
-
-		hook.Initialize(0x6302D0, (u32)AuroraTest);
-		hook.SetFlags(USE_LR_TO_RETURN);
-		hook.Enable();
-
-		return;*/
-
 		static std::string str = "";
 		static u32 buffer = 0;
 
@@ -537,8 +520,13 @@ namespace CTRPluginFramework {
 				}
 			}
 		}
+		/*else if(Controller::IsKeysPressed(Key::R + Key::DPadRight)) {
+			int res = FUNCTION(0x30F5FC).Call<int>(0xAF88F8, "Test %d", 25);
+			char* buff = (char *)(0xAF88F8 + 0xC);
+			OSD::Notify(std::string(buff));
+		}
 
-		/*if(Controller::IsKeysPressed(Key::R + Key::DPadUp)) {
+		if(Controller::IsKeysPressed(Key::R + Key::DPadUp)) {
 			AnimationData *globalData = new AnimationData(); //<u8, u8, u8, u8, u8, u16, u8>
 
 			u32 player = PlayerClass::GetInstance()->Offset();
@@ -599,7 +587,7 @@ namespace CTRPluginFramework {
 
 	void keymap(MenuEntry *entry) {	
 		static Hook hook;
-		u32 address = Region::AutoRegion(0x64FC1C, 0, 0, 0, 0, 0, 0, 0);
+		u32 address(0x64FC1C, 0, 0, 0, 0, 0, 0, 0);
 		hook.Initialize(address, (u32)ChangeSpeed);
 		hook.SetFlags(USE_LR_TO_RETURN);
 		//hook.Enable();
@@ -613,8 +601,8 @@ namespace CTRPluginFramework {
 			KB.Open(itemID, itemID);
 		}
 		
-		u32 LButton = Region::AutoRegion(0x5B4180, 0, 0, 0, 0, 0, 0, 0);
-		u32 RButton = Region::AutoRegion(0x5B4194, 0, 0, 0, 0, 0, 0, 0);
+		u32 LButton(0x5B4180, 0, 0, 0, 0, 0, 0, 0);
+		u32 RButton(0x5B4194, 0, 0, 0, 0, 0, 0, 0);
 		L1.Initialize(LButton, (u32)ScreenshotmapperL);
 		R1.Initialize(RButton, (u32)ScreenshotmapperR);
 		L1.SetFlags(USE_LR_TO_RETURN);
@@ -633,16 +621,16 @@ namespace CTRPluginFramework {
 	}*/
 
 	void lightswitch(MenuEntry *entry) {
-		static const u32 TargetAddress = Region::AutoRegion(0x190EA8, 0x1908F0, 0x190EC8, 0x190EC8, 0x190E18, 0x190E18, 0x190E18, 0x190E18);
-		static const u32 Patch = Region::AutoRegion(0x1E7AD8, 0x1E751C, 0x1E7AF8, 0x1E7AF8, 0x1E7A34, 0x1E7A34, 0x1E7A00, 0x1E7A00);
+		static const Address TargetAddress(0x190EA8, 0x1908F0, 0x190EC8, 0x190EC8, 0x190E18, 0x190E18, 0x190E18, 0x190E18);
+		static const Address Patch(0x1E7AD8, 0x1E751C, 0x1E7AF8, 0x1E7AF8, 0x1E7A34, 0x1E7A34, 0x1E7A00, 0x1E7A00);
 
 		if(entry->WasJustActivated()) {
 		//this disables the "non switchable light" flag to be written
 			u32 val = 0;
-			Process::Read32(TargetAddress, val);
-			Process::Write32(TargetAddress, val + 0x146); //patch BL 0x1E7554 to BL 0x1E7A6C
+			Process::Read32(TargetAddress.addr, val);
+			Process::Write32(TargetAddress.addr, val + 0x146); //patch BL 0x1E7554 to BL 0x1E7A6C
 		//this disables the reading of the "non switchable light" flag
-			Process::Write32(Patch, 0xE3A00000);
+			Process::Write32(Patch.addr, 0xE3A00000);
 		}
 
 		static u8 roomID = 0;
@@ -667,9 +655,9 @@ namespace CTRPluginFramework {
 
 		if(!entry->IsActivated()) {
 			u32 val = 0;
-			Process::Read32(TargetAddress, val);
-			Process::Write32(TargetAddress, val - 0x146);
-			Process::Write32(Patch, 0x05960028);
+			Process::Read32(TargetAddress.addr, val);
+			Process::Write32(TargetAddress.addr, val - 0x146);
+			Process::Write32(Patch.addr, 0x05960028);
 		}
 	}
 
@@ -678,8 +666,7 @@ namespace CTRPluginFramework {
 		static bool random = false;
 		u16 FishID = 0x22E1;
 
-		//static FUNCTION func(0x5C3DDC);
-		static FUNCTION throwfish(0x5C2DAC);
+		static Address throwfish(0x5C2DAC);
 
 		if(Controller::IsKeysPressed(Key::L + Key::DPadRight)) {
 			if(playerID == 3) playerID = 0;		

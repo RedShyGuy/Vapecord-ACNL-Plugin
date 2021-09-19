@@ -1,6 +1,4 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
 
 /*
     Amiibo Spoofer 3.0 by Slattz
@@ -67,33 +65,33 @@ namespace CTRPluginFramework {
     }
 
     void AmiiboSpoofer(MenuEntry *entry) {
-        static const u32 offsetPatch = Region::AutoRegion(0x51C104, 0x51BA58, 0x51B14C, 0x51B14C, 0x51AA68, 0x51AA68, 0x51A3FC, 0x51A3FC);
-        static const u32 offsetHook = Region::AutoRegion(0x51BBDC, 0x51B530, 0x51AC24, 0x51AC24, 0x51A540, 0x51A540, 0x519ED4, 0x519ED4);
-        static const u32 offsetPatch_o3ds1 = Region::AutoRegion(0x3DAA7C, 0x3DA48C, 0x3D9AC4, 0x3D9AC4, 0x3D975C, 0x3D975C, 0x3D961C, 0x3D961C);
-        static const u32 offsetPatch_o3ds2 = Region::AutoRegion(0x3DA824, 0x3DA234, 0x3D986C, 0x3D986C, 0x3D9504, 0x3D9504, 0x3D93C4, 0x3D93C4);
+        static const Address offsetPatch(0x51C104, 0x51BA58, 0x51B14C, 0x51B14C, 0x51AA68, 0x51AA68, 0x51A3FC, 0x51A3FC);
+        static const Address offsetHook(0x51BBDC, 0x51B530, 0x51AC24, 0x51AC24, 0x51A540, 0x51A540, 0x519ED4, 0x519ED4);
+        static const Address offsetPatch_o3ds1(0x3DAA7C, 0x3DA48C, 0x3D9AC4, 0x3D9AC4, 0x3D975C, 0x3D975C, 0x3D961C, 0x3D961C);
+        static const Address offsetPatch_o3ds2(0x3DA824, 0x3DA234, 0x3D986C, 0x3D986C, 0x3D9504, 0x3D9504, 0x3D93C4, 0x3D93C4);
         static u32 originalCode[3] = {0};
         static Hook nfcHook;
 
 		if(entry->WasJustActivated()) {
-			Process::Patch(offsetPatch, 0xE3A00003, (void*)&originalCode[0]); //Force tell nfc game code that there's an amiibo ready (NFC_TagState_InRange)
+			Process::Patch(offsetPatch.addr, 0xE3A00003, (void*)&originalCode[0]); //Force tell nfc game code that there's an amiibo ready (NFC_TagState_InRange)
 
             if(!System::IsNew3DS()) {
-                Process::Patch(offsetPatch_o3ds1, 0xE3A00002, (void*)&originalCode[1]); //Tells the o3ds the nfc reader is init'd
-                Process::Patch(offsetPatch_o3ds2, 0xE3A00000, (void*)&originalCode[2]); //Forces the game to think nfc sysmodule has started scanning
+                Process::Patch(offsetPatch_o3ds1.addr, 0xE3A00002, (void*)&originalCode[1]); //Tells the o3ds the nfc reader is init'd
+                Process::Patch(offsetPatch_o3ds2.addr, 0xE3A00000, (void*)&originalCode[2]); //Forces the game to think nfc sysmodule has started scanning
             }
 
-            nfcHook.Initialize(offsetHook, (u32)AmiiboHook);
+            nfcHook.Initialize(offsetHook.addr, (u32)AmiiboHook);
             nfcHook.SetFlags(USE_LR_TO_RETURN);
-            nfcHook.SetReturnAddress(offsetHook + 0x90); //skip over most the function as the scanning is ''done''
+            nfcHook.SetReturnAddress(offsetHook.addr + 0x90); //skip over most the function as the scanning is ''done''
             nfcHook.Enable();
 		}
 		
 		else if(!entry->IsActivated()) {
-			Process::Patch(offsetPatch, originalCode[0]);
+			Process::Patch(offsetPatch.addr, originalCode[0]);
 
             if(!System::IsNew3DS()) {
-                Process::Patch(offsetPatch_o3ds1, originalCode[1]);
-                Process::Patch(offsetPatch_o3ds2, originalCode[2]);
+                Process::Patch(offsetPatch_o3ds1.addr, originalCode[1]);
+                Process::Patch(offsetPatch_o3ds2.addr, originalCode[2]);
             }
 
             nfcHook.Disable();

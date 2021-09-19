@@ -1,7 +1,4 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "MenuPointers.hpp"
-#include <cstdarg>
 
 namespace CTRPluginFramework {
 //MenuEntry Names for Color Changer/Language Changer

@@ -1,6 +1,4 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
 
 namespace CTRPluginFramework {
 	const std::string LanguageTXT[6] {

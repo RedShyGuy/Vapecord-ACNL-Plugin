@@ -1,7 +1,4 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
 	const s_DropType DropTypes[8] = {
@@ -74,14 +71,12 @@ namespace CTRPluginFramework {
 	}
 //Place Item	
 	u32 Dropper::PlaceItem(u8 ID, u32 *ItemToReplace, u32 *ItemToPlace, u32 *ItemToShow, u8 worldx, u8 worldy, bool u0, bool u1, bool u2, bool u3, bool u4) {
-		static FUNCTION func(Code::PlaceItemOffset);
-		return func.Call<u32>(ID, (u32)ItemToReplace, (u32)ItemToPlace, (u32)ItemToShow, worldx, worldy, u0, u1, u2, u3, u4);
+		return Code::PlaceItemOffset.Call<u32>(ID, (u32)ItemToReplace, (u32)ItemToPlace, (u32)ItemToShow, worldx, worldy, u0, u1, u2, u3, u4);
 	}
 //Drop Check	
 	bool Dropper::DropCheck(u32 *wX, u32 *wY, u32 *u0, bool disallowConcrete, bool u1) {
-		static const u32 dropcheck = Region::AutoRegion(0x5990AC, 0x5985C4, 0x5980F4, 0x5980F4, 0x5979E4, 0x5979E4, 0x5976B8, 0x5976B8);
-		static FUNCTION func(dropcheck);
-		return func.Call<bool>((u32)wX, (u32)wY, (u32)u0, disallowConcrete, u1);
+		static Address dropcheck(0x5990AC, 0x5985C4, 0x5980F4, 0x5980F4, 0x5979E4, 0x5979E4, 0x5976B8, 0x5976B8);
+		return dropcheck.Call<bool>((u32)wX, (u32)wY, (u32)u0, disallowConcrete, u1);
 	}
 //Drop Item Wrapper	
 	bool Dropper::PlaceItemWrapper(u8 ID, u32 ItemToReplace, u32 *ItemToPlace, u32 *ItemToShow, u8 worldx, u8 worldy, bool u0, bool u1, bool u2, bool u3, bool u4, u8 waitAnim, u8 roomID, bool itemsequenceallowed) {
@@ -159,13 +154,8 @@ namespace CTRPluginFramework {
 			Process::Write32(player + 0x844, 0);
 			Process::Write8(player + 0x8CC, ID);
 
-		//Gets used to write the coordinates of the animation
-			float coords[3];
-			static const u32 coordoffset = Region::AutoRegion(0x5D4C88, 0x5D41B8, 0x5D3CD0, 0x5D3CD0, 0x5D3504, 0x5D3504, 0x5D321C, 0x5D321C);	
-
 		//animation patch
-			static const u32 animpatch = Region::AutoRegion(0x682430, 0x681958, 0x681468, 0x681468, 0x680F28, 0x680F28, 0x680AD0, 0x680AD0);
-			static const u32 offvalue = *(u32 *)animpatch;
+			static const Address animpatch(0x682434, 0x68195C, 0x68146C, 0x68146C, 0x680F2C, 0x680F2C, 0x680AD4, 0x680AD4);
 
 		//display pattern, smash rock, bury
 			if(waitAnim == 0x5D || waitAnim == 0x6B || waitAnim == 0x5A)
@@ -208,7 +198,7 @@ namespace CTRPluginFramework {
 			//if bury animation
 				if((ID == 0x13 || autoWaitAnim == 0x4A) && !noWait && !forced) {
 					autoWaitAnim = 0x4A;
-					Process::Patch(animpatch, 0xE3A00000);
+					Process::Patch(animpatch.addr, 0xE3A00000);
 					data.AppendAnimData<u16>(animInstance, 0x10, ID);
 					Sleep(Milliseconds(5));
 				}
@@ -227,7 +217,7 @@ namespace CTRPluginFramework {
 		//sleep if noWait is turned off
 			if(!noWait) {
 				Sleep(Milliseconds(40));
-				Process::Patch(animpatch, offvalue);
+				Process::Patch(animpatch.addr, 0xE3700001);
 			}
 		}
 		return true;

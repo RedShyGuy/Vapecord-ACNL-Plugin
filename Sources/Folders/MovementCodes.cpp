@@ -1,7 +1,4 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
 
 extern "C" void SetWalkParticleID(void);
 
@@ -10,11 +7,11 @@ u32 WalkParticleID = 0;
 namespace CTRPluginFramework {
 //Players can't push you
 	void noPush(MenuEntry *entry) { 
-		static const u32 push = Region::AutoRegion(0x652288, 0x6517B0, 0x6512C0, 0x6512C0, 0x650D80, 0x650D80, 0x650928, 0x650928);
+		static const Address push(0x652288, 0x6517B0, 0x6512C0, 0x6512C0, 0x650D80, 0x650D80, 0x650928, 0x650928);
 		
 		std::vector<std::string> cmnOpt =  { "" };
 
-		bool IsON = *(u32 *)push == 0xEA00002D;
+		bool IsON = *(u32 *)push.addr == 0xEA00002D;
 
 		cmnOpt[0] = IsON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
 		
@@ -25,7 +22,7 @@ namespace CTRPluginFramework {
 		if(op < 0)
 			return;
 			
-		Process::Patch(push, IsON ? 0x2A00002D : 0xEA00002D);
+		Process::Patch(push.addr, IsON ? 0x2A00002D : 0xEA00002D);
 		noPush(entry);
 	}
 //Definition for Coordinate Mod Speed
@@ -79,16 +76,16 @@ namespace CTRPluginFramework {
     }
 //Walk Over Things
 	void walkOver(MenuEntry *entry) {		
-		static const u32 walkover1 = Region::AutoRegion(0x6503FC, 0x64F924, 0x64F434, 0x64F434, 0x64EEF4, 0x64EEF4, 0x64EA9C, 0x64EA9C);
-		static const u32 walkover2 = Region::AutoRegion(0x650414, 0x64F93C, 0x64F44C, 0x64F44C, 0x64EF0C, 0x64EF0C, 0x64EAB4, 0x64EAB4);
-		static const u32 walkover3 = Region::AutoRegion(0x650578, 0x64FAA0, 0x64F5B0, 0x64F5B0, 0x64F070, 0x64F070, 0x64EC18, 0x64EC18);
-		static const u32 walkover4 = Region::AutoRegion(0x6505F0, 0x64FB18, 0x64F628, 0x64F628, 0x64F0E8, 0x64F0E8, 0x64EC90, 0x64EC90);
-		static const u32 walkover5 = Region::AutoRegion(0x6506A4, 0x64FBCC, 0x64F6DC, 0x64F6DC, 0x64F19C, 0x64F19C, 0x64ED44, 0x64ED44);
-		static const u32 walkover6 = Region::AutoRegion(0x6506BC, 0x64FBE4, 0x64F6F4, 0x64F6F4, 0x64F1B4, 0x64F1B4, 0x64ED5C, 0x64ED5C);
-		static const u32 walkover7 = Region::AutoRegion(0x6506C0, 0x64FBE8, 0x64F6F8, 0x64F6F8, 0x64F1B8, 0x64F1B8, 0x64ED60, 0x64ED60);
-		static const u32 walkover8 = Region::AutoRegion(0x6506EC, 0x64FC14, 0x64F724, 0x64F724, 0x64F1E4, 0x64F1E4, 0x64ED8C, 0x64ED8C);
+		static const Address walkover1(0x6503FC, 0x64F924, 0x64F434, 0x64F434, 0x64EEF4, 0x64EEF4, 0x64EA9C, 0x64EA9C);
+		static const Address walkover2(0x650414, 0x64F93C, 0x64F44C, 0x64F44C, 0x64EF0C, 0x64EF0C, 0x64EAB4, 0x64EAB4);
+		static const Address walkover3(0x650578, 0x64FAA0, 0x64F5B0, 0x64F5B0, 0x64F070, 0x64F070, 0x64EC18, 0x64EC18);
+		static const Address walkover4(0x6505F0, 0x64FB18, 0x64F628, 0x64F628, 0x64F0E8, 0x64F0E8, 0x64EC90, 0x64EC90);
+		static const Address walkover5(0x6506A4, 0x64FBCC, 0x64F6DC, 0x64F6DC, 0x64F19C, 0x64F19C, 0x64ED44, 0x64ED44);
+		static const Address walkover6(0x6506BC, 0x64FBE4, 0x64F6F4, 0x64F6F4, 0x64F1B4, 0x64F1B4, 0x64ED5C, 0x64ED5C);
+		static const Address walkover7(0x6506C0, 0x64FBE8, 0x64F6F8, 0x64F6F8, 0x64F1B8, 0x64F1B8, 0x64ED60, 0x64ED60);
+		static const Address walkover8(0x6506EC, 0x64FC14, 0x64F724, 0x64F724, 0x64F1E4, 0x64F1E4, 0x64ED8C, 0x64ED8C);
 		
-		const u32 WalkOver[8] = { walkover1, walkover2, walkover3, walkover4, walkover5, walkover6, walkover7, walkover8 };
+		const u32 WalkOver[8] = { walkover1.addr, walkover2.addr, walkover3.addr, walkover4.addr, walkover5.addr, walkover6.addr, walkover7.addr, walkover8.addr };
 		
 		static const u32 WalkOverPatch[2][8] = {
             { 0xEA000094, 0xEA000052, 0xEA000001, 0xEA000014, 0xE1A00000, 0xE1A00000, 0xEA000026, 0xEA000065 },
@@ -96,7 +93,7 @@ namespace CTRPluginFramework {
         };
 		
 		if(entry->Hotkeys[0].IsPressed()) {
-			bool index = *(u32 *)walkover1 == 0x0A000094 ? 0 : 1;
+			bool index = *(u32 *)walkover1.addr == 0x0A000094 ? 0 : 1;
 
             OSD::Notify("Walk Over Things " << (index ? (Color::Red << "OFF") : (Color::Green << "ON")));
 
@@ -110,21 +107,22 @@ namespace CTRPluginFramework {
     }
 //Movement Changer
 	void MovementChanger(MenuEntry *entry) {	
-		static const u32 move1 = Region::AutoRegion(0x64E824, 0x64DD4C, 0x64D85C, 0x64D85C, 0x64D31C, 0x64D31C, 0x64CEC0, 0x64CEC0);
-		static const u32 move2 = Region::AutoRegion(0x64E82C, 0x64DD54, 0x64D864, 0x64D864, 0x64D324, 0x64D324, 0x64CECC, 0x64CECC);
-		static const u32 move3 = Region::AutoRegion(0x653154, 0x65267C, 0x65218C, 0x65218C, 0x651C4C, 0x651C4C, 0x6517F4, 0x6517F4);
-		static const u32 move4 = Region::AutoRegion(0x653530, 0x652A58, 0x652568, 0x652568, 0x652028, 0x652028, 0x651BD0, 0x651BD0);
-		static const u32 move5 = Region::AutoRegion(0x763ABC, 0x762AA0, 0x762AC4, 0x762A9C, 0x76225C, 0x762234, 0x761E04, 0x761E049);
-		static const u32 moveoff = *(u32 *)move3;
+		static const Address Disable25Anim(0x67F748, 0x67EC70, 0x67E780, 0x67E780, 0x67E240, 0x67E240, 0x67DDE8, 0x67DDE8); //Disable going out of water animation
+		static const Address AlwaysWalk(0x64E824, 0x64DD4C, 0x64D85C, 0x64D85C, 0x64D31C, 0x64D31C, 0x64CEC0, 0x64CEC0); //Makes you walk all the time
+		static const Address AlwaysSwim(0x64E82C, 0x64DD54, 0x64D864, 0x64D864, 0x64D324, 0x64D324, 0x64CECC, 0x64CECC); //Makes you swim all the time
+		static const Address DisableYChange(0x56BE7C, 0x56B394, 0x56AEC4, 0x56AEC4, 0x56A7B4, 0x56A7B4, 0x56A4D4, 0x56A4D4); //Makes Y-Coord not go down when swimming	
+		static const Address move4(0x65352C, 0x652A54, 0x652564, 0x652564, 0x652024, 0x652024, 0x651BCC, 0x651BCC);
+		static const Address move5(0x763ABC, 0x762AA0, 0x762AC4, 0x762A9C, 0x76225C, 0x762234, 0x761E04, 0x761E04);
 		
-		static const u32 MoveChanger[5] = { move1, move2, move3, move4, move5 };
+		static const u32 MoveChanger[6] = { Disable25Anim.addr, AlwaysWalk.addr, AlwaysSwim.addr, DisableYChange.addr, move4.addr, move5.addr };
 		
-		static const u32 MoveChangerPatch[2][5] = {
-            { 0x03A00001, 0xE3A00001, 0xE1A00000, 0xE3A00000, 0xE3A00000 },
-            { 0x03A00000, 0xE3A00000, moveoff, 0xEB00AFB7, 0xE3A00001 }
+		static const u32 MoveChangerPatch[3][6] = {
+            { 0xEA000067, 0x03A00001, 0xE3A00001, 0xE12FFF1E, 0xEA00000D, 0xE3A00000 }, //Swimming
+            { 0x1A000067, 0x03A00000, 0xE3A00000, 0xED902A00, 0xE1A00004, 0xE3A00001 }, //Walking
+			{ 0x1A000067, 0x03A00001, 0xE3A00000, 0xED902A00, 0xE1A00004, 0xE3A00001 } //OFF
         };
 		
-		bool index = *(u32 *)move2 == 0xE3A00000 ? 0 : 1;
+		bool index = *(u32 *)Disable25Anim.addr == 0x1A000067 ? 0 : 1;
 	
 		if(entry->Hotkeys[0].IsPressed()) {
 			if(index) 
@@ -132,22 +130,22 @@ namespace CTRPluginFramework {
 		    else 
                 OSD::Notify("Movement Mode: Swimming", Color::Blue);
 				
-			for(int i = 0; i < 5; ++i)
+			for(int i = 0; i < 6; ++i)
                 Process::Patch(MoveChanger[i], MoveChangerPatch[index][i]);
         }
 		
 		if(!entry->IsActivated()) {
-			for(int i = 0; i < 5; ++i)
-                Process::Patch(MoveChanger[i], MoveChangerPatch[1][i]);
+			for(int i = 0; i < 6; ++i)
+                Process::Patch(MoveChanger[i], MoveChangerPatch[2][i]);
 		}
     }
 //Walk Particle	
 	void Walkparticle(MenuEntry *entry) {
-		static const u32 WalkParticlePatch = Region::AutoRegion(0x652694, 0x651BBC, 0x6516CC, 0x6516CC, 0x65118C, 0x65118C, 0x650D34, 0x650D34);
+		static const Address WalkParticlePatch(0x652694, 0x651BBC, 0x6516CC, 0x6516CC, 0x65118C, 0x65118C, 0x650D34, 0x650D34);
 		static Hook hook;
 
 		if(entry->WasJustActivated()) {
-			hook.Initialize(WalkParticlePatch, (u32)SetWalkParticleID);
+			hook.Initialize(WalkParticlePatch.addr, (u32)SetWalkParticleID);
 			hook.SetFlags(USE_LR_TO_RETURN);
 		}
 
@@ -196,11 +194,11 @@ namespace CTRPluginFramework {
 	}
 //Player Visibility Changer	
 	void onlineplayermod(MenuEntry *entry) {
-		static const u32 visi1 = Region::AutoRegion(0x655E44, 0x65536C, 0x654E7C, 0x654E7C, 0x65493C, 0x65493C, 0x6544E4, 0x6544E4);
-		static const u32 visi2 = Region::AutoRegion(0x67743C, 0x676964, 0x676474, 0x676474, 0x675F34, 0x675F34, 0x675ADC, 0x675ADC);
-		static const u32 visi3 = Region::AutoRegion(0x68DC3C, 0x68D164, 0x68CC74, 0x68CC74, 0x68C734, 0x68C734, 0x68C2DC, 0x68C2DC);
+		static const Address visi1(0x655E44, 0x65536C, 0x654E7C, 0x654E7C, 0x65493C, 0x65493C, 0x6544E4, 0x6544E4);
+		static const Address visi2(0x67743C, 0x676964, 0x676474, 0x676474, 0x675F34, 0x675F34, 0x675ADC, 0x675ADC);
+		static const Address visi3(0x68DC3C, 0x68D164, 0x68CC74, 0x68CC74, 0x68C734, 0x68C734, 0x68C2DC, 0x68C2DC);
 		
-		static const u32 VisiMod[3] = { visi1, visi2, visi3 };
+		static const u32 VisiMod[3] = { visi1.addr, visi2.addr, visi3.addr };
 		
 		static const u32 VisiModPatch[3][3] = { 
             { 0xE3A01017, 0xE3A07006, 0xE1A00000 },
@@ -211,7 +209,7 @@ namespace CTRPluginFramework {
 		if(entry->Hotkeys[0].IsPressed()) {
 			int mode = 0;
 			
-			switch(*(u32 *)visi2) {
+			switch(*(u32 *)visi2.addr) {
 				case 0xE1A07002:
 					mode = 0;
 					OSD::Notify("Visibility: Stationary", Color::Blue);
@@ -249,26 +247,26 @@ namespace CTRPluginFramework {
 	float walkSpeed = 1;
 //Player Speed Changer	
 	void speedMod(MenuEntry *entry) {
-		static const u32 sp1 = Region::AutoRegion(0x887880, 0x886878, 0x88670C, 0x88670C, 0x880B2C, 0x87FB2C, 0x87FADC, 0x87FADC);
-		static const u32 sp2 = Region::AutoRegion(0x887888, 0x886880, 0x886714, 0x886714, 0x880B34, 0x87FB34, 0x87FB34, 0x87FB34);
-		static const u32 sp3 = Region::AutoRegion(0x887958, 0x886950, 0x8867E4, 0x8867E4, 0x880C04, 0x87FC04, 0x87FC04, 0x87FC04);
-		static const u32 sp4 = Region::AutoRegion(0x5D4C80, 0x5D41B0, 0x5D3CC8, 0x5D3CC8, 0x5D34FC, 0x5D34FC, 0x5D31D0, 0x5D31D0);
-		static const u32 sp5 = Region::AutoRegion(0x8879B8, 0x8869B0, 0x886844, 0x886844, 0x880C64, 0x87FC64, 0x87FC64, 0x87FC64);
-		static const u32 sp6 = Region::AutoRegion(0x887C68, 0x886C60, 0x886AF4, 0x886AF4, 0x880F14, 0x87FF14, 0x87FF14, 0x87FF14);
-		static const u32 sp7 = Region::AutoRegion(0x94EF34, 0x94DF24, 0x94DF34, 0x94DF34, 0x947F34, 0x946F34, 0x946F34, 0x946F34);
-		static const u32 sp8 = Region::AutoRegion(0x8878A4, 0x88689C, 0x886730, 0x886730, 0x880B50, 0x87FB50, 0x87FB50, 0x87FB50);
+		static const Address sp1(0x887880, 0x886878, 0x88670C, 0x88670C, 0x880B2C, 0x87FB2C, 0x87FADC, 0x87FADC);
+		static const Address sp2(0x887888, 0x886880, 0x886714, 0x886714, 0x880B34, 0x87FB34, 0x87FB34, 0x87FB34);
+		static const Address sp3(0x887958, 0x886950, 0x8867E4, 0x8867E4, 0x880C04, 0x87FC04, 0x87FC04, 0x87FC04);
+		static const Address sp4(0x5D4C80, 0x5D41B0, 0x5D3CC8, 0x5D3CC8, 0x5D34FC, 0x5D34FC, 0x5D31D0, 0x5D31D0);
+		static const Address sp5(0x8879B8, 0x8869B0, 0x886844, 0x886844, 0x880C64, 0x87FC64, 0x87FC64, 0x87FC64);
+		static const Address sp6(0x887C68, 0x886C60, 0x886AF4, 0x886AF4, 0x880F14, 0x87FF14, 0x87FF14, 0x87FF14);
+		static const Address sp7(0x94EF34, 0x94DF24, 0x94DF34, 0x94DF34, 0x947F34, 0x946F34, 0x946F34, 0x946F34);
+		static const Address sp8(0x8878A4, 0x88689C, 0x886730, 0x886730, 0x880B50, 0x87FB50, 0x87FB50, 0x87FB50);
 		
 		if(!entry->IsActivated()) 
 			walkSpeed = 1;
 		
-		Process::WriteFloat(sp1, walkSpeed);
-		Process::WriteFloat(sp2, walkSpeed);
-		Process::WriteFloat(sp3, walkSpeed);
-		Process::WriteFloat(sp4, 1.8f * walkSpeed * 4096.0f); //swim speed
-		Process::Write16(sp5, 0x16BC); //fast 0x20 rotate
-		Process::Write16(sp6, 0xB5E); //fast 0x1F rotate
-		Process::Write16(sp7, 0xB5E); //fast 0x1F rotate
-		Process::Write8(sp8, 0x14 * walkSpeed); //slide
+		Process::WriteFloat(sp1.addr, walkSpeed);
+		Process::WriteFloat(sp2.addr, walkSpeed);
+		Process::WriteFloat(sp3.addr, walkSpeed);
+		Process::WriteFloat(sp4.addr, 1.8f * walkSpeed * 4096.0f); //swim speed
+		Process::Write16(sp5.addr, 0x16BC); //fast 0x20 rotate
+		Process::Write16(sp6.addr, 0xB5E); //fast 0x1F rotate
+		Process::Write16(sp7.addr, 0xB5E); //fast 0x1F rotate
+		Process::Write8(sp8.addr, 0x14 * walkSpeed); //slide
 	}
 //Player Speed Changer Keyboard
 	void menuSpeedMod(MenuEntry *entry) {
@@ -288,7 +286,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 		
-		k.GetMessage() = Language->Get("ROOM_WARPING_ENTER_ID") << "\n\n" << IDList::GetRoomName(input != "" ? ID : 0);
+		k.GetMessage() = Language->Get("ROOM_WARPING_ENTER_ID") << "\n\n" << IDList::GetRoomName(!input.empty() ? ID : 0);
 	}
 //Room Warper
 	void roomWarp(MenuEntry *entry) {	

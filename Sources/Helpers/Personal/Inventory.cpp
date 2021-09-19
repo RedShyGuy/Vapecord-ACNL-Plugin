@@ -1,7 +1,4 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
 	u32 Inventory::GetCurrentItemData(int i) {
@@ -157,7 +154,7 @@ namespace CTRPluginFramework {
 		
 		slot = 0;
 		while(true) {
-			u32 ItemOffset = PlayerPTR::Pointer(0x92F0 + (0x4 * slot));
+			u32 ItemOffset = PlayerPTR::Pointer(0x92F0 + (4 * slot));
 			if(itemID == *(u32 *)ItemOffset) //If item found return offset 
 				return ItemOffset;
 			
@@ -176,10 +173,8 @@ namespace CTRPluginFramework {
 	//If inv is not opened return
 		if(!Opened())
 			return;
-		
-		static FUNCTION func(Code::LoadIcon);
 
 		for(int i = 0; i < 16; ++i)
-			func.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + GetAddData(), i);
+			Code::LoadIcon.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + GetAddData(), i);
 	}
 }

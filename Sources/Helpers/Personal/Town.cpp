@@ -1,7 +1,4 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
 	void TownName::UpdateReference(const std::string& tName, u8 tID1, u8 tID2) {
@@ -21,7 +18,7 @@ namespace CTRPluginFramework {
 				Process::Write8(addr + 1, tID2);
 			}
 
-			if(tName != "") 
+			if(!tName.empty()) 
 				Process::WriteString(addr + 2, tName, 16, StringFormat::Utf16);
 
 			addr += 20;

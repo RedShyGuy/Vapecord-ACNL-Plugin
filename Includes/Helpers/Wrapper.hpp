@@ -41,21 +41,6 @@ namespace CTRPluginFramework {
 		}
 	}
 
-	class FUNCTION {
-    	public:
-        	FUNCTION(u32 Address) {
-				ItemFunc = Address;
-			};
-
-			template <typename T, class ...Args>
-			T Call(Args ...args) {
-				return((T(*)(Args...))(ItemFunc))(args...);
-			};
-
-    	private:
-        	u32 ItemFunc;
-	};
-
 	Process::ExceptionCallbackState CustomExceptionHandler(ERRF_ExceptionInfo* excep, CpuRegisters* regs);
 }
 #endif

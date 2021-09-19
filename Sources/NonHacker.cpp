@@ -1,6 +1,4 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
 
 namespace CTRPluginFramework {
 
@@ -20,7 +18,7 @@ namespace CTRPluginFramework {
 	}
 
 	u32 NonHacker::GetPlayerMessageData() {
-	    u32 PTR = *(u32 *)Code::chatpointer; //0x94FD84
+	    u32 PTR = *(u32 *)Code::chatpointer.addr; //0x94FD84
 		PTR += 0x464; //33078FA0
 		PTR += (0x530 * pID);
 		return PTR;

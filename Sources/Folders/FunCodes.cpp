@@ -1,7 +1,4 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
 
 extern "C" void PATCH_PartyPop(void);
 
@@ -10,16 +7,16 @@ u32 PartyPopperTool = 0x336A;
 namespace CTRPluginFramework {
 //Size Codes
 	void sizecodes(MenuEntry *entry) {
-		static const u32 player = Region::AutoRegion(0x1ACE00, 0x001AC848, 0x001ACE20, 0x001ACE20, 0x1ACD5C, 0x1ACD5C, 0x1ACD5C, 0x1ACD5C);
-		static const u32 bug = Region::AutoRegion(0x1F557C, 0x1F4FC4, 0x1F559C, 0x1F559C, 0x1F54D8, 0x1F54D8, 0x1F54D8, 0x1F54D8);
-		static const u32 npc = Region::AutoRegion(0x2042BC, 0x203D00, 0x2042DC, 0x2042DC, 0x2041FC, 0x2041FC, 0x2041C8, 0x2041C8);
-		static const u32 effect = Region::AutoRegion(0x550A80, 0x54FF98, 0x550C0C, 0x550C0C, 0x54F3B4, 0x54F3B4, 0x54F0D8, 0x54F0D8);
-		static const u32 shadow = Region::AutoRegion(0x28F3A4, 0x28EDE8, 0x28F3C4, 0x28F3C4, 0x28F2E4, 0x28F2E4, 0x28F2B0, 0x28F2B0);
-		static const u32 town = Region::AutoRegion(0x52E9D0, 0x52E324, 0x52DA18, 0x52DA18, 0x52D304, 0x52D304, 0x52D028, 0x52D028);
-		static const u32 horplayer = Region::AutoRegion(0x5680F8, 0x567610, 0x567140, 0x567140, 0x566A30, 0x566A30, 0x566750, 0x566750);
-		static const u32 vertplayer = Region::AutoRegion(0x567FF4, 0x56750C, 0x56703C, 0x56703C, 0x56692C, 0x56692C, 0x56664C, 0x56664C);
-		static const u32 head = Region::AutoRegion(0x568064, 0x56757C, 0x5670AC, 0x5670AC, 0x56699C, 0x56699C, 0x5666BC, 0x5666BC);
-		static const u32 corrupt = Region::AutoRegion(0x47E3F0, 0x47DD68, 0x47D438, 0x47D438, 0x47D0D0, 0x47D0D0, 0x47CF90, 0x47CF90);
+		static const Address player(0x1ACE00, 0x001AC848, 0x001ACE20, 0x001ACE20, 0x1ACD5C, 0x1ACD5C, 0x1ACD5C, 0x1ACD5C);
+		static const Address bug(0x1F557C, 0x1F4FC4, 0x1F559C, 0x1F559C, 0x1F54D8, 0x1F54D8, 0x1F54D8, 0x1F54D8);
+		static const Address npc(0x2042BC, 0x203D00, 0x2042DC, 0x2042DC, 0x2041FC, 0x2041FC, 0x2041C8, 0x2041C8);
+		static const Address effect(0x550A80, 0x54FF98, 0x550C0C, 0x550C0C, 0x54F3B4, 0x54F3B4, 0x54F0D8, 0x54F0D8);
+		static const Address shadow(0x28F3A4, 0x28EDE8, 0x28F3C4, 0x28F3C4, 0x28F2E4, 0x28F2E4, 0x28F2B0, 0x28F2B0);
+		static const Address town(0x52E9D0, 0x52E324, 0x52DA18, 0x52DA18, 0x52D304, 0x52D304, 0x52D028, 0x52D028);
+		static const Address horplayer(0x5680F8, 0x567610, 0x567140, 0x567140, 0x566A30, 0x566A30, 0x566750, 0x566750);
+		static const Address vertplayer(0x567FF4, 0x56750C, 0x56703C, 0x56703C, 0x56692C, 0x56692C, 0x56664C, 0x56664C);
+		static const Address head(0x568064, 0x56757C, 0x5670AC, 0x5670AC, 0x56699C, 0x56699C, 0x5666BC, 0x5666BC);
+		static const Address corrupt(0x47E3F0, 0x47DD68, 0x47D438, 0x47D438, 0x47D0D0, 0x47D0D0, 0x47CF90, 0x47CF90);
 		
 		static const std::vector<std::string> sizeopt = {
 			Language->Get("VECTOR_SIZE_PLAYER"),
@@ -42,7 +39,7 @@ namespace CTRPluginFramework {
 			"Custom"
 		};
 		
-		static const u32 sizer[10] = { player, bug, npc, effect, shadow, town, horplayer, vertplayer, head, corrupt };
+		static const u32 sizer[10] = { player.addr, bug.addr, npc.addr, effect.addr, shadow.addr, town.addr, horplayer.addr, vertplayer.addr, head.addr, corrupt.addr };
 		
 		static constexpr float sizes[3] = { 2.0, 1.0, 0.5 };
 
@@ -85,10 +82,10 @@ namespace CTRPluginFramework {
     }
 //T-Pose
 	void tposeentry(MenuEntry *entry) { 
-		static const u32 tpose = Region::AutoRegion(0x73C290, 0x73B5D8, 0x73B298, 0x73B270, 0x73AA30, 0x73AA08, 0x73A5D8, 0x72EBD8);
+		static const Address tpose(0x73C290, 0x73B5D8, 0x73B298, 0x73B270, 0x73AA30, 0x73AA08, 0x73A5D8, 0x72EBD8);
 		std::vector<std::string> cmnOpt =  { "" };
 
-		bool IsON = *(u32 *)tpose == 0xE1A00000;
+		bool IsON = *(u32 *)tpose.addr == 0xE1A00000;
 
 		cmnOpt[0] = IsON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
 		
@@ -99,7 +96,7 @@ namespace CTRPluginFramework {
 		if(op < 0)
 			return;
 			
-		Process::Patch(tpose, IsON ? 0x0A000011 : 0xE1A00000);
+		Process::Patch(tpose.addr, IsON ? 0x0A000011 : 0xE1A00000);
 		tposeentry(entry);
 	}
 //OSD For Take TPC Picture
@@ -114,40 +111,39 @@ namespace CTRPluginFramework {
 	}
 //Take TPC Picture
 	void freezeframe(MenuEntry *entry) {
-		static const u32 freeze = Region::AutoRegion(0x54DBE8, 0x54D100, 0x54CC30, 0x54CC30, 0x54C51C, 0x54C51C, 0x54C240, 0x54C240);
+		static const Address freeze(0x54DBE8, 0x54D100, 0x54CC30, 0x54CC30, 0x54C51C, 0x54C51C, 0x54C240, 0x54C240);
 		if(entry->Hotkeys[0].IsPressed()) {
 			if(Player::GetSaveOffset(4) == 0) {
 				OSD::Notify("Player needs to be loaded!", Color::Red);
 				return;
 			}
 
-			static const u32 CreateTPC = Region::AutoRegion(0x5B3594, 0x5B2AAC, 0x5B25DC, 0x5B25DC, 0x5B1ECC, 0x5B1ECC, 0x5B1BA0, 0x5B1BA0);
-			static const u32 TPCPoint = Region::AutoRegion(0x954F10, 0x953EF0, 0x953F08, 0x953F08, 0x94DF08, 0x94CF08, 0x94CF08, 0x94CF08);
+			static Address CreateTPC(0x5B3594, 0x5B2AAC, 0x5B25DC, 0x5B25DC, 0x5B1ECC, 0x5B1ECC, 0x5B1BA0, 0x5B1BA0);
+			static const Address TPCPoint(0x954F10, 0x953EF0, 0x953F08, 0x953F08, 0x94DF08, 0x94CF08, 0x94CF08, 0x94CF08);
 
-			static FUNCTION func(CreateTPC);
-			func.Call<void>(*(u32 *)TPCPoint, PlayerPTR::Pointer(0x5734));
+			CreateTPC.Call<void>(*(u32 *)TPCPoint.addr, PlayerPTR::Pointer(0x5734));
 			GameHelper::PlaySound(0x4A7);
 		}
 	
 		if(entry->Hotkeys[1].IsDown()) {
 			if(entry->Hotkeys[1].IsPressed())
-				Process::Patch(freeze, 0xE3A000FF);
+				Process::Patch(freeze.addr, 0xE3A000FF);
 
 			OSD::Run(tpcoverlay);
 		}
 		
 		if(!entry->Hotkeys[1].IsDown()) {
 			OSD::Stop(tpcoverlay);
-			Process::Patch(freeze, 0xE0800001);
+			Process::Patch(freeze.addr, 0xE0800001);
 		}
 
 		if(!entry->IsActivated())
-			Process::Patch(freeze, 0xE0800001);
+			Process::Patch(freeze.addr, 0xE0800001);
     }
 
 //Max Turbo Presses
 	void maxturbo(MenuEntry *entry) { 
-		u32 maxT = *(u32 *)Code::max - 0x31C;
+		u32 maxT = *(u32 *)Code::max.addr - 0x31C;
 
         Sleep(Seconds(0.0085F));
         Process::Write8(maxT, 0); //abxy
@@ -156,27 +152,27 @@ namespace CTRPluginFramework {
 
 //Multi-presses
 	void asmpresses(MenuEntry *entry) { 
-		static const u32 press = Region::AutoRegion(0x5C5BEC, 0x5C511C, 0x5C4C34, 0x5C4C34, 0x5C4524, 0x5C4524, 0x5C41F8, 0x5C41F8);
+		static const Address press(0x5C5BEC, 0x5C511C, 0x5C4C34, 0x5C4C34, 0x5C4524, 0x5C4524, 0x5C41F8, 0x5C41F8);
 		if(entry->WasJustActivated()) 
-			Process::Patch(press, 0xE1A00000); 
+			Process::Patch(press.addr, 0xE1A00000); 
 		else if(!entry->IsActivated()) 
-			Process::Patch(press, 0x0A000028); 
+			Process::Patch(press.addr, 0x0A000028); 
 	}
 //Ultimate Party Popper	
 	void partypopper(MenuEntry *entry) {
-		static const u32 PartySnakeSpeed = Region::AutoRegion(0x67F008, 0x67E530, 0x67E040, 0x67E040, 0x67DB00, 0x67DB00, 0x67D6A8, 0x67D6A8);
-		static const u32 party2 = Region::AutoRegion(0x662D9C, 0x6622C4, 0x661DD4, 0x661DD4, 0x661894, 0x661894, 0x66143C, 0x66143C);
-		static const u32 party3 = Region::AutoRegion(0x67BBC8, 0x67B0F0, 0x67AC00, 0x67AC00, 0x67A6C0, 0x67A6C0, 0x67A268, 0x67A268);
-		static const u32 PartyItemID = Region::AutoRegion(0x671874, 0x670D9C, 0x6708AC, 0x6708AC, 0x67036C, 0x67036C, 0x66FF14, 0x66FF14);
-		static const u32 PartyEffect = Region::AutoRegion(0x671880, 0x670DA8, 0x6708B8, 0x6708B8, 0x670378, 0x670378, 0x66FF20, 0x66FF20);
+		static const Address PartySnakeSpeed(0x67F008, 0x67E530, 0x67E040, 0x67E040, 0x67DB00, 0x67DB00, 0x67D6A8, 0x67D6A8);
+		static const Address party2(0x662D9C, 0x6622C4, 0x661DD4, 0x661DD4, 0x661894, 0x661894, 0x66143C, 0x66143C);
+		static const Address party3(0x67BBC8, 0x67B0F0, 0x67AC00, 0x67AC00, 0x67A6C0, 0x67A6C0, 0x67A268, 0x67A268);
+		static const Address PartyItemID(0x671874, 0x670D9C, 0x6708AC, 0x6708AC, 0x67036C, 0x67036C, 0x66FF14, 0x66FF14);
+		static const Address PartyEffect(0x671880, 0x670DA8, 0x6708B8, 0x6708B8, 0x670378, 0x670378, 0x66FF20, 0x66FF20);
 		
 		static u16 PartyEffectID = 0x20A;
 
-		Process::Write8(*(u32 *)Code::max - 0x31C, 0); //Multi Presses
+		Process::Write8(*(u32 *)Code::max.addr - 0x31C, 0); //Multi Presses
 
 		static Hook hook1, hook2;
 		
-		static const u32 PartyPop[3] = { PartySnakeSpeed, party2, party3 };
+		static const u32 PartyPop[3] = { PartySnakeSpeed.addr, party2.addr, party3.addr };
 		
 		static const float PartyPopPatch[2][3] = {
             { 8.0, 2.0, 2.0 },
@@ -184,8 +180,8 @@ namespace CTRPluginFramework {
         };
 
 		if(entry->WasJustActivated()) {
-			hook1.Initialize(PartyItemID - 0x1E0, (u32)PATCH_PartyPop);
-			hook2.Initialize(PartyItemID - 0x1B4, (u32)PATCH_PartyPop);
+			hook1.Initialize(PartyItemID.addr - 0x1E0, (u32)PATCH_PartyPop);
+			hook2.Initialize(PartyItemID.addr - 0x1B4, (u32)PATCH_PartyPop);
 
 			hook1.SetFlags(USE_LR_TO_RETURN);
 			hook2.SetFlags(USE_LR_TO_RETURN);
@@ -196,7 +192,7 @@ namespace CTRPluginFramework {
 
 		if(Player::GetTool() == 0x336A) {
 			Player::SetTool(0x336A);
-			Process::Patch(PartyEffect, PartyEffectID);
+			Process::Patch(PartyEffect.addr, PartyEffectID);
 
 			for(int i = 0; i < 3; ++i)
             	Process::WriteFloat(PartyPop[i], PartyPopPatch[0][i]);
@@ -204,21 +200,12 @@ namespace CTRPluginFramework {
 			hook1.Enable();
 			hook2.Enable();
 		}
-		else {
-			Process::Patch(PartyEffect, 0x20A);
-
-			for(int i = 0; i < 3; ++i)
-            	Process::WriteFloat(PartyPop[i], PartyPopPatch[1][i]);
-
-			hook1.Disable();
-			hook2.Disable();
-		}
    
-		if(!entry->IsActivated()) {
+		if(!entry->IsActivated() || Player::GetTool() != 0x336A) {
 			for(int i = 0; i < 3; ++i)
                Process::WriteFloat(PartyPop[i], PartyPopPatch[1][i]);	
 			
-			Process::Patch(PartyEffect, 0x20A);
+			Process::Patch(PartyEffect.addr, 0x20A);
 
 			hook1.Disable();
 			hook2.Disable();
@@ -227,9 +214,9 @@ namespace CTRPluginFramework {
 	
 	void cameramod(MenuEntry *entry) {
     //pointers & addresses
-		static const u32 cameraAsm = Region::AutoRegion(0x764504, 0x7634E8, 0x76350C, 0x7634E4, 0x762CA4, 0x762C7C, 0x76284C, 0x762824);
-        static const u32 rotationAsm = Region::AutoRegion(0x1A3230, 0x1A2C78, 0x1A3250, 0x1A3250, 0x1A3190, 0x1A3190, 0x1A3190, 0x1A3190);
-        static const u32 camerapan = Region::AutoRegion(0x1A2058, 0x1A1AA0, 0x1A2078, 0x1A2078, 0x1A1FB8, 0x1A1FB8, 0x1A1FB8, 0x1A1FB8);
+		static const Address cameraAsm(0x764504, 0x7634E8, 0x76350C, 0x7634E4, 0x762CA4, 0x762C7C, 0x76284C, 0x762824);
+        static const Address rotationAsm(0x1A3230, 0x1A2C78, 0x1A3250, 0x1A3250, 0x1A3190, 0x1A3190, 0x1A3190, 0x1A3190);
+        static const Address camerapan(0x1A2058, 0x1A1AA0, 0x1A2078, 0x1A2078, 0x1A1FB8, 0x1A1FB8, 0x1A1FB8, 0x1A1FB8);
 
     //variables
         static bool isPatched = false;
@@ -246,17 +233,17 @@ namespace CTRPluginFramework {
 		float *coord = Camera::GetCoordinates();
 
 		if(entry->WasJustActivated()) 
-			Process::Patch(camerapan, 0xE3A00000); //disables camera panning
+			Process::Patch(camerapan.addr, 0xE3A00000); //disables camera panning
 
 		if(!entry->IsActivated()) {
 			if(coord != nullptr)
 				coord = PlayerClass::GetInstance()->GetCoordinates();
 
 			Animation::ExecuteAnimationWrapper(4, 6, 0, 0, 0, 0, 0, 0, 0, 0); //idles player
-			Process::Patch(cameraAsm, 0x2A000020);
-			Process::Patch(rotationAsm, 0xE18020B4);
-            Process::Write32(rotationAsm + 0xC, 0xE18020B4);
-			Process::Patch(camerapan, 0xE3A00009);
+			Process::Patch(cameraAsm.addr, 0x2A000020);
+			Process::Patch(rotationAsm.addr, 0xE18020B4);
+            Process::Write32(rotationAsm.addr + 0xC, 0xE18020B4);
+			Process::Patch(camerapan.addr, 0xE3A00009);
 			*(u16 *)(Camera::GetInstance() + 0x12C) = OrigVal[0];
 			*(u16 *)(Camera::GetInstance() + 0x12E) = OrigVal[1];
 			return;
@@ -266,17 +253,17 @@ namespace CTRPluginFramework {
         //check if you're outside
             if(!IsIndoorsBool) {
                 if(GameHelper::RoomCheck() == 1) {
-                    Process::Patch(rotationAsm, 0xE18020B4);
-                    Process::Patch(rotationAsm + 0xC, 0xE18020B4);
+                    Process::Patch(rotationAsm.addr, 0xE18020B4);
+                    Process::Patch(rotationAsm.addr + 0xC, 0xE18020B4);
                 }
                 else {
-                    Process::Patch(rotationAsm, 0xE1A00000);
-                    Process::Patch(rotationAsm + 0xC, 0xE1A00000);
+                    Process::Patch(rotationAsm.addr, 0xE1A00000);
+                    Process::Patch(rotationAsm.addr + 0xC, 0xE1A00000);
                 }
             }
             else {
-                Process::Patch(rotationAsm, 0xE18020B4);
-                Process::Patch(rotationAsm + 0xC, 0xE18020B4);
+                Process::Patch(rotationAsm.addr, 0xE18020B4);
+                Process::Patch(rotationAsm.addr + 0xC, 0xE18020B4);
             }
 			
             if(Controller::IsKeyDown(Key::R)) {
@@ -355,7 +342,7 @@ namespace CTRPluginFramework {
             if(!isPatched) {
             //disable camera following
 				OSD::Notify("Camera following: " << Color::Red << "OFF"); 
-                Process::Patch(cameraAsm, 0xEA000020);
+                Process::Patch(cameraAsm.addr, 0xEA000020);
                 isPatched = true;
             }
             return;
@@ -363,7 +350,7 @@ namespace CTRPluginFramework {
             if(isPatched) {
 			//reenable camera followig
 				OSD::Notify("Camera following: " << Color::Green << "ON"); 
-                Process::Patch(cameraAsm, 0x2A000020);
+                Process::Patch(cameraAsm.addr, 0x2A000020);
                 isPatched = false;
             }
         }

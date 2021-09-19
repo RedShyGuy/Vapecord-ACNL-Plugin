@@ -1,5 +1,3 @@
-#include <CTRPluginFramework.hpp>
-#include "TextFileParser.hpp"
 #include "cheats.hpp"
 
 #define RANGE(X, START, END)	((X & 0xFFFF) >= START && (X & 0xFFFF) <= END)
@@ -213,7 +211,7 @@ namespace CTRPluginFramework {
 	}
 
 	/*std::string IDList::GetItemName(u16 ItemID) {
-		static const u32 ItemFunc = Region::AutoRegion(0x2FEA78, 0, 0, 0, 0, 0, 0, 0); 
+		static const u32 ItemFunc(0x2FEA78, 0, 0, 0, 0, 0, 0, 0); 
 
 		u32 Stack[44];
 		
@@ -223,7 +221,7 @@ namespace CTRPluginFramework {
 		std::string ItemName = "";
 		Process::ReadString(Stack[1], ItemName, 0x20, StringFormat::Utf16);
 
-		return ItemName == "" ? "???" : ItemName;
+		return ItemName.empty() ? "???" : ItemName;
 	}*/ 
 
 	
@@ -277,42 +275,42 @@ namespace CTRPluginFramework {
 	*/
 
 	std::string IDList::GetNNPCName(u16 VID) {
-		static const u32 SetUp = Region::AutoRegion(0x308210, 0x3083E4, 0x308298, 0x308298, 0x30822C, 0x30822C, 0x308240, 0x308240);
-		static const u32 NNPCModelData = Region::AutoRegion(0xA84AF0, 0xA83AF0, 0xA83AF0, 0xA83AF0, 0xA7DAF0, 0xA7CAF0, 0xA7CAF0, 0xA7CAF0);
+		static Address SetUp(0x308210, 0x3083E4, 0x308298, 0x308298, 0x30822C, 0x30822C, 0x308240, 0x308240);
+		static const Address NNPCModelData(0xA84AF0, 0xA83AF0, 0xA83AF0, 0xA83AF0, 0xA7DAF0, 0xA7CAF0, 0xA7CAF0, 0xA7CAF0);
 
 		u32 Stack[44];
-		u32 add = FUNCTION(Code::SetupStackData).Call<u32>(Stack);
+		u32 add = Code::SetupStackData.Call<u32>(Stack);
 
-		u32 npcModel = *(u32 *)(NNPCModelData) + VID * 0x22;
-		FUNCTION(SetUp).Call<void>(*(u32 *)Code::DataPointer, add, (char *)"STR_NNpc_name", npcModel + 10);
+		u32 npcModel = *(u32 *)(NNPCModelData.addr) + VID * 0x22;
+		SetUp.Call<void>(*(u32 *)Code::DataPointer.addr, add, (char *)"STR_NNpc_name", npcModel + 10);
 
 		std::string NNPCName = "";
 		Process::ReadString(Stack[1], NNPCName, 0x20, StringFormat::Utf16);
-		return NNPCName == "" ? "???" : NNPCName;
+		return NNPCName.empty() ? "???" : NNPCName;
 	}
 
 	std::string IDList::GetSPNPCName(u8 SPVID) {
-		static const u32 SetUp = Region::AutoRegion(0x75D108, 0x75C0EC, 0x75C110, 0x75C0E8, 0x75B8A8, 0x75B880, 0x75B450, 0x75B428);
+		static Address SetUp(0x75D108, 0x75C0EC, 0x75C110, 0x75C0E8, 0x75B8A8, 0x75B880, 0x75B450, 0x75B428);
 
 		u32 Stack[44];
-		u32 add = FUNCTION(Code::SetupStackData).Call<u32>(Stack);
+		u32 add = Code::SetupStackData.Call<u32>(Stack);
 
-		FUNCTION(SetUp).Call<void>(*(u32 *)Code::DataPointer, add, (char *)"STR_SPNpc_name", SPVID);
+		SetUp.Call<void>(*(u32 *)Code::DataPointer.addr, add, (char *)"STR_SPNpc_name", SPVID);
 
 		std::string SPNPCName = "";
 		Process::ReadString(Stack[1], SPNPCName, 0x20, StringFormat::Utf16);
-		return SPNPCName == "" ? "???" : SPNPCName;
+		return SPNPCName.empty() ? "???" : SPNPCName;
 	}
 
 	std::string IDList::GetNPCRace(u8 ID) {
-		static const u32 SetUpStack = Region::AutoRegion(0x3081E8, 0x3083BC, 0x308270, 0x308270, 0x308204, 0x308204, 0x308218, 0x308218);
-		static const u32 SetUp = Region::AutoRegion(0x312610, 0x312A4C, 0x3127EC, 0x3127EC, 0x3126F8, 0x3126F8, 0x312B3C, 0x312B3C);
+		static Address SetUpStack(0x3081E8, 0x3083BC, 0x308270, 0x308270, 0x308204, 0x308204, 0x308218, 0x308218);
+		static Address SetUp(0x312610, 0x312A4C, 0x3127EC, 0x3127EC, 0x3126F8, 0x3126F8, 0x312B3C, 0x312B3C);
 
 	//No clue why, but the USA and EUR version have some formatting string parts at the beginning of the NPC race string which we need to skip
-		static const u8 Fix = Region::AutoRegion(0xC, 0xC, 0xC, 0xC, 0, 0, 0, 0);
+		static const Address Fix(0xC, 0xC, 0xC, 0xC, 0, 0, 0, 0);
 
 		u32 Stack[44];
-		u32 add = FUNCTION(SetUpStack).Call<u32>(Stack, Stack + 0x18, 0x10);
+		u32 add = SetUpStack.Call<u32>(Stack, Stack + 0x18, 0x10);
 
 		/*
 		//Way to get race ID by VID
@@ -320,13 +318,13 @@ namespace CTRPluginFramework {
 		*(u8 *)(npcModel + 2);
 		*/
 
-		FUNCTION(SetUp).Call<void>(*(u32 *)Code::DataPointer, add, (char *)"STR_Race", ID);
+		SetUp.Call<void>(*(u32 *)Code::DataPointer.addr, add, (char *)"STR_Race", ID);
 
 		std::string NPCRace = "";
 
-		Process::ReadString(Stack[1] + Fix, NPCRace, 0x20, StringFormat::Utf16);
+		Process::ReadString(Stack[1] + Fix.addr, NPCRace, 0x20, StringFormat::Utf16);
 
-		return NPCRace == "" ? "???" : NPCRace;
+		return NPCRace.empty() ? "???" : NPCRace;
 	}
 
 	bool IDList::PopulateNPCAmiibo(SpecieID specieID, std::vector<std::string> &vec, std::vector<PACKED_AmiiboInfo> &info, bool HoldenFillyAllowed, bool NonCaravanAllowed) {
@@ -380,11 +378,10 @@ namespace CTRPluginFramework {
 
 //Get Room Name
 	std::string IDList::GetRoomName(u8 ID) {
-		static const u32 RoomName = Region::AutoRegion(0x5B4BE4, 0x5B40FC, 0x5B3C2C, 0x5B3C2C, 0x5B351C, 0x5B351C, 0x5B31F0, 0x5B31F0); 
-		static FUNCTION func(RoomName);
+		static Address RoomName(0x5B4BE4, 0x5B40FC, 0x5B3C2C, 0x5B3C2C, 0x5B351C, 0x5B351C, 0x5B31F0, 0x5B31F0); 
 
 		if(ID <= 0xA5) 
-			return Color::Green << (std::string)(func.Call<char *>(ID));
+			return Color::Green << (std::string)(RoomName.Call<char *>(ID));
 		
 		return Color::Red << Language->Get("INVALID");
 	}

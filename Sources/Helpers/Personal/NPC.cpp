@@ -1,15 +1,12 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
 /*
 Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 */
   	u32 NPC::GetData(u16 ID, int count) {
-		static const u32 point1 = Region::AutoRegion(0x95D3F4, 0x95C3D4, 0x95C3EC, 0x95C3EC, 0x9563EC, 0x9553EC, 0x9553EC, 0x9553EC);
-		u32 point = *(u32 *)point1;
+		static const Address point1(0x95D3F4, 0x95C3D4, 0x95C3EC, 0x95C3EC, 0x9563EC, 0x9553EC, 0x9553EC, 0x9553EC);
+		u32 point = *(u32 *)point1.addr;
 		if(point == 0)
 			return 0;
 
@@ -41,9 +38,9 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 	}
 
  	u16 NPC::GetVID(u32 npcData) {
-		static const u32 func1 = Region::AutoRegion(0x51D288, 0x51CBDC, 0x51C2D0, 0x51C2D0, 0x51BBEC, 0x51BBEC, 0x51B580, 0x51B580);
+		static Address func1(0x51D288, 0x51CBDC, 0x51C2D0, 0x51C2D0, 0x51BBEC, 0x51BBEC, 0x51B580, 0x51B580);
 
-		return FUNCTION(func1).Call<u16>(npcData);
+		return func1.Call<u16>(npcData);
 	}
 
 //0x01 to 0x34

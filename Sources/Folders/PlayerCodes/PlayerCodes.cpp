@@ -1,7 +1,4 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
 
 u32 BGR_HairVal = 0;
 u32 BGR_EyeVal = 0;
@@ -243,8 +240,8 @@ namespace CTRPluginFramework {
 				OSD::Notify("Loaded colors from file!", Color::Orange);
 			}
 
-			static const u32 address = Region::AutoRegion(0x4A33C8, 0x4A2D40, 0x4A2410, 0x4A2410, 0x4A20A8, 0x4A20A8, 0x4A1F68, 0x4A1F68);
-			hook.Initialize(address, (u32)BGRHook);
+			static const Address address(0x4A33C8, 0x4A2D40, 0x4A2410, 0x4A2410, 0x4A20A8, 0x4A20A8, 0x4A1F68, 0x4A1F68);
+			hook.Initialize(address.addr, (u32)BGRHook);
 		  	hook.SetFlags(USE_LR_TO_RETURN);
 			hook.Enable();
 		}
@@ -264,11 +261,11 @@ namespace CTRPluginFramework {
 	
 //Wear Helmet And Accessory /*Credits to Levi*/
 	void hatz(MenuEntry *entry) { 
-		static const u32 hatwear = Region::AutoRegion(0x68C630, 0x68BB58, 0x68B668, 0x68B668, 0x68B128, 0x68B128, 0x68ACD0, 0x68ACD0);
+		static const Address hatwear(0x68C630, 0x68BB58, 0x68B668, 0x68B668, 0x68B128, 0x68B128, 0x68ACD0, 0x68ACD0);
 		if(entry->WasJustActivated()) 
-			Process::Patch(hatwear, 0xE1A00000); 
+			Process::Patch(hatwear.addr, 0xE1A00000); 
 		else if(!entry->IsActivated()) 
-			Process::Patch(hatwear, 0x3AFFFFD6); 
+			Process::Patch(hatwear.addr, 0x3AFFFFD6); 
 	}
 
 //Faint	
@@ -336,11 +333,11 @@ namespace CTRPluginFramework {
 //Show Players On The Map
 	void map(MenuEntry *entry) {
 		PluginMenu *menu = PluginMenu::GetRunningInstance();
-		static const u32 writePatch = Region::AutoRegion(0x2215B0, 0x220FF4, 0x2215D0, 0x2215D0, 0x2214F0, 0x2214F0, 0x2214BC, 0x2214BC);
+		static const Address writePatch(0x2215B0, 0x220FF4, 0x2215D0, 0x2215D0, 0x2214F0, 0x2214F0, 0x2214BC, 0x2214BC);
 		static Hook hook;
 
 		if(entry->WasJustActivated()) {
-			hook.Initialize(writePatch, (u32)SetPlayerIconCoordinates);
+			hook.Initialize(writePatch.addr, (u32)SetPlayerIconCoordinates);
 			hook.SetFlags(USE_LR_TO_RETURN);
 			hook.Enable();
 

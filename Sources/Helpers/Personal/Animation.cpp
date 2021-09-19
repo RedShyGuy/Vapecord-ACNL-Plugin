@@ -1,14 +1,10 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
 //Get Animation Instance
 	u32 Animation::GetAnimationInstance(u32 playerInstance, u8 someVal1, u8 someVal2, u32 encVal) {
-		static const u32 getaniminst = Region::AutoRegion(0x6576F8, 0x656C20, 0x656730, 0x656730, 0x6561F0, 0x6561F0, 0x655D98, 0x655D98);
-		static FUNCTION func(getaniminst);
-		return func.Call<u32>(playerInstance, someVal1, someVal2, encVal);
+		static Address getaniminst(0x6576F8, 0x656C20, 0x656730, 0x656730, 0x6561F0, 0x6561F0, 0x655D98, 0x655D98);
+		return getaniminst.Call<u32>(playerInstance, someVal1, someVal2, encVal);
 	} 
 //Animation Wrapper	
 	bool Animation::ExecuteAnimationWrapper(u8 pIndex, u8 animID, u32 animItem, u8 emotion, u16 snake, u16 sound, bool u0, u8 wX, u8 wY, bool directSend, u8 appearance[]) {	
@@ -39,12 +35,11 @@ namespace CTRPluginFramework {
 		
 	//Gets used to write the coordinates of the animation
 		float coords[3];
-		static const u32 coordoffset = Region::AutoRegion(0x5D4C88, 0x5D41B8, 0x5D3CD0, 0x5D3CD0, 0x5D3504, 0x5D3504, 0x5D31D8, 0x5D31D8);
-		static FUNCTION func(coordoffset);
-		func.Call<void>(animInstance + 2, PlayerClass::GetInstance(pIndex)->GetCoordinates(wX, wY)); 
+		static Address coordoffset(0x5D4C88, 0x5D41B8, 0x5D3CD0, 0x5D3CD0, 0x5D3504, 0x5D3504, 0x5D31D8, 0x5D31D8);
+		coordoffset.Call<void>(animInstance + 2, PlayerClass::GetInstance(pIndex)->GetCoordinates(wX, wY)); 
 		
 	//Knock Door patch
-		static const u32 knock = Region::AutoRegion(0x65F7CC, 0x65ECF4, 0x65E804, 0x65E804,  0x65E2C4, 0x65E2C4, 0x65DE6C, 0x65DE6C);
+		static const Address knock(0x655400, 0x654928, 0x654438, 0x654438, 0x653EF8, 0x653EF8, 0x653AA0, 0x653AA0);
 		
 	//sets animation data for each animation correctly	
 		switch(animID) {
@@ -93,7 +88,7 @@ namespace CTRPluginFramework {
 			break;
 		//knock door
 			case 0x45: {
-				Process::Patch(knock, 0xE1A00000); //patch so knocking doesn't happen
+				Process::Patch(knock.addr, 0xE8BD8FF0); //patch so knocking doesn't happen   
 				data.KnockDoor_45(sound);
 			} break;
 		//put item out
@@ -254,27 +249,27 @@ namespace CTRPluginFramework {
 
 		if(!directSend) {
 		//If animation is forced and needs overwrite patch code
-			static const u32 OverWriteInstance = Region::AutoRegion(0x1ABADC, 0x1ABAFC, 0x1ABAFC, 0x1ABAFC, 0x1ABA38, 0x1ABA38, 0x1ABA38, 0x1ABA38);	
+			static const Address OverWriteInstance(0x1ABADC, 0x1ABAFC, 0x1ABAFC, 0x1ABAFC, 0x1ABA38, 0x1ABA38, 0x1ABA38, 0x1ABA38);	
 			if(forced && needOverwrite) {
-				Process::Patch(Code::PlayerInstance + 0x10, 0xE3A00000 + pIndex); //Patches code so player instance returns Index Address of selected player
-				Process::Patch(OverWriteInstance, 0xE3A00000 + pIndex); //Patches code so instead of own player selected player gets used
+				Process::Patch(Code::PlayerInstance.addr + 0x10, 0xE3A00000 + pIndex); //Patches code so player instance returns Index Address of selected player
+				Process::Patch(OverWriteInstance.addr, 0xE3A00000 + pIndex); //Patches code so instead of own player selected player gets used
 			}
 		//If animation is forced on someone else patch code
-			static const u32 PlayerDataCondition = Region::AutoRegion(0x2FEB64, 0x2FE8E0, 0x2FEBEC, 0x2FEBEC, 0x2FEB98, 0x2FEB98, 0x2FEAD0, 0x2FEAD0);
-			static const u32 IndexCondition = Region::AutoRegion(0x677530, 0x676A58, 0x676568, 0x676568, 0x676028, 0x676028, 0x675BD0, 0x675BD0);
-			static const u32 InstanceCondition = Region::AutoRegion(0x677537, 0x676A5F, 0x67656F, 0x67656F, 0x67602F, 0x67602F, 0x675BD7, 0x675BD7);	
-			static const u32 Condition1 = Region::AutoRegion(0x677454, 0x67697C, 0x67648C, 0x67648C, 0x675F4C, 0x675F4C, 0x675AF4, 0x675AF4);
-			static const u32 Condition2 = Region::AutoRegion(0x6774F0, 0x676A18, 0x676528, 0x676528, 0x675FE8, 0x675FE8, 0x675B90, 0x675B90);
+			static const Address PlayerDataCondition(0x2FEB64, 0x2FE8E0, 0x2FEBEC, 0x2FEBEC, 0x2FEB98, 0x2FEB98, 0x2FEAD0, 0x2FEAD0);
+			static const Address IndexCondition(0x677530, 0x676A58, 0x676568, 0x676568, 0x676028, 0x676028, 0x675BD0, 0x675BD0);
+			static const Address InstanceCondition(0x677537, 0x676A5F, 0x67656F, 0x67656F, 0x67602F, 0x67602F, 0x675BD7, 0x675BD7);	
+			static const Address Condition1(0x677454, 0x67697C, 0x67648C, 0x67648C, 0x675F4C, 0x675F4C, 0x675AF4, 0x675AF4);
+			static const Address Condition2(0x6774F0, 0x676A18, 0x676528, 0x676528, 0x675FE8, 0x675FE8, 0x675B90, 0x675B90);
 
 			if(forced) {
-				Process::Patch(PlayerDataCondition, 0xE1A00000); //removes condition
+				Process::Patch(PlayerDataCondition.addr, 0xE1A00000); //removes condition
 				
-				Process::Patch(IndexCondition, 0xE1A01006); //removes condition
-				Process::Write8(InstanceCondition, 0xEB); //removes condition
-				Process::Patch(Condition1, 0xE1A00000); //removes condition
-				Process::Patch(Condition2, 0xE1A00000); //removes condition
-				Process::Patch(Code::AnimConditionPatch, 0xE1A00000); //removes condition
-				Process::Patch(Code::IndexChange, 0xE3A01000 + pIndex); //in sendPkt Function GetOnlinePlayerIndex inline
+				Process::Patch(IndexCondition.addr, 0xE1A01006); //removes condition
+				Process::Write8(InstanceCondition.addr, 0xEB); //removes condition
+				Process::Patch(Condition1.addr, 0xE1A00000); //removes condition
+				Process::Patch(Condition2.addr, 0xE1A00000); //removes condition
+				Process::Patch(Code::AnimConditionPatch.addr, 0xE1A00000); //removes condition
+				Process::Patch(Code::IndexChange.addr, 0xE3A01000 + pIndex); //in sendPkt Function GetOnlinePlayerIndex inline
 				Sleep(Milliseconds(5));
 			}
 		//Executes Animation
@@ -284,17 +279,18 @@ namespace CTRPluginFramework {
 			if(forced) {
 				Sleep(Milliseconds(5));
 				
-				Process::Patch(PlayerDataCondition, 0x1A000002); //Undo Patch
+				Process::Patch(PlayerDataCondition.addr, 0x1A000002); //Undo Patch
 
-				Process::Patch(IndexCondition, 0x01A01006); //Undo Patch
-				Process::Write8(InstanceCondition, 0x0B); //Undo Patch
-				Process::Patch(Condition1, 0x0A000038); //Undo Patch	
-				Process::Patch(Condition2, 0x0A00001C); //Undo Patch
-				Process::Patch(Code::AnimConditionPatch, 0x1A000017); //Undo Patch
-				Process::Patch(Code::IndexChange, 0xE5D11268); //Undo Patch
+				Process::Patch(IndexCondition.addr, 0x01A01006); //Undo Patch
+				Process::Write8(InstanceCondition.addr, 0x0B); //Undo Patch
+				Process::Patch(Condition1.addr, 0x0A000038); //Undo Patch	
+				Process::Patch(Condition2.addr, 0x0A00001C); //Undo Patch
+				Process::Patch(Code::AnimConditionPatch.addr, 0x1A000017); //Undo Patch
+				Process::Patch(Code::IndexChange.addr, 0xE5D11268); //Undo Patch
 		
-				Process::Patch(Code::PlayerInstance + 0x10, Code::PlayerInstanceRefValue); //Undo Patch
-				Process::Patch(OverWriteInstance, 0xE3A00004); //Undo Patch
+				u32 res = Wrap::CalculateBranchInstruction(Code::PlayerInstance.addr + 0x10, Code::a_GetOnlinePlayerIndex.addr);
+				Process::Patch(Code::PlayerInstance.addr + 0x10, 0x2B000000 + res); //Undo Patch
+				Process::Patch(OverWriteInstance.addr, 0xE3A00004); //Undo Patch
 			}
 		}
 	//If it's a direct send
@@ -306,31 +302,30 @@ namespace CTRPluginFramework {
 		}
 		
 		//After it's over undo the patch with the Knock Animation
-		Process::Patch(knock, 0xEBFFD70A);
+		Process::Patch(knock.addr, 0xE24DD00C);    
 		
 		Sleep(Milliseconds(25));
 		return 1;
 	}
 //Send Animation Packet
 	void Animation::SendAnimPacket(u8 senderIndex, u32 animObj, u8 animID, u8 roomID, u8 targetPlayerIndex) {
- 		static const u32 PatchIndex = Region::AutoRegion(0x5C3CAC, 0x5C31DC, 0x5C2CF4, 0x5C2CF4, 0x5C25E4, 0x5C25E4, 0x5C22B8, 0x5C22B8);
+ 		static const Address PatchIndex(0x5C3CAC, 0x5C31DC, 0x5C2CF4, 0x5C2CF4, 0x5C25E4, 0x5C25E4, 0x5C22B8, 0x5C22B8);
 
 		Process::Write8(animObj, roomID);
 		Process::Write8(animObj + 1, animID);
 
-		Process::Patch(Code::IndexChange, 0xE3A01000 + targetPlayerIndex); //in sendPkt Function GetOnlinePlayerIndex inline
-		Process::Write8(PatchIndex, targetPlayerIndex);
+		Process::Patch(Code::IndexChange.addr, 0xE3A01000 + targetPlayerIndex); //in sendPkt Function GetOnlinePlayerIndex inline
+		Process::Write8(PatchIndex.addr, targetPlayerIndex);
 		Sleep(Milliseconds(5));
 
-		static const u32 SendPacketFunc = Region::AutoRegion(0x5C3C7C, 0x5C31AC, 0x5C2CC4, 0x5C2CC4, 0x5C25B4, 0x5C25B4, 0x5C2288, 0x5C2288);
-		static FUNCTION func(SendPacketFunc);
-		func.Call<void>(targetPlayerIndex, animObj); 
+		static Address SendPacketFunc(0x5C3C7C, 0x5C31AC, 0x5C2CC4, 0x5C2CC4, 0x5C25B4, 0x5C25B4, 0x5C2288, 0x5C2288);
+		SendPacketFunc.Call<void>(targetPlayerIndex, animObj); 
 
 		Sleep(Milliseconds(5));
-		Process::Patch(Code::IndexChange, 0xE5D11268);
-		Process::Write8(PatchIndex, 4);
+		Process::Patch(Code::IndexChange.addr, 0xE5D11268);
+		Process::Write8(PatchIndex.addr, 4);
 	}
-//Idle Animation 32DC55C0
+//Idle Animation
 	void Animation::Idle(u8 pID) {
 		u32 x, y;
 		if(!PlayerClass::GetInstance(pID)->GetWorldCoords(&x, &y))

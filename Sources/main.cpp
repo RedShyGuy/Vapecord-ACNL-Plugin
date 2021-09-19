@@ -1,7 +1,4 @@
-#include <CTRPluginFramework.hpp>
-#include <vector>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
 
 namespace CTRPluginFramework {
 	static const std::string Note = "Creator: Lukas#4444 (RedShyGuy) \n\n"
@@ -63,6 +60,27 @@ Gets region name to append to plugin title | also sets current region
 		}
 	}
 
+/*
+Checks game version
+-1 = string not found
+-2 = wrong version
+0 = correct version
+*/
+	u8 IsNewestVersion(std::string& versionSTR, const std::string& gameVersion) {
+		versionSTR.clear();
+
+		static const std::vector<u16> Pattern = { 0x0056, 0x0065, 0x0072, 0x002E, 0x0020 };
+		u16* found = (u16 *)Utils::Search<u16>(0x00800000, 0x00200000, Pattern);
+		if(found == nullptr)
+			return -1;
+
+		versionSTR = Utils::Format("%c.%c", (char)found[5], (char)found[7]);
+		if(versionSTR != gameVersion)
+			return -2;
+
+		return 0;
+	}
+
 	static const std::string GameVersion = "1.5";
 
 	bool CheckGameVersion(void) {
@@ -70,13 +88,14 @@ Gets region name to append to plugin title | also sets current region
 		ReadConfig(CONFIG::GameVer, u_byte);
 		if(u_byte == f_GameVer::Accepted)
 			return true;
-		else if(u_byte == f_GameVer::Declined)
-			return false;
 
 		std::string currentVersion = "";
-		u8 res = Region::IsNewestVersion(currentVersion, GameVersion);
+		u8 res = IsNewestVersion(currentVersion, GameVersion);
 
 		if(res == -2) {
+			if(u_byte == f_GameVer::Declined)
+				return false;
+
 			Sleep(Seconds(5));
 			static const std::string str = Utils::Format("Your game has the version %s\nThis plugin only supports the game version %s. Make sure you have the correct game version before you use this plugin!\nIgnore this warning?", currentVersion.c_str(), GameVersion.c_str());
             if(!(MessageBox(Color(0xDC143CFF) << "Warning, wrong game version!", str, DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {

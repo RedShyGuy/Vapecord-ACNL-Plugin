@@ -1,6 +1,4 @@
-#include <CTRPluginFramework.hpp>
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
 
 extern "C" bool __IsPlayerHouse() {
 	u8 pID = (u8)CTRPluginFramework::Player::GetPlayerStatus(4);
@@ -34,16 +32,14 @@ namespace CTRPluginFramework {
 				}
 			}
 
-			static FUNCTION func(Code::PlaceItemOffset);
-			return func.Call<u32>(ID, (u32)ItemToReplace, (u32)ItemToPlace, (u32)ItemToShow, worldx, worldy, 0, 0, 0, 0, 0);
+			return Code::PlaceItemOffset.Call<u32>(ID, (u32)ItemToReplace, (u32)ItemToPlace, (u32)ItemToShow, worldx, worldy, 0, 0, 0, 0, 0);
 		}
 		return 0xFFFFFFFF;
 	}
 //Hook invalid drop
 	u32 InvalidDropStop(u8 ID, u32 *ItemToReplace, u32 *ItemToPlace, u32 *ItemToShow) {
 		if(IDList::ItemValid((*ItemToPlace & 0xFFFFFFFF))) {
-			static FUNCTION func(Code::PlaceItemOffset);
-			return func.Call<u32>(ID, (u32)ItemToReplace, (u32)ItemToPlace, (u32)ItemToShow);
+			return Code::PlaceItemOffset.Call<u32>(ID, (u32)ItemToReplace, (u32)ItemToPlace, (u32)ItemToShow);
 		}
 
 		return 0xFFFFFFFF;
@@ -52,9 +48,8 @@ namespace CTRPluginFramework {
 //hook invalid show off	
 	u32 InvalidShowOffStop(u32 pOffset, u32 ItemOffset) {
 		if(IDList::ItemValid(*(u32 *)ItemOffset)) {
-			static const u32 ShowOffFunc = Region::AutoRegion(0x6523B0, 0x6518D8, 0x6513E8, 0x6513E8, 0x650EA8, 0x650EA8, 0x650A50, 0x650A50);
-			static FUNCTION func(ShowOffFunc);
-			return func.Call<u32>(pOffset, ItemOffset);
+			static Address ShowOffFunc(0x6523B0, 0x6518D8, 0x6513E8, 0x6513E8, 0x650EA8, 0x650EA8, 0x650A50, 0x650A50);
+			return ShowOffFunc.Call<u32>(pOffset, ItemOffset);
 		}
 		return 0;
 	}
@@ -62,18 +57,15 @@ namespace CTRPluginFramework {
 //Hook invalid eat
 	u32 InvalidEatStop(u32 pOffset, u32 ItemOffset, u32 InvData, u32 u0) {			
 		if(IDList::ItemValid(*(u32 *)ItemOffset)) {
-			static const u32 EatFunc = Region::AutoRegion(0x650E88, 0x6503B0, 0x64FEC0, 0x64FEC0, 0x64F980, 0x64F980, 0x64F528, 0x64F528);
-
-			static FUNCTION func(EatFunc);
-			return func.Call<u32>(pOffset, ItemOffset, InvData, u0);
+			static Address EatFunc(0x650E88, 0x6503B0, 0x64FEC0, 0x64FEC0, 0x64F980, 0x64F980, 0x64F528, 0x64F528);
+			return EatFunc.Call<u32>(pOffset, ItemOffset, InvData, u0);
 		}
 		return 0;
 	}
 //Hook to initialize	
 	void InvalidSpriteStop(u32 pData, u32 SpriteItem) {
 		if(IDList::ItemValid(*(u32 *)SpriteItem)) {
-			static FUNCTION func(Code::CopyPasteFunc);
-			func.Call<void>(pData, SpriteItem);
+			Code::CopyPasteFunc.Call<void>(pData, SpriteItem);
 		}
 	}
 //Hook for hole check
@@ -129,10 +121,8 @@ namespace CTRPluginFramework {
 		}
 		
 	//loads box
-		static const u32 OpenBox = Region::AutoRegion(0x5D5548, 0x5D4A78, 0x5D4590, 0x5D4590, 0x5D3DC4, 0x5D3DC4, 0x5D3A98, 0x5D3A98);
-
-		static FUNCTION func(OpenBox);
-		func.Call<void>(u0, u1, u2);
+		static Address OpenBox(0x5D5548, 0x5D4A78, 0x5D4590, 0x5D4590, 0x5D3DC4, 0x5D3DC4, 0x5D3A98, 0x5D3A98);
+		OpenBox.Call<void>(u0, u1, u2);
 	}
 
 	bool IsItemDroppable(u32 ItemData, u32 *ItemID, int SecondaryItemFlag) {
@@ -145,9 +135,8 @@ namespace CTRPluginFramework {
 		else if(IDList::ValidID((*ItemID & 0xFFFF), 0x340C, 0x34CD)) 
 			return true;
 
-		static const u32 O_IsItemDroppable = Region::AutoRegion(0x26FEA0, 0x26F8E4, 0x26FE9C, 0x26FE9C, 0x26FDA8, 0x26FDA8, 0x26FD74, 0x26FD74);
-		static FUNCTION func(O_IsItemDroppable);
-		return func.Call<bool>(ItemData, ItemID, SecondaryItemFlag);
+		static Address O_IsItemDroppable(0x26FEA0, 0x26F8E4, 0x26FE9C, 0x26FE9C, 0x26FDA8, 0x26FDA8, 0x26FD74, 0x26FD74);
+		return O_IsItemDroppable.Call<bool>(ItemData, ItemID, SecondaryItemFlag);
 	}
 
 	bool IsItemPlantable(u32 ItemData, u32 *ItemID) {
@@ -157,9 +146,8 @@ namespace CTRPluginFramework {
 		else if(IDList::ValidID((*ItemID & 0xFFFF), 0x9F, 0xFC)) 
 			return true;
 
-		static const u32 Plant = Region::AutoRegion(0x26FE64, 0x26F8A8, 0x26FE60, 0x26FE60, 0x26FD6C, 0x26FD6C, 0x26FD38, 0x26FD38);
-		static FUNCTION func(Plant);
-		return func.Call<bool>(ItemData, ItemID);
+		static Address Plant(0x26FE64, 0x26F8A8, 0x26FE60, 0x26FE60, 0x26FD6C, 0x26FD6C, 0x26FD38, 0x26FD38);
+		return Plant.Call<bool>(ItemData, ItemID);
 	}
 
 	int CatalogPatch_Keyboard(u32 u0, u32 u1, u32 u2) {
@@ -168,9 +156,8 @@ namespace CTRPluginFramework {
 			return 0;
 		}
 
-		static const u32 address = Region::AutoRegion(0x52A32C, 0x529C80, 0x529374, 0x529374, 0x528C60, 0x528C60, 0x528984, 0x528984);
-		static FUNCTION func(address);
-		return func.Call<int>(u0, u1, u2);
+		static Address address(0x52A32C, 0x529C80, 0x529374, 0x529374, 0x528C60, 0x528C60, 0x528984, 0x528984);
+		return address.Call<int>(u0, u1, u2);
 	} 
 //basically "forces" a B press directly for the search function to break
 	bool CatalogPatch_SearchFunction(void) {
@@ -196,85 +183,85 @@ namespace CTRPluginFramework {
 		*(u32 *)found = 0xE1A00000;
 
 		static Hook SaveButtonCheck;
-		SetHook(SaveButtonCheck, Code::nosave - 0x10, (u32)IsSTARTPressed, USE_LR_TO_RETURN);
+		SetHook(SaveButtonCheck, Code::nosave.addr - 0x10, (u32)IsSTARTPressed, USE_LR_TO_RETURN);
 
 		static Hook CatalogPHook1, CatalogPHook2;
-		static const u32 CatalogPOffset1 = Region::AutoRegion(0x21C408, 0x21BE4C, 0x21C428, 0x21C428, 0x21C348, 0x21C348, 0x21C314, 0x21C314);
-		static const u32 CatalogPOffset2 = Region::AutoRegion(0x21C0AC, 0x21BAF0, 0x21C0CC, 0x21C0CC, 0x21BFEC, 0x21BFEC, 0x21BFB8, 0x21BFB8);
+		static const Address CatalogPOffset1(0x21C408, 0x21BE4C, 0x21C428, 0x21C428, 0x21C348, 0x21C348, 0x21C314, 0x21C314);
+		static const Address CatalogPOffset2(0x21C0AC, 0x21BAF0, 0x21C0CC, 0x21C0CC, 0x21BFEC, 0x21BFEC, 0x21BFB8, 0x21BFB8);
 
-		SetHook(CatalogPHook1, CatalogPOffset1, (u32)CatalogPatch_Keyboard, USE_LR_TO_RETURN);
-		SetHook(CatalogPHook2, CatalogPOffset2, (u32)CatalogPatch_SearchFunction, USE_LR_TO_RETURN);
+		SetHook(CatalogPHook1, CatalogPOffset1.addr, (u32)CatalogPatch_Keyboard, USE_LR_TO_RETURN);
+		SetHook(CatalogPHook2, CatalogPOffset2.addr, (u32)CatalogPatch_SearchFunction, USE_LR_TO_RETURN);
 		
 		static Hook IPHook;	
-		static const u32 IPOffset = Region::AutoRegion(0x59A258, 0x599770, 0x5992A0, 0x5992A0, 0x598B90, 0x598B90, 0x598864, 0x598864);
-		SetHook(IPHook, IPOffset, (u32)InvalidPickStop, USE_LR_TO_RETURN);
+		static const Address IPOffset(0x59A258, 0x599770, 0x5992A0, 0x5992A0, 0x598B90, 0x598B90, 0x598864, 0x598864);
+		SetHook(IPHook, IPOffset.addr, (u32)InvalidPickStop, USE_LR_TO_RETURN);
 		
 		static Hook IEHook;
-		static const u32 IEOffset = Region::AutoRegion(0x5C0A38, 0x5BFF68, 0x5BFA80, 0x5BFA80, 0x5BF370, 0x5BF370, 0x5BF044, 0x5BF044);
-		SetHook(IEHook, IEOffset, (u32)InvalidEatStop, USE_LR_TO_RETURN);
+		static const Address IEOffset(0x5C0A38, 0x5BFF68, 0x5BFA80, 0x5BFA80, 0x5BF370, 0x5BF370, 0x5BF044, 0x5BF044);
+		SetHook(IEHook, IEOffset.addr, (u32)InvalidEatStop, USE_LR_TO_RETURN);
 		
 		static Hook ISOHook;
-		static const u32 ISOOffset = Region::AutoRegion(0x5C0AFC, 0x5C002C, 0x5BFB44, 0x5BFB44, 0x5BF434, 0x5BF434, 0x5BF108, 0x5BF108);
-		SetHook(ISOHook, ISOOffset, (u32)InvalidShowOffStop, USE_LR_TO_RETURN);
+		static const Address ISOOffset(0x5C0AFC, 0x5C002C, 0x5BFB44, 0x5BFB44, 0x5BF434, 0x5BF434, 0x5BF108, 0x5BF108);
+		SetHook(ISOHook, ISOOffset.addr, (u32)InvalidShowOffStop, USE_LR_TO_RETURN);
 		
 		static Hook InvDropHook, InvPlantHook;
-		static const u32 InvDropOffset = Region::AutoRegion(0x597850, 0x596D68, 0x596898, 0x596898, 0x596188, 0x596188, 0x595E5C, 0x595E5C);
-		static const u32 InvPlantOffset = Region::AutoRegion(0x597724, 0x596C3C, 0x59676C, 0x59676C, 0x59605C, 0x59605C, 0x595D30, 0x595D30);
-		SetHook(InvDropHook, InvDropOffset, (u32)InvalidDropStop, USE_LR_TO_RETURN);
-		SetHook(InvPlantHook, InvPlantOffset, (u32)InvalidDropStop, USE_LR_TO_RETURN);
+		static const Address InvDropOffset(0x597850, 0x596D68, 0x596898, 0x596898, 0x596188, 0x596188, 0x595E5C, 0x595E5C);
+		static const Address InvPlantOffset(0x597724, 0x596C3C, 0x59676C, 0x59676C, 0x59605C, 0x59605C, 0x595D30, 0x595D30);
+		SetHook(InvDropHook, InvDropOffset.addr, (u32)InvalidDropStop, USE_LR_TO_RETURN);
+		SetHook(InvPlantHook, InvPlantOffset.addr, (u32)InvalidDropStop, USE_LR_TO_RETURN);
 		
 		static Hook ISHook;
-		static const u32 ISOffset = Region::AutoRegion(0x670EA0, 0x6703C8, 0x66FED8, 0x66FED8, 0x66F998, 0x66F998, 0x66F540, 0x66F540);
-		SetHook(ISHook, ISOffset, (u32)InvalidSpriteStop, USE_LR_TO_RETURN);
+		static const Address ISOffset(0x670EA0, 0x6703C8, 0x66FED8, 0x66FED8, 0x66F998, 0x66F998, 0x66F540, 0x66F540);
+		SetHook(ISHook, ISOffset.addr, (u32)InvalidSpriteStop, USE_LR_TO_RETURN);
 		
 		static Hook IHHook;
-		static const u32 IHOffset = Region::AutoRegion(0x5980F4, 0x59760C, 0x59713C, 0x59713C, 0x596A2C, 0x596A2C, 0x596700, 0x596700);
-		SetHook(IHHook, IHOffset, (u32)InvalidHoleStop, USE_LR_TO_RETURN);
+		static const Address IHOffset(0x5980F4, 0x59760C, 0x59713C, 0x59713C, 0x596A2C, 0x596A2C, 0x596700, 0x596700);
+		SetHook(IHHook, IHOffset.addr, (u32)InvalidHoleStop, USE_LR_TO_RETURN);
 		
 		static Hook IIHook;
-		static const u32 IIOffset = Region::AutoRegion(0x72511C, 0x724464, 0x724124, 0x7240FC, 0x7238B8, 0x723890, 0x723460, 0x723460);
-		SetHook(IIHook, IIOffset, (u32)InvalidItemStop, USE_LR_TO_RETURN);
+		static const Address IIOffset(0x72511C, 0x724464, 0x724124, 0x7240FC, 0x7238B8, 0x723890, 0x723460, 0x723460);
+		SetHook(IIHook, IIOffset.addr, (u32)InvalidItemStop, USE_LR_TO_RETURN);
 		
 		static Hook CFHook;
-		static const u32 CFOffset = Region::AutoRegion(0x323514, 0x322F28, 0x322868, 0x322868, 0x32251C, 0x32251C, 0x3223D4, 0x3223D4);
-		SetHook(CFHook, CFOffset, (u32)ConvertFlower, USE_LR_TO_RETURN);
+		static const Address CFOffset(0x323514, 0x322F28, 0x322868, 0x322868, 0x32251C, 0x32251C, 0x3223D4, 0x3223D4);
+		SetHook(CFHook, CFOffset.addr, (u32)ConvertFlower, USE_LR_TO_RETURN);
 
 		static Hook NameHook;
-		static const u32 NameWrite = Region::AutoRegion(0x19C498, 0x19BEE0, 0x19C4B8, 0x19C4B8, 0x19C3F8, 0x19C3F8, 0x19C3F8, 0x19C3F8);
-		SetHook(NameHook, NameWrite, (u32)NameFunc, USE_LR_TO_RETURN);
+		static const Address NameWrite(0x19C498, 0x19BEE0, 0x19C4B8, 0x19C4B8, 0x19C3F8, 0x19C3F8, 0x19C3F8, 0x19C3F8);
+		SetHook(NameHook, NameWrite.addr, (u32)NameFunc, USE_LR_TO_RETURN);
 
 		static Hook ReplaceHook;
-		static const u32 init = Region::AutoRegion(0x165528, 0x164F70, 0x165548, 0x165548, 0x165510, 0x165510, 0x165510, 0x165510);
-		SetHook(ReplaceHook, init, (u32)IsItemReplaceable, USE_LR_TO_RETURN);
+		static const Address init(0x165528, 0x164F70, 0x165548, 0x165548, 0x165510, 0x165510, 0x165510, 0x165510);
+		SetHook(ReplaceHook, init.addr, (u32)IsItemReplaceable, USE_LR_TO_RETURN);
 
 		static Hook DropHook1, DropHook2, DropHook3, DropHook4;
-		static const u32 Drop1 = Region::AutoRegion(0x19B66C, 0x19B0B4, 0x19B68C, 0x19B68C, 0x19B5DC, 0x19B5DC, 0x19B5DC, 0x19B5DC);
-		static const u32 Drop2 = Region::AutoRegion(0x19C044, 0x19BA8C, 0x19C064, 0x19C064, 0x19BFA4, 0x19BFA4, 0x19BFA4, 0x19BFA4);
-		static const u32 Drop3 = Region::AutoRegion(0x19CFF0, 0x19CA38, 0x19D010, 0x19D010, 0x19CF50, 0x19CF50, 0x19CF50, 0x19CF50);
-		static const u32 Drop4 = Region::AutoRegion(0x2AEA64, 0x2AE498, 0x2AEA60, 0x2AEA60, 0x2AE960, 0x2AE960, 0x2AE938, 0x2AE938);
-		SetHook(DropHook1, Drop1, (u32)IsItemDroppable, USE_LR_TO_RETURN);
-		SetHook(DropHook2, Drop2, (u32)IsItemDroppable, USE_LR_TO_RETURN);
-		SetHook(DropHook3, Drop3, (u32)IsItemDroppable, USE_LR_TO_RETURN);
-		SetHook(DropHook4, Drop4, (u32)IsItemDroppable, USE_LR_TO_RETURN);
+		static const Address Drop1(0x19B66C, 0x19B0B4, 0x19B68C, 0x19B68C, 0x19B5DC, 0x19B5DC, 0x19B5DC, 0x19B5DC);
+		static const Address Drop2(0x19C044, 0x19BA8C, 0x19C064, 0x19C064, 0x19BFA4, 0x19BFA4, 0x19BFA4, 0x19BFA4);
+		static const Address Drop3(0x19CFF0, 0x19CA38, 0x19D010, 0x19D010, 0x19CF50, 0x19CF50, 0x19CF50, 0x19CF50);
+		static const Address Drop4(0x2AEA64, 0x2AE498, 0x2AEA60, 0x2AEA60, 0x2AE960, 0x2AE960, 0x2AE938, 0x2AE938);
+		SetHook(DropHook1, Drop1.addr, (u32)IsItemDroppable, USE_LR_TO_RETURN);
+		SetHook(DropHook2, Drop2.addr, (u32)IsItemDroppable, USE_LR_TO_RETURN);
+		SetHook(DropHook3, Drop3.addr, (u32)IsItemDroppable, USE_LR_TO_RETURN);
+		SetHook(DropHook4, Drop4.addr, (u32)IsItemDroppable, USE_LR_TO_RETURN);
 
 		static Hook PlantHook1, PlantHook2, PlantHook3, PlantHook4;
-		static const u32 Plant1 = Region::AutoRegion(0x19B688, 0x19B0D0, 0x19B6A8, 0x19B6A8, 0x19B5F8, 0x19B5F8, 0x19B5F8, 0x19B5F8);
-		static const u32 Plant2 = Region::AutoRegion(0x19B97C, 0x19B3C4, 0x19B99C, 0x19B99C, 0x19B8EC, 0x19B8EC, 0x19B8EC, 0x19B8EC);
-		static const u32 Plant3 = Region::AutoRegion(0x2AEAC4, 0x2AE4F8, 0x2AEAC0, 0x2AEAC0, 0x2AE9C0, 0x2AE9C0, 0x2AE998, 0x2AE998);
-		static const u32 Plant4 = Region::AutoRegion(0x2AFD24, 0x2AF758, 0x2AFD20, 0x2AFD20, 0x2AFC20, 0x2AFC20, 0x2AFBF8, 0x2AFBF8);
-		SetHook(PlantHook1, Plant1, (u32)IsItemPlantable, USE_LR_TO_RETURN);
-		SetHook(PlantHook2, Plant2, (u32)IsItemPlantable, USE_LR_TO_RETURN);
-		SetHook(PlantHook3, Plant3, (u32)IsItemPlantable, USE_LR_TO_RETURN);
-		SetHook(PlantHook4, Plant4, (u32)IsItemPlantable, USE_LR_TO_RETURN);
+		static const Address Plant1(0x19B688, 0x19B0D0, 0x19B6A8, 0x19B6A8, 0x19B5F8, 0x19B5F8, 0x19B5F8, 0x19B5F8);
+		static const Address Plant2(0x19B97C, 0x19B3C4, 0x19B99C, 0x19B99C, 0x19B8EC, 0x19B8EC, 0x19B8EC, 0x19B8EC);
+		static const Address Plant3(0x2AEAC4, 0x2AE4F8, 0x2AEAC0, 0x2AEAC0, 0x2AE9C0, 0x2AE9C0, 0x2AE998, 0x2AE998);
+		static const Address Plant4(0x2AFD24, 0x2AF758, 0x2AFD20, 0x2AFD20, 0x2AFC20, 0x2AFC20, 0x2AFBF8, 0x2AFBF8);
+		SetHook(PlantHook1, Plant1.addr, (u32)IsItemPlantable, USE_LR_TO_RETURN);
+		SetHook(PlantHook2, Plant2.addr, (u32)IsItemPlantable, USE_LR_TO_RETURN);
+		SetHook(PlantHook3, Plant3.addr, (u32)IsItemPlantable, USE_LR_TO_RETURN);
+		SetHook(PlantHook4, Plant4.addr, (u32)IsItemPlantable, USE_LR_TO_RETURN);
 
 		/*static Hook hook;
-		static const u32 address = Region::AutoRegion(0x323424, 0, 0, 0, 0, 0, 0, 0);
+		static const u32 address(0x323424, 0, 0, 0, 0, 0, 0, 0);
 		hook.Initialize(address, (u32)func);
 		hook.SetFlags(USE_LR_TO_RETURN);
 		hook.Enable();*/
 
 		/*static Hook ButtonCheck;
-		static const u32 KeyPressedFunc = Region::AutoRegion(0x304A14, 0, 0, 0, 0, 0, 0, 0);
+		static const u32 KeyPressedFunc(0x304A14, 0, 0, 0, 0, 0, 0, 0);
 		ButtonCheck.Initialize(KeyPressedFunc, (u32)IsKeyDown);
 		ButtonCheck.SetFlags(0);
 		ButtonCheck.Enable();*/
@@ -352,7 +339,7 @@ namespace CTRPluginFramework {
 			}
 		}
 	//Standard Function to write item to inv
-		u32 ItemToInvFunc = Region::AutoRegion(0x323484, 0, 0, 0, 0, 0, 0, 0);
+		u32 ItemToInvFunc(0x323484, 0, 0, 0, 0, 0, 0, 0);
 		Process::Write32((u32)&FUN, ItemToInvFunc);
 		return FUN(InvAddress, InvSlot, ItemToInv, ItemLock, ItemToReplace);
 	}*/
@@ -369,13 +356,13 @@ namespace CTRPluginFramework {
 	//this is the standard function to check for keys, exactly copied from the game
 		int iVar1;
 
-		static const u32 KeyCheck = Region::AutoRegion(0x5CF1AC, 0, 0, 0, 0, 0, 0, 0);
+		static const u32 KeyCheck(0x5CF1AC, 0, 0, 0, 0, 0, 0, 0);
 
 		static FUNCTION func(KeyCheck);
 		iVar1 = func.Call<int>();
 		
 		if(iVar1 == 0) {
-			static const u32 KeyPointer = Region::AutoRegion(0x9762F4, 0, 0, 0, 0, 0, 0, 0);
+			static const u32 KeyPointer(0x9762F4, 0, 0, 0, 0, 0, 0, 0);
 			if(*(u32 *)(*(u32 *)(KeyPointer) + 0xD0) == 0) 
 				iVar1 = 0;
 			else 
