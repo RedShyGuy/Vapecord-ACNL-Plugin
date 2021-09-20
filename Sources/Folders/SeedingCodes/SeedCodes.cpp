@@ -1,4 +1,12 @@
 #include "cheats.hpp"
+#include "RegionCodes.hpp"
+#include "TextFileParser.hpp"
+#include "Helpers/Wrapper.hpp"
+#include "Helpers/IDList.hpp"
+#include "Helpers/Inventory.hpp"
+#include "Helpers/PlayerClass.hpp"
+#include "Helpers/Dropper.hpp"
+#include "Helpers/Game.hpp"
 
 extern "C" void PATCH_EverythingSeed(void);
 extern "C" void PATCH_SnakeSpeed(void);

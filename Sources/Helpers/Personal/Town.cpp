@@ -1,4 +1,5 @@
-#include "cheats.hpp"
+#include "Helpers/Town.hpp"
+#include "Helpers/Save.hpp"
 
 namespace CTRPluginFramework {
 	void TownName::UpdateReference(const std::string& tName, u8 tID1, u8 tID2) {

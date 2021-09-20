@@ -3,6 +3,8 @@
 
 #include <CTRPluginFramework.hpp>
 
+extern bool IsIndoorsBool;
+
 namespace CTRPluginFramework {
 	enum class PlayerStatus : u8 {
 		Town_00 = 0,
@@ -14,17 +16,6 @@ namespace CTRPluginFramework {
 		Isl_02 = 6,
 		Isl_03 = 7,
 		Empty = 8
-	};
-
-	struct Outfit {
-		u16 Headwear;
-		u16 Accessory;
-		u16 Shirt;
-		u16 BackupShirt; //only not 7FFE if wet suit ON
-		u16 Pants;
-		u16 Socks;
-		u16 Shoes;
-		u16 Tool;
 	};
 
 	namespace Player {

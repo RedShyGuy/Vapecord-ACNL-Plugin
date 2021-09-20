@@ -2,13 +2,9 @@
 #define ACSYSTEM_HPP
 
 #include <CTRPluginFramework.hpp>
+#include "Helpers/Game.hpp"
 
 namespace CTRPluginFramework {
-	/*struct TouchCoord {
-		u32 X;
-		u32 Y;
-	};*/
-
 	namespace GameKey {
 		enum GameKey {
 			N			= 0,

@@ -1,4 +1,13 @@
-#include "cheats.hpp"
+#include "Helpers/Player.hpp"
+#include "Helpers/Animation.hpp"
+#include "Helpers/Game.hpp"
+#include "Helpers/Inventory.hpp"
+#include "Helpers/Save.hpp"
+#include "Helpers/PlayerClass.hpp"
+#include "Helpers/PlayerPTR.hpp"
+#include "RegionCodes.hpp"
+
+bool IsIndoorsBool = false;
 
 namespace CTRPluginFramework {
 /*

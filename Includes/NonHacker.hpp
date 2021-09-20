@@ -38,5 +38,7 @@ namespace CTRPluginFramework {
 
 			static bool Accessible[5];
 	};
+
+	void NonHackerCallBack(void);
 }
 #endif

@@ -1,4 +1,13 @@
 #include "cheats.hpp"
+#include "Helpers/Address.hpp"
+#include "TextFileParser.hpp"
+#include "Helpers/PlayerClass.hpp"
+#include "Helpers/Game.hpp"
+#include "Helpers/Animation.hpp"
+#include "Helpers/IDList.hpp"
+#include "Helpers/Wrapper.hpp"
+#include "Helpers/Dropper.hpp"
+#include "Color.h"
 
 extern "C" void SetWalkParticleID(void);
 

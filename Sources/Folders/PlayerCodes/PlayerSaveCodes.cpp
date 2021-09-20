@@ -1,4 +1,13 @@
 #include "cheats.hpp"
+#include "Helpers/PlayerClass.hpp"
+#include "TextFileParser.hpp"
+#include "Helpers/Player.hpp"
+#include "Helpers/IDList.hpp"
+#include "Helpers/Wrapper.hpp"
+#include "Helpers/PlayerPTR.hpp"
+#include "Helpers/Game.hpp"
+#include "Color.h"
+#include "Files.h"
 
 namespace CTRPluginFramework {
 //Name Changer | Player specific save code

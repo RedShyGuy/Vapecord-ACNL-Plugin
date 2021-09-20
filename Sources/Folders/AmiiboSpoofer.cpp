@@ -1,4 +1,7 @@
 #include "cheats.hpp"
+#include "Helpers/IDList.hpp"
+#include "TextFileParser.hpp"
+#include "Helpers/Address.hpp"
 
 /*
     Amiibo Spoofer 3.0 by Slattz

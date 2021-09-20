@@ -1,6 +1,17 @@
 #include <cmath>
 #include <algorithm>
 #include "cheats.hpp"
+#include "Helpers/ItemSequence.hpp"
+#include "TextFileParser.hpp"
+#include "RegionCodes.hpp"
+#include "Helpers/Dropper.hpp"
+#include "Helpers/Wrapper.hpp"
+#include "Helpers/Game.hpp"
+#include "Helpers/Inventory.hpp"
+#include "Helpers/IDList.hpp"
+#include "Helpers/Animation.hpp"
+#include "Helpers/Player.hpp"
+#include "Color.h"
 
 namespace CTRPluginFramework {
 //Item Sequencer
@@ -218,7 +229,7 @@ namespace CTRPluginFramework {
 					Process::Patch(Code::dropm8.addr, 0x0A000006);
 					Process::Patch(Code::dropm9.addr, 0xE7971100);
 					
-					RestoreDropPattern();
+					Dropper::RestorePattern();
 					DropPatternON = false;
 				} return;
 			}
@@ -253,7 +264,7 @@ namespace CTRPluginFramework {
 			Process::Patch(Code::dropm8.addr, 0x0A000006);
 			Process::Patch(Code::dropm9.addr, 0xE7971100);
 
-			RestoreDropPattern();
+			Dropper::RestorePattern();
 		}
 	}
 //Drop Items	

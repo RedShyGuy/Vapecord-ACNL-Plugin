@@ -1,4 +1,18 @@
 #include "cheats.hpp"
+#include "Helpers/PlayerClass.hpp"
+#include "TextFileParser.hpp"
+#include "Helpers/Town.hpp"
+#include "Helpers/Wrapper.hpp"
+#include "Helpers/Address.hpp"
+#include "Helpers/Save.hpp"
+#include "Helpers/Player.hpp"
+#include "Helpers/Game.hpp"
+#include "Helpers/IDList.hpp"
+#include "Helpers/PlayerPTR.hpp"
+#include "Helpers/AnimData.hpp"
+#include "Helpers/Animation.hpp"
+#include "Color.h"
+#include "Files.h"
 
 namespace CTRPluginFramework {
 //Town Name Changer | player specific save code	

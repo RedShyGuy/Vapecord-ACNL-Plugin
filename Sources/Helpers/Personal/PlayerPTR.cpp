@@ -1,4 +1,5 @@
-#include "cheats.hpp"
+#include "Helpers/PlayerPTR.hpp"
+#include "Helpers/Player.hpp"
 
 namespace CTRPluginFramework {
 //get player pointer

@@ -1,4 +1,6 @@
-#include "cheats.hpp"
+#include "Helpers/ItemSequence.hpp"
+#include "Helpers/Dropper.hpp"
+#include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
 	std::vector<u32> ItemID;

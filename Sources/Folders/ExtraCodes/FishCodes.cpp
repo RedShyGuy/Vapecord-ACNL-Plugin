@@ -1,4 +1,5 @@
 #include "cheats.hpp"
+#include "Helpers/Address.hpp"
 
 namespace CTRPluginFramework {
 //Fish Byte Always

@@ -1,4 +1,6 @@
-#include "cheats.hpp"
+#include "Helpers/GameKeyboard.hpp"
+#include "Helpers/Game.hpp"
+#include "RegionCodes.hpp"
 
 #define RANGE(X, START, END)	(X >= START && X <= END)
 

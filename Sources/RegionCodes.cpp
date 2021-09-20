@@ -1,4 +1,5 @@
-#include "cheats.hpp"
+#include "Helpers/Address.hpp"
+#include "RegionCodes.hpp"
 
 namespace CTRPluginFramework {
 	void Code::Load(void) {

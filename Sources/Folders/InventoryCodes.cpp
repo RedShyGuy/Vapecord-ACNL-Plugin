@@ -1,84 +1,21 @@
 #include "cheats.hpp"
+#include "Helpers/Game.hpp"
+#include "Helpers/IDList.hpp"
+#include "TextFileParser.hpp"
+#include "Helpers/Inventory.hpp"
+#include "Helpers/PlayerClass.hpp"
+#include "Helpers/Wrapper.hpp"
+#include "Helpers/Player.hpp"
+#include "Helpers/PlayerPTR.hpp"
+#include "Helpers/GameKeyboard.hpp"
+#include "Helpers/Animation.hpp"
+#include "RegionCodes.hpp"
+#include "Color.h"
+#include "Files.h"
 
 #define MAXCOUNT 25
 
 namespace CTRPluginFramework {
-	void TextItemChange(Keyboard& keyboard, KeyboardEvent& event) {
-		std::string& input = keyboard.GetInput();
-		u32 ID = StringToHex<u32>(input, 0xFFFF);
-
-		if(!IDList::ItemValid((ID & 0xFFFFFFFF), false)) {
-			keyboard.GetMessage() = "";
-			keyboard.SetError(Color::Red << Language->Get("INVALID_ID"));
-			return;
-		}
-
-		keyboard.GetMessage() = ItemIDSearch(ID & 0xFFFF);
-	}
-
-	Item* ItemList = new Item();
-//reserver data into pointer so search doesnt take so long
-	void ReserveItemData(Item* out) {
-		File file(ITEMLIST, File::READ);
-		if(!file.IsOpen()) {
-			ItemFileExists = false;
-			return;
-		}
-
-		std::string line;
-		LineReader reader(file);
-
-		u32 lineNumber = 0;
-		int count = 0;
-
-	//Read all lines in file
-		for(; reader(line); lineNumber++) {
-		//If line is empty, skip it
-			if(line.empty())
-				continue;
-
-			std::string lowcaseInput(line);
-			for(char& c : lowcaseInput)
-				c = std::tolower(c);
-
-			std::string Name = lowcaseInput.substr(5, 30); //lets make max 30 for now
-			std::string SID = lowcaseInput.substr(0, 4); 
-			u16 ID = StringToHex<u16>(SID, 0xFFFF);
-			out->Name.push_back(Name);
-			out->ID.push_back(ID);
-			ItemFileLenght++; //adds to file lenght to know how many items are in it
-		}
-	}
-
-	int ItemSearch(const std::string& match, Item& out) {
-		int count = 0;
-	//Read our file until the last line
-		for(int i = 0; i < ItemFileLenght; ++i) {
-			auto namePos = ItemList->Name[i].find(match);
-			if(namePos != std::string::npos) {
-				out.Name.push_back(ItemList->Name[i]);
-				out.ID.push_back(ItemList->ID[i]);
-				count++;
-			}
-		}
-
-		return count;
-	}
-
-	std::string ItemIDSearch(u16 ItemID) {
-		if(!ItemFileExists)
-			return "";
-
-	//Read our file until the last line
-		for(int i = 0; i < ItemFileLenght; ++i) {
-			if(ItemList->ID[i] == ItemID) {
-				return ItemList->Name[i];
-			}
-		}
-
-		return "???";
-	}
-
 	void ItemListCallBack(Keyboard& keyboard, KeyboardEvent& event) {
 		std::string& input = keyboard.GetInput();
 

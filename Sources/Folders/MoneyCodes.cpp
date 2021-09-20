@@ -1,4 +1,10 @@
 #include "cheats.hpp"
+#include "Helpers/Player.hpp"
+#include "TextFileParser.hpp"
+#include "Helpers/Game.hpp"
+#include "Helpers/PlayerPTR.hpp"
+#include "Helpers/Wrapper.hpp"
+#include "Helpers/Save.hpp"
 
 namespace CTRPluginFramework {
 //Wallet Mod

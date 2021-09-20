@@ -1,4 +1,12 @@
 #include "cheats.hpp"
+#include "Helpers/Save.hpp"
+#include "Helpers/Game.hpp"
+#include "TextFileParser.hpp"
+#include "Helpers/CROEditing.hpp"
+#include "RegionCodes.hpp"
+#include "Helpers/IDList.hpp"
+#include "Helpers/Wrapper.hpp"
+#include "Color.h"
 
 extern "C" void PATCH_KappnBypass1(void);
 extern "C" void PATCH_KappnBypass2(void);

@@ -1,4 +1,15 @@
 #include "cheats.hpp"
+#include "Helpers/Game.hpp"
+#include "Helpers/PlayerClass.hpp"
+#include "Helpers/Inventory.hpp"
+#include "TextFileParser.hpp"
+#include "Helpers/Player.hpp"
+#include "Helpers/Address.hpp"
+#include "Helpers/Animation.hpp"
+#include "Helpers/AnimData.hpp"
+#include "Helpers/Dropper.hpp"
+#include "Color.h"
+#include "Files.h"
 
 u32 BGR_HairVal = 0;
 u32 BGR_EyeVal = 0;

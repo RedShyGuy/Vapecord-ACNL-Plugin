@@ -1,4 +1,6 @@
-#include "cheats.hpp"
+#include "Helpers/ACMessageBox.hpp"
+#include "Helpers/Address.hpp"
+#include "Helpers/PlayerClass.hpp"
 
 namespace CTRPluginFramework {
     Time ACMSG::LifeSpan = Seconds(2);

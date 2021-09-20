@@ -4,22 +4,34 @@
 #include <CTRPluginFramework.hpp>
 
 namespace CTRPluginFramework {
-	class Inventory {
-	public:
-		static u32 			GetCurrentItemData(int i = 0);
-		static u32 			GetNextItem(u16 itemID, u8 &slot);
-		static u32 			GetNextClosetItem(u32 itemID, u8 &slot);
-		static u8  			GetSelectedSlot();
-		static u8 			GetHoveredSlot();
-		static u16			GetAddData();
-		static bool			Opened();
-		static u8			GetCurrent();
-		static void			WriteLock(int slot, u8 lock = 0);
-		static u8			GetLock(int slot);
-
-		static bool 		WriteSlot(int slot, u32 item, u8 lock = 0);
-		static bool 		ReadSlot(int slot, u32& item, u8 inv = 0);
-		static void			ReloadIcons(void);
+	struct Item {
+		std::vector<std::string> Name;
+		std::vector<u16> ID;
 	};
+	
+	extern Item* ItemList;
+	extern int ItemFileLenght;
+	extern bool ItemFileExists;
+
+	namespace Inventory {
+		u32 		GetCurrentItemData(int i = 0);
+		u32 		GetNextItem(u16 itemID, u8 &slot);
+		u32 		GetNextClosetItem(u32 itemID, u8 &slot);
+		u8  		GetSelectedSlot();
+		u8 			GetHoveredSlot();
+		u16			GetAddData();
+		bool		Opened();
+		u8			GetCurrent();
+		void		WriteLock(int slot, u8 lock = 0);
+		u8			GetLock(int slot);
+
+		bool 		WriteSlot(int slot, u32 item, u8 lock = 0);
+		bool 		ReadSlot(int slot, u32& item, u8 inv = 0);
+		void		ReloadIcons(void);
+	}
+
+	void ReserveItemData(Item* out);
+	int ItemSearch(const std::string& match, Item& out);
+	std::string ItemIDSearch(u16 ItemID);
 }
 #endif

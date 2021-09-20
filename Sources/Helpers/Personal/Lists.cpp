@@ -1,7 +1,7 @@
-#include "cheats.hpp"
+#include "Helpers/IDList.hpp"
 
 namespace CTRPluginFramework {
-    const IDS1 Buildings[205] = {
+    const ID_Data Buildings[205] = {
 		{ "Player 1 House", 0 }, 
 		{ "Player 2 House", 1 },
 		{ "Player 3 House", 2 },
@@ -209,7 +209,7 @@ namespace CTRPluginFramework {
 		{ "Empty Space", 0xFC }
 	};
 
-	const IDS1 Countrys[134] = {
+	const ID_Data Countrys[134] = {
 		{ "Japan", 1 },
 		{ "Anguilla", 8 },
 		{ "Antigua and Barbuda", 9 },

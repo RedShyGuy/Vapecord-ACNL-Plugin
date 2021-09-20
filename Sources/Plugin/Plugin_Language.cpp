@@ -1,4 +1,8 @@
-#include "cheats.hpp"
+#include "Config.hpp"
+#include "TextFileParser.hpp"
+#include "MenuPointers.hpp"
+#include "Color.h"
+#include "Files.h"
 
 namespace CTRPluginFramework {
 	const std::string LanguageTXT[6] {

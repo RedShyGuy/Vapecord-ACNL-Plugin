@@ -1,6 +1,12 @@
-#include "cheats.hpp"
-
-extern u8 waitAnim;
+#include "Helpers/Game.hpp"
+#include "Helpers/PlayerClass.hpp"
+#include "Helpers/IDList.hpp"
+#include "Helpers/Save.hpp"
+#include "Helpers/Player.hpp"
+#include "Helpers/PlayerPTR.hpp"
+#include "Helpers/Animation.hpp"
+#include "Helpers/Dropper.hpp"
+#include "RegionCodes.hpp"
 
 namespace CTRPluginFramework {
 	Keyboard optKb("");
@@ -66,27 +72,7 @@ namespace CTRPluginFramework {
 		static Address disp(0x2912B8, 0, 0, 0, 0, 0, 0, 0); 
 		return disp.Call<bool>(type);
 	}
-//Item Locks Switch
-	void GameHelper::DropItemLock(bool p_switch) {
-		static const Address BypassItemLock1(0x5A11C8, 0x5A06E0, 0x5A0210, 0x5A0210, 0x59FB00, 0x59FB00, 0x59F7D4, 0x59F7D4);
-		static const Address BypassItemLock2(0x5A11CC, 0x5A06E4, 0x5A0214, 0x5A0214, 0x59FB04, 0x59FB04, 0x59F7D8, 0x59F7D8);
-		static const Address BypassItemLock3(0x5A13C8, 0x5A08E0, 0x5A0410, 0x5A0410, 0x59FD00, 0x59FD00, 0x59F9D4, 0x59F9D4);
-		static const Address BypassItemLock4(0x5A13CC, 0x5A08E4, 0x5A0414, 0x5A0414, 0x59FD04, 0x59FD04, 0x59F9D8, 0x59F9D8);
-		
-		if(p_switch) {
-			Process::Patch(BypassItemLock1.addr, 0xE3E00000);
-			Process::Patch(BypassItemLock2.addr, 0xEA000012);
-			Process::Patch(BypassItemLock3.addr, 0xE3A00000);
-			Process::Patch(BypassItemLock4.addr, 0xE8BD83F0);
-			return;
-		}
-		
-		Process::Patch(BypassItemLock1.addr, 0xE1A05001);
-		Process::Patch(BypassItemLock2.addr, 0x1A000001);
-		Process::Patch(BypassItemLock3.addr, 0xE24DD01C);
-		Process::Patch(BypassItemLock4.addr, 0xE1A07001);	
-	}
-	//0x6ADE0 turnip price
+
 //returns current grass state of coordinates
 	u8 GrassState(u8 wX, u8 wY) {	
 		static Address gState(0x6C92FC, 0x6C87AC, 0x6C8334, 0x6C830C, 0x6C7C2C, 0x6C7C04, 0x6C77D4, 0x6C77AC); 

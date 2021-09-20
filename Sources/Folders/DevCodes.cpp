@@ -1,4 +1,16 @@
 #include "cheats.hpp"
+#include "Helpers/Wrapper.hpp"
+#include "TextFileParser.hpp"
+#include "Helpers/PlayerClass.hpp"
+#include "Helpers/Animation.hpp"
+#include "Helpers/Game.hpp"
+#include "Helpers/Address.hpp"
+#include "Helpers/Player.hpp"
+#include "Helpers/ACMessageBox.hpp"
+#include "Helpers/CROEditing.hpp"
+#include "Helpers/ACSystem.hpp"
+#include "Color.h"
+#include "Files.h"
 
 namespace CTRPluginFramework {
 //Integer For Custom Dumper

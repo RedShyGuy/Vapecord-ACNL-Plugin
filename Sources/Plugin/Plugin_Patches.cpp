@@ -1,6 +1,7 @@
 #include <CTRPluginFramework.hpp>
 #include <csvc.h>
-#include "cheats.hpp"
+#include "Helpers/Address.hpp"
+#include "Helpers/ItemSequence.hpp"
 
 namespace CTRPluginFramework {
 //This patch the NFC disabling the touchscreen when scanning an amiibo, which prevents ctrpf to be used
@@ -46,31 +47,10 @@ namespace CTRPluginFramework {
         svcCloseHandle(processHandle);
     }
 
-	void SetTitle(u32 dataParam, u32 *stack) {
-		Process::WriteString(stack[1], "Did you know?", StringFormat::Utf16);
-
-		static Address setUp(0x5D7790);
-		setUp.Call<void>(dataParam, stack);
-	}
-
-	void SetText(u32 dataParam, u32 *stack) {
-		Process::WriteString(stack[1], "I have no clue what to write here", StringFormat::Utf16);
-
-		static Address setUp(0x5D7790);
-		setUp.Call<void>(dataParam, stack);
-	}
+	void PluginHooks(void);
 	
 //FwkSettings Patch Process/Gets called even if the game is not supported
 	void PatchProcess(FwkSettings &settings) {
-		static Hook titleHook, textHook;
-		titleHook.Initialize(0x2F319C, (u32)SetTitle);
-		titleHook.SetFlags(USE_LR_TO_RETURN);
-		titleHook.Enable();
-
-		textHook.Initialize(0x2F3244, (u32)SetText);
-		textHook.SetFlags(USE_LR_TO_RETURN);
-		textHook.Enable();
-
 		ToggleTouchscreenForceOn();
 		settings.ThreadPriority = 0x30;
 	}
@@ -79,7 +59,7 @@ namespace CTRPluginFramework {
 	void RCO(void) {
 		ItemSequence::Init();
 	
-		AccidentalCrashCheck();
+		PluginHooks();
 		
 	//Online Drop Lag Remover
 		static const Address host1(0x5A1454, 0x5A096C, 0x5A049C, 0x5A049C, 0x59FD8C, 0x59FD8C, 0x59FA60, 0x59FA60);

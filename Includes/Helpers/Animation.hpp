@@ -2,8 +2,11 @@
 #define ANIMATION_HPP
 
 #include <CTRPluginFramework.hpp>
+#include "Helpers/Game.hpp"
 
 namespace CTRPluginFramework {
+	extern bool IfForceAllowed;
+
 	namespace Animation {
 		void 		Idle(u8 pID = GameHelper::GetOnlinePlayerIndex());
 		void		SendAnimPacket(u8 senderIndex, u32 animObj, u8 animID, u8 roomID, u8 targetPlayerIndex);

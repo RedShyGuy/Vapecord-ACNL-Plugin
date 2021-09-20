@@ -1,7 +1,13 @@
-#include "cheats.hpp"
+#include "Helpers/CustomButton.hpp"
+#include "Helpers/Inventory.hpp"
+#include "Helpers/Game.hpp"
+#include "Helpers/PlayerPTR.hpp"
+#include "Helpers/IDList.hpp"
+#include "Helpers/Player.hpp"
+#include "RegionCodes.hpp"
+#include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
-
 /*
 Custom Buttons are currently unused
 */

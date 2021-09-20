@@ -1,6 +1,13 @@
-#include "cheats.hpp"
+#include "Helpers/Animation.hpp"
+#include "Helpers/AnimData.hpp"
+#include "Helpers/PlayerClass.hpp"
+#include "Helpers/Game.hpp"
+#include "Helpers/Wrapper.hpp"
+#include "Helpers/Player.hpp"
+#include "RegionCodes.hpp"
 
 namespace CTRPluginFramework {
+	bool IfForceAllowed = true;
 //Get Animation Instance
 	u32 Animation::GetAnimationInstance(u32 playerInstance, u8 someVal1, u8 someVal2, u32 encVal) {
 		static Address getaniminst(0x6576F8, 0x656C20, 0x656730, 0x656730, 0x6561F0, 0x6561F0, 0x655D98, 0x655D98);

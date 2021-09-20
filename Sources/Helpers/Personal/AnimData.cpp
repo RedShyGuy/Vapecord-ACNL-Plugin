@@ -1,4 +1,6 @@
-#include "cheats.hpp"
+#include "Helpers/AnimData.hpp"
+#include "Helpers/PlayerClass.hpp"
+#include "RegionCodes.hpp"
 
 namespace CTRPluginFramework {
     u16 Calculate16BitFloat(float coord) {

@@ -4,19 +4,9 @@
 #include <CTRPluginFramework.hpp>
 
 namespace CTRPluginFramework {
-	struct IDS1 {
+	struct ID_Data {
 		const char* Name; //name of ID
 		u8 ID; //ID
-	};
-
-	struct IDS2 {
-		const char* Name; //name of ID
-		u16 ID; //ID
-	};
-
-	struct IDS3 {
-		const char* Name; //name of ID
-		u32 ID; //ID
 	};
 
 	struct Furniture {
@@ -41,8 +31,73 @@ namespace CTRPluginFramework {
 			static Range sRange;
 	};
 
+	enum class SpecieID : u8 {
+		Cat = 0,
+		Elephant,
+		Sheep,
+		Bear,
+		Dog,
+		Squirrel,
+		Rabbit,
+		Duck,
+		Hippo,
+		Wolf,
+		Mouse,
+		Pig,
+		Chicken,
+		Bull,
+		Cow,
+		Bird,
+		Frog,
+		Alligator,
+		Goat,
+		Tiger,
+		Anteater,
+		Koala,
+		Horse,
+		Octopus,
+		Lion,
+		Bearcub,
+		Rhinocero,
+		Gorilla,
+		Ostrich,
+		Kangaroo,
+		Eagle,
+		Penguin,
+		Monkey,
+		Hamster,
+		Deer,
+		Special
+	};
+
+	struct AmiiboInfo {
+		u32 ID0; //Amiibo ID0 for spoofing
+		u32 ID1; //Amiibo ID1 for spoofing
+		u16 VID; //VID for Caravan and other stuff
+		SpecieID Species; //ID of NPC's species to differentiate NPCs
+	};
+
+	struct SPAmiiboInfo {
+		u32 ID0; //Amiibo ID0 for spoofing
+		u32 ID1; //Amiibo ID1 for spoofing
+		u16 VID; //VID for Caravan and other stuff
+		u8  SPVID;
+	};
+
+	struct PACKED_AmiiboInfo {
+		std::string Name;
+		u32 ID0; //Amiibo ID0 for spoofing
+		u32 ID1; //Amiibo ID1 for spoofing
+		u16 VID; //VID for Caravan and other stuff
+	};
+
 	void ValidKeyboardCheck(Keyboard& keyboard, KeyboardEvent& event);
 	void ItemChange(Keyboard& keyboard, KeyboardEvent& event);
+	void TextItemChange(Keyboard& keyboard, KeyboardEvent& event);
+	extern const ID_Data Buildings[205];
+	extern const ID_Data Countrys[134];
+	extern const SPAmiiboInfo amiiboSPVillagers[55];
+    extern const AmiiboInfo amiiboVillagers[399];
 
 	namespace IDList {
 		bool						IsHalfAcre(u8 acreID);

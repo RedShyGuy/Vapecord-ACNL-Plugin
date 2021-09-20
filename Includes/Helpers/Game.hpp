@@ -74,7 +74,6 @@ namespace CTRPluginFramework {
 		bool				GameSaving();
 		u32 				GetRoomData();
 		bool				WaterFlower(u8 wX, u8 wY);
-		void 				DropItemLock(bool p_switch);
 		void				SetCurrentTime(bool forward, int Minutes = 0, int Hours = 0, int Days = 0, int Months = 0, int Years = 0);
 	}
 
@@ -94,74 +93,6 @@ namespace CTRPluginFramework {
 		void		AddToZ(float val);
 		void		AddToYRotation(u16 val);
 	}
-
-	struct TramplePkt {
-		u32 item;
-		u8 roomID;
-		u8 wX;
-		u8 wY;
-		u8 u0;
-	};
-
-	enum class SpecieID : u8 {
-		Cat = 0,
-		Elephant,
-		Sheep,
-		Bear,
-		Dog,
-		Squirrel,
-		Rabbit,
-		Duck,
-		Hippo,
-		Wolf,
-		Mouse,
-		Pig,
-		Chicken,
-		Bull,
-		Cow,
-		Bird,
-		Frog,
-		Alligator,
-		Goat,
-		Tiger,
-		Anteater,
-		Koala,
-		Horse,
-		Octopus,
-		Lion,
-		Bearcub,
-		Rhinocero,
-		Gorilla,
-		Ostrich,
-		Kangaroo,
-		Eagle,
-		Penguin,
-		Monkey,
-		Hamster,
-		Deer,
-		Special
-	};
-
-	struct AmiiboInfo {
-		u32 ID0; //Amiibo ID0 for spoofing
-		u32 ID1; //Amiibo ID1 for spoofing
-		u16 VID; //VID for Caravan and other stuff
-		SpecieID Species; //ID of NPC's species to differentiate NPCs
-	};
-
-	struct SPAmiiboInfo {
-		u32 ID0; //Amiibo ID0 for spoofing
-		u32 ID1; //Amiibo ID1 for spoofing
-		u16 VID; //VID for Caravan and other stuff
-		u8  SPVID;
-	};
-
-	struct PACKED_AmiiboInfo {
-		std::string Name;
-		u32 ID0; //Amiibo ID0 for spoofing
-		u32 ID1; //Amiibo ID1 for spoofing
-		u16 VID; //VID for Caravan and other stuff
-	};
 
 	template <typename A, typename V>
 	bool IfInArray(A array, V var) {

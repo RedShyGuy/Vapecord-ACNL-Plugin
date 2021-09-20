@@ -1,7 +1,8 @@
-#include "cheats.hpp"
+#include "Helpers/PlayerClass.hpp"
+#include "Helpers/Game.hpp"
+#include "RegionCodes.hpp"
 
 namespace CTRPluginFramework {
-    
     PlayerClass* PlayerClass::m_Instance = nullptr;
 	u32	PlayerClass::m_PlayerOffset = 0;
 	int	PlayerClass::m_PlayerIndex = 0;

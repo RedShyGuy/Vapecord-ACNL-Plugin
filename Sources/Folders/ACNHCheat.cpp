@@ -1,4 +1,6 @@
 #include "cheats.hpp"
+#include "Helpers/IDList.hpp"
+#include "Helpers/PlayerClass.hpp"
 
 u8 FruitCount = 0;
 

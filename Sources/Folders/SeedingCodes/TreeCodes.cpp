@@ -1,4 +1,8 @@
 #include "cheats.hpp"
+#include "Helpers/Address.hpp"
+#include "TextFileParser.hpp"
+#include "Helpers/Wrapper.hpp"
+#include "Color.h"
 
 namespace CTRPluginFramework {
 //Infinite Fruit Tree

@@ -1,7 +1,6 @@
-#include "cheats.hpp"
+#include "Helpers/Address.hpp"
 
 namespace CTRPluginFramework {
-
 	CurrRegion c_Region = INVALID;
 //AutoRegion
 	Address::Address(u32 usa, u32 usawa, u32 eur, u32 eurwa, u32 jpn, u32 jpnwa, u32 kor, u32 korwa) {

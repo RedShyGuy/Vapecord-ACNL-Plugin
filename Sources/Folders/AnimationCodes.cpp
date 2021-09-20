@@ -1,16 +1,25 @@
 #include "cheats.hpp"
+#include "RegionCodes.hpp"
+#include "Helpers/Game.hpp"
+#include "Helpers/PlayerClass.hpp"
+#include "TextFileParser.hpp"
+#include "Helpers/IDList.hpp"
+#include "Helpers/Wrapper.hpp"
+#include "Helpers/Animation.hpp"
+#include "Helpers/AnimData.hpp"
+#include "Helpers/Player.hpp"
 
 namespace CTRPluginFramework {
 //Wrapper Stuff
-	static u8 AnimID = 6;
-	static u32 ItemID = 0x2001;
-	static u16 SnakeID = 1;
-	static u8 EmoteID = 1;
-	static u16 SoundID = 0x660;
-	static u8 AppearanceID[3] = {0, 0, 0};
-	static int setmode = 0;
+	u8 a_AnimID = 6;
+	u32 a_ItemID = 0x2001;
+	u16 a_SnakeID = 1;
+	u8 a_EmoteID = 1;
+	u16 a_SoundID = 0x660;
+	u8 a_AppearanceID[3] = {0, 0, 0};
+	int setmode = 0;
 //Speed
-	static bool speedmode = false;
+	bool speedmode = false;
 
 	void PSelector_Set(u8 pIndex) {
 		Process::Patch(Code::a_GetOnlinePlayerIndex.addr, 0xE3A00000 + pIndex);
@@ -190,27 +199,27 @@ namespace CTRPluginFramework {
 			switch(setmode) {
 				case 0: return;
 				case 1: 
-					Wrap::KB<u8>(Language->Get("ANIMATIONS_ANIM_NOTE"), true, 2, AnimID, AnimID, AnimChange);
+					Wrap::KB<u8>(Language->Get("ANIMATIONS_ANIM_NOTE"), true, 2, a_AnimID, a_AnimID, AnimChange);
 				break;
 				case 2:
-					Wrap::KB<u32>(Language->Get("ANIMATIONS_TOOL_NOTE"), true, 8, ItemID, ItemID, ItemChange);
+					Wrap::KB<u32>(Language->Get("ANIMATIONS_TOOL_NOTE"), true, 8, a_ItemID, a_ItemID, ItemChange);
 				break;
 				case 3:
-					Wrap::KB<u16>(Language->Get("ANIMATIONS_SNAKE_NOTE"), true, 3, SnakeID, SnakeID, SnakeChange);
+					Wrap::KB<u16>(Language->Get("ANIMATIONS_SNAKE_NOTE"), true, 3, a_SnakeID, a_SnakeID, SnakeChange);
 				break;
 				case 4:
-					Wrap::KB<u8>(Language->Get("ANIMATIONS_EMOTE_NOTE"), true, 2, EmoteID, EmoteID, EmotionChange);
+					Wrap::KB<u8>(Language->Get("ANIMATIONS_EMOTE_NOTE"), true, 2, a_EmoteID, a_EmoteID, EmotionChange);
 				break;
 				case 5:
-					Wrap::KB<u16>(Language->Get("ANIMATIONS_SOUND_NOTE"), true, 3, SoundID, SoundID, MusicChange);
+					Wrap::KB<u16>(Language->Get("ANIMATIONS_SOUND_NOTE"), true, 3, a_SoundID, a_SoundID, MusicChange);
 				break;
 				case 6: {
 					//They cant really crash so no valid check
-					Wrap::KB<u8>(Language->Get("ANIMATIONS_APPEAR_NOTE1"), true, 2, AppearanceID[0], AppearanceID[0]);
+					Wrap::KB<u8>(Language->Get("ANIMATIONS_APPEAR_NOTE1"), true, 2, a_AppearanceID[0], a_AppearanceID[0]);
 					Sleep(Milliseconds(100));
-					Wrap::KB<u8>(Language->Get("ANIMATIONS_APPEAR_NOTE2"), true, 2, AppearanceID[1], AppearanceID[1]);
+					Wrap::KB<u8>(Language->Get("ANIMATIONS_APPEAR_NOTE2"), true, 2, a_AppearanceID[1], a_AppearanceID[1]);
 					Sleep(Milliseconds(100));
-					Wrap::KB<u8>(Language->Get("ANIMATIONS_APPEAR_NOTE3"), true, 2, AppearanceID[2], AppearanceID[2]);
+					Wrap::KB<u8>(Language->Get("ANIMATIONS_APPEAR_NOTE3"), true, 2, a_AppearanceID[2], a_AppearanceID[2]);
 				} break;
 			}
 		}
@@ -224,30 +233,28 @@ namespace CTRPluginFramework {
 		if(entry->Hotkeys[3].IsPressed()) 
 			PlayerClass::GetInstance(GameHelper::GetOnlinePlayerIndex())->GetWorldCoords(&wX, &wY);
 		
-		if(speedmode ? entry->Hotkeys[3].IsDown() :entry->Hotkeys[3].IsPressed()) {//Key::A + B
-			animExecuting = true;
-			
+		if(speedmode ? entry->Hotkeys[3].IsDown() :entry->Hotkeys[3].IsPressed()) {//Key::A + B		
 			switch(setmode) {
 				case 0: return;
 				case 1: //Animation
-					Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), IDList::AnimationValid(AnimID) ? AnimID : 6, IDList::ItemValid(ItemID) ? ItemID : 0x2001, EmoteID, SnakeID, SoundID, 0, wX + offsetX, wY + offsetY, 0, AppearanceID);
+					Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), IDList::AnimationValid(a_AnimID) ? a_AnimID : 6, IDList::ItemValid(a_ItemID) ? a_ItemID : 0x2001, a_EmoteID, a_SnakeID, a_SoundID, 0, wX + offsetX, wY + offsetY, 0, a_AppearanceID);
 				break;
 				case 2: //Tool
-					Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0x38, IDList::ItemValid(ItemID) ? ItemID : 0x2001, 0, 0, 0, 0, wX + offsetX, wY + offsetY, 0, AppearanceID);
+					Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0x38, IDList::ItemValid(a_ItemID) ? a_ItemID : 0x2001, 0, 0, 0, 0, wX + offsetX, wY + offsetY, 0, a_AppearanceID);
 				break;
 				case 3: //Snake
-					Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0xC5, 0, 0, IDList::SnakeValid(SnakeID) ? SnakeID : 1, 0, 0, wX + offsetX, wY + offsetY, 0, 0);
+					Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0xC5, 0, 0, IDList::SnakeValid(a_SnakeID) ? a_SnakeID : 1, 0, 0, wX + offsetX, wY + offsetY, 0, 0);
 				break;
 				case 4: //Emote
-					Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0xAF, 0, IDList::EmotionValid(EmoteID) ? EmoteID : 1, 0, 0, 0, wX + offsetX, wY + offsetY, 0, 0);
+					Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0xAF, 0, IDList::EmotionValid(a_EmoteID) ? a_EmoteID : 1, 0, 0, 0, wX + offsetX, wY + offsetY, 0, 0);
 				break;
 				case 5: //Sound
-					Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0xC4, 0, 0, 0, IDList::MusicValid(SoundID) ? SoundID : 0x660, 0, wX + offsetX, wY + offsetY, 0, 0);
+					Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0xC4, 0, 0, 0, IDList::MusicValid(a_SoundID) ? a_SoundID : 0x660, 0, wX + offsetX, wY + offsetY, 0, 0);
 					Sleep(Milliseconds(100));
 					Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0x06, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 				break;
 				case 6: //Appearance
-					Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0xB9, 0x2001, 0, 0, 0, 0, wX + offsetX, wY + offsetY, 0, AppearanceID);
+					Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0xB9, 0x2001, 0, 0, 0, 0, wX + offsetX, wY + offsetY, 0, a_AppearanceID);
 					Sleep(Seconds(2));
 					Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0x06, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 				break;
@@ -260,7 +267,6 @@ namespace CTRPluginFramework {
 		}
 		
 		else {
-			animExecuting = false;
 			offsetX = 0;
 			offsetY = 0;
 		}
@@ -318,29 +324,28 @@ namespace CTRPluginFramework {
 			PlayerClass::GetInstance()->GetWorldCoords(&wX, &wY);
 		
 		if(speedmode ? entry->Hotkeys[0].IsDown() : entry->Hotkeys[0].IsPressed()) {		
-			animExecuting = true;
 			for(u8 i = 0; i < 4; i++) {
 				switch(setmode) {
 					case 0: return;
 					case 1: //Animation
-						Animation::ExecuteAnimationWrapper(i, IDList::AnimationValid(AnimID) ? AnimID : 0x06, IDList::ItemValid(ItemID) ? ItemID : 0x2001, EmoteID, SnakeID, SoundID, 0, wX, wY, 1, AppearanceID);
+						Animation::ExecuteAnimationWrapper(i, IDList::AnimationValid(a_AnimID) ? a_AnimID : 0x06, IDList::ItemValid(a_ItemID) ? a_ItemID : 0x2001, a_EmoteID, a_SnakeID, a_SoundID, 0, wX, wY, 1, a_AppearanceID);
 					break;
 					case 2: //Tool
-						Animation::ExecuteAnimationWrapper(i, 0x38, IDList::ItemValid(ItemID) ? ItemID : 0x2001, 0, 0, 0, 0, wX, wY, 1, AppearanceID);
+						Animation::ExecuteAnimationWrapper(i, 0x38, IDList::ItemValid(a_ItemID) ? a_ItemID : 0x2001, 0, 0, 0, 0, wX, wY, 1, a_AppearanceID);
 					break;
 					case 3: //Snake
-						Animation::ExecuteAnimationWrapper(i, 0xC5, 0, 0, IDList::SnakeValid(SnakeID) ? SnakeID : 0x001, 0, 0, wX, wY, 1, 0);
+						Animation::ExecuteAnimationWrapper(i, 0xC5, 0, 0, IDList::SnakeValid(a_SnakeID) ? a_SnakeID : 0x001, 0, 0, wX, wY, 1, 0);
 					break;
 					case 4: //Emote
-						Animation::ExecuteAnimationWrapper(i, 0xAF, 0, IDList::EmotionValid(EmoteID) ? EmoteID : 0x01, 0, 0, 0, wX, wY, 1, 0);
+						Animation::ExecuteAnimationWrapper(i, 0xAF, 0, IDList::EmotionValid(a_EmoteID) ? a_EmoteID : 0x01, 0, 0, 0, wX, wY, 1, 0);
 					break;
 					case 5: //Sound
-						Animation::ExecuteAnimationWrapper(i, 0xC4, 0, 0, 0, IDList::MusicValid(SoundID) ? SoundID : 0x0660, 0, wX, wY, 1, 0);
+						Animation::ExecuteAnimationWrapper(i, 0xC4, 0, 0, 0, IDList::MusicValid(a_SoundID) ? a_SoundID : 0x0660, 0, wX, wY, 1, 0);
 						Sleep(Milliseconds(100));
 						Animation::ExecuteAnimationWrapper(i, 0x06, 0, 0, 0, 0, 0, 0, 0, 1, 0);
 					break;
 					case 6: //Appearance
-						Animation::ExecuteAnimationWrapper(i, 0xB9, 0x2001, 0, 0, 0, 0, wX, wY, 1, AppearanceID);
+						Animation::ExecuteAnimationWrapper(i, 0xB9, 0x2001, 0, 0, 0, 0, wX, wY, 1, a_AppearanceID);
 						Sleep(Seconds(1));
 						Animation::ExecuteAnimationWrapper(i, 0x06, 0, 0, 0, 0, 0, 0, 0, 1, 0);
 					break;

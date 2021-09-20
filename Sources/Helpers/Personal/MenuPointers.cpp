@@ -1,4 +1,6 @@
-#include "cheats.hpp"
+#include <cstdarg>
+#include "MenuPointers.hpp"
+#include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
 //MenuEntry Names for Color Changer/Language Changer
@@ -96,7 +98,7 @@ namespace CTRPluginFramework {
 		settings.CustomKeyboard.BackgroundSecondary = Color::Black;
 		settings.CustomKeyboard.BackgroundBorder = Color(255, 0, 247);
 		settings.CustomKeyboard.KeyBackground = Color::Black;
-		settings.CustomKeyboard.KeyBackgroundPressed = Color(PressedButton);
+		settings.CustomKeyboard.KeyBackgroundPressed = Color(0x505050A0);
 		settings.CustomKeyboard.KeyText = Color::White;
 		settings.CustomKeyboard.KeyTextPressed = Color::White;
 	}

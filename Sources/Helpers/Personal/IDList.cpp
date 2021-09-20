@@ -1,4 +1,10 @@
-#include "cheats.hpp"
+#include "Helpers/IDList.hpp"
+#include "Helpers/Game.hpp"
+#include "Helpers/Player.hpp"
+#include "Helpers/Save.hpp"
+#include "Helpers/Inventory.hpp"
+#include "RegionCodes.hpp"
+#include "TextFileParser.hpp"
 
 #define RANGE(X, START, END)	((X & 0xFFFF) >= START && (X & 0xFFFF) <= END)
 #define IS(X, ADDR)				((X & 0xFFFF) == ADDR)
@@ -22,6 +28,19 @@ namespace CTRPluginFramework {
 			keyboard.SetError(Color::Red << "Invalid ID!");
 			return;
 		}
+	}
+
+	void TextItemChange(Keyboard& keyboard, KeyboardEvent& event) {
+		std::string& input = keyboard.GetInput();
+		u32 ID = StringToHex<u32>(input, 0xFFFF);
+
+		if(!IDList::ItemValid((ID & 0xFFFFFFFF), false)) {
+			keyboard.GetMessage() = "";
+			keyboard.SetError(Color::Red << Language->Get("INVALID_ID"));
+			return;
+		}
+
+		keyboard.GetMessage() = ItemIDSearch(ID & 0xFFFF);
 	}
 
 	bool IDList::IsHalfAcre(u8 acreID) {
@@ -182,7 +201,7 @@ namespace CTRPluginFramework {
 			return "NPC " + GetNNPCName(VID);
 		}
 
-		for(const IDS1& buildings : Buildings) {
+		for(const ID_Data& buildings : Buildings) {
 			if(buildings.ID == ID) {
 				return std::string(buildings.Name);
 			}
@@ -192,7 +211,7 @@ namespace CTRPluginFramework {
 	}
 //get country name
 	std::string IDList::SetCountryName(u8 country) {
-		for(const IDS1& countrys : Countrys) {
+		for(const ID_Data& countrys : Countrys) {
 			if(countrys.ID == country) {
 				return std::string(countrys.Name);
 			}

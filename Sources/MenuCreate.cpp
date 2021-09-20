@@ -1,4 +1,5 @@
 #include "cheats.hpp"
+#include "MenuPointers.hpp"
 
 namespace CTRPluginFramework {
     static MenuEntry *EntryWithHotkey(MenuEntry *entry, const std::vector<Hotkey> &hotkeys) {

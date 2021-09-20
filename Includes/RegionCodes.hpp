@@ -2,6 +2,7 @@
 #define REGIONCODES_HPP
 
 #include <CTRPluginFramework.hpp>
+#include "Helpers/Address.hpp"
 
 namespace CTRPluginFramework {
 	class Code {

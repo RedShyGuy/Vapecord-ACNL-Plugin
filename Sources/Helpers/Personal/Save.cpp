@@ -1,4 +1,5 @@
-#include "cheats.hpp"
+#include "Helpers/Save.hpp"
+#include "Helpers/Address.hpp"
 
 namespace CTRPluginFramework {
 	u32 Save::s_SaveAddress = 0;

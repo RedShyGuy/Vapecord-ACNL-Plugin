@@ -1,4 +1,10 @@
-#include "cheats.hpp"
+#include "Helpers/Game.hpp"
+#include "Config.hpp"
+#include "Files.h"
+#include "RegionCodes.hpp"
+#include "Helpers/Inventory.hpp"
+#include "Helpers/Wrapper.hpp"
+#include "NonHacker.hpp"
 
 namespace CTRPluginFramework {
 	static const std::string Note = "Creator: Lukas#4444 (RedShyGuy) \n\n"
@@ -6,6 +12,16 @@ namespace CTRPluginFramework {
 									"Translators: みるえもん(Japanese), im a book(spanish), Fedecrash02(italian), Youssef & Arisa(french) \n\n"
 									"" << Utils::Format("Discord: %s", DISCORDINV);
 
+	extern bool logoExists;
+	extern int UI_Pos;
+	extern c_RGBA* logoArray;
+	bool OSD_SplashScreen(const Screen &Splash);
+	void IndoorsSeedItemCheck(void);
+	void devcallback(void);
+	void OnNewFrameCallback(Time ttime);
+	void InitMenu(PluginMenu *menu);
+	void GetPlayerInfoData(void);
+	void RCO(void);
 
 /*
 Will be called at the start of the plugin to load the language, colors and the dev check
@@ -136,11 +152,6 @@ Checks game version
 		WriteConfig(CONFIG::GameID, f_GameID::CorrectID);
 		return true;
 	}
-
-	extern bool logoExists;
-	extern int UI_Pos;
-	extern c_RGBA* logoArray;
-	bool OSD_SplashScreen(const Screen &Splash);
 
 /*
 Will set a counter at the start of the plugin as long as the title screen didn't load to

@@ -1,4 +1,12 @@
 #include "cheats.hpp"
+#include "RegionCodes.hpp"
+#include "TextFileParser.hpp"
+#include "Helpers/Game.hpp"
+#include "Helpers/Player.hpp"
+#include "Helpers/Dropper.hpp"
+#include "Helpers/PlayerPTR.hpp"
+#include "Helpers/PlayerClass.hpp"
+#include "Color.h"
 
 namespace CTRPluginFramework {
 //Shops Always Open
@@ -68,7 +76,7 @@ namespace CTRPluginFramework {
 		if(op < 0)
 			return;
 		
-		GameHelper::DropItemLock(!bypassing);
+		Dropper::DropItemLock(!bypassing);
 		bypassing = !bypassing;
 		bypass(entry);
 	}

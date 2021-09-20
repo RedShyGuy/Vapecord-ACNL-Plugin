@@ -1,4 +1,8 @@
-#include "cheats.hpp"
+#include <CTRPluginFramework.hpp>
+
+#define majorV 1
+#define minorV 9
+#define revisV 5
 
 namespace CTRPluginFramework {
     enum class CONFIG : s64 {

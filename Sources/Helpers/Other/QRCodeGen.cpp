@@ -26,7 +26,7 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
-#include "cheats.hpp"
+#include "Helpers/QRCodeGen.hpp"
 
 #ifndef QRCODEGEN_TEST
 	#define testable static  // Keep functions private

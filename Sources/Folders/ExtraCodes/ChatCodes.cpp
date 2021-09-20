@@ -1,4 +1,7 @@
 #include "cheats.hpp"
+#include "Helpers/GameKeyboard.hpp"
+#include "RegionCodes.hpp"
+#include "Files.h"
 
 namespace CTRPluginFramework {
 //Chat Bubbles Don't Disappear /*Credits to Levi*/

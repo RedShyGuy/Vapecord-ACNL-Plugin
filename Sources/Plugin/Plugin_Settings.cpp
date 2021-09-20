@@ -1,4 +1,9 @@
-#include "cheats.hpp"
+#include "Config.hpp"
+#include "Helpers/Wrapper.hpp"
+#include "Helpers/Save.hpp"
+#include "MenuPointers.hpp"
+#include "Helpers/KeySequence.hpp"
+#include "Files.h"
 
 namespace CTRPluginFramework {
 	static const u8 CONFIG_V = 0xC8;

@@ -1,4 +1,5 @@
-#include "cheats.hpp"
+#include "Helpers/CROEditing.hpp"
+#include "Helpers/Address.hpp"
 
 namespace CTRPluginFramework {  
     bool CRO::GetMemAddress(const char* croFileName, u32& buffer) {

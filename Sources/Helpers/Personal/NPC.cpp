@@ -1,4 +1,7 @@
-#include "cheats.hpp"
+#include "Helpers/NPC.hpp"
+#include "Helpers/Address.hpp"
+#include "Helpers/Player.hpp"
+#include "Helpers/IDList.hpp"
 
 namespace CTRPluginFramework {
 /*

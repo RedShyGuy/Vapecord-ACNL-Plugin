@@ -1,4 +1,7 @@
-#include "cheats.hpp"
+#include "Config.hpp"
+#include "MenuPointers.hpp"
+#include "TextFileParser.hpp"
+#include "Files.h"
 
 namespace CTRPluginFramework {
     static const Color c_Colorful[12] = {

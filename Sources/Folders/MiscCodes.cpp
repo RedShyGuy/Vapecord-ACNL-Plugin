@@ -1,4 +1,18 @@
 #include "cheats.hpp"
+#include "TextFileParser.hpp"
+#include "NonHacker.hpp"
+#include "Helpers/Wrapper.hpp"
+#include "Helpers/IDList.hpp"
+#include "RegionCodes.hpp"
+#include "Helpers/Game.hpp"
+#include "Helpers/PlayerClass.hpp"
+#include "Helpers/CROEditing.hpp"
+#include "Helpers/Player.hpp"
+#include "Helpers/Dropper.hpp"
+#include "Helpers/Inventory.hpp"
+#include "Helpers/GameKeyboard.hpp"
+#include "NonHacker.hpp"
+#include "Color.h"
 
 extern "C" void MoveFurn(void);
 extern "C" void PATCH_MoveFurnButton(void);
@@ -319,7 +333,7 @@ namespace CTRPluginFramework {
 					PlayerClass::GetInstance()->GetWorldCoords(&x, &y);
 					
 					if(bypassing) 
-						GameHelper::DropItemLock(false);
+						Dropper::DropItemLock(false);
 					
 					Sleep(Milliseconds(5));
 					
@@ -329,13 +343,13 @@ namespace CTRPluginFramework {
 						OSD::Notify("Locked Spot");
 					
 					if(bypassing) 
-						GameHelper::DropItemLock(true);
+						Dropper::DropItemLock(true);
 				} break;
 			
 			//Unlock Spot
 				case 6: {
 					if(bypassing) 
-						GameHelper::DropItemLock(false);
+						Dropper::DropItemLock(false);
 					
 					Sleep(Milliseconds(5));
 					
@@ -345,13 +359,13 @@ namespace CTRPluginFramework {
 					OSD::Notify("Unlocked Spot");
 					
 					if(bypassing) 
-						GameHelper::DropItemLock(true);
+						Dropper::DropItemLock(true);
 				} break;
 			
 			//create lock spots on whole map
 				case 7: {
 					if(bypassing) 
-						GameHelper::DropItemLock(false);
+						Dropper::DropItemLock(false);
 
 					u32 countY = 0;
 					u32 countX = 0;
@@ -370,13 +384,13 @@ namespace CTRPluginFramework {
 					OSD::Notify("Locked Map");
 					
 					if(bypassing) 
-						GameHelper::DropItemLock(true);
+						Dropper::DropItemLock(true);
 				} break;
 			
 			//unlock lock spots on whole map
 				case 8: {
 					if(bypassing) 
-						GameHelper::DropItemLock(false);
+						Dropper::DropItemLock(false);
 
 					Sleep(Milliseconds(5));
 					x = 0x10;
@@ -406,7 +420,7 @@ namespace CTRPluginFramework {
 					
 					Sleep(Milliseconds(5));
 					if(bypassing) 
-						GameHelper::DropItemLock(true);
+						Dropper::DropItemLock(true);
 				} break;
 				
 				default:

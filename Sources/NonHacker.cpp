@@ -1,4 +1,12 @@
-#include "cheats.hpp"
+#include "NonHacker.hpp"
+#include "RegionCodes.hpp"
+#include "Helpers/PlayerClass.hpp"
+#include "Helpers/Animation.hpp"
+#include "Helpers/Dropper.hpp"
+#include "Helpers/IDList.hpp"
+#include "Helpers/Game.hpp"
+#include "Helpers/Inventory.hpp"
+#include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
 

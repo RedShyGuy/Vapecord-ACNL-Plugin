@@ -4,6 +4,14 @@
 #include <CTRPluginFramework.hpp>
 #include <type_traits>
 
+#define SAVE_GARDENPLUS 0x89B00  //0x95CF94
+#define SAVE_MAIL 		0x1C208  //0x983050
+#define SAVE_EXHIBITION 0x17BE10 //0x9B4AC0
+#define SAVE_FRIEND 	0x29608  //0x983038
+#define SAVE_AMIIBO 	0x128 	 //0x95CF88
+#define SAVE_DESIGN 	0x25F90  //0x983088
+#define SAVE_PLAYER		0xC8B8	 //0x983010
+
 namespace CTRPluginFramework {
 	
 	class Save {

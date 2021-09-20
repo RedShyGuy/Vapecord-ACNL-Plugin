@@ -1,4 +1,7 @@
-#include "cheats.hpp"
+#include "Helpers/ACSystem.hpp"
+#include "Helpers/Address.hpp"
+#include "Helpers/Game.hpp"
+#include "Helpers/Player.hpp"
 
 namespace CTRPluginFramework {
     bool ACSystem::IsKeyDown(GameKey::GameKey key) {

@@ -1,4 +1,15 @@
 #include "cheats.hpp"
+#include "TextFileParser.hpp"
+#include "Helpers/Player.hpp"
+#include "Helpers/PlayerPTR.hpp"
+#include "Helpers/Game.hpp"
+#include "RegionCodes.hpp"
+#include "Helpers/Wrapper.hpp"
+#include "Helpers/PlayerClass.hpp"
+#include "Helpers/Animation.hpp"
+#include "Helpers/Dropper.hpp"
+#include "Helpers/IDList.hpp"
+#include "Color.h"
 
 extern "C" void PATCH_PartyPop(void);
 
@@ -410,7 +421,7 @@ namespace CTRPluginFramework {
 		/*If Green Wand | Restores wilted flowers instantly*/
 			case 0x3399: {
 				if(!bypassing) 
-					GameHelper::DropItemLock(true);
+					Dropper::DropItemLock(true);
 
 				u32 x, y;
 			//If no World Coords found | Either Player not loaded or other error
@@ -441,7 +452,7 @@ namespace CTRPluginFramework {
 				Dropper::PlaceItemWrapper(0xC, 0xFFFFFFFF, &PlaceItem, &PlaceItem, x, y, 0, 0, 0, 0, 0, 0x5C, 0xA5, false);
 
 				if(!bypassing) 
-					GameHelper::DropItemLock(false);
+					Dropper::DropItemLock(false);
 			} break;
 		/*If Pink Wand*/
 			case 0x339A: {
@@ -454,7 +465,7 @@ namespace CTRPluginFramework {
 		/*If Flower Fairy Wand*/
 			case 0x339C: {
 				if(!bypassing) 
-					GameHelper::DropItemLock(true);
+					Dropper::DropItemLock(true);
 				u32 x, y;
 			//If no World Coords found | Either Player not loaded or other error
 				if(!PlayerClass::GetInstance()->GetWorldCoords(&x, &y))
@@ -479,7 +490,7 @@ namespace CTRPluginFramework {
 				Dropper::PlaceItemWrapper(0xC, 0xFFFFFFFF, &PlaceItem, &PlaceItem, x, y, 0, 0, 0, 0, 0, 0x5C, 0xA5, false);
 
 				if(!bypassing) 
-					GameHelper::DropItemLock(false);
+					Dropper::DropItemLock(false);
 			} break;
 		/*If Kiki and Lala Wand | Stores outfits for you and lets you select them*/
 			case 0x339D: {

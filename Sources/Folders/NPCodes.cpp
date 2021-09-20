@@ -1,5 +1,10 @@
 #include <cmath>
 #include "cheats.hpp"
+#include "Helpers/NPC.hpp"
+#include "Helpers/Address.hpp"
+#include "Helpers/Wrapper.hpp"
+#include "Helpers/PlayerClass.hpp"
+#include "Helpers/Dropper.hpp"
 
 namespace CTRPluginFramework {
     static u32 CurrAddress = 0;
@@ -38,7 +43,7 @@ namespace CTRPluginFramework {
 	void NPCFunction(MenuEntry *entry) {
 		if(!entry->Hotkeys[0].IsPressed()) //Key::L + Key::A
 			return;
-
+		/*
 		static const std::vector<std::string> option = {
 			"Normal NPC", "Special NPC", "Player NPC"
 		};
@@ -73,10 +78,18 @@ namespace CTRPluginFramework {
 		s8 res2 = KB.Open();
 		if(res2 < 0)
 			return;
+		*/
 
-		CurrAddress = npc[res][res2].data;
+		u16 ID = 0;
+		Keyboard KB("a");
+		s8 res2 = KB.Open(ID, ID);
+		if(res2 < 0)
+			return;
 
-		OSD::Notify(Utils::Format("%s selected!", npc[res][res2].name.c_str()));
+		CurrAddress = NPC::GetData(ID);
+		//CurrAddress = npc[res][res2].data;
+
+		//OSD::Notify(Utils::Format("%s selected!", npc[res][res2].name.c_str()));
 
         //return; //debug purpose
 		PluginMenu *menu = PluginMenu::GetRunningInstance();

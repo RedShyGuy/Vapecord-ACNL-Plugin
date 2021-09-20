@@ -1,4 +1,9 @@
-#include "cheats.hpp"
+#include <cstdarg>
+#include "Helpers/QRCodeGen.hpp"
+#include "Helpers/Wrapper.hpp"
+#include "TextFileParser.hpp"
+#include "Files.h"
+#include "Config.hpp"
 
 namespace CTRPluginFramework {
 //Dump File	
@@ -211,7 +216,7 @@ namespace CTRPluginFramework {
 	std::string StoreCrashData(ERRF_ExceptionInfo* excep, CpuRegisters* regs) {
 		std::string str;
 
-		str += ("Vapecord ACNL Plugin | Version: " + fullV) + "\n";
+		str += ("Vapecord ACNL Plugin | Version: " + Utils::Format("%d.%d.%d", majorV, minorV, revisV)) + "\n";
 		str += ("Exception Type: " + GetExceptionType(excep->type)) + "\n";
 		
 		std::string name = "";
@@ -270,8 +275,8 @@ namespace CTRPluginFramework {
 	
 		DrawQrCode(TopScreen, 175, 15, qrcode);
 
-		TopScreen.Draw("Oh Uh, looks like", 15, 15, Color(SpecialRed));
-		TopScreen.Draw("your game crashed! :(", 15, 25, Color(SpecialRed));
+		TopScreen.Draw("Oh Uh, looks like", 15, 15, Color(225 ,0 ,52));
+		TopScreen.Draw("your game crashed! :(", 15, 25, Color(225 ,0 ,52));
 
 		TopScreen.Draw("Report this crash on", 15, 45);
 		TopScreen.Draw("the Vapecord Discord", 15, 55);
