@@ -341,8 +341,9 @@ namespace CTRPluginFramework {
 			OSD::Notify("Multi Slot Drop " << (enabled ? Color::Green << "ON" : Color::Red << "OFF"));
 		}
 		
-		if(Inventory::GetSelectedSlot() != -1 && Inventory::Opened()) {
-			Inventory::ReadSlot(Inventory::GetSelectedSlot(), dropitemid);
+		u8 slot = 0;
+		if(Inventory::GetSelectedSlot(slot)) {
+			Inventory::ReadSlot(slot, dropitemid);
 			if(IDList::ValidID(dropitemid, 0x295B, 0x292F)) 
 				GameHelper::ToOutdoorFlowers(dropitemid);
 

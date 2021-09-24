@@ -424,7 +424,9 @@ namespace CTRPluginFramework {
 			if(i >= OnlyItem.size())
 				return;
 
-			Sets[i] = IDList::GetSeedName(OnlyItem[i]);
+			std::string str = "";
+			IDList::GetSeedName(OnlyItem[i], str);
+			Sets[i] = str;
 			input += Color(0x40FF40FF) << Utils::Format("%4X | ", OnlyItem[i]) << Color(0xFFFDD0FF) << Sets[i] << "\n";
 		}
 		input += "etc...";

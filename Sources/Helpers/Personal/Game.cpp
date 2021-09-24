@@ -399,13 +399,7 @@ namespace CTRPluginFramework {
 	void GameHelper::ToIndoorFlowers(u32& input) {
 		input = (input + 0x2890);
 	}
-//get mail text
-	std::string GameHelper::GetMailText(int slot) {
-		u32 headeroffset = PlayerPTR::Pointer(0x6E32 + (0x280 * slot));
-		std::string headertext;
-		Process::ReadString(headeroffset, headertext, 0x150, StringFormat::Utf16);
-		return headertext;
-	}
+
 //catalog function
 	void GameHelper::Catalog(bool directcall) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) 

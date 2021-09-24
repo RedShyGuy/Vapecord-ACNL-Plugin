@@ -44,8 +44,9 @@ namespace CTRPluginFramework {
 		strings1[5] = (Utils::Format("Room: %02X", GameHelper::RoomCheck()));
 
 	//gets inv item
-		if(Inventory::GetSelectedSlot() != -1 && Inventory::Opened()) 
-			Inventory::ReadSlot(Inventory::GetSelectedSlot(), itemslotid);
+		u8 slot = 0;
+		if(Inventory::GetSelectedSlot(slot)) 
+			Inventory::ReadSlot(slot, itemslotid);
 		else 
 			itemslotid = 0xFFFFFFFF;
 		

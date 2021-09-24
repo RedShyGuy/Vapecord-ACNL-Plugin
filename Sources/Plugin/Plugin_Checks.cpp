@@ -9,6 +9,7 @@ namespace CTRPluginFramework {
 		hook.Enable();
 	}
 
+	//void slotReaderFunction(u32 u0, u8 slot);
 	u32 InvalidPickStop(u8 ID, u32 *ItemToReplace, u32 *ItemToPlace, u32 *ItemToShow, u8 worldx, u8 worldy);
 	u32 InvalidDropStop(u8 ID, u32 *ItemToReplace, u32 *ItemToPlace, u32 *ItemToShow);
 	u32 InvalidShowOffStop(u32 pOffset, u32 ItemOffset);
@@ -32,10 +33,14 @@ namespace CTRPluginFramework {
 		u32 found = Utils::Search<u32>(0x07000000, 0xF608B, { 0xE5C01068, 0xE12FFF1E });
 		*(u32 *)found = 0xE1A00000;
 
+		//static Hook slotReaderHook; 
+		//static const Address slotRead(0x19D254, 0, 0, 0, 0, 0, 0, 0);
+		//SetHook(slotReaderHook, slotRead.addr, (u32)slotReaderFunction, USE_LR_TO_RETURN);
+
 		static Hook titleHook, textHook;
 		static const Address warningTXT(0x2F319C, 0, 0, 0, 0, 0, 0, 0);
 		SetHook(titleHook, warningTXT.addr, (u32)SetTitle, USE_LR_TO_RETURN);
-		SetHook(titleHook, warningTXT.addr + 0xA8, (u32)SetText, USE_LR_TO_RETURN);
+		SetHook(textHook, warningTXT.addr + 0xA8, (u32)SetText, USE_LR_TO_RETURN);
 
 		static Hook SaveButtonCheck;
 		SetHook(SaveButtonCheck, Code::nosave.addr - 0x10, (u32)IsSTARTPressed, USE_LR_TO_RETURN);
@@ -43,7 +48,6 @@ namespace CTRPluginFramework {
 		static Hook CatalogPHook1, CatalogPHook2;
 		static const Address CatalogPOffset1(0x21C408, 0x21BE4C, 0x21C428, 0x21C428, 0x21C348, 0x21C348, 0x21C314, 0x21C314);
 		static const Address CatalogPOffset2(0x21C0AC, 0x21BAF0, 0x21C0CC, 0x21C0CC, 0x21BFEC, 0x21BFEC, 0x21BFB8, 0x21BFB8);
-
 		SetHook(CatalogPHook1, CatalogPOffset1.addr, (u32)CatalogPatch_Keyboard, USE_LR_TO_RETURN);
 		SetHook(CatalogPHook2, CatalogPOffset2.addr, (u32)CatalogPatch_SearchFunction, USE_LR_TO_RETURN);
 		

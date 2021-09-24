@@ -108,28 +108,7 @@ namespace CTRPluginFramework {
 		
 		return *(u8 *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x24);
 	}
-//get current selected inventory slot
-	u8 Inventory::GetSelectedSlot() {
-		if(GameHelper::BaseInvPointer() == 0) 
-			return -1;
-		
-		u8 slot = *(u8 *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0xCC);
-		if(slot != -1 && slot < 0x10) 
-			return slot;
-		
-		return -1;
-	}
-//get hovered inv slot
-	u8 Inventory::GetHoveredSlot() {
-		if(GameHelper::BaseInvPointer() == 0) 
-			return -1;
-		
-		u8 slot = *(u8 *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0xD4);
-		if(slot != -1 && slot < 0x10) 
-			return slot;
-		
-		return -1;
-	}
+
 //get correct inv addition data
 	u16 Inventory::GetAddData() {
 		if(GameHelper::BaseInvPointer() == 0) 
@@ -248,5 +227,41 @@ namespace CTRPluginFramework {
 
 		for(int i = 0; i < 16; ++i)
 			Code::LoadIcon.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + GetAddData(), i);
+	}
+
+//get current selected inventory slot
+	bool Inventory::GetSelectedSlot(u8& slot) {
+		if(!Opened()) 
+			return false;
+		
+		u32 offs = *(u32 *)(GameHelper::BaseInvPointer() + 0xC);
+		offs += 0xCC;
+		slot = *(u8 *)offs;
+
+		if(slot != -1 && slot < 0x10) 
+			return true;
+		
+		return false;
+	}
+
+//get hovered inv slot
+	bool Inventory::GetHoveredSlot(u8& slot) {
+		if(!Opened()) 
+			return false;
+		
+		u32 offs = *(u32 *)(GameHelper::BaseInvPointer() + 0xC);
+		offs += 0xD4;
+		slot = *(u8 *)offs;
+
+		if(slot != -1 && slot < 0x10) 
+			return true;
+		
+		return false;
+	}
+
+	void Inventory::GetMailText(u8 slot) {
+		std::string str = "";
+		Player::GetMailText(slot - MailSlotCalc, str);
+		MessageBox(str).SetClear(ClearScreen::Top)();
 	}
 }

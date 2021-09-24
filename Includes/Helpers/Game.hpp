@@ -38,7 +38,6 @@ namespace CTRPluginFramework {
 		void				ToIndoorFlowers(u32& input);
 		void				ToOutdoorFlowers(u32& input);
 	//Inventory Stuff
-		std::string 		GetMailText(int slot);
 		u32 				MailPointer();
 		u32					BaseInvPointer();
 	//Locked Spot Stuff

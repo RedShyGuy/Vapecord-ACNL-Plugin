@@ -6,6 +6,7 @@
 #include "Helpers/Dropper.hpp"
 #include "Helpers/PlayerPTR.hpp"
 #include "Helpers/PlayerClass.hpp"
+#include "Helpers/Inventory.hpp"
 #include "Color.h"
 
 namespace CTRPluginFramework {
@@ -104,19 +105,14 @@ namespace CTRPluginFramework {
 		noTrap(entry);
 	}
 
-	bool wasFF = false;
-//Show Mail Text	
+//Show Mail Text
 	void mailtext(MenuEntry *entry) {
-		if(!wasFF) {
-			if(Player::GetMailSlot() != -1) {
-                MessageBox(GameHelper::GetMailText(Player::GetMailSlot())).SetClear(ClearScreen::Top)();
-                wasFF = true;
-			}
-		}
-		
-		if(wasFF) 
-			if(Player::GetMailSlot() == -1) 
-				wasFF = false;
+		/*
+		Doesn't need anything here, 
+		just it being active will 
+		make a different function work 
+		(BROKEN for now)
+		*/
 	}
 //Water All Flowers	
 	void WaterAllFlowers(MenuEntry *entry) {	

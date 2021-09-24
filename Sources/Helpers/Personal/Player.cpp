@@ -175,16 +175,10 @@ Get Player Save Offset for loaded players
 		return pSOffset.Call<u32>(pIndex);
 	}
 
-//get current selected mail slot
-	u8 Player::GetMailSlot() {	
-		if(GameHelper::BaseInvPointer() == 0) 
-			return -1;
-		
-		u8 slot = *(u8 *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0xCC);
-		if(slot != -1 && slot < 0x1E && slot > 0x13) 
-			return slot - 19;
-		
-		return -1;
+//get mail text
+	void Player::GetMailText(u8 slot, std::string& str) {
+		u32 headeroffset = PlayerPTR::Pointer(0x6E32 + (0x280 * slot));
+		str = (char *)headeroffset; //0x150
 	}
 /*
 //Clear Mail in inv

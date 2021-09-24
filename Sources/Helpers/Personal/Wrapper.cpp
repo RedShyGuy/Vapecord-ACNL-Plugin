@@ -152,6 +152,13 @@ namespace CTRPluginFramework {
 		return (target & 0xFFFFFF);
 	}
 
+	u32 decodeARMBranch(const u32 src, const u32 val) {
+		s32 off = (val & 0xFFFFFF) << 2;
+		off = (off << 6) >> 6; //sign extend
+
+		return (u32)src + 8 + off;
+	}
+
 	void DrawQrCode(const Screen& screen, u32 posX, u32 posY, const u8* qrcode) {
 		const u32 size_qr = qrcodegen_getSize(qrcode);
 		u32 size_qr_s = size_qr;

@@ -12,10 +12,12 @@ namespace CTRPluginFramework {
 Custom Buttons are currently unused
 */
     void CustomButton::WrapItem(u32 ItemData) {
+		u8 slot = 0;
+		Inventory::GetSelectedSlot(slot);
 	//writes present lock onto item
-		Inventory::WriteLock(Inventory::GetSelectedSlot(), 1);
+		Inventory::WriteLock(slot, 1);
 	//Loads Item Icon | present icon
-		Code::LoadIcon.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x1EC0, Inventory::GetSelectedSlot());
+		Code::LoadIcon.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x1EC0, slot);
 
 		static Address restore(0x19B380);
 		restore.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
@@ -23,12 +25,14 @@ Custom Buttons are currently unused
 
 	void CustomButton::DuplicateItem(u32 ItemData) {
 		u32 itemslotid = 0x7FFE;
-		Inventory::ReadSlot(Inventory::GetSelectedSlot(), itemslotid);		
+		u8 slot = 0;
+		Inventory::GetSelectedSlot(slot);
+		Inventory::ReadSlot(slot, itemslotid);		
 		
-		if(Inventory::GetSelectedSlot() == 0xF) 
+		if(slot == 0xF) 
 			Inventory::WriteSlot(0, itemslotid);
 		else 
-			Inventory::WriteSlot(Inventory::GetSelectedSlot() + 1, itemslotid);
+			Inventory::WriteSlot(slot + 1, itemslotid);
 		
 		static Address restore(0x19B380);
 		restore.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
@@ -36,12 +40,13 @@ Custom Buttons are currently unused
 	
 	void CustomButton::PutItemToStorage(u32 ItemData) {
 		u32 itemslotid = 0x7FFE;
-		Inventory::ReadSlot(Inventory::GetSelectedSlot(), itemslotid);		
 		u8 slot = 0;
+		Inventory::GetSelectedSlot(slot);
+		Inventory::ReadSlot(slot, itemslotid);		
 		
 		if(Inventory::GetNextClosetItem(0x7FFE, slot) != 0xFFFFFFFF) {
-			Inventory::WriteSlot(Inventory::GetSelectedSlot(), 0x7FFE);	
-			PlayerPTR::Write32(0x92F0 + (0x4 * slot), itemslotid);
+			Inventory::WriteSlot(slot, 0x7FFE);	
+			PlayerPTR::Write32(0x92F0 + (4 * slot), itemslotid);
 		}
 
 		static Address restore(0x19B380);
@@ -54,9 +59,12 @@ Custom Buttons are currently unused
 		static Address restore(0x19B380);
 
 		u32 itemslotid = 0x7FFE;
-		Inventory::ReadSlot(Inventory::GetSelectedSlot(), itemslotid);
+		u8 slot = 0;
+		Inventory::GetSelectedSlot(slot);
+
+		Inventory::ReadSlot(slot, itemslotid);
 		if(IDList::ValidID(itemslotid, 0x20AC, 0x2117)) { 
-			int money = get.Call<int>(PlayerPTR::Pointer(0x6BD0 + (0x4 * Inventory::GetSelectedSlot())));
+			int money = get.Call<int>(PlayerPTR::Pointer(0x6BD0 + (4 * slot)));
 				
 			int debt = GameHelper::GetMoney((u64 *)PlayerPTR::Pointer(0x6B94));
 		//if you try to store more money than you need to, the rest will be set to your bank acc
@@ -83,12 +91,12 @@ Custom Buttons are currently unused
 
 			while(itemslotid > 0x20AC) {
 				sound.Call<void>(0x1000491);
-				Inventory::WriteSlot(Inventory::GetSelectedSlot(), itemslotid--);		
+				Inventory::WriteSlot(slot, itemslotid--);		
 			}
 
 			GameHelper::PlaySound(0x492);
 
-			Inventory::WriteSlot(Inventory::GetSelectedSlot(), 0x7FFE);
+			Inventory::WriteSlot(slot, 0x7FFE);
 		}
 		
 		restore.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));

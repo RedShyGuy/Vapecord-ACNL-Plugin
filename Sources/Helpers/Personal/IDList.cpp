@@ -220,13 +220,14 @@ namespace CTRPluginFramework {
 		return Language->Get("INVALID");
 	}
 	
-	std::string IDList::GetSeedName(u16 itemID) {
+	bool IDList::GetSeedName(u16 itemID, std::string& str) {
 		for(int i = 0; i < ItemFileLenght; i++) {
 			if(ItemList->ID[i] == itemID) {
-				return ItemList->Name[i];
+				str = ItemList->Name[i];
+				return true;
 			}
 		}
-		return Language->Get("INVALID");
+		return false;
 	}
 
 	/*std::string IDList::GetItemName(u16 ItemID) {
