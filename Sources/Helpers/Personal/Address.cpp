@@ -2,6 +2,8 @@
 
 namespace CTRPluginFramework {
 	CurrRegion c_Region = INVALID;
+
+	std::string regionName = "";
 //AutoRegion
 	Address::Address(u32 usa, u32 usawa, u32 eur, u32 eurwa, u32 jpn, u32 jpnwa, u32 kor, u32 korwa) {
 		switch(c_Region) {

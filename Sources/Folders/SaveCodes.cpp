@@ -11,6 +11,7 @@
 #include "Helpers/PlayerPTR.hpp"
 #include "Helpers/AnimData.hpp"
 #include "Helpers/Animation.hpp"
+#include "Helpers/NPC.hpp"
 #include "Color.h"
 #include "Files.h"
 
@@ -50,10 +51,10 @@ namespace CTRPluginFramework {
 				if(KB.Open(filename) == -1)
 					return;
 
-				Wrap::Dump(PATH_SAVE, filename, ".dat", WrapLoc{ Save::GetInstance()->Address(), 0x89B00 }, WrapLoc{ (u32)-1, (u32)-1 });		
+				Wrap::Dump(Utils::Format(PATH_SAVE, regionName.c_str()), filename, ".dat", WrapLoc{ Save::GetInstance()->Address(), 0x89B00 }, WrapLoc{ (u32)-1, (u32)-1 });		
 			} break;
 			case 1: {
-				if(Wrap::Restore(PATH_SAVE, ".dat", Language->Get("SAVE_RESTORE_SELECT"), nullptr, true, WrapLoc{ Save::GetInstance()->Address(), 0x89B00 }, WrapLoc{ (u32)-1, (u32)-1 }) == ExHandler::SUCCESS) {
+				if(Wrap::Restore(Utils::Format(PATH_SAVE, regionName.c_str()), ".dat", Language->Get("SAVE_RESTORE_SELECT"), nullptr, true, WrapLoc{ Save::GetInstance()->Address(), 0x89B00 }, WrapLoc{ (u32)-1, (u32)-1 }) == ExHandler::SUCCESS) {
 					static Address fixfurno(0x6A6EE0, 0x6A6408, 0x6A5F18, 0x6A5F18, 0x6A59B0, 0x6A59B0, 0x6A5558, 0x6A5558);	
 					u32 orig[1] = { 0 };
 
@@ -65,7 +66,7 @@ namespace CTRPluginFramework {
 				} 
 			} break;
 			case 2: 
-				Wrap::Delete(PATH_SAVE, ".dat");
+				Wrap::Delete(Utils::Format(PATH_SAVE, regionName.c_str()), ".dat");
 			break;
 		}
 	} 
@@ -96,7 +97,7 @@ namespace CTRPluginFramework {
 					if(KB.Open(filename) == -1)
 						return;
 
-					Wrap::Dump(PATH_BULLETIN, filename, ".dat", WrapLoc{ Player::GetBulletin(KBChoice), 0x1AC }, WrapLoc{ (u32)-1, (u32)-1 });
+					Wrap::Dump(Utils::Format(PATH_BULLETIN, regionName.c_str()), filename, ".dat", WrapLoc{ Player::GetBulletin(KBChoice), 0x1AC }, WrapLoc{ (u32)-1, (u32)-1 });
 				}
 			} break;
 			
@@ -104,11 +105,11 @@ namespace CTRPluginFramework {
 				optKb.Populate(backmessage);
 				int KBChoice = optKb.Open();
 				if(KBChoice != -1)
-					Wrap::Restore(PATH_BULLETIN, ".dat", Language->Get("RESTORE_MESSAGE"), nullptr, true, WrapLoc{ Player::GetBulletin(KBChoice), 0x1AC }, WrapLoc{ (u32)-1, (u32)-1 }); 
+					Wrap::Restore(Utils::Format(PATH_BULLETIN, regionName.c_str()), ".dat", Language->Get("RESTORE_MESSAGE"), nullptr, true, WrapLoc{ Player::GetBulletin(KBChoice), 0x1AC }, WrapLoc{ (u32)-1, (u32)-1 }); 
 			} break;
 			
 			case 2: 
-				Wrap::Delete(PATH_BULLETIN, ".dat");
+				Wrap::Delete(Utils::Format(PATH_BULLETIN, regionName.c_str()), ".dat");
 			break;
 		}
 	}
@@ -236,7 +237,7 @@ namespace CTRPluginFramework {
 		keyboard.GetMessage() = std::string(Language->Get("AMIIBO_SPOOFER_SPECIES"));
 		keyVec.clear();
 
-		IDList::PopulateNPCRace(keyVec);
+		NPC::PopulateRace(keyVec);
 
         keyboard.Populate(keyVec);
         res = keyboard.Open(); //Pick a species
@@ -249,7 +250,7 @@ namespace CTRPluginFramework {
 		keyVec.clear();
 
 		std::vector<PACKED_AmiiboInfo> amiiboVec;
-		IDList::PopulateNPCAmiibo((SpecieID)res, keyVec, amiiboVec, true, false);
+		NPC::PopulateAmiibo((SpecieID)res, keyVec, amiiboVec, true, false);
 
 		keyboard.Populate(keyVec);
 		res = keyboard.Open(); //Pick villager based on species
@@ -287,7 +288,7 @@ namespace CTRPluginFramework {
 			keyboard.GetMessage() = std::string(Language->Get("AMIIBO_SPOOFER_SPECIES"));
 			keyVec.clear();
 
-			IDList::PopulateNPCRace(keyVec);
+			NPC::PopulateRace(keyVec);
 			keyVec.pop_back(); //Removes Special Characters from vec
 
 			keyboard.Populate(keyVec);
@@ -301,7 +302,7 @@ namespace CTRPluginFramework {
 			keyVec.clear();
 
 			std::vector<PACKED_AmiiboInfo> amiiboVec;
-			IDList::PopulateNPCAmiibo((SpecieID)res, keyVec, amiiboVec, false, false);
+			NPC::PopulateAmiibo((SpecieID)res, keyVec, amiiboVec, false, false);
 
 			keyboard.Populate(keyVec);
 			res = keyboard.Open(); //Pick villager based on species

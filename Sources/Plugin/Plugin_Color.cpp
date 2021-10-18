@@ -97,12 +97,12 @@ namespace CTRPluginFramework {
                 UpdateAll(c_Luxury);
             break;			
             case f_Color::CustomMode:
-                if(!File::Exists("Vapecord/color.txt")) {
+                if(!File::Exists(PATH_CUSTOMCOLOR)) {
                     Sleep(Milliseconds(500));
                     MessageBox(Utils::Format("Error 606\nYou need the color.txt for the custom color mode to work!\nGet more info and help on the Discord Server: %s", DISCORDINV)).SetClear(ClearScreen::Top)();
                     SetupColors(true); //redo color choosing
                 }
-                colorparser->Parse("Vapecord/color.txt");
+                colorparser->Parse(PATH_CUSTOMCOLOR);
 
                 static const Color c_Custom[] = {
                     Color(std::stoul(colorparser->Get("SAVECODES"), 0, 16)), Color(std::stoul(colorparser->Get("MOVEMENTCODES"), 0, 16)), 
@@ -118,10 +118,10 @@ namespace CTRPluginFramework {
     }
 
     const Color *GetFWK(void) {
-		if(!File::Exists("Vapecord/FWKColors.txt")) 
+		if(!File::Exists(PATH_FWKCOLOR)) 
 			return nullptr;
 
-		fwkparser->Parse("Vapecord/FWKColors.txt");
+		fwkparser->Parse(PATH_FWKCOLOR);
 
 		static const Color c_Custom[26] = {
 			Color(std::stoul(fwkparser->Get("MainTextColor"), 0, 16)), Color(std::stoul(fwkparser->Get("WindowTitleColor"), 0, 16)), 

@@ -9,7 +9,6 @@ namespace CTRPluginFramework {
 		hook.Enable();
 	}
 
-	//void slotReaderFunction(u32 u0, u8 slot);
 	u32 InvalidPickStop(u8 ID, u32 *ItemToReplace, u32 *ItemToPlace, u32 *ItemToShow, u8 worldx, u8 worldy);
 	u32 InvalidDropStop(u8 ID, u32 *ItemToReplace, u32 *ItemToPlace, u32 *ItemToShow);
 	u32 InvalidShowOffStop(u32 pOffset, u32 ItemOffset);
@@ -32,10 +31,6 @@ namespace CTRPluginFramework {
 	void PluginHooks(void) {
 		u32 found = Utils::Search<u32>(0x07000000, 0xF608B, { 0xE5C01068, 0xE12FFF1E });
 		*(u32 *)found = 0xE1A00000;
-
-		//static Hook slotReaderHook; 
-		//static const Address slotRead(0x19D254, 0, 0, 0, 0, 0, 0, 0);
-		//SetHook(slotReaderHook, slotRead.addr, (u32)slotReaderFunction, USE_LR_TO_RETURN);
 
 		static Hook titleHook, textHook;
 		static const Address warningTXT(0x2F319C, 0, 0, 0, 0, 0, 0, 0);

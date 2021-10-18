@@ -220,12 +220,12 @@ namespace CTRPluginFramework {
 			} break;
 
 			case 2: {
-				if(!File::Exists(PATH_COLOR)) 
-					File::Create(PATH_COLOR);
+				if(!File::Exists(Utils::Format(PATH_COLOR, regionName.c_str()))) 
+					File::Create(Utils::Format(PATH_COLOR, regionName.c_str()));
 
 				App_Colors NewColor = App_Colors{ rval1, rval2 };
 
-				File f_color(PATH_COLOR, File::WRITE);
+				File f_color(Utils::Format(PATH_COLOR, regionName.c_str()), File::WRITE);
 				f_color.Write(&NewColor, 8);	
 				f_color.Flush();
                 f_color.Close();
@@ -239,10 +239,10 @@ namespace CTRPluginFramework {
 	void App_ColorMod(MenuEntry *entry) {
 		static Hook hook;
 		if(entry->WasJustActivated()) {
-			if(File::Exists(PATH_COLOR)) {
+			if(File::Exists(Utils::Format(PATH_COLOR, regionName.c_str()))) {
 				App_Colors OldColor;
 
-				File f_color(PATH_COLOR, File::READ);
+				File f_color(Utils::Format(PATH_COLOR, regionName.c_str()), File::READ);
 				f_color.Read(&OldColor, 8);
 				f_color.Flush();
                 f_color.Close();

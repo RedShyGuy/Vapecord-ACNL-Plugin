@@ -7,6 +7,7 @@
 #include "Helpers/PlayerPTR.hpp"
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/Inventory.hpp"
+#include "Helpers/Wrapper.hpp"
 #include "Color.h"
 
 namespace CTRPluginFramework {
@@ -105,14 +106,34 @@ namespace CTRPluginFramework {
 		noTrap(entry);
 	}
 
+	u32 slotReaderFunction(u32 u0, u8 slot) {
+		if(IsMailSlot(slot)) {
+			Inventory::GetMailText(slot);
+			OSD::Notify("Get Mail");
+		}
+
+		OSD::Notify(Utils::Format("%d", slot));
+		OSD::Notify(Utils::Format("%d", IsMailSlot(slot)));
+
+		const HookContext &curr = HookContext::GetCurrent();
+		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+		return func.Call<u32>(u0, slot);
+	}
+
 //Show Mail Text
 	void mailtext(MenuEntry *entry) {
-		/*
-		Doesn't need anything here, 
-		just it being active will 
-		make a different function work 
-		(BROKEN for now)
-		*/
+		static Hook slotReaderHook; 
+
+		if(entry->WasJustActivated()) {
+			static const Address slotRead(0x19D24C, 0, 0, 0, 0, 0, 0, 0);
+			slotReaderHook.Initialize(slotRead.addr, (u32)slotReaderFunction);
+			slotReaderHook.SetFlags(USE_LR_TO_RETURN);
+			slotReaderHook.Enable();
+		}
+
+		else if(!entry->IsActivated()) {
+			slotReaderHook.Disable();
+		}
 	}
 //Water All Flowers	
 	void WaterAllFlowers(MenuEntry *entry) {	

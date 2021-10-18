@@ -1,5 +1,6 @@
 #include "cheats.hpp"
 #include "Helpers/IDList.hpp"
+#include "Helpers/NPC.hpp"
 #include "TextFileParser.hpp"
 #include "Helpers/Address.hpp"
 
@@ -16,7 +17,7 @@ namespace CTRPluginFramework {
         Keyboard keyboard(Language->Get("AMIIBO_SPOOFER_SPECIES"));
         std::vector<std::string> keyVec;
 
-        IDList::PopulateNPCRace(keyVec);
+        NPC::PopulateRace(keyVec);
 
         keyboard.Populate(keyVec);
         s8 res = keyboard.Open(); //Pick a species
@@ -29,7 +30,7 @@ namespace CTRPluginFramework {
 
             std::vector<PACKED_AmiiboInfo> amiiboVec;
 
-            IDList::PopulateNPCAmiibo((SpecieID)res, keyVec, amiiboVec);
+            NPC::PopulateAmiibo((SpecieID)res, keyVec, amiiboVec);
 
             keyboard.Populate(keyVec);
             res = keyboard.Open(); //Pick villager based on species

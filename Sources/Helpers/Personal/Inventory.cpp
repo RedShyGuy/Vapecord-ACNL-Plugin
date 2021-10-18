@@ -260,8 +260,10 @@ namespace CTRPluginFramework {
 	}
 
 	void Inventory::GetMailText(u8 slot) {
-		std::string str = "";
-		Player::GetMailText(slot - MailSlotCalc, str);
+		slot -= MailSlotCalc;
+		u32 headeroffset = PlayerPTR::Pointer(0x6E32 + (0x280 * slot));
+		std::string str = (char *)headeroffset; //0x150
+
 		MessageBox(str).SetClear(ClearScreen::Top)();
 	}
 }

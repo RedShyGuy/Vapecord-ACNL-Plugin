@@ -3,19 +3,20 @@
 #include "Helpers/Save.hpp"
 #include "MenuPointers.hpp"
 #include "Helpers/KeySequence.hpp"
+#include "Helpers/Address.hpp"
 #include "Files.h"
 
 namespace CTRPluginFramework {
 	static const u8 CONFIG_V = 0xC8;
 
 	void WriteConfig(CONFIG config, u8 byte) {
-		File file(CONFIGNAME, File::WRITE);
+		File file(Utils::Format(CONFIGNAME, regionName.c_str()), File::WRITE);
 		file.Seek((s64)config, File::SeekPos::SET);
 		file.Write(&byte, 1);
 	}
 
 	void ReadConfig(CONFIG config, u8 &byte) {
-		File file(CONFIGNAME, File::READ);
+		File file(Utils::Format(CONFIGNAME, regionName.c_str()), File::READ);
 		file.Seek((s64)config, File::SeekPos::SET);
 		file.Read(&byte, 1);
 	}
@@ -23,20 +24,20 @@ namespace CTRPluginFramework {
 	void ResetConfig(void) {
 		u8 save[8] = { 0, 0, 0, 0, 0, 0, 0, CONFIG_V };
 
-		File w_file(CONFIGNAME, File::WRITE);
+		File w_file(Utils::Format(CONFIGNAME, regionName.c_str()), File::WRITE);
 		w_file.Write(save, sizeof(save));
 	}
 
 	void ClearConfig(void) {
-		File file(CONFIGNAME, File::TRUNCATE);
+		File file(Utils::Format(CONFIGNAME, regionName.c_str()), File::TRUNCATE);
 	}
 
 //check for config file
 	void CheckForCONFIG(void) {
-		if(!Directory::IsExists(V_DIRECTORY))
-			Directory::Create(V_DIRECTORY);
+		if(!Directory::IsExists(Utils::Format(V_DIRECTORY, regionName.c_str())))
+			Directory::Create(Utils::Format(V_DIRECTORY, regionName.c_str()));
 
-		if(File::Exists(CONFIGNAME)) {
+		if(File::Exists(Utils::Format(CONFIGNAME, regionName.c_str()))) {
 			u8 u_byte = 0;
 			ReadConfig(CONFIG::Version, u_byte);
 
@@ -47,7 +48,7 @@ namespace CTRPluginFramework {
 			else return;
 		}
 
-		File::Create(CONFIGNAME);
+		File::Create(Utils::Format(CONFIGNAME, regionName.c_str()));
 		ResetConfig();
 	}
 	
@@ -70,7 +71,7 @@ namespace CTRPluginFramework {
 				if(KB.Open(filename) == -1)
 					return;
 
-				Wrap::Dump(PATH_SAVE, filename, ".dat", WrapLoc{ Save::GetInstance()->Address(), 0x89B00 }, WrapLoc{ (u32)-1, (u32)-1 }); 
+				Wrap::Dump(Utils::Format(PATH_SAVE, regionName.c_str()), filename, ".dat", WrapLoc{ Save::GetInstance()->Address(), 0x89B00 }, WrapLoc{ (u32)-1, (u32)-1 }); 
             }
 
 			WriteConfig(CONFIG::Info, true);

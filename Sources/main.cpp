@@ -9,7 +9,7 @@
 namespace CTRPluginFramework {
 	static const std::string Note = "Creator: Lukas#4444 (RedShyGuy) \n\n"
 									"Code Credits: Nico, Jay, Levi, Slattz, Kominost, Elominator and more \n\n"
-									"Translators: みるえもん(Japanese), im a book(spanish), Fedecrash02(italian), Youssef & Arisa(french) \n\n"
+									"Translators: みるえもん(Japanese), im a book(spanish), Fedecrash02(italian), Youssef & Arisa(french), bkfirmen(german) \n\n"
 									"" << Utils::Format("Discord: %s", DISCORDINV);
 
 	extern bool logoExists;
@@ -45,35 +45,46 @@ Gets region name to append to plugin title | also sets current region
 		switch(Process::GetTitleID()) {
 			case TID_USA: 
 				c_Region = CurrRegion::USA; 
-			return "USA";
+				regionName = "USA";
+			break;
 			case TID_USAWA: 
 				c_Region = CurrRegion::USAWA;
-			return "USAWA";
+				regionName = "USAWA";
+			break;
 			case TID_EUR: 
 				c_Region = CurrRegion::EUR;
-			return "EUR";
+				regionName = "EUR";
+			break;
 			case TID_EURWA: 
 				c_Region = CurrRegion::EURWA;
-			return "EURWA";
+				regionName = "EURWA";
+			break;
 			case TID_JPN: 
 				c_Region = CurrRegion::JPN;
-			return "JPN";
+				regionName = "JPN";
+			break;
 			case TID_JPNWA: 
 				c_Region = CurrRegion::JPNWA;
-			return "JPNWA";
+				regionName = "JPNWA";
+			break;
 			case TID_KOR: 
 				c_Region = CurrRegion::KOR;
-			return "KOR";
+				regionName = "KOR";
+			break;
 			case TID_KORWA: 
 				c_Region = CurrRegion::KORWA;
-			return "KORWA";
+				regionName = "KORWA";
+			break;
 			case TID_EURWL: 
 				c_Region = CurrRegion::EURWL;
-			return "EURWL";
+				regionName = "EURWL";
+			break;
 			default: 
 				c_Region = CurrRegion::INVALID;
-			return "";
+				regionName = "";
+			break;
 		}
+		return regionName;
 	}
 
 /*

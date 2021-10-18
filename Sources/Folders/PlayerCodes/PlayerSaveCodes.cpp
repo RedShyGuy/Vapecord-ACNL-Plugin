@@ -6,6 +6,7 @@
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/PlayerPTR.hpp"
 #include "Helpers/Game.hpp"
+#include "Helpers/Address.hpp"
 #include "Color.h"
 #include "Files.h"
 
@@ -211,15 +212,15 @@ namespace CTRPluginFramework {
 				if(KB.Open(filename) == -1)
 					return;
 
-				Wrap::Dump(PATH_PLAYER, filename, ".player", WrapLoc{ Player::GetSaveOffset(4), 0xA480 }, WrapLoc{ (u32)-1, (u32)-1 });
+				Wrap::Dump(Utils::Format(PATH_PLAYER, regionName.c_str()), filename, ".player", WrapLoc{ Player::GetSaveOffset(4), 0xA480 }, WrapLoc{ (u32)-1, (u32)-1 });
 			} break;
 			case 1: {
-				Wrap::Restore(PATH_PLAYER, ".player", Language->Get("RANDOM_PLAYER_RESTORE"), nullptr, true, WrapLoc{ Player::GetSaveOffset(4), 0xA480 }, WrapLoc{ (u32)-1, (u32)-1 }); 
+				Wrap::Restore(Utils::Format(PATH_PLAYER, regionName.c_str()), ".player", Language->Get("RANDOM_PLAYER_RESTORE"), nullptr, true, WrapLoc{ Player::GetSaveOffset(4), 0xA480 }, WrapLoc{ (u32)-1, (u32)-1 }); 
 				Player::UpdateTan();
 				Player::UpdateStyle();
 			} break;	
 			case 2: 
-				Wrap::Delete(PATH_PLAYER, ".player");
+				Wrap::Delete(Utils::Format(PATH_PLAYER, regionName.c_str()), ".player");
 			break;
 		}
 	}
@@ -295,16 +296,16 @@ namespace CTRPluginFramework {
 					if(KB.Open(filename) < 0)
 						return;
 
-					Wrap::Dump(PATH_TPC, filename, ".jpg", WrapLoc{ Player::GetSaveOffset(index) + 0x5738, 0x1400 }, WrapLoc{ (u32)-1, (u32)-1 });
+					Wrap::Dump(Utils::Format(PATH_TPC, regionName.c_str()), filename, ".jpg", WrapLoc{ Player::GetSaveOffset(index) + 0x5738, 0x1400 }, WrapLoc{ (u32)-1, (u32)-1 });
 				}
 			} break;
 			
 			case 1: 
-				Wrap::Restore(PATH_TPC, ".jpg", Language->Get("TPC_DUMPER_RESTORE"), nullptr, true, WrapLoc{ PlayerPTR::Pointer(0x5738), 0x1400 }, WrapLoc{ (u32)-1, (u32)-1 });
+				Wrap::Restore(Utils::Format(PATH_TPC, regionName.c_str()), ".jpg", Language->Get("TPC_DUMPER_RESTORE"), nullptr, true, WrapLoc{ PlayerPTR::Pointer(0x5738), 0x1400 }, WrapLoc{ (u32)-1, (u32)-1 });
 			break;
 			
 			case 2: 
-				Wrap::Delete(PATH_TPC, ".jpg");
+				Wrap::Delete(Utils::Format(PATH_TPC, regionName.c_str()), ".jpg");
 			break;
 		}
 	}
@@ -354,7 +355,7 @@ namespace CTRPluginFramework {
 					if(KB.Open(filename) == -1)
 						return;
 
-					Wrap::Dump(PATH_DESIGN, filename, ".acnl", WrapLoc{ GetDesignSave(dSlot, 4), 0x26B }, WrapLoc{ (u32)-1, (u32)-1 });
+					Wrap::Dump(Utils::Format(PATH_DESIGN, regionName.c_str()), filename, ".acnl", WrapLoc{ GetDesignSave(dSlot, 4), 0x26B }, WrapLoc{ (u32)-1, (u32)-1 });
 				}
 			} break;
 			
@@ -364,13 +365,13 @@ namespace CTRPluginFramework {
 				int dSlot = DKB.Open();
 				
 				if(dSlot != -1) {
-					Wrap::Restore(PATH_DESIGN, ".acnl", Language->Get("DESIGN_DUMP_RESTORE"), nullptr, true, WrapLoc{ GetDesignSave(dSlot, 4), 0x26B }, WrapLoc{ (u32)-1, (u32)-1 });  
+					Wrap::Restore(Utils::Format(PATH_DESIGN, regionName.c_str()), ".acnl", Language->Get("DESIGN_DUMP_RESTORE"), nullptr, true, WrapLoc{ GetDesignSave(dSlot, 4), 0x26B }, WrapLoc{ (u32)-1, (u32)-1 });  
 					Player::ReloadDesign(GetRealSlot(dSlot, 4));
 				}
 			} break;
 			
 			case 2: 
-				Wrap::Delete(PATH_DESIGN, ".acnl");
+				Wrap::Delete(Utils::Format(PATH_DESIGN, regionName.c_str()), ".acnl");
 			break;
 		}
 	}

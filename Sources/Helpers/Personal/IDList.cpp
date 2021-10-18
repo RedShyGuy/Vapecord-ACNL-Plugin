@@ -3,6 +3,7 @@
 #include "Helpers/Player.hpp"
 #include "Helpers/Save.hpp"
 #include "Helpers/Inventory.hpp"
+#include "Helpers/NPC.hpp"
 #include "RegionCodes.hpp"
 #include "TextFileParser.hpp"
 
@@ -198,7 +199,7 @@ namespace CTRPluginFramework {
 			u32 Address = VillagerBase + (0x2518 * Index);
 			u16 VID = *(u16 *)(Address + 0x2C);
 
-			return "NPC " + GetNNPCName(VID);
+			return "NPC " + NPC::GetNName(VID);
 		}
 
 		for(const ID_Data& buildings : Buildings) {
@@ -293,108 +294,6 @@ namespace CTRPluginFramework {
 	}
 
 	*/
-
-	std::string IDList::GetNNPCName(u16 VID) {
-		static Address SetUp(0x308210, 0x3083E4, 0x308298, 0x308298, 0x30822C, 0x30822C, 0x308240, 0x308240);
-		static const Address NNPCModelData(0xA84AF0, 0xA83AF0, 0xA83AF0, 0xA83AF0, 0xA7DAF0, 0xA7CAF0, 0xA7CAF0, 0xA7CAF0);
-
-		u32 Stack[44];
-		u32 add = Code::SetupStackData.Call<u32>(Stack);
-
-		u32 npcModel = *(u32 *)(NNPCModelData.addr) + VID * 0x22;
-		SetUp.Call<void>(*(u32 *)Code::DataPointer.addr, add, (char *)"STR_NNpc_name", npcModel + 10);
-
-		std::string NNPCName = "";
-		Process::ReadString(Stack[1], NNPCName, 0x20, StringFormat::Utf16);
-		return NNPCName.empty() ? "???" : NNPCName;
-	}
-
-	std::string IDList::GetSPNPCName(u8 SPVID) {
-		static Address SetUp(0x75D108, 0x75C0EC, 0x75C110, 0x75C0E8, 0x75B8A8, 0x75B880, 0x75B450, 0x75B428);
-
-		u32 Stack[44];
-		u32 add = Code::SetupStackData.Call<u32>(Stack);
-
-		SetUp.Call<void>(*(u32 *)Code::DataPointer.addr, add, (char *)"STR_SPNpc_name", SPVID);
-
-		std::string SPNPCName = "";
-		Process::ReadString(Stack[1], SPNPCName, 0x20, StringFormat::Utf16);
-		return SPNPCName.empty() ? "???" : SPNPCName;
-	}
-
-	std::string IDList::GetNPCRace(u8 ID) {
-		static Address SetUpStack(0x3081E8, 0x3083BC, 0x308270, 0x308270, 0x308204, 0x308204, 0x308218, 0x308218);
-		static Address SetUp(0x312610, 0x312A4C, 0x3127EC, 0x3127EC, 0x3126F8, 0x3126F8, 0x312B3C, 0x312B3C);
-
-	//No clue why, but the USA and EUR version have some formatting string parts at the beginning of the NPC race string which we need to skip
-		static const Address Fix(0xC, 0xC, 0xC, 0xC, 0, 0, 0, 0);
-
-		u32 Stack[44];
-		u32 add = SetUpStack.Call<u32>(Stack, Stack + 0x18, 0x10);
-
-		/*
-		//Way to get race ID by VID
-		u32 npcModel = *(u32 *)(NNPCModelData) + VID * 0x22;
-		*(u8 *)(npcModel + 2);
-		*/
-
-		SetUp.Call<void>(*(u32 *)Code::DataPointer.addr, add, (char *)"STR_Race", ID);
-
-		std::string NPCRace = "";
-
-		Process::ReadString(Stack[1] + Fix.addr, NPCRace, 0x20, StringFormat::Utf16);
-
-		return NPCRace.empty() ? "???" : NPCRace;
-	}
-
-	bool IDList::PopulateNPCAmiibo(SpecieID specieID, std::vector<std::string> &vec, std::vector<PACKED_AmiiboInfo> &info, bool HoldenFillyAllowed, bool NonCaravanAllowed) {
-		if(specieID == SpecieID::Special) {
-			vec.clear();
-			info.clear();
-
-			for(const SPAmiiboInfo& amiibo : amiiboSPVillagers) {
-				if(!NonCaravanAllowed && amiibo.VID == 0xFFFF) //Non Caravan get skipped
-					continue;
-
-				std::string Name = "";
-				if(amiibo.SPVID == 0xFE) Name = "Villager";
-				else if(amiibo.SPVID == 0xFF) Name = "Timmy&Tommy";
-				else Name = GetSPNPCName(amiibo.SPVID);
-
-				info.push_back(PACKED_AmiiboInfo{Name, amiibo.ID0, amiibo.ID1, amiibo.VID});
-				vec.push_back(Name);
-			}
-
-			return true;
-		}
-
-		else if(specieID >= (SpecieID)0) {
-			vec.clear();
-			info.clear();
-
-			for(const AmiiboInfo& amiibo : amiiboVillagers) {
-				if(!HoldenFillyAllowed && amiibo.ID0 == 0) //Holden and Filly get skipped
-					continue;
-
-				if(amiibo.Species == specieID) {
-					std::string Name = GetNNPCName(amiibo.VID);
-					info.push_back(PACKED_AmiiboInfo{Name, amiibo.ID0, amiibo.ID1, amiibo.VID});
-					vec.push_back(Name);
-				}
-			}
-			return true;
-		}
-		return false;
-	}
-
-	void IDList::PopulateNPCRace(std::vector<std::string> &vec) {
-		vec.clear();
-	//0 - 34
-		for(int i = 0; i < 35; ++i) {
-			vec.push_back(IDList::GetNPCRace(i));
-		}
-		vec.push_back("special characters");
-	}
 
 //Get Room Name
 	std::string IDList::GetRoomName(u8 ID) {

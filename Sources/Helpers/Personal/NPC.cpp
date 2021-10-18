@@ -2,6 +2,7 @@
 #include "Helpers/Address.hpp"
 #include "Helpers/Player.hpp"
 #include "Helpers/IDList.hpp"
+#include "RegionCodes.hpp"
 
 namespace CTRPluginFramework {
 /*
@@ -40,6 +41,108 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 		return 0;
 	}
 
+	std::string NPC::GetNName(u16 VID) {
+		static Address SetUp(0x308210, 0x3083E4, 0x308298, 0x308298, 0x30822C, 0x30822C, 0x308240, 0x308240);
+		static const Address NNPCModelData(0xA84AF0, 0xA83AF0, 0xA83AF0, 0xA83AF0, 0xA7DAF0, 0xA7CAF0, 0xA7CAF0, 0xA7CAF0);
+
+		u32 Stack[44];
+		u32 add = Code::SetupStackData.Call<u32>(Stack);
+
+		u32 npcModel = *(u32 *)(NNPCModelData.addr) + VID * 0x22;
+		SetUp.Call<void>(*(u32 *)Code::DataPointer.addr, add, (char *)"STR_NNpc_name", npcModel + 10);
+
+		std::string NNPCName = "";
+		Process::ReadString(Stack[1], NNPCName, 0x20, StringFormat::Utf16);
+		return NNPCName.empty() ? "???" : NNPCName;
+	}
+
+	std::string NPC::GetSPName(u8 SPVID) {
+		static Address SetUp(0x75D108, 0x75C0EC, 0x75C110, 0x75C0E8, 0x75B8A8, 0x75B880, 0x75B450, 0x75B428);
+
+		u32 Stack[44];
+		u32 add = Code::SetupStackData.Call<u32>(Stack);
+
+		SetUp.Call<void>(*(u32 *)Code::DataPointer.addr, add, (char *)"STR_SPNpc_name", SPVID);
+
+		std::string SPNPCName = "";
+		Process::ReadString(Stack[1], SPNPCName, 0x20, StringFormat::Utf16);
+		return SPNPCName.empty() ? "???" : SPNPCName;
+	}
+
+	std::string NPC::GetRace(u8 ID) {
+		static Address SetUpStack(0x3081E8, 0x3083BC, 0x308270, 0x308270, 0x308204, 0x308204, 0x308218, 0x308218);
+		static Address SetUp(0x312610, 0x312A4C, 0x3127EC, 0x3127EC, 0x3126F8, 0x3126F8, 0x312B3C, 0x312B3C);
+
+	//No clue why, but the USA and EUR version have some formatting string parts at the beginning of the NPC race string which we need to skip
+		static const Address Fix(0xC, 0xC, 0xC, 0xC, 0, 0, 0, 0);
+
+		u32 Stack[44];
+		u32 add = SetUpStack.Call<u32>(Stack, Stack + 0x18, 0x10);
+
+		/*
+		//Way to get race ID by VID
+		u32 npcModel = *(u32 *)(NNPCModelData) + VID * 0x22;
+		*(u8 *)(npcModel + 2);
+		*/
+
+		SetUp.Call<void>(*(u32 *)Code::DataPointer.addr, add, (char *)"STR_Race", ID);
+
+		std::string NPCRace = "";
+
+		Process::ReadString(Stack[1] + Fix.addr, NPCRace, 0x20, StringFormat::Utf16);
+
+		return NPCRace.empty() ? "???" : NPCRace;
+	}
+
+	bool NPC::PopulateAmiibo(SpecieID specieID, std::vector<std::string> &vec, std::vector<PACKED_AmiiboInfo> &info, bool HoldenFillyAllowed, bool NonCaravanAllowed) {
+		if(specieID == SpecieID::Special) {
+			vec.clear();
+			info.clear();
+
+			for(const SPAmiiboInfo& amiibo : amiiboSPVillagers) {
+				if(!NonCaravanAllowed && amiibo.VID == 0xFFFF) //Non Caravan get skipped
+					continue;
+
+				std::string Name = "";
+				if(amiibo.SPVID == 0xFE) Name = "Villager";
+				else if(amiibo.SPVID == 0xFF) Name = "Timmy&Tommy";
+				else Name = GetSPName(amiibo.SPVID);
+
+				info.push_back(PACKED_AmiiboInfo{Name, amiibo.ID0, amiibo.ID1, amiibo.VID});
+				vec.push_back(Name);
+			}
+
+			return true;
+		}
+
+		else if(specieID >= (SpecieID)0) {
+			vec.clear();
+			info.clear();
+
+			for(const AmiiboInfo& amiibo : amiiboVillagers) {
+				if(!HoldenFillyAllowed && amiibo.ID0 == 0) //Holden and Filly get skipped
+					continue;
+
+				if(amiibo.Species == specieID) {
+					std::string Name = GetNName(amiibo.VID);
+					info.push_back(PACKED_AmiiboInfo{Name, amiibo.ID0, amiibo.ID1, amiibo.VID});
+					vec.push_back(Name);
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+	void NPC::PopulateRace(std::vector<std::string> &vec) {
+		vec.clear();
+	//0 - 34
+		for(int i = 0; i < 35; ++i) {
+			vec.push_back(GetRace(i));
+		}
+		vec.push_back("special characters");
+	}
+
  	u16 NPC::GetVID(u32 npcData) {
 		static Address func1(0x51D288, 0x51CBDC, 0x51C2D0, 0x51C2D0, 0x51BBEC, 0x51BBEC, 0x51B580, 0x51B580);
 
@@ -74,20 +177,20 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 			data = GetData(i);
 			if(data != 0) {
 				SPVID = GetSPVID(data);
-				vec.push_back(NPCdata{ IDList::GetSPNPCName(SPVID), data });
+				vec.push_back(NPCdata{ GetSPName(SPVID), data });
 			}
 		}
 
 	//Special Case (Boat SPNPC (Kappn))	
 		data = GetData(0x18C);
 		if(data != 0) {
-			vec.push_back(NPCdata{ IDList::GetSPNPCName(0x15), data }); //0x15 is Kappn's SPVID (it isn't in the RAM when he is loaded there)
+			vec.push_back(NPCdata{ GetSPName(0x15), data }); //0x15 is Kappn's SPVID (it isn't in the RAM when he is loaded there)
 		}
 
 	//Special Case (Tour Tortimer (specifically at the tour results))	
 		data = GetData(0x18B);
 		if(data != 0) {
-			vec.push_back(NPCdata{ IDList::GetSPNPCName(0x41), data }); //0x41 is Tortimers's SPVID (it isn't in the RAM when he is loaded there)
+			vec.push_back(NPCdata{ GetSPName(0x41), data }); //0x41 is Tortimers's SPVID (it isn't in the RAM when he is loaded there)
 		}
 	}
 
@@ -100,7 +203,7 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 			data = GetData(0x191 + !IsIndoorsBool, i);
 			if(data != 0) {
 				VID = GetVID(data);
-				vec.push_back(NPCdata{ IDList::GetNNPCName(VID), data });
+				vec.push_back(NPCdata{ GetNName(VID), data });
 			}
 		}
 
@@ -109,7 +212,7 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 			data = GetData(0x194, i);
 			if(data != 0) {
 				VID = GetVID(data);
-				vec.push_back(NPCdata{ IDList::GetNNPCName(VID), data });
+				vec.push_back(NPCdata{ GetNName(VID), data });
 			}
 		}
 
@@ -118,7 +221,7 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 			data = GetData(0x1FC, i);
 			if(data != 0) {
 				VID = GetVID(data);
-				vec.push_back(NPCdata{ IDList::GetNNPCName(VID), data });
+				vec.push_back(NPCdata{ GetNName(VID), data });
 			}
 		}
 	}

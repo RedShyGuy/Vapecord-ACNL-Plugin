@@ -21,6 +21,8 @@ namespace CTRPluginFramework {
 
 	u32 decodeARMBranch(const u32 src, const u32 val);
 
+	extern Directory restoreDIR;
+
 	namespace Wrap {
 		ExHandler	Dump(const std::string& path, std::string& filename, const std::string& filetype, WrapLoc dump, ...);
 		ExHandler	Restore(const std::string& path, const std::string& filetype, const std::string& KBMsg, OnChangeCallback cb, bool HasMSGBox, WrapLoc rest, ...); 

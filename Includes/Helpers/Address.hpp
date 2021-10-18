@@ -29,6 +29,8 @@ namespace CTRPluginFramework {
 
 	extern CurrRegion c_Region;
 
+	extern std::string regionName;
+
 	class Address {
 		public:
 			Address(u32 usa, u32 usawa, u32 eur, u32 eurwa, u32 jpn, u32 jpnwa, u32 kor, u32 korwa);

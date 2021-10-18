@@ -6,12 +6,12 @@
 
 namespace CTRPluginFramework {
 	const std::string LanguageTXT[6] {
-		"Vapecord/Language/japanese.txt",
-		"Vapecord/Language/english.txt",
-		"Vapecord/Language/french.txt",
-		"Vapecord/Language/german.txt",
-		"Vapecord/Language/italian.txt",
-		"Vapecord/Language/spanish.txt"
+		PATH_JAPANESETEXT,
+		PATH_ENGLISHTEXT,
+		PATH_FRENCHTEXT,
+		PATH_GERMANTEXT,
+		PATH_ITALIANTEXT,
+		PATH_SPANISHTEXT
 	};
 
     void SetupLanguage(bool SetInMenu) {

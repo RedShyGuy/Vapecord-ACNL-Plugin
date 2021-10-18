@@ -116,12 +116,6 @@ namespace CTRPluginFramework {
 		std::string 				GetRoomName(u8 ID);
 		bool		 				ValidID(u16 ID, u16 StardID, u16 EndID);
 		std::string					GetItemName(u16 ItemID);
-
-		std::string 				GetNNPCName(u16 VID);
-		std::string 				GetSPNPCName(u8 SPVID);
-		std::string 				GetNPCRace(u8 ID);
-		void 						PopulateNPCRace(std::vector<std::string> &vec);
-		bool 						PopulateNPCAmiibo(SpecieID specieID, std::vector<std::string> &vec, std::vector<PACKED_AmiiboInfo> &info, bool HoldenFillyAllowed = false, bool NonCaravanAllowed = true);
 	}
 }
 #endif

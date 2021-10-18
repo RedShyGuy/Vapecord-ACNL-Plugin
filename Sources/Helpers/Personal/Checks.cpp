@@ -5,7 +5,6 @@
 #include "Helpers/Player.hpp"
 #include "Helpers/IDList.hpp"
 #include "Helpers/Wrapper.hpp"
-#include "MenuPointers.hpp"
 #include "RegionCodes.hpp"
 
 extern "C" bool __IsPlayerHouse() {
@@ -28,15 +27,7 @@ extern "C" bool __IsPlayerHouse() {
 }
 
 namespace CTRPluginFramework {
-	void slotReaderFunction(u32 u0, u8 slot) {
-		if(IsMailSlot(slot)) {
-			if(EXTC->GetEntryList()[4]->IsActivated()) { //if Mail Text Reader is active
-				Inventory::GetMailText(slot);
-			}
-		}
-	}
-
-    //Hook invalid pickup
+//Hook invalid pickup
 	u32 InvalidPickStop(u8 ID, u32 *ItemToReplace, u32 *ItemToPlace, u32 *ItemToShow, u8 worldx, u8 worldy) {	
 		if(IDList::ItemValid((*ItemToReplace & 0xFFFFFFFF), true)) {
 			if((ID == 0xA) || (ID == 0x12) || (ID == 0x13)) {

@@ -1,11 +1,13 @@
 #include <cstdarg>
 #include "Helpers/QRCodeGen.hpp"
 #include "Helpers/Wrapper.hpp"
+#include "Helpers/Address.hpp"
 #include "TextFileParser.hpp"
 #include "Files.h"
 #include "Config.hpp"
 
 namespace CTRPluginFramework {
+	
 //Dump File	
 	ExHandler Wrap::Dump(const std::string& path, std::string& filename, const std::string& filetype, WrapLoc dump, ...) {
 		File file; 
@@ -36,37 +38,85 @@ namespace CTRPluginFramework {
 		MessageBox(Language->Get("DUMP_DUMPED") + file.GetFullName()).SetClear(ClearScreen::Top)();
 		return ExHandler::SUCCESS; //success
 	}
+
+	Directory restoreDIR;
 //Restore file	
 	ExHandler Wrap::Restore(const std::string& path, const std::string& filetype, const std::string& KBMsg, OnChangeCallback cb, bool HasMSGBox, WrapLoc rest, ...) { 
-		std::vector<std::string> f_list, f_real;
-		File file;
-		Directory dir(path);
+		redo:
+		std::string realPath = path;
 
-		if(dir.ListFiles(f_list, filetype) == Directory::OPResult::NOT_OPEN)
+		std::vector<std::string> f_Dir, f_File, f_All;
+		std::vector<bool> isDir;
+
+		File file;
+
+		Directory::Open(restoreDIR, path);
+
+		if(restoreDIR.ListDirectories(f_Dir) == Directory::OPResult::NOT_OPEN)
 			return ExHandler::ERROR_UN;
 
-		if(f_list.empty()) {
+		if(restoreDIR.ListFiles(f_File, filetype) == Directory::OPResult::NOT_OPEN)
+			return ExHandler::ERROR_UN;
+
+	//error if no directory and files found
+		if(f_Dir.empty() && f_File.empty()) {
 			if(HasMSGBox)
             	MessageBox(Language->Get("RESTORE_NOFILES")).SetClear(ClearScreen::Top)();
 
             return ExHandler::ERROR_LI; //error listing files
         }
 
-		for(const std::string& str : f_list) {
-			std::string::size_type index = str.find(filetype);
-			if(index != std::string::npos)
-				f_real.push_back(str.substr(0, index));
+		for(const std::string& str : f_Dir) {
+			f_All.push_back(str);
+			isDir.push_back(true);
 		}
+		f_Dir.clear();
+
+	//list files without file extension
+		for(const std::string& str : f_File) {
+			std::string::size_type index = str.find(filetype);
+			if(index != std::string::npos) {
+				f_All.push_back(str.substr(0, index));
+				isDir.push_back(false);
+			}
+		}
+		f_File.clear();
 
 		Keyboard kb(KBMsg);
-		kb.Populate(f_real);
+		kb.Populate(f_All);
 		kb.OnKeyboardEvent(cb);
 
-		int uchoice = kb.Open();	
-		if(uchoice == -1) 
+		s8 uchoice = kb.Open();	
+		if(uchoice < 0) 
 			return ExHandler::ERROR_UN;
-			
-		if(dir.OpenFile(file, f_list[uchoice], File::RWC) != 0) {
+
+	//if directory show all files in it
+		if(isDir[uchoice]) {
+		//Can't open directory
+			if(Directory::Open(restoreDIR, Utils::Format("%s/%s", path.c_str(), f_All[uchoice].c_str())) != Directory::OPResult::SUCCESS) 
+				return ExHandler::ERROR_UN;
+
+			if(restoreDIR.ListFiles(f_File, filetype) == Directory::OPResult::NOT_OPEN) 
+				return ExHandler::ERROR_UN;
+
+			realPath = Utils::Format("%s/%s", path.c_str(), f_All[uchoice].c_str());
+
+			f_All.clear();
+		//list files without file extension
+			for(const std::string& str : f_File) {
+				std::string::size_type index = str.find(filetype);
+				if(index != std::string::npos) {
+					f_All.push_back(str.substr(0, index));
+				}
+			}
+
+			kb.Populate(f_All);
+			uchoice = kb.Open();	
+			if(uchoice < 0) 
+				goto redo;
+		}
+
+		if(restoreDIR.OpenFile(file, f_All[uchoice] + filetype, File::RWC) != Directory::OPResult::SUCCESS) {
 			if(HasMSGBox)
 				MessageBox(Language->Get("RESTORE_ERROR2")).SetClear(ClearScreen::Top)();
 
@@ -195,7 +245,7 @@ namespace CTRPluginFramework {
 	}
 
 	int SaveCrashDump(const char *str) {
-		Directory dir(PATH_CRASH, true);
+		Directory dir(Utils::Format(PATH_CRASH, regionName.c_str()), true);
 		File file;
 
 		time_t rawtime;

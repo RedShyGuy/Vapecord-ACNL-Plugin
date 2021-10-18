@@ -65,13 +65,13 @@ namespace CTRPluginFramework {
 						if(CKB.Open(filename) == -1)
 							return;
 
-						Wrap::Dump(PATH_CUSTOM, filename, "." + filetype, cdump, WrapLoc{ (u32)-1, (u32)-1 });
+						Wrap::Dump(Utils::Format(PATH_CUSTOM, regionName.c_str()), filename, "." + filetype, cdump, WrapLoc{ (u32)-1, (u32)-1 });
 					} break;	
 					case 1: 
-						Wrap::Restore(PATH_CUSTOM, "." + filetype, "Select which dump to restore.", nullptr, true, cdump, WrapLoc{ (u32)-1, (u32)-1 }); 
+						Wrap::Restore(Utils::Format(PATH_CUSTOM, regionName.c_str()), "." + filetype, "Select which dump to restore.", nullptr, true, cdump, WrapLoc{ (u32)-1, (u32)-1 }); 
 					break;
 					case 2:
-						Wrap::Delete(PATH_CUSTOM, "." + filetype);
+						Wrap::Delete(Utils::Format(PATH_CUSTOM, regionName.c_str()), "." + filetype);
 					break;			
 				}
 			} break;	
@@ -207,16 +207,16 @@ namespace CTRPluginFramework {
 					if(KB.Open(filename) == -1)
 						return;
 
-					Wrap::Dump(PATH_PLAYER, filename, ".player", WrapLoc{ Player::GetSaveOffset(pChoice), 0xA480 }, WrapLoc{ (u32)-1, (u32)-1 });
+					Wrap::Dump(Utils::Format(PATH_PLAYER, regionName.c_str()), filename, ".player", WrapLoc{ Player::GetSaveOffset(pChoice), 0xA480 }, WrapLoc{ (u32)-1, (u32)-1 });
 				}
 			} break;
 			
 			case 1:
-				Wrap::Restore(PATH_PLAYER, ".player", "Player Restorer\nSelect File:", nullptr, true, WrapLoc{ Player::GetSaveOffset(4), 0xA480 }, WrapLoc{ (u32)-1, (u32)-1 }); 
+				Wrap::Restore(Utils::Format(PATH_PLAYER, regionName.c_str()), ".player", "Player Restorer\nSelect File:", nullptr, true, WrapLoc{ Player::GetSaveOffset(4), 0xA480 }, WrapLoc{ (u32)-1, (u32)-1 }); 
 			break;
 
 			case 2:
-				Wrap::Delete(PATH_PLAYER, ".player");
+				Wrap::Delete(Utils::Format(PATH_PLAYER, regionName.c_str()), ".player");
 			break;
 		}
 	}

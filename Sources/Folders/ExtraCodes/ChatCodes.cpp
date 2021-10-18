@@ -17,11 +17,11 @@ namespace CTRPluginFramework {
 //65 char is max (0x82)
 	void ChatCopyPaste(MenuEntry *entry) {
 		if(entry->WasJustActivated()) {
-			if(!File::Exists(PATH_CBOARD)) 
-				File::Create(PATH_CBOARD);
+			if(!File::Exists(Utils::Format(PATH_CBOARD, regionName.c_str()))) 
+				File::Create(Utils::Format(PATH_CBOARD, regionName.c_str()));
 
 			Holder.clear();
-			File f_board(PATH_CBOARD, File::READ);
+			File f_board(Utils::Format(PATH_CBOARD, regionName.c_str()), File::READ);
 			LineReader reader(f_board);
 			reader(Holder);
 			Holder.resize(65);
@@ -33,7 +33,7 @@ namespace CTRPluginFramework {
 
 		if(entry->Hotkeys[0].IsPressed()) {
 			Holder.clear();
-			File f_board(PATH_CBOARD, File::READ);
+			File f_board(Utils::Format(PATH_CBOARD, regionName.c_str()), File::READ);
 			LineReader reader(f_board);
 			reader(Holder);
 			Holder.resize(65);
@@ -49,10 +49,10 @@ namespace CTRPluginFramework {
 		else if(entry->Hotkeys[1].IsPressed()) {
 			Holder.clear();
 			if(GameKeyboard::CopySelected(Holder)) {
-				File::Remove(PATH_CBOARD);
-				File::Create(PATH_CBOARD);
+				File::Remove(Utils::Format(PATH_CBOARD, regionName.c_str()));
+				File::Create(Utils::Format(PATH_CBOARD, regionName.c_str()));
 
-				File f_board(PATH_CBOARD, File::WRITE);
+				File f_board(Utils::Format(PATH_CBOARD, regionName.c_str()), File::WRITE);
 
 				LineWriter writer(f_board);
 				writer << Holder;
@@ -71,10 +71,10 @@ namespace CTRPluginFramework {
 			if(GameKeyboard::CopySelected(Holder)) {
 				GameKeyboard::DeleteSelected();
 
-				File::Remove(PATH_CBOARD);
-				File::Create(PATH_CBOARD);
+				File::Remove(Utils::Format(PATH_CBOARD, regionName.c_str()));
+				File::Create(Utils::Format(PATH_CBOARD, regionName.c_str()));
 
-				File f_board(PATH_CBOARD, File::WRITE);
+				File f_board(Utils::Format(PATH_CBOARD, regionName.c_str()), File::WRITE);
 				
 				LineWriter writer(f_board);
 				writer << Holder;

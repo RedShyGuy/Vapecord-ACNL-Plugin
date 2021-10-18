@@ -174,12 +174,6 @@ Get Player Save Offset for loaded players
 		static Address pSOffset(0x2FEB2C, 0x2FE8A8, 0x2FEBB4, 0x2FEBB4, 0x2FEB60, 0x2FEB60, 0x2FEA98, 0x2FEA98);
 		return pSOffset.Call<u32>(pIndex);
 	}
-
-//get mail text
-	void Player::GetMailText(u8 slot, std::string& str) {
-		u32 headeroffset = PlayerPTR::Pointer(0x6E32 + (0x280 * slot));
-		str = (char *)headeroffset; //0x150
-	}
 /*
 //Clear Mail in inv
 	void Player::ClearMail(int slot) {

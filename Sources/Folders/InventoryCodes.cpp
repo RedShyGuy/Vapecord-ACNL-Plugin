@@ -384,31 +384,49 @@ namespace CTRPluginFramework {
 		MenuChanger(entry);
 	}
 
-	std::string path = "";
-	std::string type = "";
-	int lenght = -1;
-
 	void GetCustomView(Keyboard& keyboard, KeyboardEvent& event) {
 		if(event.type != KeyboardEvent::SelectionChanged)
             return;
 
 		int index = event.selectedIndex;
 
-		Directory dir(path);
-		std::vector<std::string> f_list;
+		std::vector<std::string> f_file, f_Dir, f_all;
+		std::vector<bool> isDir;
 		File file;
 
-		if(dir.ListFiles(f_list, type) == Directory::OPResult::NOT_OPEN)
+		if(restoreDIR.ListDirectories(f_Dir) == Directory::OPResult::NOT_OPEN)
 			return;
+
+		if(restoreDIR.ListFiles(f_file, ".inv") == Directory::OPResult::NOT_OPEN) 
+			return;
+
+		if(f_Dir.empty() && f_file.empty())
+			return;
+
+		for(const std::string& str : f_Dir) {
+			f_all.push_back(str);
+			isDir.push_back(true);
+		}
+
+		for(const std::string& str : f_file) {
+			f_all.push_back(str);
+			isDir.push_back(false);
+		}
 
 		if(index == -1)
 			return;
 
-		if(dir.OpenFile(file, f_list[index], File::READ) != 0) 
-			return; //error opening file
-
 		std::string& input = keyboard.GetMessage();
 		input.clear();
+
+	//if directory return
+		if(isDir[index])
+			return;
+
+		if(restoreDIR.OpenFile(file, f_all[index], File::READ) != 0) {
+			MessageBox("Debug", Utils::Format("Couldn't open file! \n%s", f_all[index])).SetClear(ClearScreen::Top)();
+			return; //error opening file
+		}
 
 		std::string Sets[16];
 		u32 SetItem[16] = { 0 };
@@ -427,7 +445,8 @@ namespace CTRPluginFramework {
 			std::string str = "";
 			IDList::GetSeedName(OnlyItem[i], str);
 			Sets[i] = str;
-			input += Color(0x40FF40FF) << Utils::Format("%4X | ", OnlyItem[i]) << Color(0xFFFDD0FF) << Sets[i] << "\n";
+
+			input += Color(0x40FF40FF) << Utils::Format("%08X | ", OnlyItem[i]) << Color(0xFFFDD0FF) << Sets[i] << "\n";
 		}
 		input += "etc...";
 		file.Flush();
@@ -442,7 +461,6 @@ namespace CTRPluginFramework {
 	
 		static const std::vector<std::string> setopt = {
 			Language->Get("VECTOR_GETSET_FURN"),
-			Language->Get("VECTOR_GETSET_ITEM"),
 			Language->Get("VECTOR_GETSET_CUSTOM"),
 		};
 	
@@ -458,20 +476,11 @@ namespace CTRPluginFramework {
 		switch(optKb.Open()) {
 			default: return;
 			case 0: {
-				path = PATH_PRESET;
-				type = ".preSF";
-				Wrap::Restore(path, type, Language->Get("GET_SET_RESTORE"), GetCustomView, false, WrapLoc{ PlayerPTR::Pointer(0x6BD0), 0x64 }, WrapLoc{ PlayerPTR::Pointer(0x6C10), 0x10 }, WrapLoc{ (u32)-1, (u32)-1 }); 
+				Wrap::Restore(PATH_PRESET, ".inv", Language->Get("GET_SET_RESTORE"), GetCustomView, false, WrapLoc{ PlayerPTR::Pointer(0x6BD0), 0x64 }, WrapLoc{ PlayerPTR::Pointer(0x6C10), 0x10 }, WrapLoc{ (u32)-1, (u32)-1 }); 
 				Inventory::ReloadIcons();
 			} return;
 
 			case 1: {
-				path = PATH_PRESET;
-				type = ".preSI";
-				Wrap::Restore(path, type, Language->Get("GET_SET_RESTORE"), GetCustomView, false, WrapLoc{ PlayerPTR::Pointer(0x6BD0), 0x64 }, WrapLoc{ PlayerPTR::Pointer(0x6C10), 0x10 }, WrapLoc{ (u32)-1, (u32)-1 }); 
-				Inventory::ReloadIcons();
-			} return;
-
-			case 2: {
 				optKb.Populate(custinvopt);
 				switch(optKb.Open()) {
 					default: return;
@@ -481,18 +490,16 @@ namespace CTRPluginFramework {
 						if(KB.Open(filename) == -1)
 							return;
 
-						Wrap::Dump(PATH_ITEMSET, filename, ".inv", WrapLoc{ PlayerPTR::Pointer(0x6BD0), 0x64 }, WrapLoc{ PlayerPTR::Pointer(0x6C10), 0x10 }, WrapLoc{ (u32)-1, (u32)-1 });
+						Wrap::Dump(Utils::Format(PATH_ITEMSET, regionName.c_str()), filename, ".inv", WrapLoc{ PlayerPTR::Pointer(0x6BD0), 0x64 }, WrapLoc{ PlayerPTR::Pointer(0x6C10), 0x10 }, WrapLoc{ (u32)-1, (u32)-1 });
 					} return;
 					
 					case 1: {			
-						path = PATH_ITEMSET;
-						type = ".inv";
-						Wrap::Restore(path, type, Language->Get("GET_SET_RESTORE"), GetCustomView, true, WrapLoc{ PlayerPTR::Pointer(0x6BD0), 0x64 }, WrapLoc{ PlayerPTR::Pointer(0x6C10), 0x10 }, WrapLoc{ (u32)-1, (u32)-1 }); 
+						Wrap::Restore(Utils::Format(PATH_ITEMSET, regionName.c_str()), ".inv", Language->Get("GET_SET_RESTORE"), GetCustomView, true, WrapLoc{ PlayerPTR::Pointer(0x6BD0), 0x64 }, WrapLoc{ PlayerPTR::Pointer(0x6C10), 0x10 }, WrapLoc{ (u32)-1, (u32)-1 }); 
 						Inventory::ReloadIcons();
 					} return;
 					
 					case 2: 
-						Wrap::Delete(PATH_ITEMSET, ".inv");
+						Wrap::Delete(Utils::Format(PATH_ITEMSET, regionName.c_str()), ".inv");
 					return;
 				}
 			}
