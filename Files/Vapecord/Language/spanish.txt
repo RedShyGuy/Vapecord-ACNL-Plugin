@@ -1,4 +1,4 @@
-﻿#This File is used for the Vapecord ACNL Plugin 1.9.5 BETA
+﻿#This File is used for the Vapecord ACNL Plugin 1.9.5
 #If you want to edit Text inside the Plugin Change the Text behind the "::" 
 #"\n" means new line so do not remove that
 #Every Line that starts with "#" is just a note and does not need to be changed
