@@ -120,9 +120,6 @@ Checks game version
 		u8 res = IsNewestVersion(currentVersion, GameVersion);
 
 		if(res == -2) {
-			if(u_byte == f_GameVer::Declined)
-				return false;
-
 			Sleep(Seconds(5));
 			static const std::string str = Utils::Format("Your game has the version %s\nThis plugin only supports the game version %s. Make sure you have the correct game version before you use this plugin!\nIgnore this warning?", currentVersion.c_str(), GameVersion.c_str());
             if(!(MessageBox(Color(0xDC143CFF) << "Warning, wrong game version!", str, DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
@@ -206,10 +203,12 @@ prevent any issues with freezing of the plugin
 		}
 
 	//Check if the game has the correct version
-		if(!CheckGameVersion()) {
+		CheckGameVersion();
+
+		/*if(!CheckGameVersion()) {
 			menu->Run();
 			return 0;
-		}
+		}*/
 
 		SleepTime();
 

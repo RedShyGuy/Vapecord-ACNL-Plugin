@@ -32,10 +32,10 @@ namespace CTRPluginFramework {
 		u32 found = Utils::Search<u32>(0x07000000, 0xF608B, { 0xE5C01068, 0xE12FFF1E });
 		*(u32 *)found = 0xE1A00000;
 
-		static Hook titleHook, textHook;
+		/*static Hook titleHook, textHook;
 		static const Address warningTXT(0x2F319C, 0, 0, 0, 0, 0, 0, 0);
 		SetHook(titleHook, warningTXT.addr, (u32)SetTitle, USE_LR_TO_RETURN);
-		SetHook(textHook, warningTXT.addr + 0xA8, (u32)SetText, USE_LR_TO_RETURN);
+		SetHook(textHook, warningTXT.addr + 0xA8, (u32)SetText, USE_LR_TO_RETURN);*/
 
 		static Hook SaveButtonCheck;
 		SetHook(SaveButtonCheck, Code::nosave.addr - 0x10, (u32)IsSTARTPressed, USE_LR_TO_RETURN);

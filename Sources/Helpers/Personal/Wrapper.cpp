@@ -3,6 +3,7 @@
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/Address.hpp"
 #include "TextFileParser.hpp"
+#include "MenuPointers.hpp"
 #include "Files.h"
 #include "Config.hpp"
 
@@ -230,6 +231,59 @@ namespace CTRPluginFramework {
 		}
 	}
 
+	std::string GetActiveCheats(void) {
+		std::string str = "Active Cheats:\n\n";
+
+		PluginMenu *menu = PluginMenu::GetRunningInstance();
+		if(menu == nullptr) //if menu somehow isn't loaded
+			return "NULL";
+
+		std::vector<MenuFolder *> Folders = menu->GetFolderList();
+		std::vector<MenuEntry *> Entrys = menu->GetEntryList();
+		std::vector<MenuFolder *> SubFolders;
+
+		for(MenuEntry *entry : Entrys) {
+			if(entry->IsActivated())
+				str += RemoveColorFromString(entry->Name()) + "\n";
+		}
+
+		for(MenuFolder *folder : Folders) {
+			SubFolders = folder->GetFolderList();
+			for(MenuFolder *subfolder : SubFolders) {
+				Entrys = subfolder->GetEntryList();
+				for(MenuEntry *entry : Entrys) {
+					if(entry->IsActivated())
+						str += (RemoveColorFromString(folder->Name()) + " -> " + RemoveColorFromString(subfolder->Name()) + " -> " + RemoveColorFromString(entry->Name())) + "\n";
+				}	
+			}
+
+			Entrys = folder->GetEntryList();
+			for(MenuEntry *entry : Entrys) {
+				if(entry->IsActivated())
+					str += (RemoveColorFromString(folder->Name()) + " -> " + RemoveColorFromString(entry->Name())) + "\n";
+			}
+		}
+
+		return str;
+	}
+
+	int SaveActiveCheats(const char *str) {
+		Directory dir(Utils::Format(PATH_CRASH, regionName.c_str()), true);
+		File file;
+
+		std::string filename = "Active_Cheats";
+		filename += ".txt";
+		
+		if(dir.OpenFile(file, filename, File::RWC | File::TRUNCATE) != 0) 
+			return -1;
+
+		file.Write(str, strlen(str));
+
+		file.Flush();
+		file.Close();
+		return 1;
+	}
+
 	std::string GetExceptionType(ERRF_ExceptionType& type) {
 		switch(type) {
 			case ERRF_ExceptionType::ERRF_EXCEPTION_PREFETCH_ABORT: 
@@ -315,7 +369,17 @@ namespace CTRPluginFramework {
 	static bool ShowInfo = false;
 	static int QRSaved = 0;
 
-	Process::ExceptionCallbackState CustomExceptionHandler(ERRF_ExceptionInfo* excep, CpuRegisters* regs) {			
+	static bool ActiveCheatsSaved = false;
+
+	Process::ExceptionCallbackState CustomExceptionHandler(ERRF_ExceptionInfo* excep, CpuRegisters* regs) {
+		if(!ActiveCheatsSaved) {
+			std::string str = GetActiveCheats();
+			const char* data = str.c_str();
+			SaveActiveCheats(data);
+
+			ActiveCheatsSaved = true;
+		}
+
 		const Screen& TopScreen = OSD::GetTopScreen();
 		const Screen& BottomScreen = OSD::GetBottomScreen();
 
@@ -337,20 +401,23 @@ namespace CTRPluginFramework {
 
 		TopScreen.Draw("Report this crash on", 15, 45);
 		TopScreen.Draw("the Vapecord Discord", 15, 55);
-		TopScreen.Draw("by sending the QR-Code!", 15, 65);
+		TopScreen.Draw("by sending the QR-Code", 15, 65);
+		TopScreen.Draw("with a description of", 15, 75);
+		TopScreen.Draw("what happened!", 15, 85);
 	
-		if(WasSaved == 0) TopScreen.Draw("A | Save Crash Dump", 15, 105, Color::DimGrey);
-		else if(WasSaved == 1) TopScreen.Draw("Crash dump saved!", 15, 105, Color::DarkGrey);
-		else TopScreen.Draw("Error!", 15, 105, Color::Red);
+		if(WasSaved == 0) TopScreen.Draw("A | Save Crash Dump", 15, 125, Color::DimGrey);
+		else if(WasSaved == 1) TopScreen.Draw("Crash dump saved!", 15, 125, Color::DarkGrey);
+		else TopScreen.Draw("Error!", 15, 125, Color::Red);
 
-		TopScreen.Draw("B | Return To Home", 15, 115, Color::DimGrey);
+		TopScreen.Draw("B | Return To Home", 15, 135, Color::DimGrey);
 
-		if(QRSaved == 0) TopScreen.Draw("X | Save QR-Code", 15, 125, Color::DimGrey);
-		else if(QRSaved == 1) TopScreen.Draw("QR-Code saved!", 15, 125, Color::DarkGrey); 
-		else TopScreen.Draw("Error!", 15, 125, Color::Red); 
+		if(QRSaved == 0) TopScreen.Draw("X | Save QR-Code", 15, 145, Color::DimGrey);
+		else if(QRSaved == 1) TopScreen.Draw("QR-Code saved!", 15, 145, Color::DarkGrey); 
+		else TopScreen.Draw("Not supported!", 15, 145, Color::Red); 
+		//else TopScreen.Draw("Error!", 15, 145, Color::Red); 
 
-		if(!ShowInfo) TopScreen.Draw("Y | Show Crash Info", 15, 135, Color::DimGrey);
-		else TopScreen.Draw("Showing crash info!", 15, 135, Color::DarkGrey);
+		if(!ShowInfo) TopScreen.Draw("Y | Show Crash Info", 15, 155, Color::DimGrey);
+		else TopScreen.Draw("Showing crash info!", 15, 155, Color::DarkGrey);
 
 		TopScreen.Draw("Discord Link:", 15, 195);
 		TopScreen.Draw(DISCORDINV, 15, 205, Color::Purple);

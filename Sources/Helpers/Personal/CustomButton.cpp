@@ -4,12 +4,13 @@
 #include "Helpers/PlayerPTR.hpp"
 #include "Helpers/IDList.hpp"
 #include "Helpers/Player.hpp"
+#include "Helpers/Wrapper.hpp"
 #include "RegionCodes.hpp"
 #include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
 /*
-Custom Buttons are currently unused
+Custom Buttons
 */
     void CustomButton::WrapItem(u32 ItemData) {
 		u8 slot = 0;
@@ -19,44 +20,41 @@ Custom Buttons are currently unused
 	//Loads Item Icon | present icon
 		Code::LoadIcon.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x1EC0, slot);
 
-		static Address restore(0x19B380);
-		restore.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		Code::RestoreItemWindow.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}
 
 	void CustomButton::DuplicateItem(u32 ItemData) {
 		u32 itemslotid = 0x7FFE;
 		u8 slot = 0;
 		Inventory::GetSelectedSlot(slot);
-		Inventory::ReadSlot(slot, itemslotid);		
+		Inventory::ReadSlot(slot, itemslotid);	
 		
 		if(slot == 0xF) 
 			Inventory::WriteSlot(0, itemslotid);
 		else 
 			Inventory::WriteSlot(slot + 1, itemslotid);
 		
-		static Address restore(0x19B380);
-		restore.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		Code::RestoreItemWindow.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}
 	
 	void CustomButton::PutItemToStorage(u32 ItemData) {
 		u32 itemslotid = 0x7FFE;
-		u8 slot = 0;
+		u8 slot = 0, closetslot = 0;
+		
 		Inventory::GetSelectedSlot(slot);
 		Inventory::ReadSlot(slot, itemslotid);		
 		
-		if(Inventory::GetNextClosetItem(0x7FFE, slot) != 0xFFFFFFFF) {
+		if(Inventory::GetNextClosetItem(0x7FFE, closetslot) != -1) {
 			Inventory::WriteSlot(slot, 0x7FFE);	
-			PlayerPTR::Write32(0x92F0 + (4 * slot), itemslotid);
+			PlayerPTR::Write32(0x92F0 + (4 * closetslot), itemslotid);
 		}
 
-		static Address restore(0x19B380);
-		restore.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		Code::RestoreItemWindow.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}
 	
 	void CustomButton::PayDebt(u32 ItemData) {	
-		static Address get(0x3055C8);
-		static Address sound(0x58DDF8);
-		static Address restore(0x19B380);
+		static Address GetMoneyFunc(0x3055C8, 0x305630, 0x3055D4, 0x3055D4, 0x305688, 0x305688, 0x305640, 0x305640);
+		static Address CallSound(0x58DDF8, 0x58D310, 0x58CE40, 0x58CE40, 0x58C730, 0x58C730, 0x58C404, 0x58C404);
 
 		u32 itemslotid = 0x7FFE;
 		u8 slot = 0;
@@ -64,7 +62,7 @@ Custom Buttons are currently unused
 
 		Inventory::ReadSlot(slot, itemslotid);
 		if(IDList::ValidID(itemslotid, 0x20AC, 0x2117)) { 
-			int money = get.Call<int>(PlayerPTR::Pointer(0x6BD0 + (4 * slot)));
+			int money = GetMoneyFunc.Call<int>(PlayerPTR::Pointer(0x6BD0 + (4 * slot)));
 				
 			int debt = GameHelper::GetMoney((u64 *)PlayerPTR::Pointer(0x6B94));
 		//if you try to store more money than you need to, the rest will be set to your bank acc
@@ -90,7 +88,7 @@ Custom Buttons are currently unused
 			GameHelper::SetMoney(PlayerPTR::Pointer(0x6B94), debt - money);
 
 			while(itemslotid > 0x20AC) {
-				sound.Call<void>(0x1000491);
+				CallSound.Call<void>(0x1000491);
 				Inventory::WriteSlot(slot, itemslotid--);		
 			}
 
@@ -99,15 +97,13 @@ Custom Buttons are currently unused
 			Inventory::WriteSlot(slot, 0x7FFE);
 		}
 		
-		restore.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		Code::RestoreItemWindow.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}
 	
 	void CustomButton::RandomOutfit(u32 ItemData) {
-		static Address restore(0x19D2A0);
-
 		Player::WriteOutfit(4, Utils::Random(0x280B, 0x28F3), Utils::Random(0x28F5, 0x295B), Utils::Random(0x2493, 0x26F5), Utils::Random(0x26F8, 0x2776), Utils::Random(0x2777, 0x279E), Utils::Random(0x279F, 0x27E5));
 		
-		restore.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		Code::RestoreOutfitWindow.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}
 
 	/*void claim(void) {
@@ -179,15 +175,15 @@ Custom Buttons are currently unused
 	};
 
 	u32 SetNameCall(u32 DataPointer, u32 *stack, char *SYS_2D_UI, u8 sysID) {
-		static Address set(0x312610);
+		const HookContext &curr = HookContext::GetCurrent();
+		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+		u32 res = func.Call<u32>(DataPointer, stack, SYS_2D_UI, sysID);
 
-		u32 res = set.Call<u32>(DataPointer, stack, SYS_2D_UI, sysID);
-
-		if(sysID == 0x2A)
+		if(sysID == 0x2A && itemsetting1 != -1)
 			Process::WriteString(stack[1], citemsettings[itemsetting1], 0x20, StringFormat::Utf16);
-		else if(sysID == 0x0C) 
+		else if(sysID == 0x0C && itemsetting2 != -1) 
 			Process::WriteString(stack[1], citemsettings[itemsetting2], 0x20, StringFormat::Utf16);
-		else if(sysID == 0x26)
+		else if(sysID == 0x26 && itemsetting3 != -1)
 			Process::WriteString(stack[1], coutfitsettings[itemsetting3], 0x20, StringFormat::Utf16);
 
 		return res;
@@ -213,9 +209,10 @@ Custom Buttons are currently unused
 			"Item Button 1", "Item Button 2", "Outfit Button 1",
 		};
 
-		ItemFuncData* FuncPointer = (ItemFuncData *)0x9509FC;
+		static const Address pointer_FUNC(0x9509FC, 0x94F9EC, 0x94F9FC, 0x94F9FC, 0x9499FC, 0x9489FC, 0x9489FC, 0x9489FC);
+		ItemFuncData* FuncPointer = (ItemFuncData *)pointer_FUNC.addr;
 
-		static const Address SYSNameFunc(0x5D5860, 0, 0, 0, 0, 0, 0, 0);
+		static const Address SYSNameFunc(0x5D5860, 0x5D4D90, 0x5D48A8, 0x5D48A8, 0x5D40DC, 0x5D40DC, 0x5D3DB0, 0x5D3DB0);
 		static Hook NameHook;
 		NameHook.Initialize(SYSNameFunc.addr, (u32)SetNameCall);
 		NameHook.SetFlags(USE_LR_TO_RETURN);
@@ -237,18 +234,16 @@ Custom Buttons are currently unused
 			if(op < 0)
 				return;
 
-			static const Address AlwaysMedicine(0x19BC04, 0, 0, 0, 0, 0, 0, 0);
+			static const Address AlwaysMedicine(0x19BC04, 0x19B64C, 0x19BC24, 0x19BC24, 0x19BB64, 0x19BB64, 0x19BB64, 0x19BB64);
 
 			if(op == 4) {
 				Process::Patch(AlwaysMedicine.addr, 0x1A000020); //Unpatch
 
 				FuncPointer[24].FunctionPointer = Undo1;
 
-				NameHook.Disable();
-				return;
+				itemsetting1 = -1;
+				goto end;
 			}
-
-			NameHook.Enable();
 
 			Process::Patch(AlwaysMedicine.addr, 0xE1A00000); //Always Take Medicine
 
@@ -263,8 +258,8 @@ Custom Buttons are currently unused
 			if(op < 0)
 				return;
 			
-			static const Address AlwaysRelease(0x19BD60, 0, 0, 0, 0, 0, 0, 0);
-			static const Address NeverToss(0x19BD80, 0, 0, 0, 0, 0, 0, 0);
+			static const Address AlwaysRelease(0x19BD60, 0x19B7A8, 0x19BD80, 0x19BD80, 0x19BCC0, 0x19BCC0, 0x19BCC0, 0x19BCC0);
+			static const Address NeverToss(0x19BD80, 0x19B7C8, 0x19BDA0, 0x19BDA0, 0x19BCE0, 0x19BCE0, 0x19BCE0, 0x19BCE0); 
 
 			if(op == 4) {
 				Process::Patch(AlwaysRelease.addr, 0x0A000013);
@@ -272,11 +267,9 @@ Custom Buttons are currently unused
 
 				FuncPointer[15].FunctionPointer = Undo2;
 
-				NameHook.Disable();
-				return;
+				itemsetting2 = -1;
+				goto end;
 			}
-
-			NameHook.Enable();
 				
 			Process::Patch(AlwaysRelease.addr, 0xE1A00000); //Enables Always Release
 			Process::Patch(NeverToss.addr, 0xE3A0200C); //Changes Toss if Cicada Shell to release
@@ -293,8 +286,8 @@ Custom Buttons are currently unused
 			if(op < 0)
 				return;
 			
-			static const Address WetSuitButton(0x19DBA4, 0, 0, 0, 0, 0, 0, 0);
-			static const Address SocksButton(0x19DC78, 0, 0, 0, 0, 0, 0, 0);
+			static const Address WetSuitButton(0x19DBA4, 0x19D5EC, 0x19DBC4, 0x19DBC4, 0x19DB04, 0x19DB04, 0x19DB04, 0x19DB04);
+			static const Address SocksButton(0x19DC78, 0x19D6C0, 0x19DC98, 0x19DC98, 0x19DBD8, 0x19DBD8, 0x19DBD8, 0x19DBD8);
 
 			if(op == 1) {
 				Process::Patch(WetSuitButton.addr, 0x1A000009);
@@ -302,11 +295,9 @@ Custom Buttons are currently unused
 
 				FuncPointer[5].FunctionPointer = Undo3;
 
-				NameHook.Disable();
-				return;
+				itemsetting3 = -1;
+				goto end;
 			}
-
-			NameHook.Enable();
 			
 			Process::Patch(WetSuitButton.addr, 0xE1A00000); //Always Remove Wet Suit
 			Process::Patch(SocksButton.addr, 0xEA000009); //Disable Remove Socks
@@ -314,6 +305,15 @@ Custom Buttons are currently unused
 			FuncPointer[5].FunctionPointer = (u32)OutfitButtonArr[op];
 
 			itemsetting3 = op;
+		}
+
+	end:
+	//If all custom buttons are disabled, disable the name hook
+		if(itemsetting1 == -1 && itemsetting2 == -1 && itemsetting3 == -1) {
+			NameHook.Disable();
+		}
+		else {
+			NameHook.Enable();
 		}
 	}
 }

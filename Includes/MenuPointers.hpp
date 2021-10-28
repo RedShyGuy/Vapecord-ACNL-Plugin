@@ -33,6 +33,7 @@ namespace CTRPluginFramework {
 	};
 
 //Functions
+	std::string RemoveColorFromString(const std::string &str);
 	std::string FormatColor(const char *fmt, ...);
 	Color GetColorFromString(const std::string &str);
 	void SetVapecordStandardTheme(FwkSettings &settings);

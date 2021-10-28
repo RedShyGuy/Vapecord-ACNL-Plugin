@@ -6,8 +6,6 @@
 #define IsItemSlot(X)	(X >= 0x00 && X <= 0x0F)
 #define IsMailSlot(X)	(X >= 0x14 && X <= 0x1D)
 
-#define MailSlotCalc 0x13
-
 namespace CTRPluginFramework {
 	struct Item {
 		std::vector<std::string> Name;
@@ -35,7 +33,6 @@ namespace CTRPluginFramework {
 		bool 		WriteSlot(int slot, u32 item, u8 lock = 0);
 		bool 		ReadSlot(int slot, u32& item, u8 inv = 0);
 		void		ReloadIcons(void);
-		void		GetMailText(u8 slot);
 	}
 
 	void ReserveItemData(Item* out);

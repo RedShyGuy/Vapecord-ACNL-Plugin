@@ -182,6 +182,14 @@ namespace CTRPluginFramework {
 		return Color(0xFFFFFFFF);
 	}
 
+	std::string RemoveColorFromString(const std::string &str) {
+		std::vector<char> r_char(str.begin(), str.end());
+		if((u8)r_char[0] == 0x1B) { //if colorcode
+			return str.substr(4);
+		}
+		return str;
+	}
+
 	void UpdateEntry(MenuEntry *entry, const std::string& name, const std::string& note) {
 		if(entry == nullptr)
 			return;
@@ -268,12 +276,12 @@ namespace CTRPluginFramework {
 	void InventoryCodesUpdate(Color color) {
 		std::vector<MenuEntry *> Entrys = INVC->GetEntryList();
 
-		const static std::string Names[2][7] = {
+		const static std::string Names[2][8] = {
 			{ "TEXT_2_ITEM", "DUPE_ITEMS", "CATALOG_TO_POCKET", "CHAT_T2I", 
-			"ITEM_SETTINGS", "SAVE_MENU_CHANGER", "GET_SET" },
+			"ITEM_SETTINGS", "SAVE_MENU_CHANGER", "GET_SET", "CUSTOM_BUTTON" },
 
 			{ "TEXT_2_ITEM_NOTE", "DUPE_ITEMS_NOTE", "CATALOG_TO_POCKET_NOTE", 
-			"CHAT_T2I_NOTE", "ITEM_SETTINGS_NOTE", "SAVE_MENU_CHANGER_NOTE", "GET_SET_NOTE" },
+			"CHAT_T2I_NOTE", "ITEM_SETTINGS_NOTE", "SAVE_MENU_CHANGER_NOTE", "GET_SET_NOTE", "CUSTOM_BUTTON_NOTE" },
 		};
 
 		const static HotkeyDat Hotkeys[4] = {
@@ -540,14 +548,14 @@ namespace CTRPluginFramework {
 			{ "CHAT_DONT_DISSAPEAR_NOTE", "CHATCOPYPASTE_NOTE", "FORCE_CHAT_NOTE" },
 		};
 
-		const static std::string Names3[2][16] = {
+		const static std::string Names3[2][15] = {
 			{ "SHOP_ALWAYS_OPEN_NAME", "DISABLE_SAVE", "DISABLE_ITEM_LOCKS", 
-			"CANT_FALL_HOLE", "SHOW_MAIL_TEXT", "WATER_FLOWERS_NAME", 
+			"CANT_FALL_HOLE", "WATER_FLOWERS_NAME", 
 			"WEED_REMOVER_NAME", "EDIT_PATTERN_NAME", "GRASS_EDITOR", 
 			"AMIIBO_SPOOFER", "TIME_TRAVEL" },
 
 			{ "SHOP_ALWAYS_OPEN_NOTE", "DISABLE_SAVE_NOTE", "DISABLE_ITEM_LOCKS_NOTE", 
-			"CANT_FALL_HOLE_NOTE", "SHOW_MAIL_TEXT_NOTE", "WATER_FLOWERS_NOTE", 
+			"CANT_FALL_HOLE_NOTE", "WATER_FLOWERS_NOTE", 
 			"WEED_REMOVER_NOTE", "EDIT_PATTERN_NOTE", "GRASS_EDITOR_NOTE", 
 			"AMIIBO_SPOOFER_NOTE", "TIME_TRAVEL_NOTE" },
 		};
@@ -558,10 +566,10 @@ namespace CTRPluginFramework {
 		};
 
 		const static HotkeyDat Hotkeys2[4] = {
-			{ { "WATER_FLOWRES_HOTKEY1" }, 5 },
-			{ { "WEED_REMOVER_HOTKEY1", "WEED_REMOVER_HOTKEY2" }, 6 },
-			{ { "GRASS_EDITOR_HOTKEY1", "GRASS_EDITOR_HOTKEY2", "GRASS_EDITOR_HOTKEY3" }, 8 },
-			{ { "TIME_FORWARD", "TIME_BACKWARDS" }, 10 },
+			{ { "WATER_FLOWRES_HOTKEY1" }, 4 },
+			{ { "WEED_REMOVER_HOTKEY1", "WEED_REMOVER_HOTKEY2" }, 5 },
+			{ { "GRASS_EDITOR_HOTKEY1", "GRASS_EDITOR_HOTKEY2", "GRASS_EDITOR_HOTKEY3" }, 7 },
+			{ { "TIME_FORWARD", "TIME_BACKWARDS" }, 9 },
 		};
 
 		for(int i = 0; i < Entrys1.size(); ++i) 

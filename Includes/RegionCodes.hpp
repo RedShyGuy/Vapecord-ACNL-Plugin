@@ -49,6 +49,8 @@ namespace CTRPluginFramework {
 		static Address		AnimFunction;
 		static Address		SetupStackData;
 		static Address		DataPointer;
+		static Address		RestoreItemWindow;
+		static Address		RestoreOutfitWindow;
 	};
 }
 

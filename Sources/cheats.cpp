@@ -118,7 +118,7 @@ Randomizes colors of Menu Folders
 		TopScreen.DrawSysfont(Utils::Format("%d%%", (u32)percentage), coordx + 280, coordy1 + 3);
 
 		TopScreen.DrawSysfont(FC, coordx + 5, coordy2 + 3);
-		TopScreen.DrawSysfont("BETA 2", coordx + 280, coordy2 + 3);
+		//TopScreen.DrawSysfont("BETA 2", coordx + 280, coordy2 + 3);
 
 		coordx = 20, coordy1 = 0, coordy2 = 218;
 

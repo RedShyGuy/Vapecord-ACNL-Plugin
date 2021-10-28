@@ -54,6 +54,7 @@ namespace CTRPluginFramework {
 	void itemsettings(MenuEntry *entry);
 	void MenuChanger(MenuEntry *entry);
 	void getset(MenuEntry *entry);
+	void SettingsButton(MenuEntry *entry);
 	
 //Player Codes Folder
 	//Player Save Codes
@@ -155,7 +156,6 @@ namespace CTRPluginFramework {
 	void nonesave(MenuEntry *entry);	
 	void bypass(MenuEntry *entry);
 	void noTrap(MenuEntry *entry);	
-	void mailtext(MenuEntry *entry);
 	void WaterAllFlowers(MenuEntry *entry);
 	void weedremover(MenuEntry *entry);
 	void editpattern(MenuEntry *entry);	
@@ -209,7 +209,6 @@ namespace CTRPluginFramework {
 	//void RestoreAll(MenuEntry *entry);
 	void FishThrower(MenuEntry *entry);
 	void lightswitch(MenuEntry *entry);
-	void SettingsButton(MenuEntry *entry);
 	void CustomSaveScreen(MenuEntry *entry);
 
 //NPC Codes

@@ -106,35 +106,6 @@ namespace CTRPluginFramework {
 		noTrap(entry);
 	}
 
-	u32 slotReaderFunction(u32 u0, u8 slot) {
-		if(IsMailSlot(slot)) {
-			Inventory::GetMailText(slot);
-			OSD::Notify("Get Mail");
-		}
-
-		OSD::Notify(Utils::Format("%d", slot));
-		OSD::Notify(Utils::Format("%d", IsMailSlot(slot)));
-
-		const HookContext &curr = HookContext::GetCurrent();
-		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
-		return func.Call<u32>(u0, slot);
-	}
-
-//Show Mail Text
-	void mailtext(MenuEntry *entry) {
-		static Hook slotReaderHook; 
-
-		if(entry->WasJustActivated()) {
-			static const Address slotRead(0x19D24C, 0, 0, 0, 0, 0, 0, 0);
-			slotReaderHook.Initialize(slotRead.addr, (u32)slotReaderFunction);
-			slotReaderHook.SetFlags(USE_LR_TO_RETURN);
-			slotReaderHook.Enable();
-		}
-
-		else if(!entry->IsActivated()) {
-			slotReaderHook.Disable();
-		}
-	}
 //Water All Flowers	
 	void WaterAllFlowers(MenuEntry *entry) {	
 		if(entry->Hotkeys[0].IsPressed()) {

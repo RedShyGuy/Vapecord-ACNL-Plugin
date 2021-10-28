@@ -53,6 +53,10 @@ namespace CTRPluginFramework {
 
 		SetupStackData = Address(0x81F9D0, 0x81E8D0, 0x81E9D8, 0x81E9B0, 0x81E150, 0x81E128, 0x81DD10, 0x81DCE8);
 
+		RestoreItemWindow = Address(0x19B380, 0x19ADC8, 0x19B3A0, 0x19B3A0, 0x19B2E0, 0x19B2E0, 0x19B2E0, 0x19B2E0);
+
+		RestoreOutfitWindow = Address(0x19D2A0, 0x19CCE8, 0x19D2C0, 0x19D2C0, 0x19D200, 0x19D200, 0x19D200, 0x19D200);
+
 	//Island Pointers
 		IslPointer = Address(0x953708, 0x9526F8, 0x952704, 0x952704, 0x94C704, 0x94B704, 0x94B704, 0x94B704);
 	//Game/Chat/Inv Pointers
@@ -104,4 +108,6 @@ namespace CTRPluginFramework {
 	Address		Code::AnimFunction;
 	Address		Code::SetupStackData;
 	Address		Code::DataPointer;
+	Address		Code::RestoreItemWindow;
+	Address		Code::RestoreOutfitWindow;
 }

@@ -107,6 +107,7 @@ namespace CTRPluginFramework {
 		INVC->Append(new MenuEntry(FolderColors[2] << "Item Settings", nullptr, itemsettings, "note")),
 		INVC->Append(new MenuEntry(FolderColors[2] << "Design Menu Changer", nullptr, MenuChanger, "note")),
 		INVC->Append(new MenuEntry(FolderColors[2] << "Get Set", nullptr, getset, "note")),
+		INVC->Append(new MenuEntry(FolderColors[2] << "Custom Buttons", nullptr, SettingsButton, "note")),
 		menu->Append(INVC);
 
 	///////////////////////
@@ -354,7 +355,6 @@ namespace CTRPluginFramework {
 		EXTC->Append(new MenuEntry(FolderColors[10] << "Disable Save Menus", nullptr, nonesave, "note")),
 		EXTC->Append(new MenuEntry(FolderColors[10] << "Disable Item Locks", nullptr, bypass, "note")),
 		EXTC->Append(new MenuEntry(FolderColors[10] << "Can't Fall In Holes Or Pitfalls", nullptr, noTrap, "note")),
-		EXTC->Append(new MenuEntry(FolderColors[10] << "Show Mail Text", mailtext, "note")),
 	    EXTC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "Water All Flowers", WaterAllFlowers, "note"), { 
 			Hotkey(Key::R | Key::DPadLeft, "Key") 
 		})),
@@ -421,7 +421,6 @@ namespace CTRPluginFramework {
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "ACNH Cheat", acnh, "")),
 		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Friend Code Test", PlayerLoader, "")),
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Player Dumper", nullptr, player_dumper, "")),
-		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Button Test", nullptr, SettingsButton, "")),
 		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Test", valuedisplayer, "")),
 		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Extra Save Restore", nullptr, RestoreAll, "")),
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Fish Thrower", FishThrower, "")),
