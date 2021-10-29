@@ -267,7 +267,9 @@ namespace CTRPluginFramework {
 		return str;
 	}
 
-	int SaveActiveCheats(const char *str) {
+	int SaveActiveCheats(const std::string &str) {
+		const char* data = str.c_str();
+		
 		Directory dir(Utils::Format(PATH_CRASH, regionName.c_str()), true);
 		File file;
 
@@ -277,7 +279,7 @@ namespace CTRPluginFramework {
 		if(dir.OpenFile(file, filename, File::RWC | File::TRUNCATE) != 0) 
 			return -1;
 
-		file.Write(str, strlen(str));
+		file.Write(data, strlen(data));
 
 		file.Flush();
 		file.Close();
@@ -374,8 +376,7 @@ namespace CTRPluginFramework {
 	Process::ExceptionCallbackState CustomExceptionHandler(ERRF_ExceptionInfo* excep, CpuRegisters* regs) {
 		if(!ActiveCheatsSaved) {
 			std::string str = GetActiveCheats();
-			const char* data = str.c_str();
-			SaveActiveCheats(data);
+			SaveActiveCheats(str);
 
 			ActiveCheatsSaved = true;
 		}
@@ -391,7 +392,7 @@ namespace CTRPluginFramework {
 
 		std::string datastr = StoreCrashData(excep, regs);
 
-		const char* data = datastr.c_str();	
+		const char* data = datastr.c_str();
 		qrcodegen_encodeText(data, temp, qrcode, qrcodegen_Ecc_LOW, qrcodegen_VERSION_MIN, qrcodegen_VERSION_MAX, qrcodegen_Mask_AUTO, true);
 	
 		DrawQrCode(TopScreen, 175, 15, qrcode);
