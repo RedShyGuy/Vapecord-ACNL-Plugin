@@ -29,10 +29,7 @@ Custom Buttons
 		Inventory::GetSelectedSlot(slot);
 		Inventory::ReadSlot(slot, itemslotid);	
 		
-		if(slot == 0xF) 
-			Inventory::WriteSlot(0, itemslotid);
-		else 
-			Inventory::WriteSlot(slot + 1, itemslotid);
+		Inventory::WriteSlot((slot == 0xF) ? 0 : (slot + 1), itemslotid);
 		
 		Code::RestoreItemWindow.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}
