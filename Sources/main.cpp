@@ -109,19 +109,23 @@ Checks game version
 	}
 
 	static const std::string GameVersion = "1.5";
+	static const std::string GameVersionUSAWA = "1.1"; //seems to be an exception, I am guessing the Devs of ACNL messed something up there
 
 	bool CheckGameVersion(void) {
+		static const Address isUSAWA(0, 1, 0, 0, 0, 0, 0, 0);
+		std::string realGameVersion = (bool)isUSAWA.addr ? GameVersionUSAWA : GameVersion;
+		
 		u8 u_byte = f_GameVer::NoneVer;
 		ReadConfig(CONFIG::GameVer, u_byte);
 		if(u_byte == f_GameVer::Accepted)
 			return true;
 
 		std::string currentVersion = "";
-		u8 res = IsNewestVersion(currentVersion, GameVersion);
+		u8 res = IsNewestVersion(currentVersion, realGameVersion);
 
 		if(res == -2) {
 			Sleep(Seconds(5));
-			static const std::string str = Utils::Format("Your game has the version %s\nThis plugin only supports the game version %s. Make sure you have the correct game version before you use this plugin!\nIgnore this warning?", currentVersion.c_str(), GameVersion.c_str());
+			static const std::string str = Utils::Format("Your game has the version %s\nThis plugin only supports the game version %s. Make sure you have the correct game version before you use this plugin!\nIgnore this warning?", currentVersion.c_str(), realGameVersion.c_str());
             if(!(MessageBox(Color(0xDC143CFF) << "Warning, wrong game version!", str, DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
 				WriteConfig(CONFIG::GameVer, f_GameVer::Declined);
 				return false;
