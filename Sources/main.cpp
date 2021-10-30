@@ -209,11 +209,6 @@ prevent any issues with freezing of the plugin
 	//Check if the game has the correct version
 		CheckGameVersion();
 
-		/*if(!CheckGameVersion()) {
-			menu->Run();
-			return 0;
-		}*/
-
 		SleepTime();
 
 	//Load Addresses
