@@ -28,7 +28,9 @@
 #define PATH_CBOARD		    "E:/Vapecord/%s/clipboard.txt"
 #define CONFIGNAME		    "E:/Vapecord/%s/plugin.bin"
 
-#define V_DIRECTORY	        "E:/Vapecord/Data/%s"
+#define V_STANDARD          "E:/Vapecord"
+#define V_DIRECTORY	        "E:/Vapecord/%s"
+#define V_DATA              "E:/Vapecord/Data"
 
 #define DISCORDINV		    "discord.gg/QwqdBpKWf3"
 

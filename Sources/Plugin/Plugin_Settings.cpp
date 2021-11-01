@@ -34,7 +34,10 @@ namespace CTRPluginFramework {
 
 //check for config file
 	void CheckForCONFIG(void) {
-		if(!Directory::IsExists(Utils::Format(V_DIRECTORY, regionName.c_str())))
+		if(!Directory::IsExists(V_STANDARD)) Directory::Create(V_STANDARD);
+		if(!Directory::IsExists(V_DATA)) Directory::Create(V_DATA);
+
+		if(!Directory::IsExists(Utils::Format(V_DIRECTORY, regionName.c_str()))) 
 			Directory::Create(Utils::Format(V_DIRECTORY, regionName.c_str()));
 
 		if(File::Exists(Utils::Format(CONFIGNAME, regionName.c_str()))) {

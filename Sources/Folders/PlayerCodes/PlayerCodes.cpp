@@ -379,4 +379,12 @@ namespace CTRPluginFramework {
 			OSD::Stop(players); 
 		}
 	}
+
+	void NeverBedHead(MenuEntry *entry) {
+		static const Address antiBedHead(0x20C798, 0x20C1DC, 0x20C7B8, 0x20C7B8, 0x20C6D8, 0x20C6D8, 0x20C6A4, 0x20C6A4);
+		if(entry->WasJustActivated()) 
+			Process::Patch(antiBedHead.addr, 0xE1A00000);
+		else if(!entry->IsActivated()) 
+			Process::Patch(antiBedHead.addr, 0xE5C41004);    
+	}
 }
