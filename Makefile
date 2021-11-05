@@ -35,9 +35,9 @@ CFLAGS		:=	$(ARCH) -Os -mword-relocations \
 				-fomit-frame-pointer -ffunction-sections -fno-strict-aliasing \
 				$(FALSEPOSITIVES)
 
-CFLAGS		+=	$(INCLUDE) -DARM11 -D_3DS 
+CFLAGS		+=	$(INCLUDE) -DARM11 -D_3DS
 
-CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++11
+CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++17
 
 ASFLAGS		:=	$(ARCH)
 LDFLAGS		:= -T $(TOPDIR)/3gx.ld $(ARCH) -Os -Wl,--gc-sections,--strip-discarded,--strip-debug

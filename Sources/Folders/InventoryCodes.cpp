@@ -181,8 +181,13 @@ namespace CTRPluginFramework {
 			if(Inventory::GetCurrent() == 0x7C) {
 				u32 CurrentItem = GetCurrentCatalogItem();
 				if(CurrentItem != 0x7FFE) {
-					if(GameHelper::SetItem(&CurrentItem))
-						OSD::Notify(Utils::Format("Spawned Item: %04X", CurrentItem));
+					if(GameHelper::SetItem(&CurrentItem)) {
+						std::string itemName = "";
+						if(IDList::GetSeedName(CurrentItem, itemName))
+							OSD::Notify(Utils::Format("Spawned Item: %s (%04X)", itemName.c_str(), CurrentItem));
+						else
+							OSD::Notify(Utils::Format("Spawned Item: %04X", CurrentItem));
+					}
 					else
 						OSD::Notify("Inventory Full!");
 				}
@@ -257,8 +262,13 @@ namespace CTRPluginFramework {
 			return;
 		}
 		
-		Inventory::WriteSlot(slot, itemID);		
-		OSD::Notify(Utils::Format("Spawned Item: %08X", itemID));
+		Inventory::WriteSlot(slot, itemID);
+
+		std::string itemName = "";
+		if(IDList::GetSeedName(itemID, itemName))
+			OSD::Notify(Utils::Format("Spawned Item: %s (%08X)", itemName.c_str(), itemID));
+		else
+			OSD::Notify(Utils::Format("Spawned Item: %08X", itemID));
 	}
 //Item Settings	
 	void itemsettings(MenuEntry *entry) {

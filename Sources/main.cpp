@@ -193,6 +193,31 @@ prevent any issues with freezing of the plugin
 		OSD::Stop(OSD_SplashScreen);
 		delete[] logoArray;
 	}
+	
+	static bool WasSuspended = false;
+	void SuspendCallBack(u32 param) {
+	/*If Game suspenses*/
+		if(!WasSuspended) {
+			
+			delete ItemList; //delete ItemList to clear a lot of memory to prevent memory issues if game is suspended
+			ItemList = nullptr;
+
+			WasSuspended = true;
+			goto reset;
+		}
+
+		OSD::Notify("Initializing Memory", Color::Purple);
+	/*If Game unsuspenses*/
+		ItemList = new Item();
+		ReserveItemData(ItemList); //redo ItemList when game is unsuspended
+		
+		WasSuspended = false;
+
+	reset:
+		const HookContext &curr = HookContext::GetCurrent();
+		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+		func.Call<void>(param);
+	}
 
 	int	main(void) {
 		PluginMenu *menu = new PluginMenu("ACNL Vapecord Plugin " << GetRegionName(), majorV, minorV, revisV, Note);
@@ -219,6 +244,12 @@ prevent any issues with freezing of the plugin
 		InitMenu(menu);
 
 		ReserveItemData(ItemList);
+
+		static const Address suspendAddress(0x124F60, 0x1249D0, 0x124F84, 0x124F84, 0x124F4C, 0x124F4C, 0x124F4C, 0x124F4C);
+		static Hook suspendHook;
+		suspendHook.Initialize(suspendAddress.addr, (u32)SuspendCallBack);
+		suspendHook.SetFlags(USE_LR_TO_RETURN);
+		suspendHook.Enable();
 
 		menu->OnFirstOpening = StartingMsg;
 

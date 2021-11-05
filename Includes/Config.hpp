@@ -2,7 +2,7 @@
 
 #define majorV 1
 #define minorV 9
-#define revisV 5
+#define revisV 6
 
 namespace CTRPluginFramework {
     enum class CONFIG : s64 {

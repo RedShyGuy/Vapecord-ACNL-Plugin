@@ -13,6 +13,9 @@ namespace CTRPluginFramework {
 
 //reserver data into pointer so search doesnt take so long
 	void ReserveItemData(Item* out) {
+		if(out == nullptr) 
+			return;
+
 		File file(ITEMLIST, File::READ);
 		if(!file.IsOpen()) {
 			ItemFileExists = false;
@@ -22,6 +25,7 @@ namespace CTRPluginFramework {
 		std::string line;
 		LineReader reader(file);
 
+		ItemFileLenght = 0; //reset file lenght if called again
 		u32 lineNumber = 0;
 		int count = 0;
 
