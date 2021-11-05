@@ -98,9 +98,16 @@ namespace CTRPluginFramework {
 		return true;
 	}
 	
-	bool ConvertFlower(u32 *Item) {
+	bool ConvertFlower/*And Mushroomized Furniture*/(u32 *Item) {
 		if(IDList::ValidID((*Item & 0xFFFF), 0x9F, 0xCB)) 
 			GameHelper::ToIndoorFlowers(*Item);
+
+		else if(IDList::ValidID((*Item & 0xFFFF), 0x2120, 0x212A))
+			*Item += 0x959;
+		else if((*Item & 0xFFFF) == 0x211E)
+			*Item += 0x23B;
+		else if((*Item & 0xFFFF) == 0x211F)
+			*Item += 0x2D9;
 
 		return true;
 	}
@@ -204,4 +211,29 @@ namespace CTRPluginFramework {
         static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
         func.Call<void>(dataParam, stack);
     }
+
+	static bool WasSuspended = false;
+	void SuspendCallBack(u32 param) {
+	/*If Game suspenses*/
+		if(!WasSuspended) {
+			
+			delete ItemList; //delete ItemList to clear a lot of memory to prevent memory issues if game is suspended
+			ItemList = nullptr;
+
+			WasSuspended = true;
+			goto reset;
+		}
+
+		OSD::Notify("Initializing Memory", Color::Purple);
+	/*If Game unsuspenses*/
+		ItemList = new Item();
+		ReserveItemData(ItemList); //redo ItemList when game is unsuspended
+		
+		WasSuspended = false;
+
+	reset:
+		const HookContext &curr = HookContext::GetCurrent();
+		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+		func.Call<void>(param);
+	}
 }

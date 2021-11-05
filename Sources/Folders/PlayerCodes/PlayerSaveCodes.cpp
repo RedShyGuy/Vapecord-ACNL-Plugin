@@ -436,10 +436,17 @@ namespace CTRPluginFramework {
 		KB.Populate(enzyopt);
 		switch(KB.Open()) {
 			default: break;
-			case 0: 
+			case 0:
+			//Sets random sizes for each insect/fish/sea creature
+				for(int i = 0; i < 0xAE; ++i)
+					Process::Write16(PlayerPTR::Pointer(0xA288 + (i * 2)), Utils::Random(1, 0x3FFF));
+			//fills ency
 				std::memset((void *)PlayerPTR::Pointer(0x6C70), 0xFFFFFFFF, 0x38);
 			break;
 			case 1: 
+			//clears random sizes
+				std::memset((void *)PlayerPTR::Pointer(0xA288), 0, 0x15C);
+			//clears ency
 				std::memset((void *)PlayerPTR::Pointer(0x6C70), 0, 0x38);
 			break;
 		} 
@@ -516,10 +523,10 @@ namespace CTRPluginFramework {
 		switch(optKb.Open()) {
 			default: break;
 			case 0: 
-				std::memset((void *)PlayerPTR::Pointer(0x8F9C), 0xFFFFFFFF, 0x18);
+				std::memset((void *)PlayerPTR::Pointer(0x8F9C), 0xFFFFFFFF, 0xC);
 			break;
 			case 1:
-				std::memset((void *)PlayerPTR::Pointer(0x8F9C), 0, 0x18);
+				std::memset((void *)PlayerPTR::Pointer(0x8F9C), 0, 0xC);
 			break;
 		}
 	}

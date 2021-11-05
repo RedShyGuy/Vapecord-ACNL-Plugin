@@ -183,10 +183,12 @@ namespace CTRPluginFramework {
 			if(IsInfoOpen) {
 				if(Town_InfoOpened.Contains(touchPos))
 					x = (fPos.x - -33.0) * 14.2f, y = (fPos.y - 6.0) * 14.2f;
+				else return;
 			}
 			else {
 				if(Town_InfoClosed.Contains(touchPos))
 					x = (fPos.x - 30.0f) * 14.2f, y = (fPos.y - 5.0f) * 14.2f;
+				else return;
 			}
 		}
 
@@ -194,19 +196,24 @@ namespace CTRPluginFramework {
 		else if(GameHelper::RoomCheck() == 0x68) {
 			if(Island.Contains(touchPos))
 				x = (fPos.x - 72.0f) * 12.1f, y = (fPos.y - 23.0f) * 12.1f;
+			else return;
 		}
 
 	//Mainstreet Map | Can't open info menu
 		else if(GameHelper::RoomCheck() == 1) {
 			if(MainStreet.Contains(touchPos))
 				x = (fPos.x - -16.0) * 6.2, y = (fPos.y - 55.0) * 6.2;
+			else return;
 		}
 
 	//Tour Map | Can't open info menu
 		else if(GameHelper::RoomCheck() >= 0x69 && GameHelper::RoomCheck() < 0x80) {
 			if(Tour.Contains(touchPos))
 				x = (fPos.x - 24.0) * 13.5, y = (fPos.y - -7.0) * 13.5;
+			else return;
 		}
+
+		else return;
 
 		coords[0] = x;
 		coords[2] = y;
