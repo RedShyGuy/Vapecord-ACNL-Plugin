@@ -32,6 +32,17 @@ namespace CTRPluginFramework {
 		int Pos;
 	};
 
+	using FuncPointer = void (*)(MenuEntry *);
+
+	/**
+	* \brief Get the gamefunction of this entry
+	*/
+	FuncPointer GetGameFunc(MenuEntry *entry);
+	/**
+	* \brief Get the menu funuction of this entry
+	*/
+	FuncPointer GetMenuFunc(MenuEntry *entry);
+
 //Functions
 	std::string RemoveColorFromString(const std::string &str);
 	std::string FormatColor(const char *fmt, ...);

@@ -22,6 +22,18 @@ namespace CTRPluginFramework {
         return(entry);
     }
 
+	/*static const std::vector<std::string> funcOpt = {
+		Language->Get("VECTOR_QUICK_BUILDING"),
+		Language->Get("VECTOR_QUICK_REMOVE"),
+		Language->Get("VECTOR_COMMANDS_CLEAR_INV"),
+		Language->Get("VECTOR_QUICK_S_A_R"),
+		Language->Get("VECTOR_QUICK_RELOAD"),
+		Language->Get("VECTOR_QUICK_LOCK_SPOT"),
+		Language->Get("VECTOR_QUICK_UNLOCK_SPOT"),
+		Language->Get("VECTOR_QUICK_LOCK_MAP"),
+		Language->Get("VECTOR_QUICK_UNLOCK_MAP"),
+	};*/
+
 /*This will load all the folders and entrys*/
     void InitMenu(PluginMenu *menu) {
 	/////////////////////
@@ -38,8 +50,8 @@ namespace CTRPluginFramework {
 		SAVEC->Append(new MenuEntry(FolderColors[0] << "Caravan Changer", nullptr, caravanchange, "note")),
 		SAVEC->Append(new MenuEntry(FolderColors[0] << "Camping Villager Changer", nullptr, SetCampingVillager, "note")),
 		SAVEC->Append(new MenuEntry(FolderColors[0] << "Shop Unlocker", nullptr, shopunlocks, "note")),
-		SAVEC->Append(new MenuEntry(FolderColors[3] << "House Editor", nullptr, HouseChanger, "note")),
-		SAVEC->Append(new MenuEntry(FolderColors[3] << "Unlock QR Machine", nullptr, unlockqrmachine, "note")),
+		SAVEC->Append(new MenuEntry(FolderColors[0] << "House Editor", nullptr, HouseChanger, "note")),
+		SAVEC->Append(new MenuEntry(FolderColors[0] << "Unlock QR Machine", nullptr, unlockqrmachine, "note")),
 		SAVEC->Append(new MenuEntry(FolderColors[0] << "Mayor Permit 100%", Permit100, "note")),
 		SAVEC->Append(new MenuEntry(FolderColors[0] << "Real Time Acre Editor", MapEditor, "note")),
 		menu->Append(SAVEC);
@@ -385,7 +397,7 @@ namespace CTRPluginFramework {
 		MISC->Append(new MenuEntry(FolderColors[11] << "Weather Modifier", nullptr, Weathermod , "note")),
 		MISC->Append(new MenuEntry(FolderColors[11] << "Always Aurora Lights", auroralights , "note")),
 		MISC->Append(new MenuEntry(FolderColors[11] << "Disable Non-Hacker Commands", nullptr, disablecommands, "note")),
-		MISC->Append(EntryWithHotkey(new MenuEntry(FolderColors[11] << "Quick Menu", miscFunctions, "note"), {
+		MISC->Append(EntryWithHotkey(new MenuEntry(FolderColors[11] << "Quick Menu", QuickMenuEntry, "note"), {
 			Hotkey(Key::Y | Key::DPadDown, "Key")
 		})),
 		MISC->Append(new MenuEntry(FolderColors[11] << "More Than 3 Number On Island",  morenumberisland, "note")),

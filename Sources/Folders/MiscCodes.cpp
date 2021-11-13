@@ -11,6 +11,8 @@
 #include "Helpers/Dropper.hpp"
 #include "Helpers/Inventory.hpp"
 #include "Helpers/GameKeyboard.hpp"
+#include "Helpers/QuickMenu.hpp"
+#include "MenuPointers.hpp"
 #include "NonHacker.hpp"
 #include "Color.h"
 
@@ -43,8 +45,8 @@ namespace CTRPluginFramework {
 
 		noncommands[5] = (AllOFF ? Color(pGreen) : Color(pRed)) << noncommands[5];
 
-		Keyboard keyboard(Language->Get("COMM_CHOOSE"));
-		keyboard.Populate(noncommands);
+		Keyboard keyboard(Language->Get("COMM_CHOOSE"), noncommands);
+
 		Sleep(Milliseconds(100));
         s8 choice = keyboard.Open();
         if(choice < 0)
@@ -102,8 +104,8 @@ namespace CTRPluginFramework {
 			gametype[i] = (IsON ? Color(pGreen) : Color(pRed)) << gametype[i];
 		}
 		
-        Keyboard keyboard(Language->Get("GAME_TYPE_CHOOSE"));
-		keyboard.Populate(gametype);
+        Keyboard keyboard(Language->Get("GAME_TYPE_CHOOSE"), gametype);
+
 		Sleep(Milliseconds(100));
         s8 gametchoice = keyboard.Open();
         if(gametchoice < 0)	
@@ -120,11 +122,10 @@ namespace CTRPluginFramework {
 
 		cmnOpt[0] = IsON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-		optKb.Populate(cmnOpt);
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
+
 		Sleep(Milliseconds(100));
-		s8 op = optKb.Open();
-		
+		s8 op = optKb.Open();	
 		if(op < 0)
 			return;
 			
@@ -155,11 +156,10 @@ namespace CTRPluginFramework {
 			weatheropt[i] = (IsON ? Color(pGreen) : Color(pRed)) << weatheropt[i];
 		}
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-		optKb.Populate(weatheropt);
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), weatheropt);
+
 		Sleep(Milliseconds(100));
 		s8 op = optKb.Open();
-		
 		if(op < 0)
 			return;
 			
@@ -217,9 +217,9 @@ namespace CTRPluginFramework {
 			Language->Get("QUICK_MENU_REMOVE_BUILDING"),
 		};
 
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));	
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), buildingOpt);
+
 		Sleep(Milliseconds(100));
-		optKb.Populate(buildingOpt);
 		switch(optKb.Open()) {
 			case 0:
 				u8 id;
@@ -270,162 +270,146 @@ namespace CTRPluginFramework {
 		}
 	}
 
-//Quick Menu
-	void miscFunctions(MenuEntry *entry) {	
-		static const std::vector<std::string> funcOpt = {
-			Language->Get("VECTOR_QUICK_BUILDING"),
-			Language->Get("VECTOR_QUICK_REMOVE"),
-			Language->Get("VECTOR_COMMANDS_CLEAR_INV"),
-			Language->Get("VECTOR_QUICK_S_A_R"),
-			Language->Get("VECTOR_QUICK_RELOAD"),
-			Language->Get("VECTOR_QUICK_LOCK_SPOT"),
-			Language->Get("VECTOR_QUICK_UNLOCK_SPOT"),
-			Language->Get("VECTOR_QUICK_LOCK_MAP"),
-			Language->Get("VECTOR_QUICK_UNLOCK_MAP"),
-		};
+	void RemoveItemsCheat(MenuEntry *entry) {
+		Sleep(Milliseconds(100));
+		if((MessageBox(Language->Get("REMOVE_ITEM_WARNING"), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
+			GameHelper::RemoveItems(true, 0, 0, 0xFF, 0xFF, true, true);
+		}
+	}
+
+	void ClearInventory(MenuEntry *entry) {
+		if(Player::GetSaveOffset(4) == 0) {
+			Sleep(Milliseconds(100));
+			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			return;
+		}
+		Sleep(Milliseconds(100));
+		if((MessageBox(Language->Get("REMOVE_INV_WARNING"), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
+			for(int i = 0; i <= 0xF; ++i)
+				Inventory::WriteSlot(i, 0x7FFE);
+		}
+	}
+
+	void ReloadRoomCheat(MenuEntry *entry) {
+		GameHelper::ReloadRoom();
+	}
+
+	void LockSpot(MenuEntry *entry) {
+		u32 x = 0, y = 0;
+
+		PlayerClass::GetInstance()->GetWorldCoords(&x, &y);
+					
+		if(bypassing) 
+			Dropper::DropItemLock(false);
 		
-		if(entry->Hotkeys[0].IsDown()) {
-			u32 x = 0, y = 0;
-			
-			Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-			optKb.Populate(funcOpt);
-			switch(optKb.Open()) {	
-				
-			//Building Modifier
-				case 0: {
-					BuildingMod(entry);
-				} break;
+		Sleep(Milliseconds(5));
+		
+		if(GameHelper::CreateLockedSpot(0x12, x, y, GameHelper::RoomCheck(), true) == 0xFFFFFFFF) 
+			OSD::Notify("Error: Too many locked spots are already existing!");			
+		else 
+			OSD::Notify("Locked Spot");
+		
+		if(bypassing) 
+			Dropper::DropItemLock(true);
+	}
 
-			//Remove Map Items
-				case 1: {
-					Sleep(Milliseconds(100));
-					if((MessageBox(Language->Get("REMOVE_ITEM_WARNING"), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
-						GameHelper::RemoveItems(true, 0, 0, 0xFF, 0xFF, true, true);
-					}
-				} break;
-				
-			//Clear Inventory
-				case 2: {
-					if(Player::GetSaveOffset(4) == 0) {
-						Sleep(Milliseconds(100));
-						MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
-						return;
-					}
-					Sleep(Milliseconds(100));
-					if((MessageBox(Language->Get("REMOVE_INV_WARNING"), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
-						for(int i = 0; i <= 0xF; ++i)
-							Inventory::WriteSlot(i, 0x7FFE);
-					}
-				} break;
+	void UnlockSpot(MenuEntry *entry) {
+		u32 x = 0, y = 0;
 
-			//Search and replace
-				case 3: {
-					SearchReplace(entry);
-				} break;
-				
-			//Reload Room
-				case 4:
-					GameHelper::ReloadRoom();	
-				break;
-			
-			//Lock Spot
-				case 5: {
-					PlayerClass::GetInstance()->GetWorldCoords(&x, &y);
-					
-					if(bypassing) 
-						Dropper::DropItemLock(false);
-					
-					Sleep(Milliseconds(5));
-					
-					if(GameHelper::CreateLockedSpot(0x12, x, y, GameHelper::RoomCheck(), true) == 0xFFFFFFFF) 
-						OSD::Notify("Error: Too many locked spots are already existing!");			
-					else 
-						OSD::Notify("Locked Spot");
-					
-					if(bypassing) 
-						Dropper::DropItemLock(true);
-				} break;
-			
-			//Unlock Spot
-				case 6: {
-					if(bypassing) 
-						Dropper::DropItemLock(false);
-					
-					Sleep(Milliseconds(5));
-					
-					PlayerClass::GetInstance()->GetWorldCoords(&x, &y);
-					GameHelper::ClearLockedSpot(x, y, GameHelper::RoomCheck(), 4);
-					
-					OSD::Notify("Unlocked Spot");
-					
-					if(bypassing) 
-						Dropper::DropItemLock(true);
-				} break;
-			
-			//create lock spots on whole map
-				case 7: {
-					if(bypassing) 
-						Dropper::DropItemLock(false);
+		if(bypassing) 
+			Dropper::DropItemLock(false);
+		
+		Sleep(Milliseconds(5));
+		
+		PlayerClass::GetInstance()->GetWorldCoords(&x, &y);
+		GameHelper::ClearLockedSpot(x, y, GameHelper::RoomCheck(), 4);
+		
+		OSD::Notify("Unlocked Spot");
+		
+		if(bypassing) 
+			Dropper::DropItemLock(true);
+	}
 
-					u32 countY = 0;
-					u32 countX = 0;
-					
-					Sleep(Milliseconds(5));
-					while(GameHelper::CreateLockedSpot(0x12, 0x10 + countX, 0x10 + countY, GameHelper::RoomCheck(), true) != 0xFFFFFFFF) {
-						countX++;
-						if(countX % 6 == 2) { 
-							countY++; 
-							countX = 0; 
-						}
-						
+	void LockMap(MenuEntry *entry) {
+		if(bypassing) 
+			Dropper::DropItemLock(false);
+
+		u32 countY = 0;
+		u32 countX = 0;
+		
+		Sleep(Milliseconds(5));
+		while(GameHelper::CreateLockedSpot(0x12, 0x10 + countX, 0x10 + countY, GameHelper::RoomCheck(), true) != 0xFFFFFFFF) {
+			countX++;
+			if(countX % 6 == 2) { 
+				countY++; 
+				countX = 0; 
+			}
+			
+			Sleep(Milliseconds(40));
+		}
+		
+		OSD::Notify("Locked Map");
+		
+		if(bypassing) 
+			Dropper::DropItemLock(true);
+	}
+
+	void UnlockMap(MenuEntry *entry) {
+		u32 x = 0, y = 0;
+		
+		if(bypassing) 
+			Dropper::DropItemLock(false);
+
+		Sleep(Milliseconds(5));
+		x = 0x10;
+		y = 0x10;
+		bool res = true;
+		while(res) {
+			while(res) {
+				if((u32)GameHelper::GetItemAtWorldCoords(x, y) != 0) {
+					if(GameHelper::GetLockedSpotIndex(x, y, GameHelper::RoomCheck()) != 0xFFFFFFFF) {
+						GameHelper::ClearLockedSpot(x, y, GameHelper::RoomCheck(), 4);
 						Sleep(Milliseconds(40));
 					}
-					
-					OSD::Notify("Locked Map");
-					
-					if(bypassing) 
-						Dropper::DropItemLock(true);
-				} break;
-			
-			//unlock lock spots on whole map
-				case 8: {
-					if(bypassing) 
-						Dropper::DropItemLock(false);
+				}
+				else 
+					res = false;
 
-					Sleep(Milliseconds(5));
-					x = 0x10;
-					y = 0x10;
-					bool res = true;
-					while(res) {
-						while(res) {
-							if((u32)GameHelper::GetItemAtWorldCoords(x, y) != 0) {
-								if(GameHelper::GetLockedSpotIndex(x, y, GameHelper::RoomCheck()) != 0xFFFFFFFF) {
-									GameHelper::ClearLockedSpot(x, y, GameHelper::RoomCheck(), 4);
-									Sleep(Milliseconds(40));
-								}
-							}
-							else 
-								res = false;
-
-							y++;
-						}
-						res = true;
-						y = 0x10;
-						x++;
-						if((u32)GameHelper::GetItemAtWorldCoords(x, y) == 0) 
-							res = false;
-					}
-					
-					OSD::Notify("Unlocked Map");
-					
-					Sleep(Milliseconds(5));
-					if(bypassing) 
-						Dropper::DropItemLock(true);
-				} break;
-				
-				default:
-					break;
+				y++;
 			}
+			res = true;
+			y = 0x10;
+			x++;
+			if((u32)GameHelper::GetItemAtWorldCoords(x, y) == 0) 
+				res = false;
+		}
+		
+		OSD::Notify("Unlocked Map");
+		
+		Sleep(Milliseconds(5));
+		if(bypassing) 
+			Dropper::DropItemLock(true);
+	}
+
+//Quick Menu
+	void QuickMenuEntry(MenuEntry *entry) {	
+		std::vector<MenuEntry*> QMEntrys;
+		std::vector<std::string> QMEntryNames;
+		
+		if(entry->Hotkeys[0].IsPressed()) {
+			QuickMenu::ListEntrys(QMEntrys);
+
+			for(const MenuEntry* entrys : QMEntrys) 
+				QMEntryNames.push_back(entrys->Name());
+
+			Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), QMEntryNames);
+
+			Sleep(Milliseconds(100));
+			s8 res = KB.Open();
+			if(res < 0)
+				return;
+
+			GetMenuFunc(QMEntrys[res])(entry);
 		}	
 	}
 //More Than 3 Numbers On Island

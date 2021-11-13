@@ -20,8 +20,8 @@ namespace CTRPluginFramework {
 
 		cmnOpt[0] = (ItemSequence::Enabled() ? Color(pGreen) << Language->Get("VECTOR_ENABLED") : Color(pRed) << Language->Get("VECTOR_DISABLED"));
 
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-		optKb.Populate(cmnOpt);
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
+
 		Sleep(Milliseconds(100));
 		s8 op = optKb.Open();
 		if(op < 0)
@@ -62,8 +62,9 @@ namespace CTRPluginFramework {
 	//Modify Drop Type	
 		if(entry->Hotkeys[0].IsPressed()) { 
 			Sleep(Milliseconds(200));
-			Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-			optKb.Populate(g_dropmod);
+			Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), g_dropmod);
+			
+			Sleep(Milliseconds(100));
 			s8 res = optKb.Open();
 			if(res < 0)
 				return;
@@ -83,15 +84,14 @@ namespace CTRPluginFramework {
 
 			u8 range, count, val;
 
-			Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-			optKb.Populate(shapeOpt);
+			Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), shapeOpt);
+			
+			Sleep(Milliseconds(100));
 			s8 index = optKb.Open();
-			Sleep(Milliseconds(200));
 			switch(index) {
 				default: return;
 			//Full Square
 				case 0: {
-					Sleep(Milliseconds(100));
 					if(Wrap::KB<u8>(Language->Get("DROP_MODS_RADIUS") << "\nMax Value: 0x15", true, 1, val, 0)) {
 						if(val > 0x15)
 							val = 0x15;
@@ -112,7 +112,6 @@ namespace CTRPluginFramework {
 				} break;
 			//circle	
 				case 1: {
-					Sleep(Milliseconds(100));
 					if(Wrap::KB<u8>(Language->Get("DROP_MODS_RADIUS") << "\nMax Value: 9", true, 1, val, 0)) {
 						if(val > 9)
 							val = 9;
@@ -130,7 +129,6 @@ namespace CTRPluginFramework {
 				} break;
 			//horizontal line	
 				case 2: {
-					Sleep(Milliseconds(100));
 					if(Wrap::KB<u8>(Language->Get("DROP_MODS_RADIUS") << "\nMax Value: 0x10", true, 2, val, 0)) {
 						if(val > 0x10)
 							val = 0x10;
@@ -148,7 +146,6 @@ namespace CTRPluginFramework {
 				} break;
 			//Vertical line	
 				case 3: {
-					Sleep(Milliseconds(100));
 					if(Wrap::KB<u8>(Language->Get("DROP_MODS_RADIUS") << "\nMax Value: 0x10", true, 2, val, 0)) {
 						if(val > 0x10)
 							val = 0x10;
@@ -166,7 +163,6 @@ namespace CTRPluginFramework {
 				} break;	
 			//square	
 				case 4: {
-					Sleep(Milliseconds(100));
 					if(Wrap::KB<u8>(Language->Get("DROP_MODS_RADIUS") << "\nMax Value: 0x10", true, 2, val, 0)) {
 						if(val > 0x10)
 							val = 0x10;
@@ -190,7 +186,6 @@ namespace CTRPluginFramework {
 				} break;
 			//NE to SW line	
 				case 5: {
-					Sleep(Milliseconds(100));
 					if(Wrap::KB<u8>(Language->Get("DROP_MODS_RADIUS") << "\nMax Value: 0x10", true, 2, val, 0)) {
 						if(val > 0x10)
 							val = 0x10;
@@ -207,7 +202,6 @@ namespace CTRPluginFramework {
 				} break;
 			//NW to SE line	
 				case 6:	{
-					Sleep(Milliseconds(100));
 					if(Wrap::KB<u8>(Language->Get("DROP_MODS_RADIUS") << "\nMax Value: 0x10", true, 2, val, 0)) {
 						if(val > 0x10)
 							val = 0x10;

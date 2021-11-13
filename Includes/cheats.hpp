@@ -172,7 +172,7 @@ namespace CTRPluginFramework {
 	void unbreakableflower(MenuEntry *entry);
 	void Weathermod(MenuEntry *entry);
 	void auroralights(MenuEntry *entry);
-	void miscFunctions(MenuEntry *entry);
+	void QuickMenuEntry(MenuEntry *entry);
 	void morenumberisland(MenuEntry *entry);
 	void fovlarge(MenuEntry *entry);
 	void roomSeeder(MenuEntry *entry);
@@ -184,6 +184,16 @@ namespace CTRPluginFramework {
 	void fast(MenuEntry *entry);
 	void fasttalk(MenuEntry *entry);
 	void speedentry(MenuEntry *entry);
+
+	void BuildingMod(MenuEntry *entry);
+	void SearchReplace(MenuEntry *entry);
+	void RemoveItemsCheat(MenuEntry *entry);
+	void ClearInventory(MenuEntry *entry);
+	void ReloadRoomCheat(MenuEntry *entry);
+	void LockSpot(MenuEntry *entry);
+	void UnlockSpot(MenuEntry *entry);
+	void LockMap(MenuEntry *entry);
+	void UnlockMap(MenuEntry *entry);
 
 //Dev Codes	
 	void customdump(MenuEntry *entry);

@@ -74,6 +74,7 @@ namespace CTRPluginFramework {
 
 		KB.GetMessage() = "Select Loaded NPC:";
 		KB.Populate(vec);
+
 		Sleep(Milliseconds(200));
 		s8 res2 = KB.Open();
 		if(res2 < 0)
@@ -95,6 +96,8 @@ namespace CTRPluginFramework {
 		static const std::vector<std::string> vec = { "Animation", "Snake", "Emotion", "Item" };	
 
 		Keyboard KB("Select Option", vec);
+
+		Sleep(Milliseconds(100));
 		s8 op = KB.Open();
 		if(op < 0)
 			return;

@@ -24,8 +24,8 @@ namespace CTRPluginFramework {
 
 		cmnOpt[0] = IsON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-		optKb.Populate(cmnOpt);
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
+
 		Sleep(Milliseconds(100));
 		s8 op = optKb.Open();
 		if(op < 0)
@@ -42,6 +42,8 @@ namespace CTRPluginFramework {
 		kb.GetMessage() = Utils::Format(Language->Get("COORD_MOD_ENTER_SPEED").c_str(), 5);
 		kb.IsHexadecimal(false);
 		kb.SetMaxLength(2);
+
+		Sleep(Milliseconds(100));
 		kb.Open(cspeed);
 	}
 //Coordinate Modifier
@@ -284,6 +286,8 @@ namespace CTRPluginFramework {
 		kb.IsHexadecimal(false);
 		kb.SetMaxLength(2);
 		kb.OnKeyboardEvent(SpeedCheck);
+
+		Sleep(Milliseconds(100));
 		kb.Open(walkSpeed);
 	}	
 //InputChangeEvent for Room Warper	

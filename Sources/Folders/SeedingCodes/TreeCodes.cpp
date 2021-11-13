@@ -15,11 +15,11 @@ namespace CTRPluginFramework {
 
 		cmnOpt[0] = (IsON ? Color(pGreen) << Language->Get("VECTOR_ENABLED") : Color(pRed) << Language->Get("VECTOR_DISABLED"));
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-		optKb.Populate(cmnOpt);
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
+		
 		Sleep(Milliseconds(100));
-		int op = optKb.Open();
-		if(op == -1)
+		s8 op = optKb.Open();
+		if(op < 0)
 			return;
 			
 		Process::Patch(fruitstay.addr, *(u32 *)fruitstay.addr == 0xEA000000 ? 0xE1A01006 : 0xEA000000);
@@ -38,8 +38,8 @@ namespace CTRPluginFramework {
 
 		cmnOpt[0] = (IsON ? Color(pGreen) << Language->Get("VECTOR_ENABLED") : Color(pRed) << Language->Get("VECTOR_DISABLED"));
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-        optKb.Populate(cmnOpt);
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
+
 		Sleep(Milliseconds(100));
 		s8 op = optKb.Open();
 		if(op < 0)

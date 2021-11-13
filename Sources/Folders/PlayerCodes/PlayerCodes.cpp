@@ -98,11 +98,10 @@ namespace CTRPluginFramework {
 
 		cmnOpt[0] = PlayerInfoON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-		optKb.Populate(cmnOpt);
-		Sleep(Milliseconds(100));
-		s8 op = optKb.Open();
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
 		
+		Sleep(Milliseconds(100));
+		s8 op = optKb.Open();	
 		if(op < 0)
 			return;
 
@@ -149,10 +148,10 @@ namespace CTRPluginFramework {
 			}
 		}
 		
-		Keyboard pKB(Language->Get("KEY_SELECT_PLAYER"));
-		pKB.Populate(pV);
-		s8 pChoice = pKB.Open();
+		Keyboard pKB(Language->Get("KEY_SELECT_PLAYER"), pV);
 		
+		Sleep(Milliseconds(100));
+		s8 pChoice = pKB.Open();
 		if((pChoice >= 0) && (pV[pChoice] != Color::Silver << "-Empty-"))
 			Player::Load(pChoice);
 	}
@@ -208,14 +207,24 @@ namespace CTRPluginFramework {
 			case 0: {
 				Keyboard kb(Language->Get("CUSTOM_ENTER_HAIR"));
 				kb.IsHexadecimal(true);
-				kb.Open(rval1);
+
+				Sleep(Milliseconds(100));
+				s8 res = kb.Open(rval1);
+				if(res < 0)
+					return;
+
 				RGB_To_BGR(rval1);
 			} break;
 
 			case 1: {
 				Keyboard kb(Language->Get("CUSTOM_ENTER_EYE"));
 				kb.IsHexadecimal(true);
-				kb.Open(rval2);
+
+				Sleep(Milliseconds(100));
+				s8 res = kb.Open(rval2);
+				if(res < 0)
+					return;
+
 				RGB_To_BGR(rval2);
 			} break;
 
@@ -230,10 +239,10 @@ namespace CTRPluginFramework {
 				f_color.Flush();
                 f_color.Close();
 
+				Sleep(Milliseconds(100));
 				MessageBox(Language->Get("CUSTOM_FILE_SAVED")).SetClear(ClearScreen::Top)();
 			} break;
 		}
-
 	}
 
 	void App_ColorMod(MenuEntry *entry) {

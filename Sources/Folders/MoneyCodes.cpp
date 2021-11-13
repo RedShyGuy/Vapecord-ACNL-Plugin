@@ -10,6 +10,7 @@ namespace CTRPluginFramework {
 //Wallet Mod
 	void wallet(MenuEntry *entry) {
 		if(Player::GetSaveOffset(4) == 0) {
+			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -21,6 +22,7 @@ namespace CTRPluginFramework {
 //Bank Mod
 	void bank(MenuEntry *entry) {
 		if(Player::GetSaveOffset(4) == 0) {
+			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -32,6 +34,7 @@ namespace CTRPluginFramework {
 //Meow Coupon Mod
 	void coupon(MenuEntry *entry) {
 		if(Player::GetSaveOffset(4) == 0) {
+			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -43,6 +46,7 @@ namespace CTRPluginFramework {
 //Badges Mod
 	void badges(MenuEntry *entry) {
 		if(Player::GetSaveOffset(4) == 0) {
+			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -54,8 +58,9 @@ namespace CTRPluginFramework {
 			Language->Get("VECTOR_BADGE_NONE")
 		};
 
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-		optKb.Populate(badgesopt);
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), badgesopt);
+		
+		Sleep(Milliseconds(100));
 		s8 index = optKb.Open();
 		if(index < 0)
 			return;
@@ -66,6 +71,7 @@ namespace CTRPluginFramework {
 //Medals Mod  32DC51B8 31F2C6BC
 	void medals(MenuEntry *entry) {
 		if(Player::GetSaveOffset(4) == 0) {
+			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -78,6 +84,7 @@ namespace CTRPluginFramework {
 //turnip Mod	
 	void turnips(MenuEntry *entry) {
 		if(Player::GetSaveOffset(4) == 0) {
+			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}

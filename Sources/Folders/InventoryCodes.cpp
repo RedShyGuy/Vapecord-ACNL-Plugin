@@ -122,9 +122,11 @@ namespace CTRPluginFramework {
 				OSD::Notify("Error: item.txt missing!", Color::Red);
 				return;
 			}
-			std::string input;
+			std::string input = "";
 			Keyboard KB(Language->Get("TEXT_2_ITEM_SEARCH_KB2"));
 			KB.OnKeyboardEvent(ItemListCallBack);
+
+			Sleep(Milliseconds(100));
 			KB.Open(input);
 		}
 	}
@@ -299,8 +301,8 @@ namespace CTRPluginFramework {
 			itemsettopt[i] = IsON ? (Color(pGreen) << itemsettopt[i]) : (Color(pRed) << itemsettopt[i]);
 		}
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-		optKb.Populate(itemsettopt);
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), itemsettopt);
+
 		Sleep(Milliseconds(100));
 		s8 op = optKb.Open();
 		if(op < 0)
@@ -361,11 +363,10 @@ namespace CTRPluginFramework {
 			menuopt[i] = (IsON ? Color(pGreen) :  Color(pRed)) << menuopt[i];
 		}
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-		optKb.Populate(menuopt);
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), menuopt);
+
 		Sleep(Milliseconds(100));
 		s8 dChoice = optKb.Open();
-		
 		if(dChoice < 0)
 			return;
 
@@ -480,8 +481,8 @@ namespace CTRPluginFramework {
 			Language->Get("FILE_DELETE"),  
 		};
 
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-		optKb.Populate(setopt);
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), setopt);
+
 		Sleep(Milliseconds(100));
 		switch(optKb.Open()) {
 			default: return;
@@ -492,6 +493,8 @@ namespace CTRPluginFramework {
 
 			case 1: {
 				optKb.Populate(custinvopt);
+
+				Sleep(Milliseconds(100));
 				switch(optKb.Open()) {
 					default: return;
 					case 0: {

@@ -31,8 +31,8 @@ namespace CTRPluginFramework {
 
 		cmnOpt[0] = IsON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
 
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-		optKb.Populate(cmnOpt);
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
+
 		Sleep(Milliseconds(100));
 		s8 op = optKb.Open();
 		if(op < 0)
@@ -52,8 +52,8 @@ namespace CTRPluginFramework {
 
 		cmnOpt[0] = IsON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-		optKb.Populate(cmnOpt);
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
+
 		Sleep(Milliseconds(100));
 		s8 op = optKb.Open();
 		if(op < 0)
@@ -70,8 +70,8 @@ namespace CTRPluginFramework {
 
 		cmnOpt[0] = bypassing ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
 
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-		optKb.Populate(cmnOpt);
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
+
 		Sleep(Milliseconds(100));
 		s8 op = optKb.Open();
 		
@@ -93,8 +93,8 @@ namespace CTRPluginFramework {
 
 		cmnOpt[0] = IsON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-		optKb.Populate(cmnOpt);
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
+
 		Sleep(Milliseconds(100));
 		s8 op = optKb.Open();
 		
@@ -140,9 +140,9 @@ namespace CTRPluginFramework {
 		
 		static int size = 400;
 		if(entry->Hotkeys[0].IsPressed()) {
+			Keyboard KB(Language->Get("WEED_REMOVER_KEY"), weedopt);
+
 			Sleep(Milliseconds(100));
-			Keyboard KB(Language->Get("WEED_REMOVER_KEY"));
-			KB.Populate(weedopt);
 			switch(KB.Open()) {
 				case 0: size = 5000; break;
 				case 1: 
@@ -204,9 +204,9 @@ namespace CTRPluginFramework {
 		const u32 GrassStart = *(u32 *)(GameHelper::GetCurrentMap() + 0x28);
 		Keyboard KB(Language->Get("GRASS_EDITOR_KB1") << "\n" << Color(0x228B22FF) << 
 					Language->Get("GRASS_EDITOR_KB2")  << "\n" << Color(0xCD853FFF) << 
-					Language->Get("GRASS_EDITOR_KB3"));
+					Language->Get("GRASS_EDITOR_KB3"), GrassKB);
 					
-		KB.Populate(GrassKB);
+		Sleep(Milliseconds(100));
 		switch(KB.Open()) {
 			case 0:
 				std::memset((void *)GrassStart, -1, 0x2800);
@@ -303,6 +303,8 @@ namespace CTRPluginFramework {
 			KBS.IsHexadecimal(false);
 			CurrTime = i;
 			KBS.SetCompareCallback(CheckTimeInput);
+
+			Sleep(Milliseconds(100));
 			s8 cho = KBS.Open(timedat[i]);
 			if(cho < 0)
 				return;

@@ -14,13 +14,16 @@ namespace CTRPluginFramework {
 //Name Changer | Player specific save code
 	void NameChanger(MenuEntry* entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
+			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 		
 		Keyboard keyboard(Language->Get("NAME_CHANGER_ENTER_NAME"));
-		std::string input;
+		std::string input = "";
 		keyboard.SetMaxLength(8);
+
+		Sleep(Milliseconds(100));
 		if(keyboard.Open(input) < 0) 
 			return;
 
@@ -30,6 +33,7 @@ namespace CTRPluginFramework {
 //Player Appearance Changer	
 	void playermod(MenuEntry *entry) {
 		if(Player::GetSaveOffset(4) == 0) {
+			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
 			return;
 		}	
@@ -85,10 +89,9 @@ namespace CTRPluginFramework {
 		u8 ID = 0;
 		u16 ID2 = 0;
 
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-		optKb.Populate(playeropt);
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), playeropt);
+		
 		Sleep(Milliseconds(100));
-
 		s8 choice = optKb.Open();
 		if(choice < 0)
 			return;
@@ -104,6 +107,8 @@ namespace CTRPluginFramework {
 	//Gender Change
 		if(choice == 4) {
 			optKb.Populate(genderopt);
+
+			Sleep(Milliseconds(100));
 			s8 res = optKb.Open();
 			if(res < 0)
 				return;
@@ -113,6 +118,8 @@ namespace CTRPluginFramework {
 				
 		if(choice == 5) {
 			optKb.Populate(tanopt);
+
+			Sleep(Milliseconds(100));
 			switch(optKb.Open()) {
 				default: break;	
 				case 0: Process::Write8(Player::GetSaveOffset(GameHelper::GetOnlinePlayerIndex()) + 8, 0xF); goto tanupdate;
@@ -129,6 +136,7 @@ namespace CTRPluginFramework {
 		if(choice == 6) {
 			optKb.Populate(outfitplayeropt);
 
+			Sleep(Milliseconds(100));
 			s8 res = optKb.Open();
 			if(res < 0)
 				return;
@@ -153,6 +161,7 @@ namespace CTRPluginFramework {
 //Random Outfit
 	void randomoutfit(MenuEntry *entry) {
 		if(Player::GetSaveOffset(4) == 0) {
+			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
 			return;
 		}
@@ -162,8 +171,9 @@ namespace CTRPluginFramework {
 			Language->Get("VECTOR_RANDOM_PLAYER")
 		};
 
-		Keyboard randkb(Language->Get("KEY_RANDOMIZE_PLAYER"));
-		randkb.Populate(randomopt);
+		Keyboard randkb(Language->Get("KEY_RANDOMIZE_PLAYER"), randomopt);
+
+		Sleep(Milliseconds(100));
 		switch(randkb.Open()) {
 			default: break;			
 			case 0: {
@@ -192,6 +202,7 @@ namespace CTRPluginFramework {
 //Player Backup/Restore
 	void playerbackup(MenuEntry *entry) {
 		if(Player::GetSaveOffset(4) == 0) {
+			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
 			return;
 		}
@@ -202,13 +213,16 @@ namespace CTRPluginFramework {
 			Language->Get("FILE_DELETE"),  
 		};
 
-		Keyboard backkb(Language->Get("KEY_CHOOSE_OPTION"));
-		backkb.Populate(backopt);
+		Keyboard backkb(Language->Get("KEY_CHOOSE_OPTION"), backopt);
+
+		Sleep(Milliseconds(100));
 		switch(backkb.Open()) {
 			default: break;		
 			case 0: {
 				std::string filename = "";
 				Keyboard KB(Language->Get("RANDOM_PLAYER_DUMP"));
+
+				Sleep(Milliseconds(100));
 				if(KB.Open(filename) == -1)
 					return;
 
@@ -228,6 +242,7 @@ namespace CTRPluginFramework {
 //TPC Message Changer | Player specific save code
 	void tpcmessage(MenuEntry* entry) {
 		if(Player::GetSaveOffset(4) == 0) {
+			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -237,16 +252,18 @@ namespace CTRPluginFramework {
 			Language->Get("TPC_MESSAGE_ALLIGN_EMPTY")
 		};
 
-		Keyboard KB(Language->Get("TPC_MESSAGE_ALLIGN"));
-		KB.Populate(alignments);
+		Keyboard KB(Language->Get("TPC_MESSAGE_ALLIGN"), alignments);
 
-		std::string input;
+		std::string input = "";
 
+		Sleep(Milliseconds(100));
 		switch(KB.Open()) {
 			default: return;
 			case 0:
 				KB.GetMessage() = Language->Get("TPC_MESSAGE_ENTER_NAME");
 				KB.SetMaxLength(26);
+
+				Sleep(Milliseconds(100));
 				if(KB.Open(input) >= 0) 
 					Process::WriteString(Player::GetSaveOffset(4) + 0x6B38, input, 0x20, StringFormat::Utf16);
 			break;
@@ -259,6 +276,7 @@ namespace CTRPluginFramework {
 //TPC Image Dumper | non player specific save code
 	void tpc(MenuEntry *entry) {
 		if(Player::GetSaveOffset(4) == 0) {
+			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -276,16 +294,16 @@ namespace CTRPluginFramework {
 			Language->Get("FILE_DELETE"),  
 		};
 			
-		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"));
-		KB.Populate(tpcselectopt);
-		
+		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), tpcselectopt);
+
+		Sleep(Milliseconds(100));
 		switch(KB.Open()) {
 			default: break;
 			
 			case 0: {
-				Keyboard PKB(Language->Get("KEY_SELECT_PLAYER"));
-				PKB.Populate(g_player);
-				
+				Keyboard PKB(Language->Get("KEY_SELECT_PLAYER"), g_player);
+
+				Sleep(Milliseconds(100));
 				s8 index = PKB.Open();
 				if(index < 0)
 					return;
@@ -293,6 +311,8 @@ namespace CTRPluginFramework {
 				if(Player::GetSaveOffset(index) != 0) {
 					std::string filename = "";
 					Keyboard KB(Language->Get("TPC_DUMPER_NAME"));
+
+					Sleep(Milliseconds(100));
 					if(KB.Open(filename) < 0)
 						return;
 
@@ -324,6 +344,7 @@ namespace CTRPluginFramework {
 //dump designs | player specific save code
 	void DesignDumper(MenuEntry *entry) {
 		if(Player::GetSaveOffset(4) == 0) {
+			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -339,19 +360,22 @@ namespace CTRPluginFramework {
 			Language->Get("FILE_DELETE"),  
 		};
 		
-		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"));
-		KB.Populate(designselect);
+		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), designselect);
+		
+		Sleep(Milliseconds(100));
 		switch(KB.Open()) {
 			default: break;
 			
 			case 0: { 
-				Keyboard DKB(Language->Get("KEYBOARD_DESIGNDUMP"));
-				DKB.Populate(designslots);
-				int dSlot = DKB.Open();
+				Keyboard DKB(Language->Get("KEYBOARD_DESIGNDUMP"), designslots);
 				
+				Sleep(Milliseconds(100));
+				int dSlot = DKB.Open();
 				if(dSlot != -1) {
 					std::string filename = "";
 					Keyboard KB(Language->Get("DESIGN_DUMP_NAME"));
+
+					Sleep(Milliseconds(100));
 					if(KB.Open(filename) == -1)
 						return;
 
@@ -360,10 +384,10 @@ namespace CTRPluginFramework {
 			} break;
 			
 			case 1: {
-				Keyboard DKB(Language->Get("KEYBOARD_DESIGNDUMP"));
-				DKB.Populate(designslots);
-				int dSlot = DKB.Open();
+				Keyboard DKB(Language->Get("KEYBOARD_DESIGNDUMP"), designslots);
 				
+				Sleep(Milliseconds(100));
+				int dSlot = DKB.Open();
 				if(dSlot != -1) {
 					Wrap::Restore(Utils::Format(PATH_DESIGN, regionName.c_str()), ".acnl", Language->Get("DESIGN_DUMP_RESTORE"), nullptr, true, WrapLoc{ GetDesignSave(dSlot, 4), 0x26B }, WrapLoc{ (u32)-1, (u32)-1 });  
 					Player::ReloadDesign(GetRealSlot(dSlot, 4));
@@ -378,6 +402,7 @@ namespace CTRPluginFramework {
 //Fill Emote List | player specific save code
 	void emotelist(MenuEntry *entry) {
 		if(Player::GetSaveOffset(4) == 0) {
+			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -395,9 +420,9 @@ namespace CTRPluginFramework {
 			0x27, 0x28, 0x18, 0x1E, 0x2B, 0x2C, 0x2E 
 		};
 		
-		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"));
-		KB.Populate(emoteopt);
-		
+		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), emoteopt);
+	
+		Sleep(Milliseconds(100));
 		switch(KB.Open()) {
 			default: break;
 			case 0: 
@@ -409,6 +434,7 @@ namespace CTRPluginFramework {
 				KB.IsHexadecimal(true);
 				KB.CanAbort(true);
 				
+				Sleep(Milliseconds(100));
 				if(KB.Open(emotion) < 0)
 					return;
 				
@@ -423,6 +449,7 @@ namespace CTRPluginFramework {
 //Fill Enzyklopedia List | player specific save code
 	void enzyklopedia(MenuEntry *entry) {
 		if(Player::GetSaveOffset(4) == 0) {
+			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -432,8 +459,9 @@ namespace CTRPluginFramework {
 			Language->Get("VECTOR_ENZY_CLEAR"),
 		};		
 		
-		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"));
-		KB.Populate(enzyopt);
+		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), enzyopt);
+		
+		Sleep(Milliseconds(100));
 		switch(KB.Open()) {
 			default: break;
 			case 0:
@@ -454,6 +482,7 @@ namespace CTRPluginFramework {
 //Change Dream Code | player specific save code
 	void comodifier(MenuEntry *entry) {
 		if(Player::GetSaveOffset(4) == 0) {
+			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -464,8 +493,12 @@ namespace CTRPluginFramework {
 		kb.DisplayTopScreen = true;
 		
 		u16 part1, part2, part3;
+
+		Sleep(Milliseconds(100));
 		if(kb.Open(part1, 0) >= 0) {
+			Sleep(Milliseconds(100));
 			if(kb.Open(part2, 0) >= 0) {
+				Sleep(Milliseconds(100));
 				if(kb.Open(part3, 0) >= 0) {
 					Process::Write8(PlayerPTR::Pointer(0x56F9), (part1 >> 8) & 0xFF);
 					Process::Write8(PlayerPTR::Pointer(0x56F4), part1 & 0xFF);
@@ -485,6 +518,7 @@ namespace CTRPluginFramework {
 //Enable Unused Menu | player specific save code
 	void debug1(MenuEntry *entry) {
 		if(Player::GetSaveOffset(4) == 0) {
+			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -495,8 +529,8 @@ namespace CTRPluginFramework {
  
 		cmnOpt[0] = IsON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
 		
-		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"));
-		KB.Populate(cmnOpt);
+		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
+
 		Sleep(Milliseconds(100));
 		s8 op = KB.Open();
 		if(op < 0)
@@ -509,6 +543,7 @@ namespace CTRPluginFramework {
 //Fill Song List | player specific save code
 	void FillSongs(MenuEntry *entry) {
 		if(Player::GetSaveOffset(4) == 0) {
+			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -518,8 +553,9 @@ namespace CTRPluginFramework {
 			Language->Get("VECTOR_ENZY_CLEAR"),
 		};		
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-		optKb.Populate(songopt);
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), songopt);
+		
+		Sleep(Milliseconds(100));
 		switch(optKb.Open()) {
 			default: break;
 			case 0: 
@@ -534,6 +570,7 @@ namespace CTRPluginFramework {
 //Fill Catalog | player specific save code	
 	void FillCatalog(MenuEntry *entry) {
 		if(Player::GetSaveOffset(4) == 0) {
+			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -543,8 +580,9 @@ namespace CTRPluginFramework {
 			Language->Get("VECTOR_ENZY_CLEAR"),
 		};	
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-		optKb.Populate(songopt);
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), songopt);
+		
+		Sleep(Milliseconds(100));
 		switch(optKb.Open()) {
 			default: break;
 			case 0: 

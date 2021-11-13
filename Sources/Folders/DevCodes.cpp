@@ -12,6 +12,8 @@
 #include "Color.h"
 #include "Files.h"
 
+#include "MenuPointers.hpp"
+
 namespace CTRPluginFramework {
 //Integer For Custom Dumper
 	static WrapLoc cdump;

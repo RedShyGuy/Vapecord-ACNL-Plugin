@@ -20,8 +20,9 @@ namespace CTRPluginFramework {
         NPC::PopulateRace(keyVec);
 
         keyboard.Populate(keyVec);
-        s8 res = keyboard.Open(); //Pick a species
+
         Sleep(Milliseconds(100));
+        s8 res = keyboard.Open(); //Pick a species
 
         Process::Write32(offset + 0x10C, 0); //Game always sets this in the original function, so I'll do it too 
         if(res >= 0) { //User picked a species
@@ -33,8 +34,9 @@ namespace CTRPluginFramework {
             NPC::PopulateAmiibo((SpecieID)res, keyVec, amiiboVec);
 
             keyboard.Populate(keyVec);
-            res = keyboard.Open(); //Pick villager based on species
+
             Sleep(Milliseconds(100));
+            res = keyboard.Open(); //Pick villager based on species
 
             if(res >= 0) { //User picked a specific villager
                 Process::Write32(offset + 0xA8, 2); //"Successfully read tag" nfc flag

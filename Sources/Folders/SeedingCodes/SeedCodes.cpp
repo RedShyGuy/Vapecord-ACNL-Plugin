@@ -82,7 +82,6 @@ namespace CTRPluginFramework {
 		}
 		
 		if(entry->Hotkeys[0].IsPressed()) {
-			Sleep(Milliseconds(100));
 			Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, PickupSeederItemID, PickupSeederItemID, ItemChange);
         }	
 		
@@ -206,8 +205,9 @@ namespace CTRPluginFramework {
 		};
 		
 		u16 input = 0;
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-		optKb.Populate(fireOpt);
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), fireOpt);
+		
+		Sleep(Milliseconds(100));
 		switch(optKb.Open()) {
 			default: break;
 			case 0: {

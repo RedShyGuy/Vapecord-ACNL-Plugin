@@ -4,6 +4,7 @@
 #include "RegionCodes.hpp"
 #include "Helpers/Inventory.hpp"
 #include "Helpers/Wrapper.hpp"
+#include "Helpers/QuickMenu.hpp"
 #include "NonHacker.hpp"
 
 #include <stdio.h>
@@ -223,6 +224,8 @@ prevent any issues with freezing of the plugin
 		InitMenu(menu);
 
 		ReserveItemData(ItemList);
+
+		QuickMenu::Init();
 
 		menu->OnFirstOpening = StartingMsg;
 

@@ -64,10 +64,10 @@ namespace CTRPluginFramework {
 					pV[i] = pColor[i] << "Player: " << std::to_string(i);
 			}
 			
-			Keyboard pKB(Language->Get("KEY_SELECT_PLAYER"));
-			pKB.Populate(pV);
-			s8 pChoice = pKB.Open();
+			Keyboard pKB(Language->Get("KEY_SELECT_PLAYER"), pV);
 			
+			Sleep(Milliseconds(100));
+			s8 pChoice = pKB.Open();
 			if(pChoice >= 0) {
 				if(pV[pChoice] != Color::Silver << "-Empty-") {
 					PSelector_Set(pChoice);
@@ -226,8 +226,7 @@ namespace CTRPluginFramework {
 		
 		else if(entry->Hotkeys[2].IsPressed()) {
 			speedmode = !speedmode;
-			OSD::Notify("Speed Mode " << (speedmode ? Color::Green << "ON" : Color::Red << "OFF"));
-			
+			OSD::Notify("Speed Mode " << (speedmode ? Color::Green << "ON" : Color::Red << "OFF"));			
 		}
 		
 		if(entry->Hotkeys[3].IsPressed()) 

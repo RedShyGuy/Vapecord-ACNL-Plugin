@@ -58,11 +58,11 @@ namespace CTRPluginFramework {
 
 		float size = 0.0;
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-		optKb.Populate(sizeopt);
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), sizeopt);
+
 		Sleep(Milliseconds(100));
-		int op = optKb.Open();
-		if(op == -1)
+		s8 op = optKb.Open();
+		if(op < 0)
 			return;
 			
 		if(op <= 9) {
@@ -72,11 +72,14 @@ namespace CTRPluginFramework {
 			}
 			
 			optKb.Populate(sizesopt);
+
+			Sleep(Milliseconds(100));
 			s8 op2 = optKb.Open();
 			if(op2 < 0)
 				return;
 
 			if(op2 == 3) {
+				Sleep(Milliseconds(100));
 				if(optKb.Open(size, size) >= 0)
 					Process::WriteFloat(sizer[op], size);
 			}
@@ -100,8 +103,8 @@ namespace CTRPluginFramework {
 
 		cmnOpt[0] = IsON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-		optKb.Populate(cmnOpt);
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
+
 		Sleep(Milliseconds(100));
 		s8 op = optKb.Open();
 		if(op < 0)

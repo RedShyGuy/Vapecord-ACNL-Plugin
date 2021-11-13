@@ -40,6 +40,14 @@ namespace CTRPluginFramework {
 		Color(220, 20, 60, 0)
 	};
 
+	FuncPointer GetGameFunc(MenuEntry *entry) {
+		return *(FuncPointer *)(*(u32 *)((u32)entry + 0x14) + 0x5C);
+	}
+
+	FuncPointer GetMenuFunc(MenuEntry *entry) {
+		return *(FuncPointer *)(*(u32 *)((u32)entry + 0x14) + 0x60);
+	}
+
 //Functions for easier color changes
 	void UpdateAll(const Color arr[12]) {
 		for(int i = 0; i < (sizeof(FolderColors) / sizeof(FolderColors[0])); ++i)

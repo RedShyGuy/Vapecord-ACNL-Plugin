@@ -56,11 +56,10 @@ namespace CTRPluginFramework {
 
 		cmnOpt[1] = (IsON ? Color(pGreen) : Color(pRed)) << cmnOpt[1];
 		
-		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"));
-		KB.Populate(cmnOpt);
+		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
+
 		Sleep(Milliseconds(100));
 		s8 op = KB.Open();
-		
 		if(op < 0)
 			return;
 
@@ -109,11 +108,11 @@ namespace CTRPluginFramework {
 
 		cmnOpt[0] = IsON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
-		optKb.Populate(cmnOpt);
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
+
 		Sleep(Milliseconds(100));
-		int op = optKb.Open();
-		if(op == -1)
+		s8 op = optKb.Open();
+		if(op < 0)
 			return;
 		
 		Process::Patch(Code::country.addr, IsON ? 0xE1A00C20 : 0xE3A000FF);
@@ -133,9 +132,10 @@ namespace CTRPluginFramework {
 			Language->Get("VECTOR_DISABLE")
 		};
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), countOpt);
         static u8 input = 0;
-		optKb.Populate(countOpt);
+		
+		Sleep(Milliseconds(100));
 		switch(optKb.Open()) {
 			default: break;	
 			case 0: 
@@ -157,6 +157,8 @@ namespace CTRPluginFramework {
 
 		for(int i = 0; i < 4; ++i) {
 			SetItem.GetMessage() = Utils::Format(Language->Get("ISLAND_SHOP_MOD_ENTER_ID").c_str(), i + 1);
+
+			Sleep(Milliseconds(100));
 			s8 res = SetItem.Open(ShopItem[i]);
 			if(res < 0)
 				break;
@@ -213,6 +215,8 @@ namespace CTRPluginFramework {
 		kb.IsHexadecimal(true);
 		for(u8 i = 0; i < 16; ++i) {
 			kb.GetMessage() = Utils::Format(Language->Get("ISLAND_ACRE_ENTER_ID").c_str(), i + 1);
+
+			Sleep(Milliseconds(100));
 			kb.Open(isl.acres[i], isl.acres[i]);
 		}
 	}
@@ -236,10 +240,13 @@ namespace CTRPluginFramework {
 		kb.IsHexadecimal(true);
 		for(u8 i = 0; i < 2; ++i) {
 			kb.GetMessage() = Language->Get("ISLAND_BUILDING_ENTER_ID") << " " << std::to_string(i + 1);
+			Sleep(Milliseconds(100));
 			kb.Open(isl.b[i].id, isl.b[i].id);
 			kb.GetMessage() = Language->Get("ISLAND_BUILDING_ENTER_X") << " " << std::to_string(i + 1);
+			Sleep(Milliseconds(100));
 			kb.Open(isl.b[i].x, isl.b[i].x);
 			kb.GetMessage() = Language->Get("ISLAND_BUILDING_ENTER_Y") << " " << std::to_string(i + 1);
+			Sleep(Milliseconds(100));
 			kb.Open(isl.b[i].y, isl.b[i].y);
 		}
 	}
