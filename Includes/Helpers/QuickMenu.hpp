@@ -9,7 +9,7 @@ namespace CTRPluginFramework {
             static void Init(void);
             static void ListEntrys(std::vector<MenuEntry*> &quickmenu);
             static void AddEntry(MenuEntry* entry);
-
+            static void ListAvailableCogEntrys(std::vector<MenuEntry*> &cogEntrys);
 
     };
 }

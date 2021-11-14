@@ -5,11 +5,7 @@ namespace CTRPluginFramework {
     std::vector<MenuEntry*> TestEntry;
 
     void QuickMenu::Init() {
-        std::vector<MenuEntry *> Entrys = SAVEC->GetEntryList();
-
-        TestEntry.push_back(Entrys[0]);
-        TestEntry.push_back(Entrys[1]);
-        TestEntry.push_back(Entrys[2]);
+        
     }
 
     void QuickMenu::ListEntrys(std::vector<MenuEntry*> &quickmenu) {
@@ -18,5 +14,39 @@ namespace CTRPluginFramework {
 
     void QuickMenu::AddEntry(MenuEntry* entry) {
         TestEntry.push_back(entry);
+    }
+
+    void QuickMenu::ListAvailableCogEntrys(std::vector<MenuEntry*> &cogEntrys) {
+        PluginMenu *menu = PluginMenu::GetRunningInstance();
+        if(menu == nullptr) //if menu somehow isn't loaded
+            return;
+
+        cogEntrys.clear();
+        std::vector<MenuEntry *> AllEntrys;
+
+        std::vector<MenuFolder *> Folders = menu->GetFolderList();
+        std::vector<MenuEntry *> Entrys = menu->GetEntryList();
+        std::vector<MenuFolder *> SubFolders;
+
+        for(MenuEntry *entry : Entrys)
+            AllEntrys.push_back(entry);
+
+        for(MenuFolder *folder : Folders) {
+            SubFolders = folder->GetFolderList();
+            for(MenuFolder *subfolder : SubFolders) {
+                Entrys = subfolder->GetEntryList();
+                for(MenuEntry *entry : Entrys)
+                    AllEntrys.push_back(entry);
+            }
+
+            Entrys = folder->GetEntryList();
+            for(MenuEntry *entry : Entrys) 
+                AllEntrys.push_back(entry);
+        }
+
+        for(MenuEntry *entry : AllEntrys) {
+            if(GetGameFunc(entry) == nullptr && GetMenuFunc(entry) != nullptr && entry->IsVisible())
+                cogEntrys.push_back(entry);
+        }
     }
 }

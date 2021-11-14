@@ -402,12 +402,34 @@ namespace CTRPluginFramework {
 			for(const MenuEntry* entrys : QMEntrys) 
 				QMEntryNames.push_back(entrys->Name());
 
+			QMEntryNames.push_back("Add entry...");
+
 			Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), QMEntryNames);
 
 			Sleep(Milliseconds(100));
 			s8 res = KB.Open();
 			if(res < 0)
 				return;
+
+			if(res >= QMEntryNames.size() - 1) {
+				std::vector<MenuEntry*> CogEntrys;
+				std::vector<std::string> CogNames;
+
+				QuickMenu::ListAvailableCogEntrys(CogEntrys);
+
+				for(const MenuEntry* entrys : CogEntrys) 
+					CogNames.push_back(entrys->Name());
+
+				Sleep(Milliseconds(100));
+				KB.Populate(CogNames);
+				res = KB.Open();
+				if(res >= 0) {
+					QuickMenu::AddEntry(CogEntrys[res]);
+					Sleep(Milliseconds(100));
+					MessageBox(Utils::Format("Added %s to the Quick Menu!", RemoveColorFromString(CogEntrys[res]->Name()).c_str())).SetClear(ClearScreen::Top)();
+				}
+				return;
+			}
 
 			GetMenuFunc(QMEntrys[res])(entry);
 		}	
