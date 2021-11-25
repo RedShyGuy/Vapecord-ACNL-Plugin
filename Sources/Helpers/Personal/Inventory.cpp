@@ -29,7 +29,7 @@ namespace CTRPluginFramework {
 		u32 lineNumber = 0;
 		int count = 0;
 
-	//Read all lines in file
+	//Read alll ines in file
 		for(; reader(line); lineNumber++) {
 		//If line is empty, skip it
 			if(line.empty())

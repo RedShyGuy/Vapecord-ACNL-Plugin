@@ -40,6 +40,7 @@ Will be called at the start of the plugin to load the language, colors and the d
 		SetupLanguage(false);
 		SetupColors(false);
 		IsDevModeUsable();
+		QuickMenu::Init();
 		*menu -= UpdateInstance;
 	}
 
@@ -224,8 +225,6 @@ prevent any issues with freezing of the plugin
 		InitMenu(menu);
 
 		ReserveItemData(ItemList);
-
-		QuickMenu::Init();
 
 		menu->OnFirstOpening = StartingMsg;
 

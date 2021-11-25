@@ -434,10 +434,8 @@ namespace CTRPluginFramework {
 		if(isDir[index])
 			return;
 
-		if(restoreDIR.OpenFile(file, f_all[index], File::READ) != 0) {
-			MessageBox("Debug", Utils::Format("Couldn't open file! \n%s", f_all[index])).SetClear(ClearScreen::Top)();
+		if(restoreDIR.OpenFile(file, f_all[index], File::READ) != 0) 
 			return; //error opening file
-		}
 
 		std::string Sets[16];
 		u32 SetItem[16] = { 0 };
