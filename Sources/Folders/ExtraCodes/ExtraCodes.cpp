@@ -8,6 +8,7 @@
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/Inventory.hpp"
 #include "Helpers/Wrapper.hpp"
+#include "Helpers/IDList.hpp"
 #include "Color.h"
 
 namespace CTRPluginFramework {
@@ -104,6 +105,124 @@ namespace CTRPluginFramework {
 		Process::Patch(notraps1.addr, *(u32 *)notraps1.addr == 0xEA000014 ? 0x1A000014 : 0xEA000014);
 		Process::Patch(notraps2.addr, *(u32 *)notraps2.addr == 0xEA00002D ? 0x1A00002D : 0xEA00002D);
 		noTrap(entry);
+	}
+
+	void SetSpotState(MenuEntry *entry) {
+		const std::vector<std::string> spotVEC = {
+			Language->Get("VECTOR_QUICK_LOCK_SPOT"), 
+			Language->Get("VECTOR_QUICK_UNLOCK_SPOT"),
+			Language->Get("VECTOR_QUICK_LOCK_MAP"),
+			Language->Get("VECTOR_QUICK_UNLOCK_MAP")
+		};
+
+		u32 x = 0, y = 0;
+		PlayerClass::GetInstance()->GetWorldCoords(&x, &y);
+
+		if(bypassing) 
+			Dropper::DropItemLock(false);
+
+		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), spotVEC);
+		Sleep(Milliseconds(100));
+		switch(KB.Open()) {
+			default: break;
+			case 0: {
+				if(GameHelper::CreateLockedSpot(0x12, x, y, GameHelper::RoomCheck(), true) == 0xFFFFFFFF) 
+					OSD::Notify("Error: Too many locked spots are already existing!");			
+				else 
+					OSD::Notify("Locked Spot");
+			} break;
+
+			case 1: {
+				GameHelper::ClearLockedSpot(x, y, GameHelper::RoomCheck(), 4);
+				OSD::Notify("Unlocked Spot");
+			} break;
+
+			case 2: {
+				x = 0, y = 0;
+				while(GameHelper::CreateLockedSpot(0x12, 0x10 + x, 0x10 + y, GameHelper::RoomCheck(), true) != 0xFFFFFFFF) {
+					x++;
+					if(x % 6 == 2) { 
+						y++; 
+						x = 0; 
+					}
+					
+					Sleep(Milliseconds(40));
+				}
+				OSD::Notify("Locked Map");
+			} break;
+
+			case 3: {
+				x = 0x10, y = 0x10;
+				bool res = true;
+
+				while(res) {
+					while(res) {
+						if((u32)GameHelper::GetItemAtWorldCoords(x, y) != 0) {
+							if(GameHelper::GetLockedSpotIndex(x, y, GameHelper::RoomCheck()) != 0xFFFFFFFF) {
+								GameHelper::ClearLockedSpot(x, y, GameHelper::RoomCheck(), 4);
+								Sleep(Milliseconds(40));
+							}
+						}
+						else 
+							res = false;
+
+						y++;
+					}
+					res = true;
+					y = 0x10;
+					x++;
+					if((u32)GameHelper::GetItemAtWorldCoords(x, y) == 0) 
+						res = false;
+				}
+				OSD::Notify("Unlocked Map");
+			} break;
+		}
+
+		Sleep(Milliseconds(5));
+		if(bypassing) 
+			Dropper::DropItemLock(true);
+	}
+
+//search and replace
+	void SearchReplace(MenuEntry *entry) {
+		if(!PlayerClass::GetInstance()->IsLoaded()) {
+			OSD::Notify("Your player needs to be loaded!", Color::Red);
+			return;
+		}
+
+		u32 x = 0, y = 0;
+		u32 count = 0;
+		u32 ItemToSearch = 0;
+		u32 ItemToReplace = 0;
+		
+		if(!Wrap::KB<u32>(Language->Get("QUICK_MENU_SEARCH_REPLACE_SEARCH"), true, 8, ItemToSearch, 0x7FFE)) 
+			return;
+		
+		if(!Wrap::KB<u32>(Language->Get("QUICK_MENU_SEARCH_REPLACE_REPLACE"), true, 8, ItemToReplace, ItemToReplace)) 
+			return;
+		
+		if(!IDList::ItemValid(ItemToReplace)) {
+			OSD::Notify("Item Is Invalid!", Color::Red);
+			return;
+		}
+			
+		int res = Dropper::Search_Replace(300, { ItemToSearch }, ItemToReplace, 0x3D, true, "items replaced!", true);
+		if(res == -1) {
+			OSD::Notify("Your player needs to be loaded!", Color::Red);
+			return;
+		}
+		else if(res == -2) {
+			OSD::Notify("Only works outside!", Color::Red);
+			return;
+		}
+	}
+
+//remove all town items
+	void RemoveItemsCheat(MenuEntry *entry) {
+		Sleep(Milliseconds(100));
+		if((MessageBox(Language->Get("REMOVE_ITEM_WARNING"), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
+			GameHelper::RemoveItems(true, 0, 0, 0xFF, 0xFF, true, true);
+		}
 	}
 
 //Water All Flowers	

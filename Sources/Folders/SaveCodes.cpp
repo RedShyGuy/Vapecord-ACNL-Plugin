@@ -635,6 +635,47 @@ namespace CTRPluginFramework {
 		Process::Write16(PlayerPTR::Pointer(0x5710), IsON2 ? 0x880 : 0x955);
 		unlockqrmachine(entry);
 	}
+
+//InputChangeEvent For Quick Menu
+	void onBuildingChange(Keyboard &k, KeyboardEvent &e) {
+		if(e.type == KeyboardEvent::CharacterRemoved || e.type == KeyboardEvent::CharacterAdded) {
+			std::string s = k.GetInput();
+			k.GetMessage() = "ID:\n\n" << IDList::GetBuildingName(!s.empty() ? std::stoi(s, nullptr, 16) : 0);
+		}
+	}
+
+	void BuildingMod(MenuEntry *entry) {
+		if(Player::GetSaveOffset(4) == 0) {
+			Sleep(Milliseconds(100));
+			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			return;
+		}
+
+		static const std::vector<std::string> buildingOpt = {
+			Language->Get("QUICK_MENU_PLACE_AT_LOCATION"),
+			Language->Get("QUICK_MENU_MOVE_TO_LOCATION"),
+			Language->Get("QUICK_MENU_REMOVE_BUILDING"),
+		};
+
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), buildingOpt);
+
+		Sleep(Milliseconds(100));
+		switch(optKb.Open()) {
+			case 0:
+				u8 id;
+				if(Wrap::KB<u8>(Language->Get("ENTER_ID"), 1, 2, id, 0, onBuildingChange)) {
+					GameHelper::PlaceBuilding(id);
+				}
+				break;
+			case 1:
+				GameHelper::MoveBuilding();
+				break;
+			case 2:
+				GameHelper::RemoveBuilding();
+				break;
+			default: break;
+		}
+	}
 /*
 	bool IsVillagerBoxed(u32 VillagerData) {
 		u8 flag = *(u8 *)(VillagerData + 0x24E4 + 0x2C);

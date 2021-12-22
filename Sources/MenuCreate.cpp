@@ -22,18 +22,6 @@ namespace CTRPluginFramework {
         return(entry);
     }
 
-	/*static const std::vector<std::string> funcOpt = {
-		Language->Get("VECTOR_QUICK_BUILDING"),
-		Language->Get("VECTOR_QUICK_REMOVE"),
-		Language->Get("VECTOR_COMMANDS_CLEAR_INV"),
-		Language->Get("VECTOR_QUICK_S_A_R"),
-		Language->Get("VECTOR_QUICK_RELOAD"),
-		Language->Get("VECTOR_QUICK_LOCK_SPOT"),
-		Language->Get("VECTOR_QUICK_UNLOCK_SPOT"),
-		Language->Get("VECTOR_QUICK_LOCK_MAP"),
-		Language->Get("VECTOR_QUICK_UNLOCK_MAP"),
-	};*/
-
 /*This will load all the folders and entrys*/
     void InitMenu(PluginMenu *menu) {
 	/////////////////////
@@ -52,6 +40,7 @@ namespace CTRPluginFramework {
 		SAVEC->Append(new MenuEntry(FolderColors[0] << "Shop Unlocker", nullptr, shopunlocks, "note")),
 		SAVEC->Append(new MenuEntry(FolderColors[0] << "House Editor", nullptr, HouseChanger, "note")),
 		SAVEC->Append(new MenuEntry(FolderColors[0] << "Unlock QR Machine", nullptr, unlockqrmachine, "note")),
+		SAVEC->Append(new MenuEntry(FolderColors[0] << "Building Modifier", nullptr, BuildingMod, "note")),
 		SAVEC->Append(new MenuEntry(FolderColors[0] << "Mayor Permit 100%", Permit100, "note")),
 		SAVEC->Append(new MenuEntry(FolderColors[0] << "Real Time Acre Editor", MapEditor, "note")),
 		menu->Append(SAVEC);
@@ -116,6 +105,7 @@ namespace CTRPluginFramework {
 		INVC->Append(EntryWithHotkey(new MenuEntry(FolderColors[2] << "Chat Text2Item", chatt2i, "note"), { 
 			Hotkey(Key::R | Key::DPadLeft, "Key") 
 		})),
+		INVC->Append(new MenuEntry(FolderColors[2] << "Clear Inventory", nullptr, ClearInventory, "note")),
 		INVC->Append(new MenuEntry(FolderColors[2] << "Item Settings", nullptr, itemsettings, "note")),
 		INVC->Append(new MenuEntry(FolderColors[2] << "Design Menu Changer", nullptr, MenuChanger, "note")),
 		INVC->Append(new MenuEntry(FolderColors[2] << "Get Set", nullptr, getset, "note")),
@@ -367,6 +357,9 @@ namespace CTRPluginFramework {
 		EXTC->Append(new MenuEntry(FolderColors[10] << "Disable Save Menus", nullptr, nonesave, "note")),
 		EXTC->Append(new MenuEntry(FolderColors[10] << "Disable Item Locks", nullptr, bypass, "note")),
 		EXTC->Append(new MenuEntry(FolderColors[10] << "Can't Fall In Holes Or Pitfalls", nullptr, noTrap, "note")),
+		EXTC->Append(new MenuEntry(FolderColors[10] << "Set Spot State", nullptr, SetSpotState, "note")),
+		EXTC->Append(new MenuEntry(FolderColors[10] << "Search And Replace", nullptr, SearchReplace, "note")),
+		EXTC->Append(new MenuEntry(FolderColors[10] << "Remove All Town Items", nullptr, RemoveItemsCheat, "note")),
 	    EXTC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "Water All Flowers", WaterAllFlowers, "note"), { 
 			Hotkey(Key::R | Key::DPadLeft, "Key") 
 		})),
@@ -397,6 +390,7 @@ namespace CTRPluginFramework {
 		MISC->Append(new MenuEntry(FolderColors[11] << "Weather Modifier", nullptr, Weathermod , "note")),
 		MISC->Append(new MenuEntry(FolderColors[11] << "Always Aurora Lights", auroralights , "note")),
 		MISC->Append(new MenuEntry(FolderColors[11] << "Disable Non-Hacker Commands", nullptr, disablecommands, "note")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "Reload Room", nullptr, ReloadRoomCheat, "note")),
 		MISC->Append(EntryWithHotkey(new MenuEntry(FolderColors[11] << "Quick Menu", QuickMenuEntry, "note"), {
 			Hotkey(Key::Y | Key::DPadDown, "Key")
 		})),

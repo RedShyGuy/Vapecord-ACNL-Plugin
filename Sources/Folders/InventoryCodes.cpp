@@ -272,6 +272,20 @@ namespace CTRPluginFramework {
 		else
 			OSD::Notify(Utils::Format("Spawned Item: %08X", itemID));
 	}
+//Clear Inventory
+	void ClearInventory(MenuEntry *entry) {
+		if(Player::GetSaveOffset(4) == 0) {
+			Sleep(Milliseconds(100));
+			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			return;
+		}
+		Sleep(Milliseconds(100));
+		if((MessageBox(Language->Get("REMOVE_INV_WARNING"), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
+			for(int i = 0; i <= 0xF; ++i)
+				Inventory::WriteSlot(i, 0x7FFE);
+		}
+	}
+
 //Item Settings	
 	void itemsettings(MenuEntry *entry) {
 		static const Address showoff(0x19BA78, 0x19B4C0, 0x19BA98, 0x19BA98, 0x19B9D8, 0x19B9D8, 0x19B9D8, 0x19B9D8);

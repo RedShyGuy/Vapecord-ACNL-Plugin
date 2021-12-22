@@ -24,6 +24,7 @@ namespace CTRPluginFramework {
 	void TreeSizeChanger(MenuEntry *entry);
 	void ChangeNativeFruit(MenuEntry *entry);
 	void PWPUnlock(MenuEntry *entry);
+	void BuildingMod(MenuEntry *entry);
 	void unlockqrmachine(MenuEntry *entry);
 	void GrassChanger(MenuEntry *entry);
 	void HouseChanger(MenuEntry *entry);
@@ -53,6 +54,7 @@ namespace CTRPluginFramework {
 	void catalog(MenuEntry *entry);
 	void itemsettings(MenuEntry *entry);
 	void MenuChanger(MenuEntry *entry);
+	void ClearInventory(MenuEntry *entry);
 	void getset(MenuEntry *entry);
 	void SettingsButton(MenuEntry *entry);
 	
@@ -156,6 +158,9 @@ namespace CTRPluginFramework {
 	void nonesave(MenuEntry *entry);	
 	void bypass(MenuEntry *entry);
 	void noTrap(MenuEntry *entry);	
+	void SetSpotState(MenuEntry *entry);
+	void SearchReplace(MenuEntry *entry);
+	void RemoveItemsCheat(MenuEntry *entry);
 	void WaterAllFlowers(MenuEntry *entry);
 	void weedremover(MenuEntry *entry);
 	void editpattern(MenuEntry *entry);	
@@ -172,6 +177,7 @@ namespace CTRPluginFramework {
 	void unbreakableflower(MenuEntry *entry);
 	void Weathermod(MenuEntry *entry);
 	void auroralights(MenuEntry *entry);
+	void ReloadRoomCheat(MenuEntry *entry);
 	void QuickMenuEntry(MenuEntry *entry);
 	void morenumberisland(MenuEntry *entry);
 	void fovlarge(MenuEntry *entry);
@@ -184,16 +190,6 @@ namespace CTRPluginFramework {
 	void fast(MenuEntry *entry);
 	void fasttalk(MenuEntry *entry);
 	void speedentry(MenuEntry *entry);
-
-	void BuildingMod(MenuEntry *entry);
-	void SearchReplace(MenuEntry *entry);
-	void RemoveItemsCheat(MenuEntry *entry);
-	void ClearInventory(MenuEntry *entry);
-	void ReloadRoomCheat(MenuEntry *entry);
-	void LockSpot(MenuEntry *entry);
-	void UnlockSpot(MenuEntry *entry);
-	void LockMap(MenuEntry *entry);
-	void UnlockMap(MenuEntry *entry);
 
 //Dev Codes	
 	void customdump(MenuEntry *entry);

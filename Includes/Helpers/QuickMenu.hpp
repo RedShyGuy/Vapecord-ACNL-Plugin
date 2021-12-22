@@ -14,6 +14,7 @@ namespace CTRPluginFramework {
             static void Init(void);
             static void ListEntrys(quickMenuData &quickmenu);
             static void AddEntry(MenuEntry* entry, s8 ID);
+            static void RemoveEntry(MenuEntry* entry, s8 ID);
             static void ListAvailableCogEntrys(std::vector<MenuEntry*> &cogEntrys, std::vector<s8> &ID);
 
             static quickMenuData g_quickMenu;

@@ -27,14 +27,11 @@ namespace CTRPluginFramework {
 
     //reads file which holds ID data of the hidden entrys
         File f_quickm(Utils::Format(PATH_QUICKM, regionName.c_str()), File::READ);
-        s8* buffer = new s8(f_quickm.GetSize());
+        s8* buffer = new s8[f_quickm.GetSize()];
         f_quickm.Read(buffer, f_quickm.GetSize());
         for(int i = 0; i < f_quickm.GetSize(); ++i) {
             q_quickMenuFile.push_back(buffer[i]);
         }
-
-        //Sleep(Milliseconds(500));
-        //delete[] buffer;
 
     //reads through all entry ID's and hides all entrys which have their ID inside of the file 
         for(int i = 0; i < data.entry.size(); ++i) {
@@ -50,6 +47,8 @@ namespace CTRPluginFramework {
                 }
             }
         }
+
+        delete[] buffer;
     }
 
 //This will list all the entrys with their ID of the Quick Menu
@@ -76,6 +75,27 @@ namespace CTRPluginFramework {
         f_quickm.Write(g_quickMenu.ID.data(), g_quickMenu.ID.size());
 
         entry->Hide();
+    }
+
+//This will remove a entry from the Quick Menu
+    void QuickMenu::RemoveEntry(MenuEntry* entry, s8 ID) {
+        data.entry.push_back(entry);
+        data.ID.push_back(ID);
+
+        for(int i = 0; i < g_quickMenu.entry.size(); ++i) {
+            if(g_quickMenu.ID[i] == ID) {
+                g_quickMenu.entry.erase(g_quickMenu.entry.begin() + i);
+                g_quickMenu.ID.erase(g_quickMenu.ID.begin() + i);
+            }
+        }
+
+        if(!File::Exists(Utils::Format(PATH_QUICKM, regionName.c_str()))) 
+            File::Create(Utils::Format(PATH_QUICKM, regionName.c_str()));
+
+        File f_quickm(Utils::Format(PATH_QUICKM, regionName.c_str()), File::WRITE | File::TRUNCATE);
+        f_quickm.Write(g_quickMenu.ID.data(), g_quickMenu.ID.size());
+
+        entry->Show();
     }
 
 //This lists all available cog entrys of the plugin (ignoring hidden ones)

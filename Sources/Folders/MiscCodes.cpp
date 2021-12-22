@@ -196,243 +196,117 @@ namespace CTRPluginFramework {
 		}
 	}
 
-//InputChangeEvent For Quick Menu
-	void onBuildingChange(Keyboard &k, KeyboardEvent &e) {
-		if(e.type == KeyboardEvent::CharacterRemoved || e.type == KeyboardEvent::CharacterAdded) {
-			std::string s = k.GetInput();
-			k.GetMessage() = "ID:\n\n" << IDList::GetBuildingName(!s.empty() ? std::stoi(s, nullptr, 16) : 0);
-		}
-	}
-
-	void BuildingMod(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
-			Sleep(Milliseconds(100));
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
-			return;
-		}
-
-		static const std::vector<std::string> buildingOpt = {
-			Language->Get("QUICK_MENU_PLACE_AT_LOCATION"),
-			Language->Get("QUICK_MENU_MOVE_TO_LOCATION"),
-			Language->Get("QUICK_MENU_REMOVE_BUILDING"),
-		};
-
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), buildingOpt);
-
-		Sleep(Milliseconds(100));
-		switch(optKb.Open()) {
-			case 0:
-				u8 id;
-				if(Wrap::KB<u8>(Language->Get("ENTER_ID"), 1, 2, id, 0, onBuildingChange)) {
-					GameHelper::PlaceBuilding(id);
-				}
-				break;
-			case 1:
-				GameHelper::MoveBuilding();
-				break;
-			case 2:
-				GameHelper::RemoveBuilding();
-				break;
-			default: break;
-		}
-	}
-
-	void SearchReplace(MenuEntry *entry) {
+//reload room
+	void ReloadRoomCheat(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
 			OSD::Notify("Your player needs to be loaded!", Color::Red);
 			return;
 		}
 
-		u32 x = 0, y = 0;
-		u32 count = 0;
-		u32 ItemToSearch = 0;
-		u32 ItemToReplace = 0;
-		
-		if(!Wrap::KB<u32>(Language->Get("QUICK_MENU_SEARCH_REPLACE_SEARCH"), true, 8, ItemToSearch, 0x7FFE)) 
-			return;
-		
-		if(!Wrap::KB<u32>(Language->Get("QUICK_MENU_SEARCH_REPLACE_REPLACE"), true, 8, ItemToReplace, ItemToReplace)) 
-			return;
-		
-		if(!IDList::ItemValid(ItemToReplace)) {
-			OSD::Notify("Item Is Invalid!", Color::Red);
-			return;
-		}
-			
-		int res = Dropper::Search_Replace(300, { ItemToSearch }, ItemToReplace, 0x3D, true, "items replaced!", true);
-		if(res == -1) {
-			OSD::Notify("Your player needs to be loaded!", Color::Red);
-			return;
-		}
-		else if(res == -2) {
-			OSD::Notify("Only works outside!", Color::Red);
-			return;
-		}
-	}
-
-	void RemoveItemsCheat(MenuEntry *entry) {
-		Sleep(Milliseconds(100));
-		if((MessageBox(Language->Get("REMOVE_ITEM_WARNING"), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
-			GameHelper::RemoveItems(true, 0, 0, 0xFF, 0xFF, true, true);
-		}
-	}
-
-	void ClearInventory(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
-			Sleep(Milliseconds(100));
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
-			return;
-		}
-		Sleep(Milliseconds(100));
-		if((MessageBox(Language->Get("REMOVE_INV_WARNING"), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
-			for(int i = 0; i <= 0xF; ++i)
-				Inventory::WriteSlot(i, 0x7FFE);
-		}
-	}
-
-	void ReloadRoomCheat(MenuEntry *entry) {
 		GameHelper::ReloadRoom();
 	}
 
-	void LockSpot(MenuEntry *entry) {
-		u32 x = 0, y = 0;
+	std::vector<std::string> cogNotes;
 
-		PlayerClass::GetInstance()->GetWorldCoords(&x, &y);
-					
-		if(bypassing) 
-			Dropper::DropItemLock(false);
-		
-		Sleep(Milliseconds(5));
-		
-		if(GameHelper::CreateLockedSpot(0x12, x, y, GameHelper::RoomCheck(), true) == 0xFFFFFFFF) 
-			OSD::Notify("Error: Too many locked spots are already existing!");			
-		else 
-			OSD::Notify("Locked Spot");
-		
-		if(bypassing) 
-			Dropper::DropItemLock(true);
-	}
+	void NoteFromCogCheat(Keyboard& keyboard, KeyboardEvent& event) {
+        std::string& input = keyboard.GetMessage();
+        if(event.type != KeyboardEvent::SelectionChanged)
+            return;
 
-	void UnlockSpot(MenuEntry *entry) {
-		u32 x = 0, y = 0;
-
-		if(bypassing) 
-			Dropper::DropItemLock(false);
-		
-		Sleep(Milliseconds(5));
-		
-		PlayerClass::GetInstance()->GetWorldCoords(&x, &y);
-		GameHelper::ClearLockedSpot(x, y, GameHelper::RoomCheck(), 4);
-		
-		OSD::Notify("Unlocked Spot");
-		
-		if(bypassing) 
-			Dropper::DropItemLock(true);
-	}
-
-	void LockMap(MenuEntry *entry) {
-		if(bypassing) 
-			Dropper::DropItemLock(false);
-
-		u32 countY = 0;
-		u32 countX = 0;
-		
-		Sleep(Milliseconds(5));
-		while(GameHelper::CreateLockedSpot(0x12, 0x10 + countX, 0x10 + countY, GameHelper::RoomCheck(), true) != 0xFFFFFFFF) {
-			countX++;
-			if(countX % 6 == 2) { 
-				countY++; 
-				countX = 0; 
-			}
-			
-			Sleep(Milliseconds(40));
+		if(event.selectedIndex < 0 || event.selectedIndex >= cogNotes.size() || cogNotes.empty()) {
+			input.clear();
+			return;
 		}
-		
-		OSD::Notify("Locked Map");
-		
-		if(bypassing) 
-			Dropper::DropItemLock(true);
-	}
 
-	void UnlockMap(MenuEntry *entry) {
-		u32 x = 0, y = 0;
-		
-		if(bypassing) 
-			Dropper::DropItemLock(false);
-
-		Sleep(Milliseconds(5));
-		x = 0x10;
-		y = 0x10;
-		bool res = true;
-		while(res) {
-			while(res) {
-				if((u32)GameHelper::GetItemAtWorldCoords(x, y) != 0) {
-					if(GameHelper::GetLockedSpotIndex(x, y, GameHelper::RoomCheck()) != 0xFFFFFFFF) {
-						GameHelper::ClearLockedSpot(x, y, GameHelper::RoomCheck(), 4);
-						Sleep(Milliseconds(40));
-					}
-				}
-				else 
-					res = false;
-
-				y++;
-			}
-			res = true;
-			y = 0x10;
-			x++;
-			if((u32)GameHelper::GetItemAtWorldCoords(x, y) == 0) 
-				res = false;
-		}
-		
-		OSD::Notify("Unlocked Map");
-		
-		Sleep(Milliseconds(5));
-		if(bypassing) 
-			Dropper::DropItemLock(true);
+		input = cogNotes[event.selectedIndex];
 	}
 
 //Quick Menu
 	void QuickMenuEntry(MenuEntry *entry) {	
 		quickMenuData QMEntrys;
 		std::vector<std::string> QMEntryNames;
+
+		static const std::vector<std::string> opt = { "Add Cog-Cheat", "Remove Cog-Cheat" };
 		
 		if(entry->Hotkeys[0].IsPressed()) {
 			QuickMenu::ListEntrys(QMEntrys);
 
-			for(const MenuEntry* entrys : QMEntrys.entry) 
+			cogNotes.clear();
+			for(const MenuEntry* entrys : QMEntrys.entry) {
 				QMEntryNames.push_back(entrys->Name());
+				cogNotes.push_back(entrys->Note());
+			}
 
-			QMEntryNames.push_back("Add entry...");
-
-			Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), QMEntryNames);
+			QMEntryNames.push_back("Quick Menu Options...");
 
 			Sleep(Milliseconds(100));
+			Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), QMEntryNames);
+			KB.OnKeyboardEvent(NoteFromCogCheat);
 			s8 res = KB.Open();
+			cogNotes.clear();
 			if(res < 0)
 				return;
 
 			if(res >= QMEntryNames.size() - 1) {
+				Sleep(Milliseconds(100));
+				KB.Populate(opt);
+				KB.OnKeyboardEvent(nullptr);
+				res = KB.Open();
+				if(res < 0)
+					return;
+
 				quickMenuData CogEntrys;
 				std::vector<std::string> CogNames;
-
 				QuickMenu::ListAvailableCogEntrys(CogEntrys.entry, CogEntrys.ID);
 
-				if(CogEntrys.entry.size() <= 0) {
+				if(res == 0) {
+					if(CogEntrys.entry.size() <= 0) {
+						Sleep(Milliseconds(100));
+						MessageBox("Error", "You have already added every Cog-Cheat to the Quick Menu!").SetClear(ClearScreen::Top)();
+						return;
+					}
+
+					for(const MenuEntry* entrys : CogEntrys.entry) {
+						CogNames.push_back(entrys->Name());
+						cogNotes.push_back(entrys->Note());
+					}
+
 					Sleep(Milliseconds(100));
-					MessageBox("Error", "You have already added every Cog-Cheat to the Quick Menu!").SetClear(ClearScreen::Top)();
-					return;
+					KB.Populate(CogNames);
+					KB.OnKeyboardEvent(NoteFromCogCheat);
+					res = KB.Open();
+
+					cogNotes.clear();
+					if(res >= 0) {
+						QuickMenu::AddEntry(CogEntrys.entry[res], CogEntrys.ID[res]);
+						Sleep(Milliseconds(100));
+						MessageBox(Utils::Format("Added %s to the Quick Menu!", RemoveColorFromString(CogEntrys.entry[res]->Name()).c_str())).SetClear(ClearScreen::Top)();
+					}
 				}
 
-				for(const MenuEntry* entrys : CogEntrys.entry) 
-					CogNames.push_back(entrys->Name());
+				else if(res == 1) {
+					if(QMEntrys.entry.size() <= 0) {
+						Sleep(Milliseconds(100));
+						MessageBox("Error", "The Quick Menu is empty!").SetClear(ClearScreen::Top)();
+						return;
+					}
 
-				Sleep(Milliseconds(100));
-				KB.Populate(CogNames);
-				res = KB.Open();
-				if(res >= 0) {
-					QuickMenu::AddEntry(CogEntrys.entry[res], CogEntrys.ID[res]);
+					for(const MenuEntry* entrys : QMEntrys.entry) {
+						CogNames.push_back(entrys->Name());
+						cogNotes.push_back(entrys->Note());
+					}
+
 					Sleep(Milliseconds(100));
-					MessageBox(Utils::Format("Added %s to the Quick Menu!", RemoveColorFromString(CogEntrys.entry[res]->Name()).c_str())).SetClear(ClearScreen::Top)();
+					KB.Populate(CogNames);
+					KB.OnKeyboardEvent(NoteFromCogCheat);
+					res = KB.Open();
+
+					cogNotes.clear();
+					if(res >= 0) {
+						QuickMenu::RemoveEntry(QMEntrys.entry[res], QMEntrys.ID[res]);
+						Sleep(Milliseconds(100));
+						MessageBox(Utils::Format("Removed %s from the Quick Menu!", RemoveColorFromString(QMEntrys.entry[res]->Name()).c_str())).SetClear(ClearScreen::Top)();
+					}
 				}
 				return;
 			}
