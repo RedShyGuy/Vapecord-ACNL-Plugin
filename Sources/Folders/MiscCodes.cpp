@@ -207,26 +207,106 @@ namespace CTRPluginFramework {
 	}
 
 	std::vector<std::string> cogNotes;
+	static bool IsOnStartMenu = false;
+	void QuickMenuOptions(void);
 
-	void NoteFromCogCheat(Keyboard& keyboard, KeyboardEvent& event) {
+	void CogCheatCallback(Keyboard& keyboard, KeyboardEvent& event) {
         std::string& input = keyboard.GetMessage();
+		static std::string cheatDesc = "";
+		input = (IsOnStartMenu ? ToggleDrawMode(Render::UNDERLINE | Render::BOLD) + "\uE052 | Quick Menu Options...\n\n" + ToggleDrawMode(Render::UNDERLINE | Render::BOLD) : "") + cheatDesc;
+
+		if(event.type == KeyboardEvent::KeyPressed && IsOnStartMenu) {
+			if(event.affectedKey == Key::L) {
+				QuickMenuOptions();
+				keyboard.Close();
+			}
+		}
+
         if(event.type != KeyboardEvent::SelectionChanged)
             return;
 
 		if(event.selectedIndex < 0 || event.selectedIndex >= cogNotes.size() || cogNotes.empty()) {
-			input.clear();
+			cheatDesc.clear();
 			return;
 		}
 
-		input = cogNotes[event.selectedIndex];
+		cheatDesc.clear();
+		cheatDesc += ToggleDrawMode(Render::UNDERLINE) + "Cheat Description:\n" + ToggleDrawMode(Render::UNDERLINE);
+		cheatDesc += cogNotes[event.selectedIndex];
+	}
+
+	void QuickMenuOptions(void) {
+		Sleep(Milliseconds(100));
+		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), std::vector<std::string>{ "Add Cog-Cheat", "Remove Cog-Cheat" });
+		IsOnStartMenu = false;
+		s8 res = KB.Open();
+		if(res < 0)
+			return;
+
+		quickMenuData CogEntrys;
+		QuickMenu::ListAvailableCogEntrys(CogEntrys.entry, CogEntrys.ID);
+
+		quickMenuData QMEntrys;
+		QuickMenu::ListEntrys(QMEntrys);
+
+		std::vector<std::string> CogNames;
+
+		cogNotes.clear();
+		if(res == 0) {
+			if(CogEntrys.entry.size() <= 0) {
+				Sleep(Milliseconds(100));
+				MessageBox("Error", "You have already added every Cog-Cheat to the Quick Menu!").SetClear(ClearScreen::Top)();
+				return;
+			}
+
+			for(const MenuEntry* entrys : CogEntrys.entry) {
+				CogNames.push_back(entrys->Name());
+				cogNotes.push_back(entrys->Note());
+			}
+
+			Sleep(Milliseconds(100));
+			KB.Populate(CogNames);
+			KB.OnKeyboardEvent(CogCheatCallback);
+			res = KB.Open();
+
+			cogNotes.clear();
+			if(res >= 0) {
+				QuickMenu::AddEntry(CogEntrys.entry[res], CogEntrys.ID[res]);
+				Sleep(Milliseconds(100));
+				MessageBox(Utils::Format("Added %s to the Quick Menu!", RemoveColorFromString(CogEntrys.entry[res]->Name()).c_str())).SetClear(ClearScreen::Top)();
+			}
+		}
+
+		else if(res == 1) {
+			if(QMEntrys.entry.size() <= 0) {
+				Sleep(Milliseconds(100));
+				MessageBox("Error", "The Quick Menu is empty!").SetClear(ClearScreen::Top)();
+				return;
+			}
+
+			for(const MenuEntry* entrys : QMEntrys.entry) {
+				CogNames.push_back(entrys->Name());
+				cogNotes.push_back(entrys->Note());
+			}
+
+			Sleep(Milliseconds(100));
+			KB.Populate(CogNames);
+			KB.OnKeyboardEvent(CogCheatCallback);
+			res = KB.Open();
+
+			cogNotes.clear();
+			if(res >= 0) {
+				QuickMenu::RemoveEntry(QMEntrys.entry[res], QMEntrys.ID[res]);
+				Sleep(Milliseconds(100));
+				MessageBox(Utils::Format("Removed %s from the Quick Menu!", RemoveColorFromString(QMEntrys.entry[res]->Name()).c_str())).SetClear(ClearScreen::Top)();
+			}
+		}
 	}
 
 //Quick Menu
 	void QuickMenuEntry(MenuEntry *entry) {	
 		quickMenuData QMEntrys;
 		std::vector<std::string> QMEntryNames;
-
-		static const std::vector<std::string> opt = { "Add Cog-Cheat", "Remove Cog-Cheat" };
 		
 		if(entry->Hotkeys[0].IsPressed()) {
 			QuickMenu::ListEntrys(QMEntrys);
@@ -237,79 +317,14 @@ namespace CTRPluginFramework {
 				cogNotes.push_back(entrys->Note());
 			}
 
-			QMEntryNames.push_back("Quick Menu Options...");
-
 			Sleep(Milliseconds(100));
 			Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), QMEntryNames);
-			KB.OnKeyboardEvent(NoteFromCogCheat);
+			KB.OnKeyboardEvent(CogCheatCallback);
+			IsOnStartMenu = true;
 			s8 res = KB.Open();
 			cogNotes.clear();
 			if(res < 0)
 				return;
-
-			if(res >= QMEntryNames.size() - 1) {
-				Sleep(Milliseconds(100));
-				KB.Populate(opt);
-				KB.OnKeyboardEvent(nullptr);
-				res = KB.Open();
-				if(res < 0)
-					return;
-
-				quickMenuData CogEntrys;
-				std::vector<std::string> CogNames;
-				QuickMenu::ListAvailableCogEntrys(CogEntrys.entry, CogEntrys.ID);
-
-				if(res == 0) {
-					if(CogEntrys.entry.size() <= 0) {
-						Sleep(Milliseconds(100));
-						MessageBox("Error", "You have already added every Cog-Cheat to the Quick Menu!").SetClear(ClearScreen::Top)();
-						return;
-					}
-
-					for(const MenuEntry* entrys : CogEntrys.entry) {
-						CogNames.push_back(entrys->Name());
-						cogNotes.push_back(entrys->Note());
-					}
-
-					Sleep(Milliseconds(100));
-					KB.Populate(CogNames);
-					KB.OnKeyboardEvent(NoteFromCogCheat);
-					res = KB.Open();
-
-					cogNotes.clear();
-					if(res >= 0) {
-						QuickMenu::AddEntry(CogEntrys.entry[res], CogEntrys.ID[res]);
-						Sleep(Milliseconds(100));
-						MessageBox(Utils::Format("Added %s to the Quick Menu!", RemoveColorFromString(CogEntrys.entry[res]->Name()).c_str())).SetClear(ClearScreen::Top)();
-					}
-				}
-
-				else if(res == 1) {
-					if(QMEntrys.entry.size() <= 0) {
-						Sleep(Milliseconds(100));
-						MessageBox("Error", "The Quick Menu is empty!").SetClear(ClearScreen::Top)();
-						return;
-					}
-
-					for(const MenuEntry* entrys : QMEntrys.entry) {
-						CogNames.push_back(entrys->Name());
-						cogNotes.push_back(entrys->Note());
-					}
-
-					Sleep(Milliseconds(100));
-					KB.Populate(CogNames);
-					KB.OnKeyboardEvent(NoteFromCogCheat);
-					res = KB.Open();
-
-					cogNotes.clear();
-					if(res >= 0) {
-						QuickMenu::RemoveEntry(QMEntrys.entry[res], QMEntrys.ID[res]);
-						Sleep(Milliseconds(100));
-						MessageBox(Utils::Format("Removed %s from the Quick Menu!", RemoveColorFromString(QMEntrys.entry[res]->Name()).c_str())).SetClear(ClearScreen::Top)();
-					}
-				}
-				return;
-			}
 
 			GetMenuFunc(QMEntrys.entry[res])(entry);
 		}	
