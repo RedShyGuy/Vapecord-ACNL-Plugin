@@ -108,6 +108,12 @@ namespace CTRPluginFramework {
 	}
 
 	void SetSpotState(MenuEntry *entry) {
+		if(!PlayerClass::GetInstance()->IsLoaded()) {
+			Sleep(Milliseconds(100));
+			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			return;
+		}
+
 		const std::vector<std::string> spotVEC = {
 			Language->Get("VECTOR_QUICK_LOCK_SPOT"), 
 			Language->Get("VECTOR_QUICK_UNLOCK_SPOT"),
@@ -186,7 +192,8 @@ namespace CTRPluginFramework {
 //search and replace
 	void SearchReplace(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			OSD::Notify("Your player needs to be loaded!", Color::Red);
+			Sleep(Milliseconds(100));
+			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 
@@ -220,7 +227,8 @@ namespace CTRPluginFramework {
 //remove all town items
 	void RemoveItemsCheat(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			OSD::Notify("Your player needs to be loaded!", Color::Red);
+			Sleep(Milliseconds(100));
+			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 

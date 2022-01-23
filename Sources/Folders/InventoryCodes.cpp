@@ -279,6 +279,7 @@ namespace CTRPluginFramework {
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
+
 		Sleep(Milliseconds(100));
 		if((MessageBox(Language->Get("REMOVE_INV_WARNING"), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
 			for(int i = 0; i <= 0xF; ++i)
