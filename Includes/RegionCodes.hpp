@@ -51,6 +51,7 @@ namespace CTRPluginFramework {
 		static Address		DataPointer;
 		static Address		RestoreItemWindow;
 		static Address		RestoreOutfitWindow;
+		static Address		ExGameData;
 	};
 }
 

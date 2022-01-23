@@ -326,20 +326,20 @@ namespace CTRPluginFramework {
 			"SONG_LIST_NOTE", "FILL_CATALOG_NOTE",  },
 		};
 
-		const static std::string Names2[2][7] = {
+		const static std::string Names2[2][8] = {
 			{ "PLAYER_INFO", "PLAYER_LOADER", "NECK_POSITION", 
 			"CUSTOM_HAIR_EYE", "WEAR_HELMET", "FAINT", 
-			"PLAYERS_ON_MAP", },
+			"PLAYERS_ON_MAP", "NEVER_BEDHEAD" },
 
 			{ "PLAYER_INFO_NOTE", "PLAYER_LOADER_NOTE", "NECK_POSITION_NOTE", 
 			"CUSTOM_HAIR_EYE_NOTE", "WEAR_HELMET_NOTE", "FAINT_NOTE", 
-			"PLAYERS_ON_MAP_NOTE", },
+			"PLAYERS_ON_MAP_NOTE", "NEVER_BEDHEAD_NOTE" },
 		};
 
 		const static HotkeyDat Hotkeys[3] = {
-			{ { "NECK_POSITION" }, 2 },
-			{ { "CUSTOM_HAIR_EYE_KEY1" }, 3 },
-			{ { "FAINT" }, 5 },
+			{ { "NECK_POSITION" }, 1 },
+			{ { "CUSTOM_HAIR_EYE_KEY1" }, 2 },
+			{ { "FAINT" }, 4 },
 		};
 
 		for(int i = 0; i < Entrys1.size(); ++i) 

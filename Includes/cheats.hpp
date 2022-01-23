@@ -77,9 +77,10 @@ namespace CTRPluginFramework {
 	void neckentry(MenuEntry *entry);
 	void debug(MenuEntry *entry);
 	void hatz(MenuEntry *entry);
-	void pLoaderEntry(MenuEntry *entry);
+	//void pLoaderEntry(MenuEntry *entry);
 	void Faint(MenuEntry *entry);
 	void map(MenuEntry *entry);
+	void NeverBedHead(MenuEntry *entry);
 	
 //Animation Codes Folder
 	void playerSelector(MenuEntry *entry);
@@ -132,6 +133,7 @@ namespace CTRPluginFramework {
 	void buildingMod(MenuEntry *entry);
 	void menuBuildingMod(MenuEntry *entry);
 	void FreeKappn(MenuEntry *entry);
+	void IslandSaver(MenuEntry *entry);
 	
 //Fun Codes
 	void sizecodes(MenuEntry *entry);

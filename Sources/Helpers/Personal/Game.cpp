@@ -445,15 +445,15 @@ namespace CTRPluginFramework {
 		return *(bool *)LoadCheck.addr;
 		return 0;
 	}
-//get map boolen pointer	
+//get map boolen pointer
 	bool GameHelper::MapBoolCheck() {
 		return *(bool *)Code::MapBool.addr;
 	}
-//Get online index	
+//Get online index
 	u8 GameHelper::GetOnlinePlayerIndex() {
 		return Code::a_GetOnlinePlayerIndex.Call<u8>();
 	}
-//Get actual index	
+//Get actual index
 	u8 GameHelper::GetActualPlayerIndex() {
 		u8 index = *(u8 *)((*(u32 *)Code::GamePointer.addr) + 0x13268);
 		if(index >= 4) 

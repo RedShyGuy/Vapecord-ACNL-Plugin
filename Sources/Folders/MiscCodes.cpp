@@ -317,6 +317,11 @@ namespace CTRPluginFramework {
 				cogNotes.push_back(entrys->Note());
 			}
 
+			if(QMEntryNames.empty()) {
+				QuickMenuOptions();
+				return;
+			}
+
 			Sleep(Milliseconds(100));
 			Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), QMEntryNames);
 			KB.OnKeyboardEvent(CogCheatCallback);
@@ -387,6 +392,7 @@ namespace CTRPluginFramework {
 		else if(!entry->IsActivated()) 
 			Process::Patch(walktalk.addr, 0x0A000000); 
 	}
+
 //Keyboard Extender
 	void key_limit(MenuEntry* entry) {
 		if(!GameKeyboard::IsOpen())
@@ -398,7 +404,7 @@ namespace CTRPluginFramework {
 		u32 KeyData = *(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x1328;
 		static const Address KeyEnter(0xAD7253, 0xAD6253, 0xAD6253, 0xAD6253, 0xAD0253, 0xACF253, 0xACF253, 0xACF253);
 		static const Address KeyAt(0xAD75C0, 0xAD65C0, 0xAD65C0, 0xAD65C0, 0xAD05C0, 0xACF5C0, 0xACF5C0, 0xACF5C0);
-		
+	
 		Process::Write8(KeyData + 0xC, 0x41);
 		Process::Write8(KeyData + 0x12B, 0x44);
 		Process::Write8(KeyEnter.addr, 1);

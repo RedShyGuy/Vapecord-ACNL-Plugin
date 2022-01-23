@@ -129,4 +129,3 @@ FUNCTION    SetWalkParticleID
     LDR         R4, [R4]
 
     POP         {PC}
-

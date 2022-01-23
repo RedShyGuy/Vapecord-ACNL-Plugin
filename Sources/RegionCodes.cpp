@@ -70,6 +70,8 @@ namespace CTRPluginFramework {
 		ChatPoint = Address(0x95F11C, 0x95E0FC, 0x95E114, 0x95E114, 0x958114, 0x957114, 0x957114, 0x957114);
 
 		DataPointer = Address(0x95EEDC, 0x95DEBC, 0x95DED4, 0x95DED4, 0x957ED4, 0x956ED4, 0x956ED4, 0x956ED4);
+
+		ExGameData = Address(0x95D3F4, 0x95C3D4, 0x95C3EC, 0x95C3EC, 0x9563EC, 0x9553EC, 0x9553EC, 0x9553EC);
 	}
 	
 	Address		Code::IslPointer;
@@ -110,4 +112,5 @@ namespace CTRPluginFramework {
 	Address		Code::DataPointer;
 	Address		Code::RestoreItemWindow;
 	Address		Code::RestoreOutfitWindow;
+	Address		Code::ExGameData;
 }

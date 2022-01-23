@@ -67,6 +67,7 @@ namespace CTRPluginFramework {
 			k_Color.CanAbort(false);
             k_Color.OnKeyboardEvent(ColorChange);
             
+			Sleep(Milliseconds(100));
             switch(k_Color.Open()) {
 				case 0:
 					u_byte = f_Color::ColorMode; //COLORFUL MODE ON
@@ -169,7 +170,7 @@ namespace CTRPluginFramework {
 
             Keyboard fwk_Lang("Lets you change the Main Colors of the plugin, to set custom ones change them in the FWKColors.txt!", FWKOpt);
 			fwk_Lang.CanAbort(false);
-            
+            Sleep(Milliseconds(100));
             switch(fwk_Lang.Open()) {
 				case 0:
 					u_byte = fwk_Color::FWK_Custom; 		

@@ -33,9 +33,11 @@ namespace CTRPluginFramework {
 		u32 found = Utils::Search<u32>(0x07000000, 0xF608B, { 0xE5C01068, 0xE12FFF1E });
 		*(u32 *)found = 0xE1A00000;
 
+		/*
 		static Hook suspendHook;
 		static const Address suspendAddress(0x124EB8, 0x124928, 0x124EDC, 0x124EDC, 0x124EA4, 0x124EA4, 0x124EA4, 0x124EA4);
 		SetHook(suspendHook, suspendAddress.addr, (u32)SuspendCallBack, USE_LR_TO_RETURN);
+		*/
 
 		/*static Hook titleHook, textHook;
 		static const Address warningTXT(0x2F319C, 0, 0, 0, 0, 0, 0, 0);

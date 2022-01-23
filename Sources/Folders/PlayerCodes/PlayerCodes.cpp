@@ -120,7 +120,8 @@ namespace CTRPluginFramework {
 		debug(entry);
 	}
 
-//player loader
+//player loader | for now disabled
+/*
 	void pLoaderEntry(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
@@ -155,6 +156,7 @@ namespace CTRPluginFramework {
 		if((pChoice >= 0) && (pV[pChoice] != Color::Silver << "-Empty-"))
 			Player::Load(pChoice);
 	}
+*/
 
 //Neck Position
 	void neckentry(MenuEntry *entry) {

@@ -121,6 +121,7 @@ namespace CTRPluginFramework {
 	};
 //Plugin settings which can be used any time
 	void pluginsettings(MenuEntry *entry) {
+		Sleep(Milliseconds(100));
 		Keyboard colkb("Select Option:");
 		colkb.Populate(pluginstgns);
 		switch(colkb.Open()) {

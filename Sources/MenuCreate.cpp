@@ -135,7 +135,7 @@ namespace CTRPluginFramework {
 		PSAVEC->Append(new MenuEntry(FolderColors[3] << "Fill Catalog", nullptr, FillCatalog, "note")),
 		PLAYC->Append(PSAVEC);
 		PLAYC->Append(new MenuEntry(FolderColors[3] << "Player Info", nullptr, debug, "note")),
-		PLAYC->Append(new MenuEntry(FolderColors[3] << "Player Loader", nullptr, pLoaderEntry, "note")),
+	//PLAYC->Append(new MenuEntry(FolderColors[3] << "Player Loader", nullptr, pLoaderEntry, "note")),
 		PLAYC->Append(EntryWithHotkey(new MenuEntry(FolderColors[3] << "Neck Position", neckentry, "note"), { 
 			Hotkey(Key::L | Key::DPadDown, "Key") 
 		})),
@@ -147,6 +147,8 @@ namespace CTRPluginFramework {
 			Hotkey(Key::R | Key::A, "Key")
 		})),
 		PLAYC->Append(new MenuEntry(FolderColors[3] << "Show Players On The Map", map, "note")),
+
+		PLAYC->Append(new MenuEntry(FolderColors[3] << "Never Bedhead", NeverBedHead, "note")),
 		menu->Append(PLAYC);
 
 	//////////////////////////
@@ -439,6 +441,7 @@ namespace CTRPluginFramework {
 																			  FormatColor("%cKiki and Lala Wand: %cNULL", Color(0xFF7700FF), Color::White))),
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Light Switch Toggler", lightswitch, "Lets you toggle the light switch.\nHotkeys are:\nL + DPadUp : Toggle light in current room\nL + DPadRight : Set Room ID\nL + DPadLeft : Toggle light in set room")),
 		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Custom Save Settings", CustomSaveScreen, "")),
+		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Island Saver", nullptr, IslandSaver, "")),
 		menu->Append(DEVC);
 
 	/*Other Cheats*/

@@ -84,7 +84,7 @@ namespace CTRPluginFramework {
 
 		OSD::Notify(Utils::Format("%s selected!", npc[res][res2].name.c_str()));
 
-        //return; //debug purpose
+        return; //debug purpose
 		PluginMenu *menu = PluginMenu::GetRunningInstance();
 		*menu += checkloadstate;
 	}

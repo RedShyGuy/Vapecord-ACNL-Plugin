@@ -44,7 +44,7 @@ namespace CTRPluginFramework {
 			return kb.Open((T &)output, (T)def) == 0;
 		}
 	}
-
+	
 	Process::ExceptionCallbackState CustomExceptionHandler(ERRF_ExceptionInfo* excep, CpuRegisters* regs);
 }
 #endif

@@ -219,6 +219,11 @@ namespace CTRPluginFramework {
 
 //remove all town items
 	void RemoveItemsCheat(MenuEntry *entry) {
+		if(!PlayerClass::GetInstance()->IsLoaded()) {
+			OSD::Notify("Your player needs to be loaded!", Color::Red);
+			return;
+		}
+
 		Sleep(Milliseconds(100));
 		if((MessageBox(Language->Get("REMOVE_ITEM_WARNING"), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
 			GameHelper::RemoveItems(true, 0, 0, 0xFF, 0xFF, true, true);

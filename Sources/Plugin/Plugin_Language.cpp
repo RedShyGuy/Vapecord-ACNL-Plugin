@@ -54,7 +54,7 @@ namespace CTRPluginFramework {
 
             Keyboard k_Lang(s_Lang, v_Lang);
 			k_Lang.CanAbort(false);
-            
+            Sleep(Milliseconds(100));
             switch(k_Lang.Open()) {
 				case 0:
 					u_byte = f_Language::JapaneseLang; //Japanese MODE ON

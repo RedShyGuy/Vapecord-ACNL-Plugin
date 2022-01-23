@@ -16,6 +16,7 @@
 #define PATH_ITALIANTEXT    "E:/Vapecord/Data/Language/italian.txt"
 #define PATH_SPANISHTEXT    "E:/Vapecord/Data/Language/spanish.txt"
 
+#define PATH_ISLAND	        "E:/Vapecord/%s/Island"
 #define PATH_BULLETIN	    "E:/Vapecord/%s/Bulletin"
 #define PATH_SAVE		    "E:/Vapecord/%s/Save"
 #define PATH_TPC		    "E:/Vapecord/%s/TPC"

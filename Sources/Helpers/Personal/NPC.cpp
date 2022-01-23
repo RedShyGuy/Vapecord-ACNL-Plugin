@@ -9,8 +9,7 @@ namespace CTRPluginFramework {
 Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 */
   	u32 NPC::GetData(u16 ID, int count) {
-		static const Address point1(0x95D3F4, 0x95C3D4, 0x95C3EC, 0x95C3EC, 0x9563EC, 0x9553EC, 0x9553EC, 0x9553EC);
-		u32 point = *(u32 *)point1.addr;
+		u32 point = *(u32 *)Code::ExGameData.addr;
 		if(point == 0)
 			return 0;
 

@@ -6,7 +6,11 @@
 #include "RegionCodes.hpp"
 #include "Helpers/IDList.hpp"
 #include "Helpers/Wrapper.hpp"
+#include "Helpers/PlayerClass.hpp"
+#include "Helpers/ItemSequence.hpp"
+#include "Helpers/Dropper.hpp"
 #include "Color.h"
+#include "Files.h"
 
 extern "C" void PATCH_KappnBypass1(void);
 extern "C" void PATCH_KappnBypass2(void);
@@ -239,13 +243,13 @@ namespace CTRPluginFramework {
 		kb.SetMaxLength(2);
 		kb.IsHexadecimal(true);
 		for(u8 i = 0; i < 2; ++i) {
-			kb.GetMessage() = Language->Get("ISLAND_BUILDING_ENTER_ID") << " " << std::to_string(i + 1);
+			kb.GetMessage() = Language->Get("ISLAND_BUILDING_ENTER_ID") << Utils::Format(" %d", i + 1);
 			Sleep(Milliseconds(100));
 			kb.Open(isl.b[i].id, isl.b[i].id);
-			kb.GetMessage() = Language->Get("ISLAND_BUILDING_ENTER_X") << " " << std::to_string(i + 1);
+			kb.GetMessage() = Language->Get("ISLAND_BUILDING_ENTER_X") << Utils::Format(" %d", i + 1);
 			Sleep(Milliseconds(100));
 			kb.Open(isl.b[i].x, isl.b[i].x);
-			kb.GetMessage() = Language->Get("ISLAND_BUILDING_ENTER_Y") << " " << std::to_string(i + 1);
+			kb.GetMessage() = Language->Get("ISLAND_BUILDING_ENTER_Y") << Utils::Format(" %d", i + 1);
 			Sleep(Milliseconds(100));
 			kb.Open(isl.b[i].y, isl.b[i].y);
 		}
@@ -269,6 +273,96 @@ namespace CTRPluginFramework {
 		else if(!entry->IsActivated()) {
 			hook1.Disable();	
 			hook2.Disable();	
+		}
+	}
+
+	void RestoreIsland(u32 fileData) {
+		bool ItemSequenceWasON = false;
+
+		if(ItemSequence::Enabled()) {
+			ItemSequenceWasON = true;
+			ItemSequence::Switch(false);
+		}
+
+		if(!bypassing) 
+			Dropper::DropItemLock(true);
+
+		u32 count = 0;
+		u32 x = 0x10, y = 0x10;
+		static int nextItem = 0;
+
+		bool res = true;
+		while(res) {
+			while(res) {
+				if((u32)GameHelper::GetItemAtWorldCoords(x, y) != 0) {
+					u32 var = *(u32 *)(fileData + (nextItem++ * 4));
+					if(Dropper::PlaceItemWrapper(1, 0xFFFFFFFF, &var, &var, x, y, 0, 0, 0, 0, 0, 6, 0xA5, false)) {
+						count++;
+						if(count % 300 == 0) 
+							Sleep(Milliseconds(500));
+					}
+				}
+				else 
+					res = false;
+
+				y++;
+			}
+			res = true;
+			
+			y = 0x10;
+			x++;
+			if((u32)GameHelper::GetItemAtWorldCoords(x, y) == 0) 
+				res = false;
+		}		
+		
+		OSD::Notify(Utils::Format("%d %s", count, "items placed!"));
+
+	//OFF
+		if(!bypassing) 
+			Dropper::DropItemLock(false);	
+
+		if(ItemSequenceWasON)
+			ItemSequence::Switch(true);
+	}
+
+	void IslandSaver(MenuEntry *entry) {
+		if(!PlayerClass::GetInstance()->IsLoaded()) {
+			Sleep(Milliseconds(100));
+			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			return;
+		}
+		if(!GameHelper::IsInRoom(0x68)) {
+			Sleep(Milliseconds(100));
+			MessageBox("You need to be on the island for this cheat to work").SetClear(ClearScreen::Top)();
+			return;
+		}
+
+		u32 startPos = (u32)GameHelper::GetItemAtWorldCoords(0x10, 0x10);
+		u32 endPos = (u32)GameHelper::GetItemAtWorldCoords(0x2F, 0x2F);
+
+		Keyboard KB("a", std::vector<std::string>{ "Backup Island", "Restore Island", "Delete Files" });
+		s8 index = KB.Open();
+		switch(index) {
+			default: break;
+			case 0: {
+				std::string filename = "";
+				Keyboard KB("Name the island backup:");
+
+				Sleep(Milliseconds(100));
+				if(KB.Open(filename) == -1)
+					return;
+
+				Wrap::Dump(Utils::Format(PATH_ISLAND, regionName.c_str()), filename, ".dat", WrapLoc{ startPos, endPos - startPos }, WrapLoc{ (u32)-1, (u32)-1 });
+			} break;
+			case 1: {
+				u32 islandFileData = 0xA00000;
+				Wrap::Restore(Utils::Format(PATH_ISLAND, regionName.c_str()), ".dat", "", nullptr, false, WrapLoc{ (u32)islandFileData, 0x1000 }, WrapLoc{ (u32)-1, (u32)-1 });
+
+				RestoreIsland(islandFileData);
+			} break;
+			case 2: {
+				Wrap::Delete(Utils::Format(PATH_ISLAND, regionName.c_str()), ".dat");
+			} break;
 		}
 	}
 }

@@ -18,7 +18,6 @@ namespace CTRPluginFramework {
 		//u32 				GetDesign();
 		//u32				GetFriend();
 		//u32 				GetExhibition();
-		u32					GetGardenPlus(u32 add = 0);
 	//value display
 		bool 				SetValueDisplay(u8 type);
 		void 				ResetValueDisplay(void);

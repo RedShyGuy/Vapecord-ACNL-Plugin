@@ -18,11 +18,14 @@ loads specific player
 	//This will load the players save data
 		static Address pLoad(0x5C441C, 0x5C394C, 0x5C3464, 0x5C3464, 0x5C2D54, 0x5C2D54, 0x5C2A28, 0x5C2A28);
 		pLoad.Call<void>(0, pIndex, 0);
+
+		//BF77B0(0x330981F4)
 		
 	//This will port the player to his home
 		static Address pReload(0x5B66FC, 0x5B5C14, 0x5B5744, 0x5B5744, 0x5B5034, 0x5B5034, 0x5B4D08, 0x5B4D08);
 		pReload.Call<void>(GameHelper::GetRoomData(), pIndex, 1, 0);
 	}
+
 /*
 reload design
 */
