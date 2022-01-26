@@ -6,7 +6,7 @@
             ],
             "compilerPath": "C:/devkitPro/devkitARM/bin/arm-none-eabi-g++.exe",
             "cStandard": "c11",
-            "cppStandard": "gnu++11",
+            "cppStandard": "gnu++20",
             "intelliSenseMode": "gcc-arm",
             "includePath": [
                 "${default}",

@@ -2,22 +2,11 @@
 #define PLAYER_HPP
 
 #include <CTRPluginFramework.hpp>
+#include "Helpers/GameStructs.hpp"
 
 extern bool IsIndoorsBool;
 
 namespace CTRPluginFramework {
-	enum class PlayerStatus : u8 {
-		Town_00 = 0,
-		Town_01 = 1,
-		Town_02 = 2,
-		Town_03 = 3,
-		Isl_00 = 4,
-		Isl_01 = 5,
-		Isl_02 = 6,
-		Isl_03 = 7,
-		Empty = 8
-	};
-
 	namespace Player {
 		u32 			GetBulletin(int slot);
 		void 			Load(int pIndex);
@@ -38,6 +27,8 @@ namespace CTRPluginFramework {
 		float*		    GetCollisionSize(u8 PlayerIndex = 4);
 		bool			IsIndoors();
 		u8				GetRoom(u8 PlayerIndex);
+
+		ACNL_Player		*GetData(u8 PlayerIndex = 4);
 	};
 
 	namespace PlayerName {

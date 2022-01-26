@@ -7,12 +7,12 @@
 #include "Files.h"
 
 namespace CTRPluginFramework {
-	Item* ItemList = new Item();
+	ItemVec* ItemList = new ItemVec();
 	int ItemFileLenght = 0;
 	bool ItemFileExists = true;
 
 //reserver data into pointer so search doesnt take so long
-	void ReserveItemData(Item* out) {
+	void ReserveItemData(ItemVec* out) {
 		if(out == nullptr) 
 			return;
 
@@ -48,7 +48,7 @@ namespace CTRPluginFramework {
 		}
 	}
 
-	int ItemSearch(const std::string& match, Item& out) {
+	int ItemSearch(const std::string& match, ItemVec& out) {
 		int count = 0;
 	//Read our file until the last line
 		for(int i = 0; i < ItemFileLenght; ++i) {

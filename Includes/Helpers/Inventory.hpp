@@ -7,12 +7,12 @@
 #define IsMailSlot(X)	(X >= 0x14 && X <= 0x1D)
 
 namespace CTRPluginFramework {
-	struct Item {
+	struct ItemVec {
 		std::vector<std::string> Name;
 		std::vector<u16> ID;
 	};
 	
-	extern Item* ItemList;
+	extern ItemVec* ItemList;
 	extern int ItemFileLenght;
 	extern bool ItemFileExists;
 
@@ -35,8 +35,8 @@ namespace CTRPluginFramework {
 		void		ReloadIcons(void);
 	}
 
-	void ReserveItemData(Item* out);
-	int ItemSearch(const std::string& match, Item& out);
+	void ReserveItemData(ItemVec* out);
+	int ItemSearch(const std::string& match, ItemVec& out);
 	std::string ItemIDSearch(u16 ItemID);
 }
 #endif

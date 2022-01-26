@@ -7,13 +7,14 @@
 #include "Helpers/PlayerPTR.hpp"
 #include "Helpers/Game.hpp"
 #include "Helpers/Address.hpp"
+#include "Helpers/GameStructs.hpp"
 #include "Color.h"
 #include "Files.h"
 
 namespace CTRPluginFramework {
 //Name Changer | Player specific save code
 	void NameChanger(MenuEntry* entry) {
-		if(!PlayerClass::GetInstance()->IsLoaded()) {
+		if(Player::GetSaveOffset(4) == 0) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -39,10 +40,8 @@ namespace CTRPluginFramework {
 		}	
 
 		static const u8 ValidID[5][2] = {
-			{ 0, 0x21 },
-			{ 0, 0xF },
-			{ 0, 0xB },
-			{ 0, 5 },
+			{ 0x00, 0x21 }, { 0x00, 0x0F }, 
+			{ 0x00, 0x0B }, { 0x00, 0x05 }
 		};
 
 		static const u16 ValidID2[6][2] = {
@@ -86,8 +85,10 @@ namespace CTRPluginFramework {
 			Language->Get("VECTOR_OUTFIT_SHOES")
 		};
 
+		ACNL_Player *player = Player::GetData();
+
 		u8 ID = 0;
-		u16 ID2 = 0;
+		Item item = { 0, 0};
 
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), playeropt);
 		
@@ -100,8 +101,12 @@ namespace CTRPluginFramework {
 		if(choice < 4) {
 			KeyRange::Set({ ValidID[choice][0], ValidID[choice][1] });
 			if(Wrap::KB<u8>(Language->Get("ENTER_ID") << Utils::Format("%02X -> %02X", ValidID[choice][0], ValidID[choice][1]), true, 2, ID, ID, ValidKeyboardCheck)) {
-				PlayerPTR::Write8(4 + choice, ID);
-				goto update;
+				switch(choice) {
+					case 0: player->HairStyle = ID; goto update;
+					case 1: player->HairColor = ID; goto update;
+					case 2: player->Face = ID; goto update;
+					case 3: player->EyeColor = ID; goto update;
+				}
 			}
 		}
 	//Gender Change
@@ -122,13 +127,13 @@ namespace CTRPluginFramework {
 			Sleep(Milliseconds(100));
 			switch(optKb.Open()) {
 				default: break;	
-				case 0: Process::Write8(Player::GetSaveOffset(GameHelper::GetOnlinePlayerIndex()) + 8, 0xF); goto tanupdate;
-				case 1: Process::Write8(Player::GetSaveOffset(GameHelper::GetOnlinePlayerIndex()) + 8, 0xA); goto tanupdate;
-				case 2: Process::Write8(Player::GetSaveOffset(GameHelper::GetOnlinePlayerIndex()) + 8, 0); goto tanupdate;
+				case 0: player->Tan = 0xF; goto tanupdate;
+				case 1: player->Tan = 0xA; goto tanupdate;
+				case 2: player->Tan = 0; goto tanupdate;
 				case 3: {
 					u8 val = 0;
 					if(Wrap::KB<u8>(Language->Get("PLAYER_APPEARANCE_TAN_LEVEL") << "0x00 -> 0x0F", false, 2, val, 0)) 
-						Process::Write8(Player::GetSaveOffset(GameHelper::GetOnlinePlayerIndex()) + 8, val);
+						player->Tan = val;
 				} goto tanupdate;
 			}
 		}
@@ -141,12 +146,18 @@ namespace CTRPluginFramework {
 			if(res < 0)
 				return;
 
-			KeyRange::Set({ ValidID[choice][0], ValidID[choice][1] });
-			if(Wrap::KB<u16>(Language->Get("ENTER_ID") << Utils::Format("%04X -> %04X", ValidID2[choice][0], ValidID2[choice][1]), true, 4, ID2, ID2, ValidKeyboardCheck)) {
-				Process::Write16(Player::GetSaveOffset(GameHelper::GetOnlinePlayerIndex()) + 0xA + (choice * 4), ID2);
+			KeyRange::Set({ ValidID2[res][0], ValidID2[res][1] });
+			if(Wrap::KB<u16>(Language->Get("ENTER_ID") << Utils::Format("%04X -> %04X", ValidID2[res][0], ValidID2[res][1]), true, 4, item.ID, item.ID, ValidKeyboardCheck)) {
+				switch(res) {
+					case 0: player->Hat = item; break;
+					case 1: player->Accessory = item; break;
+					case 2: player->TopWear = item; break;
+					case 3: player->BottomWear = item; break;
+					case 4: player->Socks = item; break;
+					case 5: player->Shoes = item; break;
+				}
 
-				u32 add = Player::GetSaveOffset(GameHelper::GetOnlinePlayerIndex()) + 0xA;
-				Player::WriteOutfit(GameHelper::GetOnlinePlayerIndex(), *(u16 *)(add), *(u16 *)(add + 4), *(u16 *)(add + 8), *(u16 *)(add + 0xC), *(u16 *)(add + 0x10), *(u16 *)(add + 0x14));
+				Player::WriteOutfit(GameHelper::GetOnlinePlayerIndex(), player->Hat.ID, player->Accessory.ID, player->TopWear.ID, player->BottomWear.ID, player->Socks.ID, player->Shoes.ID);
 			}
 		}
 
@@ -171,27 +182,28 @@ namespace CTRPluginFramework {
 			Language->Get("VECTOR_RANDOM_PLAYER")
 		};
 
-		Keyboard randkb(Language->Get("KEY_RANDOMIZE_PLAYER"), randomopt);
+		ACNL_Player *player = Player::GetData();
 
+		Keyboard randkb(Language->Get("KEY_RANDOMIZE_PLAYER"), randomopt);
 		Sleep(Milliseconds(100));
 		switch(randkb.Open()) {
 			default: break;			
-			case 0: {
+			case 0: 
 				Player::WriteOutfit(GameHelper::GetOnlinePlayerIndex(), Utils::Random(0x280B, 0x28F3), Utils::Random(0x28F5, 0x295B), Utils::Random(0x2493, 0x26F5), Utils::Random(0x26F8, 0x2776), Utils::Random(0x2777, 0x279E), Utils::Random(0x279F, 0x27E5));
-			} break;
+			break;
 			case 1: {
-				Process::Write8(Player::GetSaveOffset(GameHelper::GetOnlinePlayerIndex()) + 4, Utils::Random(0, 0x21)); //HairStyle
-				Process::Write8(Player::GetSaveOffset(GameHelper::GetOnlinePlayerIndex()) + 5, Utils::Random(0, 0xF)); //HairColor
-				Process::Write8(Player::GetSaveOffset(GameHelper::GetOnlinePlayerIndex()) + 6, Utils::Random(0, 4)); //EyeStyle
-				Process::Write8(Player::GetSaveOffset(GameHelper::GetOnlinePlayerIndex()) + 7, Utils::Random(0, 4)); //EyeColor
-				Process::Write8(Player::GetSaveOffset(GameHelper::GetOnlinePlayerIndex()) + 8, Utils::Random(0, 0xF)); //Tan
+				player->HairStyle = Utils::Random(0, 0x21);
+				player->HairColor = Utils::Random(0, 0xF);
+				player->Face = Utils::Random(0, 4);
+				player->EyeColor = Utils::Random(0, 4);
+				player->Tan = Utils::Random(0, 0xF);
 				
-				Process::Write16(Player::GetSaveOffset(GameHelper::GetOnlinePlayerIndex()) + 0xA, Utils::Random(0x280B, 0x28F3)); //Headwear
-				Process::Write16(Player::GetSaveOffset(GameHelper::GetOnlinePlayerIndex()) + 0xE, Utils::Random(0x28F5, 0x295B)); //Glasses
-				Process::Write16(Player::GetSaveOffset(GameHelper::GetOnlinePlayerIndex()) + 0x12, Utils::Random(0x2493, 0x26F5)); //Shirt
-				Process::Write16(Player::GetSaveOffset(GameHelper::GetOnlinePlayerIndex()) + 0x1A, Utils::Random(0x26F8, 0x2776)); //Pants
-				Process::Write16(Player::GetSaveOffset(GameHelper::GetOnlinePlayerIndex()) + 0x1E, Utils::Random(0x2777, 0x279E)); //Socks
-				Process::Write16(Player::GetSaveOffset(GameHelper::GetOnlinePlayerIndex()) + 0x22, Utils::Random(0x279F, 0x27E5)); //Shoes
+				player->Hat = Item{(u16)Utils::Random(0x280B, 0x28F3), 0};
+				player->Accessory = Item{(u16)Utils::Random(0x28F5, 0x295B), 0};
+				player->TopWear = Item{(u16)Utils::Random(0x2493, 0x26F5), 0};
+				player->BottomWear = Item{(u16)Utils::Random(0x26F8, 0x2776), 0};
+				player->Socks = Item{(u16)Utils::Random(0x2777, 0x279E), 0};
+				player->Shoes = Item{(u16)Utils::Random(0x279F, 0x27E5), 0};
 
 			//Reloads player style
 				Player::UpdateStyle();
@@ -214,7 +226,6 @@ namespace CTRPluginFramework {
 		};
 
 		Keyboard backkb(Language->Get("KEY_CHOOSE_OPTION"), backopt);
-
 		Sleep(Milliseconds(100));
 		switch(backkb.Open()) {
 			default: break;		
@@ -246,30 +257,18 @@ namespace CTRPluginFramework {
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
-		
-		static const std::vector<std::string> alignments = {
-			Language->Get("TPC_MESSAGE_ALLIGN_NORMAL"), 
-			Language->Get("TPC_MESSAGE_ALLIGN_EMPTY")
-		};
 
-		Keyboard KB(Language->Get("TPC_MESSAGE_ALLIGN"), alignments);
-
+		ACNL_Player *player = Player::GetData();
 		std::string input = "";
 
-		Sleep(Milliseconds(100));
-		switch(KB.Open()) {
-			default: return;
-			case 0:
-				KB.GetMessage() = Language->Get("TPC_MESSAGE_ENTER_NAME");
-				KB.SetMaxLength(26);
+		Keyboard KB(Language->Get("TPC_MESSAGE_ENTER_NAME"));
+		KB.SetMaxLength(26);
 
-				Sleep(Milliseconds(100));
-				if(KB.Open(input) >= 0) 
-					Process::WriteString(Player::GetSaveOffset(4) + 0x6B38, input, 0x20, StringFormat::Utf16);
-			break;
-			case 1:
-				Process::Write16(Player::GetSaveOffset(4) + 0x6B38, 0x000E);
-			break;
+		Sleep(Milliseconds(100));
+		if(KB.Open(input) >= 0) {
+			u16 buffer[sizeof(player->TPCText) / sizeof(u16)] = { 0 };
+			utf8_to_utf16(buffer, reinterpret_cast<const u8*>(input.data()), input.size());
+			std::copy(std::begin(buffer), std::end(buffer), std::begin(player->TPCText));
 		}
 	}
 
@@ -331,11 +330,8 @@ namespace CTRPluginFramework {
 	}
 
 	u32 GetRealSlot(u8 slot, int pIndex) {
-		u32 sData = Player::GetSaveOffset(pIndex);
-		u32 DesignSlot = sData + 0x548C;
-		
-		u8 correctslot = *(u8 *)(DesignSlot + slot);
-		return correctslot;
+		ACNL_Player *player = Player::GetData(pIndex);
+		return player->PatternOrder[slot];
 	}
 //get correct save for design
 	u32 GetDesignSave(u8 slot, int pIndex) {
@@ -419,6 +415,8 @@ namespace CTRPluginFramework {
 			0x1A, 0x24, 0x26, 0x1B, 0x19, 0x21, 0x2A, 0x29, 0x1D, 0x1C, 0x20, 
 			0x27, 0x28, 0x18, 0x1E, 0x2B, 0x2C, 0x2E 
 		};
+
+		ACNL_Player *player = Player::GetData();
 		
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), emoteopt);
 	

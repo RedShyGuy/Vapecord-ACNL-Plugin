@@ -33,7 +33,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 
-		Item match;
+		ItemVec match;
 		int res = ItemSearch(lowcaseInput, match);
 
 		if(res == 0) {

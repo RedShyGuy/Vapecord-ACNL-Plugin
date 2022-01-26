@@ -226,7 +226,7 @@ namespace CTRPluginFramework {
 
 			Trim(ItemName);
 
-			Item match;
+			ItemVec match;
 			int res = ItemSearch(ItemName, match);
 			if(res == 0) //no item found
 				return;

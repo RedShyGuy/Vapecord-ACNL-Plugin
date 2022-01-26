@@ -460,7 +460,7 @@ namespace CTRPluginFramework {
 				GameHelper::SetCurrentTime(false, minute, 0, 0, 0, 0);
 		}
 	//somehow doesnt work always?
-		if(Controller::IsKeysReleased(entry->Hotkeys[0].GetKeys()) || Controller::IsKeysReleased(entry->Hotkeys[1].GetKeys())) 
+		else if(Controller::IsKeysReleased(entry->Hotkeys[0].GetKeys()) || Controller::IsKeysReleased(entry->Hotkeys[1].GetKeys())) 
 			PressedTicks = 0;
 	}
 }

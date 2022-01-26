@@ -277,6 +277,11 @@ get room
 		return var == 0 ? 0xFF : *(u8 *)var;
 	}
 
+	ACNL_Player *Player::GetData(u8 PlayerIndex) {
+		u32 *addr = (u32 *)GetSaveOffset(PlayerIndex >= 4 ? GameHelper::GetOnlinePlayerIndex() : PlayerIndex);
+		return (ACNL_Player *)addr;
+	}
+
 	void PlayerName::UpdateReference(u8 pIndex, const std::string& pName, u8 pGender) {
 		u32 pAddress = Player::GetSaveOffset(pIndex >= 4 ? GameHelper::GetOnlinePlayerIndex() : pIndex);
 

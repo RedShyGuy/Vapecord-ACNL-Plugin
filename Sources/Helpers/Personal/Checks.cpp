@@ -226,7 +226,7 @@ namespace CTRPluginFramework {
 
 		OSD::Notify("Initializing Memory", Color::Purple);
 	/*If Game unsuspenses*/
-		ItemList = new Item();
+		ItemList = new ItemVec();
 		ReserveItemData(ItemList); //redo ItemList when game is unsuspended
 		
 		WasSuspended = false;
