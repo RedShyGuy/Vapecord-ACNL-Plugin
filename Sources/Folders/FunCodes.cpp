@@ -201,11 +201,15 @@ namespace CTRPluginFramework {
 			hook2.SetFlags(USE_LR_TO_RETURN);
 		}
 
+		ACNL_Player *player = Player::GetData();
+		if(!player)
+			return;
+
 		if(entry->Hotkeys[0].IsPressed()) 
 			Wrap::KB<u16>(Language->Get("ULTIMATE_PARTY_POPPER_ENTER_EFFECT"), true, 3, PartyEffectID, PartyEffectID);
 
-		if(Player::GetTool() == 0x336A) {
-			Player::SetTool(0x336A);
+		if(player->HeldItem.ID == 0x336A) {
+			player->HeldItem.ID = 0x336A;
 			Process::Patch(PartyEffect.addr, PartyEffectID);
 
 			for(int i = 0; i < 3; ++i)
@@ -215,7 +219,7 @@ namespace CTRPluginFramework {
 			hook2.Enable();
 		}
    
-		if(!entry->IsActivated() || Player::GetTool() != 0x336A) {
+		if(!entry->IsActivated() || player->HeldItem.ID != 0x336A) {
 			for(int i = 0; i < 3; ++i)
                Process::WriteFloat(PartyPop[i], PartyPopPatch[1][i]);	
 			
@@ -414,8 +418,12 @@ namespace CTRPluginFramework {
 	//If player is not idling or running return
 		if(*PlayerClass::GetInstance()->GetAnimation() != 6 && *PlayerClass::GetInstance()->GetAnimation() != 0xD)
 			return;
+
+		ACNL_Player *player = Player::GetData();
+		if(!player)
+			return;
 		
-		switch(Player::GetTool()) {
+		switch(player->HeldItem.ID) {
 			default: break;
 		/*If Blue Wand*/
 			case 0x3398: {

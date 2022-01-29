@@ -88,7 +88,7 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetData();
 
 		u8 ID = 0;
-		Item item = { 0, 0};
+		u16 item = 0;
 
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), playeropt);
 		
@@ -147,14 +147,14 @@ namespace CTRPluginFramework {
 				return;
 
 			KeyRange::Set({ ValidID2[res][0], ValidID2[res][1] });
-			if(Wrap::KB<u16>(Language->Get("ENTER_ID") << Utils::Format("%04X -> %04X", ValidID2[res][0], ValidID2[res][1]), true, 4, item.ID, item.ID, ValidKeyboardCheck)) {
+			if(Wrap::KB<u16>(Language->Get("ENTER_ID") << Utils::Format("%04X -> %04X", ValidID2[res][0], ValidID2[res][1]), true, 4, item, item, ValidKeyboardCheck)) {
 				switch(res) {
-					case 0: player->Hat = item; break;
-					case 1: player->Accessory = item; break;
-					case 2: player->TopWear = item; break;
-					case 3: player->BottomWear = item; break;
-					case 4: player->Socks = item; break;
-					case 5: player->Shoes = item; break;
+					case 0: player->Hat.ID = item; break;
+					case 1: player->Accessory.ID = item; break;
+					case 2: player->TopWear.ID = item; break;
+					case 3: player->BottomWear.ID = item; break;
+					case 4: player->Socks.ID = item; break;
+					case 5: player->Shoes.ID = item; break;
 				}
 
 				Player::WriteOutfit(GameHelper::GetOnlinePlayerIndex(), player->Hat.ID, player->Accessory.ID, player->TopWear.ID, player->BottomWear.ID, player->Socks.ID, player->Shoes.ID);
@@ -198,12 +198,12 @@ namespace CTRPluginFramework {
 				player->EyeColor = Utils::Random(0, 4);
 				player->Tan = Utils::Random(0, 0xF);
 				
-				player->Hat = Item{(u16)Utils::Random(0x280B, 0x28F3), 0};
-				player->Accessory = Item{(u16)Utils::Random(0x28F5, 0x295B), 0};
-				player->TopWear = Item{(u16)Utils::Random(0x2493, 0x26F5), 0};
-				player->BottomWear = Item{(u16)Utils::Random(0x26F8, 0x2776), 0};
-				player->Socks = Item{(u16)Utils::Random(0x2777, 0x279E), 0};
-				player->Shoes = Item{(u16)Utils::Random(0x279F, 0x27E5), 0};
+				player->Hat.ID = Utils::Random(0x280B, 0x28F3);
+				player->Accessory.ID = Utils::Random(0x28F5, 0x295B);
+				player->TopWear.ID = Utils::Random(0x2493, 0x26F5);
+				player->BottomWear.ID = Utils::Random(0x26F8, 0x2776);
+				player->Socks.ID = Utils::Random(0x2777, 0x279E);
+				player->Shoes.ID = Utils::Random(0x279F, 0x27E5);
 
 			//Reloads player style
 				Player::UpdateStyle();
@@ -397,7 +397,9 @@ namespace CTRPluginFramework {
 	}
 //Fill Emote List | player specific save code
 	void emotelist(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetData();
+
+		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -408,15 +410,12 @@ namespace CTRPluginFramework {
 			Language->Get("VECTOR_EMOTIONLIST_FILL_EMOTION"),
 			Language->Get("VECTOR_EMOTIONLIST_CLEAR_LIST"),
 		};
-		
-		static const u8 emotionIDs[40] = { 
-			0x09, 0x0D, 0x06, 0x02, 0x12, 0x0E, 0x0B, 0x05, 0x01, 0x11, 0x0C, 
-			0x08, 0x04, 0x13, 0x10, 0x0A, 0x07, 0x03, 0x14, 0x15, 0x16, 0x17, 
-			0x1A, 0x24, 0x26, 0x1B, 0x19, 0x21, 0x2A, 0x29, 0x1D, 0x1C, 0x20, 
-			0x27, 0x28, 0x18, 0x1E, 0x2B, 0x2C, 0x2E 
-		};
 
-		ACNL_Player *player = Player::GetData();
+		static Address emoticons(0x8902A4, 0x88F29C, 0x88F130, 0x88F130, 0x889550, 0x888550, 0x888500, 0x888500);
+		Emoticons *gameEmotes = new Emoticons();
+		gameEmotes = (Emoticons *)emoticons.addr;
+		if(!gameEmotes)
+			return;
 		
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), emoteopt);
 	
@@ -424,29 +423,30 @@ namespace CTRPluginFramework {
 		switch(KB.Open()) {
 			default: break;
 			case 0: 
-				Process::CopyMemory((void *)PlayerPTR::Pointer(0x89D0), emotionIDs, 0x28); 
+				player->Emotes = *gameEmotes;
 			break; 
 			case 1: {
 				u8 emotion = 0; 
 				Keyboard KB(Language->Get("EMOTION_LIST_TYPE_ID"));
 				KB.IsHexadecimal(true);
-				KB.CanAbort(true);
 				
 				Sleep(Milliseconds(100));
 				if(KB.Open(emotion) < 0)
 					return;
 				
-				std::memset((void *)PlayerPTR::Pointer(0x89D0), emotion, 0x28);
+				std::memset((void *)player->Emotes.emoticons, emotion, 0x28);
 			} break;
 			
 			case 2: 
-				std::memset((void *)PlayerPTR::Pointer(0x89D0), 0, 0x28);
+				std::memset((void *)player->Emotes.emoticons, 0, 0x28);
 			break;
 		}
 	}
 //Fill Enzyklopedia List | player specific save code
 	void enzyklopedia(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetData();
+
+		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -455,7 +455,11 @@ namespace CTRPluginFramework {
 		static const std::vector<std::string> enzyopt = {
 			Language->Get("VECTOR_ENZY_FILL"),
 			Language->Get("VECTOR_ENZY_CLEAR"),
-		};		
+		};
+
+		static const std::pair<u16, u16> Pairs[3] = { 
+			{ 0x28E, 0x2D6 }, { 0x2E1, 0x329 }, { 0x32D, 0x34B }
+		};
 		
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), enzyopt);
 		
@@ -463,23 +467,40 @@ namespace CTRPluginFramework {
 		switch(KB.Open()) {
 			default: break;
 			case 0:
-			//Sets random sizes for each insect/fish/sea creature
-				for(int i = 0; i < 0xAE; ++i)
-					Process::Write16(PlayerPTR::Pointer(0xA288 + (i * 2)), Utils::Random(1, 0x3FFF));
-			//fills ency
-				std::memset((void *)PlayerPTR::Pointer(0x6C70), 0xFFFFFFFF, 0x38);
+				for(int i = 0; i < 3; ++i) {
+					for(u16 j = Pairs[i].first; j < Pairs[i].second; ++j) 
+						player->UnlockedItems[(j >> 5)] |= (1 << (j & 0x1F));
+				}
+
+				for(int i = 0; i < 72; ++i) {
+					player->EncyclopediaSizes.Insects[i] = Utils::Random(1, 0x3FFF);
+					player->EncyclopediaSizes.Fish[i] = Utils::Random(1, 0x3FFF);
+
+					if(i < 30)
+						player->EncyclopediaSizes.SeaCreatures[i] = Utils::Random(1, 0x3FFF);
+				}
 			break;
 			case 1: 
-			//clears random sizes
-				std::memset((void *)PlayerPTR::Pointer(0xA288), 0, 0x15C);
-			//clears ency
-				std::memset((void *)PlayerPTR::Pointer(0x6C70), 0, 0x38);
+				for(int i = 0; i < 3; ++i) {
+					for(u16 j = Pairs[i].first; j < Pairs[i].second; ++j) 
+						player->UnlockedItems[(j >> 5)] &= ~(1 << (j & 0x1F));
+				}
+
+				for(int i = 0; i < 72; ++i) {
+					player->EncyclopediaSizes.Insects[i] = 0;
+					player->EncyclopediaSizes.Fish[i] = 0;
+
+					if(i < 30)
+						player->EncyclopediaSizes.SeaCreatures[i] = 0;
+				}
 			break;
 		} 
 	}
 //Change Dream Code | player specific save code
 	void comodifier(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetData();
+
+		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -487,7 +508,6 @@ namespace CTRPluginFramework {
 
 		Keyboard kb(Language->Get("DREAM_CODE_ENTER_ID"));
 		kb.IsHexadecimal(true);
-		kb.CanAbort(true);
 		kb.DisplayTopScreen = true;
 		
 		u16 part1, part2, part3;
@@ -498,24 +518,20 @@ namespace CTRPluginFramework {
 			if(kb.Open(part2, 0) >= 0) {
 				Sleep(Milliseconds(100));
 				if(kb.Open(part3, 0) >= 0) {
-					Process::Write8(PlayerPTR::Pointer(0x56F9), (part1 >> 8) & 0xFF);
-					Process::Write8(PlayerPTR::Pointer(0x56F4), part1 & 0xFF);
-					
-					Process::Write8(PlayerPTR::Pointer(0x56F3), (part2 >> 8) & 0xFF);
-					Process::Write8(PlayerPTR::Pointer(0x56F2), part2 & 0xFF);
-					
-					Process::Write8(PlayerPTR::Pointer(0x56F1), (part3 >> 8) & 0xFF);
-					Process::Write8(PlayerPTR::Pointer(0x56F0), part3 & 0xFF);
+					player->DreamCode.DCPart1 = (part2 << 16) + part3;
+					player->DreamCode.DCPart2 = (part1 & 0xFF);
+					player->DreamCode.DCPart3 = (part1 >> 8);
 
-					if(*(u8 *)PlayerPTR::Pointer(0x56F8) == 0)
-						Process::Write8(PlayerPTR::Pointer(0x56F8), 1); //activates dream code
+					player->DreamCode.HasDreamAddress = true;
 				}
 			}
 		}	
 	}
 //Enable Unused Menu | player specific save code
 	void debug1(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetData();
+
+		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -523,8 +539,8 @@ namespace CTRPluginFramework {
 		
 		std::vector<std::string> cmnOpt =  { "" };
 		
-		bool IsON = *(u8 *)PlayerPTR::Pointer(0x572F) == 0x40;
- 
+		bool IsON = player->PlayerFlags.CanUseCensusMenu == 1;
+
 		cmnOpt[0] = IsON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
 		
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
@@ -534,7 +550,8 @@ namespace CTRPluginFramework {
 		if(op < 0)
 			return;
 
-		PlayerPTR::Write8(0x572F, IsON ? 0 : 0x40);
+		player->PlayerFlags.CanUseCensusMenu = IsON ? 0 : 1;
+
 		debug1(entry);
 	}
 

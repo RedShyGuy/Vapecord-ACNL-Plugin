@@ -47,35 +47,12 @@ reload design
 /*
 writes design data
 */
-	void Player::SetDesign(int slot, std::string DesignName, u16 PlayerID, std::string PlayerName, u8 PlayerGender, u16 PlayerTownID, std::string PlayerTownName, u32 DesignCheck1, u8 DesignCheck2, u8 DesignType) {
-		if(Player::GetSaveOffset(4) == 0)
+	void Player::StealDesign(u8 slot) {
+		ACNL_Player *player = Player::GetData();
+		if(!player)
 			return;
-		
-		u32 design = Player::GetDesign(slot);
-		
-		if(!DesignName.empty()) 
-			Process::WriteString(design, DesignName, 0x28, StringFormat::Utf16); //Sets Design Name
-		
-		if(PlayerID != -1)
-			Process::Write16(design + 0x2A, PlayerID); //Sets Player ID
-		
-		if(!PlayerName.empty()) 
-			Process::WriteString(design + 0x2C, PlayerName, 0x10, StringFormat::Utf16); //Sets Player Name
 
-		if(PlayerGender != -1)
-			Process::Write8(design + 0x3E, PlayerGender); //Sets Player Gender
-		if(PlayerTownID != -1)
-			Process::Write16(design + 0x40, PlayerTownID); //Sets Player Town ID
-		
-		if(!PlayerTownName.empty()) 
-			Process::WriteString(design + 0x42, PlayerTownName, 0x10, StringFormat::Utf16); //Sets Player Town Name
-		
-		if(DesignCheck1 != -1)
-			Process::Write32(design + 0x54, DesignCheck1); //Sets Design Check1
-		if(DesignCheck2 != -1)
-			Process::Write8(design + 0x68, DesignCheck2); //Sets Design Check2
-		if(DesignType != -1)
-			Process::Write8(design + 0x69, DesignType); //Sets Design Type
+		player->Patterns[slot].CreatorData = player->PlayerInfo;
 	}
 /*
 Gets correct design data
@@ -95,13 +72,17 @@ Update Tan
 	void Player::UpdateTan() {
 		if(!PlayerClass::GetInstance()->IsLoaded())
 			return;
+
+		ACNL_Player *player = Player::GetData();
+		if(!player);
+			return;
 		
 		u32 i = PlayerClass::GetInstance()->Offset();
 		u32 GetStoredData = i + 0x1B4; //0x33077570
 	//This Stores the Tan Data Correctly
 		
 		static Address GetTanDataOffset(0x713798, 0x712C48, 0x7127A0, 0x712778, 0x711F4C, 0x711F24, 0x711AF4, 0x711ACC);
-		u8 Tan = GetTanDataOffset.Call<u8>(Player::GetSaveOffset(4) + 4);
+		u8 Tan = GetTanDataOffset.Call<u8>(player->Tan);
 		
 		Process::Write8(GetStoredData + 0x1C0, Tan);
 		
@@ -134,25 +115,6 @@ Write Outfit
 		if(Pants != 0xFFFF) Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Pants, 4, 0, 0, 0, x, y, 0);
 		if(Socks != 0xFFFF) Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Socks, 5, 0, 0, 0, x, y, 0);
 		if(Shoes != 0xFFFF) Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Shoes, 6, 0, 0, 0, x, y, 0);
-	}
-/*
-Write Appearance
-*/
-	void Player::WriteAppearance(u8 PlayerIndex, u8 HairStyle, u8 HairColor, u8 EyeStyle, u8 EyeColor, u8 TanLevel, u8 Gender) {
-		u32 x, y;
-		if(!PlayerClass::GetInstance(PlayerIndex)->GetWorldCoords(&x, &y))
-			return;
-		
-		u8 HairStyleID = HairStyle != -1 ? HairStyle : *(u8 *)PlayerPTR::Pointer(4);
-		u8 HairColorID = HairColor != -1 ? HairColor : *(u8 *)PlayerPTR::Pointer(5);
-		u8 EyeColorID = EyeColor != -1 ? EyeColor : *(u8 *)PlayerPTR::Pointer(7);
-		
-		u8 Appearance[3] = {HairStyleID, HairColorID, EyeColorID};
-		
-		if(HairStyle != 0xFF | EyeColor != 0xFF | HairColor != 0xFF) Animation::ExecuteAnimationWrapper(PlayerIndex, 0xB9, 0, 0, 0, 0, 0, x, y, 0, Appearance);
-		if(EyeStyle != 0xFF) PlayerPTR::Write8(6, EyeStyle);
-		if(TanLevel != 0xFF) PlayerPTR::Write8(8, TanLevel);		
-		if(Gender != 0xFF) PlayerPTR::Write8(0x55BA, Gender);	
 	}
 //If player is loaded (uses to 8) 27B0E0(pP)
 /*
@@ -238,21 +200,6 @@ Get Player Save Offset for loaded players
 	}
 */
 
-/*
-Set Tool
-*/
-	void Player::SetTool(u16 tool) {
-		if(Player::GetSaveOffset(4) == 0) 
-			return;
-			
-		Process::Write16(PlayerPTR::Pointer(0x26), tool);
-	}
-/*
-Get Tool
-*/
-	u16 Player::GetTool() {
-		return Player::GetSaveOffset(4) != 0 ? *(u16 *)PlayerPTR::Pointer(0x26) : 0x7FFE;
-	}
 /*
 If player exitst
 */

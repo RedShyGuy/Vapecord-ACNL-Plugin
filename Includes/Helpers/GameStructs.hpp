@@ -4,6 +4,8 @@
 #include <CTRPluginFramework.hpp>
 #include <optional>
 
+#pragma pack(1)
+
 namespace CTRPluginFramework {
 
     enum class PlayerStatus : u8 {
@@ -25,6 +27,10 @@ namespace CTRPluginFramework {
         u16 Flags;
     };
 
+    struct Emoticons {
+        u8 emoticons[40];
+    };
+
     struct Mannequin {
         Item Hat; //Item ID < 0xXXXX
         Item Accessory; //Item ID < 0xXXXX
@@ -32,14 +38,14 @@ namespace CTRPluginFramework {
         Item BottomWear; //Item ID < 0xXXXX
         Item Socks; //Item ID < 0xXXXX
         Item Shoes; //Item ID < 0xXXXX
-    } PACKED;
+    };
 
     struct TownID {
         u16 TID; //Default is 0
         u16/*wchar*/ DataTownName[9]; //Default is 0
         u8 Unknown01; //Default is 0xA
         u8 Unknown02;
-    } PACKED;
+    };
 
     struct PersonalID {
         u16 PID;
@@ -49,7 +55,7 @@ namespace CTRPluginFramework {
         TownID TownData;
         u8 TPC_Country;
         u8 TPC_County;
-    } PACKED;
+    };
 
     struct ACNL_Pattern {
         u16/*wchar*/ Title[21];
@@ -66,20 +72,7 @@ namespace CTRPluginFramework {
         u8 PatternData3[512]; //optional
         u8 PatternData4[512]; //optional
         u32 ZeroPad_3; //Zero Padding; Optional*/
-    } PACKED;
-    
-    struct Player_Patterns {
-        ACNL_Pattern Pattern1;
-        ACNL_Pattern Pattern2;
-        ACNL_Pattern Pattern3;
-        ACNL_Pattern Pattern4;
-        ACNL_Pattern Pattern5;
-        ACNL_Pattern Pattern6;
-        ACNL_Pattern Pattern7;
-        ACNL_Pattern Pattern8;
-        ACNL_Pattern Pattern9;
-        ACNL_Pattern Pattern10;
-    } PACKED;
+    };
 
     struct BDGValues {
         u64 Badge_Fishes_Value; //Encrypted Value
@@ -106,7 +99,7 @@ namespace CTRPluginFramework {
         u64 Badge_PlayTime_Value; //Encrypted Value
         u64 Badge_Helper_Value; //Encrypted Value
         u64 Badge_Dream_Value; //Encrypted Value      
-    } PACKED;
+    };
 
     struct BDG {
         u8 Badge_Fishes;
@@ -133,14 +126,14 @@ namespace CTRPluginFramework {
         u8 Badge_PlayTime;
         u8 Badge_Helper;
         u8 Badge_Dream;   
-    } PACKED;
+    };
 
     struct PlayerBadges {
         BDGValues BadgeValues; //0x567C: 24 badges (encrypted values)
         BDG Badges; //0x573C: 24 badges
         u64 Unknown1; //0x5754 -> 0x575B: Encrypted Value
         u64 Unknown1_1; //0x575C -> 0x5763: Encrypted Value
-    } PACKED;
+    };
 
     struct HHAHouseInfo {
         s32 HHAHousePoints; //0x5764 -> 0x5767
@@ -176,7 +169,7 @@ namespace CTRPluginFramework {
         u8 GoldExteriorsUnlocked; //0x577E -> 0x577E //5 is max
         u8 GoldExteriorsApplied; //0x577E -> 0x577E //Not Verified; 5 is max
         u8 HouseUnk21; //0x577E -> 0x577E
-    } PACKED;
+    };
 
     struct ACNL_DreamAddress {
         u32 DCPart1;
@@ -184,7 +177,7 @@ namespace CTRPluginFramework {
         bool HasDreamAddress;
         u8  DCPart3;
         u16 Padding;
-    } PACKED;
+    };
 
     struct Player_Flags {
         u8 Unknown1 : 1;
@@ -603,7 +596,7 @@ namespace CTRPluginFramework {
         u8 Unknown414 : 1;
         u8 Unknown415 : 1;
         u8 Unknown416 : 1;
-    } PACKED;
+    };
 
     struct ACNL_Letter {
         PersonalID Reciever;
@@ -626,7 +619,7 @@ namespace CTRPluginFramework {
         u8 Unknown3;
         Item AttachedItem;
         u64  Unknown4;
-    } PACKED;
+    };
 
     struct Player_Letters {
         ACNL_Letter Letter1;
@@ -639,50 +632,7 @@ namespace CTRPluginFramework {
         ACNL_Letter Letter8;
         ACNL_Letter Letter9;
         ACNL_Letter Letter10;
-    } PACKED;
-
-    struct Player_Emotes {
-        u8 Emote1;
-        u8 Emote2;
-        u8 Emote3;
-        u8 Emote4;
-        u8 Emote5;
-        u8 Emote6;
-        u8 Emote7;
-        u8 Emote8;
-        u8 Emote9;
-        u8 Emote10;
-        u8 Emote11;
-        u8 Emote12;
-        u8 Emote13;
-        u8 Emote14;
-        u8 Emote15;
-        u8 Emote16;
-        u8 Emote17;
-        u8 Emote18;
-        u8 Emote19;
-        u8 Emote20;
-        u8 Emote21;
-        u8 Emote22;
-        u8 Emote23;
-        u8 Emote24;
-        u8 Emote25;
-        u8 Emote26;
-        u8 Emote27;
-        u8 Emote28;
-        u8 Emote29;
-        u8 Emote30;
-        u8 Emote31;
-        u8 Emote32;
-        u8 Emote33;
-        u8 Emote34;
-        u8 Emote35;
-        u8 Emote36;
-        u8 Emote37;
-        u8 Emote38;
-        u8 Emote39;
-        u8 Emote40;
-    } PACKED;
+    };
 
     struct UnknownStruct1 {
         u32 Unk1; //0 //Set to 0 in Player ctor
@@ -760,7 +710,7 @@ namespace CTRPluginFramework {
         u8 Unk73 ; //0x68 //Set to 0 in Player ctor
         u8 Unk74; //0x69 //Set to 0 in Player ctor
         TownID TownData; //0x6A -> 0x7F
-    } PACKED;
+    };
 
    struct UnknownStruct2 {
         u32 Unknown5; //0x8B80 //???; Set to 0, then 0xFFFFFFFF in player ctor
@@ -789,7 +739,7 @@ namespace CTRPluginFramework {
         u32 Unknown28; //0x8DB0 //???; Set to 0 in player ctor
         u32 Unknown29; //0x8DB4 //???; Set to 0 in player ctor
         u32 Unknown30; //0x8DBC //???; Set to 0 in player ctor
-    } PACKED;
+    };
 
     struct UnknownStruct3 {
         s64 Unknown1; //0x8DEC //???; Set to 0, then 0x7FFFFFFFFFFFFFFF in player ctor
@@ -800,7 +750,7 @@ namespace CTRPluginFramework {
         u16 Unknown6; //0x8DF8 //???; Set to 0x0000 in player ctor
         u8 Unknown7; //0x8DFA //???; Set to 0x6 in player ctor
         u8 Unknown8; //0x8DFB //???; Set to 0xFF in player ctor
-    } PACKED;
+    };
 
     struct UnknownStruct4 { //Probably exact same struct as UnknownStruct3 but is set differently
         s64 Unknown1; //0x8DEC //???; Set to 0, then 0x7FFFFFFFFFFFFFFF in player ctor
@@ -811,7 +761,7 @@ namespace CTRPluginFramework {
         u16 Unknown6; //0x8DF8 //???; Set to 0x7ffe in player ctor
         u8 Unknown7; //0x8DFA //???; Set to 0x4 in player ctor
         u8 Unknown8; //0x8DFB //???; Set to 0xFF in player ctor
-    } PACKED;
+    };
 
     struct UnknownStruct5 {//Similar to UnknownStruct3
         s64 Unknown1; //0x8DEC //???; Set to 0, then 0x7FFFFFFFFFFFFFFF in player ctor
@@ -825,7 +775,7 @@ namespace CTRPluginFramework {
         u8 Unknown9; //0x8E01 //???; Set to 0x7 in player ctor
         u8 Unknown10; //0x8E02 //???; Set to 0xFF in player ctor
         u8 Padding2; //Padding: Not set in ctor;
-    } PACKED;
+    };
 
     struct UnknownStruct6Mini {
         TownID TownData1;
@@ -833,7 +783,7 @@ namespace CTRPluginFramework {
         u16 VillagerID; //This struct used in Villager ctor, and this is VID in it; Set to 0xFFFF in player ctor
         u8 VillagerPersonality; //This struct used in Villager ctor, and this is VP in it; Set to 0x8 in player ctor
         u8 Padding; //Padding: Not set in ctor
-    } PACKED;
+    };
 
     struct UnknownStruct6 {
         s64 Unknown1; //???; Set to 0, then 0x7FFFFFFFFFFFFFFF in player ctor
@@ -847,7 +797,7 @@ namespace CTRPluginFramework {
         u32 Unknown7; //???; Set to 0x00007ffe in player ctor
         u8 Unknown8; //???; Set to 0 in player ctor
         u8 Unknown9; //???; Set to 0 in player ctor
-    } PACKED;
+    };
 
     struct UnknownStruct7 { //Probably exact same struct as UnknownStruct4 but is set differently
         s64 Unknown1; //???; Set to 0, then 0x7FFFFFFFFFFFFFFF in player ctor
@@ -857,7 +807,7 @@ namespace CTRPluginFramework {
         u8 Unknown5; //???; Set to 0xFF in player ctor
         u8 Unknown6; //???; Set to 0xFF in player ctor
         u8 Padding1; //Padding: Not set in ctor
-    } PACKED;
+    };
 
     struct UnknownStruct8 { //Similar to UnknownStruct3
         s64 Unknown1; //???; Set to 0, then 0x7FFFFFFFFFFFFFFF in player ctor
@@ -865,7 +815,7 @@ namespace CTRPluginFramework {
         u8 Unknown3; //???; Set to 0xFF in player ctor
         u8 Unknown4; //???; Set to 0x9 in player ctor
         u8 Unknown7; //Padding: Not set in ctor
-    } PACKED;
+    };
 
     struct UnknownStruct9 {
         u16 Unknown1; //???; Set to 0 in player ctor
@@ -883,25 +833,25 @@ namespace CTRPluginFramework {
         u16 Unknown13; //???; Set to 0 in player ctor
         u8 Unknown14; //???; Set to 0 in player ctor
         u8 Padding1; //Padding: Not set in ctor
-    } PACKED;
+    };
 
     struct UnknownStruct10 {
         Item UnkItem1; //Some Item; Set to 0x00007ffe in player ctor
         u16 Unknown2; //???; Set to 0 in player ctor
-    } PACKED;
+    };
 
     struct LyleFlags {
         u8 HasHeardEvaluation : 1; //Set when asking about home evaluation
         u8 HasAskedWhatsNew : 1;
         u8 HasHeardFirstEvaluation: 1; //Set when asking about home evaluation
         u8 LyleWhatsNew : 5;
-    } PACKED;
+    };
 
     struct Player_Dressers {
         Item DrawerA[60];
         Item DrawerB[60];
         Item DrawerC[60];
-    } PACKED;
+    };
 
     struct MiiData1 {
         u8 MiiFace[92]; //0x5538 -> 0x5595 //Based on https://3dbrew.org/wiki/Mii#Mii_format
@@ -911,7 +861,13 @@ namespace CTRPluginFramework {
         u8 Unknown2[24]; //0x5596 -> 0x55BF: Gets written to when getting a Mii form Harriet. Never read(?)
         u8 ZeroPad_3[30]; //0x55C0 -> 0x55DF
         u16 ZeroPad_2;
-    } PACKED;
+    };
+
+    struct Encyclopedia_Sizes {
+        u16 Insects[0x48]; //range 1 to 0x3FFF
+        u16 Fish[0x48]; //range 1 to 0x3FFF
+        u16 SeaCreatures[0x1E]; //range 1 to 0x3FFF
+    };
 
     struct ACNL_Player { //UnknownNotSetYetX = Not set by player ctor
         u32 Checksum1; //0xA0 //Checksum of the first 0x6b84 of player data
@@ -930,7 +886,7 @@ namespace CTRPluginFramework {
         Item HeldItem; //0xC6 //Item ID < 0xXXXX
         u8 Unknown0; //0xCA //Inverted gender(?): 1 for male, 0 for female. Default = 1 in PlayerConstructor (EUR 1.5 0x20D27C)
         u8 Padding_0 = 0; //0xCB
-        Player_Patterns Patterns; //0xCC //10 Patterns
+        ACNL_Pattern Patterns[10]; //0xCC //10 Patterns
         u8 PatternOrder[10]; //0x552C -> 0x5535 //Order of patterns from 0x0 - 0x9
         u16 Padding_1; //0x5536 //U16 Zero Padding; Always 0x0000
         MiiData1 PlayerMii;
@@ -973,7 +929,7 @@ namespace CTRPluginFramework {
         u16 Padding_10; //0x6C6E -> 0x6C6F
         Item Inventory[16]; //0x6C70 -> 0x6CAF
         u8 InventoryItemLocks[16]; //0x6CB0 -> 0x6CBF
-        u8 UnlockedItems[0x2E8]; //0x6CC0 -> 0x6FA7 //Game uses one big bitfield for items 'unlocked'. Bits correspond to item ids. Used for catalog, encyclopedia, etc
+        u32 UnlockedItems[0xBA]; //0x6CC0 -> 0x6FA7 //Game uses one big bitfield for items 'unlocked'. Bits correspond to item ids. Used for catalog, encyclopedia, etc
         u64 PocketMoney; //0x6FA8 -> 0x6FAF: Encrypted Value
         Item IslandBox[40]; //0x6FB0 -> 0x704F
         Item IslandInventory[16]; //0x7050 -> 0x708F
@@ -989,7 +945,7 @@ namespace CTRPluginFramework {
         u16 Padding_13; //0x8A6C -> 0x8A6D
         u8 DefaultLtrRecieverNameIndent; //0x8A6E -> 0x8A6E
         u8 DefaultFutureLtrRecieverNameIndent; //0x8A6F -> 0x8A6F //Cannot be >= 0x20
-        Player_Emotes Emotes; //0x8A70 -> 0x8A97 //Players Emotes (40 slots)
+        Emoticons Emotes; //0x8A70 -> 0x8A97 //Players Emotes (40 slots)
         s8 EmotePage; //0x8A98 -> 0x8A98 //0xFF = Page 1, 0x00 = Page 2
         u8 Padding_14; //0x8A99 -> 0x8A99
         u16 SpotpassDLCRecievedIds[32]; //0x8A9A -> 0x8AD9 //Not Verified; 0xFFFF is default, then 0xXXXX is ID of DLC recieved
@@ -997,12 +953,12 @@ namespace CTRPluginFramework {
         UnknownStruct1 UnkBuffer1; //0x8ADC -> 0x8B5B
         u16 Padding_16; //0x8B5C -> 0x8B5D
         LyleFlags LyleFlag; //0x8B5E
-        u8  HasDeductions__; //0x8B5F //Not 100% sure; something to do with items facing a wall, therefore deductions; Reads HouseUnk9 later in code
-        u8  HHAAwardsUnlockedDupe; //0x8B60
-        u8  GoldExteriorsUnlockedDupe; //0x8B60
-        u8  HHAUnk1; //0x8B62
-        u8  HHAUnk2; //0x8B63 //READU8(CurrentHouseTheme+1) | 0x80; Only When Exterior/Theme???
-        u8  HHAUnk3[0x1C]; //0x8B63 -> //0x8B7F //Come back to later
+        u8 HasDeductions__; //0x8B5F //Not 100% sure; something to do with items facing a wall, therefore deductions; Reads HouseUnk9 later in code
+        u8 HHAAwardsUnlockedDupe; //0x8B60
+        u8 GoldExteriorsUnlockedDupe; //0x8B60
+        u8 HHAUnk1; //0x8B62
+        u8 HHAUnk2; //0x8B63 //READU8(CurrentHouseTheme+1) | 0x80; Only When Exterior/Theme???
+        u8 HHAUnk3[0x1C]; //0x8B63 -> //0x8B7F //Come back to later
         UnknownStruct2 UnkBuffer2; //0x8B80 -> 0x8DBB
         u64 MeowCoupons; //0x8DBC -> 0x8DC3: Encrypted Value
         u64 Unk2; //0x8DC4 -> 0x8DCB: Encrypted Value
@@ -1033,12 +989,13 @@ namespace CTRPluginFramework {
         u8 UnkBuffer10[0x21]; //ctor unsets every bit except in last byte in buffer, it only unsets bits 0 to 5
         u8 Padding_17;
         u8 Unk_u8_3; //Set to 0 in player ctor
-        u8 UnknownNotSetYet6[0xE];
+    u8 UnknownNotSetYet6[0xE]; //most likely songs
         Item SantaBagInv[10]; //0x9048 -> 0x906F
         u8 PlayerZero_Filler[0x320]; //Always 0?? Game just memclr's in player ctor
         Player_Dressers Dressers; //Each dresser is 60 long
-        u16/*wchar*/ BDayWish[0x22];
-        ACNL_Letter Letter1;
+        u16/*wchar*/ BDayWish[0x22]; //0x9660 -> 0x96A4
+        /*
+        ACNL_Letter Letter1; 
         ACNL_Letter Letter2;
         ACNL_Letter Letter3;
         ACNL_Letter Letter4;
@@ -1047,7 +1004,12 @@ namespace CTRPluginFramework {
         u8 UnkBuffer11[0x40];
         u8 UnkBuffer12[0x40];
         u8 UnknownNotSetYet8[0xA4];
-        UnknownStruct10 UnkStruct10_1;
+        */
+
+        u8 UnknownBuffer[0xC84]; 
+        Encyclopedia_Sizes EncyclopediaSizes; //0xA328 -> 0xA484
+        u8 UnkBuffer11[0x84]; //0xA485 -> 0xA507
+        UnknownStruct10 UnkStruct10_1; //0xA508
         UnknownStruct10 UnkStruct10_2;
         UnknownStruct10 UnkStruct10_3;
         Item UnkItem3; //Some Item; Set to 0x00007ffe in player ctor

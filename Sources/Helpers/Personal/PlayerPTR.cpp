@@ -18,8 +18,4 @@ namespace CTRPluginFramework {
 	bool PlayerPTR::Write8(u32 lenght, u8 value) {
 		return Process::Write8(PlayerPTR::Pointer(lenght), value);
 	}
-//Write String
-	bool PlayerPTR::WriteString(u32 lenght, const std::string &input, StringFormat outFmt) {
-		return Process::WriteString(PlayerPTR::Pointer(lenght), input, outFmt);
-	}
 }

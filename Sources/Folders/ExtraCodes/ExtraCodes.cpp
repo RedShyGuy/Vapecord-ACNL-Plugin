@@ -292,15 +292,8 @@ namespace CTRPluginFramework {
 	}
 //Edit Every Pattern
 	void editpattern(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0)
-			return;
-		
-		std::string PlayerName = "", TownName = "";
-		Process::ReadString(PlayerPTR::Pointer(0x55A8), PlayerName, 0x10, StringFormat::Utf16);
-		Process::ReadString(PlayerPTR::Pointer(0x55BE), TownName, 0x10, StringFormat::Utf16);
-		
 		for(int i = 0; i < 10; ++i) 
-			Player::SetDesign(i, "", *(u16 *)PlayerPTR::Pointer(0x55A6), PlayerName, *(u8 *)PlayerPTR::Pointer(0x55BA), *(u16 *)PlayerPTR::Pointer(0x55BC), TownName, *(u32 *)PlayerPTR::Pointer(0x55D0), 0xFF, 0xFF);
+			Player::StealDesign(i);
 
 		entry->Disable();
 	}
