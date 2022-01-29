@@ -989,7 +989,8 @@ namespace CTRPluginFramework {
         u8 UnkBuffer10[0x21]; //ctor unsets every bit except in last byte in buffer, it only unsets bits 0 to 5
         u8 Padding_17;
         u8 Unk_u8_3; //Set to 0 in player ctor
-    u8 UnknownNotSetYet6[0xE]; //most likely songs
+        u16 Padding_18;
+        u32 AddedSongs[3]; //Bitfield for added songs
         Item SantaBagInv[10]; //0x9048 -> 0x906F
         u8 PlayerZero_Filler[0x320]; //Always 0?? Game just memclr's in player ctor
         Player_Dressers Dressers; //Each dresser is 60 long
@@ -1013,7 +1014,7 @@ namespace CTRPluginFramework {
         UnknownStruct10 UnkStruct10_2;
         UnknownStruct10 UnkStruct10_3;
         Item UnkItem3; //Some Item; Set to 0x00007ffe in player ctor
-        u16 Padding_18;
+        u16 Padding_19;
     };
 }
 #endif

@@ -139,6 +139,43 @@ Get Player Save Offset for loaded players
 		static Address pSOffset(0x2FEB2C, 0x2FE8A8, 0x2FEBB4, 0x2FEBB4, 0x2FEB60, 0x2FEB60, 0x2FEA98, 0x2FEA98);
 		return pSOffset.Call<u32>(pIndex);
 	}
+
+	bool Player::SetUnlockableBitField(ACNL_Player *player, u8 ID, bool state) {
+		if(!player)
+			return false;
+
+		static Address SetUp1(0x5360A8, 0, 0, 0, 0, 0, 0, 0);
+		static Address SetUp2(0x6BA680, 0, 0, 0, 0, 0, 0, 0);
+		static Address SetStack(0x2FCC14, 0, 0, 0, 0, 0, 0, 0);
+		static Address ReadStack(0x769DBC, 0, 0, 0, 0, 0, 0, 0);
+
+		u32* val = SetUp1.Call<u32*>(ID);
+		u32 uVar5 = *(u32 *)(val + 4);
+		u32 data;
+
+		if(uVar5 < 0x6EE) {
+			u32 uVar6 = 0;
+			if(uVar5 != 0) {
+				do {
+					u32 uVar3 = SetUp2.Call<u32>(ID, uVar6);
+					SetStack.Call<void>(&data, uVar3);
+					s32 uVar4 = ReadStack.Call<u32>(&data);
+
+					if(uVar4 > -1) {
+						if((uVar4 >> 5) < 0xBA) {
+							if(state)
+								player->UnlockedItems[(uVar4 >> 5)] |= (1 << (uVar4 & 0x1F));
+							else
+								player->UnlockedItems[(uVar4 >> 5)] &= ~(1 << (uVar4 & 0x1F));
+						}
+					}		
+
+					uVar6++;
+				} while(uVar6 < uVar5);	
+			}
+		}
+		return true;
+	}
 /*
 //Clear Mail in inv
 	void Player::ClearMail(int slot) {

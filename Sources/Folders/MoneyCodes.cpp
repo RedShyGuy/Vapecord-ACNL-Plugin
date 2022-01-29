@@ -6,22 +6,32 @@
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/Save.hpp"
 
+#include "Helpers/Address.hpp"
+
 namespace CTRPluginFramework {
 //Wallet Mod
 	void wallet(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetData();
+
+		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 		
 		u32 money = 0;
-		if(Wrap::KB<u32>(Language->Get("ENTER_AMOUNT"), false, 5, money, 0))
-			GameHelper::SetMoney(PlayerPTR::Pointer(0x6F08), money);
+		if(Wrap::KB<u32>(Language->Get("ENTER_AMOUNT"), false, 5, money, 0)) {
+			static Address moneyset(0x3036A4, 0x303534, 0x303738, 0x303738, 0x303404, 0x303404, 0x3034C0, 0x3034C0); 
+			moneyset.Call<void>(&player->PocketMoney, money);
+
+			//GameHelper::EncryptValue((u32 *)player->PocketMoney, money);
+		}
 	}
 //Bank Mod
 	void bank(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetData();
+
+		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -29,11 +39,13 @@ namespace CTRPluginFramework {
 		
 		u32 money = 0;
 		if(Wrap::KB<u32>(Language->Get("ENTER_AMOUNT"), false, 9, money, 0))
-			GameHelper::SetMoney(PlayerPTR::Pointer(0x6B8C), money);
+			GameHelper::EncryptValue((u32 *)player->BankAmount, money);
 	}
 //Meow Coupon Mod
 	void coupon(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetData();
+
+		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -41,11 +53,13 @@ namespace CTRPluginFramework {
 		
 		u32 coupon = 0;
 		if(Wrap::KB<u32>(Language->Get("ENTER_AMOUNT"), false, 4, coupon, 0))
-			GameHelper::SetMoney(PlayerPTR::Pointer(0x8D1C), coupon);
+			GameHelper::EncryptValue((u32 *)player->MeowCoupons, coupon);
 	}
 //Badges Mod
 	void badges(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetData();
+
+		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -70,7 +84,9 @@ namespace CTRPluginFramework {
 	}
 //Medals Mod  32DC51B8 31F2C6BC
 	void medals(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetData();
+
+		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -78,12 +94,14 @@ namespace CTRPluginFramework {
 		
 		u32 medal = 0;
 		if(Wrap::KB<u32>(Language->Get("ENTER_AMOUNT"), false, 4, medal, 0)) {
-			GameHelper::SetMoney(PlayerPTR::Pointer(0x6B9C), medal);
+			GameHelper::EncryptValue((u32 *)player->MedalAmount, medal);
 		}	
 	}	
 //turnip Mod	
 	void turnips(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetData();
+
+		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -93,8 +111,8 @@ namespace CTRPluginFramework {
 		if(Wrap::KB<u32>(Language->Get("ENTER_AMOUNT"), false, 5, turnip, 0)) {
 			for(int i = 0; i < 6; ++i) {
 				u32 TurnipOffset = Save::GetInstance()->Address(0x6ADE0);
-				GameHelper::SetMoney(TurnipOffset + i * 16, turnip); //AM
-				GameHelper::SetMoney(TurnipOffset + i * 16 + 8, turnip); //PM
+				GameHelper::EncryptValue((u32 *)(TurnipOffset + i * 16), turnip); //AM
+				GameHelper::EncryptValue((u32 *)(TurnipOffset + i * 16 + 8), turnip); //PM
 			}
 		}
 	}

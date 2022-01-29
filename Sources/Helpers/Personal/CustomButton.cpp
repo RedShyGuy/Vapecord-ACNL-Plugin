@@ -61,28 +61,28 @@ Custom Buttons
 		if(IDList::ValidID(itemslotid, 0x20AC, 0x2117)) { 
 			int money = GetMoneyFunc.Call<int>(PlayerPTR::Pointer(0x6BD0 + (4 * slot)));
 				
-			int debt = GameHelper::GetMoney((u64 *)PlayerPTR::Pointer(0x6B94));
+			int debt = GameHelper::DecryptValue((u64 *)PlayerPTR::Pointer(0x6B94));
 		//if you try to store more money than you need to, the rest will be set to your bank acc
 			if(money >= debt) {
 				int diff = std::abs(money - debt);
 				
-				int bank = GameHelper::GetMoney((u64 *)PlayerPTR::Pointer(0x6B8C));
+				int bank = GameHelper::DecryptValue((u64 *)PlayerPTR::Pointer(0x6B8C));
 			//if money that goes to the bank will not fill it it up completely	
 				if((bank + diff) <= 999999999) {
-					GameHelper::SetMoney(PlayerPTR::Pointer(0x6B8C), bank + diff);
+					//GameHelper::EncryptValue(PlayerPTR::Pointer(0x6B8C), bank + diff);
 				}
 			//If bank is not full but still can hold bells fill it up
 				else {
 					if(bank != 999999999) {
 						diff = 999999999 - diff;
-						GameHelper::SetMoney(PlayerPTR::Pointer(0x6B8C), diff);
+						//GameHelper::EncryptValue(PlayerPTR::Pointer(0x6B8C), diff);
 					}
 				}
 				
 				money = debt; //make money the exact debt
 			}
 
-			GameHelper::SetMoney(PlayerPTR::Pointer(0x6B94), debt - money);
+			//GameHelper::EncryptValue(PlayerPTR::Pointer(0x6B94), debt - money);
 
 			while(itemslotid > 0x20AC) {
 				CallSound.Call<void>(0x1000491);

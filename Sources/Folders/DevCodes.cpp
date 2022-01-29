@@ -233,19 +233,6 @@ namespace CTRPluginFramework {
 			Keyboard kb("Enter Text");
 			kb.Open(text);
 		}
-
-		if(Controller::IsKeysPressed(Key::L + Key::DPadRight)) {
-			ACNL_Player *player = Player::GetData();
-			if(player) {
-				player->UnknownBuffer[0] = 1;
-				player->UnknownBuffer[3092] = 2;
-
-				player->EncyclopediaSizes.Insects[0] = 0x1234;
-
-				OSD::Notify(Utils::Format("EncyclopediaSizes : %08X", player->EncyclopediaSizes.Insects[0]));
-				OSD::Notify(Utils::Format("UnkStruct10_1 : %08X", player->UnkStruct10_1.UnkItem1.ID));
-			}
-		}
 	}
 /*
 //Hook

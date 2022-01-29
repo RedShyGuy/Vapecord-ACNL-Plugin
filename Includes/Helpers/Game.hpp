@@ -31,8 +31,8 @@ namespace CTRPluginFramework {
 		void 				SetPlayedHours(u32 hours);
 	//Money Stuff
 		void 				SetBadges(u8 badge = 0, u8 type = 0);
-		int					GetMoney(u64 *position);
-		void				SetMoney(u32 position, int moneyamount);
+		int					DecryptValue(u64 *position);
+		void				EncryptValue(u32 *position, int moneyamount);
 	//Flower Converter
 		void				ToIndoorFlowers(u32& input);
 		void				ToOutdoorFlowers(u32& input);

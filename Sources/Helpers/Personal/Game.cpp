@@ -329,21 +329,15 @@ namespace CTRPluginFramework {
 		*(u64 *)RealTime.addr += Time;
 	}
 	
-//get money(decrypt it) 
-	int GameHelper::GetMoney(u64 *position) {
-		if(Player::GetSaveOffset(4) == 0) 
-			return 0;
-		
+//decrypt it
+	int GameHelper::DecryptValue(u64 *position) {
 		static Address moneyget(0x3037DC, 0x30366C, 0x303870, 0x303870, 0x30353C, 0x30353C, 0x3035F8, 0x3035F8);
 		return moneyget.Call<int>(position);
 	}
-//set money	
-	void GameHelper::SetMoney(u32 position, int moneyamount) {
-		if(Player::GetSaveOffset(4) == 0) 
-			return;
-		
+//encrypt it
+	void GameHelper::EncryptValue(u32 *position, int moneyamount) {
 		static Address moneyset(0x3036A4, 0x303534, 0x303738, 0x303738, 0x303404, 0x303404, 0x3034C0, 0x3034C0); 
-		moneyset.Call<void>(position, (u32)moneyamount);
+		moneyset.Call<void>(position, moneyamount);
 	}
 
 	void InjectTouchCallBack(void) {

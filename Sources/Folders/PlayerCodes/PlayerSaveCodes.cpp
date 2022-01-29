@@ -457,9 +457,7 @@ namespace CTRPluginFramework {
 			Language->Get("VECTOR_ENZY_CLEAR"),
 		};
 
-		static const std::pair<u16, u16> Pairs[3] = { 
-			{ 0x28E, 0x2D6 }, { 0x2E1, 0x329 }, { 0x32D, 0x34B }
-		};
+		static const u8 EncyclopediaID[3] = { 0x24, 0x27, 0x28 };
 		
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), enzyopt);
 		
@@ -467,10 +465,8 @@ namespace CTRPluginFramework {
 		switch(KB.Open()) {
 			default: break;
 			case 0:
-				for(int i = 0; i < 3; ++i) {
-					for(u16 j = Pairs[i].first; j < Pairs[i].second; ++j) 
-						player->UnlockedItems[(j >> 5)] |= (1 << (j & 0x1F));
-				}
+				for(int i = 0; i < 3; ++i) 
+					Player::SetUnlockableBitField(player, EncyclopediaID[i], true);
 
 				for(int i = 0; i < 72; ++i) {
 					player->EncyclopediaSizes.Insects[i] = Utils::Random(1, 0x3FFF);
@@ -481,10 +477,8 @@ namespace CTRPluginFramework {
 				}
 			break;
 			case 1: 
-				for(int i = 0; i < 3; ++i) {
-					for(u16 j = Pairs[i].first; j < Pairs[i].second; ++j) 
-						player->UnlockedItems[(j >> 5)] &= ~(1 << (j & 0x1F));
-				}
+				for(int i = 0; i < 3; ++i) 
+					Player::SetUnlockableBitField(player, EncyclopediaID[i], false);
 
 				for(int i = 0; i < 72; ++i) {
 					player->EncyclopediaSizes.Insects[i] = 0;
@@ -557,7 +551,9 @@ namespace CTRPluginFramework {
 
 //Fill Song List | player specific save code
 	void FillSongs(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetData();
+
+		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -566,7 +562,11 @@ namespace CTRPluginFramework {
 		static const std::vector<std::string> songopt = {
 			Language->Get("VECTOR_ENZY_FILL"),
 			Language->Get("VECTOR_ENZY_CLEAR"),
-		};		
+		};
+
+		static const std::pair<u16, u16> Pairs = { 0x212B, 0x2186 };
+
+		static Address calcBitField(0x2FF76C, 0, 0, 0, 0, 0, 0, 0);
 		
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), songopt);
 		
@@ -574,17 +574,25 @@ namespace CTRPluginFramework {
 		switch(optKb.Open()) {
 			default: break;
 			case 0: 
-				std::memset((void *)PlayerPTR::Pointer(0x8F9C), 0xFFFFFFFF, 0xC);
+				for(u16 i = Pairs.first; i < Pairs.second; ++i) {
+					int field = calcBitField.Call<int>(&i);
+					player->AddedSongs[(field >> 5)] |= (1 << (field & 0x1F));
+				}
 			break;
 			case 1:
-				std::memset((void *)PlayerPTR::Pointer(0x8F9C), 0, 0xC);
+				for(u16 i = Pairs.first; i < Pairs.second; ++i) {
+					int field = calcBitField.Call<int>(&i);
+					player->AddedSongs[(field >> 5)] &= ~(1 << (field & 0x1F));
+				}
 			break;
 		}
 	}
 
 //Fill Catalog | player specific save code	
 	void FillCatalog(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetData();
+
+		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -594,6 +602,13 @@ namespace CTRPluginFramework {
 			Language->Get("VECTOR_ENZY_FILL"),
 			Language->Get("VECTOR_ENZY_CLEAR"),
 		};	
+
+		static const u8 CatalogID[15] = {
+			0x03, 0x04, 0x05, 0x06, 
+			0x09, 0x07, 0x0C, 0x0D, 
+			0x0B, 0x0A, 0x19, 0x29, 
+			0x2F, 0x2E, 0x2C
+		};
 		
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), songopt);
 		
@@ -601,10 +616,12 @@ namespace CTRPluginFramework {
 		switch(optKb.Open()) {
 			default: break;
 			case 0: 
-				std::memset((void *)PlayerPTR::Pointer(0x6C90), 0xFF, 0x1A8);
+				for(int i = 0; i < 15; ++i)
+					Player::SetUnlockableBitField(player, CatalogID[i], true);
 			break;
 			case 1: 
-				std::memset((void *)PlayerPTR::Pointer(0x6C90), 0, 0x1A8);
+				for(int i = 0; i < 15; ++i)
+					Player::SetUnlockableBitField(player, CatalogID[i], false);
 			break;
 		}
     }
