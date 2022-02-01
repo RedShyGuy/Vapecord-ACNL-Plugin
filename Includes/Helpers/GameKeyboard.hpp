@@ -2,6 +2,7 @@
 #define CHAT_HPP
 
 #include <CTRPluginFramework.hpp>
+#include "Helpers/GameStructs.hpp"
 
 namespace CTRPluginFramework {
 	namespace GameKeyboard {
@@ -11,7 +12,7 @@ namespace CTRPluginFramework {
 		bool 				IsOpen();
 		bool				IsEmpty();
 		bool 				Copy(std::string& str, int pos, int lenght);
-		bool 				ConvertToItemID(std::string& str, u32 &ItemID);
+		bool 				ConvertToItemID(std::string& str, Item &ItemID);
 		void 				SendMessage(const std::string& str);
 	}
 }

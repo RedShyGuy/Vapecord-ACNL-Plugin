@@ -3,8 +3,9 @@
 
 #include <3ds.h>
 #include <CTRPluginFramework.hpp>
+#include "Helpers/GameStructs.hpp"
 
-extern u32 PickupSeederItemID;
+extern CTRPluginFramework::Item PickupSeederItemID;
 
 namespace CTRPluginFramework {
 	extern const std::string fullV;
@@ -187,7 +188,7 @@ namespace CTRPluginFramework {
 	void walktalkentry(MenuEntry *entry);
 	void key_limit(MenuEntry* entry);
 	void CustomKeyboard(MenuEntry* entry);
-	void Beans(MenuEntry *entry);
+	void BeansParticleChanger(MenuEntry *entry);
 	void Daytime(MenuEntry *entry);
 	void fast(MenuEntry *entry);
 	void fasttalk(MenuEntry *entry);

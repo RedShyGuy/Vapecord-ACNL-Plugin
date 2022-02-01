@@ -448,7 +448,7 @@ namespace CTRPluginFramework {
     }
 			
 //Beans Particle Changer	
-	void Beans(MenuEntry *entry) {
+	void BeansParticleChanger(MenuEntry *entry) {
 		static const Address beans(0x673E0C, 0x673334, 0x672E44, 0x672E44, 0x672904, 0x672904, 0x6724AC, 0x6724AC);
         static u16 input = 0; 
 		

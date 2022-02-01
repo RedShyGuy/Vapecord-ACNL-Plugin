@@ -2,6 +2,7 @@
 #define INVENTORY_HPP
 
 #include <CTRPluginFramework.hpp>
+#include "Helpers/GameStructs.hpp"
 
 #define IsItemSlot(X)	(X >= 0x00 && X <= 0x0F)
 #define IsMailSlot(X)	(X >= 0x14 && X <= 0x1D)
@@ -9,7 +10,7 @@
 namespace CTRPluginFramework {
 	struct ItemVec {
 		std::vector<std::string> Name;
-		std::vector<u16> ID;
+		std::vector<Item> ID;
 	};
 	
 	extern ItemVec* ItemList;
@@ -20,23 +21,21 @@ namespace CTRPluginFramework {
 
 	namespace Inventory {
 		u32 		GetCurrentItemData(int i = 0);
-		u32 		GetNextItem(u16 itemID, u8 &slot);
-		u32 		GetNextClosetItem(u32 itemID, u8 &slot);
+		bool 		GetNextItem(Item itemID, u8 &slot);
+		bool 		GetNextClosetItem(Item itemID, u8 &slot);
 		bool 		GetSelectedSlot(u8& slot);
 		bool 		GetHoveredSlot(u8& slot);
 		u16			GetAddData();
 		bool		Opened();
 		u8			GetCurrent();
-		void		WriteLock(int slot, u8 lock = 0);
-		u8			GetLock(int slot);
 
-		bool 		WriteSlot(int slot, u32 item, u8 lock = 0);
-		bool 		ReadSlot(int slot, u32& item, u8 inv = 0);
+		bool 		WriteSlot(int slot, Item item, u8 lock = 0);
+		bool 		ReadSlot(int slot, Item& item);
 		void		ReloadIcons(void);
 	}
 
 	void ReserveItemData(ItemVec* out);
 	int ItemSearch(const std::string& match, ItemVec& out);
-	std::string ItemIDSearch(u16 ItemID);
+	std::string ItemIDSearch(Item ItemID);
 }
 #endif

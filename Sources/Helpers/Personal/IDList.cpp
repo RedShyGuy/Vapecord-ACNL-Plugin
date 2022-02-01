@@ -24,8 +24,8 @@ namespace CTRPluginFramework {
 
 	void ItemChange(Keyboard& keyboard, KeyboardEvent& event) {
 		std::string& input = keyboard.GetInput();	
-		u32 ID = StringToHex<u32>(input, 0xFFFF);
-		if(!IDList::ItemValid((ID & 0xFFFFFFFF))) {
+		Item ID = U32_TO_ITEM(StringToHex<u32>(input, 0xFFFF));
+		if(!IDList::ItemValid(ID)) {
 			keyboard.SetError(Color::Red << "Invalid ID!");
 			return;
 		}
@@ -33,15 +33,15 @@ namespace CTRPluginFramework {
 
 	void TextItemChange(Keyboard& keyboard, KeyboardEvent& event) {
 		std::string& input = keyboard.GetInput();
-		u32 ID = StringToHex<u32>(input, 0xFFFF);
+		Item ID = U32_TO_ITEM(StringToHex<u32>(input, 0xFFFF));
 
-		if(!IDList::ItemValid((ID & 0xFFFFFFFF), false)) {
+		if(!IDList::ItemValid(ID, false)) {
 			keyboard.GetMessage() = "";
 			keyboard.SetError(Color::Red << Language->Get("INVALID_ID"));
 			return;
 		}
 
-		keyboard.GetMessage() = ItemIDSearch(ID & 0xFFFF);
+		keyboard.GetMessage() = ItemIDSearch(ID);
 	}
 
 	bool IDList::IsHalfAcre(u8 acreID) {
@@ -163,9 +163,9 @@ namespace CTRPluginFramework {
 		return true;
 	}
 //If item is valid
-	bool IDList::ItemValid(u32 itemID, bool IsDropped) {
-		u16 item = (itemID & 0xFFFF);
-		u16 flag = ((itemID >> 16) & 0xFFFF);
+	bool IDList::ItemValid(Item itemID, bool IsDropped) {
+		u16 item = itemID.ID;
+		u16 flag = itemID.Flags;
 
 		if(!FlagValid(flag, IsDropped))
 			return false;
@@ -186,8 +186,8 @@ namespace CTRPluginFramework {
 	}
 
 //If tool is valid
-	bool IDList::ToolsValid(u16 toolsID) {
-		return (toolsID == 0x2001 || (toolsID == 0x3729) || (toolsID > 0x334B && toolsID < 0x33A3));
+	bool IDList::ToolsValid(Item toolsID) {
+		return (toolsID.ID == 0x2001 || (toolsID.ID == 0x3729) || (toolsID.ID > 0x334B && toolsID.ID < 0x33A3));
 	}
 
 //Get Building Name
@@ -221,7 +221,7 @@ namespace CTRPluginFramework {
 		return Language->Get("INVALID");
 	}
 	
-	bool IDList::GetSeedName(u16 itemID, std::string& str) {
+	bool IDList::GetSeedName(Item itemID, std::string& str) {
 		for(int i = 0; i < ItemFileLenght; i++) {
 			if(ItemList->ID[i] == itemID) {
 				str = ItemList->Name[i];

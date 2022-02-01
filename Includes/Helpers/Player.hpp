@@ -18,9 +18,8 @@ namespace CTRPluginFramework {
 		PlayerStatus 	GetPlayerStatus(u8 pPlayer);
 		u32				GetSpecificSave(u8 pPlayer);
 		u32				GetSaveOffset(u8 pIndex);
-		void			WriteOutfit(u8 PlayerIndex, u16 HeadWear, u16 Glasses, u16 Shirt, u16 Pants, u16 Socks, u16 Shoes);
+		void			WriteOutfit(u8 PlayerIndex, Item HeadWear, Item Glasses, Item Shirt, Item Pants, Item Socks, Item Shoes);
 		void 			ClearMail(int slot);
-		void 			SetTool(u16 tool);
 		bool			Exists(u8 PlayerIndex);		
 		float*		    GetCollisionSize(u8 PlayerIndex = 4);
 		bool			IsIndoors();

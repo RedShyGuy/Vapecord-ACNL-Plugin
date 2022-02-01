@@ -2,6 +2,7 @@
 #define NONHACKER_HPP
 
 #include <CTRPluginFramework.hpp>
+#include "Helpers/GameStructs.hpp"
 
 namespace CTRPluginFramework {
 	class NonHacker {
@@ -33,8 +34,7 @@ namespace CTRPluginFramework {
 			u8 emotionID = 1;
 			u16 snakeID = 1;
 			u16 musicID = 0x660;
-			u16 itemID = 0x7FFE;
-			u16 flagID = 0;
+			CTRPluginFramework::Item itemID = { 0x7FFE, 0 };
 
 			static bool Accessible[5];
 	};

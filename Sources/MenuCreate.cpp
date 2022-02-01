@@ -402,7 +402,7 @@ namespace CTRPluginFramework {
 		MISC->Append(new MenuEntry(FolderColors[11] << "Can Walk When Talk", walktalkentry, "note")),
 		MISC->Append(new MenuEntry(FolderColors[11] << "Keyboard Extender", key_limit, "note")),
 		MISC->Append(new MenuEntry(FolderColors[11] << "Custom Keyboard Symbols", CustomKeyboard, "note")),
-		MISC->Append(EntryWithHotkey(new MenuEntry(FolderColors[11] << "Beans Particle Changer", Beans, "note"), { 
+		MISC->Append(EntryWithHotkey(new MenuEntry(FolderColors[11] << "Beans Particle Changer", BeansParticleChanger, "note"), { 
 			Hotkey(Key::L | Key::DPadLeft, "Key") 
 		})),
 		MISC->Append(new MenuEntry(FolderColors[11] << "Always Daytime", Daytime, "note")),    

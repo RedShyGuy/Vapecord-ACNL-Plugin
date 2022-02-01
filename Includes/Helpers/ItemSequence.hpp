@@ -2,12 +2,13 @@
 #define ITEMSEQUENCE_HPP
 
 #include <CTRPluginFramework.hpp>
+#include "Helpers/GameStructs.hpp"
 
 namespace CTRPluginFramework {
 	namespace ItemSequence {
 		void		Init();
-		u32			*Next();
-		u32			PeekNext();
+		Item		*Next();
+		Item		PeekNext();
 		void		Switch(bool enable);
 		bool		Enabled();
 		void		OpenIS();

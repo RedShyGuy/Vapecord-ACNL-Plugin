@@ -2,6 +2,7 @@
 #define GAME_HPP
 
 #include <CTRPluginFramework.hpp>
+#include "Helpers/GameStructs.hpp"
 
 namespace CTRPluginFramework {
 	struct c_RGBA {
@@ -30,12 +31,12 @@ namespace CTRPluginFramework {
 		void 				SetPlayedDays(u16 days);
 		void 				SetPlayedHours(u32 hours);
 	//Money Stuff
-		void 				SetBadges(u8 badge = 0, u8 type = 0);
+		void 				SetBadges(u8 badge, u8 type, bool WithStats);
 		int					DecryptValue(u64 *position);
-		void				EncryptValue(u32 *position, int moneyamount);
+		void				EncryptValue(u64 *position, int moneyamount);
 	//Flower Converter
-		void				ToIndoorFlowers(u32& input);
-		void				ToOutdoorFlowers(u32& input);
+		void				ToIndoorFlowers(Item& input);
+		void				ToOutdoorFlowers(Item& input);
 	//Inventory Stuff
 		u32 				MailPointer();
 		u32					BaseInvPointer();
@@ -45,14 +46,14 @@ namespace CTRPluginFramework {
 		u32					GetLockedSpotIndex(u8 wX, u8 wY, u8 roomID = 0xA5);
 	//Other Stuff	
 		std::string 		GetCountryName();
-		bool 				IsOutdoorItem(u16 item);
+		bool 				IsOutdoorItem(Item item);
 		void				ReloadRoom();
 		void				Catalog(bool directcall = false);
 		u32					RoomFunction(u8 room, bool u0, bool u1, bool u2);
 		u8					GetOnlinePlayerIndex();
 		u8					GetActualPlayerIndex();
 		u8					GetOnlinePlayerCount();
-		u32					*GetItemAtWorldCoords(u32 x, u32 y);
+		Item				*GetItemAtWorldCoords(u32 x, u32 y);
 		u32					GetCurrentMap(void);	
 		bool				RemoveItems(bool trample, u8 wX, u8 wY, u8 width, u8 length, bool allowAbort, bool removeEverything, bool counting = true);
 		void				Particles(u32 particleID, float *floats);
@@ -65,7 +66,7 @@ namespace CTRPluginFramework {
 		bool				MapBoolCheck();
 		bool				LoadRoomBool();
 		bool				InvFull();
-		bool				SetItem(u32 *item);
+		bool				SetItem(Item *item);
 		void				OpenMenu(u8 menuID, bool NoMenCall = false);
 		void				ChangeGameType(u8 GameType);
 		u8					GetGameType();

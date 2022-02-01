@@ -69,9 +69,9 @@ namespace CTRPluginFramework {
 			if(!IfForceAllowed && PlayerClass::GetInstance()->Offset() == PlayerClass::GetInstance(pID)->Offset())
 				return;
 		
-			Animation::ExecuteAnimationWrapper(pID, animID, 0, 0, 0, 0, 0, x, y, true);
+			Animation::ExecuteAnimationWrapper(pID, animID, {0, 0}, 0, 0, 0, 0, x, y, true);
 			Sleep(Seconds(2));
-			Animation::ExecuteAnimationWrapper(pID, 6, 0, 0, 0, 0, 0, x, y, true);
+			Animation::ExecuteAnimationWrapper(pID, 6, {0, 0}, 0, 0, 0, 0, x, y, true);
 			OSD::Notify("Player: " << pName);
 			OSD::Notify(Utils::Format("Animation: %02X", animID)); 
 		}
@@ -86,9 +86,9 @@ namespace CTRPluginFramework {
 			if(!IfForceAllowed && PlayerClass::GetInstance()->Offset() == PlayerClass::GetInstance(pID)->Offset())
 				return;
 			
-			Animation::ExecuteAnimationWrapper(pID, 0xAF, 0, emotionID, 0, 0, 0, x, y, true);
+			Animation::ExecuteAnimationWrapper(pID, 0xAF, {0, 0}, emotionID, 0, 0, 0, x, y, true);
 			Sleep(Seconds(2));
-			Animation::ExecuteAnimationWrapper(pID, 6, 0, 0, 0, 0, 0, x, y, true);
+			Animation::ExecuteAnimationWrapper(pID, 6, {0, 0}, 0, 0, 0, 0, x, y, true);
 			OSD::Notify("Player: " << pName); 
 			OSD::Notify(Utils::Format("Emotion: %02X", emotionID));
 		}
@@ -103,9 +103,9 @@ namespace CTRPluginFramework {
 			if(!IfForceAllowed && PlayerClass::GetInstance()->Offset() == PlayerClass::GetInstance(pID)->Offset())
 				return;
 			
-			Animation::ExecuteAnimationWrapper(pID, 0xC5, 0, 0, snakeID, 0, 0, x, y, true);
+			Animation::ExecuteAnimationWrapper(pID, 0xC5, {0, 0}, 0, snakeID, 0, 0, x, y, true);
 			Sleep(Seconds(2));
-			Animation::ExecuteAnimationWrapper(pID, 6, 0, 0, 0, 0, 0, x, y, true);
+			Animation::ExecuteAnimationWrapper(pID, 6, {0, 0}, 0, 0, 0, 0, x, y, true);
 			OSD::Notify("Player: " << pName);
 			OSD::Notify(Utils::Format("Snake: %03X", snakeID)); 
 		}
@@ -120,16 +120,12 @@ namespace CTRPluginFramework {
 			if(!IfForceAllowed && PlayerClass::GetInstance()->Offset() == PlayerClass::GetInstance(pID)->Offset())
 				return;
 			
-			Animation::ExecuteAnimationWrapper(pID, 0xC4, 0, 0, 0, musicID, 0, x, y, true);
+			Animation::ExecuteAnimationWrapper(pID, 0xC4, {0, 0}, 0, 0, musicID, 0, x, y, true);
 			Sleep(Milliseconds(100));
-			Animation::ExecuteAnimationWrapper(pID, 6, 0, 0, 0, 0, 0, x, y, true);
+			Animation::ExecuteAnimationWrapper(pID, 6, {0, 0}, 0, 0, 0, 0, x, y, true);
 			OSD::Notify("Player: " << pName); 
 			OSD::Notify(Utils::Format("Music: %03X", musicID)); 
 		}
-	}
-
-	u32 FuseItem(u16 FlagID, u16 ItemID) {
-		return (FlagID << 16) + ItemID;
 	}
 
 	void NonHacker::Item() {
@@ -138,10 +134,9 @@ namespace CTRPluginFramework {
 
 		u32 x, y;
 		if(PlayerClass::GetInstance(pID)->GetWorldCoords(&x, &y)) {	
-			u32 Item = FuseItem(flagID, itemID);
-			Dropper::PlaceItemWrapper(0xA, 0xFFFFFFFF, &Item, &Item, x, y, 0, 0, 0, 0, 0, 0x56, 0xA5, false);
+			Dropper::PlaceItemWrapper(0xA, ReplaceEverything, &itemID, &itemID, x, y, 0, 0, 0, 0, 0, 0x56, 0xA5, false);
 			OSD::Notify("Player: " << pName); 
-			OSD::Notify(Utils::Format("Item: %08X", Item));
+			OSD::Notify(Utils::Format("Item: %08X", *(u32*)&itemID));
 		}	
 	}
 
@@ -208,10 +203,10 @@ namespace CTRPluginFramework {
 		}
 
 		else if(Command == "i:") {
-			nHack.itemID = StringToHex<u16>(ID_16Bit, 0x2001); //sets item
+			nHack.itemID.ID = StringToHex<u16>(ID_16Bit, 0x2001); //sets item
 			if(IDList::ItemValid(nHack.itemID)) {
 				if(SPCommand == "f:") 
-					nHack.flagID = StringToHex<u16>(SPID_16Bit, 0); //sets flag
+					nHack.itemID.Flags = StringToHex<u16>(SPID_16Bit, 0); //sets flag
 
 				nHack.Item();
 			}

@@ -8,7 +8,6 @@
 #include "Helpers/Player.hpp"
 #include "Helpers/Game.hpp"
 #include "Helpers/IDList.hpp"
-#include "Helpers/PlayerPTR.hpp"
 #include "Helpers/AnimData.hpp"
 #include "Helpers/Animation.hpp"
 #include "Helpers/NPC.hpp"
@@ -362,7 +361,9 @@ namespace CTRPluginFramework {
 	}
 //Shop Unlocker
     void shopunlocks(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetData();
+
+		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -442,10 +443,11 @@ namespace CTRPluginFramework {
 	
 	//op 3 is also special cause it removes shrunk if true
 		if(op == 3) {
-			if(*(bool *)Save::GetInstance()->Address(Shops[op]) != 0) {
-			//To remove shrunk if he is in room 1
-				u8 byte = *(u8 *)PlayerPTR::Pointer(0x5714);
-				Process::Write8(PlayerPTR::Pointer(0x5714), byte | 0x4);
+			if(!player->PlayerFlags.FinishedShrunkSignatures) {
+			//To remove shrunk if petition is not done
+				//u8 byte = *(u8 *)PlayerPTR::Pointer(0x5714);
+				//Process::Write8(PlayerPTR::Pointer(0x5714), byte | 0x4);
+				player->PlayerFlags.FinishedShrunkSignatures = 1;
 			}
 		}
 		shopunlocks(entry);
@@ -611,7 +613,9 @@ namespace CTRPluginFramework {
 
 //Unlock QR Machine | half player specific save code	
 	void unlockqrmachine(MenuEntry *entry) {	
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetData();
+
+		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -620,7 +624,10 @@ namespace CTRPluginFramework {
 		std::vector<std::string> cmnOpt =  { "" };
 
 		bool IsON1 = *(u16 *)Save::GetInstance()->Address(0x621D4) == 0x8000;
-		bool IsON2 = *(u16 *)PlayerPTR::Pointer(0x5710) >= 0x955;
+
+		bool IsON2 = player->PlayerFlags.BefriendSable1 &&
+					player->PlayerFlags.BefriendSable2 &&
+					player->PlayerFlags.BefriendSable3;
 		
 		cmnOpt[0] = (IsON1 && IsON2) ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
 		
@@ -630,9 +637,12 @@ namespace CTRPluginFramework {
 		s8 op = optKb.Open();
 		if(op < 0)
 			return;
-		
+
 		Save::GetInstance()->Write<u16>(0x621D4, (IsON1 ? 0 : 0x8000));
-		Process::Write16(PlayerPTR::Pointer(0x5710), IsON2 ? 0x880 : 0x955);
+
+		player->PlayerFlags.BefriendSable1 = IsON2 ? 0 : 1;
+		player->PlayerFlags.BefriendSable2 = IsON2 ? 0 : 1;
+		player->PlayerFlags.BefriendSable3 = IsON2 ? 0 : 1;
 		unlockqrmachine(entry);
 	}
 
@@ -808,11 +818,36 @@ namespace CTRPluginFramework {
 
 //Finish Mayor Permit | only for player 1	
 	void Permit100(MenuEntry *entry) {
-		if(Player::GetSaveOffset(0) == 0) {
+		ACNL_Player *player = Player::GetData();
+
+		if(!player) {
 			entry->Disable();
 			return;
 		}
-		Process::Write8(PlayerPTR::Pointer(0x571A), (*(u8 *)(PlayerPTR::Pointer(0x571A)) & 1) | 0xC8);
+
+		//player->PlayerFlags.FinishedFirstDay = 1; //not tested (might break something)
+		player->PlayerFlags.PermitApproval = 1;
+		player->PlayerFlags.MayorJobIntroduction = 1;
+		player->PlayerFlags.KnowsPermitRequirements = 1;
+		player->PlayerFlags.PermitFinished = 1;
+		player->PlayerFlags.PermitApprovalArrived = 1;
+		player->PlayerFlags.PermitIntroduction = 1;
+		player->PlayerFlags.PWPExplained = 1;
+		player->PlayerFlags.OrdinanceExplained = 1;
+		player->PlayerFlags.PermitFinished = 1;
+
+	//make all permit points ON
+		player->PlayerFlags.Permit_Points1 = 1;
+		player->PlayerFlags.Permit_Points2 = 1;
+		player->PlayerFlags.Permit_Points3 = 1;
+		player->PlayerFlags.Permit_Points4 = 1;
+		player->PlayerFlags.Permit_Points5 = 1;
+		player->PlayerFlags.Permit_Points6 = 1;
+		player->PlayerFlags.Permit_Points7 = 1;
+		player->PlayerFlags.Permit_Points8 = 1;
+		player->PlayerFlags.Permit_Points9 = 1;
+		player->PlayerFlags.Permit_Points10 = 1;
+
 		entry->Disable();
     }
 

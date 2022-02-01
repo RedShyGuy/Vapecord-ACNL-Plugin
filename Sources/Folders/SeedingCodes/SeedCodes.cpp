@@ -7,6 +7,7 @@
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/Dropper.hpp"
 #include "Helpers/Game.hpp"
+#include "Helpers/GameStructs.hpp"
 
 extern "C" void PATCH_EverythingSeed(void);
 extern "C" void PATCH_SnakeSpeed(void);
@@ -17,8 +18,8 @@ extern "C" bool __IsPickSnakeID(u16 snakeID) {
 	return std::find(std::begin(snakeIDArr), std::end(snakeIDArr), snakeID) != std::end(snakeIDArr);
 }
 
-u32 EverythingSeederItemID = 0x80007FFE;
-u32 PickupSeederItemID = 0x7FFE;
+CTRPluginFramework::Item EverythingSeederItemID = {0x7FFE, 0x8000};
+CTRPluginFramework::Item PickupSeederItemID = {0x7FFE, 0};
 
 namespace CTRPluginFramework {
 //Pickup Seeder
@@ -82,7 +83,7 @@ namespace CTRPluginFramework {
 		}
 		
 		if(entry->Hotkeys[0].IsPressed()) {
-			Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, PickupSeederItemID, PickupSeederItemID, ItemChange);
+			Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, *(u32 *)&PickupSeederItemID, *(u32 *)&PickupSeederItemID, ItemChange);
         }	
 		
 	//Switches Seed Item to Remove Item
@@ -204,24 +205,24 @@ namespace CTRPluginFramework {
 			Language->Get("VECTOR_DISABLE")
 		};
 		
-		u16 input = 0;
+		Item input = {0x7FFE, 0};
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), fireOpt);
 		
 		Sleep(Milliseconds(100));
 		switch(optKb.Open()) {
 			default: break;
 			case 0: {
-				if(Wrap::KB<u16>(Language->Get("FIREWORK_SEEDER_ENTER_ID"), true, 4, input, input, ItemChange)) 
-					Process::Patch(firework.addr, input);
+				if(Wrap::KB<u16>(Language->Get("FIREWORK_SEEDER_ENTER_ID"), true, 4, *(u16 *)&input, *(u16 *)&input, ItemChange)) 
+					Process::Patch(firework.addr, *(u16 *)&input);
 			} break;
-			case 1: Inventory::WriteSlot(0, 0x339F); break;
+			case 1: Inventory::WriteSlot(0, {0x339F, 0}); break;
 			case 2: Process::Patch(firework.addr, 0x33A0); break;
 		}
 	}
 //OSD for Map Editor	
 	bool editorID(const Screen &screen) { 
 		if(screen.IsTop) 
-			screen.Draw(Utils::Format("ID: %08X", dropitem), 320, 220, Color::White); 
+			screen.Draw(Utils::Format("ID: %08X", *(u32 *)&dropitem), 320, 220, Color::White); 
 
 		return 1;
 	}
@@ -342,13 +343,13 @@ namespace CTRPluginFramework {
 			if(entry->Hotkeys[5].IsDown()) {
 				keyPressedTicks++;
 				if((keyPressedTicks < 90 ? (keyPressedTicks % 10) == 1 : (keyPressedTicks % 3) == 1) || keyPressedTicks > 220)
-					dropitem = (dropitem - 1 == 0x1FFF ? 0xFD : dropitem - 1) % 0x4000;
+					dropitem.ID = (dropitem.ID - 1 == 0x1FFF ? 0xFD : dropitem.ID - 1) % 0x4000;
 			}
 			
 			if(entry->Hotkeys[6].IsDown()) {
 				keyPressedTicks++;
 				if((keyPressedTicks < 90 ? (keyPressedTicks % 10) == 1 : (keyPressedTicks % 3) == 1) || keyPressedTicks > 220) 
-					dropitem = (dropitem + 1 == 0xFE ? 0x2000 : dropitem + 1) % 0x4000;
+					dropitem.ID = (dropitem.ID + 1 == 0xFE ? 0x2000 : dropitem.ID + 1) % 0x4000;
 			}
 			
 			if(entry->Hotkeys[7].IsPressed()) {
@@ -366,9 +367,9 @@ namespace CTRPluginFramework {
 			}
 			
 			if(turbo ? entry->Hotkeys[9].IsDown() : entry->Hotkeys[9].IsPressed()) {//Key::A
-				u32 pItem = (u32)GameHelper::GetItemAtWorldCoords(selectedX, selectedY);
+				Item *pItem = GameHelper::GetItemAtWorldCoords(selectedX, selectedY);
 				
-				if(pItem == 0) 
+				if(!pItem) 
 					return;
 				
 				for(s8 i = -size; i <= size; ++i) {
@@ -382,7 +383,7 @@ namespace CTRPluginFramework {
 			}
 			
 			if(entry->Hotkeys[10].IsPressed()) 
-				Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, dropitem, dropitem, ItemChange);
+				Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, *(u32 *)&dropitem, *(u32 *)&dropitem, ItemChange);
 		}
 		
 		if(!entry->IsActivated()) { 
@@ -396,7 +397,7 @@ namespace CTRPluginFramework {
 	}
 
 	void E_Seeder_KB(MenuEntry *entry) {
-		Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, EverythingSeederItemID, EverythingSeederItemID, ItemChange);
+		Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, *(u32 *)&EverythingSeederItemID, *(u32 *)&EverythingSeederItemID, ItemChange);
 	}
 
 	void everythingseeder(MenuEntry *entry) {
@@ -410,10 +411,10 @@ namespace CTRPluginFramework {
 		
 		if(entry->Hotkeys[0].IsDown() && !active) {
 			if(!IDList::ItemValid(EverythingSeederItemID))
-				EverythingSeederItemID = 0x2018;
+				EverythingSeederItemID = {0x2018, 0};
 
-			if((EverythingSeederItemID & 0xFFFF) == 0x7FFE)
-				EverythingSeederItemID = 0x80007FFE;
+			if(EverythingSeederItemID.ID == 0x7FFE)
+				EverythingSeederItemID = {0x7FFE, 0x8000};
 
 			hook1.Enable();
 			hook2.Enable();

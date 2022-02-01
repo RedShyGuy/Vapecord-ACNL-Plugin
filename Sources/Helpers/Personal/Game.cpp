@@ -3,7 +3,6 @@
 #include "Helpers/IDList.hpp"
 #include "Helpers/Save.hpp"
 #include "Helpers/Player.hpp"
-#include "Helpers/PlayerPTR.hpp"
 #include "Helpers/Animation.hpp"
 #include "Helpers/Dropper.hpp"
 #include "RegionCodes.hpp"
@@ -335,40 +334,39 @@ namespace CTRPluginFramework {
 		return moneyget.Call<int>(position);
 	}
 //encrypt it
-	void GameHelper::EncryptValue(u32 *position, int moneyamount) {
+	void GameHelper::EncryptValue(u64 *position, int moneyamount) {
 		static Address moneyset(0x3036A4, 0x303534, 0x303738, 0x303738, 0x303404, 0x303404, 0x3034C0, 0x3034C0); 
 		moneyset.Call<void>(position, moneyamount);
 	}
 
-	void InjectTouchCallBack(void) {
-		static PluginMenu *menu = PluginMenu::GetRunningInstance();
-		if(!menu->IsOpen()) {
-			Controller::InjectTouch(300, 200); //lazy way to properly update badges lol
-			*menu -= InjectTouchCallBack;
-		}
-	}
-
 //set badges	
-	void GameHelper::SetBadges(u8 badge, u8 type) {
-		if(Player::GetSaveOffset(4) == 0) 
-			return;
-		
-		Process::Write8(PlayerPTR::Pointer(0x569C) + badge, type);
-
-		return; //for now!
-
-		if(GameHelper::BaseInvPointer() == 0)
+	void GameHelper::SetBadges(u8 badge, u8 type, bool WithStats) {
+		ACNL_Player *player = Player::GetData();
+		if(!player) 
 			return;
 
-	//if badge menu is not opened
-		if(*(u8 *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x19E8) != 0xC) 
-			return;
+		player->Badges.Badges[badge] = type;
 
-		static PluginMenu *menu = PluginMenu::GetRunningInstance();
+		if(WithStats) {
+			//type = {3 = Gold, 2 = Silver, 1 = Bronze, 0 = None}
+			static const int Values[3][24] = {
+				{ 36, 36, 15, 500, 500, 100, 30, 100, 
+				50, 100, 1000000, 500000, 150, 100, 500, 500000, 
+				50, 30, 20, 20, 50000, 50, 50, 50 },
 
-		static Address LoadBadges(0x6AD730);
-		LoadBadges.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x800, PlayerPTR::Pointer(0x569C)); //32DC50B8, 31F2C6BC
-		*menu += InjectTouchCallBack;
+				{ 58, 58, 24, 2000, 2000, 200, 100, 250, 
+				200, 250, 10000000, 3000000, 1500, 300, 2000, 2000000, 
+				100, 100, 50, 50, 100000, 200, 100, 200 },
+				
+				{ 72, 72, 30, 5000, 5000, 1000, 200, 500, 
+				500, 500, 100000000, 10000000, 5000, 1000, 5000, 5000000, 
+				200, 200, 80, 100, 150000, 500, 300, 500 }
+			};
+
+			u64 enc;
+			GameHelper::EncryptValue(&enc, Values[type][badge]);
+			player->Badges.BadgeValues[badge] = type == 0 ? 0 : enc;
+		}
 	}
 //if game is ACNL
 	bool GameHelper::IsACNL() {
@@ -382,16 +380,16 @@ namespace CTRPluginFramework {
 		return IDList::SetCountryName(country);
 	}
 //if item is outdoor only
-	bool GameHelper::IsOutdoorItem(u16 item) {
-		return (item <= 0xFD && item >= 0);
+	bool GameHelper::IsOutdoorItem(Item item) {
+		return (item.ID <= 0xFD && item.ID >= 0);
 	}
 //converts flower to outdoor flower
-	void GameHelper::ToOutdoorFlowers(u32& input) {
-		input = (input - 0x2890);
+	void GameHelper::ToOutdoorFlowers(Item& input) {
+		input.ID = (input.ID - 0x2890);
 	}
 //converts flower to indoor flower
-	void GameHelper::ToIndoorFlowers(u32& input) {
-		input = (input + 0x2890);
+	void GameHelper::ToIndoorFlowers(Item& input) {
+		input.ID = (input.ID + 0x2890);
 	}
 
 //catalog function
@@ -461,9 +459,9 @@ namespace CTRPluginFramework {
 		return getplayer2.Call<u8>(*(u32 *)Code::GamePointer.addr);
 	}
 //Get item at world coords
-	u32 *GameHelper::GetItemAtWorldCoords(u32 x, u32 y) {
+	Item *GameHelper::GetItemAtWorldCoords(u32 x, u32 y) {
 		static Address WorlditemCoords(0x2FEF9C, 0x2FEB00, 0x2FEF0C, 0x2FEF0C, 0x2FEE38, 0x2FEE38, 0x2FECF0, 0x2FECF0);
-		return WorlditemCoords.Call<u32 *>(GetCurrentMap(), x, y, 0);
+		return WorlditemCoords.Call<Item *>(GetCurrentMap(), x, y, 0);
 	}
 //Get current map
 	u32 GameHelper::GetCurrentMap(void) {
@@ -480,7 +478,7 @@ namespace CTRPluginFramework {
 		bool res = false;
 		u8 x = wX, y = wY;
 		u32 count = 0;
-		u32 Empty = 0x7FFE;
+		Item Empty = {0x7FFE, 0};
 
 		if(!PlayerClass::GetInstance()->IsLoaded()) 
 			return res;
@@ -508,8 +506,8 @@ namespace CTRPluginFramework {
 		
 		while(res && (x - wX < width || removeEverything)) {
 			while(res && (y - wY < length || removeEverything)) {
-				if((u32)GameHelper::GetItemAtWorldCoords(x, y) != 0) {
-					if(*GameHelper::GetItemAtWorldCoords(x, y) != 0x7FFE) {
+				if(GameHelper::GetItemAtWorldCoords(x, y)) {
+					if(GameHelper::GetItemAtWorldCoords(x, y)->ID != 0x7FFE) {
 						count++;
 						if(count % 300 == 0) 
 							Sleep(Milliseconds(50));
@@ -517,7 +515,7 @@ namespace CTRPluginFramework {
 						if(trample) 
 							GameHelper::TrampleAt(x, y);
 						else 
-							Dropper::PlaceItemWrapper(6, 0xFFFFFFFF, &Empty, &Empty, x, y, 0, 0, 0, 0, 0, 0x3C, 0xA5);
+							Dropper::PlaceItemWrapper(6, ReplaceEverything, &Empty, &Empty, x, y, 0, 0, 0, 0, 0, 0x3C, 0xA5);
 
 						Controller::Update();
 						if(Controller::IsKeyPressed(Key::B) && allowAbort) {
@@ -539,7 +537,7 @@ namespace CTRPluginFramework {
 				y = wY;
 
 			x++;
-			if((u32)GameHelper::GetItemAtWorldCoords(x, y) == 0) 
+			if(!GameHelper::GetItemAtWorldCoords(x, y)) 
 				res = false;
 		}
 	end:
@@ -600,15 +598,15 @@ namespace CTRPluginFramework {
 	}
 //Trample at specific position	
 	void GameHelper::TrampleAt(u8 wX, u8 wY) {		
-		u32 pItem = (u32)GameHelper::GetItemAtWorldCoords(wX, wY);
-		u32 Empty = 0x7FFE;
+		Item *pItem = GameHelper::GetItemAtWorldCoords(wX, wY);
+		Item Empty = {0x7FFE, 0};
 		
-		if(pItem == 0) 
+		if(!pItem) 
 			return;
 		
 		u8 room = Player::GetRoom(GameHelper::GetActualPlayerIndex()); 
 		if(GameHelper::GetOnlinePlayerCount() != 0) {	
-			TramplePkt data { *(u32 *)pItem, room, wX, wY, 0 };
+			TramplePkt data { *pItem, room, wX, wY, 0 };
 			
 			static Address trample(0x625488, 0x6249B0, 0x6244C0, 0x6244C0, 0x623F80, 0x623F80, 0x623B28, 0x623B28);
 			trample.Call<void>(0x47, 4, &data, 8);
@@ -626,7 +624,7 @@ namespace CTRPluginFramework {
 		return fullinv.Call<bool>(PlayerClass::GetInstance()->Offset());
 	}
 //sets first empty slot
-	bool GameHelper::SetItem(u32 *item) {		
+	bool GameHelper::SetItem(Item *item) {		
 		if(Player::GetSaveOffset(4) == 0) 
 			return 0;
 		

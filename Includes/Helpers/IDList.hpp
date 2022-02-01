@@ -2,6 +2,7 @@
 #define IDLIST_HPP
 
 #include <CTRPluginFramework.hpp>
+#include "Helpers/GameStructs.hpp"
 
 namespace CTRPluginFramework {
 	struct ID_Data {
@@ -11,7 +12,7 @@ namespace CTRPluginFramework {
 
 	struct Furniture {
 		std::string Name;
-		u16 Items[16];
+		Item Items[16];
 	};
 
 	struct Range {
@@ -104,18 +105,18 @@ namespace CTRPluginFramework {
 		bool 						RoomValid(u8 roomID);
 		bool 						MenuValid(u8 MenuID);
 		bool						BuildingValid(u8 buildingID);
-		bool						ToolsValid(u16 toolsID);
-		bool 						ItemValid(u32 itemID, bool IsDropped = true);
+		bool						ToolsValid(Item toolsID);
+		bool 						ItemValid(Item itemID, bool IsDropped = true);
 		bool 						MusicValid(u16 musicID);
 		bool 						AnimationValid(u8 animID);
 		bool 						SnakeValid(u16 snakeID);
 		bool 						EmotionValid(u8 emotionID);
-		bool						GetSeedName(u16 itemID, std::string& str);
+		bool						GetSeedName(Item itemID, std::string& str);
 		std::string  				SetCountryName(u8 country);
 		std::string 				GetBuildingName(u8 ID);
 		std::string 				GetRoomName(u8 ID);
 		bool		 				ValidID(u16 ID, u16 StardID, u16 EndID);
-		std::string					GetItemName(u16 ItemID);
+		std::string					GetItemName(Item ItemID);
 	}
 }
 #endif

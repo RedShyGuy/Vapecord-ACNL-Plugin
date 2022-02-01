@@ -1,7 +1,6 @@
 #include "Helpers/CustomButton.hpp"
 #include "Helpers/Inventory.hpp"
 #include "Helpers/Game.hpp"
-#include "Helpers/PlayerPTR.hpp"
 #include "Helpers/IDList.hpp"
 #include "Helpers/Player.hpp"
 #include "Helpers/Wrapper.hpp"
@@ -16,7 +15,8 @@ Custom Buttons
 		u8 slot = 0;
 		Inventory::GetSelectedSlot(slot);
 	//writes present lock onto item
-		Inventory::WriteLock(slot, 1);
+		ACNL_Player *player = Player::GetData();
+		player->InventoryItemLocks[slot] = 1;
 	//Loads Item Icon | present icon
 		Code::LoadIcon.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x1EC0, slot);
 
@@ -24,7 +24,7 @@ Custom Buttons
 	}
 
 	void CustomButton::DuplicateItem(u32 ItemData) {
-		u32 itemslotid = 0x7FFE;
+		Item itemslotid = {0x7FFE, 0};
 		u8 slot = 0;
 		Inventory::GetSelectedSlot(slot);
 		Inventory::ReadSlot(slot, itemslotid);	
@@ -35,15 +35,17 @@ Custom Buttons
 	}
 	
 	void CustomButton::PutItemToStorage(u32 ItemData) {
-		u32 itemslotid = 0x7FFE;
+		Item itemslotid = {0x7FFE, 0};
 		u8 slot = 0, closetslot = 0;
 		
 		Inventory::GetSelectedSlot(slot);
 		Inventory::ReadSlot(slot, itemslotid);		
 		
-		if(Inventory::GetNextClosetItem(0x7FFE, closetslot) != -1) {
-			Inventory::WriteSlot(slot, 0x7FFE);	
-			PlayerPTR::Write32(0x92F0 + (4 * closetslot), itemslotid);
+		if(Inventory::GetNextClosetItem({0x7FFE, 0}, closetslot)) {
+			Inventory::WriteSlot(slot, {0x7FFE, 0});	
+
+			ACNL_Player *player = Player::GetData();
+			player->Dressers[closetslot] = (Item)itemslotid;
 		}
 
 		Code::RestoreItemWindow.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
@@ -53,52 +55,62 @@ Custom Buttons
 		static Address GetMoneyFunc(0x3055C8, 0x305630, 0x3055D4, 0x3055D4, 0x305688, 0x305688, 0x305640, 0x305640);
 		static Address CallSound(0x58DDF8, 0x58D310, 0x58CE40, 0x58CE40, 0x58C730, 0x58C730, 0x58C404, 0x58C404);
 
-		u32 itemslotid = 0x7FFE;
+		Item itemslotid = {0x7FFE, 0};
 		u8 slot = 0;
 		Inventory::GetSelectedSlot(slot);
 
-		Inventory::ReadSlot(slot, itemslotid);
-		if(IDList::ValidID(itemslotid, 0x20AC, 0x2117)) { 
-			int money = GetMoneyFunc.Call<int>(PlayerPTR::Pointer(0x6BD0 + (4 * slot)));
-				
-			int debt = GameHelper::DecryptValue((u64 *)PlayerPTR::Pointer(0x6B94));
-		//if you try to store more money than you need to, the rest will be set to your bank acc
-			if(money >= debt) {
-				int diff = std::abs(money - debt);
-				
-				int bank = GameHelper::DecryptValue((u64 *)PlayerPTR::Pointer(0x6B8C));
-			//if money that goes to the bank will not fill it it up completely	
-				if((bank + diff) <= 999999999) {
-					//GameHelper::EncryptValue(PlayerPTR::Pointer(0x6B8C), bank + diff);
-				}
-			//If bank is not full but still can hold bells fill it up
-				else {
-					if(bank != 999999999) {
-						diff = 999999999 - diff;
-						//GameHelper::EncryptValue(PlayerPTR::Pointer(0x6B8C), diff);
+		ACNL_Player *player = Player::GetData();
+
+		if(player) {
+			Inventory::ReadSlot(slot, itemslotid);
+			if(IDList::ValidID(itemslotid.ID, 0x20AC, 0x2117)) { 
+				int money = GetMoneyFunc.Call<int>(&player->Inventory[slot]);
+					
+				int debt = GameHelper::DecryptValue(&player->DebtAmount);
+			//if you try to store more money than you need to, the rest will be set to your bank acc
+				if(money >= debt) {
+					int diff = std::abs(money - debt);
+					
+					int bank = GameHelper::DecryptValue(&player->BankAmount);
+				//if money that goes to the bank will not fill it it up completely	
+					if((bank + diff) <= 999999999) {
+						GameHelper::EncryptValue(&player->BankAmount, bank + diff);
 					}
+				//If bank is not full but still can hold bells fill it up
+					else {
+						if(bank != 999999999) {
+							diff = 999999999 - diff;
+							GameHelper::EncryptValue(&player->BankAmount, diff);
+						}
+					}
+					
+					money = debt; //make money the exact debt
 				}
-				
-				money = debt; //make money the exact debt
+
+				GameHelper::EncryptValue(&player->DebtAmount, debt - money);
+
+				while(itemslotid.ID > 0x20AC) {
+					CallSound.Call<void>(0x1000491);
+					itemslotid.ID--;
+					Inventory::WriteSlot(slot, itemslotid);		
+				}
+
+				GameHelper::PlaySound(0x492);
+
+				Inventory::WriteSlot(slot, {0x7FFE, 0});
 			}
-
-			//GameHelper::EncryptValue(PlayerPTR::Pointer(0x6B94), debt - money);
-
-			while(itemslotid > 0x20AC) {
-				CallSound.Call<void>(0x1000491);
-				Inventory::WriteSlot(slot, itemslotid--);		
-			}
-
-			GameHelper::PlaySound(0x492);
-
-			Inventory::WriteSlot(slot, 0x7FFE);
 		}
-		
+
 		Code::RestoreItemWindow.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}
 	
 	void CustomButton::RandomOutfit(u32 ItemData) {
-		Player::WriteOutfit(4, Utils::Random(0x280B, 0x28F3), Utils::Random(0x28F5, 0x295B), Utils::Random(0x2493, 0x26F5), Utils::Random(0x26F8, 0x2776), Utils::Random(0x2777, 0x279E), Utils::Random(0x279F, 0x27E5));
+		Player::WriteOutfit(4, U32_TO_ITEM(Utils::Random(0x280B, 0x28F3)), 
+							   U32_TO_ITEM(Utils::Random(0x28F5, 0x295B)), 
+							   U32_TO_ITEM(Utils::Random(0x2493, 0x26F5)), 
+							   U32_TO_ITEM(Utils::Random(0x26F8, 0x2776)), 
+							   U32_TO_ITEM(Utils::Random(0x2777, 0x279E)), 
+							   U32_TO_ITEM(Utils::Random(0x279F, 0x27E5)));
 		
 		Code::RestoreOutfitWindow.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}

@@ -1,7 +1,6 @@
 #include "cheats.hpp"
 #include "TextFileParser.hpp"
 #include "Helpers/Player.hpp"
-#include "Helpers/PlayerPTR.hpp"
 #include "Helpers/Game.hpp"
 #include "RegionCodes.hpp"
 #include "Helpers/Wrapper.hpp"
@@ -10,10 +9,11 @@
 #include "Helpers/Dropper.hpp"
 #include "Helpers/IDList.hpp"
 #include "Color.h"
+#include "Helpers/GameStructs.hpp"
 
 extern "C" void PATCH_PartyPop(void);
 
-u32 PartyPopperTool = 0x336A;
+CTRPluginFramework::Item PartyPopperTool = {0x336A, 0};
 
 namespace CTRPluginFramework {
 //Size Codes
@@ -127,7 +127,8 @@ namespace CTRPluginFramework {
 	void freezeframe(MenuEntry *entry) {
 		static const Address freeze(0x54DBE8, 0x54D100, 0x54CC30, 0x54CC30, 0x54C51C, 0x54C51C, 0x54C240, 0x54C240);
 		if(entry->Hotkeys[0].IsPressed()) {
-			if(Player::GetSaveOffset(4) == 0) {
+			ACNL_Player *player = Player::GetData();
+			if(!player) {
 				OSD::Notify("Player needs to be loaded!", Color::Red);
 				return;
 			}
@@ -135,7 +136,7 @@ namespace CTRPluginFramework {
 			static Address CreateTPC(0x5B3594, 0x5B2AAC, 0x5B25DC, 0x5B25DC, 0x5B1ECC, 0x5B1ECC, 0x5B1BA0, 0x5B1BA0);
 			static const Address TPCPoint(0x954F10, 0x953EF0, 0x953F08, 0x953F08, 0x94DF08, 0x94CF08, 0x94CF08, 0x94CF08);
 
-			CreateTPC.Call<void>(*(u32 *)TPCPoint.addr, PlayerPTR::Pointer(0x5734));
+			CreateTPC.Call<void>(*(u32 *)TPCPoint.addr, &player->HasTPCPic);
 			GameHelper::PlaySound(0x4A7);
 		}
 	
@@ -257,7 +258,7 @@ namespace CTRPluginFramework {
 			if(coord != nullptr)
 				coord = PlayerClass::GetInstance()->GetCoordinates();
 
-			Animation::ExecuteAnimationWrapper(4, 6, 0, 0, 0, 0, 0, 0, 0, 0); //idles player
+			Animation::ExecuteAnimationWrapper(4, 6, {0, 0}, 0, 0, 0, 0, 0, 0, 0); //idles player
 			Process::Patch(cameraAsm.addr, 0x2A000020);
 			Process::Patch(rotationAsm.addr, 0xE18020B4);
             Process::Write32(rotationAsm.addr + 0xC, 0xE18020B4);
@@ -307,12 +308,12 @@ namespace CTRPluginFramework {
 				switch(isOn) {
 					case 0: 
 						OSD::Notify("Player: " << Color::Red << "Locked"); 
-						Animation::ExecuteAnimationWrapper(4, 0xF, 0, 0, 0, 0, 0, 0, 0, 0);
+						Animation::ExecuteAnimationWrapper(4, 0xF, {0, 0}, 0, 0, 0, 0, 0, 0, 0);
 						isOn = true;
 					break;
 					case 1: 
 						OSD::Notify("Player: " << Color::Green << "Unlocked");
-						Animation::ExecuteAnimationWrapper(4, 6, 0, 0, 0, 0, 0, 0, 0, 0);
+						Animation::ExecuteAnimationWrapper(4, 6, {0, 0}, 0, 0, 0, 0, 0, 0, 0);
 						isOn = false;
 					break;
 				}
@@ -440,14 +441,12 @@ namespace CTRPluginFramework {
 					return;
 
 			//If Item is 0 return | 0 means no item-offset
-				u32 Item = (u32)GameHelper::GetItemAtWorldCoords(x, y);	
-				if(Item == 0) 
+				Item *item = GameHelper::GetItemAtWorldCoords(x, y);	
+				if(!item) 
 					return;
 
-				u32 PlaceItem = *(u32 *)Item;
-				
 			//If ID is not wilted flower return
-				if(!IDList::ValidID((u16)PlaceItem, 0xCE, 0xF7))
+				if(!IDList::ValidID(item->ID, 0xCE, 0xF7))
 					return;
 
 			//Removes Wilted Flower	
@@ -459,8 +458,8 @@ namespace CTRPluginFramework {
 				//GameHelper::PlaySound(0);
 
 			//Places Fixed Flower
-				PlaceItem -= 0x2F; //Jumps to fixed flower 
-				Dropper::PlaceItemWrapper(0xC, 0xFFFFFFFF, &PlaceItem, &PlaceItem, x, y, 0, 0, 0, 0, 0, 0x5C, 0xA5, false);
+				item->ID -= 0x2F; //Jumps to fixed flower 
+				Dropper::PlaceItemWrapper(0xC, ReplaceEverything, item, item, x, y, 0, 0, 0, 0, 0, 0x5C, 0xA5, false);
 
 				if(!bypassing) 
 					Dropper::DropItemLock(false);
@@ -482,13 +481,12 @@ namespace CTRPluginFramework {
 				if(!PlayerClass::GetInstance()->GetWorldCoords(&x, &y))
 					return;
 			//If Item is 0 return | 0 means no item-offset
-				u32 Item = (u32)GameHelper::GetItemAtWorldCoords(x, y);	
-				if(Item == 0) 
+				Item *item = GameHelper::GetItemAtWorldCoords(x, y);	
+				if(!item) 
 					return;
-				
-				u32 PlaceItem = *(u32 *)Item;
+
 			//If no growing tree found return	
-				if(!(std::find(std::begin(Growing_Trees), std::end(Growing_Trees), (PlaceItem & 0xFFFF)) != std::end(Growing_Trees)))
+				if(!(std::find(std::begin(Growing_Trees), std::end(Growing_Trees), item->ID) != std::end(Growing_Trees)))
 					return;
 				
 			//Removes growing tree
@@ -497,8 +495,8 @@ namespace CTRPluginFramework {
 				for(int i = 0; i <= 20; ++i) 
 					GameHelper::Particles(0x19A, PlayerClass::GetInstance()->GetCoordinates(x, y));				
 			//Places Grown Tree
-				PlaceItem += 1; //Jumps to next growth level
-				Dropper::PlaceItemWrapper(0xC, 0xFFFFFFFF, &PlaceItem, &PlaceItem, x, y, 0, 0, 0, 0, 0, 0x5C, 0xA5, false);
+				item->ID += 1; //Jumps to next growth level
+				Dropper::PlaceItemWrapper(0xC, ReplaceEverything, item, item, x, y, 0, 0, 0, 0, 0, 0x5C, 0xA5, false);
 
 				if(!bypassing) 
 					Dropper::DropItemLock(false);

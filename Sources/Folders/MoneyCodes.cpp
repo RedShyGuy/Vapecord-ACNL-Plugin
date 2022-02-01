@@ -2,7 +2,6 @@
 #include "Helpers/Player.hpp"
 #include "TextFileParser.hpp"
 #include "Helpers/Game.hpp"
-#include "Helpers/PlayerPTR.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/Save.hpp"
 
@@ -20,12 +19,8 @@ namespace CTRPluginFramework {
 		}
 		
 		u32 money = 0;
-		if(Wrap::KB<u32>(Language->Get("ENTER_AMOUNT"), false, 5, money, 0)) {
-			static Address moneyset(0x3036A4, 0x303534, 0x303738, 0x303738, 0x303404, 0x303404, 0x3034C0, 0x3034C0); 
-			moneyset.Call<void>(&player->PocketMoney, money);
-
-			//GameHelper::EncryptValue((u32 *)player->PocketMoney, money);
-		}
+		if(Wrap::KB<u32>(Language->Get("ENTER_AMOUNT"), false, 5, money, 0))
+			GameHelper::EncryptValue(&player->PocketMoney, money);
 	}
 //Bank Mod
 	void bank(MenuEntry *entry) {
@@ -39,7 +34,7 @@ namespace CTRPluginFramework {
 		
 		u32 money = 0;
 		if(Wrap::KB<u32>(Language->Get("ENTER_AMOUNT"), false, 9, money, 0))
-			GameHelper::EncryptValue((u32 *)player->BankAmount, money);
+			GameHelper::EncryptValue(&player->BankAmount, money);
 	}
 //Meow Coupon Mod
 	void coupon(MenuEntry *entry) {
@@ -53,7 +48,7 @@ namespace CTRPluginFramework {
 		
 		u32 coupon = 0;
 		if(Wrap::KB<u32>(Language->Get("ENTER_AMOUNT"), false, 4, coupon, 0))
-			GameHelper::EncryptValue((u32 *)player->MeowCoupons, coupon);
+			GameHelper::EncryptValue(&player->MeowCoupons, coupon);
 	}
 //Badges Mod
 	void badges(MenuEntry *entry) {
@@ -79,8 +74,10 @@ namespace CTRPluginFramework {
 		if(index < 0)
 			return;
 
+		bool WithStats = MessageBox("Do you want to set the appropiate badge stats?\n(This will edit all badge related game stats)", DialogType::DialogYesNo).SetClear(ClearScreen::Top)();
+
 		for(int i = 0; i < 24; ++i) 
-			GameHelper::SetBadges(i, std::abs(index - 3));
+			GameHelper::SetBadges(i, std::abs(index - 3), WithStats);
 	}
 //Medals Mod  32DC51B8 31F2C6BC
 	void medals(MenuEntry *entry) {
@@ -94,7 +91,7 @@ namespace CTRPluginFramework {
 		
 		u32 medal = 0;
 		if(Wrap::KB<u32>(Language->Get("ENTER_AMOUNT"), false, 4, medal, 0)) {
-			GameHelper::EncryptValue((u32 *)player->MedalAmount, medal);
+			GameHelper::EncryptValue(&player->MedalAmount, medal);
 		}	
 	}	
 //turnip Mod	
@@ -111,8 +108,8 @@ namespace CTRPluginFramework {
 		if(Wrap::KB<u32>(Language->Get("ENTER_AMOUNT"), false, 5, turnip, 0)) {
 			for(int i = 0; i < 6; ++i) {
 				u32 TurnipOffset = Save::GetInstance()->Address(0x6ADE0);
-				GameHelper::EncryptValue((u32 *)(TurnipOffset + i * 16), turnip); //AM
-				GameHelper::EncryptValue((u32 *)(TurnipOffset + i * 16 + 8), turnip); //PM
+				GameHelper::EncryptValue((u64 *)(TurnipOffset + i * 16), turnip); //AM
+				GameHelper::EncryptValue((u64 *)(TurnipOffset + i * 16 + 8), turnip); //PM
 			}
 		}
 	}

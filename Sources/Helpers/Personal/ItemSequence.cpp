@@ -2,8 +2,9 @@
 #include "Helpers/Dropper.hpp"
 #include "TextFileParser.hpp"
 
+
 namespace CTRPluginFramework {
-	std::vector<u32> ItemID;
+	std::vector<Item> ItemID;
 	std::vector<std::string> KBItems;
 	u8 Index;
 	bool ISActive = false;
@@ -14,7 +15,7 @@ namespace CTRPluginFramework {
 	}
 	
 	void ItemSequence::OpenIS() {
-		u32 AddedItem;
+		Item AddedItem;
 		
 		Keyboard AddKB(Language->Get("ITEM_SEQUENCER_ENTER_ID"));
 		AddKB.CanAbort(true);
@@ -28,7 +29,7 @@ namespace CTRPluginFramework {
 	//if item vector is not empty add existing items to keyboard
 		if(ItemID.size() != 0) {
 			for(u8 i = 1; i < ItemID.size(); i++) 
-				KBItems.push_back(Utils::Format("%08X", ItemID.at(i)));
+				KBItems.push_back(Utils::Format("%08X", *(u32 *)&ItemID.at(i)));
 		}
 		
 		KBItems.push_back("Add...");
@@ -45,7 +46,7 @@ namespace CTRPluginFramework {
 				
 			case 0:
 				Sleep(Milliseconds(200));
-				AddKB.Open(dropitem, dropitem);
+				AddKB.Open(*(u32 *)&dropitem, *(u32 *)&dropitem);
 			break;
 			
 			default:
@@ -53,12 +54,12 @@ namespace CTRPluginFramework {
 			//If new item gets added
 				if(Select + 1 == KBItems.size()) {
 				//Adds new item
-					if(AddKB.Open(AddedItem) == 0) 
+					if(AddKB.Open(*(u32 *)&AddedItem) == 0) 
 						ItemID.push_back(AddedItem);
 				}
 				else {
 				//if already existing item is selected 
-					if(AddKB.Open(ItemID.at(Select), ItemID.at(Select)) == -1) {
+					if(AddKB.Open(*(u32 *)&ItemID.at(Select), *(u32 *)&ItemID.at(Select)) == -1) {
 					//If Item is not selected remove position
 						ItemID.erase(ItemID.begin() + Select);
 					}
@@ -77,7 +78,7 @@ namespace CTRPluginFramework {
 		ISActive = enable;
 	}
 //moves to next item
-	u32 *ItemSequence::Next() {
+	Item *ItemSequence::Next() {
 		if(ItemID.size() - 1 > Index) 
 			Index++;
 		else 
@@ -89,7 +90,7 @@ namespace CTRPluginFramework {
 		return &ItemID.at(Index);
 	}
 //Look at the next item	
-	u32 ItemSequence::PeekNext() {
+	Item ItemSequence::PeekNext() {
 		if(ItemID.size() - 1 > Index) 
 			Index++;
 		else 

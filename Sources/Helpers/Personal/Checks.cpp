@@ -28,27 +28,27 @@ extern "C" bool __IsPlayerHouse() {
 
 namespace CTRPluginFramework {
 //Hook invalid pickup
-	u32 InvalidPickStop(u8 ID, u32 *ItemToReplace, u32 *ItemToPlace, u32 *ItemToShow, u8 worldx, u8 worldy) {	
-		if(IDList::ItemValid((*ItemToReplace & 0xFFFFFFFF), true)) {
+	u32 InvalidPickStop(u8 ID, Item *ItemToReplace, Item *ItemToPlace, Item *ItemToShow, u8 worldx, u8 worldy) {	
+		if(IDList::ItemValid(*ItemToReplace, true)) {
 			if((ID == 0xA) || (ID == 0x12) || (ID == 0x13)) {
-				if((*ItemToPlace & 0xFFFF) == 0x7FFE) {
-					*ItemToPlace = 0x80007FFE;
-					*ItemToShow = 0x80007FFE;
+				if(ItemToPlace->ID == 0x7FFE) {
+					*ItemToPlace = {0x7FFE, 0x8000};
+					*ItemToShow = {0x7FFE, 0x8000};
 				}
 			}
 
 			const HookContext &curr = HookContext::GetCurrent();
 			static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
-			return func.Call<u32>(ID, (u32)ItemToReplace, (u32)ItemToPlace, (u32)ItemToShow, worldx, worldy, 0, 0, 0, 0, 0);
+			return func.Call<u32>(ID, ItemToReplace, ItemToPlace, ItemToShow, worldx, worldy, 0, 0, 0, 0, 0);
 		}
 		return 0xFFFFFFFF;
 	}
 //Hook invalid drop
-	u32 InvalidDropStop(u8 ID, u32 *ItemToReplace, u32 *ItemToPlace, u32 *ItemToShow) {
-		if(IDList::ItemValid((*ItemToPlace & 0xFFFFFFFF))) {
+	u32 InvalidDropStop(u8 ID, Item *ItemToReplace, Item *ItemToPlace, Item *ItemToShow) {
+		if(IDList::ItemValid(*ItemToPlace)) {
 			const HookContext &curr = HookContext::GetCurrent();
 			static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
-			return func.Call<u32>(ID, (u32)ItemToReplace, (u32)ItemToPlace, (u32)ItemToShow);
+			return func.Call<u32>(ID, ItemToReplace, ItemToPlace, ItemToShow);
 		}
 
 		return 0xFFFFFFFF;
@@ -56,7 +56,7 @@ namespace CTRPluginFramework {
 
 //hook invalid show off	
 	u32 InvalidShowOffStop(u32 pOffset, u32 ItemOffset) {
-		if(IDList::ItemValid(*(u32 *)ItemOffset)) {
+		if(IDList::ItemValid(*(Item *)ItemOffset)) {
 			const HookContext &curr = HookContext::GetCurrent();
 			static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
 			return func.Call<u32>(pOffset, ItemOffset);
@@ -66,7 +66,7 @@ namespace CTRPluginFramework {
 	
 //Hook invalid eat
 	u32 InvalidEatStop(u32 pOffset, u32 ItemOffset, u32 InvData, u32 u0) {			
-		if(IDList::ItemValid(*(u32 *)ItemOffset)) {
+		if(IDList::ItemValid(*(Item *)ItemOffset)) {
 			const HookContext &curr = HookContext::GetCurrent();
 			static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
 			return func.Call<u32>(pOffset, ItemOffset, InvData, u0);
@@ -74,60 +74,60 @@ namespace CTRPluginFramework {
 		return 0;
 	}
 //Hook to initialize	
-	void InvalidSpriteStop(u32 pData, u32 SpriteItem) {
-		if(IDList::ItemValid(*(u32 *)SpriteItem)) {
+	void InvalidSpriteStop(u32 pData, Item SpriteItem) {
+		if(IDList::ItemValid(SpriteItem)) {
 			const HookContext &curr = HookContext::GetCurrent();
 			static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
 			func.Call<void>(pData, SpriteItem);
 		}
 	}
 //Hook for hole check
-	bool InvalidHoleStop(u32* Item, u32 Hole) {
+	bool InvalidHoleStop(Item* item, Item Hole) {
 		if(IsIndoorsBool) 
 			return true;
 		
-		return((*Item & 0xFFFF7FFF) == Hole);
+		return(Item{u16(item->ID & 0x7FFF), item->Flags} == Hole);
 	}
 //Hook for invalid item check
-	bool InvalidItemStop(u32* Item) {
-		if(!IDList::ItemValid(*Item, false)) {
+	bool InvalidItemStop(Item* item) {
+		if(!IDList::ItemValid(*item, false)) {
 			//Mannequin will not be removed
-			if(!IDList::ValidID(*Item, 0x30CC, 0x30D1))
+			if(!IDList::ValidID(item->ID, 0x30CC, 0x30D1))
 				return false;
 		}
 		return true;
 	}
 	
-	bool ConvertFlower/*And Mushroomized Furniture*/(u32 *Item) {
-		if(IDList::ValidID((*Item & 0xFFFF), 0x9F, 0xCB)) 
-			GameHelper::ToIndoorFlowers(*Item);
+	bool ConvertFlower/*And Mushroomized Furniture*/(Item *item) {
+		if(IDList::ValidID(item->ID, 0x9F, 0xCB)) 
+			GameHelper::ToIndoorFlowers(*item);
 
-		else if(IDList::ValidID((*Item & 0xFFFF), 0x2120, 0x212A))
-			*Item += 0x959;
-		else if((*Item & 0xFFFF) == 0x211E)
-			*Item += 0x23B;
-		else if((*Item & 0xFFFF) == 0x211F)
-			*Item += 0x2D9;
+		else if(IDList::ValidID(item->ID, 0x2120, 0x212A))
+			item->ID += 0x959;
+		else if(item->ID == 0x211E)
+			item->ID += 0x23B;
+		else if(item->ID == 0x211F)
+			item->ID += 0x2D9;
 
 		return true;
 	}
 
 //Hook to check if item is replacable
-	bool IsItemReplaceable(u32 *item) {
-		//If item is replace all		 || if item is ID to replace || if item is 7FFE					 and ID to replace is 7FFE
-		if(ItemIDToReplace == 0xFFFFFFFF || *item == ItemIDToReplace || (((*item & 0x7FFE) == 0x7FFE) && ItemIDToReplace == 0x7FFE)) 
+	bool IsItemReplaceable(Item *item) {
+		//If item is replace all		 		|| if item is ID to replace || if item is 7FFE					   and ID to replace is 7FFE
+		if(ItemIDToReplace == ReplaceEverything || *item == ItemIDToReplace || (((item->ID & 0x7FFE) == 0x7FFE) && ItemIDToReplace.ID == 0x7FFE)) 
 			return true;
 			
 		return false;
 	}
 
 	void NameFunc(u32 r0, u32 r1, u32 r2) {		
-		u32 itemslotid = 0x7FFE;
+		Item itemslotid = {0x7FFE, 0};
 		u8 slot = 0;
 		if(Inventory::GetSelectedSlot(slot)) {
 			if(Inventory::ReadSlot(slot, itemslotid)) {
-				itemslotid = itemslotid & 0xFFFF;
-				if(GameHelper::IsOutdoorItem(itemslotid) || itemslotid == 0x3729) {
+				itemslotid.Flags = 0;
+				if(GameHelper::IsOutdoorItem(itemslotid) || itemslotid.ID == 0x3729) {
 					std::string name = "";
 					if(IDList::GetSeedName(itemslotid, name)) {
 						u32 InvPointer = *(u32 *)(GameHelper::BaseInvPointer() + 0xC);
@@ -147,14 +147,14 @@ namespace CTRPluginFramework {
         func.Call<void>(r0, r1, r2);
 	}
 
-	bool IsItemDroppable(u32 ItemData, u32 *ItemID, int SecondaryItemFlag) {
-		if(IDList::ValidID((*ItemID & 0xFFFF), 0x98, 0x9E)) 
+	bool IsItemDroppable(u32 ItemData, Item *ItemID, int SecondaryItemFlag) {
+		if(IDList::ValidID(ItemID->ID, 0x98, 0x9E)) 
 			return true;
-		else if((*ItemID & 0xFFFF) == 0xFD)
+		else if(ItemID->ID == 0xFD)
 			return true;
-		else if(IDList::ValidID((*ItemID & 0xFFFF), 0x228E, 0x234B)) 
+		else if(IDList::ValidID(ItemID->ID, 0x228E, 0x234B)) 
 			return true;
-		else if(IDList::ValidID((*ItemID & 0xFFFF), 0x340C, 0x34CD)) 
+		else if(IDList::ValidID(ItemID->ID, 0x340C, 0x34CD)) 
 			return true;
 
 		const HookContext &curr = HookContext::GetCurrent();
@@ -162,11 +162,11 @@ namespace CTRPluginFramework {
         return func.Call<bool>(ItemData, ItemID, SecondaryItemFlag);
 	}
 
-	bool IsItemPlantable(u32 ItemData, u32 *ItemID) {
+	bool IsItemPlantable(u32 ItemData, Item *ItemID) {
 	//seed items which should be plantable
-		if(IDList::ValidID((*ItemID & 0xFFFF), 0, 0x97)) 
+		if(IDList::ValidID(ItemID->ID, 0, 0x97)) 
 			return true;
-		else if(IDList::ValidID((*ItemID & 0xFFFF), 0x9F, 0xFC)) 
+		else if(IDList::ValidID(ItemID->ID, 0x9F, 0xFC)) 
 			return true;
 
 		const HookContext &curr = HookContext::GetCurrent();

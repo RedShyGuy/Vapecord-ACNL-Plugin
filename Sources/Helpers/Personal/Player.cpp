@@ -4,7 +4,6 @@
 #include "Helpers/Inventory.hpp"
 #include "Helpers/Save.hpp"
 #include "Helpers/PlayerClass.hpp"
-#include "Helpers/PlayerPTR.hpp"
 #include "RegionCodes.hpp"
 
 bool IsIndoorsBool = false;
@@ -104,17 +103,17 @@ update appearance
 /*
 Write Outfit
 */
-	void Player::WriteOutfit(u8 PlayerIndex, u16 HeadWear, u16 Glasses, u16 Shirt, u16 Pants, u16 Socks, u16 Shoes) {
+	void Player::WriteOutfit(u8 PlayerIndex, Item HeadWear, Item Glasses, Item Shirt, Item Pants, Item Socks, Item Shoes) {
 		u32 x, y;
 		if(!PlayerClass::GetInstance(PlayerIndex)->GetWorldCoords(&x, &y))
 			return;
 		
-		if(HeadWear != 0xFFFF) Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, HeadWear, 0, 0, 0, 0, x, y, 0);
-		if(Glasses != 0xFFFF) Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Glasses, 1, 0, 0, 0, x, y, 0);
-		if(Shirt != 0xFFFF) Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Shirt, 2, 0, 0, 0, x, y, 0);
-		if(Pants != 0xFFFF) Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Pants, 4, 0, 0, 0, x, y, 0);
-		if(Socks != 0xFFFF) Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Socks, 5, 0, 0, 0, x, y, 0);
-		if(Shoes != 0xFFFF) Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Shoes, 6, 0, 0, 0, x, y, 0);
+		if(HeadWear.ID != 0xFFFF) Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, HeadWear, 0, 0, 0, 0, x, y, 0);
+		if(Glasses.ID != 0xFFFF) Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Glasses, 1, 0, 0, 0, x, y, 0);
+		if(Shirt.ID != 0xFFFF) Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Shirt, 2, 0, 0, 0, x, y, 0);
+		if(Pants.ID != 0xFFFF) Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Pants, 4, 0, 0, 0, x, y, 0);
+		if(Socks.ID != 0xFFFF) Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Socks, 5, 0, 0, 0, x, y, 0);
+		if(Shoes.ID != 0xFFFF) Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Shoes, 6, 0, 0, 0, x, y, 0);
 	}
 //If player is loaded (uses to 8) 27B0E0(pP)
 /*
@@ -149,7 +148,7 @@ Get Player Save Offset for loaded players
 		static Address SetStack(0x2FCC14, 0, 0, 0, 0, 0, 0, 0);
 		static Address ReadStack(0x769DBC, 0, 0, 0, 0, 0, 0, 0);
 
-		u32* val = SetUp1.Call<u32*>(ID);
+		u32 val = SetUp1.Call<u32>(ID);
 		u32 uVar5 = *(u32 *)(val + 4);
 		u32 data;
 

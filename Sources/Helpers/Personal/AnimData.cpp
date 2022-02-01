@@ -30,8 +30,8 @@ namespace CTRPluginFramework {
         AppendAnimData<u8>(animInst, 0x13, option);
     }
 
-    void AnimData::Pick_3C_3D(u8 dropID, u32 itemID, Coord worldCoords) {
-        AppendAnimData<u32>(animInst, 0xE, itemID);
+    void AnimData::Pick_3C_3D(u8 dropID, Item itemID, Coord worldCoords) {
+        AppendAnimData<Item>(animInst, 0xE, itemID);
         AppendAnimData<u8>(animInst, 0x12, worldCoords.wX);
         AppendAnimData<u8>(animInst, 0x13, worldCoords.wY);
         AppendAnimData<u8>(animInst, 0x15, dropID);
@@ -52,7 +52,7 @@ namespace CTRPluginFramework {
 
 //684480(pInstance, hairstyleID, haircolorID, eyecolorID, miihat, u0 = 3)
 //Research about this one a bit
-    void AnimData::Appearance_B9(u16 animItem, u8 appearance[]) {
+    void AnimData::Appearance_B9(Item animItem, u8 appearance[]) {
         AppendAnimData<u8>(animInst, 0xC, 0x10);
         AppendAnimData<u8>(animInst, 0xD, 0);
     //Write Appearance to Animation
@@ -60,7 +60,7 @@ namespace CTRPluginFramework {
         AppendAnimData<u8>(animInst, 0xF, appearance[1]);
         AppendAnimData<u8>(animInst, 0x10, appearance[2]);
     //Writes Item to animation //used for mii head
-        AppendAnimData<u16>(animInst, 0x11, animItem & 0xFFFF);
+        AppendAnimData<u16>(animInst, 0x11, animItem.ID);
     }
 
     void AnimData::OpenMailBox_8B_DE() {
@@ -95,11 +95,11 @@ namespace CTRPluginFramework {
         AppendCoordData(animInst, 0x17, PlayerClass::GetInstance(pIndex)->GetCoordinates());
     }
 
-    void AnimData::BuryOut_50_51(u32 animItem, Coord worldCoords) {
+    void AnimData::BuryOut_50_51(Item animItem, Coord worldCoords) {
         AppendAnimData<u8>(animInst, 5, 0);
         AppendAnimData<u8>(animInst, 0x16, 1);
 
-        AppendAnimData<u32>(animInst, 0x10, animItem);
+        AppendAnimData<Item>(animInst, 0x10, animItem);
 
         AppendAnimData<u8>(animInst, 0xE, worldCoords.wX);
         AppendAnimData<u8>(animInst, 0xF, worldCoords.wY);
@@ -232,8 +232,8 @@ namespace CTRPluginFramework {
         AppendAnimData<u8>(animInst, 0xF, emotion & 0xFF);
     }
 
-    void AnimData::HoldTool_3C(u32 animItem, u8 emotion, Coord worldCoords) {
-        AppendAnimData<u32>(animInst, 0xE, animItem & 0xFFFFFFFF);
+    void AnimData::HoldTool_3C(Item animItem, u8 emotion, Coord worldCoords) {
+        AppendAnimData<Item>(animInst, 0xE, animItem);
 
         AppendAnimData<u8>(animInst, 0x12, worldCoords.wX);
         AppendAnimData<u8>(animInst, 0x13, worldCoords.wY);
@@ -248,8 +248,8 @@ namespace CTRPluginFramework {
         AppendAnimData<u8>(animInst, 0x10, emotion & 0xFF);
     }
 
-    void AnimData::ChangeOutfit_36(u32 animItem, u8 emotion) {
-        AppendAnimData<u32>(animInst, 0xE, animItem & 0xFFFFFFFF);
+    void AnimData::ChangeOutfit_36(Item animItem, u8 emotion) {
+        AppendAnimData<Item>(animInst, 0xE, animItem);
         AppendAnimData<u8>(animInst, 0x12, emotion & 0xFF); //Not emotion, position of outfit
         AppendAnimData<u32>(animInst, 0x1C, 0x01480000);
     }  
@@ -269,10 +269,10 @@ namespace CTRPluginFramework {
         AppendAnimData<u8>(animInst, 0x13, emotion & 0xFF);
     }
 
-    void AnimData::FishFall_B3_B4_B5(u32 animItem, Coord worldCoords) {
+    void AnimData::FishFall_B3_B4_B5(Item animItem, Coord worldCoords) {
         AppendCoordData(animInst, 0xE, PlayerClass::GetInstance(pIndex)->GetCoordinates(worldCoords.wX, worldCoords.wY));
     
-        AppendAnimData<u32>(animInst, 0x12, animItem & 0xFFFFFFFF);
+        AppendAnimData<Item>(animInst, 0x12, animItem);
     }
 
     void AnimData::Null_95_33(Coord worldCoords) {
@@ -281,36 +281,36 @@ namespace CTRPluginFramework {
         AppendCoordData(animInst, 0xF, PlayerClass::GetInstance(pIndex)->GetCoordinates(worldCoords.wX, worldCoords.wY));
     }
 
-    void AnimData::PickUp_3E(u32 animItem, u16 snake) {
-        AppendAnimData<u16>(animInst, 0xE, animItem & 0xFFFF);
-        AppendAnimData<u16>(animInst, 0x10, (animItem >> 0x10) & 0xFFFF);
+    void AnimData::PickUp_3E(Item animItem, u16 snake) {
+        AppendAnimData<u16>(animInst, 0xE, animItem.ID);
+        AppendAnimData<u16>(animInst, 0x10, animItem.Flags);
         AppendAnimData<u16>(animInst, 0x12, snake & 0xFFF);
         AppendAnimData<u32>(animInst, 0x14, 0x20101);
     }
 
-    void AnimData::EquipItem_38(u32 animItem) {
-        AppendAnimData<u16>(animInst, 0xE, animItem & 0xFFFF);
-        AppendAnimData<u16>(animInst, 0x10, (animItem >> 0x10) & 0xFFFF);
+    void AnimData::EquipItem_38(Item animItem) {
+        AppendAnimData<u16>(animInst, 0xE, animItem.ID);
+        AppendAnimData<u16>(animInst, 0x10, animItem.Flags);
         AppendAnimData<u8>(animInst, 0x12, 1);
     }
 
-    void AnimData::PickPluck_41_42(u32 animItem) {
-        AppendAnimData<u16>(animInst, 0xE, animItem & 0xFFFF);
-        AppendAnimData<u16>(animInst, 0x10, (animItem >> 0x10) & 0xFFFF);
+    void AnimData::PickPluck_41_42(Item animItem) {
+        AppendAnimData<u16>(animInst, 0xE, animItem.ID);
+        AppendAnimData<u16>(animInst, 0x10, animItem.Flags);
         AppendAnimData<u8>(animInst, 0x14, 3);
 
         AppendCoordData(animInst, 0x15, PlayerClass::GetInstance(pIndex)->GetCoordinates());
     }
 
-    void AnimData::Null_B7_71_72_24_3F_3D_92_93_94(u32 animItem) {
-        AppendAnimData<u16>(animInst, 0xE, animItem & 0xFFFF);
-        AppendAnimData<u16>(animInst, 0x10, (animItem >> 0x10) & 0xFFFF);
+    void AnimData::Null_B7_71_72_24_3F_3D_92_93_94(Item animItem) {
+        AppendAnimData<u16>(animInst, 0xE, animItem.ID);
+        AppendAnimData<u16>(animInst, 0x10, animItem.Flags);
     }
 
-    void AnimData::Null_Default(u32 animItem, Coord worldCoords) {
+    void AnimData::Null_Default(Item animItem, Coord worldCoords) {
         AppendAnimData<u8>(animInst, 0xE, worldCoords.wX);
         AppendAnimData<u8>(animInst, 0xF, worldCoords.wY);
 
-        AppendAnimData<u16>(animInst, 0x10, animItem & 0xFFFF);
+        AppendAnimData<u16>(animInst, 0x10, animItem.ID);
     }
 }

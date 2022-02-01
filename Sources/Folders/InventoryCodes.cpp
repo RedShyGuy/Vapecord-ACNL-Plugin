@@ -6,7 +6,6 @@
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/Player.hpp"
-#include "Helpers/PlayerPTR.hpp"
 #include "Helpers/GameKeyboard.hpp"
 #include "Helpers/Animation.hpp"
 #include "RegionCodes.hpp"
@@ -55,65 +54,70 @@ namespace CTRPluginFramework {
 		
 		input.clear();
 		u8 slot = 0;
-		if(Inventory::GetNextItem(0x7FFE, slot) == 0xFFFFFFFF) {
+		if(!Inventory::GetNextItem({0x7FFE, 0}, slot)) {
 			keyboard.Close();
 			OSD::Notify("Inventory Full!",  Color::Red);
 			return;
 		}
 			
-		if(!IDList::ItemValid(match.ID[kres], false)) {
+		if(!IDList::ItemValid(Item(match.ID[kres]), false)) {
 			keyboard.Close();
 			OSD::Notify("Invalid Item!",  Color::Red);
 			return;
 		}	
+
 		Inventory::WriteSlot(slot, match.ID[kres]);
 		OSD::Notify(Utils::Format("Set Item %04X to slot %d", match.ID[kres], slot));
 	}
 
 //Text to Item
 	void t2i(MenuEntry *entry) {
-		static u32 val = 0;
+		Item val;
+		ACNL_Player *player = Player::GetData();
+
 		if(entry->Hotkeys[0].IsPressed()) {
-			if(Player::GetSaveOffset(4) == 0) {
+			if(!player) {
 				OSD::Notify("Error: Player needs to be loaded!", Color::Red);
 				return;
 			}
 
 			Inventory::ReadSlot(0, val);
-			if(Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, val, val, TextItemChange)) 		
+			if(Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, *(u32 *)&val, *(u32 *)&val, TextItemChange)) 		
 				Inventory::WriteSlot(0, val);
 		}
 		
 		else if(entry->Hotkeys[1].IsPressed()) {
-			if(Player::GetSaveOffset(4) == 0) {
+			if(!player) {
 				OSD::Notify("Error: Player needs to be loaded!", Color::Red);
 				return;
 			}
 
-			if(Wrap::KB<u32>(Language->Get("TEXT_2_ITEM_SET"), true, 8, val, 0x7FFE, TextItemChange)) {
-				for(int i = 0; i < 0x10; ++i) 
-					Inventory::WriteSlot(i, val + i);
+			if(Wrap::KB<u32>(Language->Get("TEXT_2_ITEM_SET"), true, 8, *(u32 *)&val, 0x7FFE, TextItemChange)) {
+				for(int i = 0; i < 0x10; ++i) {
+					val.ID + i;
+					Inventory::WriteSlot(i, val);
+				}
 			}
 		} 
 		
 		else if(entry->Hotkeys[2].IsPressed()) {
-			if(Player::GetSaveOffset(4) == 0) {
+			if(!player) {
 				OSD::Notify("Error: Player needs to be loaded!", Color::Red);
 				return;
 			}
 
 			u32 x, y;
 			if(PlayerClass::GetInstance()->GetWorldCoords(&x, &y)) {
-				val = (u32)GameHelper::GetItemAtWorldCoords(x, y);
-				if(val != 0) {
-					Inventory::WriteSlot(0, *(u32 *)val);
-					OSD::Notify(Utils::Format("Item ID: %08X (%08X)", *(u32 *)val, val));
+				Item *item = GameHelper::GetItemAtWorldCoords(x, y);
+				if(item) {
+					Inventory::WriteSlot(0, *item);
+					OSD::Notify(Utils::Format("Item ID: %08X", *(u32 *)item));
 				}
 			}
 		}
 
 		else if(entry->Hotkeys[3].IsPressed()) {
-			if(Player::GetSaveOffset(4) == 0) {
+			if(!player) {
 				OSD::Notify("Error: Player needs to be loaded!", Color::Red);
 				return;
 			}
@@ -131,16 +135,20 @@ namespace CTRPluginFramework {
 		}
 	}
 //Duplicate Items
-	void duplication(MenuEntry *entry) {	
-		u32 dupe = 0x7FFE;
+	void duplication(MenuEntry *entry) {
+		ACNL_Player *player = Player::GetData();
+		if(!player) 
+			return;
+
+		Item dupe;
 		if(entry->Hotkeys[0].IsPressed()) {
 			Inventory::ReadSlot(0, dupe);
-			Inventory::WriteSlot(1, dupe, Inventory::GetLock(0));
+			Inventory::WriteSlot(1, dupe, player->InventoryItemLocks[0]);
 		}
 		else if(entry->Hotkeys[1].IsPressed()) {
 			Inventory::ReadSlot(0, dupe);
 			for(int i = 0; i <= 0xF; ++i) 
-				Inventory::WriteSlot(i, dupe, Inventory::GetLock(0));
+				Inventory::WriteSlot(i, dupe, player->InventoryItemLocks[0]);
 		}
 	}
 
@@ -156,11 +164,11 @@ namespace CTRPluginFramework {
 		return 1;
 	}
 	
-	u16 GetCurrentCatalogItem() {
+	Item GetCurrentCatalogItem() {
 		if(GameHelper::BaseInvPointer() == 0) 
-			return 0x7FFE;
+			return {0x7FFE, 0};
 		
-		return *(u16 *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x3B9C);
+		return *(Item *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x3B9C);
 	}
 	static bool isCatalogOpen = false;
 //Catalog To Pockets
@@ -181,14 +189,14 @@ namespace CTRPluginFramework {
 			}	
 		//if catalog is opened get item
 			if(Inventory::GetCurrent() == 0x7C) {
-				u32 CurrentItem = GetCurrentCatalogItem();
-				if(CurrentItem != 0x7FFE) {
+				Item CurrentItem = GetCurrentCatalogItem();
+				if(CurrentItem.ID != 0x7FFE) {
 					if(GameHelper::SetItem(&CurrentItem)) {
 						std::string itemName = "";
 						if(IDList::GetSeedName(CurrentItem, itemName))
-							OSD::Notify(Utils::Format("Spawned Item: %s (%04X)", itemName.c_str(), CurrentItem));
+							OSD::Notify(Utils::Format("Spawned Item: %s (%04X)", itemName.c_str(), *(u16 *)&CurrentItem));
 						else
-							OSD::Notify(Utils::Format("Spawned Item: %04X", CurrentItem));
+							OSD::Notify(Utils::Format("Spawned Item: %04X", *(u16 *)&CurrentItem));
 					}
 					else
 						OSD::Notify("Inventory Full!");
@@ -241,7 +249,7 @@ namespace CTRPluginFramework {
 		}
 		
 		std::string chatStr = "";
-		u32 itemID = 0;
+		Item itemID;
 
 		if(!GameKeyboard::Copy(chatStr, 0, 0x16)) {
 			OSD::Notify("Somehow couldn't copy!", Color::Red);
@@ -254,7 +262,7 @@ namespace CTRPluginFramework {
 		}
 		
 		u8 slot = 0;
-		if(Inventory::GetNextItem(0x7FFE, slot) == 0xFFFFFFFF) {
+		if(!Inventory::GetNextItem({0x7FFE, 0}, slot)) {
 			OSD::Notify("Inventory Full!", Color::Red);
 			return;
 		}
@@ -268,9 +276,9 @@ namespace CTRPluginFramework {
 
 		std::string itemName = "";
 		if(IDList::GetSeedName(itemID, itemName))
-			OSD::Notify(Utils::Format("Spawned Item: %s (%08X)", itemName.c_str(), itemID));
+			OSD::Notify(Utils::Format("Spawned Item: %s (%08X)", itemName.c_str(), *(u32 *)&itemID));
 		else
-			OSD::Notify(Utils::Format("Spawned Item: %08X", itemID));
+			OSD::Notify(Utils::Format("Spawned Item: %08X", *(u32 *)&itemID));
 	}
 //Clear Inventory
 	void ClearInventory(MenuEntry *entry) {
@@ -283,7 +291,7 @@ namespace CTRPluginFramework {
 		Sleep(Milliseconds(100));
 		if((MessageBox(Language->Get("REMOVE_INV_WARNING"), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
 			for(int i = 0; i <= 0xF; ++i)
-				Inventory::WriteSlot(i, 0x7FFE);
+				Inventory::WriteSlot(i, Item{ 0x7FFE, 0 });
 		}
 	}
 
@@ -453,12 +461,12 @@ namespace CTRPluginFramework {
 			return; //error opening file
 
 		std::string Sets[16];
-		u32 SetItem[16] = { 0 };
-		std::vector<u32> OnlyItem;
+		Item SetItem[16];
+		std::vector<Item> OnlyItem;
 		file.Read(&SetItem, sizeof(SetItem));
 
 		for(int i = 0; i < 16; ++i) {
-			if(SetItem[i] != 0x7FFE)
+			if(SetItem[i].ID != 0x7FFE)
 				OnlyItem.push_back(SetItem[i]);
 		}
 
@@ -470,7 +478,7 @@ namespace CTRPluginFramework {
 			IDList::GetSeedName(OnlyItem[i], str);
 			Sets[i] = str;
 
-			input += Color(0x40FF40FF) << Utils::Format("%08X | ", OnlyItem[i]) << Color(0xFFFDD0FF) << Sets[i] << "\n";
+			input += Color(0x40FF40FF) << Utils::Format("%08X | ", *(u32 *)&OnlyItem[i]) << Color(0xFFFDD0FF) << Sets[i] << "\n";
 		}
 		input += "etc...";
 		file.Flush();
@@ -500,7 +508,7 @@ namespace CTRPluginFramework {
 		switch(optKb.Open()) {
 			default: return;
 			case 0: {
-				Wrap::Restore(PATH_PRESET, ".inv", Language->Get("GET_SET_RESTORE"), GetCustomView, false, WrapLoc{ PlayerPTR::Pointer(0x6BD0), 0x64 }, WrapLoc{ PlayerPTR::Pointer(0x6C10), 0x10 }, WrapLoc{ (u32)-1, (u32)-1 }); 
+				Wrap::Restore(PATH_PRESET, ".inv", Language->Get("GET_SET_RESTORE"), GetCustomView, false, WrapLoc{ Player::GetSaveOffset(4) + 0x6BD0, 0x64 }, WrapLoc{ Player::GetSaveOffset(4) + 0x6C10, 0x10 }, WrapLoc{ (u32)-1, (u32)-1 }); 
 				Inventory::ReloadIcons();
 			} return;
 
@@ -516,11 +524,11 @@ namespace CTRPluginFramework {
 						if(KB.Open(filename) == -1)
 							return;
 
-						Wrap::Dump(Utils::Format(PATH_ITEMSET, regionName.c_str()), filename, ".inv", WrapLoc{ PlayerPTR::Pointer(0x6BD0), 0x64 }, WrapLoc{ PlayerPTR::Pointer(0x6C10), 0x10 }, WrapLoc{ (u32)-1, (u32)-1 });
+						Wrap::Dump(Utils::Format(PATH_ITEMSET, regionName.c_str()), filename, ".inv", WrapLoc{ Player::GetSaveOffset(4) + 0x6BD0, 0x64 }, WrapLoc{ Player::GetSaveOffset(4) + 0x6C10, 0x10 }, WrapLoc{ (u32)-1, (u32)-1 });
 					} return;
 					
 					case 1: {			
-						Wrap::Restore(Utils::Format(PATH_ITEMSET, regionName.c_str()), ".inv", Language->Get("GET_SET_RESTORE"), GetCustomView, true, WrapLoc{ PlayerPTR::Pointer(0x6BD0), 0x64 }, WrapLoc{ PlayerPTR::Pointer(0x6C10), 0x10 }, WrapLoc{ (u32)-1, (u32)-1 }); 
+						Wrap::Restore(Utils::Format(PATH_ITEMSET, regionName.c_str()), ".inv", Language->Get("GET_SET_RESTORE"), GetCustomView, true, WrapLoc{ Player::GetSaveOffset(4) + 0x6BD0, 0x64 }, WrapLoc{ Player::GetSaveOffset(4) + 0x6C10, 0x10 }, WrapLoc{ (u32)-1, (u32)-1 }); 
 						Inventory::ReloadIcons();
 					} return;
 					

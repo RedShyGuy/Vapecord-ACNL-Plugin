@@ -104,7 +104,7 @@ namespace CTRPluginFramework {
 		return Process::ReadString(ChatText + pos, str, lenght, StringFormat::Utf16);
 	}
 
-	bool GameKeyboard::ConvertToItemID(std::string& str, u32 &ItemID) {
+	bool GameKeyboard::ConvertToItemID(std::string& str, Item &ItemID) {
 		for(char& c : str)
 			c = std::tolower(c);
 
@@ -119,7 +119,7 @@ namespace CTRPluginFramework {
 			else 
 				return false; //Incorrect char
 
-			ItemID = (ItemID << 4) | (byte & 0xF);
+			*(u32 *)&ItemID = (*(u32 *)&ItemID << 4) | (byte & 0xF);
 		}
 		return true;
 	}

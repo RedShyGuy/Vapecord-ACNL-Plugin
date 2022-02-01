@@ -2,7 +2,6 @@
 #define GAMESTRUCTS_HPP
 
 #include <CTRPluginFramework.hpp>
-#include <optional>
 
 #pragma pack(1)
 
@@ -20,12 +19,189 @@ namespace CTRPluginFramework {
         Empty = 8
     };
 
+    enum Item_Categories {
+        MiiHead = 0, //(0x2000)
+        NPCBuildingItems, //(0x2061 -> 0x2074)
+        Bells, //(0x20AC -> 0x2117)
+        Wallpaper, //(0x234C -> 0x23EA)
+        Carpets, //(0x23EB -> 0x2492)
+        Furniture, //(0x29DF -> 0x30CB)
+        Shirts, //(0x2495 -> 0x2681)
+        Dresses, //(0x2682 -> 0x26EC)
+        Wetsuits, //(0x26ED -> 0x26F5)
+        Trousers, //(0x26F8 -> 0x2776)
+        Socks, //(0x2777 -> 0x279E)
+        Shoes, //(0x279F -> 0x27E5)
+        Hats, //(0x280B -> 0x28F4)
+        Accesories, //flower accesories not included(0x28F5 -> 0x292E)
+        Axes, //(0x334C -> 0x334F)
+        Nets, //(0x3350 -> 0x3353)
+        Rods, //(0x3354 -> 0x3357)
+        Shovels, //(0x3358 -> 0x335B)
+        Slingshots, //(0x3360 -> 0x3363)
+        Cans, //(0x335C -> 0x335F)
+        ToyHammer, //(0x3364 -> 0x3365)
+        Megaphone, //(0x3366)
+        Timer, //(0x3367)
+        HandheldFireworks, //(0x3368 -> 0x3369) 
+        FountainFirework, //(0x339F)
+        Umbrellas, //(0x27E6 -> 0x280A) 
+        PartyPopper, //(0x336A)
+        BubbleWands, //(0x336B)
+        Balloons, //(0x336C -> 0x3383) 
+        Pinwheels, //(0x3384 -> 0x338B)
+        Beans, //(0x338E)
+        Good_LuckRoll, //(0x338F)
+        Soft_Serves, //(0x3390 -> 0x3393)
+        IceCream, //(0x3394 -> 0x3397)
+        Wands, //(0x3398 -> 0x339D)
+        Tweeter, //(0x339E)
+        Bugs, //(0x228E -> 0x22D5)
+        Feathers, //(0x22D7 -> 0x22DE)
+        Snowflake, //(0x22D6)
+        Fish, //(0x22E1 -> 0x2328)
+        SeaCreatures, //(0x232D -> 0x234A)
+        MailPapers, //(0x223F -> 0x2281)
+        MelodyPaper, //(0x2282)
+        Fossil, //(0x202A)
+        AnalyzedFossils, //(0x3130 -> 0x3172)
+        FossilModels, //(0x3173 -> 0x3186)
+        Gyroids, //(0x295C -> 0x29DE)
+        Songs, //(0x212B -> 0x2185)
+        Unknown1, //(0x2186 -> 0x2188)
+        SongsWall, //(0x2189 -> 0x21E3)
+        SongsMusicBox, //(0x21E4 -> 0x223E)
+        Fruits, //(0x2001 -> 0x200D)
+        PerfectFruits, //(0x200E -> 0x2012)
+        RottenFruits, //(0x2013 -> 0x2017)
+        FlowerBags, //(0x2038 -> 0x2060)
+        TreeSaplings, //(0x202C -> 0x202D)
+        BushShoots, //(0x202E -> 0x2035)
+        Turnips, //(0x2283 -> 0x228C)
+        SpoiledTurnips, //(0x228D)
+        Sold_OutSigns1, //Nooklings and Gracie(0x2083 -> 0x2084)
+        Seashells, //(0x208C -> 0x2095)
+        Garbage, //(0x2329 -> 0x232B)
+        Mushrooms, //(0x2098 -> 0x209D)
+        MushroomFurniture, //(0x211E -> 0x212A)
+        FlowerAccesories, //(0x292F -> 0x295B)
+        PitfallSeeds, //(0x209F -> 0x20A0)
+        SpecialOres, //gold and silver nugget(0x20A1 -> 0x20A2)
+        Ores, //(0x20A3 -> 0x20A6)
+        Ingredients, //butter, milk, etc(0x20A7 -> 0x20AB)
+        Beehive, //(0x209E)
+        Fertilizer, //(0x202B)
+        ProPatternShirt, //(0x33A7)
+        PatternItems, //like knit hat, horned hat, etc(0x33A8 -> 0x33BB)
+        WrappingPaper, //(0x2089)
+        Medicine, //(0x208A)
+        SignatureSheet, //(0x33BC)
+        PetitionForm, //(0x33BD)
+        PaperScrap, //(0x33BE)
+        UnknownLostItem, //lost item not checked yet(0x33BF -> 0x33C2)
+        KnownLostItem, //checked lost item(0x33C3 -> 0x33C6)
+        SantaBag, //(0x33A1)
+        MysteryBag, //(0x33A2)
+        Candy, //(0x2096)
+        Lollipop, //(0x2097)
+        RealPaintings, //(0x30D2 -> 0x30EA)
+        FakePaintings, //(0x30F3 -> 0x3100)
+        RealPaintingsWall, //(0x3109 -> 0x3121)
+        FakePaintingsWall, //(0x3122 -> 0x312F)
+        RealStatues, //(0x30EB -> 0x30F2)
+        FakeStatues, //(0x3101 -> 0x3108)
+        FortuneCookie, //(0x33C8)
+        FortuneCookieSlips, //(0x33C9 -> 0x3401)
+        BadgesSprite, //(0x340C -> 0x340E)
+        HouseMailBoxs, //(0x3426 -> 0x343B)
+        HouseArchedDoors, //(0x343C -> 0x3451)
+        HouseDoors, //(0x3452 -> 0x3466)
+        HouseRoofs, //(0x3467 -> 0x3489)
+        HouseFences, //(0x348A -> 0x34A0)
+        HouseExteriors, //(0x34A1 -> 0x34C0)
+        HousePavements, //(0x34C1 -> 0x34C9)
+        HouseArchitectures, //(0x34CA -> 0x34CD)
+        WaterEgg, //(0x232C)
+        Deep_SeaEgg, //(0x234B)
+        EarthEgg, //(0x2118)
+        TreeEgg, //(0x2119)
+        StoneEgg, //(0x211A)
+        SkyEgg, //(0x211B)
+        WinningTicket, //(0x211C)
+        Grand_PrizeTicket, //(0x211D)
+        Present, //(0x2036)
+        Map, //(0x340F)
+        Trophies, //(0x3417 -> 0x3419)
+        FireworkUsed, //(0x33A0)
+        CoffeeBeans, //(0x33A3 -> 0x33A5)
+        ChocolateCoin, //(0x33A6)
+        Coffee, //(0x338C)
+        FizzyAppleJuice, //(0x338D)
+        FruitBaskets, //(0x2018 -> 0x2024)
+        PerfectFruitBaskets, //(0x2025 -> 0x2029)
+        MovingBoxes, //(0x207E -> 0x2080)
+        BingoCard, //(0x341A)
+        BingoCardExpired, //(0x341B)
+        TimeCapsule, //(0x341C)
+        Mannequins, //(0x30CC -> 0x30CF)
+        Sold_OutSigns2, //Retail(0x2085)
+        TPC, //(0x3410)
+        Lockers, //Train Station and Museum(0x2081 -> 0x2082)
+        Chairs, //Retail, Island Hut and Harvey(0x207B -> 0x207D)
+        FlowerSprites, //(0x341F -> 0x3425)
+        Towel, //(0x33C7)
+        Vests, //Male and Female(0x2493 -> 0x2494)
+        Shorts, //Male and Female (0x26F6 -> 0x26F7)
+        Photos, //(0x3187 -> 0x334B)
+        Sold_OutSigns1Wall, //Nooklings and Gracie(0x2086 -> 0x2087)
+        LostBook, //(0x3411)
+        ChocolateHeart, //(0x208B)
+        Scavenger_HuntList, //(0x341D)
+        Mail, //(0x3412)
+        VillagerPresent, //(0x2037)
+        Sold_OutSigns3, //Redd(0x2088)
+        ShopItemHangups, //1x1 and 1x2(0x2079 -> 0x207A)
+        ReddsCookie, //(0x3402)
+        Tickets, //(0x3403 -> 0x340B)
+        MuseumItems, //Podium, Stands and Wallpaper(0x2075 -> 0x2078)
+        ClubTortimerForm, //(0x341E)
+        GracieMannequins, //(0x30D0 -> 0x30D1)
+        Seeds, //Flower seed, sapling(0x3413 -> 0x3416)
+        ShirtsWall, //(0x34CE -> 0x36BA)
+        DressesWall, //(0x36BB -> 0x3725)
+        MagicLamp, //(0x3726)
+        RetailGiantItem, //giant item sign and box(0x3727 -> 0x3728)
+        FryingPan, //(0x3729)
+        Good_LuckCharm, //(0x22DF)
+        IkadaTrophy, //(0x372A)
+        Unknown2, //(0x22E0)
+    };
+
     /*All Credits go to https://github.com/Slattz/ACNL_Research/blob/master/010%20Templates/garden_plus.dat.bt*/
 
     struct Item {
         u16 ID;
         u16 Flags;
+
+        bool operator==(const Item& item) const {
+            return ID == item.ID && Flags == item.Flags;
+        }
+
+        bool operator!=(const Item& item) const {
+            return ID != item.ID && Flags != item.Flags;
+        }
+
+        bool operator>(const Item&item) const {
+            return (ID + Flags) > (item.ID + item.Flags);
+        }
     };
+
+    static inline Item U32_TO_ITEM(const u32& val) {
+        Item item;
+        item.ID = val;
+        item.Flags = val >> 16;
+        return item;
+    }
 
     struct Emoticons {
         u8 emoticons[40];
@@ -74,7 +250,7 @@ namespace CTRPluginFramework {
         u32 ZeroPad_3; //Zero Padding; Optional*/
     };
 
-    struct BDGValues {
+    /*struct BDGValues {
         u64 Badge_Fishes_Value; //Encrypted Value
         u64 Badge_Bugs_Value; //Encrypted Value
         u64 Badge_Marine_Value; //Encrypted Value
@@ -125,12 +301,13 @@ namespace CTRPluginFramework {
         u8 Badge_HHAScore;
         u8 Badge_PlayTime;
         u8 Badge_Helper;
+
         u8 Badge_Dream;   
-    };
+    };*/
 
     struct PlayerBadges {
-        BDGValues BadgeValues; //0x567C: 24 badges (encrypted values)
-        BDG Badges; //0x573C: 24 badges
+        u64 BadgeValues[24]; //0x567C: 24 badges (encrypted values)
+        u8 Badges[24]; //0x573C: 24 badges
         u64 Unknown1; //0x5754 -> 0x575B: Encrypted Value
         u64 Unknown1_1; //0x575C -> 0x5763: Encrypted Value
     };
@@ -180,422 +357,422 @@ namespace CTRPluginFramework {
     };
 
     struct Player_Flags {
-        u8 Unknown1 : 1;
-        u8 Unknown2 : 1;
-        u8 Unknown3 : 1;
-        u8 Unknown4 : 1;
-        u8 Unknown5 : 1;
-        u8 Unknown6 : 1;
-        u8 Unknown7 : 1;
-        u8 Unknown8 : 1;
-        u8 Unknown9 : 1;
-        u8 Unknown10 : 1;
-        u8 Unknown11 : 1;
-        u8 Unknown12 : 1;
-        u8 Unknown13 : 1;
-        u8 Unknown14 : 1;
-        u8 Unknown15 : 1;
-        u8 Unknown16 : 1;
-        u8 Unknown17 : 1;
-        u8 Unknown18 : 1;
-        u8 Unknown19 : 1;
-        u8 Unknown20 : 1;
-        u8 Unknown21 : 1;
-        u8 Unknown22 : 1;
-        u8 Unknown23 : 1;
-        u8 Unknown24 : 1;
-        u8 Unknown25 : 1;
-        u8 Unknown26 : 1;
-        u8 Unknown27 : 1;
-        u8 Unknown28 : 1;
-        u8 BlathersIntroduced : 1;
-        u8 Unknown30 : 1;
-        u8 Unknown31 : 1;
-        u8 Unknown32 : 1;
-        u8 Unknown33 : 1;
-        u8 Unknown34 : 1;
-        u8 Unknown35 : 1;
-        u8 Unknown36 : 1;
-        u8 Unknown37 : 1;
-        u8 Unknown38 : 1;
-        u8 Unknown39 : 1;
-        u8 Unknown40 : 1;
-        u8 KnowIsabelleName : 1;
-        u8 Unknown42 : 1;
-        u8 Unknown43 : 1;
-        u8 Unknown44 : 1;
-        u8 Unknown45 : 1;
-        u8 Unknown46 : 1;
-        u8 Unknown47 : 1;
-        u8 Unknown48 : 1;
-        u8 Unknown49 : 1;
-        u8 Unknown50 : 1;
-        u8 Unknown51 : 1;
-        u8 Unknown52 : 1;
-        u8 Unknown53 : 1;
-        u8 Unknown54 : 1;
-        u8 Unknown55 : 1;
-        u8 Unknown56 : 1;
-        u8 Unknown57 : 1;
-        u8 Unknown58 : 1;
-        u8 Unknown59 : 1;
-        u8 Unknown60 : 1;
-        u8 Unknown61 : 1;
-        u8 Unknown62 : 1;
-        u8 Unknown63 : 1;
-        u8 Unknown64 : 1;
-        u8 Unknown65 : 1;
-        u8 Unknown66 : 1;
-        u8 Unknown67 : 1;
-        u8 Unknown68 : 1;
-        u8 Unknown69 : 1;
-        u8 Unknown70 : 1;
-        u8 Unknown71 : 1;
-        u8 Unknown72 : 1;
-        u8 Unknown73 : 1;
-        u8 Unknown74 : 1;
-        u8 Unknown75 : 1;
-        u8 Unknown76 : 1;
-        u8 Unknown77 : 1;
-        u8 Unknown78 : 1;
-        u8 Unknown79 : 1;
-        u8 Unknown80 : 1;
-        u8 Unknown81 : 1;
-        u8 ResetPending : 1;
-        u8 Unknown83 : 1;
-        u8 Unknown84 : 1;
-        u8 Unknown85 : 1;
-        u8 Unknown86 : 1;
-        u8 Unknown87 : 1;
-        u8 Unknown88 : 1;
-        u8 Unknown89 : 1;
-        u8 Unknown90 : 1;
-        u8 Unknown91 : 1;
-        u8 Unknown92 : 1;
-        u8 Unknown93 : 1;
-        u8 Unknown94 : 1;
-        u8 Unknown95 : 1;
-        u8 Unknown96 : 1;
-        u8 Unknown97 : 1;
-        u8 Unknown98 : 1;
-        u8 Unknown99 : 1;
-        u8 Unknown100 : 1;
-        u8 Unknown101 : 1;
-        u8 Unknown102 : 1;
-        u8 Unknown103 : 1;
-        u8 Unknown104 : 1;
-        u8 Unknown105 : 1;
-        u8 Unknown106 : 1;
-        u8 Unknown107 : 1;
-        u8 Unknown108 : 1;
-        u8 Unknown109 : 1;
-        u8 Unknown110 : 1;
-        u8 Unknown111 : 1;
-        u8 Unknown112 : 1;
-        u8 Unknown113 : 1;
-        u8 Unknown114 : 1;
-        u8 Unknown115 : 1;
-        u8 Unknown116 : 1;
-        u8 Unknown117 : 1;
-        u8 Unknown118 : 1;
-        u8 HasBeeSting : 1;
-        u8 Unknown120 : 1;
-        u8 Unknown121 : 1;
-        u8 Unknown122 : 1;
-        u8 Unknown123 : 1;
-        u8 CanTravel : 1; //i.e. can use train
-        u8 Unknown125 : 1;
-        u8 Unknown126 : 1;
-        u8 Unknown127 : 1;
-        u8 Unknown128 : 1;
-        u8 Unknown129 : 1;
-        u8 Unknown130 : 1;
-        u8 Unknown131 : 1;
-        u8 Unknown132 : 1;
-        u8 Unknown133 : 1;
-        u8 Unknown134 : 1;
-        u8 Unknown135 : 1;
-        u8 Unknown136 : 1;
-        u8 Unknown137 : 1;
-        u8 Unknown138 : 1;
-        u8 Unknown139 : 1;
-        u8 Unknown140 : 1;
-        u8 Unknown141 : 1;
-        u8 Unknown142 : 1;
-        u8 Unknown143 : 1;
-        u8 Unknown144 : 1;
-        u8 Unknown145 : 1;
-        u8 Unknown146 : 1;
-        u8 Unknown147 : 1;
-        u8 Unknown148 : 1;
-        u8 Unknown149 : 1;
-        u8 Unknown150 : 1;
-        u8 Unknown151 : 1;
-        u8 Unknown152 : 1;
-        u8 Unknown153 : 1;
-        u8 Unknown154 : 1;
-        u8 RecievedHHSIntro : 1;
-        u8 Unknown156 : 1;
-        u8 Unknown157 : 1;
-        u8 Unknown158 : 1;
-        u8 Unknown159 : 1;
-        u8 Unknown160 : 1;
-        u8 Unknown161 : 1;
-        u8 Unknown162 : 1;
-        u8 Unknown163 : 1;
-        u8 Unknown164 : 1;
-        u8 Unknown165 : 1;
-        u8 Unknown166 : 1;
-        u8 Unknown167 : 1;
-        u8 Unknown168 : 1;
-        u8 Unknown169 : 1;
-        u8 Unknown170 : 1;
-        u8 Unknown171 : 1;
-        u8 Unknown172 : 1;
-        u8 Unknown173 : 1;
-        u8 Unknown174 : 1;
-        u8 Unknown175 : 1;
-        u8 Unknown176 : 1;
-        u8 Unknown177 : 1;
-        u8 Unknown178 : 1;
-        u8 Unknown179 : 1;
-        u8 Unknown180 : 1;
-        u8 Unknown181 : 1;
-        u8 Unknown182 : 1;
-        u8 Unknown183 : 1;
-        u8 Unknown184 : 1;
-        u8 Unknown185 : 1;
-        u8 Unknown186 : 1;
-        u8 Unknown187 : 1;
-        u8 Unknown188 : 1;
-        u8 Unknown189 : 1;
-        u8 Unknown190 : 1;
-        u8 Unknown191 : 1;
-        u8 Unknown192 : 1;
-        u8 Unknown193 : 1;
-        u8 Unknown194 : 1;
-        u8 Unknown195 : 1;
-        u8 Unknown196 : 1;
-        u8 Unknown197 : 1;
-        u8 Unknown198 : 1;
-        u8 Unknown199 : 1;
-        u8 Unknown200 : 1;
-        u8 Unknown201 : 1;
-        u8 Unknown202 : 1;
-        u8 Unknown203 : 1;
-        u8 Unknown204 : 1;
-        u8 Unknown205 : 1;
-        u8 Unknown206 : 1;
-        u8 Unknown207 : 1;
-        u8 Unknown208 : 1;
-        u8 Unknown209 : 1;
-        u8 Unknown210 : 1;
-        u8 Unknown211 : 1;
-        u8 Unknown212 : 1;
-        u8 Unknown213 : 1;
-        u8 Unknown214 : 1;
-        u8 Unknown215 : 1;
-        u8 Unknown216 : 1;
-        u8 Unknown217 : 1;
-        u8 Unknown218 : 1;
-        u8 Unknown219 : 1;
-        u8 Unknown220 : 1;
-        u8 Unknown221 : 1;
-        u8 Unknown222 : 1;
-        u8 Unknown223 : 1;
-        u8 Unknown224 : 1;
-        u8 Unknown225 : 1;
-        u8 Unknown226 : 1;
-        u8 Unknown227 : 1;
-        u8 Unknown228 : 1;
-        u8 Unknown229 : 1;
-        u8 Unknown230 : 1;
-        u8 Unknown231 : 1;
-        u8 Unknown232 : 1;
-        u8 Unknown233 : 1;
-        u8 Unknown234 : 1;
-        u8 Unknown235 : 1;
-        u8 Unknown236 : 1;
-        u8 Unknown237 : 1;
-        u8 Unknown238 : 1;
-        u8 Unknown239 : 1;
-        u8 Unknown240 : 1;
-        u8 Unknown241 : 1;
-        u8 Unknown242 : 1;
-        u8 Unknown243 : 1;
-        u8 Unknown244 : 1;
-        u8 Unknown245 : 1;
-        u8 Unknown246 : 1;
-        u8 Unknown247 : 1;
-        u8 Unknown248 : 1;
-        u8 Unknown249 : 1;
-        u8 Unknown250 : 1;
-        u8 HasClubTortimerMembership : 1;
-        u8 Unknown252 : 1;
-        u8 Unknown253 : 1;
-        u8 Unknown254 : 1;
-        u8 Unknown255 : 1;
-        u8 Unknown256 : 1;
-        u8 Unknown257 : 1;
-        u8 Unknown258 : 1;
-        u8 Unknown259 : 1;
-        u8 Unknown260 : 1;
-        u8 Unknown261 : 1;
-        u8 Unknown262 : 1;
-        u8 Unknown263 : 1;
-        u8 Unknown264 : 1;
-        u8 Unknown265 : 1;
-        u8 Unknown266 : 1;
-        u8 Unknown267 : 1;
-        u8 Unknown268 : 1;
-        u8 Unknown269 : 1;
-        u8 Unknown270 : 1;
-        u8 Unknown271 : 1;
-        u8 Unknown272 : 1;
-        u8 Unknown273 : 1;
-        u8 Unknown274 : 1;
-        u8 Unknown275 : 1;
-        u8 Unknown276 : 1;
-        u8 Unknown277 : 1;
-        u8 Unknown278 : 1;
-        u8 Unknown279 : 1;
-        u8 Unknown280 : 1;
-        u8 Unknown281 : 1;
-        u8 Unknown282 : 1;
-        u8 Unknown283 : 1;
-        u8 Unknown284 : 1;
-        u8 Unknown285 : 1;
-        u8 Unknown286 : 1;
-        u8 Unknown287 : 1;
-        u8 Unknown288 : 1;
-        u8 Unknown289 : 1;
-        u8 Unknown290 : 1;
-        u8 Unknown291 : 1;
-        u8 Unknown292 : 1;
-        u8 Unknown293 : 1;
-        u8 Unknown294 : 1;
-        u8 Unknown295 : 1;
-        u8 Unknown296 : 1;
-        u8 Unknown297 : 1;
-        u8 Unknown298 : 1;
-        u8 Unknown299 : 1;
-        u8 Unknown300 : 1;
-        u8 Unknown301 : 1;
-        u8 Unknown302 : 1;
-        u8 Unknown303 : 1;
-        u8 Unknown304 : 1;
-        u8 Unknown305 : 1;
-        u8 Unknown306 : 1;
-        u8 Unknown307 : 1;
-        u8 Unknown308 : 1;
-        u8 Unknown309 : 1;
-        u8 Unknown310 : 1;
-        u8 Unknown311 : 1;
-        u8 Unknown312 : 1;
-        u8 Unknown313 : 1;
-        u8 Unknown314 : 1;
-        u8 Unknown315 : 1;
-        u8 Unknown316 : 1;
-        u8 Unknown317 : 1;
-        u8 Unknown318 : 1;
-        u8 Unknown319 : 1;
-        u8 Unknown320 : 1;
-        u8 Unknown321 : 1;
-        u8 Unknown322 : 1;
-        u8 Unknown323 : 1;
-        u8 Unknown324 : 1;
-        u8 Unknown325 : 1;
-        u8 Unknown326 : 1;
-        u8 Unknown327 : 1;
-        u8 Unknown328 : 1;
-        u8 Unknown329 : 1;
-        u8 Unknown330 : 1;
-        u8 Unknown331 : 1;
-        u8 Unknown332 : 1;
-        u8 Unknown333 : 1;
-        u8 Unknown334 : 1;
-        u8 Unknown335 : 1;
-        u8 Unknown336 : 1;
-        u8 Unknown337 : 1;
-        u8 Unknown338 : 1;
-        u8 Unknown339 : 1;
-        u8 Unknown340 : 1;
-        u8 Unknown341 : 1;
-        u8 Unknown342 : 1;
-        u8 Unknown343 : 1;
-        u8 Unknown344 : 1;
-        u8 Unknown345 : 1;
-        u8 Unknown346 : 1;
-        u8 Unknown347 : 1;
-        u8 Unknown348 : 1;
-        u8 Unknown349 : 1;
-        u8 Unknown350 : 1;
-        u8 Unknown351 : 1;
-        u8 Unknown352 : 1;
-        u8 Unknown353 : 1;
-        u8 Unknown354 : 1;
-        u8 Unknown355 : 1;
-        u8 Unknown356 : 1;
-        u8 Unknown357 : 1;
-        u8 Unknown358 : 1;
-        u8 Unknown359 : 1;
-        u8 RecievedCATIntro : 1;
-        u8 Unknown361 : 1;
-        u8 Unknown362 : 1;
-        u8 Unknown363 : 1;
-        u8 Unknown364 : 1;
-        u8 Unknown365 : 1;
-        u8 Unknown366 : 1;
-        u8 Unknown367 : 1;
-        u8 Unknown368 : 1;
-        u8 Unknown369 : 1;
-        u8 Unknown370 : 1;
-        u8 Unknown371 : 1;
-        u8 Unknown372 : 1;
-        u8 Unknown373 : 1;
-        u8 Unknown374 : 1;
-        u8 Unknown375 : 1;
-        u8 Unknown376 : 1;
-        u8 Unknown377 : 1;
-        u8 Unknown378 : 1;
-        u8 Unknown379 : 1;
-        u8 Unknown380 : 1;
-        u8 Unknown381 : 1;
-        u8 Unknown382 : 1;
-        u8 CanUseCensusMenu : 1;
-        u8 Unknown384 : 1;
-        u8 Unknown385 : 1;
-        u8 Unknown386 : 1;
-        u8 Unknown387 : 1;
-        u8 Unknown388 : 1;
-        u8 Unknown389 : 1;
-        u8 Unknown390 : 1;
-        u8 Unknown391 : 1;
-        u8 Unknown392 : 1;
-        u8 Unknown393 : 1;
-        u8 Unknown394 : 1;
-        u8 Unknown395 : 1;
-        u8 Unknown396 : 1;
-        u8 Unknown397 : 1;
-        u8 Unknown398 : 1;
-        u8 Unknown399 : 1;
-        u8 Unknown400 : 1;
-        u8 Unknown401 : 1;
-        u8 Unknown402 : 1;
-        u8 Unknown403 : 1;
-        u8 Unknown404 : 1;
-        u8 Unknown405 : 1;
-        u8 Unknown406 : 1;
-        u8 Unknown407 : 1;
-        u8 Unknown408 : 1;
-        u8 Unknown409 : 1;
-        u8 Unknown410 : 1;
-        u8 Unknown411 : 1;
-        u8 Unknown412 : 1;
-        u8 Unknown413 : 1;
-        u8 Unknown414 : 1;
-        u8 Unknown415 : 1;
-        u8 Unknown416 : 1;
+        uint8_t Unknown1 : 1;
+        uint8_t Unknown2 : 1;
+        uint8_t Unknown3 : 1;
+        uint8_t Unknown4 : 1;
+        uint8_t Unknown5 : 1; //most likely player set their name and townname
+        uint8_t Unknown6 : 1;
+        uint8_t Unknown7 : 1;
+        uint8_t Unknown8 : 1;
+        uint8_t Unknown9 : 1;
+        uint8_t FinishedFirstDay : 1; //Introduction day finished
+        uint8_t Unknown11 : 1;
+        uint8_t Unknown12 : 1;
+        uint8_t Unknown13 : 1;
+        uint8_t Unknown14 : 1;
+        uint8_t Unknown15 : 1;
+        uint8_t Unknown16 : 1;
+        uint8_t Unknown17 : 1;
+        uint8_t Unknown18 : 1;
+        uint8_t Unknown19 : 1;
+        uint8_t Unknown20 : 1;
+        uint8_t Unknown21 : 1;
+        uint8_t Unknown22 : 1;
+        uint8_t Unknown23 : 1;
+        uint8_t Unknown24 : 1;
+        uint8_t Unknown25 : 1;
+        uint8_t Unknown26 : 1;
+        uint8_t MainStreetUnlocked : 1;
+        uint8_t TomNookIntroduced : 1;
+        uint8_t BlathersIntroduced : 1;
+        uint8_t Unknown30 : 1;
+        uint8_t Unknown31 : 1;
+        uint8_t Unknown32 : 1;
+        uint8_t Unknown33 : 1;
+        uint8_t Unknown34 : 1;
+        uint8_t Unknown35 : 1;
+        uint8_t Unknown36 : 1;
+        uint8_t Unknown37 : 1;
+        uint8_t Unknown38 : 1;
+        uint8_t Unknown39 : 1;
+        uint8_t Unknown40 : 1;
+        uint8_t KnowIsabelleName : 1;
+        uint8_t Unknown42 : 1;
+        uint8_t Unknown43 : 1;
+        uint8_t Unknown44 : 1;
+        uint8_t Unknown45 : 1;
+        uint8_t Unknown46 : 1;
+        uint8_t Unknown47 : 1;
+        uint8_t Unknown48 : 1;
+        uint8_t Unknown49 : 1;
+        uint8_t Unknown50 : 1;
+        uint8_t Unknown51 : 1;
+        uint8_t Unknown52 : 1;
+        uint8_t Unknown53 : 1;
+        uint8_t Unknown54 : 1;
+        uint8_t Unknown55 : 1;
+        uint8_t Unknown56 : 1;
+        uint8_t Unknown57 : 1;
+        uint8_t Unknown58 : 1;
+        uint8_t Unknown59 : 1;
+        uint8_t Unknown60 : 1;
+        uint8_t Unknown61 : 1;
+        uint8_t Unknown62 : 1;
+        uint8_t Unknown63 : 1;
+        uint8_t Unknown64 : 1;
+        uint8_t Unknown65 : 1;
+        uint8_t Unknown66 : 1;
+        uint8_t Unknown67 : 1;
+        uint8_t Unknown68 : 1;
+        uint8_t Unknown69 : 1;
+        uint8_t Unknown70 : 1;
+        uint8_t Unknown71 : 1;
+        uint8_t Unknown72 : 1;
+        uint8_t Unknown73 : 1;
+        uint8_t Unknown74 : 1;
+        uint8_t Unknown75 : 1;
+        uint8_t Unknown76 : 1;
+        uint8_t Unknown77 : 1;
+        uint8_t Unknown78 : 1;
+        uint8_t Unknown79 : 1;
+        uint8_t Unknown80 : 1;
+        uint8_t Unknown81 : 1;
+        uint8_t ResetPending : 1;
+        uint8_t Unknown83 : 1;
+        uint8_t Unknown84 : 1;
+        uint8_t Unknown85 : 1;
+        uint8_t Unknown86 : 1;
+        uint8_t Unknown87 : 1;
+        uint8_t Unknown88 : 1; //first talked to pete
+        uint8_t Unknown89 : 1;
+        uint8_t Unknown90 : 1;
+        uint8_t Unknown91 : 1;
+        uint8_t Unknown92 : 1;
+        uint8_t Unknown93 : 1;
+        uint8_t Unknown94 : 1;
+        uint8_t Unknown95 : 1;
+        uint8_t Unknown96 : 1;
+        uint8_t Unknown97 : 1;
+        uint8_t Unknown98 : 1;
+        uint8_t Unknown99 : 1;
+        uint8_t Unknown100 : 1;
+        uint8_t Unknown101 : 1;
+        uint8_t Unknown102 : 1;
+        uint8_t Unknown103 : 1;
+        uint8_t Unknown104 : 1;
+        uint8_t PermitApprovalArrived : 1; //day of arrival of permit
+        uint8_t MayorJobIntroduction : 1; //after permit
+        uint8_t PermitApproval : 1; //if approval arrived
+        uint8_t PermitIntroduction : 1; //Isabelle told you about the mayor permit
+        uint8_t Unknown109 : 1;
+        uint8_t Unknown110 : 1;
+        uint8_t Unknown111 : 1;
+        uint8_t PWPExplained : 1; //PWP system explained
+        uint8_t OrdinanceExplained : 1; //Ordinance system explained
+        uint8_t Unknown114 : 1;
+        uint8_t Unknown115 : 1;
+  /*73*/uint8_t PermitFinished : 1;
+        uint8_t Unknown117 : 1;
+        uint8_t Unknown118 : 1;
+        uint8_t HasBeeSting : 1;
+        uint8_t Unknown120 : 1;
+        uint8_t Unknown121 : 1;
+        uint8_t Unknown122 : 1;
+        uint8_t Unknown123 : 1;
+        uint8_t CanTravel : 1; //i.e. can use train
+        uint8_t Unknown125 : 1;
+        uint8_t Unknown126 : 1;
+        uint8_t Unknown127 : 1;
+        uint8_t Unknown128 : 1;
+        uint8_t Unknown129 : 1;
+        uint8_t Unknown130 : 1;
+        uint8_t Unknown131 : 1;
+        uint8_t Unknown132 : 1;
+        uint8_t BefriendSable1 : 1;
+        uint8_t Unknown134 : 1;
+        uint8_t BefriendSable2 : 1;
+        uint8_t Unknown136 : 1;
+        uint8_t BefriendSable3 : 1;
+        uint8_t Unknown138 : 1;
+        uint8_t Unknown139 : 1;
+        uint8_t Unknown140 : 1;
+        uint8_t Unknown141 : 1;
+        uint8_t Unknown142 : 1;
+        uint8_t Unknown143 : 1;
+        uint8_t Unknown144 : 1;
+        uint8_t Unknown145 : 1;
+        uint8_t Unknown146 : 1;
+        uint8_t Unknown147 : 1;
+        uint8_t Unknown148 : 1;
+        uint8_t Unknown149 : 1;
+        uint8_t Unknown150 : 1;
+        uint8_t Unknown151 : 1;
+        uint8_t Unknown152 : 1;
+        uint8_t Unknown153 : 1;
+        uint8_t Unknown154 : 1;
+        uint8_t RecievedHHSIntro : 1;
+        uint8_t Unknown156 : 1;
+        uint8_t Unknown157 : 1;
+        uint8_t Unknown158 : 1;
+        uint8_t Unknown159 : 1;
+        uint8_t Unknown160 : 1;
+        uint8_t Unknown161 : 1;
+        uint8_t Unknown162 : 1;
+        uint8_t FinishedShrunkSignatures : 1;
+        uint8_t Unknown164 : 1;
+        uint8_t Unknown165 : 1;
+        uint8_t Unknown166 : 1;
+        uint8_t Unknown167 : 1;
+        uint8_t Unknown168 : 1;
+        uint8_t Unknown169 : 1;
+        uint8_t Unknown170 : 1;
+        uint8_t Unknown171 : 1;
+        uint8_t Unknown172 : 1;
+        uint8_t Unknown173 : 1;
+        uint8_t Unknown174 : 1;
+        uint8_t Unknown175 : 1;
+        uint8_t Unknown176 : 1;
+        uint8_t Unknown177 : 1;
+        uint8_t Unknown178 : 1;
+        uint8_t Unknown179 : 1;
+        uint8_t Unknown180 : 1;
+        uint8_t Unknown181 : 1;
+        uint8_t Unknown182 : 1;
+        uint8_t Unknown183 : 1;
+        uint8_t Unknown184 : 1;
+        uint8_t Unknown185 : 1;
+        uint8_t Unknown186 : 1;
+        uint8_t Unknown187 : 1;
+        uint8_t Unknown188 : 1;
+        uint8_t Unknown189 : 1;
+        uint8_t Unknown190 : 1;
+        uint8_t Unknown191 : 1;
+        uint8_t Unknown192 : 1;
+        uint8_t Unknown193 : 1;
+        uint8_t Unknown194 : 1;
+        uint8_t Unknown195 : 1;
+        uint8_t Unknown196 : 1;
+        uint8_t Unknown197 : 1;
+        uint8_t Unknown198 : 1;
+        uint8_t Unknown199 : 1;
+        uint8_t Unknown200 : 1;
+        uint8_t Unknown201 : 1;
+        uint8_t Unknown202 : 1;
+        uint8_t Unknown203 : 1;
+        uint8_t Unknown204 : 1;
+        uint8_t Unknown205 : 1;
+        uint8_t Unknown206 : 1;
+        uint8_t Unknown207 : 1;
+        uint8_t KnowsPermitRequirements : 1; //Isabelle explained how to obtain mayor permit
+        uint8_t Unknown209 : 1;
+        uint8_t Permit_Points1 : 1; //written to bulletin board? (1 points)
+        uint8_t Permit_Points2 : 1; //mayor permit (2 points)
+        uint8_t Permit_Points3 : 1; //written to bulletin board? (4 points)
+        uint8_t Permit_Points4 : 1; //mayor permit (8 points)
+        uint8_t Permit_Points5 : 1; //mayor permit (16 points)
+        uint8_t Permit_Points6 : 1; //mayor permit (32 points)
+        uint8_t Permit_Points7 : 1; //mayor permit (64 points)
+        uint8_t Permit_Points8 : 1; //mayor permit? (128 points?)
+        uint8_t Permit_Points9 : 1; //mayor permit? (256 points?)
+        uint8_t Permit_Points10 : 1; //mayor permit? (512 points?)
+        uint8_t Unknown220 : 1; 
+        uint8_t Unknown221 : 1;
+        uint8_t Unknown222 : 1;
+        uint8_t Unknown223 : 1;
+        uint8_t Unknown224 : 1;
+        uint8_t Unknown225 : 1;
+        uint8_t Unknown226 : 1;
+        uint8_t Unknown227 : 1;
+        uint8_t Unknown228 : 1;
+        uint8_t Unknown229 : 1;
+        uint8_t Unknown230 : 1;
+        uint8_t Unknown231 : 1;
+        uint8_t Unknown232 : 1;
+        uint8_t Unknown233 : 1;
+        uint8_t Unknown234 : 1;
+        uint8_t Unknown235 : 1;
+        uint8_t Unknown236 : 1;
+        uint8_t Unknown237 : 1;
+        uint8_t Unknown238 : 1;
+        uint8_t Unknown239 : 1;
+        uint8_t Unknown240 : 1;
+        uint8_t Unknown241 : 1;
+        uint8_t Unknown242 : 1;
+        uint8_t Unknown243 : 1;
+        uint8_t Unknown244 : 1;
+        uint8_t Unknown245 : 1;
+        uint8_t Unknown246 : 1;
+        uint8_t Unknown247 : 1;
+        uint8_t Unknown248 : 1;
+        uint8_t Unknown249 : 1;
+        uint8_t Unknown250 : 1;
+        uint8_t HasClubTortimerMembership : 1;
+        uint8_t Unknown252 : 1;
+        uint8_t Unknown253 : 1;
+        uint8_t Unknown254 : 1;
+        uint8_t Unknown255 : 1;
+        uint8_t Unknown256 : 1;
+        uint8_t Unknown257 : 1;
+        uint8_t Unknown258 : 1;
+        uint8_t Unknown259 : 1;
+        uint8_t Unknown260 : 1;
+        uint8_t Unknown261 : 1;
+        uint8_t Unknown262 : 1;
+        uint8_t Unknown263 : 1;
+        uint8_t Unknown264 : 1;
+        uint8_t Unknown265 : 1;
+        uint8_t Unknown266 : 1;
+        uint8_t Unknown267 : 1;
+        uint8_t Unknown268 : 1;
+        uint8_t Unknown269 : 1;
+        uint8_t Unknown270 : 1;
+        uint8_t Unknown271 : 1;
+        uint8_t Unknown272 : 1;
+        uint8_t Unknown273 : 1;
+        uint8_t Unknown274 : 1;
+        uint8_t Unknown275 : 1;
+        uint8_t Unknown276 : 1;
+        uint8_t Unknown277 : 1;
+        uint8_t Unknown278 : 1;
+        uint8_t Unknown279 : 1;
+        uint8_t Unknown280 : 1;
+        uint8_t Unknown281 : 1;
+        uint8_t Unknown282 : 1;
+        uint8_t Unknown283 : 1;
+        uint8_t Unknown284 : 1;
+        uint8_t Unknown285 : 1;
+        uint8_t Unknown286 : 1;
+        uint8_t Unknown287 : 1;
+        uint8_t Unknown288 : 1;
+        uint8_t Unknown289 : 1;
+        uint8_t Unknown290 : 1;
+        uint8_t Unknown291 : 1;
+        uint8_t Unknown292 : 1;
+        uint8_t Unknown293 : 1;
+        uint8_t Unknown294 : 1;
+        uint8_t Unknown295 : 1;
+        uint8_t Unknown296 : 1;
+        uint8_t Unknown297 : 1;
+        uint8_t Unknown298 : 1;
+        uint8_t Unknown299 : 1;
+        uint8_t Unknown300 : 1;
+        uint8_t Unknown301 : 1;
+        uint8_t Unknown302 : 1;
+        uint8_t Unknown303 : 1;
+        uint8_t Unknown304 : 1;
+        uint8_t Unknown305 : 1;
+        uint8_t Unknown306 : 1;
+        uint8_t Unknown307 : 1;
+        uint8_t Unknown308 : 1;
+        uint8_t Unknown309 : 1;
+        uint8_t Unknown310 : 1;
+        uint8_t Unknown311 : 1;
+        uint8_t Unknown312 : 1;
+        uint8_t Unknown313 : 1;
+        uint8_t Unknown314 : 1;
+        uint8_t Unknown315 : 1;
+        uint8_t Unknown316 : 1;
+        uint8_t Unknown317 : 1;
+        uint8_t Unknown318 : 1;
+        uint8_t Unknown319 : 1;
+        uint8_t Unknown320 : 1;
+        uint8_t Unknown321 : 1;
+        uint8_t Unknown322 : 1;
+        uint8_t Unknown323 : 1;
+        uint8_t Unknown324 : 1;
+        uint8_t Unknown325 : 1;
+        uint8_t Unknown326 : 1;
+        uint8_t Unknown327 : 1;
+        uint8_t Unknown328 : 1;
+        uint8_t Unknown329 : 1;
+        uint8_t Unknown330 : 1;
+        uint8_t Unknown331 : 1;
+        uint8_t Unknown332 : 1;
+        uint8_t Unknown333 : 1;
+        uint8_t Unknown334 : 1;
+        uint8_t Unknown335 : 1;
+        uint8_t Unknown336 : 1;
+        uint8_t Unknown337 : 1;
+        uint8_t Unknown338 : 1;
+        uint8_t Unknown339 : 1;
+        uint8_t Unknown340 : 1;
+        uint8_t Unknown341 : 1;
+        uint8_t Unknown342 : 1;
+        uint8_t Unknown343 : 1;
+        uint8_t Unknown344 : 1;
+        uint8_t Unknown345 : 1;
+        uint8_t Unknown346 : 1;
+        uint8_t Unknown347 : 1;
+        uint8_t Unknown348 : 1;
+        uint8_t Unknown349 : 1;
+        uint8_t Unknown350 : 1;
+        uint8_t Unknown351 : 1;
+        uint8_t Unknown352 : 1;
+        uint8_t Unknown353 : 1;
+        uint8_t Unknown354 : 1;
+        uint8_t Unknown355 : 1;
+        uint8_t Unknown356 : 1;
+        uint8_t Unknown357 : 1;
+        uint8_t Unknown358 : 1;
+        uint8_t Unknown359 : 1;
+        uint8_t RecievedCATIntro : 1;
+        uint8_t Unknown361 : 1;
+        uint8_t Unknown362 : 1;
+        uint8_t Unknown363 : 1;
+        uint8_t Unknown364 : 1;
+        uint8_t Unknown365 : 1;
+        uint8_t Unknown366 : 1;
+        uint8_t Unknown367 : 1;
+        uint8_t Unknown368 : 1;
+        uint8_t Unknown369 : 1;
+        uint8_t Unknown370 : 1;
+        uint8_t Unknown371 : 1;
+        uint8_t Unknown372 : 1;
+        uint8_t Unknown373 : 1;
+        uint8_t Unknown374 : 1;
+        uint8_t Unknown375 : 1;
+        uint8_t Unknown376 : 1;
+        uint8_t Unknown377 : 1;
+        uint8_t Unknown378 : 1;
+        uint8_t Unknown379 : 1;
+        uint8_t Unknown380 : 1;
+        uint8_t Unknown381 : 1;
+        uint8_t Unknown382 : 1;
+        uint8_t CanUseCensusMenu : 1;
+        uint8_t Unknown384 : 1;
+        uint8_t Unknown385 : 1;
+        uint8_t Unknown386 : 1;
+        uint8_t Unknown387 : 1;
+        uint8_t Unknown388 : 1;
+        uint8_t Unknown389 : 1;
+        uint8_t Unknown390 : 1;
+        uint8_t Unknown391 : 1;
+        uint8_t Unknown392 : 1;
+        uint8_t Unknown393 : 1;
+        uint8_t Unknown394 : 1;
+        uint8_t Unknown395 : 1;
+        uint8_t Unknown396 : 1;
+        uint8_t Unknown397 : 1;
+        uint8_t Unknown398 : 1;
+        uint8_t Unknown399 : 1;
+        uint8_t Unknown400 : 1;
+        uint8_t Unknown401 : 1;
+        uint8_t Unknown402 : 1;
+        uint8_t Unknown403 : 1;
+        uint8_t Unknown404 : 1;
+        uint8_t Unknown405 : 1;
+        uint8_t Unknown406 : 1;
+        uint8_t Unknown407 : 1;
+        uint8_t Unknown408 : 1;
+        uint8_t Unknown409 : 1;
+        uint8_t Unknown410 : 1;
+        uint8_t Unknown411 : 1;
+        uint8_t Unknown412 : 1;
+        uint8_t Unknown413 : 1;
+        uint8_t Unknown414 : 1;
+        uint8_t Unknown415 : 1;
+        uint8_t Unknown416 : 1;
     };
 
     struct ACNL_Letter {
@@ -634,7 +811,7 @@ namespace CTRPluginFramework {
         ACNL_Letter Letter10;
     };
 
-    struct UnknownStruct1 {
+    struct UnknownStruct1 { //Initiatives
         u32 Unk1; //0 //Set to 0 in Player ctor
         u32 Unk2; //4 //Set to 0 in Player ctor
         u8 Unk3; //8 //Set to 0 in Player ctor
@@ -847,12 +1024,6 @@ namespace CTRPluginFramework {
         u8 LyleWhatsNew : 5;
     };
 
-    struct Player_Dressers {
-        Item DrawerA[60];
-        Item DrawerB[60];
-        Item DrawerC[60];
-    };
-
     struct MiiData1 {
         u8 MiiFace[92]; //0x5538 -> 0x5595 //Based on https://3dbrew.org/wiki/Mii#Mii_format
         u16 ZeroPad_1 = 0;  //0x5594 //U16 Zero Padding; Always 0x0000
@@ -993,7 +1164,7 @@ namespace CTRPluginFramework {
         u32 AddedSongs[3]; //Bitfield for added songs
         Item SantaBagInv[10]; //0x9048 -> 0x906F
         u8 PlayerZero_Filler[0x320]; //Always 0?? Game just memclr's in player ctor
-        Player_Dressers Dressers; //Each dresser is 60 long
+        Item Dressers[180]; //Each dresser is 60 long
         u16/*wchar*/ BDayWish[0x22]; //0x9660 -> 0x96A4
         /*
         ACNL_Letter Letter1; 
@@ -1006,7 +1177,6 @@ namespace CTRPluginFramework {
         u8 UnkBuffer12[0x40];
         u8 UnknownNotSetYet8[0xA4];
         */
-
         u8 UnknownBuffer[0xC84]; 
         Encyclopedia_Sizes EncyclopediaSizes; //0xA328 -> 0xA484
         u8 UnkBuffer11[0x84]; //0xA485 -> 0xA507
@@ -1015,6 +1185,656 @@ namespace CTRPluginFramework {
         UnknownStruct10 UnkStruct10_3;
         Item UnkItem3; //Some Item; Set to 0x00007ffe in player ctor
         u16 Padding_19;
+    };
+
+    struct ACNL_Date {
+        u16 Year;
+        u8 Month;
+        u8 Day;
+    };
+
+    struct VillagerFutureHome {
+        PersonalID unknownPID;
+        u8 Zerod[34]; //Related to class script::WordPtrSv, technically same buffer as UnkName
+        u16/*wchar*/ UnkName[9]; //Related to class script::WordPtrSv, technically same buffer as Zerod
+        Item UnkItem1; //Group 1; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem2; //Group 1; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem3; //Group 1; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem4; //Group 1; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem5; //Group 1; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem6; //Group 1; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem7; //Group 1; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem8; //Group 1; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem9; //Group 2; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem10; //Group 2; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem11; //Group 2; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem12; //Group 2; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem13; //Group 2; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem14; //Group 2; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem15; //Group 2; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem16; //Group 2; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem17; //Group 3; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem18; //Group 4; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem19; //Group 5; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem20; //Group 6; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem21; //Group 7; Some Item; Set to 0x00007ffe in player ctor
+        u8 UnkBitfield[8];
+        u16 unk;
+        TownID UnkTownID;
+        u64 Unknown22; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        ACNL_Date Date1;
+        ACNL_Date Date2;
+        ACNL_Date Date3;
+        ACNL_Date Date4;
+        u16 Unknown23; //ctor sets to 0xFFFF
+        u8 Unk24; //ctor sets to 0x31
+        u8 Padding;
+    };
+
+    struct Villager_Status {
+        u8 IsBoxed : 1;
+        u8 HasMoved : 1;
+        u8 Unknown3 : 1;
+        u8 Unknown4 : 1;
+        u8 Unknown5 : 1;
+        u8 Unknown6 : 1;
+        u8 Unknown7 : 1;
+        u8 Unknown8 : 1;
+        u8 Unknown9 : 1;
+        u8 Unknown10 : 1;
+        u8 Unknown11 : 1;
+        u8 Unknown12 : 1;
+        u8 Unknown13 : 1;
+        u8 RealtedToBelowButUnk : 1;
+        u8 MovingToAnotherTown : 1;
+        u8 Unknown16 : 1;
+        u8 Unknown17 : 1;
+        u8 Unknown18 : 1;
+        u8 Unknown19 : 1;
+        u8 Unknown20 : 1;
+        u8 Unknown21 : 1;
+        u8 Unknown22 : 1;
+        u8 Unknown23 : 1;
+        u8 Unknown24 : 1;
+        u8 Unknown25 : 1;
+        u8 Unknown26 : 1;
+        u8 Unknown27 : 1;
+        u8 Unknown28 : 1;
+        u8 Unknown29 : 1;
+        u8 Unknown30 : 1;
+        u8 Unknown31 : 1;
+        u8 Unknown32 : 1;
+    };
+
+    struct ACNL_Villager {
+        UnknownStruct6Mini Mini1;
+        ACNL_Pattern Pattern;
+        TownID TownID1;
+        u32 Unknown1[2]; //Game copies value from 0x6E29A, otherwise gens random number, gets u32 value then does something to it (EUR 1.5 IDA: 0x6BBBD4)
+        u64 Unknown2; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        Item UnkItem1; //Group 1; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem2; //Group 1; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem3; //Group 1; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem4; //Group 1; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem5; //Group 2; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem6; //Group 2; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem7; //Group 2; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem8; //Group 2; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem9; //Group 3; Some Item; Set to 0x00007ffe in player ctor
+        Item UnkItem10; //Group 4; Some Item; Set to 0x00007ffe in player ctor
+        //This is the places the Villager has passed through, which is cool
+        VillagerFutureHome Home1; //This is the current home, or if the villager is moving somewhere, the next home.
+        VillagerFutureHome Home2; //This is the last home, or if the villager is moving somewhere, the current home.
+        VillagerFutureHome Home3;
+        VillagerFutureHome Home4;
+        VillagerFutureHome Home5;
+        VillagerFutureHome Home6;
+        VillagerFutureHome Home7;
+        VillagerFutureHome Home8;
+        VillagerFutureHome Home9;
+        VillagerFutureHome Home10;
+        VillagerFutureHome Home11;
+        VillagerFutureHome Home12;
+        VillagerFutureHome Home13;
+        VillagerFutureHome Home14;
+        VillagerFutureHome Home15;
+        VillagerFutureHome Home16;
+        u16 Padding;
+        ACNL_Letter Letter1; //Group 1
+        ACNL_Letter Letter2; //Group 1
+        ACNL_Letter Letter3; //Group 1
+        ACNL_Letter Letter4; //Group 1
+        ACNL_Letter Letter5; //Single
+        u16 UnkNum1; //Single; Set to 2011 in ctor
+        u16 UnkNum2; //Group 1; Set to 2011 in ctor
+        u16 UnkNum3; //Group 1; Set to 2011 in ctor
+        u16 UnkNum4; //Group 1; Set to 2011 in ctor
+        u16 UnkNum5; //Group 1; Set to 2011 in ctor
+        Item Shirt; //246E - 2471
+        Item Song; //2472 - 2475
+        Item Wallpaper; //2476 - 2479
+        Item Carpet; //247A - 247D
+        Item Umbrella; //247E - 2481
+        Item Furniture[16]; //2482 - 24C1
+        ACNL_Date Date1; //24C2 - 24C5
+        u16/*wchar*/ Catchphrase[11]; //Last character is null terminator | 24C6 - 24DB
+        u8 Unknown3; //ctor sets to 7
+        u8 Padding2;
+        ACNL_Date Date2; //This seems to be a date, maybe date last talked??
+        u8 Unknown4; //ctor sets to 2 //Also general flags? | 24E4
+        u8 Unknown5; //ctor sets to 0x18; 0x2 means they're at home
+        Villager_Status Status; //ctor sets to 0; bit 1 set: moving out, bit 2 set: moving in; bit 3 removed from all villagers when loading game, unk
+        u8 Unknown6; //ctor sets to 0xFF
+        u8 Unknown7; //ctor sets to 0xFF
+        u8 Unknown8; //ctor sets to 0xFF
+        u8 Unknown9; //ctor sets to 0
+    };
+
+    struct ACNL_VillagerData {
+        u32 Checksum; //Checksum of the 0x22BC8 of this data
+        ACNL_Villager Villager1;
+        ACNL_Villager Villager2;
+        ACNL_Villager Villager3;
+        ACNL_Villager Villager4;
+        ACNL_Villager Villager5;
+        ACNL_Villager Villager6;
+        ACNL_Villager Villager7;
+        ACNL_Villager Villager8;
+        ACNL_Villager Villager9;
+        ACNL_Villager Villager10;
+        u32 Unk1;
+        u8 Unknown[0x2474];
+        ACNL_Villager UnkVillager1;
+        ACNL_Villager UnkVillager2;
+        ACNL_Villager UnkVillager3;
+        ACNL_Villager UnkVillager4;
+        u8 Unknown2[0x14];
+    };
+
+    struct ACNL_Building {
+        u16 ID; //0xFC is none, only below 0xFC considered valid
+        u8 XCoord;
+        u8 YCoord;
+    };
+
+    struct Town_Buildings {
+        ACNL_Building Building1;
+        ACNL_Building Building2;
+        ACNL_Building Building3;
+        ACNL_Building Building4;
+        ACNL_Building Building5;
+        ACNL_Building Building6;
+        ACNL_Building Building7;
+        ACNL_Building Building8;
+        ACNL_Building Building9;
+        ACNL_Building Building10;
+        ACNL_Building Building11;
+        ACNL_Building Building12;
+        ACNL_Building Building13;
+        ACNL_Building Building14;
+        ACNL_Building Building15;
+        ACNL_Building Building16;
+        ACNL_Building Building17;
+        ACNL_Building Building18;
+        ACNL_Building Building19;
+        ACNL_Building Building20;
+        ACNL_Building Building21;
+        ACNL_Building Building22;
+        ACNL_Building Building23;
+        ACNL_Building Building24;
+        ACNL_Building Building25;
+        ACNL_Building Building26;
+        ACNL_Building Building27;
+        ACNL_Building Building28;
+        ACNL_Building Building29;
+        ACNL_Building Building30;
+        ACNL_Building Building31;
+        ACNL_Building Building32;
+        ACNL_Building Building33;
+        ACNL_Building Building34;
+        ACNL_Building Building35;
+        ACNL_Building Building36;
+        ACNL_Building Building37;
+        ACNL_Building Building38;
+        ACNL_Building Building39;
+        ACNL_Building Building40;
+        ACNL_Building Building41;
+        ACNL_Building Building42;
+        ACNL_Building Building43;
+        ACNL_Building Building44;
+        ACNL_Building Building45;
+        ACNL_Building Building46;
+        ACNL_Building Building47;
+        ACNL_Building Building48;
+        ACNL_Building Building49;
+        ACNL_Building Building50;
+        ACNL_Building Building51;
+        ACNL_Building Building52;
+        ACNL_Building Building53;
+        ACNL_Building Building54;
+        ACNL_Building Building55;
+        ACNL_Building Building56;
+        ACNL_Building EventPWP1;
+        ACNL_Building EventPWP2;
+    };
+
+    struct ACNL_BuildingData {
+        u32 Checksum; //Checksum of the 0x44B8 of this data
+        u8 NormalPWPsAmount;
+        u8 EventPWPsAmount;
+        u8 TownTreeSize; //1 <-> 7
+        u8 Padding1;
+        Town_Buildings Buildings;
+        //These are for the design stands I think; "FF_Padding1" is probably not padding but which pattern corresponds to which pwp???
+        ACNL_Pattern UnkPattern1;
+        u64 FF_Padding1;
+        ACNL_Pattern UnkPattern2;
+        u64 FF_Padding2;
+        ACNL_Pattern UnkPattern3;
+        u64 FF_Padding3;
+        ACNL_Pattern UnkPattern4;
+        u64 FF_Padding4;
+        ACNL_Pattern UnkPattern5;
+        u64 FF_Padding5;
+        ACNL_Pattern UnkPattern6;
+        u64 FF_Padding6;
+        ACNL_Pattern UnkPattern7;
+        u64 FF_Padding7;
+        ACNL_Pattern UnkPattern8;
+        u8 UnlockedPWPs[20]; //Devs use bitfield for unlocked PWPS
+    };
+
+    struct ACNL_MinigameData {
+        u32 Checksum; //Checksum of the 0x28F0 of this data
+        u8 Unknown[0x28F0];
+    };
+
+    struct ACNL_UnknownData {
+        u32 Checksum; //Checksum of the 0x7F0 of this data
+        u8 Unknown[0x7F0];
+    };
+
+    struct ACNL_MiniTownPlayerStruct { //size=0x20
+        u16 Unknown[0x10]; //ctor sets each to 0xFFFF
+    };
+
+    struct ACNL_SmallTownPlayerStruct { //size = 0x302
+        u8 Unknown1[0x22];
+        ACNL_MiniTownPlayerStruct Unk1; //ctor inits these seperately then all at once, idk if it's two arrays or one
+        ACNL_MiniTownPlayerStruct Unk2;
+        Item UnkItems1[0x64];
+        Item UnkItems2[0x40];
+        Item UnkItem1;
+        Item UnkItem2;
+        Item UnkItem3;
+        Item UnkItem4;
+    };
+
+    struct ACNL_SomeTownPlayerStruct {
+        u32 ZeroPad1;
+        u32 Unknown1;
+        u32 Unknown2;
+        u8  Unknown3;
+        u32 Unknown4;
+        u32 Unknown5;
+        u8  Unknown6;
+        u16 Padding1;
+        ACNL_SmallTownPlayerStruct Unk1;
+        ACNL_SmallTownPlayerStruct Unk2;
+        ACNL_SmallTownPlayerStruct Unk3;
+        ACNL_SmallTownPlayerStruct Unk4;
+        ACNL_SmallTownPlayerStruct Unk5;
+        ACNL_SmallTownPlayerStruct Unk6;
+        u16 Unk7;
+        u8 Unk8;
+        u8 Padding2;
+    };
+
+    struct ACNL_MuseumExhibit {//size = 0xB98
+        u8 Unk1; //Flag of some sort, ctor sets to 0xFF
+        u8 Padding;
+        ACNL_SmallTownPlayerStruct unkSmallTownPlayerStruct1;
+        ACNL_Pattern UnkPattern1;
+        u16/*wchar*/ OwnerName[0x11];
+        u16 Padding2;
+    };
+
+    struct ACNL_NewPWP {//size = 0x10
+        u8 Unk1; //ctor sets to 0
+        u8 Unk2; //ctor sets to 0
+        u8 Unk3; //ctor sets to 0
+        u8 Padding;
+        u32 Unk4; //Money accumulated???
+        u32 Unk5; //Total cost amount???
+        ACNL_Building Building;
+    };
+
+    struct ACNL_BulletinBoardMessage { //size = 0x1AC
+        u32 Unk1; //ctor sets to 0
+        u32 Unk2; //ctor sets to 0
+        u32 Unk3; //ctor sets to 0
+        u32 Unk4; //ctor sets to 0
+        u16 Unk5; //ctor sets to 0
+        u32 Unk6; //ctor sets to 0
+        u32 Unk7; //ctor sets to 0
+        u32 Unk8; //ctor sets to 0
+        u32 Unk9; //ctor sets to 0
+        u16 Unk10; //ctor sets to 0
+        u16/*wchar*/ Message[0xC1];
+        ACNL_Date MessageDate;
+        u16 Unk11; //ctor sets to 0
+    };
+
+    struct Town_Flags {
+        u8 Unknown1 : 1;
+        u8 EarlyBirdOrdinance : 1;
+        u8 NightOwlOrdinance  : 1;
+        u8 BellBoomOrdinance  : 1;
+        u8 BeautifulOrdinance : 1;
+        u8 Unknown6 : 1;
+        u8 Unknown7 : 1;
+        u8 Unknown8 : 1;
+        u8 Unknown9 : 1;
+        u8 Unknown10 : 1;
+        u8 Unknown11 : 1;
+        u8 Unknown12 : 1;
+        u8 Unknown13 : 1;
+        u8 Unknown14 : 1;
+        u8 Unknown15 : 1;
+        u8 Unknown16 : 1;
+        u8 Unknown17 : 1;
+        u8 Unknown18 : 1;
+        u8 Unknown19 : 1;
+        u8 Unknown20 : 1;
+        u8 Unknown21 : 1;
+        u8 Unknown22 : 1;
+        u8 Unknown23 : 1;
+        u8 Unknown24 : 1;
+        u8 Unknown25 : 1;
+        u8 Unknown26 : 1;
+        u8 Unknown27 : 1;
+        u8 Unknown28 : 1;
+        u8 Unknown29 : 1;
+        u8 Unknown30 : 1;
+        u8 Unknown31 : 1;
+        u8 Unknown32 : 1;
+        u8 Unknown33 : 1;
+        u8 Unknown34 : 1;
+        u8 Unknown35 : 1;
+        u8 Unknown36 : 1;
+        u8 Unknown37 : 1;
+        u8 Unknown38 : 1;
+        u8 Unknown39 : 1; //ctor sets this bit
+        u8 Unknown40 : 1;
+        u8 Unknown41 : 1;
+        u8 Unknown42 : 1;
+        u8 Unknown43 : 1;
+        u8 Unknown44 : 1;
+        u8 Unknown45 : 1;
+        u8 Unknown46 : 1;
+        u8 Unknown47 : 1;
+        u8 Unknown48 : 1;
+        u8 Unknown49 : 1;
+        u8 Unknown50 : 1;
+        u8 Unknown51 : 1;
+        u8 Unknown52 : 1;
+        u8 Unknown53 : 1;
+        u8 Unknown54 : 1;
+        u8 Unknown55 : 1;
+        u8 Unknown56 : 1;
+        u8 Unknown57 : 1;
+        u8 Unknown58 : 1;
+        u8 Unknown59 : 1;
+        u8 Unknown60 : 1;
+        u8 Unknown61 : 1;
+        u8 Unknown62 : 1;
+        u8 Unknown63 : 1;
+        u8 Unknown64 : 1;
+        u8 Unknown65 : 1;
+        u8 Unknown66 : 1;
+        u8 Unknown67 : 1;
+        u8 Unknown68 : 1;
+        u8 Unknown69 : 1;
+        u8 Unknown70 : 1;
+        u8 Unknown71 : 1;
+        u8 Unknown72 : 1;
+        u8 Unknown73 : 1; //ctor sets this bit
+        u8 Unknown74 : 1; //ctor sets this bit
+        u8 Unknown75 : 1; //ctor sets this bit
+        u8 Unknown76 : 1;
+        u8 Unknown77 : 1;
+        u8 Unknown78 : 1;
+        u8 Unknown79 : 1;
+        u8 Unknown80 : 1;
+        u8 Unknown81 : 1;
+        u8 Unknown82 : 1;
+        u8 Unknown83 : 1;
+        u8 Unknown84 : 1;
+        u8 Unknown85 : 1;
+        u8 Unknown86 : 1;
+        u8 Unknown87 : 1;
+        u8 Unknown88 : 1;
+        u8 Unknown89 : 1;
+        u8 Unknown90 : 1;
+        u8 Unknown91 : 1;
+        u8 Unknown92 : 1;
+        u8 Unknown93 : 1;
+        u8 Unknown94 : 1;
+        u8 Unknown95 : 1;
+        u8 Unknown96 : 1;
+        u8 Unknown97 : 1;
+        u8 Unknown98 : 1;
+        u8 Unknown99 : 1;
+        u8 Unknown100 : 1;
+        u8 Unknown101 : 1;
+        u8 Unknown102 : 1;
+        u8 Unknown103 : 1;
+        u8 Unknown104 : 1;
+        u8 Unknown105 : 1;
+        u8 Unknown106 : 1;
+        u8 Unknown107 : 1;
+        u8 Unknown108 : 1;
+        u8 Unknown109 : 1;
+        u8 Unknown110 : 1;
+        u8 Unknown111 : 1;
+        u8 Unknown112 : 1;
+        u8 Unknown113 : 1;
+        u8 Unknown114 : 1;
+        u8 Unknown115 : 1;
+        u8 Unknown116 : 1;
+        u8 Unknown117 : 1;
+        u8 Unknown118 : 1;
+        u8 Unknown119 : 1;
+        u8 Unknown120 : 1;
+        u8 Unknown121 : 1;
+        u8 Unknown122 : 1;
+        u8 Unknown123 : 1;
+        u8 Unknown124 : 1;
+        u8 Unknown125 : 1;
+        u8 Unknown126 : 1;
+        u8 Unknown127 : 1;
+        u8 Unknown128 : 1;
+        u8 Unknown129 : 1;
+        u8 Unknown130 : 1;
+        u8 Unknown131 : 1;
+        u8 Unused1 : 1;
+        u8 Unused2 : 1;
+        u8 Unused3 : 1;
+        u8 Unused4 : 1;
+    };
+
+    struct ACNL_TownData {
+        u32 Checksum; //Checksum of the 0x1E4D8 of this data
+        u8 Unknown1[88];
+        u8 OceanSide; //[0-1]; 0: Left, 1: Right; Museum and Camping Ground and the starting position of the train driving by are all on the opposite side to this.; Ctor sets to 3
+        u8 GrassType; //[0-2]; 0: Triangle / Square (Winter) | 1: Circle / Star (Winter) | 2: Square / Circle (Winter); Ctor sets to 2
+        u8 CliffType; //[0-2]; This is unused/scrapped. All 3 cliff texture in the ROM are the exact same.; Ctor sets to 2
+        u8 Padding1;
+        u16 TownAcres[7*6]; //42 acres in total; 7 colunms, 6 rows. Game reads Acre IDs as u16; ctor sets each to 265 (0x109)
+        Item TownItems[(16*16)*(5*4)]; //16*16 items per acre; Items only cover map acres (5*4); 0x1400 of items
+        u8 MapGrassToday[(16*16)*(5*4)]; //16*16 slots per acre; Grass deterioration only affects map acres (5*4); 0x1400 of grass
+        u8 Unused2[40]; //Town data ctor never initializes this, so likely not used. Where the code would branch to do so, there is a NOP (both in WA and Orig).
+        u8 MapGrass[(16*16)*(8*6)];
+        u8 Unused3[0x1000]; //Town data actually includes it with MapGrass (0x8000 in total), despite this portion not being used
+        ACNL_SomeTownPlayerStruct Player1;
+        ACNL_SomeTownPlayerStruct Player2;
+        ACNL_SomeTownPlayerStruct Player3;
+        ACNL_SomeTownPlayerStruct Player4;
+        u8 Unknown2[0x10];
+        s64 Playtime;
+        TownID TownData1;
+        u8 Unknown3;
+        Town_Flags TownFlags;
+        u16 Unknown4; //Likely padding
+        Item LostAndFoundItems[16];
+        u8 Unknown5[16]; //likely padding
+        u64 Unknown6; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        Item TownFruit; //Yes, the game uses an item id to represent the town fruit lol
+        u16 DaysPlayed;
+        u8 Unknown7[0xC];
+        u8 Unknown8; //Group 1
+        u8 Unknown9; //Group 1
+        u8 Unknown10; //Group 1
+        u8 Padding2;
+        u64 Unknown11; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u64 Unknown12; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u8 Unknown13[8];
+        u64 Unknown14; //encrypted value
+        Item NooklingsItems[24];
+        u8 Unknown15[28]; //likely padding
+        Item AblesItems[5];
+        Item AblesPatternItems[8];
+        u64 Unknown16; //encrypted value
+        u8 Unknown17[0x10]; //likely padding
+        ACNL_Pattern AbleDisplayPattern1;
+        ACNL_Pattern AbleDisplayPattern2;
+        ACNL_Pattern AbleDisplayPattern3;
+        ACNL_Pattern AbleDisplayPattern4;
+        ACNL_Pattern AbleDisplayPattern5;
+        ACNL_Pattern AbleDisplayPattern6;
+        ACNL_Pattern AbleDisplayPattern7;
+        ACNL_Pattern AbleDisplayPattern8;
+        Item LabellesItems[7]; //Accessories in right of shop
+        u8 Unknown18[8]; //likely padding
+        u64 Unknown19; //encrypted value
+        u16/*wchar*/ ScrappedString[4];
+        u64 Unknown20; //encrypted value
+        u16 Unknown21;
+        Item LeifItems[11];
+        u8 Unknown22[14]; //likely padding
+        Item ReddItems[4];
+        u8 Unknown23[4]; //likely padding
+        PersonalID UnknownPID1; //unused?
+        PersonalID UnknownPID2; //unused?
+        PersonalID UnknownPID3; //unused?
+        PersonalID UnknownPID4; //unused?
+        u64 Unknown24; //encrypted value
+        u64 Unknown25; //encrypted value
+        u64 Unknown26; //encrypted value
+        u64 Unknown27; //encrypted value
+        u8 Unknown28[8];
+        u64 Unknown29; //encrypted value
+        u8 KickUnlockStatus; //0 = locked; 1 = Being Built; 2 = Built/Unlocked
+        u8 Padding4;
+        Item KicksItems[6];
+        u8 Unknown31[6];
+        Item UnkItems1[4]; //ctor does this and below seperately, 4 at a time
+        Item UnkItems2[4];
+        u32 Padding5;
+        u64 Unknown32; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u64 Unknown33; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u64 Unknown34; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u64 Unknown35; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u8 Unknown36[0x10]; //likely padding
+        Item UnkItems3[5];
+        Item UnkItems4[8];
+        u8 Unknown37[8];
+        u64 Unknown38; //encrypted value
+        u64 Unknown39; //encrypted value
+        u64 Unknown40; //encrypted value
+        u64 Unknown41; //encrypted value
+        u64 Unknown42; //encrypted value
+        u64 Unknown43; //encrypted value
+        u64 Unknown44; //encrypted value
+        u64 Unknown45; //encrypted value
+        ACNL_Pattern UnknownPattern1;
+        ACNL_Pattern UnknownPattern2;
+        ACNL_Pattern UnknownPattern3;
+        ACNL_Pattern UnknownPattern4;
+        ACNL_Pattern UnknownPattern5;
+        ACNL_Pattern UnknownPattern6;
+        ACNL_Pattern UnknownPattern7;
+        ACNL_Pattern UnknownPattern8;
+        u64 Unknown46; //encrypted value
+        u64 Unknown47; //encrypted value
+        u64 Unknown48; //encrypted value
+        u64 Unknown49; //encrypted value
+        u16 Unknown50;
+        Item MuseumItems[3];
+        u8 Unknown51[4]; //likely padding
+        Item NooksHomeItems[8];
+        u8 Unknown52[8]; //likely padding
+        u8 GracieUnlockStatus; //0 = locked??; 1 = Unlocked??
+        u8 Padding6;
+        Item GracieItems[18];
+        u8 Unknown53[18]; //likely padding
+        Mannequin UnkMannequin1;
+        Mannequin UnkMannequin2;
+        u8 Unknown54[0x10];
+        Item UnkItem1;
+        Item UnkItem2;
+        Item UnkItem3;
+        Item UnkItem4;
+        u8 Unknown55[0x16];
+        Item UnkItems5[4];
+        u64 Unknown56; //encrypted value
+        u64 Unknown57[0xE]; //encrypted value
+        u8 Unknown58[8];
+        Item UnkItem6;
+        Item UnkItems7[2];
+        Item UnkItems8[2];
+        u8 Unknown59[0x10];
+        //This is likely town tree stuff
+        u16 Unknown60; //year?
+        u8 Unknown61;
+        u8 Unknown62;
+        u16 Unknown63; //year?
+        u8 Unknown64;
+        u8 Unknown65;
+        u8 Unknown66[0x44];
+        ACNL_Date TownTreeDates1[0x43];
+        ACNL_Date TownTreeDates2[0x48];
+        ACNL_Date TownTreeDates3[0x1E];
+        ACNL_Date TownTreeDates4[0x48];
+        ACNL_Date TownTreeDates5[0x19];
+        ACNL_Date TownTreeDates6[0x08];
+        u8 Unknown67[0x114];
+        ACNL_MuseumExhibit Exhibit1;
+        ACNL_MuseumExhibit Exhibit2;
+        ACNL_MuseumExhibit Exhibit3;
+        ACNL_MuseumExhibit Exhibit4;
+        u64 Unknown68; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u8 Unknown69[7];
+        u64 Unknown70; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u8 Unknown71[7];
+        u64 Unknown72; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u8 Unknown73[10];
+        ACNL_NewPWP NextPWPToBuild;
+        ACNL_Building UnknownBuilding1;
+        ACNL_BulletinBoardMessage BBoardMessages[0xF];
+        u64 Unknown74; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u8 Unknown75[0x14];
+        u16 Unknown76;
+        Item UnkItem9;
+        u64 Unknown77; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u64 Unknown78; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u64 Unknown79; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        PersonalID unknownPID1;
+        PersonalID unknownPID2;
+        PersonalID unknownPID3;
+        u8 Unknown80[0x96];
+        Item UnkItems10[3];
+        u8 unknown[0x1BCE];
     };
 }
 #endif

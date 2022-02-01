@@ -1,7 +1,6 @@
 #include "Helpers/Inventory.hpp"
 #include "Helpers/Game.hpp"
 #include "Helpers/Player.hpp"
-#include "Helpers/PlayerPTR.hpp"
 #include "Helpers/IDList.hpp"
 #include "RegionCodes.hpp"
 #include "Files.h"
@@ -41,7 +40,7 @@ namespace CTRPluginFramework {
 
 			std::string Name = lowcaseInput.substr(5, 30); //lets make max 30 for now
 			std::string SID = lowcaseInput.substr(0, 4); 
-			u16 ID = StringToHex<u16>(SID, 0xFFFF);
+			Item ID = U32_TO_ITEM(StringToHex<u16>(SID, 0xFFFF));
 			out->Name.push_back(Name);
 			out->ID.push_back(ID);
 			ItemFileLenght++; //adds to file lenght to know how many items are in it
@@ -63,7 +62,7 @@ namespace CTRPluginFramework {
 		return count;
 	}
 
-	std::string ItemIDSearch(u16 ItemID) {
+	std::string ItemIDSearch(Item ItemID) {
 		if(!ItemFileExists)
 			return "";
 
@@ -91,20 +90,7 @@ namespace CTRPluginFramework {
 		
 		return (Items + (0xAC * i));
 	}
-//Get inv lock
-	u8 Inventory::GetLock(int slot) {
-		if(Player::GetSaveOffset(4) == 0)
-			return -1;
-		
-		return *(u8 *)(PlayerPTR::Pointer(0x6C10) + slot);
-	}
-//Write Inv Lock
-	void Inventory::WriteLock(int slot, u8 lock) {
-		if(Player::GetSaveOffset(4) == 0)
-			return;
-		
-		PlayerPTR::Write8(0x6C10 + slot, lock);
-	}
+
 //Get current inventory ID
 	u8 Inventory::GetCurrent() {
 		if(GameHelper::BaseInvPointer() == 0) 
@@ -150,68 +136,58 @@ namespace CTRPluginFramework {
 		return *(u8 *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + (0x8419 + GetAddData())) == 1;
 	}
 //Write Inventory Slot
-	bool Inventory::WriteSlot(int slot, u32 item, u8 lock) {
-		if(Player::GetSaveOffset(4) == 0)
+	bool Inventory::WriteSlot(int slot, Item item, u8 lock) {
+		ACNL_Player *player = Player::GetData();
+		if(!player) 
 			return false;
 			
 		if(!IDList::ItemValid(item, false)) 
 			return false;
 		
 	//Writes item and fixes lock if needed
-		PlayerPTR::Write32(0x6BD0 + (0x4 * slot), item);
-		WriteLock(slot, lock);
+		player->Inventory[slot] = item;
+		player->InventoryItemLocks[slot] = lock;
 		
 		ReloadIcons();
 
 		return true;
 	}
 //Read Inventory Slot	
-	bool Inventory::ReadSlot(int slot, u32& item, u8 inv) {
-		if(Player::GetSaveOffset(4) == 0) 
+	bool Inventory::ReadSlot(int slot, Item& item) {
+		ACNL_Player *player = Player::GetData();
+		if(!player) 
 			return false;
-			
-		switch(inv) {
-			case 0: { //If Standard Inventory
-				item = *(u32 *)PlayerPTR::Pointer(0x6BD0 + (0x4 * slot));
-			} return true;
-				
-			case 0x3D: { //If Closet
-				item = *(u32 *)PlayerPTR::Pointer(0x92F0 + (0x4 * slot));
-			} return true;
-				
-			case 0x89: { //If Secret Closet
-				item = *(u32 *)PlayerPTR::Pointer(0x7A6D8 + (0x4 * slot));
-			} return true;
-		}	
-		return false;
+
+		item = player->Inventory[slot];
+		return true;
 	}
 //Get asked item
-	u32 Inventory::GetNextItem(u16 itemID, u8 &slot) {
-		if(Player::GetSaveOffset(4) == 0) 
-			return -1;
+	bool Inventory::GetNextItem(Item itemID, u8 &slot) {
+		ACNL_Player *player = Player::GetData();
+		if(!player) 
+			return false;
 		
 		slot = 0;
 		while(true) {
-			u32 ItemOffset = PlayerPTR::Pointer(0x6BD0 + (0x4 * slot));
-			if(itemID == *(u32 *)ItemOffset) //If item found return offset 
-				return ItemOffset;
+			if(itemID == player->Inventory[slot]) //If item found return  
+				return true;
 			
 			slot++; //goto next slot
 			
 			if(15 < slot) //If item not found return
-				return -1;			
+				return false;		
 		}
 	}
 //Get asked closet item	
-	u32 Inventory::GetNextClosetItem(u32 itemID, u8 &slot) {
-		if(Player::GetSaveOffset(4) == 0) 
-			return -1;
+	bool Inventory::GetNextClosetItem(Item itemID, u8 &slot) {
+		ACNL_Player *player = Player::GetData();
+		if(!player) 
+			return false;
 		
 		slot = 0;
 		while(true) {
-			u32 ItemOffset = PlayerPTR::Pointer(0x92F0 + (4 * slot));
-			if(itemID == *(u32 *)ItemOffset) //If item found return offset 
-				return ItemOffset;
+			if(itemID == player->Dressers[slot]) //If item found return  
+				return true;
 			
 			slot++; //goto next slot
 			

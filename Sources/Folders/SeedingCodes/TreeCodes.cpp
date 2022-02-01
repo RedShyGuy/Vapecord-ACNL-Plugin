@@ -3,6 +3,7 @@
 #include "TextFileParser.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Color.h"
+#include "Helpers/GameStructs.hpp"
 
 namespace CTRPluginFramework {
 //Infinite Fruit Tree
@@ -55,16 +56,16 @@ namespace CTRPluginFramework {
 	void fruititemmod(MenuEntry *entry) {
 		static const Address fruitmod(0x2FE6A0, 0x2FE510, 0x2FE5E8, 0x2FE5E8, 0x2FE5AC, 0x2FE5AC, 0x2FE5D0, 0x2FE5D0);
 		
-		static u32 val = 0x2018;
+		static Item val = {0x2018, 0};
 		if(entry->WasJustActivated()) {
 			Process::Patch(fruitmod.addr, 0xE59F0020); 
             Process::Write32(fruitmod.addr + 0xC, 0xE3500000); 
-			Process::Patch(fruitmod.addr + 0x28, val);
+			Process::Patch(fruitmod.addr + 0x28, *(u32 *)&val);
 		}
 		
 		if(entry->Hotkeys[0].IsDown()) {
-			if(Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, val, val)) 
-				Process::Patch(fruitmod.addr + 0x28, val);
+			if(Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, *(u32 *)&val, *(u32 *)&val)) 
+				Process::Patch(fruitmod.addr + 0x28, *(u32 *)&val);
 		}
 		
 		if(!entry->IsActivated()) {

@@ -152,7 +152,7 @@ namespace CTRPluginFramework {
 		}
 	}
 //Defined u32 items for Island Shop Slot Mod
-	u32 ShopItem[4] = { 0x2018, 0x2018, 0x2018, 0x2018 };
+	Item ShopItem[4] = { {0x2018, 0}, {0x2018, 0}, {0x2018, 0}, {0x2018, 0} };
 //Keyboard for Island Shop Slot Mod
 	void IslandSettings(MenuEntry *entry) {
 		Keyboard SetItem("a");
@@ -163,7 +163,7 @@ namespace CTRPluginFramework {
 			SetItem.GetMessage() = Utils::Format(Language->Get("ISLAND_SHOP_MOD_ENTER_ID").c_str(), i + 1);
 
 			Sleep(Milliseconds(100));
-			s8 res = SetItem.Open(ShopItem[i]);
+			s8 res = SetItem.Open(*(u32 *)&ShopItem[i]);
 			if(res < 0)
 				break;
 		}
@@ -176,7 +176,7 @@ namespace CTRPluginFramework {
 		
 		if(GameHelper::NextRoomCheck() == 0xA5 && GameHelper::RoomCheck() == 0x65) {
 			for(int i = 0; i < 4; ++i) {
-				Process::Write32(*(u32 *)IslandShopPointer.addr + 0x10 + (i * 4), IDList::ItemValid(ShopItem[i], false) ? ShopItem[i] : 0x2018);
+				Process::Write32(*(u32 *)IslandShopPointer.addr + 0x10 + (i * 4), IDList::ItemValid(ShopItem[i], false) ? *(u32 *)&ShopItem[i] : 0x2018);
 			}
 		}
 	}
@@ -294,9 +294,9 @@ namespace CTRPluginFramework {
 		bool res = true;
 		while(res) {
 			while(res) {
-				if((u32)GameHelper::GetItemAtWorldCoords(x, y) != 0) {
-					u32 var = *(u32 *)(fileData + (nextItem++ * 4));
-					if(Dropper::PlaceItemWrapper(1, 0xFFFFFFFF, &var, &var, x, y, 0, 0, 0, 0, 0, 6, 0xA5, false)) {
+				if(GameHelper::GetItemAtWorldCoords(x, y)) {
+					Item var = *(Item *)(fileData + (nextItem++ * 4));
+					if(Dropper::PlaceItemWrapper(1, ReplaceEverything, &var, &var, x, y, 0, 0, 0, 0, 0, 6, 0xA5, false)) {
 						count++;
 						if(count % 300 == 0) 
 							Sleep(Milliseconds(500));
@@ -311,7 +311,7 @@ namespace CTRPluginFramework {
 			
 			y = 0x10;
 			x++;
-			if((u32)GameHelper::GetItemAtWorldCoords(x, y) == 0) 
+			if(!GameHelper::GetItemAtWorldCoords(x, y)) 
 				res = false;
 		}		
 		
@@ -337,8 +337,8 @@ namespace CTRPluginFramework {
 			return;
 		}
 
-		u32 startPos = (u32)GameHelper::GetItemAtWorldCoords(0x10, 0x10);
-		u32 endPos = (u32)GameHelper::GetItemAtWorldCoords(0x2F, 0x2F);
+		Item *startPos = GameHelper::GetItemAtWorldCoords(0x10, 0x10);
+		Item *endPos = GameHelper::GetItemAtWorldCoords(0x2F, 0x2F);
 
 		Keyboard KB("a", std::vector<std::string>{ "Backup Island", "Restore Island", "Delete Files" });
 		s8 index = KB.Open();
@@ -352,7 +352,7 @@ namespace CTRPluginFramework {
 				if(KB.Open(filename) == -1)
 					return;
 
-				Wrap::Dump(Utils::Format(PATH_ISLAND, regionName.c_str()), filename, ".dat", WrapLoc{ startPos, endPos - startPos }, WrapLoc{ (u32)-1, (u32)-1 });
+				Wrap::Dump(Utils::Format(PATH_ISLAND, regionName.c_str()), filename, ".dat", WrapLoc{ *(u32 *)startPos, *(u32 *)(endPos - startPos) }, WrapLoc{ (u32)-1, (u32)-1 });
 			} break;
 			case 1: {
 				u32 islandFileData = 0xA00000;

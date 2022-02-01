@@ -23,7 +23,7 @@ namespace CTRPluginFramework {
 	
 	void GetPlayerInfoData(void) {	
 		u8 pIndex = GameHelper::GetOnlinePlayerIndex();
-		if(!PlayerClass::GetInstance(pIndex)->IsLoaded())
+		if(!PlayerClass::GetInstance(pIndex)->IsLoaded() || !Player::GetData(pIndex))
 			return;
 	
 	//gets coordinates
@@ -34,13 +34,13 @@ namespace CTRPluginFramework {
 			PlayerClass::GetInstance(pIndex)->GetWorldCoords(&selectedX, &selectedY);
 		
 	//gets item standing on
-		u32 pItem = (u32)GameHelper::GetItemAtWorldCoords(selectedX, selectedY);	
+		Item *pItem = GameHelper::GetItemAtWorldCoords(selectedX, selectedY);	
 		
 		strings1[0] = ("Coordinates: " << std::to_string(pCoords[0]).erase(4) << "|" << std::to_string(pCoords[2]).erase(4));
 		strings1[1] = (Utils::Format("World Coordinates: %02X|%02X", (u8)(selectedX & 0xFF), (u8)(selectedY & 0xFF)));
 		strings1[2] = ("Velocity: " << std::to_string(*PlayerClass::GetInstance(pIndex)->GetVelocity()).erase(4));
 		strings1[3] = (Utils::Format("Animation: %02X / %03X", *PlayerClass::GetInstance(pIndex)->GetAnimation(), *PlayerClass::GetInstance(pIndex)->GetSnake()));
-		strings1[4] = ("Standing on: " << (pItem != 0 ? Utils::Format("%08X", *(u32 *)pItem) : "N/A") << (GameHelper::GetLockedSpotIndex(selectedX, selectedY) != 0xFFFFFFFF ? "(Locked)" : ""));
+		strings1[4] = ("Standing on: " << (pItem->ID != 0 ? Utils::Format("%08X", *(u32 *)pItem) : "N/A") << (GameHelper::GetLockedSpotIndex(selectedX, selectedY) != 0xFFFFFFFF ? "(Locked)" : ""));
 		strings1[5] = (Utils::Format("Room: %02X", GameHelper::RoomCheck()));
 
 	//gets inv item
@@ -48,12 +48,12 @@ namespace CTRPluginFramework {
 		if(Inventory::GetSelectedSlot(slot)) 
 			Inventory::ReadSlot(slot, itemslotid);
 		else 
-			itemslotid = 0xFFFFFFFF;
+			itemslotid = ReplaceEverything;
 		
 		strings2[0] = (Utils::Format("Pickup: %08X", PickupSeederItemID));
 		strings2[1] = (Utils::Format("Drop: %08X", dropitem));
-		strings2[2] = ("Replace: " << (ItemIDToReplace == 0xFFFFFFFF ? "everything" : Utils::Format("%08X", ItemIDToReplace)));
-		strings2[3] = (itemslotid != 0xFFFFFFFF) ? Utils::Format("Item ID: %04X", itemslotid) : "No Slot Selected";
+		strings2[2] = ("Replace: " << (ItemIDToReplace == ReplaceEverything ? "everything" : Utils::Format("%08X", ItemIDToReplace)));
+		strings2[3] = (itemslotid != ReplaceEverything) ? Utils::Format("Item ID: %04X", itemslotid) : "No Slot Selected";
 	}
 //debug OSD
 	bool debugOSD(const Screen &screen) {
@@ -296,7 +296,7 @@ namespace CTRPluginFramework {
         if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
 			u32 x, y;
 			if(PlayerClass::GetInstance(GameHelper::GetOnlinePlayerIndex())->GetWorldCoords(&x, &y))
-				Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0x9D, 0, 0, 0, 0, 0, x, y, 0, 0);
+				Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0x9D, { 0, 0 }, 0, 0, 0, 0, x, y, 0, 0);
 		}
     }
 

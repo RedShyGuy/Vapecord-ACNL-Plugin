@@ -235,8 +235,8 @@ namespace CTRPluginFramework {
 
 	//set replace item	
 		if(entry->Hotkeys[2].IsPressed()) {
-			if(Wrap::KB<u32>(Language->Get("DROP_MODS_ENTER_ID"), true, 8, ItemIDToReplace, 0x7FFE))
-				OSD::Notify("Now replacing: " << (ItemIDToReplace == 0xFFFFFFFF ? "everything" : Utils::Format("%08X", ItemIDToReplace)));
+			if(Wrap::KB<u32>(Language->Get("DROP_MODS_ENTER_ID"), true, 8, *(u32 *)&ItemIDToReplace, 0x7FFE))
+				OSD::Notify("Now replacing: " << (ItemIDToReplace == ReplaceEverything ? "everything" : Utils::Format("%08X", ItemIDToReplace)));
 		}
 
 	//set Item sequence	
@@ -264,7 +264,7 @@ namespace CTRPluginFramework {
 //Drop Items	
 	void instantDrop(MenuEntry *entry) {
 		if(entry->Hotkeys[0].IsPressed()) 
-			Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, dropitem, dropitem, ItemChange);
+			Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, *(u32 *)&dropitem, *(u32 *)&dropitem, ItemChange);
 		
 		if(turbo ? entry->Hotkeys[1].IsDown() : entry->Hotkeys[1].IsPressed()) {//Key::L + Key::DPadDown
 			u32 wX, wY, u0;
@@ -280,7 +280,7 @@ namespace CTRPluginFramework {
 		u32 wX, wY, u0;
 		
 		if(entry->Hotkeys[0].IsPressed()) 
-			Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, dropitem, dropitem, ItemChange);
+			Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, *(u32 *)&dropitem, *(u32 *)&dropitem, ItemChange);
 		
 		else if(entry->Hotkeys[1].IsPressed()) {
 			enabled = !enabled;
@@ -295,7 +295,7 @@ namespace CTRPluginFramework {
 //Touch Drop
 	void touchDrop(MenuEntry *entry) {
 		if(entry->Hotkeys[0].IsPressed()) 
-			Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, dropitem, dropitem, ItemChange);
+			Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, *(u32 *)&dropitem, *(u32 *)&dropitem, ItemChange);
 		
 		if((turbo ? Touch::IsDown() : Controller::IsKeyPressed(Key::Touchpad)) && GameHelper::MapBoolCheck() == 1) {
 			UIntVector pos = Touch::GetPosition();
@@ -327,8 +327,8 @@ namespace CTRPluginFramework {
 //Slot Drop
 	void ShowInvSlotID(MenuEntry *entry) {
 		static bool enabled = false;
-		static u32 dropitemid = 0x7FFE;
-		
+		static Item dropitemid = {0x7FFE, 0};
+		 
 	//Auto Drop Hotkeys
 		if(entry->Hotkeys[0].IsPressed()) {
 			enabled = !enabled;
@@ -338,7 +338,7 @@ namespace CTRPluginFramework {
 		u8 slot = 0;
 		if(Inventory::GetSelectedSlot(slot)) {
 			Inventory::ReadSlot(slot, dropitemid);
-			if(IDList::ValidID(dropitemid, 0x295B, 0x292F)) 
+			if(IDList::ValidID(*(u16 *)&dropitemid, 0x295B, 0x292F)) 
 				GameHelper::ToOutdoorFlowers(dropitemid);
 
 		//Auto Drop

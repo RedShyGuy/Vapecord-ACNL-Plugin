@@ -191,12 +191,12 @@ namespace CTRPluginFramework {
 			u32 x, y;
 			if(PlayerClass::GetInstance()->GetWorldCoords(&x, &y)) {
 				if(!allforce && pos >= 0) {
-					Animation::ExecuteAnimationWrapper(pos, 0x34, 1, 1, 1, 1, 0, x, y, true);
+					Animation::ExecuteAnimationWrapper(pos, 0x34, {1, 0}, 1, 1, 1, 0, x, y, true);
 					OSD::Notify(Utils::Format("Teleported player %02X to you", pos));
 				}
 				else {
 					for(u8 i = 0; i < 4; ++i) {
-						Animation::ExecuteAnimationWrapper(i, 0x34, 1, 1, 1, 1, 0, x, y, true);
+						Animation::ExecuteAnimationWrapper(i, 0x34, {1, 0}, 1, 1, 1, 0, x, y, true);
 					}
 					OSD::Notify("Teleported players to you");
 				}

@@ -4,7 +4,6 @@
 #include "Helpers/Game.hpp"
 #include "Helpers/Player.hpp"
 #include "Helpers/Dropper.hpp"
-#include "Helpers/PlayerPTR.hpp"
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/Inventory.hpp"
 #include "Helpers/Wrapper.hpp"
@@ -163,7 +162,7 @@ namespace CTRPluginFramework {
 
 				while(res) {
 					while(res) {
-						if((u32)GameHelper::GetItemAtWorldCoords(x, y) != 0) {
+						if(GameHelper::GetItemAtWorldCoords(x, y)) {
 							if(GameHelper::GetLockedSpotIndex(x, y, GameHelper::RoomCheck()) != 0xFFFFFFFF) {
 								GameHelper::ClearLockedSpot(x, y, GameHelper::RoomCheck(), 4);
 								Sleep(Milliseconds(40));
@@ -177,7 +176,7 @@ namespace CTRPluginFramework {
 					res = true;
 					y = 0x10;
 					x++;
-					if((u32)GameHelper::GetItemAtWorldCoords(x, y) == 0) 
+					if(!GameHelper::GetItemAtWorldCoords(x, y)) 
 						res = false;
 				}
 				OSD::Notify("Unlocked Map");
@@ -199,13 +198,13 @@ namespace CTRPluginFramework {
 
 		u32 x = 0, y = 0;
 		u32 count = 0;
-		u32 ItemToSearch = 0;
-		u32 ItemToReplace = 0;
+		Item ItemToSearch = {0x7FFE, 0};
+		Item ItemToReplace = {0x7FFE, 0};
 		
-		if(!Wrap::KB<u32>(Language->Get("QUICK_MENU_SEARCH_REPLACE_SEARCH"), true, 8, ItemToSearch, 0x7FFE)) 
+		if(!Wrap::KB<u32>(Language->Get("QUICK_MENU_SEARCH_REPLACE_SEARCH"), true, 8, *(u32 *)&ItemToSearch, 0x7FFE)) 
 			return;
 		
-		if(!Wrap::KB<u32>(Language->Get("QUICK_MENU_SEARCH_REPLACE_REPLACE"), true, 8, ItemToReplace, ItemToReplace)) 
+		if(!Wrap::KB<u32>(Language->Get("QUICK_MENU_SEARCH_REPLACE_REPLACE"), true, 8, *(u32 *)&ItemToReplace, *(u32 *)&ItemToReplace)) 
 			return;
 		
 		if(!IDList::ItemValid(ItemToReplace)) {
@@ -246,7 +245,7 @@ namespace CTRPluginFramework {
 			
 			while(res) {
 				while(res) {
-					if((u32)GameHelper::GetItemAtWorldCoords(x, y) != 0) 
+					if(GameHelper::GetItemAtWorldCoords(x, y)) 
 						GameHelper::WaterFlower(x, y);
 					else 
 						res = false;
@@ -257,7 +256,7 @@ namespace CTRPluginFramework {
 				res = true;
 				y = 0x10;
 				x++;
-				if((u32)GameHelper::GetItemAtWorldCoords(x, y) == 0) 
+				if(!GameHelper::GetItemAtWorldCoords(x, y)) 
 					res = false;
 			}
 			OSD::Notify("Success!");
@@ -283,7 +282,7 @@ namespace CTRPluginFramework {
 		}
 		
 		else if(entry->Hotkeys[1].IsPressed()) {
-			int res = Dropper::Search_Replace(size, { 0x7C, 0x7D, 0x7E, 0x7F, 0xCC, 0xF8 }, 0x7FFE, 0x3D, false, "Weed Removed!", true);
+			int res = Dropper::Search_Replace(size, { {0x7C, 0}, {0x7D, 0}, {0x7E, 0}, {0x7F, 0}, {0xCC, 0}, {0xF8, 0} }, {0x7FFE, 0}, 0x3D, false, "Weed Removed!", true);
 			if(res == -1)
 				OSD::Notify("Your player needs to be loaded!", Color::Red);
 			else if(res == -2) 

@@ -4,7 +4,6 @@
 #include "Helpers/Player.hpp"
 #include "Helpers/IDList.hpp"
 #include "Helpers/Wrapper.hpp"
-#include "Helpers/PlayerPTR.hpp"
 #include "Helpers/Game.hpp"
 #include "Helpers/Address.hpp"
 #include "Helpers/GameStructs.hpp"
@@ -157,7 +156,7 @@ namespace CTRPluginFramework {
 					case 5: player->Shoes.ID = item; break;
 				}
 
-				Player::WriteOutfit(GameHelper::GetOnlinePlayerIndex(), player->Hat.ID, player->Accessory.ID, player->TopWear.ID, player->BottomWear.ID, player->Socks.ID, player->Shoes.ID);
+				Player::WriteOutfit(GameHelper::GetOnlinePlayerIndex(), player->Hat, player->Accessory, player->TopWear, player->BottomWear, player->Socks, player->Shoes);
 			}
 		}
 
@@ -171,7 +170,9 @@ namespace CTRPluginFramework {
 
 //Random Outfit
 	void randomoutfit(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetData();
+
+		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
 			return;
@@ -180,16 +181,19 @@ namespace CTRPluginFramework {
 		static const std::vector<std::string> randomopt = {
 			Language->Get("VECTOR_RANDOM_OUTFIT"),
 			Language->Get("VECTOR_RANDOM_PLAYER")
-		};
-
-		ACNL_Player *player = Player::GetData();
+		};	
 
 		Keyboard randkb(Language->Get("KEY_RANDOMIZE_PLAYER"), randomopt);
 		Sleep(Milliseconds(100));
 		switch(randkb.Open()) {
 			default: break;			
 			case 0: 
-				Player::WriteOutfit(GameHelper::GetOnlinePlayerIndex(), Utils::Random(0x280B, 0x28F3), Utils::Random(0x28F5, 0x295B), Utils::Random(0x2493, 0x26F5), Utils::Random(0x26F8, 0x2776), Utils::Random(0x2777, 0x279E), Utils::Random(0x279F, 0x27E5));
+				Player::WriteOutfit(GameHelper::GetOnlinePlayerIndex(), U32_TO_ITEM(Utils::Random(0x280B, 0x28F3)), 
+																		U32_TO_ITEM(Utils::Random(0x28F5, 0x295B)), 
+																		U32_TO_ITEM(Utils::Random(0x2493, 0x26F5)), 
+																		U32_TO_ITEM(Utils::Random(0x26F8, 0x2776)), 
+																		U32_TO_ITEM(Utils::Random(0x2777, 0x279E)), 
+																		U32_TO_ITEM(Utils::Random(0x279F, 0x27E5)));
 			break;
 			case 1: {
 				player->HairStyle = Utils::Random(0, 0x21);
@@ -252,13 +256,13 @@ namespace CTRPluginFramework {
 
 //TPC Message Changer | Player specific save code
 	void tpcmessage(MenuEntry* entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetData();
+		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
-
-		ACNL_Player *player = Player::GetData();
+		
 		std::string input = "";
 
 		Keyboard KB(Language->Get("TPC_MESSAGE_ENTER_NAME"));
@@ -274,7 +278,8 @@ namespace CTRPluginFramework {
 
 //TPC Image Dumper | non player specific save code
 	void tpc(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetData();
+		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -320,7 +325,7 @@ namespace CTRPluginFramework {
 			} break;
 			
 			case 1: 
-				Wrap::Restore(Utils::Format(PATH_TPC, regionName.c_str()), ".jpg", Language->Get("TPC_DUMPER_RESTORE"), nullptr, true, WrapLoc{ PlayerPTR::Pointer(0x5738), 0x1400 }, WrapLoc{ (u32)-1, (u32)-1 });
+				Wrap::Restore(Utils::Format(PATH_TPC, regionName.c_str()), ".jpg", Language->Get("TPC_DUMPER_RESTORE"), nullptr, true, WrapLoc{ Player::GetSaveOffset(4) + 0x5738, 0x1400 }, WrapLoc{ (u32)-1, (u32)-1 });
 			break;
 			
 			case 2: 
@@ -457,7 +462,10 @@ namespace CTRPluginFramework {
 			Language->Get("VECTOR_ENZY_CLEAR"),
 		};
 
-		static const u8 EncyclopediaID[3] = { 0x24, 0x27, 0x28 };
+		static const Item_Categories EncyclopediaID[3] = { 
+			Item_Categories::Bugs, Item_Categories::Fish, 
+			Item_Categories::SeaCreatures
+		};
 		
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), enzyopt);
 		
@@ -603,11 +611,15 @@ namespace CTRPluginFramework {
 			Language->Get("VECTOR_ENZY_CLEAR"),
 		};	
 
-		static const u8 CatalogID[15] = {
-			0x03, 0x04, 0x05, 0x06, 
-			0x09, 0x07, 0x0C, 0x0D, 
-			0x0B, 0x0A, 0x19, 0x29, 
-			0x2F, 0x2E, 0x2C
+		static const Item_Categories CatalogID[15] = {
+			Item_Categories::Wallpaper, Item_Categories::Carpets,
+			Item_Categories::Furniture, Item_Categories::Shirts,
+			Item_Categories::Dresses, Item_Categories::Trousers,
+			Item_Categories::Socks, Item_Categories::Shoes,
+			Item_Categories::Hats, Item_Categories::Accesories,
+			Item_Categories::Umbrellas, Item_Categories::MailPapers,
+			Item_Categories::Songs, Item_Categories::Gyroids,
+			Item_Categories::AnalyzedFossils
 		};
 		
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), songopt);

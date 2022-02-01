@@ -14,7 +14,7 @@ namespace CTRPluginFramework {
 		return getaniminst.Call<u32>(playerInstance, someVal1, someVal2, encVal);
 	} 
 //Animation Wrapper	
-	bool Animation::ExecuteAnimationWrapper(u8 pIndex, u8 animID, u32 animItem, u8 emotion, u16 snake, u16 sound, bool u0, u8 wX, u8 wY, bool directSend, u8 appearance[]) {	
+	bool Animation::ExecuteAnimationWrapper(u8 pIndex, u8 animID, Item animItem, u8 emotion, u16 snake, u16 sound, bool u0, u8 wX, u8 wY, bool directSend, u8 appearance[]) {	
 	//Gets actual PlayerIndex
 		u8 AIndex = GameHelper::GetActualPlayerIndex();
 		
@@ -338,6 +338,6 @@ namespace CTRPluginFramework {
 		if(!PlayerClass::GetInstance(pID)->GetWorldCoords(&x, &y))
 			return;
 		
-		Animation::ExecuteAnimationWrapper(pID, 6, 0, 0, 0, 0, 0, x, y, 0);
+		Animation::ExecuteAnimationWrapper(pID, 6, {0, 0}, 0, 0, 0, 0, x, y, 0);
 	}
 }
