@@ -26,6 +26,7 @@ namespace CTRPluginFramework {
 		u8				GetRoom(u8 PlayerIndex);
 
 		ACNL_Player		*GetData(u8 PlayerIndex = 4);
+		bool 			SaveExists(ACNL_Player *player);
 
 		bool 			SetUnlockableBitField(ACNL_Player *player, u8 ID, bool state);
 	};

@@ -261,8 +261,12 @@ get room
 	}
 
 	ACNL_Player *Player::GetData(u8 PlayerIndex) {
-		u32 *addr = (u32 *)GetSaveOffset(PlayerIndex >= 4 ? GameHelper::GetOnlinePlayerIndex() : PlayerIndex);
+		u32 *addr = (u32 *)GetSpecificSave(PlayerIndex >= 4 ? GameHelper::GetOnlinePlayerIndex() : PlayerIndex);
 		return (ACNL_Player *)addr;
+	}
+
+	bool Player::SaveExists(ACNL_Player *player) {
+		return (player && player->PlayerInfo.PID != 0 && player->PlayerInfo.TownData.TID != 0);
 	}
 
 	void PlayerName::UpdateReference(u8 pIndex, const std::string& pName, u8 pGender) {

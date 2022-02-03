@@ -10,6 +10,7 @@
 #include "Helpers/IDList.hpp"
 #include "Helpers/AnimData.hpp"
 #include "Helpers/Animation.hpp"
+#include "Helpers/Converters.hpp"
 #include "Helpers/NPC.hpp"
 #include "Color.h"
 #include "Files.h"
@@ -445,8 +446,6 @@ namespace CTRPluginFramework {
 		if(op == 3) {
 			if(!player->PlayerFlags.FinishedShrunkSignatures) {
 			//To remove shrunk if petition is not done
-				//u8 byte = *(u8 *)PlayerPTR::Pointer(0x5714);
-				//Process::Write8(PlayerPTR::Pointer(0x5714), byte | 0x4);
 				player->PlayerFlags.FinishedShrunkSignatures = 1;
 			}
 		}
@@ -542,12 +541,21 @@ namespace CTRPluginFramework {
 		};
 		
 		for(int i = 0; i <= 3; ++i) {
-			u32 pO = Player::GetSpecificSave(i);
+			ACNL_Player *player = Player::GetData(i);
+			if(player) {
+				if(Player::SaveExists(player)) {
+					std::string str = "";
+					Convert::U16_TO_STR(player->PlayerInfo.PlayerName, str);
+					pV[i] = pColor[i] << str;
+				}
+			}
+		
+			/*u32 pO = Player::GetSpecificSave(i);
 			if(*(u16 *)(pO + 0x55A6) != 0) {
 				std::string pS = "";
 				Process::ReadString((pO + 0x55A8), pS, 0x10, StringFormat::Utf16);
 				pV[i] = pColor[i] << pS;
-			}
+			}*/
 		}
 		
 		Keyboard pKB(Language->Get("KEY_SELECT_PLAYER"), pV);
@@ -985,8 +993,10 @@ namespace CTRPluginFramework {
 			OSD::SwapBuffers();
 		}
 		
-		Process::Play();
 		delete[] acreArray;
+		acreArray = nullptr;
+
+		Process::Play();
 
 		return okay;
 	}
@@ -1026,7 +1036,7 @@ namespace CTRPluginFramework {
 			*menu += GetAcreID;
 		}
 
-		bool IsOkay = (GameHelper::MapBoolCheck() && GameHelper::IsInRoom(0) && Player::GetSaveOffset(4) != 0);
+		bool IsOkay = (GameHelper::MapBoolCheck() && GameHelper::IsInRoom(0) && !Player::GetData());
 		static bool WasActivated = false;
 		int res = 0;
 

@@ -29,7 +29,7 @@ namespace CTRPluginFramework {
 	//if item vector is not empty add existing items to keyboard
 		if(ItemID.size() != 0) {
 			for(u8 i = 1; i < ItemID.size(); i++) 
-				KBItems.push_back(Utils::Format("%08X", *(u32 *)&ItemID.at(i)));
+				KBItems.push_back(Utils::Format("%08X", ItemID.at(i)));
 		}
 		
 		KBItems.push_back("Add...");

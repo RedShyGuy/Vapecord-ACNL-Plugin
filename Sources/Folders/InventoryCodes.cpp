@@ -194,9 +194,9 @@ namespace CTRPluginFramework {
 					if(GameHelper::SetItem(&CurrentItem)) {
 						std::string itemName = "";
 						if(IDList::GetSeedName(CurrentItem, itemName))
-							OSD::Notify(Utils::Format("Spawned Item: %s (%04X)", itemName.c_str(), *(u16 *)&CurrentItem));
+							OSD::Notify(Utils::Format("Spawned Item: %s (%04X)", itemName.c_str(), CurrentItem.ID));
 						else
-							OSD::Notify(Utils::Format("Spawned Item: %04X", *(u16 *)&CurrentItem));
+							OSD::Notify(Utils::Format("Spawned Item: %04X", CurrentItem.ID));
 					}
 					else
 						OSD::Notify("Inventory Full!");
@@ -276,9 +276,9 @@ namespace CTRPluginFramework {
 
 		std::string itemName = "";
 		if(IDList::GetSeedName(itemID, itemName))
-			OSD::Notify(Utils::Format("Spawned Item: %s (%08X)", itemName.c_str(), *(u32 *)&itemID));
+			OSD::Notify(Utils::Format("Spawned Item: %s (%08X)", itemName.c_str(), itemID));
 		else
-			OSD::Notify(Utils::Format("Spawned Item: %08X", *(u32 *)&itemID));
+			OSD::Notify(Utils::Format("Spawned Item: %08X", itemID));
 	}
 //Clear Inventory
 	void ClearInventory(MenuEntry *entry) {
@@ -478,7 +478,7 @@ namespace CTRPluginFramework {
 			IDList::GetSeedName(OnlyItem[i], str);
 			Sets[i] = str;
 
-			input += Color(0x40FF40FF) << Utils::Format("%08X | ", *(u32 *)&OnlyItem[i]) << Color(0xFFFDD0FF) << Sets[i] << "\n";
+			input += Color(0x40FF40FF) << Utils::Format("%08X | ", OnlyItem[i]) << Color(0xFFFDD0FF) << Sets[i] << "\n";
 		}
 		input += "etc...";
 		file.Flush();

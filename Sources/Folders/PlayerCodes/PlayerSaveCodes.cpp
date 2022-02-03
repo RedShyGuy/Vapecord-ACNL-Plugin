@@ -7,6 +7,7 @@
 #include "Helpers/Game.hpp"
 #include "Helpers/Address.hpp"
 #include "Helpers/GameStructs.hpp"
+#include "Helpers/Converters.hpp"
 #include "Color.h"
 #include "Files.h"
 
@@ -270,9 +271,7 @@ namespace CTRPluginFramework {
 
 		Sleep(Milliseconds(100));
 		if(KB.Open(input) >= 0) {
-			u16 buffer[sizeof(player->TPCText) / sizeof(u16)] = { 0 };
-			utf8_to_utf16(buffer, reinterpret_cast<const u8*>(input.data()), input.size());
-			std::copy(std::begin(buffer), std::end(buffer), std::begin(player->TPCText));
+			Convert::STR_TO_U16(input, player->TPCText);
 		}
 	}
 

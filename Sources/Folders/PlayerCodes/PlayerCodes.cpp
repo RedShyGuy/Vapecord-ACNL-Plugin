@@ -28,6 +28,8 @@ namespace CTRPluginFramework {
 	
 	//gets coordinates
 		float *pCoords = PlayerClass::GetInstance(pIndex)->GetCoordinates();
+		if(!pCoords)
+			return;
 		
 	//Gets world coords	
 		if(!MapEditorActive)
@@ -35,6 +37,8 @@ namespace CTRPluginFramework {
 		
 	//gets item standing on
 		Item *pItem = GameHelper::GetItemAtWorldCoords(selectedX, selectedY);	
+		if(!pItem)
+			return;
 		
 		strings1[0] = ("Coordinates: " << std::to_string(pCoords[0]).erase(4) << "|" << std::to_string(pCoords[2]).erase(4));
 		strings1[1] = (Utils::Format("World Coordinates: %02X|%02X", (u8)(selectedX & 0xFF), (u8)(selectedY & 0xFF)));
@@ -53,7 +57,7 @@ namespace CTRPluginFramework {
 		strings2[0] = (Utils::Format("Pickup: %08X", PickupSeederItemID));
 		strings2[1] = (Utils::Format("Drop: %08X", dropitem));
 		strings2[2] = ("Replace: " << (ItemIDToReplace == ReplaceEverything ? "everything" : Utils::Format("%08X", ItemIDToReplace)));
-		strings2[3] = (itemslotid != ReplaceEverything) ? Utils::Format("Item ID: %04X", itemslotid) : "No Slot Selected";
+		strings2[3] = (itemslotid != ReplaceEverything) ? Utils::Format("Item ID: %08X", itemslotid) : "No Slot Selected";
 	}
 //debug OSD
 	bool debugOSD(const Screen &screen) {

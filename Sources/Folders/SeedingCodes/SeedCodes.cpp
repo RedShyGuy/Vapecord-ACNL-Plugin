@@ -222,7 +222,7 @@ namespace CTRPluginFramework {
 //OSD for Map Editor	
 	bool editorID(const Screen &screen) { 
 		if(screen.IsTop) 
-			screen.Draw(Utils::Format("ID: %08X", *(u32 *)&dropitem), 320, 220, Color::White); 
+			screen.Draw(Utils::Format("ID: %08X", dropitem), 320, 220, Color::White); 
 
 		return 1;
 	}
