@@ -73,7 +73,7 @@ Update Tan
 			return;
 
 		ACNL_Player *player = Player::GetData();
-		if(!player);
+		if(!player)
 			return;
 		
 		u32 i = PlayerClass::GetInstance()->Offset();

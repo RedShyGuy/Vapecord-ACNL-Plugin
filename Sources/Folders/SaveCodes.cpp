@@ -549,13 +549,6 @@ namespace CTRPluginFramework {
 					pV[i] = pColor[i] << str;
 				}
 			}
-		
-			/*u32 pO = Player::GetSpecificSave(i);
-			if(*(u16 *)(pO + 0x55A6) != 0) {
-				std::string pS = "";
-				Process::ReadString((pO + 0x55A8), pS, 0x10, StringFormat::Utf16);
-				pV[i] = pColor[i] << pS;
-			}*/
 		}
 		
 		Keyboard pKB(Language->Get("KEY_SELECT_PLAYER"), pV);
@@ -1036,7 +1029,7 @@ namespace CTRPluginFramework {
 			*menu += GetAcreID;
 		}
 
-		bool IsOkay = (GameHelper::MapBoolCheck() && GameHelper::IsInRoom(0) && !Player::GetData());
+		bool IsOkay = (GameHelper::MapBoolCheck() && GameHelper::IsInRoom(0) && Player::GetData());
 		static bool WasActivated = false;
 		int res = 0;
 

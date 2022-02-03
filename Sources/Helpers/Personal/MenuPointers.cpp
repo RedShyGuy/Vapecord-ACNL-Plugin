@@ -326,12 +326,12 @@ namespace CTRPluginFramework {
 			"SONG_LIST_NOTE", "FILL_CATALOG_NOTE",  },
 		};
 
-		const static std::string Names2[2][8] = {
-			{ "PLAYER_INFO", "PLAYER_LOADER", "NECK_POSITION", 
+		const static std::string Names2[2][7] = {
+			{ "PLAYER_INFO", /*"PLAYER_LOADER",*/ "NECK_POSITION", 
 			"CUSTOM_HAIR_EYE", "WEAR_HELMET", "FAINT", 
 			"PLAYERS_ON_MAP", "NEVER_BEDHEAD" },
 
-			{ "PLAYER_INFO_NOTE", "PLAYER_LOADER_NOTE", "NECK_POSITION_NOTE", 
+			{ "PLAYER_INFO_NOTE", /*"PLAYER_LOADER_NOTE",*/ "NECK_POSITION_NOTE", 
 			"CUSTOM_HAIR_EYE_NOTE", "WEAR_HELMET_NOTE", "FAINT_NOTE", 
 			"PLAYERS_ON_MAP_NOTE", "NEVER_BEDHEAD_NOTE" },
 		};
