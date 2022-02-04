@@ -73,7 +73,7 @@ namespace CTRPluginFramework {
 //Text to Item
 	void t2i(MenuEntry *entry) {
 		Item val;
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 
 		if(entry->Hotkeys[0].IsPressed()) {
 			if(!player) {
@@ -136,7 +136,7 @@ namespace CTRPluginFramework {
 	}
 //Duplicate Items
 	void duplication(MenuEntry *entry) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 		if(!player) 
 			return;
 
@@ -282,7 +282,7 @@ namespace CTRPluginFramework {
 	}
 //Clear Inventory
 	void ClearInventory(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		if(!Player::GetSaveData()) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -428,10 +428,10 @@ namespace CTRPluginFramework {
 		std::vector<bool> isDir;
 		File file;
 
-		if(restoreDIR.ListDirectories(f_Dir) == Directory::OPResult::NOT_OPEN)
+		if(Wrap::restoreDIR.ListDirectories(f_Dir) == Directory::OPResult::NOT_OPEN)
 			return;
 
-		if(restoreDIR.ListFiles(f_file, ".inv") == Directory::OPResult::NOT_OPEN) 
+		if(Wrap::restoreDIR.ListFiles(f_file, ".inv") == Directory::OPResult::NOT_OPEN) 
 			return;
 
 		if(f_Dir.empty() && f_file.empty())
@@ -457,7 +457,7 @@ namespace CTRPluginFramework {
 		if(isDir[index])
 			return;
 
-		if(restoreDIR.OpenFile(file, f_all[index], File::READ) != 0) 
+		if(Wrap::restoreDIR.OpenFile(file, f_all[index], File::READ) != 0) 
 			return; //error opening file
 
 		std::string Sets[16];
@@ -484,9 +484,12 @@ namespace CTRPluginFramework {
 		file.Flush();
 		file.Close();
 	}
-//Get Set	
+//Get Set
 	void getset(MenuEntry *entry) { 
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetSaveData();
+
+		if(!player) {
+			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -502,13 +505,16 @@ namespace CTRPluginFramework {
 			Language->Get("FILE_DELETE"),  
 		};
 
+		WrapLoc LocInv = { (u32 *)player->Inventory, sizeof(player->Inventory) };
+		WrapLoc LocLock = { (u32 *)player->InventoryItemLocks, sizeof(player->InventoryItemLocks) };
+
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), setopt);
 
 		Sleep(Milliseconds(100));
 		switch(optKb.Open()) {
 			default: return;
 			case 0: {
-				Wrap::Restore(PATH_PRESET, ".inv", Language->Get("GET_SET_RESTORE"), GetCustomView, false, WrapLoc{ Player::GetSaveOffset(4) + 0x6BD0, 0x64 }, WrapLoc{ Player::GetSaveOffset(4) + 0x6C10, 0x10 }, WrapLoc{ (u32)-1, (u32)-1 }); 
+				Wrap::Restore(PATH_PRESET, ".inv", Language->Get("GET_SET_RESTORE"), GetCustomView, false, &LocInv, &LocLock, nullptr); 
 				Inventory::ReloadIcons();
 			} return;
 
@@ -524,11 +530,11 @@ namespace CTRPluginFramework {
 						if(KB.Open(filename) == -1)
 							return;
 
-						Wrap::Dump(Utils::Format(PATH_ITEMSET, regionName.c_str()), filename, ".inv", WrapLoc{ Player::GetSaveOffset(4) + 0x6BD0, 0x64 }, WrapLoc{ Player::GetSaveOffset(4) + 0x6C10, 0x10 }, WrapLoc{ (u32)-1, (u32)-1 });
+						Wrap::Dump(Utils::Format(PATH_ITEMSET, regionName.c_str()), filename, ".inv", &LocInv, &LocLock, nullptr);
 					} return;
 					
 					case 1: {			
-						Wrap::Restore(Utils::Format(PATH_ITEMSET, regionName.c_str()), ".inv", Language->Get("GET_SET_RESTORE"), GetCustomView, true, WrapLoc{ Player::GetSaveOffset(4) + 0x6BD0, 0x64 }, WrapLoc{ Player::GetSaveOffset(4) + 0x6C10, 0x10 }, WrapLoc{ (u32)-1, (u32)-1 }); 
+						Wrap::Restore(Utils::Format(PATH_ITEMSET, regionName.c_str()), ".inv", Language->Get("GET_SET_RESTORE"), GetCustomView, true, &LocInv, &LocLock, nullptr); 
 						Inventory::ReloadIcons();
 					} return;
 					

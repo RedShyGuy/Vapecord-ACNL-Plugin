@@ -1,5 +1,4 @@
 #include "cheats.hpp"
-#include "Helpers/Save.hpp"
 #include "Helpers/Game.hpp"
 #include "TextFileParser.hpp"
 #include "Helpers/CROEditing.hpp"
@@ -9,6 +8,7 @@
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/ItemSequence.hpp"
 #include "Helpers/Dropper.hpp"
+#include "Helpers/Save.hpp"
 #include "Color.h"
 #include "Files.h"
 
@@ -17,14 +17,14 @@ extern "C" void PATCH_KappnBypass2(void);
 
 namespace CTRPluginFramework {
 //For Acre And Building Mod
-	struct Building {
+	struct sBuilding {
 		u16 id;
 		u8 x;
 		u8 y;
 	};
 
 	struct Island {
-		Building b[2];
+		sBuilding b[2];
 		u8 acres[16];
 	};
 	
@@ -352,16 +352,16 @@ namespace CTRPluginFramework {
 				if(KB.Open(filename) == -1)
 					return;
 
-				Wrap::Dump(Utils::Format(PATH_ISLAND, regionName.c_str()), filename, ".dat", WrapLoc{ *(u32 *)startPos, *(u32 *)(endPos - startPos) }, WrapLoc{ (u32)-1, (u32)-1 });
+				//Wrap::Dump(Utils::Format(PATH_ISLAND, regionName.c_str()), filename, ".dat", WrapLoc{ *(u32 *)startPos, *(u32 *)(endPos - startPos) }, WrapLoc{ (u32)-1, (u32)-1 });
 			} break;
 			case 1: {
 				u32 islandFileData = 0xA00000;
-				Wrap::Restore(Utils::Format(PATH_ISLAND, regionName.c_str()), ".dat", "", nullptr, false, WrapLoc{ (u32)islandFileData, 0x1000 }, WrapLoc{ (u32)-1, (u32)-1 });
+				//Wrap::Restore(Utils::Format(PATH_ISLAND, regionName.c_str()), ".dat", "", nullptr, false, WrapLoc{ (u32)islandFileData, 0x1000 }, WrapLoc{ (u32)-1, (u32)-1 });
 
 				RestoreIsland(islandFileData);
 			} break;
 			case 2: {
-				Wrap::Delete(Utils::Format(PATH_ISLAND, regionName.c_str()), ".dat");
+				//Wrap::Delete(Utils::Format(PATH_ISLAND, regionName.c_str()), ".dat");
 			} break;
 		}
 	}

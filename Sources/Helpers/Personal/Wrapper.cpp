@@ -1,5 +1,4 @@
 #include <cstdarg>
-#include "Helpers/QRCodeGen.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/Address.hpp"
 #include "TextFileParser.hpp"
@@ -8,9 +7,7 @@
 #include "Config.hpp"
 
 namespace CTRPluginFramework {
-	
-//Dump File	
-	ExHandler Wrap::Dump(const std::string& path, std::string& filename, const std::string& filetype, WrapLoc dump, ...) {
+	ExHandler Wrap::Dump(const std::string& path, std::string& filename, const std::string& filetype, WrapLoc *dump, ...) {
 		File file; 
 		Directory dir(path, true);     
 			
@@ -26,13 +23,16 @@ namespace CTRPluginFramework {
 		va_list dumps;
 		va_start(dumps, dump);
 
-		while(dump.Address != 0xFFFFFFFF) { //the last arg needs to be -1 in order for the while loop to exit
-			if(file.Dump(dump.Address, dump.Lenght) != 0) {
+		while(dump != nullptr) { //the last arg needs to be nullptr in order for the while loop to exit
+			if(file.Dump(*(u32 *)&dump->Address, dump->Lenght) != 0) {
 				MessageBox(Language->Get("DUMP_ERROR1")).SetClear(ClearScreen::Top)();
 				return ExHandler::ERROR_DRD; //error dumping file
 			}
 
-			dump = va_arg(dumps, WrapLoc); //go to next argument		
+			OSD::Notify(Utils::Format("Address: %08X", dump->Address));
+			OSD::Notify(Utils::Format("Lenght: %08X", dump->Lenght));
+
+			dump = va_arg(dumps, WrapLoc*); //go to next argument		
 		}
 		va_end(dumps);
 
@@ -40,9 +40,8 @@ namespace CTRPluginFramework {
 		return ExHandler::SUCCESS; //success
 	}
 
-	Directory restoreDIR;
-//Restore file	
-	ExHandler Wrap::Restore(const std::string& path, const std::string& filetype, const std::string& KBMsg, OnChangeCallback cb, bool HasMSGBox, WrapLoc rest, ...) { 
+	Directory Wrap::restoreDIR;
+	ExHandler Wrap::Restore(const std::string& path, const std::string& filetype, const std::string& KBMsg, OnChangeCallback cb, bool HasMSGBox, WrapLoc *rest, ...) {
 		redo:
 		std::string realPath = path;
 
@@ -62,10 +61,10 @@ namespace CTRPluginFramework {
 	//error if no directory and files found
 		if(f_Dir.empty() && f_File.empty()) {
 			if(HasMSGBox)
-            	MessageBox(Language->Get("RESTORE_NOFILES")).SetClear(ClearScreen::Top)();
+				MessageBox(Language->Get("RESTORE_NOFILES")).SetClear(ClearScreen::Top)();
 
-            return ExHandler::ERROR_LI; //error listing files
-        }
+			return ExHandler::ERROR_LI; //error listing files
+		}
 
 		for(const std::string& str : f_Dir) {
 			f_All.push_back(str);
@@ -127,15 +126,15 @@ namespace CTRPluginFramework {
 		va_list restore;
 		va_start(restore, rest);
 
-		while(rest.Address != 0xFFFFFFFF) {
-			if(file.Inject(rest.Address, rest.Lenght) != 0) {
+		while(rest != nullptr) {
+			if(file.Inject(*(u32 *)&rest->Address, rest->Lenght) != 0) {
 				if(HasMSGBox)
 					MessageBox(Language->Get("RESTORE_ERROR1")).SetClear(ClearScreen::Top)();
 
 				return ExHandler::ERROR_DRD; //error injecting file
 			}
 
-			rest = va_arg(restore, WrapLoc); //go to next argument
+			rest = va_arg(restore, WrapLoc*); //go to next argument
 		}
 		va_end(restore);
 

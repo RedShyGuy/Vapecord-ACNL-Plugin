@@ -2,8 +2,8 @@
 #include "Helpers/Animation.hpp"
 #include "Helpers/Game.hpp"
 #include "Helpers/Inventory.hpp"
-#include "Helpers/Save.hpp"
 #include "Helpers/PlayerClass.hpp"
+#include "Helpers/Save.hpp"
 #include "RegionCodes.hpp"
 
 bool IsIndoorsBool = false;
@@ -42,22 +42,15 @@ reload design
 		static Address ReloadOffset(0x320DE0, 0x3207F4, 0x320134, 0x320134, 0x31FDE8, 0x31FDE8, 0x31FCA0, 0x31FCA0);
 		ReloadOffset.Call<void>(Data2);
 	}
-
 /*
 writes design data
 */
 	void Player::StealDesign(u8 slot) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 		if(!player)
 			return;
 
 		player->Patterns[slot].CreatorData = player->PlayerInfo;
-	}
-/*
-Gets correct design data
-*/
-	u32 Player::GetDesign(int slot, int pIndex) {
-		return (Player::GetSaveOffset(pIndex) + 0x2C) + (0x870 * slot);
 	}
 /*
 Get correct bulletin board message (14 Max)
@@ -72,7 +65,7 @@ Update Tan
 		if(!PlayerClass::GetInstance()->IsLoaded())
 			return;
 
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 		if(!player)
 			return;
 		
@@ -81,7 +74,7 @@ Update Tan
 	//This Stores the Tan Data Correctly
 		
 		static Address GetTanDataOffset(0x713798, 0x712C48, 0x7127A0, 0x712778, 0x711F4C, 0x711F24, 0x711AF4, 0x711ACC);
-		u8 Tan = GetTanDataOffset.Call<u8>(player->Tan);
+		u8 Tan = GetTanDataOffset.Call<u8>(&player->PlayerFeatures);
 		
 		Process::Write8(GetStoredData + 0x1C0, Tan);
 		
@@ -260,7 +253,7 @@ get room
 		return var == 0 ? 0xFF : *(u8 *)var;
 	}
 
-	ACNL_Player *Player::GetData(u8 PlayerIndex) {
+	ACNL_Player *Player::GetSaveData(u8 PlayerIndex) {
 		u32 *addr = (u32 *)GetSpecificSave(PlayerIndex >= 4 ? GameHelper::GetOnlinePlayerIndex() : PlayerIndex);
 		return (ACNL_Player *)addr;
 	}

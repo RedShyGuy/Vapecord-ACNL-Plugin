@@ -221,6 +221,13 @@ namespace CTRPluginFramework {
         u16/*wchar*/ DataTownName[9]; //Default is 0
         u8 Unknown01; //Default is 0xA
         u8 Unknown02;
+
+        bool operator==(const TownID& townID) const {
+            return TID == townID.TID && 
+                    DataTownName == townID.DataTownName && 
+                    Unknown01 == townID.Unknown01 && 
+                    Unknown02 == townID.Unknown02;
+        }
     };
 
     struct PersonalID {
@@ -798,19 +805,6 @@ namespace CTRPluginFramework {
         u64  Unknown4;
     };
 
-    struct Player_Letters {
-        ACNL_Letter Letter1;
-        ACNL_Letter Letter2;
-        ACNL_Letter Letter3;
-        ACNL_Letter Letter4;
-        ACNL_Letter Letter5;
-        ACNL_Letter Letter6;
-        ACNL_Letter Letter7;
-        ACNL_Letter Letter8;
-        ACNL_Letter Letter9;
-        ACNL_Letter Letter10;
-    };
-
     struct UnknownStruct1 { //Initiatives
         u32 Unk1; //0 //Set to 0 in Player ctor
         u32 Unk2; //4 //Set to 0 in Player ctor
@@ -1040,13 +1034,17 @@ namespace CTRPluginFramework {
         u16 SeaCreatures[0x1E]; //range 1 to 0x3FFF
     };
 
-    struct ACNL_Player { //UnknownNotSetYetX = Not set by player ctor
-        u32 Checksum1; //0xA0 //Checksum of the first 0x6b84 of player data
+    struct Player_Features {
         u8 HairStyle; //0xA4
         u8 HairColor; //0xA5 //Values: 0x0 -> 0xF
         u8 Face; //0xA6 //Values: 0x0 -> 0xB
         u8 EyeColor; //0xA7 //Values: 0x0 -> 0x5
         u16 Tan; //0xA8 //Values: 0x0 -> 0xF
+    };
+
+    struct ACNL_Player { //UnknownNotSetYetX = Not set by player ctor
+        u32 Checksum1; //0xA0 //Checksum of the first 0x6b84 of player data
+        Player_Features PlayerFeatures;
         Item Hat; //0xAA //Item ID < 0xXXXX
         Item Accessory; //0xAE //Item ID < 0xXXXX
         Item TopWear; //0xB2 //Item ID < 0xXXXX
@@ -1107,7 +1105,7 @@ namespace CTRPluginFramework {
         u8 IslandInventoryItemLocks[16]; //0x7090 -> 0x709F: may be Padding also, needs testing
         Item UnknownItem1; //0x70A0 -> 0x70A3
         Item UnknownItem2; //0x70A4 -> 0x70A7
-        Player_Letters Letters; //0x70A8 -> 0x89A7
+        ACNL_Letter Letters[10]; //0x70A8 -> 0x89A7
         u16/*wchar*/ LetterHeader[0x20]; //0x89A8 -> 0x89E7
         u16 Padding_11; //0x89E8 -> 0x89E9
         u16/*wchar*/ FutureLetterHeader[0x20]; //0x89EA -> 0x8A29
@@ -1283,28 +1281,9 @@ namespace CTRPluginFramework {
         Item UnkItem9; //Group 3; Some Item; Set to 0x00007ffe in player ctor
         Item UnkItem10; //Group 4; Some Item; Set to 0x00007ffe in player ctor
         //This is the places the Villager has passed through, which is cool
-        VillagerFutureHome Home1; //This is the current home, or if the villager is moving somewhere, the next home.
-        VillagerFutureHome Home2; //This is the last home, or if the villager is moving somewhere, the current home.
-        VillagerFutureHome Home3;
-        VillagerFutureHome Home4;
-        VillagerFutureHome Home5;
-        VillagerFutureHome Home6;
-        VillagerFutureHome Home7;
-        VillagerFutureHome Home8;
-        VillagerFutureHome Home9;
-        VillagerFutureHome Home10;
-        VillagerFutureHome Home11;
-        VillagerFutureHome Home12;
-        VillagerFutureHome Home13;
-        VillagerFutureHome Home14;
-        VillagerFutureHome Home15;
-        VillagerFutureHome Home16;
+        VillagerFutureHome Home[16]; //If moving: 0 = next home, 1 = current home | If not moving: 0 = current home, 1 = last home
         u16 Padding;
-        ACNL_Letter Letter1; //Group 1
-        ACNL_Letter Letter2; //Group 1
-        ACNL_Letter Letter3; //Group 1
-        ACNL_Letter Letter4; //Group 1
-        ACNL_Letter Letter5; //Single
+        ACNL_Letter Letter[5];
         u16 UnkNum1; //Single; Set to 2011 in ctor
         u16 UnkNum2; //Group 1; Set to 2011 in ctor
         u16 UnkNum3; //Group 1; Set to 2011 in ctor
@@ -1332,22 +1311,10 @@ namespace CTRPluginFramework {
 
     struct ACNL_VillagerData {
         u32 Checksum; //Checksum of the 0x22BC8 of this data
-        ACNL_Villager Villager1;
-        ACNL_Villager Villager2;
-        ACNL_Villager Villager3;
-        ACNL_Villager Villager4;
-        ACNL_Villager Villager5;
-        ACNL_Villager Villager6;
-        ACNL_Villager Villager7;
-        ACNL_Villager Villager8;
-        ACNL_Villager Villager9;
-        ACNL_Villager Villager10;
+        ACNL_Villager Villager[10];
         u32 Unk1;
         u8 Unknown[0x2474];
-        ACNL_Villager UnkVillager1;
-        ACNL_Villager UnkVillager2;
-        ACNL_Villager UnkVillager3;
-        ACNL_Villager UnkVillager4;
+        ACNL_Villager UnkVillager[4];
         u8 Unknown2[0x14];
     };
 
@@ -1706,14 +1673,7 @@ namespace CTRPluginFramework {
         Item AblesPatternItems[8];
         u64 Unknown16; //encrypted value
         u8 Unknown17[0x10]; //likely padding
-        ACNL_Pattern AbleDisplayPattern1;
-        ACNL_Pattern AbleDisplayPattern2;
-        ACNL_Pattern AbleDisplayPattern3;
-        ACNL_Pattern AbleDisplayPattern4;
-        ACNL_Pattern AbleDisplayPattern5;
-        ACNL_Pattern AbleDisplayPattern6;
-        ACNL_Pattern AbleDisplayPattern7;
-        ACNL_Pattern AbleDisplayPattern8;
+        ACNL_Pattern AbleDisplayPattern[8];
         Item LabellesItems[7]; //Accessories in right of shop
         u8 Unknown18[8]; //likely padding
         u64 Unknown19; //encrypted value
@@ -1724,10 +1684,7 @@ namespace CTRPluginFramework {
         u8 Unknown22[14]; //likely padding
         Item ReddItems[4];
         u8 Unknown23[4]; //likely padding
-        PersonalID UnknownPID1; //unused?
-        PersonalID UnknownPID2; //unused?
-        PersonalID UnknownPID3; //unused?
-        PersonalID UnknownPID4; //unused?
+        PersonalID UnknownPID1[4]; //unused?
         u64 Unknown24; //encrypted value
         u64 Unknown25; //encrypted value
         u64 Unknown26; //encrypted value
@@ -1757,14 +1714,7 @@ namespace CTRPluginFramework {
         u64 Unknown43; //encrypted value
         u64 Unknown44; //encrypted value
         u64 Unknown45; //encrypted value
-        ACNL_Pattern UnknownPattern1;
-        ACNL_Pattern UnknownPattern2;
-        ACNL_Pattern UnknownPattern3;
-        ACNL_Pattern UnknownPattern4;
-        ACNL_Pattern UnknownPattern5;
-        ACNL_Pattern UnknownPattern6;
-        ACNL_Pattern UnknownPattern7;
-        ACNL_Pattern UnknownPattern8;
+        ACNL_Pattern UnknownPattern[8];
         u64 Unknown46; //encrypted value
         u64 Unknown47; //encrypted value
         u64 Unknown48; //encrypted value
@@ -1809,10 +1759,7 @@ namespace CTRPluginFramework {
         ACNL_Date TownTreeDates5[0x19];
         ACNL_Date TownTreeDates6[0x08];
         u8 Unknown67[0x114];
-        ACNL_MuseumExhibit Exhibit1;
-        ACNL_MuseumExhibit Exhibit2;
-        ACNL_MuseumExhibit Exhibit3;
-        ACNL_MuseumExhibit Exhibit4;
+        ACNL_MuseumExhibit Exhibit[4];
         u64 Unknown68; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
         u8 Unknown69[7];
         u64 Unknown70; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
@@ -1829,12 +1776,26 @@ namespace CTRPluginFramework {
         u64 Unknown77; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
         u64 Unknown78; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
         u64 Unknown79; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
-        PersonalID unknownPID1;
-        PersonalID unknownPID2;
-        PersonalID unknownPID3;
+        PersonalID UnknownPID2[3];
         u8 Unknown80[0x96];
         Item UnkItems10[3];
         u8 unknown[0x1BCE];
     };
+
+    /*struct Garden_Plus {
+        //SecureValueHeader SecureValue;
+        //ACNL_SaveHeader Header;
+        u8 Header[0xA0];
+        ACNL_Player Player1;
+        ACNL_Player Player2;
+        ACNL_Player Player3;
+        ACNL_Player Player4;
+        ACNL_VillagerData VillagerData;
+        ACNL_BuildingData BuildingData;
+        ACNL_MinigameData MinigameData; //WA exclusive
+        ACNL_UnknownData UnkData; //WA exclusive
+        ACNL_TownData TownData;
+        u8 padding;
+    };*/
 }
 #endif

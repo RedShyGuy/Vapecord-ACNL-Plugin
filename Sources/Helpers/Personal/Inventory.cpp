@@ -137,7 +137,7 @@ namespace CTRPluginFramework {
 	}
 //Write Inventory Slot
 	bool Inventory::WriteSlot(int slot, Item item, u8 lock) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 		if(!player) 
 			return false;
 			
@@ -154,7 +154,7 @@ namespace CTRPluginFramework {
 	}
 //Read Inventory Slot	
 	bool Inventory::ReadSlot(int slot, Item& item) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 		if(!player) 
 			return false;
 
@@ -163,7 +163,7 @@ namespace CTRPluginFramework {
 	}
 //Get asked item
 	bool Inventory::GetNextItem(Item itemID, u8 &slot) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 		if(!player) 
 			return false;
 		
@@ -180,7 +180,7 @@ namespace CTRPluginFramework {
 	}
 //Get asked closet item	
 	bool Inventory::GetNextClosetItem(Item itemID, u8 &slot) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 		if(!player) 
 			return false;
 		

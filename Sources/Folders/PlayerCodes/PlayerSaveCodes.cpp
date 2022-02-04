@@ -14,7 +14,7 @@
 namespace CTRPluginFramework {
 //Name Changer | Player specific save code
 	void NameChanger(MenuEntry* entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		if(!Player::GetSaveData()) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -33,7 +33,9 @@ namespace CTRPluginFramework {
 
 //Player Appearance Changer	
 	void playermod(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetSaveData();
+
+		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
 			return;
@@ -85,8 +87,6 @@ namespace CTRPluginFramework {
 			Language->Get("VECTOR_OUTFIT_SHOES")
 		};
 
-		ACNL_Player *player = Player::GetData();
-
 		u8 ID = 0;
 		u16 item = 0;
 
@@ -102,10 +102,10 @@ namespace CTRPluginFramework {
 			KeyRange::Set({ ValidID[choice][0], ValidID[choice][1] });
 			if(Wrap::KB<u8>(Language->Get("ENTER_ID") << Utils::Format("%02X -> %02X", ValidID[choice][0], ValidID[choice][1]), true, 2, ID, ID, ValidKeyboardCheck)) {
 				switch(choice) {
-					case 0: player->HairStyle = ID; goto update;
-					case 1: player->HairColor = ID; goto update;
-					case 2: player->Face = ID; goto update;
-					case 3: player->EyeColor = ID; goto update;
+					case 0: player->PlayerFeatures.HairStyle = ID; goto update;
+					case 1: player->PlayerFeatures.HairColor = ID; goto update;
+					case 2: player->PlayerFeatures.Face = ID; goto update;
+					case 3: player->PlayerFeatures.EyeColor = ID; goto update;
 				}
 			}
 		}
@@ -127,13 +127,13 @@ namespace CTRPluginFramework {
 			Sleep(Milliseconds(100));
 			switch(optKb.Open()) {
 				default: break;	
-				case 0: player->Tan = 0xF; goto tanupdate;
-				case 1: player->Tan = 0xA; goto tanupdate;
-				case 2: player->Tan = 0; goto tanupdate;
+				case 0: player->PlayerFeatures.Tan = 0xF; goto tanupdate;
+				case 1: player->PlayerFeatures.Tan = 0xA; goto tanupdate;
+				case 2: player->PlayerFeatures.Tan = 0; goto tanupdate;
 				case 3: {
 					u8 val = 0;
 					if(Wrap::KB<u8>(Language->Get("PLAYER_APPEARANCE_TAN_LEVEL") << "0x00 -> 0x0F", false, 2, val, 0)) 
-						player->Tan = val;
+						player->PlayerFeatures.Tan = val;
 				} goto tanupdate;
 			}
 		}
@@ -171,7 +171,7 @@ namespace CTRPluginFramework {
 
 //Random Outfit
 	void randomoutfit(MenuEntry *entry) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
 			Sleep(Milliseconds(100));
@@ -197,11 +197,11 @@ namespace CTRPluginFramework {
 																		U32_TO_ITEM(Utils::Random(0x279F, 0x27E5)));
 			break;
 			case 1: {
-				player->HairStyle = Utils::Random(0, 0x21);
-				player->HairColor = Utils::Random(0, 0xF);
-				player->Face = Utils::Random(0, 4);
-				player->EyeColor = Utils::Random(0, 4);
-				player->Tan = Utils::Random(0, 0xF);
+				player->PlayerFeatures.HairStyle = Utils::Random(0, 0x21);
+				player->PlayerFeatures.HairColor = Utils::Random(0, 0xF);
+				player->PlayerFeatures.Face = Utils::Random(0, 4);
+				player->PlayerFeatures.EyeColor = Utils::Random(0, 4);
+				player->PlayerFeatures.Tan = Utils::Random(0, 0xF);
 				
 				player->Hat.ID = Utils::Random(0x280B, 0x28F3);
 				player->Accessory.ID = Utils::Random(0x28F5, 0x295B);
@@ -218,11 +218,14 @@ namespace CTRPluginFramework {
 
 //Player Backup/Restore
 	void playerbackup(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetSaveData();
+		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
 			return;
 		}
+
+		WrapLoc locPlayer = { (u32 *)player, sizeof(ACNL_Player) };
 		
 		static const std::vector<std::string> backopt = {
 			Language->Get("VECTOR_RANDOM_BACKUP"),
@@ -242,10 +245,10 @@ namespace CTRPluginFramework {
 				if(KB.Open(filename) == -1)
 					return;
 
-				Wrap::Dump(Utils::Format(PATH_PLAYER, regionName.c_str()), filename, ".player", WrapLoc{ Player::GetSaveOffset(4), 0xA480 }, WrapLoc{ (u32)-1, (u32)-1 });
+				Wrap::Dump(Utils::Format(PATH_PLAYER, regionName.c_str()), filename, ".player", &locPlayer, nullptr);
 			} break;
 			case 1: {
-				Wrap::Restore(Utils::Format(PATH_PLAYER, regionName.c_str()), ".player", Language->Get("RANDOM_PLAYER_RESTORE"), nullptr, true, WrapLoc{ Player::GetSaveOffset(4), 0xA480 }, WrapLoc{ (u32)-1, (u32)-1 }); 
+				Wrap::Restore(Utils::Format(PATH_PLAYER, regionName.c_str()), ".player", Language->Get("RANDOM_PLAYER_RESTORE"), nullptr, true, &locPlayer, nullptr); 
 				Player::UpdateTan();
 				Player::UpdateStyle();
 			} break;	
@@ -257,7 +260,7 @@ namespace CTRPluginFramework {
 
 //TPC Message Changer | Player specific save code
 	void tpcmessage(MenuEntry* entry) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
@@ -277,7 +280,7 @@ namespace CTRPluginFramework {
 
 //TPC Image Dumper | non player specific save code
 	void tpc(MenuEntry *entry) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
@@ -296,6 +299,8 @@ namespace CTRPluginFramework {
 			Language->Get("VECTOR_TPCDUMP_RESTORE"),
 			Language->Get("FILE_DELETE"),  
 		};
+
+		WrapLoc locTPC;
 			
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), tpcselectopt);
 
@@ -310,8 +315,9 @@ namespace CTRPluginFramework {
 				s8 index = PKB.Open();
 				if(index < 0)
 					return;
-					
-				if(Player::GetSaveOffset(index) != 0) {
+
+				player = Player::GetSaveData(index);
+				if(player) {
 					std::string filename = "";
 					Keyboard KB(Language->Get("TPC_DUMPER_NAME"));
 
@@ -319,12 +325,15 @@ namespace CTRPluginFramework {
 					if(KB.Open(filename) < 0)
 						return;
 
-					Wrap::Dump(Utils::Format(PATH_TPC, regionName.c_str()), filename, ".jpg", WrapLoc{ Player::GetSaveOffset(index) + 0x5738, 0x1400 }, WrapLoc{ (u32)-1, (u32)-1 });
+					locTPC = { (u32 *)player->TPCPic, sizeof(player->TPCPic) };
+					Wrap::Dump(Utils::Format(PATH_TPC, regionName.c_str()), filename, ".jpg", &locTPC, nullptr);
 				}
 			} break;
 			
 			case 1: 
-				Wrap::Restore(Utils::Format(PATH_TPC, regionName.c_str()), ".jpg", Language->Get("TPC_DUMPER_RESTORE"), nullptr, true, WrapLoc{ Player::GetSaveOffset(4) + 0x5738, 0x1400 }, WrapLoc{ (u32)-1, (u32)-1 });
+				player = Player::GetSaveData();
+				locTPC = { (u32 *)player->TPCPic, sizeof(player->TPCPic) };
+				Wrap::Restore(Utils::Format(PATH_TPC, regionName.c_str()), ".jpg", Language->Get("TPC_DUMPER_RESTORE"), nullptr, true, &locTPC, nullptr);
 			break;
 			
 			case 2: 
@@ -333,17 +342,10 @@ namespace CTRPluginFramework {
 		}
 	}
 
-	u32 GetRealSlot(u8 slot, int pIndex) {
-		ACNL_Player *player = Player::GetData(pIndex);
-		return player->PatternOrder[slot];
-	}
-//get correct save for design
-	u32 GetDesignSave(u8 slot, int pIndex) {
-		return Player::GetDesign(GetRealSlot(slot, pIndex), pIndex);
-	}
 //dump designs | player specific save code
 	void DesignDumper(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetSaveData();
+		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -359,6 +361,9 @@ namespace CTRPluginFramework {
 			Language->Get("VECTOR_DESIGNDUMP_RESTORE"), 
 			Language->Get("FILE_DELETE"),  
 		};
+
+		WrapLoc locPattern;
+		s8 dSlot = 0;
 		
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), designselect);
 		
@@ -370,28 +375,32 @@ namespace CTRPluginFramework {
 				Keyboard DKB(Language->Get("KEYBOARD_DESIGNDUMP"), designslots);
 				
 				Sleep(Milliseconds(100));
-				int dSlot = DKB.Open();
-				if(dSlot != -1) {
-					std::string filename = "";
-					Keyboard KB(Language->Get("DESIGN_DUMP_NAME"));
+				dSlot = DKB.Open();
+				if(dSlot < 0)
+					return;
 
-					Sleep(Milliseconds(100));
-					if(KB.Open(filename) == -1)
-						return;
+				std::string filename = "";
+				Keyboard KB(Language->Get("DESIGN_DUMP_NAME"));
 
-					Wrap::Dump(Utils::Format(PATH_DESIGN, regionName.c_str()), filename, ".acnl", WrapLoc{ GetDesignSave(dSlot, 4), 0x26B }, WrapLoc{ (u32)-1, (u32)-1 });
-				}
+				Sleep(Milliseconds(100));
+				if(KB.Open(filename) < 0)
+					return;
+
+				locPattern = { (u32 *)&player->Patterns[player->PatternOrder[dSlot]], sizeof(ACNL_Pattern) };
+				Wrap::Dump(Utils::Format(PATH_DESIGN, regionName.c_str()), filename, ".acnl", &locPattern, nullptr);
 			} break;
 			
 			case 1: {
 				Keyboard DKB(Language->Get("KEYBOARD_DESIGNDUMP"), designslots);
 				
 				Sleep(Milliseconds(100));
-				int dSlot = DKB.Open();
-				if(dSlot != -1) {
-					Wrap::Restore(Utils::Format(PATH_DESIGN, regionName.c_str()), ".acnl", Language->Get("DESIGN_DUMP_RESTORE"), nullptr, true, WrapLoc{ GetDesignSave(dSlot, 4), 0x26B }, WrapLoc{ (u32)-1, (u32)-1 });  
-					Player::ReloadDesign(GetRealSlot(dSlot, 4));
-				}
+				dSlot = DKB.Open();
+				if(dSlot < 0)
+					return;
+
+				locPattern = { (u32 *)&player->Patterns[player->PatternOrder[dSlot]], sizeof(ACNL_Pattern) };
+				Wrap::Restore(Utils::Format(PATH_DESIGN, regionName.c_str()), ".acnl", Language->Get("DESIGN_DUMP_RESTORE"), nullptr, true, &locPattern, nullptr);
+				Player::ReloadDesign(player->PatternOrder[dSlot]);
 			} break;
 			
 			case 2: 
@@ -401,7 +410,7 @@ namespace CTRPluginFramework {
 	}
 //Fill Emote List | player specific save code
 	void emotelist(MenuEntry *entry) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
 			Sleep(Milliseconds(100));
@@ -448,7 +457,7 @@ namespace CTRPluginFramework {
 	}
 //Fill Enzyklopedia List | player specific save code
 	void enzyklopedia(MenuEntry *entry) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
 			Sleep(Milliseconds(100));
@@ -499,7 +508,7 @@ namespace CTRPluginFramework {
 	}
 //Change Dream Code | player specific save code
 	void comodifier(MenuEntry *entry) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
 			Sleep(Milliseconds(100));
@@ -530,7 +539,7 @@ namespace CTRPluginFramework {
 	}
 //Enable Unused Menu | player specific save code
 	void debug1(MenuEntry *entry) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
 			Sleep(Milliseconds(100));
@@ -551,14 +560,14 @@ namespace CTRPluginFramework {
 		if(op < 0)
 			return;
 
-		player->PlayerFlags.CanUseCensusMenu = IsON ? 0 : 1;
+		player->PlayerFlags.CanUseCensusMenu = !IsON;
 
 		debug1(entry);
 	}
 
 //Fill Song List | player specific save code
 	void FillSongs(MenuEntry *entry) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
 			Sleep(Milliseconds(100));
@@ -597,7 +606,7 @@ namespace CTRPluginFramework {
 
 //Fill Catalog | player specific save code	
 	void FillCatalog(MenuEntry *entry) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
 			Sleep(Milliseconds(100));

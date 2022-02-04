@@ -15,7 +15,7 @@ Custom Buttons
 		u8 slot = 0;
 		Inventory::GetSelectedSlot(slot);
 	//writes present lock onto item
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 		player->InventoryItemLocks[slot] = 1;
 	//Loads Item Icon | present icon
 		Code::LoadIcon.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x1EC0, slot);
@@ -44,7 +44,7 @@ Custom Buttons
 		if(Inventory::GetNextClosetItem({0x7FFE, 0}, closetslot)) {
 			Inventory::WriteSlot(slot, {0x7FFE, 0});	
 
-			ACNL_Player *player = Player::GetData();
+			ACNL_Player *player = Player::GetSaveData();
 			player->Dressers[closetslot] = (Item)itemslotid;
 		}
 
@@ -59,7 +59,7 @@ Custom Buttons
 		u8 slot = 0;
 		Inventory::GetSelectedSlot(slot);
 
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 
 		if(player) {
 			Inventory::ReadSlot(slot, itemslotid);

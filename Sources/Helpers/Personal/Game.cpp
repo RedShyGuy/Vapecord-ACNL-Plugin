@@ -1,10 +1,10 @@
 #include "Helpers/Game.hpp"
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/IDList.hpp"
-#include "Helpers/Save.hpp"
 #include "Helpers/Player.hpp"
 #include "Helpers/Animation.hpp"
 #include "Helpers/Dropper.hpp"
+#include "Helpers/Save.hpp"
 #include "RegionCodes.hpp"
 
 namespace CTRPluginFramework {
@@ -53,6 +53,11 @@ namespace CTRPluginFramework {
 
 	u32 Set::ToRGBA_U32(int r, int g, int b, int a) {
 		return(r << 24 | g << 16 | b << 8 | a);
+	}
+
+	ACNL_BuildingData *Building::GetSaveData() {
+		u32 *addr = (u32 *)(Code::GardenPlus.Call<u32>() + 0x4BE80);
+		return (ACNL_BuildingData *)addr;
 	}
 
 	void GameHelper::PlaySound(u16 soundID) {
@@ -341,7 +346,7 @@ namespace CTRPluginFramework {
 
 //set badges	
 	void GameHelper::SetBadges(u8 badge, u8 type, bool WithStats) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 		if(!player) 
 			return;
 

@@ -3,14 +3,13 @@
 #include "TextFileParser.hpp"
 #include "Helpers/Game.hpp"
 #include "Helpers/Wrapper.hpp"
-#include "Helpers/Save.hpp"
-
 #include "Helpers/Address.hpp"
+#include "Helpers/Save.hpp"
 
 namespace CTRPluginFramework {
 //Wallet Mod
 	void wallet(MenuEntry *entry) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
 			Sleep(Milliseconds(100));
@@ -24,7 +23,7 @@ namespace CTRPluginFramework {
 	}
 //Bank Mod
 	void bank(MenuEntry *entry) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
 			Sleep(Milliseconds(100));
@@ -38,7 +37,7 @@ namespace CTRPluginFramework {
 	}
 //Meow Coupon Mod
 	void coupon(MenuEntry *entry) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
 			Sleep(Milliseconds(100));
@@ -52,7 +51,7 @@ namespace CTRPluginFramework {
 	}
 //Badges Mod
 	void badges(MenuEntry *entry) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
 			Sleep(Milliseconds(100));
@@ -81,7 +80,7 @@ namespace CTRPluginFramework {
 	}
 //Medals Mod  32DC51B8 31F2C6BC
 	void medals(MenuEntry *entry) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
 			Sleep(Milliseconds(100));
@@ -96,7 +95,7 @@ namespace CTRPluginFramework {
 	}	
 //turnip Mod	
 	void turnips(MenuEntry *entry) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
 			Sleep(Milliseconds(100));

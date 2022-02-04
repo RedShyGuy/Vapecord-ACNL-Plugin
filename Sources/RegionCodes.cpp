@@ -72,6 +72,8 @@ namespace CTRPluginFramework {
 		DataPointer = Address(0x95EEDC, 0x95DEBC, 0x95DED4, 0x95DED4, 0x957ED4, 0x956ED4, 0x956ED4, 0x956ED4);
 
 		ExGameData = Address(0x95D3F4, 0x95C3D4, 0x95C3EC, 0x95C3EC, 0x9563EC, 0x9553EC, 0x9553EC, 0x9553EC);
+	
+		GardenPlus = Address(0x2FB344, 0x2FB328, 0x2FB340, 0x2FB340, 0x2FB354, 0x2FB354, 0x2FB360, 0x2FB360);
 	}
 	
 	Address		Code::IslPointer;
@@ -113,4 +115,5 @@ namespace CTRPluginFramework {
 	Address		Code::RestoreItemWindow;
 	Address		Code::RestoreOutfitWindow;
 	Address		Code::ExGameData;
+	Address		Code::GardenPlus;
 }

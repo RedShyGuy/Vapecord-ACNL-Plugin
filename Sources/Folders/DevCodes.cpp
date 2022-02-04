@@ -9,10 +9,9 @@
 #include "Helpers/ACMessageBox.hpp"
 #include "Helpers/CROEditing.hpp"
 #include "Helpers/ACSystem.hpp"
-#include "Helpers/Save.hpp"
+#include "Helpers/Converters.hpp"
 #include "Color.h"
 #include "Files.h"
-
 #include "MenuPointers.hpp"
 
 namespace CTRPluginFramework {
@@ -41,11 +40,11 @@ namespace CTRPluginFramework {
 				switch(CKB.Open()) {
 					default: break;
 					case 0:
-						Wrap::KB<u32>("Offset to start the dump.", true, 8, cdump.Address, cdump.Address);
+						Wrap::KB<u32>("Offset to start the dump.", true, 8, *(u32 *)cdump.Address, *(u32 *)cdump.Address);
 					break;
 					
 					case 1:
-						Wrap::KB<u32>("The length of the dump.", true, 8, cdump.Lenght, cdump.Lenght);
+						Wrap::KB<u32>("The length of the dump.", true, 8, *(u32 *)&cdump.Lenght, *(u32 *)&cdump.Lenght);
 					break;
 					
 					case 2: {
@@ -68,10 +67,10 @@ namespace CTRPluginFramework {
 						if(CKB.Open(filename) == -1)
 							return;
 
-						Wrap::Dump(Utils::Format(PATH_CUSTOM, regionName.c_str()), filename, "." + filetype, cdump, WrapLoc{ (u32)-1, (u32)-1 });
+						Wrap::Dump(Utils::Format(PATH_CUSTOM, regionName.c_str()), filename, "." + filetype, &cdump, nullptr);
 					} break;	
 					case 1: 
-						Wrap::Restore(Utils::Format(PATH_CUSTOM, regionName.c_str()), "." + filetype, "Select which dump to restore.", nullptr, true, cdump, WrapLoc{ (u32)-1, (u32)-1 }); 
+						Wrap::Restore(Utils::Format(PATH_CUSTOM, regionName.c_str()), "." + filetype, "Select which dump to restore.", nullptr, true, &cdump, nullptr); 
 					break;
 					case 2:
 						Wrap::Delete(Utils::Format(PATH_CUSTOM, regionName.c_str()), "." + filetype);
@@ -168,7 +167,9 @@ namespace CTRPluginFramework {
     }
 
 	void player_dumper(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetSaveData();
+
+		if(!player) {
 			MessageBox(Language->Get("SAVE_PLAYER_NO"))();
 			return;
 		}
@@ -185,18 +186,22 @@ namespace CTRPluginFramework {
 			"Player Restore",
 			"Delete File"
 		};
+
+		WrapLoc locPlayer;
 		
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
 		optKb.Populate(select);
 		switch(optKb.Open()) {
 			default: break;
 			case 0: {
-				for(int i = 0; i <= 3; i++) {
-					u32 pO = Player::GetSaveOffset(i);
-					if(pO != 0) {
-						std::string pS = "";
-						Process::ReadString((pO + 0x55A8), pS, 0x10, StringFormat::Utf16);
-						pV[i] = pColor[i] << pS;
+				for(int i = 0; i <= 3; ++i) {
+					player = Player::GetSaveData(i);
+					if(player) {
+						if(Player::SaveExists(player)) {
+							std::string str = "";
+							Convert::U16_TO_STR(player->PlayerInfo.PlayerName, str);
+							pV[i] = pColor[i] << str;
+						}
 					}
 				}
 		
@@ -210,12 +215,16 @@ namespace CTRPluginFramework {
 					if(KB.Open(filename) == -1)
 						return;
 
-					Wrap::Dump(Utils::Format(PATH_PLAYER, regionName.c_str()), filename, ".player", WrapLoc{ Player::GetSaveOffset(pChoice), 0xA480 }, WrapLoc{ (u32)-1, (u32)-1 });
+					player = Player::GetSaveData(pChoice);
+					locPlayer = { (u32 *)player, sizeof(player) };
+					Wrap::Dump(Utils::Format(PATH_PLAYER, regionName.c_str()), filename, ".player", &locPlayer, nullptr);
 				}
 			} break;
 			
 			case 1:
-				Wrap::Restore(Utils::Format(PATH_PLAYER, regionName.c_str()), ".player", "Player Restorer\nSelect File:", nullptr, true, WrapLoc{ Player::GetSaveOffset(4), 0xA480 }, WrapLoc{ (u32)-1, (u32)-1 }); 
+				player = Player::GetSaveData();
+				locPlayer = { (u32 *)player, sizeof(player) };
+				Wrap::Restore(Utils::Format(PATH_PLAYER, regionName.c_str()), ".player", "Player Restorer\nSelect File:", nullptr, true, &locPlayer, nullptr); 
 			break;
 
 			case 2:
@@ -1488,7 +1497,7 @@ namespace CTRPluginFramework {
 			kb.Open(text);
 		}
 
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) 
 			return;

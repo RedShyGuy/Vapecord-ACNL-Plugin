@@ -3,6 +3,7 @@
 
 #include <CTRPluginFramework.hpp>
 #include "IDList.hpp"
+#include "Helpers/GameStructs.hpp"
 
 namespace CTRPluginFramework {
 
@@ -17,6 +18,8 @@ namespace CTRPluginFramework {
       u16 GetVID(u32 npcData);
       u8 IsPlayer(u32 npcData);
       u32 GetPlayerSave(u32 npcData);
+
+      ACNL_VillagerData *GetSaveData();
 
       std::string GetNName(u16 VID);
       std::string GetSPName(u8 SPVID);

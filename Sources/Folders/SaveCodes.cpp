@@ -4,7 +4,6 @@
 #include "Helpers/Town.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/Address.hpp"
-#include "Helpers/Save.hpp"
 #include "Helpers/Player.hpp"
 #include "Helpers/Game.hpp"
 #include "Helpers/IDList.hpp"
@@ -12,6 +11,7 @@
 #include "Helpers/Animation.hpp"
 #include "Helpers/Converters.hpp"
 #include "Helpers/NPC.hpp"
+#include "Helpers/Save.hpp"
 #include "Color.h"
 #include "Files.h"
 
@@ -32,7 +32,7 @@ namespace CTRPluginFramework {
         if(keyboard.Open(input) < 0) 
 			return;
 
-		TownName::Set(input);
+		Town::EditName(input);
     }
 
 //Save Backup and Restore | non player specific save code
@@ -42,6 +42,8 @@ namespace CTRPluginFramework {
 			Language->Get("SAVE_RESTORE"),  
 			Language->Get("FILE_DELETE"),  
 		};
+
+		WrapLoc lock = { (u32 *)Save::GetInstance()->Address(), 0x89B00 };
 		
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), options);
 
@@ -56,10 +58,11 @@ namespace CTRPluginFramework {
 				if(KB.Open(filename) == -1)
 					return;
 
-				Wrap::Dump(Utils::Format(PATH_SAVE, regionName.c_str()), filename, ".dat", WrapLoc{ Save::GetInstance()->Address(), 0x89B00 }, WrapLoc{ (u32)-1, (u32)-1 });		
+				Wrap::Dump(Utils::Format(PATH_SAVE, regionName.c_str()), filename, ".dat", &lock, nullptr);		
 			} break;
 			case 1: {
-				if(Wrap::Restore(Utils::Format(PATH_SAVE, regionName.c_str()), ".dat", Language->Get("SAVE_RESTORE_SELECT"), nullptr, true, WrapLoc{ Save::GetInstance()->Address(), 0x89B00 }, WrapLoc{ (u32)-1, (u32)-1 }) == ExHandler::SUCCESS) {
+
+				if(Wrap::Restore(Utils::Format(PATH_SAVE, regionName.c_str()), ".dat", Language->Get("SAVE_RESTORE_SELECT"), nullptr, true, &lock, nullptr) == ExHandler::SUCCESS) {
 					static Address fixfurno(0x6A6EE0, 0x6A6408, 0x6A5F18, 0x6A5F18, 0x6A59B0, 0x6A59B0, 0x6A5558, 0x6A5558);	
 					u32 orig[1] = { 0 };
 
@@ -90,6 +93,8 @@ namespace CTRPluginFramework {
 			backmessage.push_back(Utils::Format(Language->Get("VECTOR_BULLETINDUMPER_MESSAGE").c_str(), i));
 		
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), bullsett);
+
+		WrapLoc loc;
 	
 		Sleep(Milliseconds(100));
 		switch(optKb.Open()) {
@@ -107,7 +112,8 @@ namespace CTRPluginFramework {
 					if(KB.Open(filename) < 0)
 						return;
 
-					Wrap::Dump(Utils::Format(PATH_BULLETIN, regionName.c_str()), filename, ".dat", WrapLoc{ Player::GetBulletin(KBChoice), 0x1AC }, WrapLoc{ (u32)-1, (u32)-1 });
+					loc = { (u32 *)Player::GetBulletin(KBChoice), 0x1AC };
+					Wrap::Dump(Utils::Format(PATH_BULLETIN, regionName.c_str()), filename, ".dat", &loc, nullptr);
 				}
 			} break;
 			
@@ -116,8 +122,10 @@ namespace CTRPluginFramework {
 
 				Sleep(Milliseconds(100));
 				s8 KBChoice = optKb.Open();
-				if(KBChoice >= 0)
-					Wrap::Restore(Utils::Format(PATH_BULLETIN, regionName.c_str()), ".dat", Language->Get("RESTORE_MESSAGE"), nullptr, true, WrapLoc{ Player::GetBulletin(KBChoice), 0x1AC }, WrapLoc{ (u32)-1, (u32)-1 }); 
+				if(KBChoice >= 0) {
+					loc = { (u32 *)Player::GetBulletin(KBChoice), 0x1AC };
+					Wrap::Restore(Utils::Format(PATH_BULLETIN, regionName.c_str()), ".dat", Language->Get("RESTORE_MESSAGE"), nullptr, true, &loc, nullptr); 
+				}
 			} break;
 			
 			case 2: 
@@ -362,7 +370,7 @@ namespace CTRPluginFramework {
 	}
 //Shop Unlocker
     void shopunlocks(MenuEntry *entry) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
 			Sleep(Milliseconds(100));
@@ -541,7 +549,7 @@ namespace CTRPluginFramework {
 		};
 		
 		for(int i = 0; i <= 3; ++i) {
-			ACNL_Player *player = Player::GetData(i);
+			ACNL_Player *player = Player::GetSaveData(i);
 			if(player) {
 				if(Player::SaveExists(player)) {
 					std::string str = "";
@@ -614,7 +622,7 @@ namespace CTRPluginFramework {
 
 //Unlock QR Machine | half player specific save code	
 	void unlockqrmachine(MenuEntry *entry) {	
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
 			Sleep(Milliseconds(100));
@@ -819,7 +827,7 @@ namespace CTRPluginFramework {
 
 //Finish Mayor Permit | only for player 1	
 	void Permit100(MenuEntry *entry) {
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
 			entry->Disable();
@@ -1029,7 +1037,7 @@ namespace CTRPluginFramework {
 			*menu += GetAcreID;
 		}
 
-		bool IsOkay = (GameHelper::MapBoolCheck() && GameHelper::IsInRoom(0) && Player::GetData());
+		bool IsOkay = (GameHelper::MapBoolCheck() && GameHelper::IsInRoom(0) && Player::GetSaveData());
 		static bool WasActivated = false;
 		int res = 0;
 

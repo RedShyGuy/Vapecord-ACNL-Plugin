@@ -12,6 +12,10 @@ namespace CTRPluginFramework {
 		u8 A;
 	};
 
+	namespace Building {
+		ACNL_BuildingData 	*GetSaveData();
+	}
+
 	namespace GameHelper {
 		void				PlaySound(u16 soundID);
 	//save files

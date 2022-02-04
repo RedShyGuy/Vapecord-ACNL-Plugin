@@ -23,7 +23,7 @@ namespace CTRPluginFramework {
 	
 	void GetPlayerInfoData(void) {	
 		u8 pIndex = GameHelper::GetOnlinePlayerIndex();
-		if(!PlayerClass::GetInstance(pIndex)->IsLoaded() || !Player::GetData(pIndex))
+		if(!PlayerClass::GetInstance(pIndex)->IsLoaded() || !Player::GetSaveData(pIndex))
 			return;
 	
 	//gets coordinates

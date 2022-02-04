@@ -127,7 +127,7 @@ namespace CTRPluginFramework {
 	void freezeframe(MenuEntry *entry) {
 		static const Address freeze(0x54DBE8, 0x54D100, 0x54CC30, 0x54CC30, 0x54C51C, 0x54C51C, 0x54C240, 0x54C240);
 		if(entry->Hotkeys[0].IsPressed()) {
-			ACNL_Player *player = Player::GetData();
+			ACNL_Player *player = Player::GetSaveData();
 			if(!player) {
 				OSD::Notify("Player needs to be loaded!", Color::Red);
 				return;
@@ -202,7 +202,7 @@ namespace CTRPluginFramework {
 			hook2.SetFlags(USE_LR_TO_RETURN);
 		}
 
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 		if(!player)
 			return;
 
@@ -420,7 +420,7 @@ namespace CTRPluginFramework {
 		if(*PlayerClass::GetInstance()->GetAnimation() != 6 && *PlayerClass::GetInstance()->GetAnimation() != 0xD)
 			return;
 
-		ACNL_Player *player = Player::GetData();
+		ACNL_Player *player = Player::GetSaveData();
 		if(!player)
 			return;
 		

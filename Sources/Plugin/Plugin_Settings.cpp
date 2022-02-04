@@ -74,7 +74,8 @@ namespace CTRPluginFramework {
 				if(KB.Open(filename) == -1)
 					return;
 
-				Wrap::Dump(Utils::Format(PATH_SAVE, regionName.c_str()), filename, ".dat", WrapLoc{ Save::GetInstance()->Address(), 0x89B00 }, WrapLoc{ (u32)-1, (u32)-1 }); 
+				WrapLoc loc = { (u32 *)Save::GetInstance()->Address(), 0x89B00 };
+				Wrap::Dump(Utils::Format(PATH_SAVE, regionName.c_str()), filename, ".dat", &loc, nullptr); 
             }
 
 			WriteConfig(CONFIG::Info, true);

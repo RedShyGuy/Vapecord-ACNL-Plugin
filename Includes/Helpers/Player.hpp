@@ -11,7 +11,6 @@ namespace CTRPluginFramework {
 		u32 			GetBulletin(int slot);
 		void 			Load(int pIndex);
 		void			ReloadDesign(int slot);
-		u32				GetDesign(int slot, int pIndex = 4);
 		void			StealDesign(u8 slot);
 		void			UpdateStyle();
 		void			UpdateTan();
@@ -25,7 +24,7 @@ namespace CTRPluginFramework {
 		bool			IsIndoors();
 		u8				GetRoom(u8 PlayerIndex);
 
-		ACNL_Player		*GetData(u8 PlayerIndex = 4);
+		ACNL_Player		*GetSaveData(u8 PlayerIndex = 4);
 		bool 			SaveExists(ACNL_Player *player);
 
 		bool 			SetUnlockableBitField(ACNL_Player *player, u8 ID, bool state);

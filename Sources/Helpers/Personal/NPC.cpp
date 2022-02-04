@@ -40,6 +40,11 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 		return 0;
 	}
 
+	ACNL_VillagerData *NPC::GetSaveData() {
+		u32 *addr = (u32 *)(Code::GardenPlus.Call<u32>() + 0x292A0);
+		return (ACNL_VillagerData *)addr;
+	}
+
 	std::string NPC::GetNName(u16 VID) {
 		static Address SetUp(0x308210, 0x3083E4, 0x308298, 0x308298, 0x30822C, 0x30822C, 0x308240, 0x308240);
 		static const Address NNPCModelData(0xA84AF0, 0xA83AF0, 0xA83AF0, 0xA83AF0, 0xA7DAF0, 0xA7CAF0, 0xA7CAF0, 0xA7CAF0);

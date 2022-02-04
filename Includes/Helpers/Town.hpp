@@ -2,11 +2,12 @@
 #define TOWN_HPP
 
 #include <CTRPluginFramework.hpp>
+#include <Helpers/GameStructs.hpp>
 
 namespace CTRPluginFramework {
-	namespace TownName {
-		void	Set(const std::string& name);
-		void	UpdateReference(const std::string& tName, u8 tID1, u8 tID2 = -1);
+	namespace Town {
+		ACNL_TownData *GetSaveData(void);
+		void 		   EditName(const std::string& name);
 	}
 }
 #endif
