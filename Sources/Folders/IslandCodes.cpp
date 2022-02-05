@@ -9,6 +9,7 @@
 #include "Helpers/ItemSequence.hpp"
 #include "Helpers/Dropper.hpp"
 #include "Helpers/Save.hpp"
+#include "Helpers/Player.hpp"
 #include "Color.h"
 #include "Files.h"
 
@@ -38,27 +39,23 @@ namespace CTRPluginFramework {
 	};
 
 	void UnlockIsland(MenuEntry *entry) {
-		const u32 ClubTortimer = Save::GetInstance()->Address(0x57BF);
-		const u32 Island = Save::GetInstance()->Address(0x57B2);
-		u8 value1 = 0, value2 = 0;
+		ACNL_Player *player = Player::GetSaveData();
+		if(!player) {
+			Sleep(Milliseconds(100));
+			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
+			return;
+		}
 
 		std::vector<std::string> cmnOpt =  {
 			Language->Get("UNLOCK_ISLAND_ISL"),
 			Language->Get("UNLOCK_ISLAND_CLUB")
 		};
 
-		Set::ReadNibble(Island, value1, false);
-		Set::ReadNibble(ClubTortimer, value2, true);
+		bool IsON1 = player->PlayerFlags.UnlockedKappn == 1;
+		bool IsON2 = player->PlayerFlags.HasClubTortimerMembership == 1;
 
-		bool IsON;
-
-		IsON = value1 >= 8;
-
-		cmnOpt[0] = (IsON ? Color(pGreen) : Color(pRed)) << cmnOpt[0];
-			
-		IsON = value2 >= 4;
-
-		cmnOpt[1] = (IsON ? Color(pGreen) : Color(pRed)) << cmnOpt[1];
+		cmnOpt[0] = (IsON1 ? Color(pGreen) : Color(pRed)) << cmnOpt[0];
+		cmnOpt[1] = (IsON2 ? Color(pGreen) : Color(pRed)) << cmnOpt[1];
 		
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
 
@@ -67,23 +64,18 @@ namespace CTRPluginFramework {
 		if(op < 0)
 			return;
 
-		if(op == 0) {
-			if(value1 < 8) //under 8 is locked and everything above is unlocked
-				Set::WriteNibble(Island, 8, false);
-			else //if above or 8 Island is unlocked
-				Set::WriteNibble(Island, 0, false);
-
-			UnlockIsland(entry);
+		else if(op == 0) {
+			player->PlayerFlags.UnlockedKappn = !IsON1;
+			player->PlayerFlags.KnowKappn = !IsON1;
 		}
 
-		if(op == 1) {
-			if(value2 < 4) //below 4 is locked club tortimer | everything above is unlocked
-				Set::WriteNibble(ClubTortimer, 4, true); 
-			else //if above or 4 club tortimer is unlocked
-				Set::WriteNibble(ClubTortimer, 0, true);
-
-			UnlockIsland(entry);
+		else if(op == 1) {
+			player->PlayerFlags.HasClubTortimerMembership = !IsON2;
+			player->PlayerFlags.ClubTortimerFirstAsked = !IsON2;
+			player->PlayerFlags.ClubTortimerRulesExplained = !IsON2;
 		}
+
+		UnlockIsland(entry);
 	}
 
 //Instant Bonus Ore | CRO Patch

@@ -122,13 +122,9 @@ namespace CTRPluginFramework {
 		Convert::STR_TO_U16(name, player->PlayerInfo.TownData.DataTownName);
 		TownID newTownID = player->PlayerInfo.TownData;
 
-		int res = 0;
 		for(int i = 0; i < townIDs.size(); ++i) {
-			if(*(TownID *)townIDs[i] == oldTownID) {
+			if(*(TownID *)townIDs[i] == oldTownID) 
 				*(TownID *)townIDs[i] = newTownID;
-				res++;
-			}
 		}
-		OSD::Notify(Utils::Format("%08X", res));
 	}
 }

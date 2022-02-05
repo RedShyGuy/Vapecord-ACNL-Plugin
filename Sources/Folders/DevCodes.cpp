@@ -10,6 +10,7 @@
 #include "Helpers/CROEditing.hpp"
 #include "Helpers/ACSystem.hpp"
 #include "Helpers/Converters.hpp"
+#include "Helpers/Town.hpp"
 #include "Color.h"
 #include "Files.h"
 #include "MenuPointers.hpp"
@@ -360,7 +361,7 @@ namespace CTRPluginFramework {
 				playerFlag->KnowIsabelleName = set; 
 			break;
 			case 41:
-				playerFlag->Unknown42 = set; 
+				playerFlag->KnowKappn = set; 
 			break;
 			case 42:
 				playerFlag->Unknown43 = set; 
@@ -693,7 +694,7 @@ namespace CTRPluginFramework {
 				playerFlag->Unknown152 = set; 
 			break;
 			case 152:
-				playerFlag->Unknown153 = set; 
+				playerFlag->UnlockedKappn = set; 
 			break;
 			case 153:
 				playerFlag->Unknown154 = set; 
@@ -990,10 +991,10 @@ namespace CTRPluginFramework {
 				playerFlag->HasClubTortimerMembership = set; 
 			break;
 			case 251:
-				playerFlag->Unknown252 = set; 
+				playerFlag->ClubTortimerFirstAsked = set; 
 			break;
 			case 252:
-				playerFlag->Unknown253 = set; 
+				playerFlag->ClubTortimerRulesExplained = set; 
 			break;
 			case 253:
 				playerFlag->Unknown254 = set; 
