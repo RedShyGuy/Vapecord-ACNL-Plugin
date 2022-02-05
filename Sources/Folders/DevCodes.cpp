@@ -691,10 +691,10 @@ namespace CTRPluginFramework {
 				playerFlag->Unknown151 = set; 
 			break;
 			case 151:
-				playerFlag->Unknown152 = set; 
+				playerFlag->UnlockedKappn = set; 
 			break;
 			case 152:
-				playerFlag->UnlockedKappn = set; 
+				playerFlag->Unknown153 = set; 
 			break;
 			case 153:
 				playerFlag->Unknown154 = set; 

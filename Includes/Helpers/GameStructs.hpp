@@ -525,8 +525,8 @@ namespace CTRPluginFramework {
         u8 Unknown149 : 1;
         u8 Unknown150 : 1;
         u8 Unknown151 : 1;
-        u8 Unknown152 : 1;
         u8 UnlockedKappn : 1; //unlocked kappn boat
+        u8 Unknown153 : 1; 
         u8 Unknown154 : 1;
         u8 RecievedHHSIntro : 1;
         u8 Unknown156 : 1;
