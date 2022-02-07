@@ -184,7 +184,7 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 
 		Item empty = {0x7FFE, 0};
 
-		Item *actualItemAtCoords = (pItemAtCoords->ID & 0x7FFE) == 0x7FFE ? &empty : pItemAtCoords;
+		Item *actualItemAtCoords = (pItemAtCoords->ID == 0x7FFE) ? &empty : pItemAtCoords;
 
 	//writes the item to replace, if 0xFFFFFFFF is selected as item it will replace item at coords, if not use standard ItemToReplace
 		Item *actualItemToReplace = ItemToReplace == ReplaceEverything ? actualItemAtCoords : &ItemToReplace;
@@ -195,9 +195,9 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 
 		Item crashPreventItem = IsIndoorsBool ? Item{0x2001, 0} : Item{0x7FFE, 0x8000};
 
-		Item *ItemReplace = (actualItemToReplace->ID & 0x7FFE) == 0x7FFE ? &crashPreventItem : actualItemToReplace;
-		Item *ItemPlace = (actualItemToPlace->ID & 0x7FFE) == 0x7FFE ? &crashPreventItem : actualItemToPlace;
-		Item *ItemShow = (actualItemToShow->ID & 0x7FFE) == 0x7FFE ? &crashPreventItem : actualItemToShow;
+		Item *ItemReplace = (actualItemToReplace->ID == 0x7FFE) ? &crashPreventItem : actualItemToReplace;
+		Item *ItemPlace = (actualItemToPlace->ID == 0x7FFE) ? &crashPreventItem : actualItemToPlace;
+		Item *ItemShow = (actualItemToShow->ID == 0x7FFE) ? &crashPreventItem : actualItemToShow;
 
 	//place item function
 		Dropper::PlaceItem(ID, ItemReplace, ItemPlace, ItemShow, worldx, worldy, u0, u1, 0, u3, u4);

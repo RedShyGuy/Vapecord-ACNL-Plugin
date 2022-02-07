@@ -228,25 +228,26 @@ namespace CTRPluginFramework {
 	void SaveCodesUpdate(Color color) {	
 		std::vector<MenuEntry *> Entrys = SAVEC->GetEntryList();
 
-		const static std::string Names[2][15] = {
+		const static std::string Names[2][16] = {
 			{ "TOWN_NAME_CHANGER", "SAVE_BACKUP_NAME", "BULL_BOARD_DUMPER", 
 			"TREESIZE_NAME", "CHANGE_NATIVE_NAME", "PWP_UNLOCK_NAME", 
 			"GRASS_CHANGER_NAME", "CARAVAN_SET", "CAMPING_SET", 
 			"SHOP_UPGRADE", "HOUSE_EDITOR_NAME", "QR_MACHINE_NAME", 
-			"BUILDING_MOD_NAME", "MAYOR_PERMIT_NAME", "REAL_TIME_ACRE" },
+			"BUILDING_MOD_NAME", "FILL_MUSEUM_NAME", "MAYOR_PERMIT_NAME", 
+			"REAL_TIME_ACRE" },
 
 			{ "TOWN_NAME_CHANGER_NOTE", "SAVE_BACKUP_NOTE", "BULL_BOARD_DUMPER_NOTE", 
 			"TREESIZE_NOTE", "CHANGE_NATIVE_NOTE", "PWP_UNLOCK_NOTE", 
 			"GRASS_CHANGER_NOTE", "CARAVAN_SET_NOTE", "CAMPING_SET_NOTE", 
 			"SHOP_UPGRADE_NOTE", "HOUSE_EDITOR_NOTE", "QR_MACHINE_NOTE", 
-			"BUILDING_MOD_NOTE", "MAYOR_PERMIT_NOTE", "REAL_TIME_ACRE_NOTE" },
+			"BUILDING_MOD_NOTE", "FILL_MUSEUM_NOTE", "MAYOR_PERMIT_NOTE", 
+			"REAL_TIME_ACRE_NOTE" },
 		};
 
 		for(int i = 0; i < Entrys.size(); ++i) 
 			UpdateEntry(Entrys[i], Color(color) << Language->Get(Names[0][i]), Language->Get(Names[1][i]));
 	
 		SAVEC->Name() = Color(color) << Language->Get("SAVE_CODES");
-
 	}
 	
 	void MovementCodesUpdate(Color color) {	

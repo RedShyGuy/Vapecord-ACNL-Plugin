@@ -23,6 +23,8 @@ namespace CTRPluginFramework {
 		//u32 				GetDesign();
 		//u32				GetFriend();
 		//u32 				GetExhibition();
+
+		Item_Categories 	GetItemCategorie(Item itemID);
 	//value display
 		bool 				SetValueDisplay(u8 type);
 		void 				ResetValueDisplay(void);
@@ -31,9 +33,6 @@ namespace CTRPluginFramework {
 		void				RemoveBuilding();
 		void 				PlaceBuilding(u8 buildingID);
 		void				PlaceBuildingUpdateCollisions(u32 x, u32 y, u16 buildingID);
-	//Time Stuff
-		void 				SetPlayedDays(u16 days);
-		void 				SetPlayedHours(u32 hours);
 	//Money Stuff
 		void 				SetBadges(u8 badge, u8 type, bool WithStats);
 		int					DecryptValue(u64 *position);

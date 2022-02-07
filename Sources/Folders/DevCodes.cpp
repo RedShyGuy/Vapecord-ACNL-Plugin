@@ -1498,6 +1498,12 @@ namespace CTRPluginFramework {
 			kb.Open(text);
 		}
 
+		if(Controller::IsKeysPressed(Key::ZL + Key::DPadDown)) {
+			OSD::Notify(Utils::Format("PlayTime : %08X", std::addressof(Town::GetSaveData()->Playtime)));
+			OSD::Notify(Utils::Format("DaysPlayed : %08X", std::addressof(Town::GetSaveData()->DaysPlayed)));
+			
+		}
+
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) 

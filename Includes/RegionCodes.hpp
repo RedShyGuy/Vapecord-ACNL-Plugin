@@ -53,6 +53,7 @@ namespace CTRPluginFramework {
 		static Address		RestoreOutfitWindow;
 		static Address		ExGameData;
 		static Address		GardenPlus;
+		static Address		CalcBitField;
 	};
 }
 

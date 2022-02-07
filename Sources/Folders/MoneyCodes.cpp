@@ -4,7 +4,7 @@
 #include "Helpers/Game.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/Address.hpp"
-#include "Helpers/Save.hpp"
+#include "Helpers/Town.hpp"
 
 namespace CTRPluginFramework {
 //Wallet Mod
@@ -95,9 +95,9 @@ namespace CTRPluginFramework {
 	}	
 //turnip Mod	
 	void turnips(MenuEntry *entry) {
-		ACNL_Player *player = Player::GetSaveData();
+		ACNL_TownData *town = Town::GetSaveData();
 
-		if(!player) {
+		if(!town) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -106,9 +106,8 @@ namespace CTRPluginFramework {
 		u32 turnip = 0;
 		if(Wrap::KB<u32>(Language->Get("ENTER_AMOUNT"), false, 5, turnip, 0)) {
 			for(int i = 0; i < 6; ++i) {
-				u32 TurnipOffset = Save::GetInstance()->Address(0x6ADE0);
-				GameHelper::EncryptValue((u64 *)(TurnipOffset + i * 16), turnip); //AM
-				GameHelper::EncryptValue((u64 *)(TurnipOffset + i * 16 + 8), turnip); //PM
+				GameHelper::EncryptValue(&town->TurnipPrices[i], turnip); //AM
+				GameHelper::EncryptValue(&town->TurnipPrices[i + 6], turnip); //PM
 			}
 		}
 	}

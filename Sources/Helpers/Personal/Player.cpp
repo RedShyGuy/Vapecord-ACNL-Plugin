@@ -160,10 +160,10 @@ Get Player Save Offset for loaded players
 							else
 								player->UnlockedItems[(uVar4 >> 5)] &= ~(1 << (uVar4 & 0x1F));
 						}
-					}		
+					}
 
 					uVar6++;
-				} while(uVar6 < uVar5);	
+				} while(uVar6 < uVar5);
 			}
 		}
 		return true;

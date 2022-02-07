@@ -5,6 +5,7 @@
 #include "Helpers/Animation.hpp"
 #include "Helpers/Dropper.hpp"
 #include "Helpers/Save.hpp"
+#include "Helpers/Town.hpp"
 #include "RegionCodes.hpp"
 
 namespace CTRPluginFramework {
@@ -58,6 +59,11 @@ namespace CTRPluginFramework {
 	ACNL_BuildingData *Building::GetSaveData() {
 		u32 *addr = (u32 *)(Code::GardenPlus.Call<u32>() + 0x4BE80);
 		return (ACNL_BuildingData *)addr;
+	}
+
+	Item_Categories GameHelper::GetItemCategorie(Item itemID) {
+		static Address getCategorie(0x2FCBC4, 0, 0, 0, 0, 0, 0, 0);
+		return getCategorie.Call<Item_Categories>(itemID);
 	}
 
 	void GameHelper::PlaySound(u16 soundID) {
@@ -301,17 +307,6 @@ namespace CTRPluginFramework {
 	bool GameHelper::IsInRoom(u8 room) {
 		return GameHelper::RoomCheck() == room;
 	} 
-//set played hours	
-	void GameHelper::SetPlayedHours(u32 hours) {
-		int intminutes = hours * 60;
-		int intseconds = intminutes * 60;
-		u32 sethours = intseconds;
-		Save::GetInstance()->Write<u32>(0x621B0, sethours);
-	}
-//set played days	
-	void GameHelper::SetPlayedDays(u16 days) {
-		Save::GetInstance()->Write<u16>(0x6223E, days);
-	}
 	
 //set current time
 	void GameHelper::SetCurrentTime(bool forward, int Minutes, int Hours, int Days, int Months, int Years) {

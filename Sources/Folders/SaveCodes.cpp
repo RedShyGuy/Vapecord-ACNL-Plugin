@@ -14,6 +14,7 @@
 #include "Helpers/Save.hpp"
 #include "Color.h"
 #include "Files.h"
+#include "RegionCodes.hpp"
 
 namespace CTRPluginFramework {
 //Town Name Changer | player specific save code	
@@ -43,7 +44,7 @@ namespace CTRPluginFramework {
 			Language->Get("FILE_DELETE"),  
 		};
 
-		WrapLoc lock = { (u32 *)Save::GetInstance()->Address(), 0x89B00 };
+		WrapLoc lock = { (u32 *)Code::GardenPlus.Call<u32>(), 0x89B00 };
 		
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), options);
 
@@ -61,7 +62,6 @@ namespace CTRPluginFramework {
 				Wrap::Dump(Utils::Format(PATH_SAVE, regionName.c_str()), filename, ".dat", &lock, nullptr);		
 			} break;
 			case 1: {
-
 				if(Wrap::Restore(Utils::Format(PATH_SAVE, regionName.c_str()), ".dat", Language->Get("SAVE_RESTORE_SELECT"), nullptr, true, &lock, nullptr) == ExHandler::SUCCESS) {
 					static Address fixfurno(0x6A6EE0, 0x6A6408, 0x6A5F18, 0x6A5F18, 0x6A59B0, 0x6A59B0, 0x6A5558, 0x6A5558);	
 					u32 orig[1] = { 0 };
@@ -135,6 +135,14 @@ namespace CTRPluginFramework {
 	}
 //Tree Size Changer | non player specific save code
 	void TreeSizeChanger(MenuEntry *entry) {
+		ACNL_BuildingData *building = Building::GetSaveData();
+		if(!building)
+			return;
+
+		ACNL_TownData *town = Town::GetSaveData();
+		if(!town)
+			return;
+
 		std::vector<std::string> treesizevec;
 		
 		for(int i = 1; i <= 8; ++i)
@@ -148,13 +156,21 @@ namespace CTRPluginFramework {
 		s8 op = optKb.Open();
 		if(op < 0)
 			return;
-		
-		Save::GetInstance()->Write<u8>(0x4BE86, op);
-		GameHelper::SetPlayedHours(played[op]); 
-		GameHelper::SetPlayedDays(played[op]); 
+
+		int intminutes = played[op] * 60;
+		int intseconds = intminutes * 60;
+		s64 sethours = intseconds;
+
+		building->TownTreeSize = op;
+		town->Playtime = sethours;
+		town->DaysPlayed = played[op];
     }
 //Change Native Fruit | non player specific save code	
 	void ChangeNativeFruit(MenuEntry *entry) {
+		ACNL_TownData *town = Town::GetSaveData();
+		if(!town)
+			return;
+
 		std::vector<std::string> fruitopt = {
             Language->Get("NATIVE_FRUIT_APPLE"),
             Language->Get("NATIVE_FRUIT_ORANGE"),
@@ -173,7 +189,7 @@ namespace CTRPluginFramework {
 		bool IsON;
 
 		for(int i = 0; i < 12; ++i) {
-			IsON = *(u8 *)Save::GetInstance()->Address(0x6223A) == (i + 1);
+			IsON = town->TownFruit.ID == 0x2000 + (i + 1);
 			fruitopt[i] = IsON ? (Color(pGreen) << fruitopt[i]) : (fruitopt[i] = Color(pRed) << fruitopt[i]);
 		}
 
@@ -184,33 +200,43 @@ namespace CTRPluginFramework {
 		if(userChoice < 0)
 			return;
 		
-		Save::GetInstance()->Write<u8>(0x6223A, userChoice + 1);
-		
+		town->TownFruit.ID = 0x2000 + userChoice + 1;
 		ChangeNativeFruit(entry);
 	}
+
 //Unlock All PWP | non player specific save code	
 	void PWPUnlock(MenuEntry *entry) {	
+		ACNL_BuildingData *building = Building::GetSaveData();
+		if(!building)
+			return;
+
 		static const std::vector<std::string> songopt = {
 			Language->Get("VECTOR_ENZY_FILL"),
 			Language->Get("VECTOR_ENZY_CLEAR"),
 		};
 			
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), songopt);
-		
+
 		Sleep(Milliseconds(100));
 		switch(optKb.Open()) {
 			default: break;
 			case 0:
-				std::memset((void *)Save::GetInstance()->Address(0x50330), 0xFFFFFFFF, 0x18);
+				for(int i = 0; i < 104; ++i) 
+					building->UnlockedPWPs[i >> 5] |= (1 << (i & 0x1F));
 			break;
 			case 1: 
-				std::memset((void *)Save::GetInstance()->Address(0x50330), 0, 0x18);
+				for(int i = 0; i < 104; ++i) 
+					building->UnlockedPWPs[i >> 5] &= ~(1 << (i & 0x1F));
 			break;
 		}
     }
 
 //Grass Type Changer | non player specific save code		
 	void GrassChanger(MenuEntry *entry) {
+		ACNL_TownData *town = Town::GetSaveData();
+		if(!town)
+			return;
+
 		std::vector<std::string> grasstypevec = {
 			Language->Get("GRASS_CHANGER_TRIANGLE"),
             Language->Get("GRASS_CHANGER_CIRCLE"),
@@ -230,8 +256,8 @@ namespace CTRPluginFramework {
 		s8 op = optKb.Open();
 		if(op < 0)
 			return;
-	
-		Save::GetInstance()->Write<u8>(0x53481, op);
+
+		town->TownGrassType = op;
 		GrassChanger(entry);
     }
 
@@ -824,6 +850,77 @@ namespace CTRPluginFramework {
 	thunk_FUN_00608660();
 	FUN_00304a60(0x62,2,2,2,2);
 	*/
+
+	void CompleteMuseum(MenuEntry *entry) {
+		ACNL_TownData *town = Town::GetSaveData();
+		if(!town)
+			return;
+
+		static const std::pair<u16, u16> Pairs[6] = { 
+			{ 0x3130, 0x3172 }, //AnalyzedFossils
+			{ 0x228E, 0x22D5 }, //Bugs
+			{ 0x22E1, 0x2328 }, //Fish
+			{ 0x232D, 0x234A }, //SeaCreatures
+			{ 0x30D2, 0x30EA }, //RealPaintings
+			{ 0x30EB, 0x30F2 } //RealStatues
+		};
+
+		static const u16 Addage[6] = {
+			0, 0xA9, 0x43, 0x8B, 0xF1, 0x10A
+		};
+
+		std::vector<std::string> pV = {
+			Color::Silver << "-Empty-",
+			Color::Silver << "-Empty-",
+			Color::Silver << "-Empty-",
+			Color::Silver << "-Empty-",
+		};
+
+		static const std::vector<std::string> musOpt = {
+			Language->Get("VECTOR_ENZY_FILL"),
+			Language->Get("VECTOR_ENZY_CLEAR"),
+		};
+
+		for(int i = 0; i <= 3; ++i) {
+			ACNL_Player *player = Player::GetSaveData(i);
+			if(player) {
+				if(Player::SaveExists(player)) {
+					std::string str = "";
+					Convert::U16_TO_STR(player->PlayerInfo.PlayerName, str);
+					pV[i] = pColor[i] << str;
+				}
+			}
+		}
+
+		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), musOpt);
+		Sleep(Milliseconds(100));
+		s8 state = optKb.Open();
+		if(state < 0)
+			return;
+
+		else if(state == 0) {
+			optKb.Populate(pV);
+			s8 player = optKb.Open();
+			if(player < 0 && pV[player] == (Color::Silver << "-Empty-"))
+				return;
+
+			for(int j = 0; j < 6; ++j) {
+				for(u16 i = Pairs[j].first; i < Pairs[j].second; ++i) {
+					int field = Code::CalcBitField.Call<int>(&i);
+					town->MuseumDonations[Addage[j] + field] = player + 1;
+				}
+			}
+		}
+
+		else if(state == 1) {
+			for(int j = 0; j < 6; ++j) {
+				for(u16 i = Pairs[j].first; i < Pairs[j].second; ++i) {
+					int field = Code::CalcBitField.Call<int>(&i);
+					town->MuseumDonations[Addage[j] + field] = 0;
+				}
+			}
+		}
+	}
 
 //Finish Mayor Permit | only for player 1	
 	void Permit100(MenuEntry *entry) {

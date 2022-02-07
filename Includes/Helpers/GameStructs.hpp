@@ -188,7 +188,7 @@ namespace CTRPluginFramework {
         }
 
         bool operator!=(const Item& item) const {
-            return ID != item.ID && Flags != item.Flags;
+            return ID != item.ID || Flags != item.Flags;
         }
 
         bool operator>(const Item&item) const {
@@ -1418,7 +1418,7 @@ namespace CTRPluginFramework {
         ACNL_Pattern UnkPattern7;
         u64 FF_Padding7;
         ACNL_Pattern UnkPattern8;
-        u8 UnlockedPWPs[20]; //Devs use bitfield for unlocked PWPS
+        u32 UnlockedPWPs[3]; //Devs use bitfield for unlocked PWPS
     };
 
     struct ACNL_MinigameData {
@@ -1641,10 +1641,10 @@ namespace CTRPluginFramework {
     };
 
     struct ACNL_TownData {
-        u32 Checksum; //Checksum of the 0x1E4D8 of this data
+        u32 Checksum; //0x53424; Checksum of the 0x1E4D8 of this data
         u8 Unknown1[88];
         u8 OceanSide; //[0-1]; 0: Left, 1: Right; Museum and Camping Ground and the starting position of the train driving by are all on the opposite side to this.; Ctor sets to 3
-        u8 GrassType; //[0-2]; 0: Triangle / Square (Winter) | 1: Circle / Star (Winter) | 2: Square / Circle (Winter); Ctor sets to 2
+        u8 TownGrassType; //[0-2]; 0: Triangle / Square (Winter) | 1: Circle / Star (Winter) | 2: Square / Circle (Winter); Ctor sets to 2
         u8 CliffType; //[0-2]; This is unused/scrapped. All 3 cliff texture in the ROM are the exact same.; Ctor sets to 2
         u8 Padding1;
         u16 TownAcres[7*6]; //42 acres in total; 7 colunms, 6 rows. Game reads Acre IDs as u16; ctor sets each to 265 (0x109)
@@ -1664,10 +1664,10 @@ namespace CTRPluginFramework {
         Town_Flags TownFlags;
         u16 Unknown4; //Likely padding
         Item LostAndFoundItems[16];
-        u8 Unknown5[16]; //likely padding
+        u8 Unknown5[16]; //0x62222; likely padding
         u64 Unknown6; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
         Item TownFruit; //Yes, the game uses an item id to represent the town fruit lol
-        u16 DaysPlayed;
+        u16 DaysPlayed; //0x6223E
         u8 Unknown7[0xC];
         u8 Unknown8; //Group 1
         u8 Unknown9; //Group 1
@@ -1736,66 +1736,72 @@ namespace CTRPluginFramework {
         u8 Unknown52[8]; //likely padding
         u8 GracieUnlockStatus; //0 = locked??; 1 = Unlocked??
         u8 Padding6;
-        Item GracieItems[18];
+        Item GracieItems[18]; //0x6ACF8
         u8 Unknown53[18]; //likely padding
-        Mannequin UnkMannequin1;
-        Mannequin UnkMannequin2;
+        Mannequin GracieMannequin1;
+        Mannequin GracieMannequin2;
         u8 Unknown54[0x10];
-        Item UnkItem1;
-        Item UnkItem2;
-        Item UnkItem3;
-        Item UnkItem4;
+        Item ClubLOLGyroids[4];
         u8 Unknown55[0x16];
-        Item UnkItems5[4];
+        Item IslandShopItems[4];
         u64 Unknown56; //encrypted value
-        u64 Unknown57[0xE]; //encrypted value
+        u64 Unknown57[2]; //encrypted value
+        u64 TurnipPrices[12]; //encrypted value; first 6 are AM, second 6 are PM
         u8 Unknown58[8];
         Item UnkItem6;
         Item UnkItems7[2];
         Item UnkItems8[2];
         u8 Unknown59[0x10];
         //This is likely town tree stuff
-        u16 Unknown60; //year?
-        u8 Unknown61;
-        u8 Unknown62;
-        u16 Unknown63; //year?
-        u8 Unknown64;
-        u8 Unknown65;
-        u8 Unknown66[0x44];
+        ACNL_Date Unknown60;
+        ACNL_Date Unknown61; 
+        u8 Unknown62[0x44];
         ACNL_Date TownTreeDates1[0x43];
         ACNL_Date TownTreeDates2[0x48];
         ACNL_Date TownTreeDates3[0x1E];
         ACNL_Date TownTreeDates4[0x48];
         ACNL_Date TownTreeDates5[0x19];
         ACNL_Date TownTreeDates6[0x08];
-        u8 Unknown67[0x114];
+        u8 MuseumDonations[0x114];
         ACNL_MuseumExhibit Exhibit[4];
+        u64 Unknown64; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u8 Unknown65[7];
+        u64 Unknown66; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u8 Unknown67[7];
         u64 Unknown68; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
-        u8 Unknown69[7];
-        u64 Unknown70; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
-        u8 Unknown71[7];
-        u64 Unknown72; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
-        u8 Unknown73[10];
+        u8 Unknown69[10];
         ACNL_NewPWP NextPWPToBuild;
         ACNL_Building UnknownBuilding1;
         ACNL_BulletinBoardMessage BBoardMessages[0xF];
-        u64 Unknown74; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
-        u8 Unknown75[0x14];
-        u16 Unknown76;
+        u64 Unknown70; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u8 Unknown71[0x14];
+        u16 Unknown72;
         Item UnkItem9;
-        u64 Unknown77; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
-        u64 Unknown78; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
-        u64 Unknown79; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u64 Unknown73; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u64 Unknown74; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u64 Unknown75; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
         PersonalID UnknownPID2[3];
-        u8 Unknown80[0x96];
+        u8 Unknown76[0x96];
         Item UnkItems10[3];
-    //0x6FD32 //start of unknown
-        u8 Unknown81[0x1A6];
+        u8 Unknown77[0x184]; //0x6FD32 //start of unknown
+        u8 IslandGrassType; //[0-2]; 0: Triangle | 1: Circle | 2: Square;
+        u8 Padding7;
+        u16 IslandAcres[4*4]; //0x6FEB8; 16 acres in total; 4 colunms, 4 rows. Game reads Acre IDs as u16;
+        Item IslandItems[(16*16)*(2*2)]; //0x6FED8; 16*16 items per acre; Items only cover map acres (2*2); 0x400 of items
+        ACNL_Building IslandBuildings[2]; //Island Hut and Lloid
+        ACNL_Pattern TownFlag; //0x70F1C
+        u8 Unknown78[0x2208]; //0x7178C
+        ACNL_Letter Player1Letters[10]; //0x73958 MailBox
+        u8 Unknown79[0x288];
+        ACNL_Letter Player2Letters[10]; //0x754E0 MailBox
+        u8 Unknown80[0x288];
+        ACNL_Letter Player3Letters[10]; //0x77068 MailBox
+        u8 Unknown81[0x288];
+        ACNL_Letter Player4Letters[10]; //0x78BF0 MailBox
 
-    //0x6FED8 //island items
+        //0x7A778 some items
 
-        
-        u8 unknown[0x1A28];
+        //u8 unknown[0xA00];
     };
 
     /*struct Garden_Plus {

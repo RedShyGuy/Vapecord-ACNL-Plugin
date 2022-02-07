@@ -94,6 +94,15 @@ namespace CTRPluginFramework {
 
 		for(int i = 0; i < 3; ++i)
 			townIDs.push_back(&town->UnknownPID2[i].TownData);
+
+		townIDs.push_back(&town->TownFlag.CreatorData.TownData);
+
+		for(int i = 0; i < 10; ++i) {
+			townIDs.push_back(&town->Player1Letters[i].Reciever.TownData);
+			townIDs.push_back(&town->Player2Letters[i].Reciever.TownData);
+			townIDs.push_back(&town->Player3Letters[i].Reciever.TownData);
+			townIDs.push_back(&town->Player4Letters[i].Reciever.TownData);
+		}
 	}
 
 	void WrapTownDataReferences(std::vector<TownID *> &townIDs) {

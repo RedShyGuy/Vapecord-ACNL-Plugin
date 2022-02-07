@@ -8,6 +8,7 @@
 #include "Helpers/Address.hpp"
 #include "Helpers/GameStructs.hpp"
 #include "Helpers/Converters.hpp"
+#include "RegionCodes.hpp"
 #include "Color.h"
 #include "Files.h"
 
@@ -581,23 +582,21 @@ namespace CTRPluginFramework {
 		};
 
 		static const std::pair<u16, u16> Pairs = { 0x212B, 0x2186 };
-
-		static Address calcBitField(0x2FF76C, 0, 0, 0, 0, 0, 0, 0);
 		
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), songopt);
 		
 		Sleep(Milliseconds(100));
 		switch(optKb.Open()) {
 			default: break;
-			case 0: 
+			case 0: { 
 				for(u16 i = Pairs.first; i < Pairs.second; ++i) {
-					int field = calcBitField.Call<int>(&i);
+					int field = Code::CalcBitField.Call<int>(&i);
 					player->AddedSongs[(field >> 5)] |= (1 << (field & 0x1F));
 				}
-			break;
+			} break;
 			case 1:
 				for(u16 i = Pairs.first; i < Pairs.second; ++i) {
-					int field = calcBitField.Call<int>(&i);
+					int field = Code::CalcBitField.Call<int>(&i);
 					player->AddedSongs[(field >> 5)] &= ~(1 << (field & 0x1F));
 				}
 			break;

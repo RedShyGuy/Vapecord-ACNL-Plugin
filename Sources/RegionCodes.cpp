@@ -74,6 +74,8 @@ namespace CTRPluginFramework {
 		ExGameData = Address(0x95D3F4, 0x95C3D4, 0x95C3EC, 0x95C3EC, 0x9563EC, 0x9553EC, 0x9553EC, 0x9553EC);
 	
 		GardenPlus = Address(0x2FB344, 0x2FB328, 0x2FB340, 0x2FB340, 0x2FB354, 0x2FB354, 0x2FB360, 0x2FB360);
+
+		CalcBitField = Address(0x2FF76C, 0, 0, 0, 0, 0, 0, 0);
 	}
 	
 	Address		Code::IslPointer;
@@ -116,4 +118,5 @@ namespace CTRPluginFramework {
 	Address		Code::RestoreOutfitWindow;
 	Address		Code::ExGameData;
 	Address		Code::GardenPlus;
+	Address		Code::CalcBitField;
 }

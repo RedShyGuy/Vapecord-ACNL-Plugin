@@ -31,6 +31,7 @@ namespace CTRPluginFramework {
 	void HouseChanger(MenuEntry *entry);
 	void caravanchange(MenuEntry *entry);
 	void SetCampingVillager(MenuEntry *entry);
+	void CompleteMuseum(MenuEntry *entry);
 	void Permit100(MenuEntry *entry);	
 	void MapEditor(MenuEntry *entry);
 	

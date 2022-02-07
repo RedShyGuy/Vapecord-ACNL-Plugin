@@ -41,6 +41,7 @@ namespace CTRPluginFramework {
 		SAVEC->Append(new MenuEntry(FolderColors[0] << "House Editor", nullptr, HouseChanger, "note")),
 		SAVEC->Append(new MenuEntry(FolderColors[0] << "Unlock QR Machine", nullptr, unlockqrmachine, "note")),
 		SAVEC->Append(new MenuEntry(FolderColors[0] << "Building Modifier", nullptr, BuildingMod, "note")),
+		SAVEC->Append(new MenuEntry(FolderColors[0] << "Fill Museum", nullptr, CompleteMuseum, "note")),
 		SAVEC->Append(new MenuEntry(FolderColors[0] << "Mayor Permit 100%", Permit100, "note")),
 		SAVEC->Append(new MenuEntry(FolderColors[0] << "Real Time Acre Editor", MapEditor, "note")),
 		menu->Append(SAVEC);

@@ -211,7 +211,7 @@ namespace CTRPluginFramework {
 			OSD::Notify("Item Is Invalid!", Color::Red);
 			return;
 		}
-			
+
 		int res = Dropper::Search_Replace(300, { ItemToSearch }, ItemToReplace, 0x3D, true, "items replaced!", true);
 		if(res == -1) {
 			OSD::Notify("Your player needs to be loaded!", Color::Red);
