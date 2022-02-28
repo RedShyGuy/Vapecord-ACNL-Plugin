@@ -11,6 +11,8 @@
 #include "Helpers/ACSystem.hpp"
 #include "Helpers/Converters.hpp"
 #include "Helpers/Town.hpp"
+#include "Helpers/NPC.hpp"
+#include "RegionCodes.hpp"
 #include "Color.h"
 #include "Files.h"
 #include "MenuPointers.hpp"
@@ -1488,6 +1490,26 @@ namespace CTRPluginFramework {
 		}
 	}
 	
+	u64 GetFriendCode(u8 pIndex) {
+		u32 gPoint = *(u32 *)Code::GamePointer.addr;
+		if(gPoint == 0)
+			return 0;
+
+		frdInit();
+
+		u32 pID = *(u32 *)((gPoint + 0xC0) + (0x18 * pIndex));
+
+		if((int)pID == -3)
+			return 0;
+		
+		u64 fCode = 0;
+		FRD_PrincipalIdToFriendCode(pID, &fCode);
+
+		frdExit();
+
+		return fCode;
+	}
+
 //Message Box Debug	
 	void msgboxtest(MenuEntry *entry) {
 		static std::string text;
@@ -1499,9 +1521,18 @@ namespace CTRPluginFramework {
 		}
 
 		if(Controller::IsKeysPressed(Key::ZL + Key::DPadDown)) {
-			OSD::Notify(Utils::Format("PlayTime : %08X", std::addressof(Town::GetSaveData()->Playtime)));
-			OSD::Notify(Utils::Format("DaysPlayed : %08X", std::addressof(Town::GetSaveData()->DaysPlayed)));
-			
+			for(int i = 0; i < 4; ++i) {
+				u64 fCode = GetFriendCode(i);
+				if(fCode == 0) {
+					OSD::Notify(Utils::Format("Player %d: Not Loaded!", i));
+					continue;
+				}
+
+				char buffer[13];
+				sprintf(buffer, "%012lld", fCode);
+				std::string str = (std::string(buffer));
+				OSD::Notify(Utils::Format("Player %d: %s - %s - %s", i, str.substr(0, 4).c_str(), str.substr(4, 4).c_str(), str.substr(8, 4).c_str()));
+			}
 		}
 
 		ACNL_Player *player = Player::GetSaveData();

@@ -12,6 +12,7 @@
 #include "Helpers/Converters.hpp"
 #include "Helpers/NPC.hpp"
 #include "Helpers/Save.hpp"
+#include "Helpers/GameStructs.hpp"
 #include "Color.h"
 #include "Files.h"
 #include "RegionCodes.hpp"
@@ -246,7 +247,7 @@ namespace CTRPluginFramework {
 		bool IsON;
 		
 		for(int i = 0; i < 3; ++i) {
-			IsON = *(u8 *)Save::GetInstance()->Address(0x53481) == i;
+			IsON = town->TownGrassType == i;
 			grasstypevec[i] = IsON ? (Color(pGreen) << grasstypevec[i]) : (Color(pRed) << grasstypevec[i]);
 		}
 		
@@ -262,6 +263,10 @@ namespace CTRPluginFramework {
     }
 
 	void caravanchange(MenuEntry *entry) {
+		ACNL_TownData *town = Town::GetSaveData();
+		if(!town)
+			return;
+
 		int caravan = 0;
 
 		std::vector<std::string> keyVec = {
@@ -305,11 +310,15 @@ namespace CTRPluginFramework {
 
 		const PACKED_AmiiboInfo& amiibo = amiiboVec[res];
 
-		Save::GetInstance()->Write<u16>(0x6AE60 + (2 * caravan), amiibo.VID);
+		town->CampgroundCaravan[caravan] = amiibo.VID;
 		OSD::Notify(Utils::Format("Set %s in caravan %1d", amiibo.Name.c_str(), caravan));
 	}
 
 	void SetCampingVillager(MenuEntry *entry) {
+		ACNL_BuildingData *building = Building::GetSaveData();
+		if(!building) 
+			return;
+
 		std::vector<std::string> keyVec = {
 			Language->Get("CAMPING_SET_SET"),
 			Language->Get("CAMPING_SET_REMOVE")
@@ -322,7 +331,6 @@ namespace CTRPluginFramework {
        	if(res < 0)
 			return;
 		
-		static const u32 B_Removal = Save::GetInstance()->Address(0x4BE88);
 		static Address SetNPCFunc(0x3081A8, 0x308380, 0x308234, 0x308234, 0x3081C8, 0x3081C8, 0x3081DC, 0x3081DC);
 		static Address DeleteNPCFunc(0x30836C, 0x3084D0, 0x308384, 0x308384, 0x308474, 0x308474, 0x30832C, 0x30832C);
 
@@ -357,14 +365,14 @@ namespace CTRPluginFramework {
 			const PACKED_AmiiboInfo& amiibo = amiiboVec[res];
 
 			for(int i = 0; i < 56; ++i) {
-				if(*(u8 *)(B_Removal + (i * 4)) == 0xC6)
-					*(u8 *)(B_Removal + (i * 4)) = 0x5F;
+				if(building->Buildings.Building[i].ID == 0xC6)
+					building->Buildings.Building[i].ID = 0x5F;
 			}
 
 			u32 null[]{ 0 };
 			u16 VID[]{ amiibo.VID };
 
-			SetNPCFunc.Call<void>(Save::GetInstance()->Address(0x292A4 + 0x17676), VID, null, Save::GetInstance()->Address(0x621B8)); 
+			SetNPCFunc.Call<void>(&NPC::GetSaveData()->townID1, VID, null, &Town::GetSaveData()->TownData1); 
 			OSD::Notify(Utils::Format("Set %s!", amiibo.Name.c_str()), Color::Green);
 
 			if(GameHelper::IsInRoom(0))
@@ -373,11 +381,11 @@ namespace CTRPluginFramework {
 
 		else if(res == 1) {
 			for(int i = 0; i < 56; ++i) {
-				if(*(u8 *)(B_Removal + (i * 4)) == 0x5F)
-					*(u8 *)(B_Removal + (i * 4)) = 0xC6;
+				if(building->Buildings.Building[i].ID == 0x5F)
+					building->Buildings.Building[i].ID = 0xC6;
 			}
 
-			DeleteNPCFunc.Call<void>(Save::GetInstance()->Address(0x292A4 + 0x17676));
+			DeleteNPCFunc.Call<void>(&NPC::GetSaveData()->townID1);
 			OSD::Notify("Camping Villager Removed!", Color::Red);
 
 			if(GameHelper::IsInRoom(0))
@@ -385,20 +393,12 @@ namespace CTRPluginFramework {
 		}
 	}
 
-//get if specific nook is unlocked
-	bool IsNookUnlocked(int value) {
-		return(*(u32 *)Save::GetInstance()->Address(0x62264) / 0x0101 == value);
-	}
-//Help File For Shop Unlocker
-	void nook_common(int value) {
-		Save::GetInstance()->Write<u32>(0x62264, 0x0101 * value);
-		Save::GetInstance()->Write<u8>(0x666F4, (value == 1 ? 2 : value));
-	}
 //Shop Unlocker
     void shopunlocks(MenuEntry *entry) {
 		ACNL_Player *player = Player::GetSaveData();
+		ACNL_TownData *town = Town::GetSaveData();
 
-		if(!player) {
+		if(!player || !town) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -421,69 +421,80 @@ namespace CTRPluginFramework {
 			Language->Get("VECTOR_SHOP_TIY"),
 			Language->Get("VECTOR_SHOP_TT_EMPORIUM")
 		};
-		
-		const u32 Shops[7] = {
-			0,		 //just for loop
-			0x6ADA4, //Fortune Teller
-			0x6ADA2, //Dream Suite
-			0x6AD82, //Club LOL
-			0x6ACBC, //Museum Shop
-			0x6ADB4, //Shampoodle
-			0x6682C, //Kicks
-		};
-		
-		const int ShopValues[7] = {
-			0,		//Just for loop
-			1,		//Fortune Teller
-			1,		//Dream Suite
-			2,		//Club LOL
-			1,		//Museum Shop
-			2,		//Shampoodle
-			2,		//Kicks
+
+		static const int NooklingBellsSpent[5] {
+			0, 12000, 25000, 50000, 100000
 		};
 
-		bool IsON;
+		u8* UnlockStates[6] = {
+			&town->FortuneTellerUnlockStatus,
+			&town->DreamSuiteUnlockStatus,
+			&town->ClubLOLUnlockState,
+			&town->MuseumShopUnlockState,
+			&town->ShampoodleUnlockStatus,
+			&town->KickUnlockStatus
+		};
+
+		bool IsON = false;
 		
-		for(int i = 1; i < 7; ++i) { 
-			IsON = *(bool *)Save::GetInstance()->Address(Shops[i]) != 0;
-			shopopt[i] = (IsON ? Color(pGreen) : Color(pRed)) << shopopt[i];
+		for(int i = 0; i < 6; ++i) { 
+			IsON = *UnlockStates[i] != 0;
+			shopopt[i + 1] = (IsON ? Color(pGreen) : Color(pRed)) << shopopt[i + 1];
 		}
 		
 		Keyboard shopkb(Language->Get("KEY_CHOOSE_STORE"), shopopt);
 
 		Sleep(Milliseconds(100));
 		s8 op = shopkb.Open();
-		if(op < 0)
-			return;
-		
-	//op 0 which is a special case cause nook has multiple states
-		if(op == 0) {
-			for(int i = 0; i < 5; ++i) { 
-				nookopt[i] = (IsNookUnlocked(i) ? Color(pGreen) : Color(pRed)) << nookopt[i];
-			}
-			
-			Keyboard nookkb(Language->Get("KEY_CHOOSE_UPGRADE"), nookopt); 
-
-			Sleep(Milliseconds(100));
-			s8 nook = nookkb.Open();
-			if(nook < 0)
-				return;
+		switch(op) {
+			default: break;
+		//Nooklings
+			case 0: {
+				for(int i = 0; i < 5; ++i) 
+					nookopt[i] = ((town->NooklingState == i) ? Color(pGreen) : Color(pRed)) << nookopt[i];
 				
-			nook_common(nook);
+				Keyboard nookkb(Language->Get("KEY_CHOOSE_UPGRADE"), nookopt); 
+
+				Sleep(Milliseconds(100));
+				s8 nook = nookkb.Open();
+				if(nook < 0)
+					return;
+
+				town->NooklingState = nook;
+				town->NooklingStateUnknown = nook;
+				GameHelper::EncryptValue(&town->NooklingBellsSpent, NooklingBellsSpent[nook]);
+				town->LeifUnlockStatus = (nook == 1 ? 2 : nook);
+			} shopunlocks(entry);
+		//Fortune Teller
+			case 1: 
+				town->FortuneTellerUnlockStatus = !town->FortuneTellerUnlockStatus;
 			shopunlocks(entry);
-			return;
-		}
-		
-		Save::GetInstance()->Write<u8>(Shops[op], (*(bool *)Save::GetInstance()->Address(Shops[op]) != 0 ? 0 : ShopValues[op]));
-	
-	//op 3 is also special cause it removes shrunk if true
-		if(op == 3) {
-			if(!player->PlayerFlags.FinishedShrunkSignatures) {
+		//Dream Suite
+			case 2:
+				town->DreamSuiteUnlockStatus = !town->DreamSuiteUnlockStatus;
+			shopunlocks(entry);
+		//Club LOL
+			case 3:
+				town->ClubLOLUnlockState = (town->ClubLOLUnlockState < 2) ? 2 : 0;
+
 			//To remove shrunk if petition is not done
-				player->PlayerFlags.FinishedShrunkSignatures = 1;
-			}
+				if(!player->PlayerFlags.FinishedShrunkSignatures)
+					player->PlayerFlags.FinishedShrunkSignatures = 1;
+
+			shopunlocks(entry);
+		//Museum Shop
+			case 4:
+				town->MuseumShopUnlockState = !town->MuseumShopUnlockState;
+			shopunlocks(entry);
+		//Shampoodle
+			case 5:
+				town->ShampoodleUnlockStatus = (town->ShampoodleUnlockStatus < 2) ? 2 : 0;
+			shopunlocks(entry);
+		//Kicks
+			case 6:
+				town->KickUnlockStatus = (town->KickUnlockStatus < 2) ? 2 : 0;
+			shopunlocks(entry);
 		}
-		shopunlocks(entry);
 	}
 
 	void HouseChanger(MenuEntry *entry) {

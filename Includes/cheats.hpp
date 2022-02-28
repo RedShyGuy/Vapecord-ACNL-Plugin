@@ -49,6 +49,7 @@ namespace CTRPluginFramework {
 	void speedMod(MenuEntry *entry);
 	void menuSpeedMod(MenuEntry *entry);
 	void roomWarp(MenuEntry *entry);
+	void shovelknockback(MenuEntry *entry);
 	
 //Inventory Codes Folder
 	void t2i(MenuEntry *entry);

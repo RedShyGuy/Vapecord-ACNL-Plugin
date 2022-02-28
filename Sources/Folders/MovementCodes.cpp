@@ -324,6 +324,29 @@ namespace CTRPluginFramework {
 			}
 		}
 	}
+
+//Shovel Knockback
+	void shovelknockback(MenuEntry *entry) {
+		static Address rockHitting(0x66E9F4, 0, 0, 0, 0, 0, 0, 0);
+		static Address itemHitting(0x672120, 0, 0, 0, 0, 0, 0, 0);
+
+		static Address coordChangeFUNC(0x6511EC, 0, 0, 0, 0, 0, 0, 0);
+
+		u32 res = 0;
+
+		if(entry->WasJustActivated()) {
+			Process::Patch(rockHitting.addr, 0xE1A00000);
+			Process::Patch(itemHitting.addr, 0xE1A00000);
+		}
+		
+		else if(!entry->IsActivated()) {
+			res = Wrap::CalculateBranchInstruction(rockHitting.addr, coordChangeFUNC.addr);
+			Process::Patch(rockHitting.addr, 0xEB000000 + res);
+
+			res = Wrap::CalculateBranchInstruction(itemHitting.addr, coordChangeFUNC.addr);
+			Process::Patch(itemHitting.addr, 0xEB000000 + res);
+		}
+	}
 }
 
 //disable Return To Town 0x61F508 0xE1A00000

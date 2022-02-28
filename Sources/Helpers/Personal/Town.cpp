@@ -56,6 +56,9 @@ namespace CTRPluginFramework {
 				townIDs.push_back(&villager->Villager[i].Letter[g].Reciever.TownData);
 			}
 		}
+
+		townIDs.push_back(&villager->townID1);
+		townIDs.push_back(&villager->townID2);
 	}
 
 	void GetBuildingTownDataReferences(std::vector<TownID *> &townIDs) {
