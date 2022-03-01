@@ -81,7 +81,11 @@ namespace CTRPluginFramework {
 	} 
 
 //Bulletinboard message backup/restore | non player specific save code
-	void bullboard(MenuEntry *entry) {		
+	void bullboard(MenuEntry *entry) {
+		ACNL_TownData *town = Town::GetSaveData();
+		if(!town)
+			return;
+
 		static const std::vector<std::string> bullsett = {
 			Language->Get("VECTOR_BULLETINDUMPER_BACKUP"),
 			Language->Get("VECTOR_BULLETINDUMPER_RESTORE"),
@@ -113,7 +117,7 @@ namespace CTRPluginFramework {
 					if(KB.Open(filename) < 0)
 						return;
 
-					loc = { (u32 *)Player::GetBulletin(KBChoice), 0x1AC };
+					loc = { (u32 *)&town->BBoardMessages[KBChoice], sizeof(ACNL_BulletinBoardMessage) };
 					Wrap::Dump(Utils::Format(PATH_BULLETIN, regionName.c_str()), filename, ".dat", &loc, nullptr);
 				}
 			} break;
@@ -124,7 +128,7 @@ namespace CTRPluginFramework {
 				Sleep(Milliseconds(100));
 				s8 KBChoice = optKb.Open();
 				if(KBChoice >= 0) {
-					loc = { (u32 *)Player::GetBulletin(KBChoice), 0x1AC };
+					loc = { (u32 *)&town->BBoardMessages[KBChoice], sizeof(ACNL_BulletinBoardMessage) };
 					Wrap::Restore(Utils::Format(PATH_BULLETIN, regionName.c_str()), ".dat", Language->Get("RESTORE_MESSAGE"), nullptr, true, &loc, nullptr); 
 				}
 			} break;
@@ -446,8 +450,10 @@ namespace CTRPluginFramework {
 
 		Sleep(Milliseconds(100));
 		s8 op = shopkb.Open();
+		if(op < 0)
+			return;
+
 		switch(op) {
-			default: break;
 		//Nooklings
 			case 0: {
 				for(int i = 0; i < 5; ++i) 
@@ -464,15 +470,15 @@ namespace CTRPluginFramework {
 				town->NooklingStateUnknown = nook;
 				GameHelper::EncryptValue(&town->NooklingBellsSpent, NooklingBellsSpent[nook]);
 				town->LeifUnlockStatus = (nook == 1 ? 2 : nook);
-			} shopunlocks(entry);
+			} break;
 		//Fortune Teller
 			case 1: 
 				town->FortuneTellerUnlockStatus = !town->FortuneTellerUnlockStatus;
-			shopunlocks(entry);
+			break;
 		//Dream Suite
 			case 2:
 				town->DreamSuiteUnlockStatus = !town->DreamSuiteUnlockStatus;
-			shopunlocks(entry);
+			break;
 		//Club LOL
 			case 3:
 				town->ClubLOLUnlockState = (town->ClubLOLUnlockState < 2) ? 2 : 0;
@@ -481,24 +487,27 @@ namespace CTRPluginFramework {
 				if(!player->PlayerFlags.FinishedShrunkSignatures)
 					player->PlayerFlags.FinishedShrunkSignatures = 1;
 
-			shopunlocks(entry);
+			break;
 		//Museum Shop
 			case 4:
 				town->MuseumShopUnlockState = !town->MuseumShopUnlockState;
-			shopunlocks(entry);
+			break;
 		//Shampoodle
 			case 5:
 				town->ShampoodleUnlockStatus = (town->ShampoodleUnlockStatus < 2) ? 2 : 0;
-			shopunlocks(entry);
+			break;
 		//Kicks
 			case 6:
 				town->KickUnlockStatus = (town->KickUnlockStatus < 2) ? 2 : 0;
-			shopunlocks(entry);
+			break;
 		}
+
+		shopunlocks(entry);
 	}
 
 	void HouseChanger(MenuEntry *entry) {
-		if(Player::GetSaveOffset(4) == 0) {
+		ACNL_Player *player = Player::GetSaveData();
+		if(!player) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -660,8 +669,9 @@ namespace CTRPluginFramework {
 //Unlock QR Machine | half player specific save code	
 	void unlockqrmachine(MenuEntry *entry) {	
 		ACNL_Player *player = Player::GetSaveData();
+		ACNL_TownData *town = Town::GetSaveData();
 
-		if(!player) {
+		if(!player || !town) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -669,7 +679,7 @@ namespace CTRPluginFramework {
 		
 		std::vector<std::string> cmnOpt =  { "" };
 
-		bool IsON1 = *(u16 *)Save::GetInstance()->Address(0x621D4) == 0x8000;
+		bool IsON1 = town->TownFlags.QRMachineUnlocked;
 
 		bool IsON2 = player->PlayerFlags.BefriendSable1 &&
 					player->PlayerFlags.BefriendSable2 &&
@@ -684,11 +694,11 @@ namespace CTRPluginFramework {
 		if(op < 0)
 			return;
 
-		Save::GetInstance()->Write<u16>(0x621D4, (IsON1 ? 0 : 0x8000));
+		town->TownFlags.QRMachineUnlocked = !town->TownFlags.QRMachineUnlocked;
 
-		player->PlayerFlags.BefriendSable1 = IsON2 ? 0 : 1;
-		player->PlayerFlags.BefriendSable2 = IsON2 ? 0 : 1;
-		player->PlayerFlags.BefriendSable3 = IsON2 ? 0 : 1;
+		player->PlayerFlags.BefriendSable1 = !player->PlayerFlags.BefriendSable1;
+		player->PlayerFlags.BefriendSable2 = !player->PlayerFlags.BefriendSable2;
+		player->PlayerFlags.BefriendSable3 = !player->PlayerFlags.BefriendSable3;
 		unlockqrmachine(entry);
 	}
 

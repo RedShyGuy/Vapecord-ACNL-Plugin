@@ -10,6 +10,7 @@
 #include "Helpers/CROEditing.hpp"
 #include "Helpers/ACSystem.hpp"
 #include "Helpers/Converters.hpp"
+#include "Helpers/GameKeyboard.hpp"
 #include "Helpers/Town.hpp"
 #include "Helpers/NPC.hpp"
 #include "RegionCodes.hpp"
@@ -1531,8 +1532,12 @@ namespace CTRPluginFramework {
 				char buffer[13];
 				sprintf(buffer, "%012lld", fCode);
 				std::string str = (std::string(buffer));
-				OSD::Notify(Utils::Format("Player %d: %s - %s - %s", i, str.substr(0, 4).c_str(), str.substr(4, 4).c_str(), str.substr(8, 4).c_str()));
+				GameKeyboard::SendMessage(Utils::Format("Player %d: %s - %s - %s", i, str.substr(0, 4).c_str(), str.substr(4, 4).c_str(), str.substr(8, 4).c_str()));
 			}
+		}
+
+		if(Controller::IsKeysPressed(Key::ZR + Key::DPadDown)) {
+			OSD::Notify(Utils::Format("%08X", std::addressof(Town::GetSaveData()->TownFlags)));
 		}
 
 		ACNL_Player *player = Player::GetSaveData();

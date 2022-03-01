@@ -1505,7 +1505,7 @@ namespace CTRPluginFramework {
         u8 Unknown53 : 1;
         u8 Unknown54 : 1;
         u8 Unknown55 : 1;
-        u8 Unknown56 : 1;
+        u8 QRMachineUnlocked : 1;
         u8 Unknown57 : 1;
         u8 Unknown58 : 1;
         u8 Unknown59 : 1;
@@ -1608,7 +1608,7 @@ namespace CTRPluginFramework {
         s64 Playtime;
         TownID TownData1;
         u8 Unknown3;
-        Town_Flags TownFlags; //0x31F8914F
+        Town_Flags TownFlags; //0x621CF
         u16 Unknown4; //Likely padding
         Item LostAndFoundItems[16]; //0x621E2
         u8 Unknown5[16]; //0x62222; likely padding

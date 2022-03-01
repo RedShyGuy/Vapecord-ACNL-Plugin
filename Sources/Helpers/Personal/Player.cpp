@@ -53,12 +53,6 @@ writes design data
 		player->Patterns[slot].CreatorData = player->PlayerInfo;
 	}
 /*
-Get correct bulletin board message (14 Max)
-*/
-	u32 Player::GetBulletin(int slot) {
-		return Save::GetInstance()->Address(0x6E2B8 + (0x1AC * slot));
-	}
-/*
 Update Tan
 */
 	void Player::UpdateTan() {

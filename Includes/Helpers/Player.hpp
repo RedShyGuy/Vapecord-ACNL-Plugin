@@ -8,7 +8,6 @@ extern bool IsIndoorsBool;
 
 namespace CTRPluginFramework {
 	namespace Player {
-		u32 			GetBulletin(int slot);
 		void 			Load(int pIndex);
 		void			ReloadDesign(int slot);
 		void			StealDesign(u8 slot);
