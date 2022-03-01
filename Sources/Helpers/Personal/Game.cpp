@@ -56,6 +56,16 @@ namespace CTRPluginFramework {
 		return(r << 24 | g << 16 | b << 8 | a);
 	}
 
+	ACNL_Date GameHelper::GetCurrentDate(void) {
+		static Address getDateData(0x2FB394, 0, 0, 0, 0, 0, 0, 0);
+		static Address convertToDate(0x30F6DC, 0, 0, 0, 0, 0, 0, 0);
+
+		ACNL_Date date;
+		convertToDate.Call<void>(&date, getDateData.Call<u32>());
+
+		return date;
+	}
+
 	ACNL_BuildingData *Building::GetSaveData() {
 		u32 *addr = (u32 *)(Code::GardenPlus.Call<u32>() + 0x4BE80);
 		return (ACNL_BuildingData *)addr;

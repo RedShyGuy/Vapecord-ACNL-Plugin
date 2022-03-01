@@ -17,6 +17,7 @@ namespace CTRPluginFramework {
 	}
 
 	namespace GameHelper {
+		ACNL_Date 			GetCurrentDate(void);
 		void				PlaySound(u16 soundID);
 	//save files
 		//u32				GetMail();

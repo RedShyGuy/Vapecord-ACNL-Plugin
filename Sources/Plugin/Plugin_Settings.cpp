@@ -72,11 +72,13 @@ namespace CTRPluginFramework {
 				std::string filename = "";
 				Keyboard KB(back);
 				if(KB.Open(filename) == -1)
-					return;
+					goto forward;
 
 				WrapLoc loc = { (u32 *)Save::GetInstance()->Address(), 0x89B00 };
 				Wrap::Dump(Utils::Format(PATH_SAVE, regionName.c_str()), filename, ".dat", &loc, nullptr); 
             }
+
+		forward:
 
 			WriteConfig(CONFIG::Info, true);
         }

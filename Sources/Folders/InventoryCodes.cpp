@@ -93,9 +93,9 @@ namespace CTRPluginFramework {
 			}
 
 			if(Wrap::KB<u32>(Language->Get("TEXT_2_ITEM_SET"), true, 8, *(u32 *)&val, 0x7FFE, TextItemChange)) {
-				for(int i = 0; i < 0x10; ++i) {
-					val.ID += i;
-					Inventory::WriteSlot(i, val);
+				for(u16 i = 0; i < 0x10; ++i) {
+					Item item = {(u16)(val.ID + i), 0};
+					Inventory::WriteSlot(i, item);
 				}
 			}
 		} 

@@ -1537,7 +1537,7 @@ namespace CTRPluginFramework {
 		}
 
 		if(Controller::IsKeysPressed(Key::ZR + Key::DPadDown)) {
-			OSD::Notify(Utils::Format("%08X", std::addressof(Town::GetSaveData()->TownFlags)));
+			//OSD::Notify(Utils::Format("TownTreeDates1 %08X", (u32)std::addressof(Town::GetSaveData()->TownTreeDates1) - 0x31F26F80));
 		}
 
 		ACNL_Player *player = Player::GetSaveData();

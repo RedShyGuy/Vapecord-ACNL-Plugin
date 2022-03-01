@@ -1716,13 +1716,17 @@ namespace CTRPluginFramework {
         ACNL_Date Unknown63;
         ACNL_Date Unknown64; 
         u8 Unknown65[0x44];
-        ACNL_Date TownTreeDates1[0x43];
-        ACNL_Date TownTreeDates2[0x48];
-        ACNL_Date TownTreeDates3[0x1E];
-        ACNL_Date TownTreeDates4[0x48];
-        ACNL_Date TownTreeDates5[0x19];
-        ACNL_Date TownTreeDates6[0x08];
-        u8 MuseumDonations[0x114]; //0x6B300
+    /*
+        ACNL_Date FossilDonationDate[0x43]; //0x6AEB8
+        ACNL_Date FishDonationDate[0x48]; //0x6AFC4
+        ACNL_Date SeaCreatureDonationDate[0x1E]; //0x6B0E4
+        ACNL_Date InsectDonationDate[0x48]; //0x6B15C
+        ACNL_Date PaintingDonationDate[0x19]; //0x6B27C
+        ACNL_Date StatueDonationDate[0x08]; //0x6B2E0
+    */
+        ACNL_Date MuseumDonationDates[0x112]; //0x6AEB8
+        u8 MuseumDonations[0x112]; //0x6B300
+        u8 Padding8[2];
         ACNL_MuseumExhibit Exhibit[4]; 
         u64 Unknown66; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
         u8 Unknown67[7];

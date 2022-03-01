@@ -878,16 +878,16 @@ namespace CTRPluginFramework {
 			return;
 
 		static const std::pair<u16, u16> Pairs[6] = { 
-			{ 0x3130, 0x3172 }, //AnalyzedFossils
-			{ 0x228E, 0x22D5 }, //Bugs
-			{ 0x22E1, 0x2328 }, //Fish
-			{ 0x232D, 0x234A }, //SeaCreatures
-			{ 0x30D2, 0x30EA }, //RealPaintings
-			{ 0x30EB, 0x30F2 } //RealStatues
+			{ 0x3130, 0x3173 }, //AnalyzedFossils 43
+			{ 0x22E1, 0x2329 }, //Fish 48
+			{ 0x232D, 0x234B }, //SeaCreatures 1E
+			{ 0x228E, 0x22D6 }, //Insects 48
+			{ 0x30D2, 0x30EB }, //RealPaintings 19
+			{ 0x30EB, 0x30F3 } //RealStatues 8
 		};
 
 		static const u16 Addage[6] = {
-			0, 0xA9, 0x43, 0x8B, 0xF1, 0x10A
+			0, 0x43, 0x8B, 0xA9, 0xF1, 0x10A
 		};
 
 		std::vector<std::string> pV = {
@@ -929,6 +929,8 @@ namespace CTRPluginFramework {
 				for(u16 i = Pairs[j].first; i < Pairs[j].second; ++i) {
 					int field = Code::CalcBitField.Call<int>(&i);
 					town->MuseumDonations[Addage[j] + field] = player + 1;
+
+					town->MuseumDonationDates[Addage[j] + field] = GameHelper::GetCurrentDate();
 				}
 			}
 		}
@@ -938,6 +940,8 @@ namespace CTRPluginFramework {
 				for(u16 i = Pairs[j].first; i < Pairs[j].second; ++i) {
 					int field = Code::CalcBitField.Call<int>(&i);
 					town->MuseumDonations[Addage[j] + field] = 0;
+
+					town->MuseumDonationDates[Addage[j] + field] = { 0, 0, 0 };
 				}
 			}
 		}
