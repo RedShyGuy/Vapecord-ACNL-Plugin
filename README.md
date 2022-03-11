@@ -2,7 +2,7 @@
 ![](https://cdn.discordapp.com/attachments/635194808859623444/787825102841970728/Snickerstream_-_23_FPS_14_12_2020_00_35_21.png)
 
 ## Introduction
-Hello I am Lukas and I created this plugin :).
+Hello I am Lukas and I created this plugin!
 It gets updated very frequently and I always try to make it as stable as possible!
 
 ## Plugin
