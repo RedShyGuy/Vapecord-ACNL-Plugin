@@ -985,8 +985,7 @@ namespace CTRPluginFramework {
 	std::string S_AcreID[4][5] = { "" };
 	static constexpr int I_RectXPos[5] = { 70, 106, 142, 178, 214 };
 	static constexpr int J_RectYPos[4] = { 54, 90, 126, 162 };
-	static constexpr int Addage[4] = { 0x00, 0x0E, 0x1C, 0x2A };
-
+	static constexpr int Addage[4] = { 0x8, 0xF, 0x16, 0x1D };
 //OSD for Map Editor
 	bool MapDraw(const Screen &screen) {	
 		if(!screen.IsTop) {
@@ -1004,11 +1003,13 @@ namespace CTRPluginFramework {
 		if(!(GameHelper::MapBoolCheck() && GameHelper::IsInRoom(0) && Player::GetSaveOffset(4) != 0)) 
 			return;
 
-		static u32 townacre = Save::GetInstance()->Address(0x53494);
+		ACNL_TownData *town = Town::GetSaveData();
+		if(!town)
+			return;
 
 		for(int j = 0; j < 4; ++j) 
 			for(int i = 0; i < 5; ++i) 
-				S_AcreID[j][i] = (Utils::Format("%02X", *(u8 *)((townacre + Addage[j]) + (i * 2))));
+				S_AcreID[j][i] = (Utils::Format("%02X", town->TownAcres[Addage[j] + i]));
 	}
 
 	c_RGBA* acreArray = nullptr;
@@ -1127,7 +1128,9 @@ namespace CTRPluginFramework {
 //Map Function
 	void AcreChange(int acre, u8 offset) {
 		u8 AcreID = 0;
-		u32 townacre = Save::GetInstance()->Address(0x53494); 
+		ACNL_TownData *town = Town::GetSaveData();
+		if(!town)
+			return;
 
 		Keyboard Acre(Utils::Format(Language->Get("MAP_EDITOR_TYPE_ID").c_str(), acre));
 		Sleep(Milliseconds(200));
@@ -1138,7 +1141,8 @@ namespace CTRPluginFramework {
 		if(!IsAcreOkay(AcreID)) 
 			return;
 
-		Process::Write8(townacre + offset, AcreID);
+		town->TownAcres[offset] = AcreID;
+
 		OSD::Notify(Utils::Format("Acre %02d : %02X", acre, AcreID));
 
 		u32 pInstance = PlayerClass::GetInstance()->Offset();
@@ -1173,7 +1177,7 @@ namespace CTRPluginFramework {
 						if(!rec.Contains(Touch::GetPosition()))
 							continue;
 						
-						AcreChange(res, Addage[j] + (i * 2));
+						AcreChange(res, Addage[j] + i);
 					}
 				}
 			}

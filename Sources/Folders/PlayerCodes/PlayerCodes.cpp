@@ -189,7 +189,7 @@ namespace CTRPluginFramework {
 		u8 ShiftG = Utils::Random(0, 255);
 		u8 ShiftR = Utils::Random(0, 255); 	
 			
-		return Set::ToRGB(ShiftB, ShiftG, ShiftR);
+		return (ShiftB << 16 | ShiftG << 8 | ShiftR);
     }
 
 	static u32 rval1 = 0, rval2 = 0;

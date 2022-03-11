@@ -10,51 +10,6 @@
 
 namespace CTRPluginFramework {
 	Keyboard optKb("");
-//Writes 4Bit
-	bool Set::WriteNibble(u32 address, u8 value, bool right_side) {
-		if(!Process::CheckAddress(address)) //checks if address is valid
-			return false;
-	//right side of the byte
-		if(right_side) {
-			*(u8 *)address &= ~0xF; //Clears 4bit first
-			*(u8 *)address |= (value & 0xF); //Write 4bit then
-			return true;
-		}
-	//left side of the byte
-		*(u8 *)address &= ~(0xF << 4); //Clears 4bit first
-		*(u8 *)address |= ((value & 0xF) << 4); //Write 4bit then
-		return true;
-	}
-//Reads 4Bit
-	bool Set::ReadNibble(u32 address, u8 &value, bool right_side) {
-		if(!Process::CheckAddress(address)) //checks if address is valid
-			return false;
-	//right side of the byte
-		if(right_side) {
-			value = *(u8 *)(address) & 0xF;
-			return true;
-		}
-	//left side of the byte	
-		value = (*(u8 *)(address) >> 4) & 0xF;
-		return true;
-	}
-
-	c_RGBA Set::ToRGBA(int hexValue) {	
-		c_RGBA rgb;
-		rgb.R = ((hexValue >> 24) & 0xFF) / 255.0;
-		rgb.G = ((hexValue >> 16) & 0xFF) / 255.0;
-		rgb.B = ((hexValue >> 8) & 0xFF) / 255.0;
-		rgb.A = ((hexValue) & 0xFF) / 255.0;
-		return rgb;
-	}
-
-	u32 Set::ToRGB(int r, int g, int b) {
-		return(r << 16 | g << 8 | b);
-	}
-
-	u32 Set::ToRGBA_U32(int r, int g, int b, int a) {
-		return(r << 24 | g << 16 | b << 8 | a);
-	}
 
 	ACNL_Date GameHelper::GetCurrentDate(void) {
 		static Address getDateData(0x2FB394, 0, 0, 0, 0, 0, 0, 0);
@@ -169,6 +124,12 @@ namespace CTRPluginFramework {
 
 //move building
 	void GameHelper::MoveBuilding() {
+		ACNL_BuildingData *building = Building::GetSaveData();
+		if(!building) {
+			OSD::Notify("Unknown Error: Building Save Data not loaded!", Color::Red);
+			return;
+		}
+
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
 			OSD::Notify("Error: Player Needs To Be Loaded!", Color::Red);
 			return;
@@ -186,34 +147,39 @@ namespace CTRPluginFramework {
 		
 		Sleep(Milliseconds(100));
 		std::vector<u8> index;
-		s8 val;
+
 		std::vector<std::string> buildingOpt;
-		u32 building, targetPlayer;
-		u32 buildingremoval = Save::GetInstance()->Address(0x4BE88);
-		u32 x, y;
-		
 		buildingOpt.clear();
-		for(building = 0; building < 56; building++) { 
-			targetPlayer = buildingremoval + building * 4;
-			if (*(u8 *)(targetPlayer) != 0xFC) {
-				index.push_back(building);
-				buildingOpt.push_back(IDList::GetBuildingName(*(u8 *)targetPlayer));
+
+		for(int i = 0; i < 56; i++) { 
+			u8 bID = building->Buildings.Building[i].ID;
+			if(bID != 0xFC) {
+				index.push_back(i);
+				buildingOpt.push_back(IDList::GetBuildingName(bID));
 			}
 		}
 		
 		optKb.Populate(buildingOpt);
-		val = optKb.Open();
+		s8 val = optKb.Open();
 		if(val < 0) 
 			return;
 		
+		u32 x, y;
 		PlayerClass::GetInstance()->GetWorldCoords(&x, &y);
-		Process::Write8(buildingremoval + index.at(val) * 4 + 2, x & 0xFF);
-		Process::Write8(buildingremoval + index.at(val) * 4 + 3, y & 0xFF);
+		building->Buildings.Building[index.at(val)].XCoord = x & 0xFF;
+		building->Buildings.Building[index.at(val)].YCoord = y & 0xFF;
+
 		Sleep(Milliseconds(20));
 		GameHelper::ReloadRoom();
 	}
 //remove building
 	void GameHelper::RemoveBuilding() {
+		ACNL_BuildingData *building = Building::GetSaveData();
+		if(!building) {
+			OSD::Notify("Unknown Error: Building Save Data not loaded!", Color::Red);
+			return;
+		}
+
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
 			OSD::Notify("Error: Player Needs To Be Loaded!", Color::Red);
 			return;
@@ -231,45 +197,45 @@ namespace CTRPluginFramework {
 		
 		Sleep(Milliseconds(100));
 		std::vector<u8> index;
-		s8 val;
+
 		std::vector<std::string> buildingOpt;
-		u32 building, targetPlayer;
-		u32 buildingremoval = Save::GetInstance()->Address(0x4BE88);
-		
 		buildingOpt.clear();
-		for(building = 0; building < 56; building++) {
-			targetPlayer = buildingremoval + building * 4;
-			if(*(u8 *)(targetPlayer) != 0xFC) {
-				index.push_back(building);
-				
-				buildingOpt.push_back(IDList::GetBuildingName(*(u8 *)targetPlayer));
+		for(int i = 0; i < 56; i++) {
+			u8 bID = building->Buildings.Building[i].ID;
+			if(bID != 0xFC) {
+				index.push_back(i);
+				buildingOpt.push_back(IDList::GetBuildingName(bID));
 			}
 		}
 		
 		optKb.Populate(buildingOpt);
-		val = optKb.Open();
+		s8 val = optKb.Open();
 		if(val < 0) 
 			return;
 		
-		if(!IDList::BuildingValid(*(u8 *)(buildingremoval + index.at(val) * 4) & 0xFF)) {
+		if(!IDList::BuildingValid(building->Buildings.Building[index.at(val)].ID)) {
 			OSD::Notify("Error: You can not remove that building!", Color::Red);
 			return;
 		}
-		
-		Process::Write32(buildingremoval + index.at(val) * 4, 0xFC);
-		*(u8 *)(buildingremoval - 4) = *(u8 *)(buildingremoval - 4) - 1;
+
+		building->Buildings.Building[index.at(val)].ID = 0xFC;
+		building->Buildings.Building[index.at(val)].XCoord = 0;
+		building->Buildings.Building[index.at(val)].YCoord = 0;
+
+		building->NormalPWPsAmount--;
+
 		Sleep(Milliseconds(20));
 		GameHelper::ReloadRoom();
 	}
 //check for free building place
-	bool BuildingSpotFree() {	
-		if(!PlayerClass::GetInstance()->IsLoaded()) 
+	bool BuildingSpotFree() {
+		ACNL_BuildingData *building = Building::GetSaveData();
+		if(!building) 
 			return 0;
-		
+
 		int Bslot = 0;
 		while(true) { 
-			u32 Building = Save::GetInstance()->Address(0x4BE88 + (0x4 * Bslot));
-			if(0xFC == *(u8 *)Building) //If empty building slot was found
+			if(0xFC == building->Buildings.Building[Bslot].ID) //If empty building slot was found
 				return 1;
 			
 			Bslot++; //goto next slot
@@ -308,10 +274,13 @@ namespace CTRPluginFramework {
 	
 		u32 x, y;	
 		PlayerClass::GetInstance()->GetWorldCoords(&x, &y);
-		buildingID &= 0xFFFF;
 		GameHelper::PlaceBuildingUpdateCollisions(x, y, buildingID);
+
 		Sleep(Milliseconds(20));
-		GameHelper::ReloadRoom();	
+		GameHelper::ReloadRoom();
+
+		float *coords = PlayerClass::GetInstance()->GetCoordinates();
+		coords[2] += 100;
 	}
 //is in room
 	bool GameHelper::IsInRoom(u8 room) {
@@ -333,8 +302,8 @@ namespace CTRPluginFramework {
 	//makes time negative
 		if(!forward) 
 			Time = Time * (-1);
-
-		*(u64 *)Save::GetInstance()->Address(0x621A0) += Time;
+		
+		Town::GetSaveData()->CurrentTime += Time;
 		*(u64 *)RealTime.addr += Time;
 	}
 	
@@ -445,7 +414,6 @@ namespace CTRPluginFramework {
 	bool GameHelper::LoadRoomBool() {
 		static const Address LoadCheck(0x94F451, 0x94E441, 0x94E451, 0x94E451, 0x948451, 0x947451, 0x947451, 0x947451);
 		return *(bool *)LoadCheck.addr;
-		return 0;
 	}
 //get map boolen pointer
 	bool GameHelper::MapBoolCheck() {

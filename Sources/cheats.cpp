@@ -25,7 +25,7 @@ Returns a randomized RGBA color
         u8 ShiftB = Utils::Random(0, 255);	
 		u8 ShiftA = Utils::Random(0, 255);
 			
-		return Set::ToRGBA_U32(ShiftR, ShiftG, ShiftB, ShiftA);
+		return(ShiftR << 24 | ShiftG << 16 | ShiftB << 8 | ShiftA);
     }
 
 	bool RainBowON = false;
@@ -63,9 +63,7 @@ Randomizes colors of Menu Folders
 		u64 localFriendCode = 0;
 		FRD_PrincipalIdToFriendCode(key.principalId, &localFriendCode);
 
-		char buffer[13];
-		sprintf(buffer, "%012lld", localFriendCode);
-		std::string str = (std::string(buffer));
+		std::string str = Utils::Format("%012lld", localFriendCode);
 		FC = Utils::Format("FC: %s - %s - %s", str.substr(0, 4).c_str(), str.substr(4, 4).c_str(), str.substr(8, 4).c_str());
 
 		frdExit();

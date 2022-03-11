@@ -193,11 +193,13 @@ namespace CTRPluginFramework {
 //Get Building Name
 	std::string IDList::GetBuildingName(u8 ID) {
 		if(ID >= 8 && ID <= 0x11) {
-			u32 VillagerBase = Save::GetInstance()->Address(0x292A4); //VID
+			ACNL_VillagerData *villager = NPC::GetSaveData();
+			if(!villager)
+				return Utils::Format("NPC %d", ID - 8);
 
-			u8 Index = ID - 8;
-			u32 Address = VillagerBase + (0x2518 * Index);
-			u16 VID = *(u16 *)(Address + 0x2C);
+			u16 VID = villager->Villager[ID - 8].Mini1.VillagerID;
+			if(VID == 0xFFFF)
+				return "NPC -Empty-";
 
 			return "NPC " + NPC::GetNName(VID);
 		}

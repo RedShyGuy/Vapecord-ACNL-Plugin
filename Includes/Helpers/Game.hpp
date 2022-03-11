@@ -80,14 +80,6 @@ namespace CTRPluginFramework {
 		void				SetCurrentTime(bool forward, int Minutes = 0, int Hours = 0, int Days = 0, int Months = 0, int Years = 0);
 	}
 
-	namespace Set {
-		c_RGBA			ToRGBA(int hexValue);
-		u32				ToRGB(int r = 255, int g = 255, int b = 255);
-		u32				ToRGBA_U32(int r = 255, int g = 255, int b = 255, int a = 255);
-        bool     		WriteNibble(u32 address, u8 value, bool right_side);
-		bool     		ReadNibble(u32 address, u8 &value, bool right_side);
-	}
-
 	namespace Camera {
 		u32			GetInstance();
 		float* 		GetCoordinates();

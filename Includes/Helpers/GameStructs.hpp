@@ -1604,8 +1604,9 @@ namespace CTRPluginFramework {
         ACNL_SomeTownPlayerStruct Player2;
         ACNL_SomeTownPlayerStruct Player3;
         ACNL_SomeTownPlayerStruct Player4;
-        u8 Unknown2[0x10];
-        s64 Playtime;
+        s64 CurrentTime; //0x621A0
+        s64 Unknown2;
+        s64 Playtime; //0x621B0
         TownID TownData1;
         u8 Unknown3;
         Town_Flags TownFlags; //0x621CF
