@@ -815,7 +815,7 @@ namespace CTRPluginFramework {
         u64  Unknown4;
     };
 
-    struct UnknownStruct1 { //Initiatives
+    struct UnknownStruct1 { //Initiatives 0x8A3C
         u32 Unk1; //0 //Set to 0 in Player ctor
         u32 Unk2; //4 //Set to 0 in Player ctor
         u8 Unk3; //8 //Set to 0 in Player ctor

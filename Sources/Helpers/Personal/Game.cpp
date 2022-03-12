@@ -63,11 +63,11 @@ namespace CTRPluginFramework {
 		return 1;
 	}
 //reload room
-	void GameHelper::ReloadRoom() {
+	void GameHelper::ReloadRoom(float *coords) {
 		static const Address u0Data(0x976C0E, 0x975BEE, 0x975C06, 0x975C06, 0x96FC06, 0x96EC06, 0x96EC06, 0x96EC06);
 
 		static Address ReloadFunc(0x5B6660, 0x5B5B78, 0x5B56A8, 0x5B56A8, 0x5B4F98, 0x5B4F98, 0x5B4C6C, 0x5B4C6C); 
-		ReloadFunc.Call<void>(GetRoomData(), RoomCheck(), PlayerClass::GetInstance()->GetCoordinates(), (u32 *)u0Data.addr, 6, 0, 0, 1, 1);
+		ReloadFunc.Call<void>(GetRoomData(), RoomCheck(), coords, (u32 *)u0Data.addr, 6, 0, 0, 1, 1);
 	}
 	
 //Get Room Reload Data
@@ -277,10 +277,11 @@ namespace CTRPluginFramework {
 		GameHelper::PlaceBuildingUpdateCollisions(x, y, buildingID);
 
 		Sleep(Milliseconds(20));
-		GameHelper::ReloadRoom();
 
 		float *coords = PlayerClass::GetInstance()->GetCoordinates();
-		coords[2] += 100;
+		coords[2] += 20;
+
+		GameHelper::ReloadRoom(coords);
 	}
 //is in room
 	bool GameHelper::IsInRoom(u8 room) {

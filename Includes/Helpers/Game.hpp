@@ -3,6 +3,7 @@
 
 #include <CTRPluginFramework.hpp>
 #include "Helpers/GameStructs.hpp"
+#include "Helpers/PlayerClass.hpp"
 
 namespace CTRPluginFramework {
 	struct c_RGBA {
@@ -51,7 +52,7 @@ namespace CTRPluginFramework {
 	//Other Stuff	
 		std::string 		GetCountryName();
 		bool 				IsOutdoorItem(Item item);
-		void				ReloadRoom();
+		void				ReloadRoom(float *coords = PlayerClass::GetInstance()->GetCoordinates());
 		void				Catalog(bool directcall = false);
 		u32					RoomFunction(u8 room, bool u0, bool u1, bool u2);
 		u8					GetOnlinePlayerIndex();
