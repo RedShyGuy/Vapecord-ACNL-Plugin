@@ -1537,7 +1537,7 @@ namespace CTRPluginFramework {
 		}
 
 		if(Controller::IsKeysPressed(Key::ZR + Key::DPadDown)) {
-			OSD::Notify(Utils::Format("UnkBuffer1 %08X", (u32)std::addressof(Player::GetSaveData()->UnkBuffer1) - 0x31F27020));
+			OSD::Notify(Utils::Format("Player1 %08X", (u32)std::addressof(Town::GetSaveData()->Player1) - 0x31F26F80));
 		}
 
 		ACNL_Player *player = Player::GetSaveData();

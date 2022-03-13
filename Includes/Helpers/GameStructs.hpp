@@ -1378,37 +1378,85 @@ namespace CTRPluginFramework {
         u8 Unknown[0x7F0];
     };
 
-    struct ACNL_MiniTownPlayerStruct { //size=0x20
+    struct ACNL_MiniRoomStruct { //size=0x20
         u16 Unknown[0x10]; //ctor sets each to 0xFFFF
     };
 
-    struct ACNL_SmallTownPlayerStruct { //size = 0x302
-        u8 Unknown1[0x22];
-        ACNL_MiniTownPlayerStruct Unk1; //ctor inits these seperately then all at once, idk if it's two arrays or one
-        ACNL_MiniTownPlayerStruct Unk2;
-        Item UnkItems1[0x64];
-        Item UnkItems2[0x40];
-        Item UnkItem1;
-        Item UnkItem2;
+    struct PlayerHouseExterior { //size = 0x9
+        u8 HouseSize;
+        u8 HouseStyle;
+        u8 HouseDoorShape;
+        u8 HouseBrick;
+        u8 HouseRoof;
+        u8 HouseDoor;
+        u8 HouseFence;
+        u8 HousePavement;
+        u8 HouseMailBox;
+    };
+
+    struct RoomFlags {
+        u8 BrightLight; //0x5D918 //or white light?
+        u8 Unknown2; //0x5D919
+        u8 RegularLight; //0x5D91A //or yellow light?
+        u8 Unknown4; //0x5D91B
+        u8 Unknown5; //0x5D91C
+        u8 Unknown6; //0x5D91D
+        u8 Unknown7; //0x5D91E
+        u8 Unknown8; //0x5D91F
+        u8 Unknown9; //0x5D920
+        u8 Unknown10; //0x5D921
+        u8 Unknown11; //0x5D922
+        u8 Unknown12; //0x5D923
+        u8 Unknown13; //0x5D924
+        u8 Unknown14; //0x5D925
+        u8 LightSourceAmount; //0x5D926 //How many lights are active
+
+
+        u8 Unknown16; //0x5D927
+        u8 Unknown17; //0x5D928
+        u8 Unknown18; //0x5D929
+        u8 Unknown19; //0x5D92A
+        u8 Unknown20; //0x5D92B
+        u8 Unknown21; //0x5D92C
+        u8 Unknown22; //0x5D92D
+
+        u8 LightSwitchState; //0x5D92E //0 = Light OFF; 1 = Light ON
+        u8 Unknown24; //0x5D92F
+        u8 Unknown25; //0x5D930
+        u8 Unknown26; //0x5D931
+        u8 Unknown27; //0x5D932
+        u8 Unknown28; //0x5D933
+        u8 Unknown29; //0x5D934
+        u8 Unknown30; //0x5D935
+        u8 RoomSize; //0x5D936
+        u8 Unknown32; //0x5D937
+        u8 Unknown33; //0x5D938
+        u8 Unknown34; //0x5D939
+    };
+
+    struct ACNL_Room { //size = 0x302
+        RoomFlags flags; //0x5D918
+        ACNL_MiniRoomStruct Unk1; //ctor inits these seperately then all at once, idk if it's two arrays or one
+        ACNL_MiniRoomStruct Unk2;
+        Item RoomItems1[0x64];
+        Item RoomItems2[0x40];
+        Item Wallpaper;
+        Item Flooring;
         Item UnkItem3;
         Item UnkItem4;
     };
 
-    struct ACNL_SomeTownPlayerStruct {
-        u32 ZeroPad1;
-        u32 Unknown1;
-        u32 Unknown2;
-        u8  Unknown3;
-        u32 Unknown4;
-        u32 Unknown5;
-        u8  Unknown6;
-        u16 Padding1;
-        ACNL_SmallTownPlayerStruct Unk1;
-        ACNL_SmallTownPlayerStruct Unk2;
-        ACNL_SmallTownPlayerStruct Unk3;
-        ACNL_SmallTownPlayerStruct Unk4;
-        ACNL_SmallTownPlayerStruct Unk5;
-        ACNL_SmallTownPlayerStruct Unk6;
+    struct ACNL_PlayerHouse {
+        u32 ZeroPad1; //0x5D900
+        PlayerHouseExterior exterior1; //0x5D904
+        PlayerHouseExterior exterior2; //maybe if you are upgrading? //0x5D90D
+        u16 Padding1; //0x5D916
+        ACNL_Room MiddleRoom; //0x5D918
+        ACNL_Room SecondRoom;
+        ACNL_Room BasementRoom;
+        ACNL_Room RightRoom;
+        ACNL_Room LeftRoom;
+        ACNL_Room BackRoom;
         u16 Unk7;
         u8 Unk8;
         u8 Padding2;
@@ -1417,7 +1465,7 @@ namespace CTRPluginFramework {
     struct ACNL_MuseumExhibit {//size = 0xB98
         u8 Unk1; //Flag of some sort, ctor sets to 0xFF
         u8 Padding;
-        ACNL_SmallTownPlayerStruct unkSmallTownPlayerStruct1;
+        ACNL_Room museumRoom;
         ACNL_Pattern UnkPattern1;
         u16/*wchar*/ OwnerName[0x11];
         u16 Padding2;
@@ -1600,10 +1648,7 @@ namespace CTRPluginFramework {
         u8 Unused2[40]; //Town data ctor never initializes this, so likely not used. Where the code would branch to do so, there is a NOP (both in WA and Orig).
         u8 MapGrass[(16*16)*(8*6)];
         u8 Unused3[0x1000]; //Town data actually includes it with MapGrass (0x8000 in total), despite this portion not being used
-        ACNL_SomeTownPlayerStruct Player1;
-        ACNL_SomeTownPlayerStruct Player2;
-        ACNL_SomeTownPlayerStruct Player3;
-        ACNL_SomeTownPlayerStruct Player4;
+        ACNL_PlayerHouse PlayerHouse[4]; //0x5D900
         s64 CurrentTime; //0x621A0
         s64 Unknown2;
         s64 Playtime; //0x621B0

@@ -654,7 +654,7 @@ namespace CTRPluginFramework {
 		
 		u8 RoomSize = 0;
 		
-		u32 InteriorSizeBase = Save::GetInstance()->Address(0x5D936 + (0x1228 * pChoice) + (0x302 * rChoice));
+		u32 InteriorSizeBase = Save::GetInstance()->Address(0x5D918 + (0x1228 * pChoice) + (0x302 * rChoice));
 	
 		if(Wrap::KB<u8>(RoomInfo[rChoice], true, 2, RoomSize, *(u8 *)(InteriorSizeBase))) {
 			if(!IDList::ValidID(RoomSize, ValidRoomValues[rChoice][0], ValidRoomValues[rChoice][1])) {
@@ -662,7 +662,7 @@ namespace CTRPluginFramework {
 				MessageBox(Language->Get("INVALID_ID")).SetClear(ClearScreen::Top)();
 				return;
 			}
-			Process::Write8(InteriorSizeBase, RoomSize);
+			Process::Write8(InteriorSizeBase + 0x1E, RoomSize);
 		}
 	}
 
