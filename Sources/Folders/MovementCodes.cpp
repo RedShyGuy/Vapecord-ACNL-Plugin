@@ -17,22 +17,11 @@ namespace CTRPluginFramework {
 //Players can't push you
 	void noPush(MenuEntry *entry) { 
 		static const Address push(0x652288, 0x6517B0, 0x6512C0, 0x6512C0, 0x650D80, 0x650D80, 0x650928, 0x650928);
-		
-		std::vector<std::string> cmnOpt =  { "" };
 
-		bool IsON = *(u32 *)push.addr == 0xEA00002D;
-
-		cmnOpt[0] = IsON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
-		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
-
-		Sleep(Milliseconds(100));
-		s8 op = optKb.Open();
-		if(op < 0)
-			return;
-			
-		Process::Patch(push.addr, IsON ? 0x2A00002D : 0xEA00002D);
-		noPush(entry);
+		if(entry->WasJustActivated()) 
+			Process::Patch(push.addr, 0xEA00002D);
+		else if(!entry->IsActivated())
+			Process::Patch(push.addr, 0x2A00002D);
 	}
 //Definition for Coordinate Mod Speed
 	float cspeed = 5.0;

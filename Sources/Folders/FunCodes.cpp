@@ -97,21 +97,11 @@ namespace CTRPluginFramework {
 //T-Pose
 	void tposeentry(MenuEntry *entry) { 
 		static const Address tpose(0x73C290, 0x73B5D8, 0x73B298, 0x73B270, 0x73AA30, 0x73AA08, 0x73A5D8, 0x72EBD8);
-		std::vector<std::string> cmnOpt =  { "" };
 
-		bool IsON = *(u32 *)tpose.addr == 0xE1A00000;
-
-		cmnOpt[0] = IsON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
-		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
-
-		Sleep(Milliseconds(100));
-		s8 op = optKb.Open();
-		if(op < 0)
-			return;
-			
-		Process::Patch(tpose.addr, IsON ? 0x0A000011 : 0xE1A00000);
-		tposeentry(entry);
+		if(entry->WasJustActivated()) 
+			Process::Patch(tpose.addr, 0xE1A00000);
+		else if(!entry->IsActivated())
+			Process::Patch(tpose.addr, 0x0A000011);
 	}
 //OSD For Take TPC Picture
 	bool tpcoverlay(const Screen &screen) {

@@ -4,6 +4,7 @@
 #include "Helpers/Inventory.hpp"
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/Save.hpp"
+#include "Helpers/Converters.hpp"
 #include "RegionCodes.hpp"
 
 bool IsIndoorsBool = false;
@@ -253,35 +254,42 @@ get room
 	}
 
 	bool Player::SaveExists(ACNL_Player *player) {
-		return (player && player->PlayerInfo.PID != 0 && player->PlayerInfo.TownData.TID != 0);
+		return (player && player->PlayerInfo.PlayerData.PID != 0 && player->PlayerInfo.TownData.TID != 0);
 	}
 
-	void PlayerName::UpdateReference(u8 pIndex, const std::string& pName, u8 pGender) {
-		u32 pAddress = Player::GetSaveOffset(pIndex >= 4 ? GameHelper::GetOnlinePlayerIndex() : pIndex);
+	void Player::EditGender(u8 pIndex, u8 pGender) {
+		ACNL_Player *player = Player::GetSaveData(pIndex);
+		if(!player)
+			return;
 
-	//search all player ID references
-		u16 pData[11], pCheck[11];
-		Process::CopyMemory((void *)pData, (void *)(pAddress + 0x55A6), 22);
+		u32 GardenPlus = Save::GetInstance()->Address();
 
-		for(u32 addr = Save::GetInstance()->Address(); addr < Save::GetInstance()->Address(SAVE_GARDENPLUS); addr += 2) {
-			Process::CopyMemory((void *)pCheck, (void *)addr, 22);
-			if(!std::equal(std::begin(pData), std::end(pData), std::begin(pCheck)))
-				continue;
+		PlayerID oldPlayerID = player->PlayerInfo.PlayerData;
+		player->PlayerInfo.PlayerData.Gender = pGender;
+		PlayerID newPlayerID = player->PlayerInfo.PlayerData;
 
-			if(pGender != -1)
-				Process::Write8(addr + 20, pGender);
-
-			if(!pName.empty()) 
-				Process::WriteString(addr + 2, pName, 16, StringFormat::Utf16);
-
-			addr += 22;
+		for(u32 addr = GardenPlus; addr < (GardenPlus + SAVE_GARDENPLUS); addr++) {
+			if(*(PlayerID *)addr == oldPlayerID) {
+				*(PlayerID *)addr = newPlayerID;
+			}
 		}
 	}
-	
-/*
-Set Player Name
-*/
-	void PlayerName::Set(const std::string& name) {
-		PlayerName::UpdateReference(4, name, -1);
+
+	void Player::EditName(u8 pIndex, const std::string& name) {
+		ACNL_Player *player = Player::GetSaveData(pIndex);
+		if(!player)
+			return;
+
+		u32 GardenPlus = Save::GetInstance()->Address();
+
+		PlayerID oldPlayerID = player->PlayerInfo.PlayerData;
+		Convert::STR_TO_U16(name, player->PlayerInfo.PlayerData.PlayerName);
+		PlayerID newPlayerID = player->PlayerInfo.PlayerData;
+
+		for(u32 addr = GardenPlus; addr < (GardenPlus + SAVE_GARDENPLUS); addr++) {
+			if(*(PlayerID *)addr == oldPlayerID) {
+				*(PlayerID *)addr = newPlayerID;
+			}
+		}
 	}
 }

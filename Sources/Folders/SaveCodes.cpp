@@ -507,7 +507,8 @@ namespace CTRPluginFramework {
 
 	void HouseChanger(MenuEntry *entry) {
 		ACNL_Player *player = Player::GetSaveData();
-		if(!player) {
+		ACNL_TownData *town = Town::GetSaveData();
+		if(!player || !town) {
 			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
@@ -574,24 +575,13 @@ namespace CTRPluginFramework {
 		};
 		
 		static constexpr u8 ValidHouseValues[9][2] = {
-			{ 0, 7 },
-			{ 0, 3 },
-			{ 0, 1 },
-			{ 0, 0x1F },
-			{ 0, 0x22 },
-			{ 0, 0x15 },
-			{ 0, 0x16 },
-			{ 0, 8 },
-			{ 0, 0x15 },
+			{ 0x00, 0x07 }, { 0x00, 0x03 }, { 0x00, 0x01 },
+			{ 0x00, 0x1F }, { 0x00, 0x22 }, { 0x00, 0x15 },
+			{ 0x00, 0x16 }, { 0x00, 0x08 }, { 0x00, 0x15 },
 		};
 		
 		static constexpr u8 ValidRoomValues[6][2] = {
-			{ 0, 4 },
-			{ 1, 4 },
-			{ 1, 4 },
-			{ 1, 4 },
-			{ 1, 4 },
-			{ 1, 4 },
+			{ 0, 4 }, { 1, 4 }, { 1, 4 }, { 1, 4 }, { 1, 4 }, { 1, 4 },
 		};
 		
 		for(int i = 0; i <= 3; ++i) {
@@ -599,7 +589,7 @@ namespace CTRPluginFramework {
 			if(player) {
 				if(Player::SaveExists(player)) {
 					std::string str = "";
-					Convert::U16_TO_STR(player->PlayerInfo.PlayerName, str);
+					Convert::U16_TO_STR(player->PlayerInfo.PlayerData.PlayerName, str);
 					pV[i] = pColor[i] << str;
 				}
 			}
@@ -629,17 +619,51 @@ namespace CTRPluginFramework {
 				return;
 			
 			u8 Value = 0;
-		//Gets Save Offset for house base
-			u32 ExteriorBase = Save::GetInstance()->Address(0x5D904 + (0x1228 * pChoice));
-
-			if(Wrap::KB<u8>(HouseInfo[eChoice], true, 2, Value, *(u8 *)(ExteriorBase + eChoice))) {
+			if(Wrap::KB<u8>(HouseInfo[eChoice], true, 2, Value, Value)) {
 				if(!IDList::ValidID(Value, ValidHouseValues[eChoice][0], ValidHouseValues[eChoice][1])) {
 					Sleep(Milliseconds(100));
 					MessageBox(Language->Get("INVALID_ID")).SetClear(ClearScreen::Top)();
 					return;
 				}
-				Process::Write8(ExteriorBase + eChoice, Value);
-				Process::Write8(ExteriorBase + (9 + eChoice), Value);
+
+				switch(eChoice) {
+					case 0:
+						town->PlayerHouse[pChoice].exterior1.HouseSize = Value;
+						town->PlayerHouse[pChoice].exterior2.HouseSize = Value;
+					break;
+					case 1:
+						town->PlayerHouse[pChoice].exterior1.HouseStyle = Value;
+						town->PlayerHouse[pChoice].exterior2.HouseStyle = Value;
+					break;
+					case 2:
+						town->PlayerHouse[pChoice].exterior1.HouseDoorShape = Value;
+						town->PlayerHouse[pChoice].exterior2.HouseDoorShape = Value;
+					break;
+					case 3:
+						town->PlayerHouse[pChoice].exterior1.HouseBrick = Value;
+						town->PlayerHouse[pChoice].exterior2.HouseBrick = Value;
+					break;
+					case 4:
+						town->PlayerHouse[pChoice].exterior1.HouseRoof = Value;
+						town->PlayerHouse[pChoice].exterior2.HouseRoof = Value;
+					break;
+					case 5:
+						town->PlayerHouse[pChoice].exterior1.HouseDoor = Value;
+						town->PlayerHouse[pChoice].exterior2.HouseDoor = Value;
+					break;
+					case 6:
+						town->PlayerHouse[pChoice].exterior1.HouseFence = Value;
+						town->PlayerHouse[pChoice].exterior2.HouseFence = Value;
+					break;
+					case 7:
+						town->PlayerHouse[pChoice].exterior1.HousePavement = Value;
+						town->PlayerHouse[pChoice].exterior2.HousePavement = Value;
+					break;
+					case 8:
+						town->PlayerHouse[pChoice].exterior1.HouseMailBox = Value;
+						town->PlayerHouse[pChoice].exterior2.HouseMailBox = Value;
+					break;
+				}
 			}
 			return;
 		}
@@ -653,16 +677,33 @@ namespace CTRPluginFramework {
 			return;
 		
 		u8 RoomSize = 0;
-		
-		u32 InteriorSizeBase = Save::GetInstance()->Address(0x5D918 + (0x1228 * pChoice) + (0x302 * rChoice));
-	
-		if(Wrap::KB<u8>(RoomInfo[rChoice], true, 2, RoomSize, *(u8 *)(InteriorSizeBase))) {
+		if(Wrap::KB<u8>(RoomInfo[rChoice], true, 2, RoomSize, RoomSize)) {
 			if(!IDList::ValidID(RoomSize, ValidRoomValues[rChoice][0], ValidRoomValues[rChoice][1])) {
 				Sleep(Milliseconds(100));
 				MessageBox(Language->Get("INVALID_ID")).SetClear(ClearScreen::Top)();
 				return;
 			}
-			Process::Write8(InteriorSizeBase + 0x1E, RoomSize);
+
+			switch(rChoice) {
+				case 0:
+					town->PlayerHouse[pChoice].MiddleRoom.flags.RoomSize = RoomSize;
+				break;
+				case 1:
+					town->PlayerHouse[pChoice].SecondRoom.flags.RoomSize = RoomSize;
+				break;
+				case 2:
+					town->PlayerHouse[pChoice].BasementRoom.flags.RoomSize = RoomSize;
+				break;
+				case 3:
+					town->PlayerHouse[pChoice].RightRoom.flags.RoomSize = RoomSize;
+				break;
+				case 4:
+					town->PlayerHouse[pChoice].LeftRoom.flags.RoomSize = RoomSize;
+				break;
+				case 5:
+					town->PlayerHouse[pChoice].BackRoom.flags.RoomSize = RoomSize;
+				break;
+			}
 		}
 	}
 
@@ -907,7 +948,7 @@ namespace CTRPluginFramework {
 			if(player) {
 				if(Player::SaveExists(player)) {
 					std::string str = "";
-					Convert::U16_TO_STR(player->PlayerInfo.PlayerName, str);
+					Convert::U16_TO_STR(player->PlayerInfo.PlayerData.PlayerName, str);
 					pV[i] = pColor[i] << str;
 				}
 			}

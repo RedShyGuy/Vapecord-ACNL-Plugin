@@ -94,34 +94,18 @@ namespace CTRPluginFramework {
 		}
 		return 1;
 	}
-
-	static bool PlayerInfoON = false;
 //enable debug OSD
 	void debug(MenuEntry *entry) {
-		std::vector<std::string> cmnOpt =  { "" };
-
-		cmnOpt[0] = PlayerInfoON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
-		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
-		
-		Sleep(Milliseconds(100));
-		s8 op = optKb.Open();	
-		if(op < 0)
-			return;
-
 		PluginMenu *menu = PluginMenu::GetRunningInstance();
 		
-		if(!PlayerInfoON) {
+		if(entry->WasJustActivated()) {
 			*menu += GetPlayerInfoData;
 			OSD::Run(debugOSD); 
-			PlayerInfoON = true;
 		}
-		else {
+		else if(!entry->IsActivated()) {
 			*menu -= GetPlayerInfoData;
 			OSD::Stop(debugOSD); 
-			PlayerInfoON = false;
 		}
-		debug(entry);
 	}
 
 //player loader | for now disabled

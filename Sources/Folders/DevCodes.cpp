@@ -203,7 +203,7 @@ namespace CTRPluginFramework {
 					if(player) {
 						if(Player::SaveExists(player)) {
 							std::string str = "";
-							Convert::U16_TO_STR(player->PlayerInfo.PlayerName, str);
+							Convert::U16_TO_STR(player->PlayerInfo.PlayerData.PlayerName, str);
 							pV[i] = pColor[i] << str;
 						}
 					}
@@ -1537,7 +1537,7 @@ namespace CTRPluginFramework {
 		}
 
 		if(Controller::IsKeysPressed(Key::ZR + Key::DPadDown)) {
-			OSD::Notify(Utils::Format("Player1 %08X", (u32)std::addressof(Town::GetSaveData()->Player1) - 0x31F26F80));
+			OSD::Notify(Utils::Format("UnknownPattern %08X", (u32)std::addressof(Town::GetSaveData()->UnknownPattern) - 0x31F26F80));
 		}
 
 		ACNL_Player *player = Player::GetSaveData();

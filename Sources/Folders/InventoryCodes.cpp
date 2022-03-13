@@ -152,30 +152,44 @@ namespace CTRPluginFramework {
 		}
 	}
 
-	static bool catact = true;
-//OSD for the Catalog To Pockets
-	bool catalogosd(const Screen &screen) {
-		if(screen.IsTop) {			
-			screen.Draw("1. Press L + DPadRight to open catalog", 0, 0);
-			screen.Draw("2. Search for wanted item", 0, 10);
-			screen.Draw("3. Press L + DPadRight to get item", 0, 20);
-			screen.Draw("(To remove this note press L + Y)", 0, 30);		
+	void CatalogGetItem(u32 invData) {
+		Item CurrentItem = *(Item *)(invData + 0x3B9C - 0x28);
+
+		if(GameHelper::SetItem(&CurrentItem)) {
+			std::string itemName = "";
+			if(IDList::GetSeedName(CurrentItem, itemName))
+				OSD::Notify(Utils::Format("Spawned Item: %s (%04X)", itemName.c_str(), CurrentItem.ID));
+			else
+				OSD::Notify(Utils::Format("Spawned Item: %04X", CurrentItem.ID));
 		}
-		return 1;
+		else
+			OSD::Notify("Inventory Full!");
+
+		static Address argData(0x8499E4, 0, 0, 0, 0, 0, 0, 0);
+
+		const HookContext &curr = HookContext::GetCurrent();
+		static Address restoreButton(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+		restoreButton.Call<void>(invData, *(u32 *)argData.addr, *(u32 *)(argData.addr + 4));
 	}
-	
-	Item GetCurrentCatalogItem() {
-		if(GameHelper::BaseInvPointer() == 0) 
-			return {0x7FFE, 0};
-		
-		return *(Item *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x3B9C);
-	}
+
 	static bool isCatalogOpen = false;
 //Catalog To Pockets
 	void catalog(MenuEntry *entry) {
-		if(entry->WasJustActivated()) 
-			OSD::Run(catalogosd);
-		
+		static Hook hook;
+		static Address AllItemsBuyable(0x70E494, 0, 0, 0, 0, 0, 0, 0);
+		static Address NoWindow(0x21C748, 0, 0, 0, 0, 0, 0, 0);
+		static Address cHook(0x21B4B0, 0, 0, 0, 0, 0, 0, 0);
+
+		if(entry->WasJustActivated()) {
+			hook.Initialize(cHook.addr, (u32)CatalogGetItem);
+			hook.SetFlags(USE_LR_TO_RETURN);
+			hook.Enable();
+
+			Process::Patch(NoWindow.addr, 0xEB000000);
+			Process::Patch(AllItemsBuyable.addr, 0xE3A00000);
+			Process::Patch(AllItemsBuyable.addr + 4, 0xEA00000B);
+		}
+
 		if(entry->Hotkeys[0].IsPressed()) {
 			if(!PlayerClass::GetInstance()->IsLoaded()) {
 				OSD::Notify("Player needs to be loaded!");
@@ -187,21 +201,6 @@ namespace CTRPluginFramework {
 				GameHelper::Catalog();
 				return;
 			}	
-		//if catalog is opened get item
-			if(Inventory::GetCurrent() == 0x7C) {
-				Item CurrentItem = GetCurrentCatalogItem();
-				if(CurrentItem.ID != 0x7FFE) {
-					if(GameHelper::SetItem(&CurrentItem)) {
-						std::string itemName = "";
-						if(IDList::GetSeedName(CurrentItem, itemName))
-							OSD::Notify(Utils::Format("Spawned Item: %s (%04X)", itemName.c_str(), CurrentItem.ID));
-						else
-							OSD::Notify(Utils::Format("Spawned Item: %04X", CurrentItem.ID));
-					}
-					else
-						OSD::Notify("Inventory Full!");
-				}
-			}
 		}
 		
 		if(Inventory::GetCurrent() == 0x7C && !isCatalogOpen) 
@@ -212,20 +211,13 @@ namespace CTRPluginFramework {
 			isCatalogOpen = false;
 		}
 		
-		if(entry->Hotkeys[1].IsPressed()) {
-			if(catact) {
-				OSD::Stop(catalogosd);
-				catact = false;
-				return;
-			}
-
-			OSD::Run(catalogosd); 
-			catact = true;
-		}
-		
 		if(!entry->IsActivated()) {
+			hook.Disable();
+			Process::Patch(NoWindow.addr, 0xE3A00001);
+			Process::Patch(AllItemsBuyable.addr, 0x03A00001);
+			Process::Patch(AllItemsBuyable.addr + 4, 0x0A00000B);
+
 			isCatalogOpen = false;
-			OSD::Stop(catalogosd);
 		}
 	}
 //Chat Text2Item

@@ -29,7 +29,7 @@ namespace CTRPluginFramework {
 		if(keyboard.Open(input) < 0) 
 			return;
 
-		PlayerName::Set(input);
+		Player::EditName(4, input);
 	}
 
 //Player Appearance Changer	
@@ -115,11 +115,11 @@ namespace CTRPluginFramework {
 			optKb.Populate(genderopt);
 
 			Sleep(Milliseconds(100));
-			s8 res = optKb.Open();
-			if(res < 0)
+			s8 gender = optKb.Open();
+			if(gender < 0)
 				return;
 
-			PlayerName::UpdateReference(4, "", res);
+			Player::EditGender(4, gender);
 		}
 				
 		if(choice == 5) {

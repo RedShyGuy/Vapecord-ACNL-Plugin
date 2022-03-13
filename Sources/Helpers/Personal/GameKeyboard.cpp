@@ -108,6 +108,8 @@ namespace CTRPluginFramework {
 		for(char& c : str)
 			c = std::tolower(c);
 
+		u32 rawItem;
+
 		const u8* hex = (const u8*)str.c_str();
 		while(*hex) {
 			u8 byte = (u8)*hex++;
@@ -119,8 +121,12 @@ namespace CTRPluginFramework {
 			else 
 				return false; //Incorrect char
 
-			*(u32 *)&ItemID = (*(u32 *)&ItemID << 4) | (byte & 0xF);
+			rawItem = (rawItem << 4) | (byte & 0xF);
 		}
+
+		ItemID.ID = rawItem;
+		ItemID.Flags = (rawItem >> 16);
+
 		return true;
 	}
 

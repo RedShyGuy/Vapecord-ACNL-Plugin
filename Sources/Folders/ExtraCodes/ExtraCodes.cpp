@@ -25,85 +25,52 @@ namespace CTRPluginFramework {
 
 		const u32 ShopOpen[9] = { shopretail.addr, shopnookling.addr, shopgarden.addr, shopables.addr, shopshampoodle.addr, shopkicks.addr, shopnooks.addr, shopkatrina.addr, shopredd.addr };
 
-        std::vector<std::string> cmnOpt =  { "" };
-
-		bool IsON = *(u32 *)ShopOpen[0] == 0xE3A00001;
-
-		cmnOpt[0] = IsON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
-
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
-
-		Sleep(Milliseconds(100));
-		s8 op = optKb.Open();
-		if(op < 0)
-			return;
-			
-		for(int i = 0; i < 9; ++i)
-			Process::Patch(ShopOpen[i], *(u32 *)ShopOpen[i] == 0xE3A00001 ? 0xE3A00000 : 0xE3A00001);
-			
-		ShopsAlwaysOpen(entry);
+		if(entry->WasJustActivated()) {
+			for(int i = 0; i < 9; ++i)
+				Process::Patch(ShopOpen[i], 0xE3A00001);
+		}
+		else if(!entry->IsActivated()) {
+			for(int i = 0; i < 9; ++i)
+				Process::Patch(ShopOpen[i], 0xE3A00000);
+		}
     }
 
 //Disable Save Menus
 	void nonesave(MenuEntry *entry) {
-		std::vector<std::string> cmnOpt =  { "" };
-
-		bool IsON = *(u32 *)Code::nosave.addr == 0xE1A00000;
-
-		cmnOpt[0] = IsON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
-		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
-
-		Sleep(Milliseconds(100));
-		s8 op = optKb.Open();
-		if(op < 0)
-			return;
-
-		Process::Patch(Code::nosave.addr, IsON ? 0xE8900006 : 0xE1A00000);
-		save = !save;
-		nonesave(entry);
+		if(entry->WasJustActivated()) {
+			Process::Patch(Code::nosave.addr, 0xE1A00000);
+			save = true;
+		}
+		else if(!entry->IsActivated()) {
+			Process::Patch(Code::nosave.addr, 0xE8900006);
+			save = false;
+		}
 	}
 
 //Disable Item Locks /*Credits to Nico*/
 	void bypass(MenuEntry *entry) {
-		std::vector<std::string> cmnOpt =  { "" };	
-
-		cmnOpt[0] = bypassing ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
-
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
-
-		Sleep(Milliseconds(100));
-		s8 op = optKb.Open();
-		
-		if(op < 0)
-			return;
-		
-		Dropper::DropItemLock(!bypassing);
-		bypassing = !bypassing;
-		bypass(entry);
+		if(entry->WasJustActivated()) {
+			Dropper::DropItemLock(true);
+			bypassing = true;
+		}
+		else if(!entry->IsActivated()) {
+			Dropper::DropItemLock(false);
+			bypassing = false;
+		}
 	}
 //Can't Fall In Holes Or Pitfalls /*Credits to Nico*/
 	void noTrap(MenuEntry *entry) {
 		static const Address notraps1(0x65A668, 0x659B90, 0x6596A0, 0x6596A0, 0x659160, 0x659160, 0x658D08, 0x658D08);
 		static const Address notraps2(0x6789E4, 0x677F0C, 0x677A1C, 0x677A1C, 0x6774DC, 0x6774DC, 0x677084, 0x677084);
 		
-		std::vector<std::string> cmnOpt =  { "" };
-
-		bool IsON = *(u32 *)notraps1.addr == 0xEA000014;
-
-		cmnOpt[0] = IsON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
-		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
-
-		Sleep(Milliseconds(100));
-		s8 op = optKb.Open();
-		
-		if(op < 0)
-			return;
-			
-		Process::Patch(notraps1.addr, *(u32 *)notraps1.addr == 0xEA000014 ? 0x1A000014 : 0xEA000014);
-		Process::Patch(notraps2.addr, *(u32 *)notraps2.addr == 0xEA00002D ? 0x1A00002D : 0xEA00002D);
-		noTrap(entry);
+		if(entry->WasJustActivated()) {
+			Process::Patch(notraps1.addr, 0xEA000014);
+			Process::Patch(notraps2.addr, 0xEA00002D);
+		}
+		else if(!entry->IsActivated()) {
+			Process::Patch(notraps1.addr, 0x1A000014);
+			Process::Patch(notraps2.addr, 0x1A00002D);
+		}
 	}
 
 	void SetSpotState(MenuEntry *entry) {

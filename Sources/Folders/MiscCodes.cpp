@@ -116,21 +116,10 @@ namespace CTRPluginFramework {
     }
 //Unbreakable Flowers	
 	void unbreakableflower(MenuEntry *entry) { 
-		std::vector<std::string> cmnOpt =  { "" };
-		
-		bool IsON = *(u32 *)Code::UnbreakableFlower.addr == 0xE3A0801D;
-
-		cmnOpt[0] = IsON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
-		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
-
-		Sleep(Milliseconds(100));
-		s8 op = optKb.Open();	
-		if(op < 0)
-			return;
-			
-		Process::Patch(Code::UnbreakableFlower.addr, IsON ? 0x0A00004B : 0xE3A0801D);
-		unbreakableflower(entry);
+		if(entry->WasJustActivated())
+			Process::Patch(Code::UnbreakableFlower.addr, 0xE3A0801D);
+		else if(!entry->IsActivated())
+			Process::Patch(Code::UnbreakableFlower.addr, 0x0A00004B);
 	}
 //Weather Mod	
 	void Weathermod(MenuEntry *entry) { 
@@ -259,9 +248,13 @@ namespace CTRPluginFramework {
 				return;
 			}
 
-			for(const MenuEntry* entrys : CogEntrys.entry) {
+			/*for(const MenuEntry* entrys : CogEntrys.entry) {
 				CogNames.push_back(entrys->Name());
 				cogNotes.push_back(entrys->Note());
+			}*/
+			for(int i = 0; i < CogEntrys.entry.size(); ++i) {
+				CogNames.push_back(CogEntrys.entry[i]->Name() + Utils::Format("%02X", CogEntrys.ID[i]));
+				cogNotes.push_back(CogEntrys.entry[i]->Note());
 			}
 
 			Sleep(Milliseconds(100));

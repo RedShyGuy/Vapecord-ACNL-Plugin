@@ -9,22 +9,11 @@ namespace CTRPluginFramework {
 //Infinite Fruit Tree
 	void fruitStays(MenuEntry *entry) {
 		static const Address fruitstay(0x5972CC, 0x5967E4, 0x596314, 0x596314, 0x595C04, 0x595C04, 0x5958D8, 0x5958D8);
-		
-		std::vector<std::string> cmnOpt =  { "" };
 
-		bool IsON = *(u32 *)fruitstay.addr == 0xEA000000;
-
-		cmnOpt[0] = (IsON ? Color(pGreen) << Language->Get("VECTOR_ENABLED") : Color(pRed) << Language->Get("VECTOR_DISABLED"));
-		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
-		
-		Sleep(Milliseconds(100));
-		s8 op = optKb.Open();
-		if(op < 0)
-			return;
-			
-		Process::Patch(fruitstay.addr, *(u32 *)fruitstay.addr == 0xEA000000 ? 0xE1A01006 : 0xEA000000);
-		fruitStays(entry);
+		if(entry->WasJustActivated()) 
+			Process::Patch(fruitstay.addr, 0xEA000000);
+		else if(!entry->IsActivated())
+			Process::Patch(fruitstay.addr, 0xE1A01006);
 	}
 //Axe Tree Shake	
 	void shakechop(MenuEntry *entry) {
@@ -32,25 +21,19 @@ namespace CTRPluginFramework {
 		static const Address shake2(0x5971DC, 0x5966F4, 0x596224, 0x596224, 0x595B14, 0x595B14, 0x5957E8, 0x5957E8);
 		static const Address shake3(0x5971E4, 0x5966FC, 0x59622C, 0x59622C, 0x595B1C, 0x595B1C, 0x5957F0, 0x5957F0);
 		static const Address shake4(0x5971EC, 0x596704, 0x596234, 0x596234, 0x595B24, 0x595B24, 0x5957F8, 0x5957F8);
-		
-		std::vector<std::string> cmnOpt =  { "" };
-		
-		bool IsON = *(u32 *)shake1.addr == 0xE1A00000;
-
-		cmnOpt[0] = (IsON ? Color(pGreen) << Language->Get("VECTOR_ENABLED") : Color(pRed) << Language->Get("VECTOR_DISABLED"));
-		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
-
-		Sleep(Milliseconds(100));
-		s8 op = optKb.Open();
-		if(op < 0)
-			return;
 			
-		Process::Patch(shake1.addr, *(u32 *)shake1.addr == 0xE1A00000 ? 0x0A000008 : 0xE1A00000);
-		Process::Patch(shake2.addr, *(u32 *)shake2.addr == 0xE1A00000 ? 0x0A00005B : 0xE1A00000);
-		Process::Patch(shake3.addr, *(u32 *)shake3.addr == 0x1A00001B ? 0x0A00001B : 0x1A00001B);
-		Process::Patch(shake4.addr, *(u32 *)shake4.addr == 0xEA000080 ? 0x0A000080 : 0xEA000080);	
-		shakechop(entry);
+		if(entry->WasJustActivated()) {
+			Process::Patch(shake1.addr, 0xE1A00000);
+			Process::Patch(shake2.addr, 0xE1A00000);
+			Process::Patch(shake3.addr, 0x1A00001B);
+			Process::Patch(shake4.addr, 0xEA000080);	
+		}
+		else if(!entry->IsActivated()) {
+			Process::Patch(shake1.addr, 0x0A000008);
+			Process::Patch(shake2.addr, 0x0A00005B);
+			Process::Patch(shake3.addr, 0x0A00001B);
+			Process::Patch(shake4.addr, 0x0A000080);	
+		}
     }
 //Fruit Tree Item Modifier	
 	void fruititemmod(MenuEntry *entry) {

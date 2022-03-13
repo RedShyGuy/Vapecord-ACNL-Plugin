@@ -38,7 +38,7 @@ namespace CTRPluginFramework {
 		SAVEC->Append(new MenuEntry(FolderColors[0] << "Caravan Changer", nullptr, caravanchange, "note")),
 		SAVEC->Append(new MenuEntry(FolderColors[0] << "Camping Villager Changer", nullptr, SetCampingVillager, "note")),
 		SAVEC->Append(new MenuEntry(FolderColors[0] << "Shop Unlocker", nullptr, shopunlocks, "note")),
-		SAVEC->Append(new MenuEntry(FolderColors[0] << "House Editor", nullptr, HouseChanger, "note")),
+	//SAVEC->Append(new MenuEntry(FolderColors[0] << "House Editor", nullptr, HouseChanger, "note")),
 		SAVEC->Append(new MenuEntry(FolderColors[0] << "Unlock QR Machine", nullptr, unlockqrmachine, "note")),
 		SAVEC->Append(new MenuEntry(FolderColors[0] << "Building Modifier", nullptr, BuildingMod, "note")),
 		SAVEC->Append(new MenuEntry(FolderColors[0] << "Fill Museum", nullptr, CompleteMuseum, "note")),
@@ -50,7 +50,7 @@ namespace CTRPluginFramework {
 	/*Movement Codes Folder*/
 	/////////////////////////
 		MOVEC = new MenuFolder(FolderColors[1] << "Movement Codes");
-		MOVEC->Append(new MenuEntry(FolderColors[1] << "Other Players Can't Push You", nullptr, noPush, "note")),
+		MOVEC->Append(new MenuEntry(FolderColors[1] << "Other Players Can't Push You", noPush, "note")),
 		MOVEC->Append(EntryWithHotkey(new MenuEntry(FolderColors[1] << "Coordinate Modifier", coordinate, coordspeed, "note"), {
 			Hotkey(Key::A, "Key"), 
 			Hotkey(Key::DPadRight, "Key2"), 
@@ -135,7 +135,7 @@ namespace CTRPluginFramework {
 		PSAVEC->Append(new MenuEntry(FolderColors[3] << "Song List", nullptr, FillSongs, "note")),
 		PSAVEC->Append(new MenuEntry(FolderColors[3] << "Fill Catalog", nullptr, FillCatalog, "note")),
 		PLAYC->Append(PSAVEC);
-		PLAYC->Append(new MenuEntry(FolderColors[3] << "Player Info", nullptr, debug, "note")),
+		PLAYC->Append(new MenuEntry(FolderColors[3] << "Player Info", debug, "note")),
 	//PLAYC->Append(new MenuEntry(FolderColors[3] << "Player Loader", nullptr, pLoaderEntry, "note")),
 		PLAYC->Append(EntryWithHotkey(new MenuEntry(FolderColors[3] << "Neck Position", neckentry, "note"), { 
 			Hotkey(Key::L | Key::DPadDown, "Key") 
@@ -250,8 +250,8 @@ namespace CTRPluginFramework {
 	/*Tree Codes SubFolder*/
 	////////////////////////
 		TREEC = new MenuFolder(FolderColors[5] << "Tree Codes");
-		TREEC->Append(new MenuEntry(FolderColors[5] << "Infinite Fruit Tree", nullptr, fruitStays, "note")),
-		TREEC->Append(new MenuEntry(FolderColors[5] << "Axe Tree Shake", nullptr, shakechop, "note")),
+		TREEC->Append(new MenuEntry(FolderColors[5] << "Infinite Fruit Tree", fruitStays, "note")),
+		TREEC->Append(new MenuEntry(FolderColors[5] << "Axe Tree Shake", shakechop, "note")),
 		TREEC->Append(EntryWithHotkey(new MenuEntry(FolderColors[5] << "Fruit Tree Item Modifier", fruititemmod, "note"), { 
 			Hotkey(Key::A | Key::DPadLeft, "Key") 
 		})),
@@ -317,7 +317,7 @@ namespace CTRPluginFramework {
 	////////////////////
 		FUNC = new MenuFolder(FolderColors[9] << "Fun Codes"); 
 		FUNC->Append(new MenuEntry(FolderColors[9] << "Size Codes", nullptr, sizecodes, "note")),
-		FUNC->Append(new MenuEntry(FolderColors[9] << "T-Pose", nullptr, tposeentry, "note")),
+		FUNC->Append(new MenuEntry(FolderColors[9] << "T-Pose", tposeentry, "note")),
 		FUNC->Append(EntryWithHotkey(new MenuEntry(FolderColors[9] << "Take TPC Pic", freezeframe, "note"), { 
 			Hotkey(Key::L, "Key"), 
 			Hotkey(Key::A, "Key2") 
@@ -356,10 +356,10 @@ namespace CTRPluginFramework {
 			Hotkey(Key::R, "Key") 
 		})),
 		EXTC->Append(CHAC);
-		EXTC->Append(new MenuEntry(FolderColors[10] << "Shops Always Open", nullptr, ShopsAlwaysOpen, "note")),
-		EXTC->Append(new MenuEntry(FolderColors[10] << "Disable Save Menus", nullptr, nonesave, "note")),
-		EXTC->Append(new MenuEntry(FolderColors[10] << "Disable Item Locks", nullptr, bypass, "note")),
-		EXTC->Append(new MenuEntry(FolderColors[10] << "Can't Fall In Holes Or Pitfalls", nullptr, noTrap, "note")),
+		EXTC->Append(new MenuEntry(FolderColors[10] << "Shops Always Open", ShopsAlwaysOpen, "note")),
+		EXTC->Append(new MenuEntry(FolderColors[10] << "Disable Save Menus", nonesave, "note")),
+		EXTC->Append(new MenuEntry(FolderColors[10] << "Disable Item Locks", bypass, "note")),
+		EXTC->Append(new MenuEntry(FolderColors[10] << "Can't Fall In Holes Or Pitfalls", noTrap, "note")),
 		EXTC->Append(new MenuEntry(FolderColors[10] << "Set Spot State", nullptr, SetSpotState, "note")),
 		EXTC->Append(new MenuEntry(FolderColors[10] << "Search And Replace", nullptr, SearchReplace, "note")),
 		EXTC->Append(new MenuEntry(FolderColors[10] << "Remove All Town Items", nullptr, RemoveItemsCheat, "note")),
@@ -389,7 +389,7 @@ namespace CTRPluginFramework {
 		MISC = new MenuFolder(FolderColors[11] << "Misc Codes");		
 		MISC->Append(new MenuEntry(FolderColors[11] << "Change Tool Animation", nullptr, tooltype, "note")),
 		MISC->Append(new MenuEntry(FolderColors[11] << "Change Gametype", nullptr, mgtype, "note")),
-		MISC->Append(new MenuEntry(FolderColors[11] << "Unbreakable Flowers", nullptr, unbreakableflower, "note")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "Unbreakable Flowers", unbreakableflower, "note")),
 		MISC->Append(new MenuEntry(FolderColors[11] << "Weather Modifier", nullptr, Weathermod , "note")),
 		MISC->Append(new MenuEntry(FolderColors[11] << "Always Aurora Lights", auroralights , "note")),
 		MISC->Append(new MenuEntry(FolderColors[11] << "Disable Non-Hacker Commands", nullptr, disablecommands, "note")),

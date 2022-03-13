@@ -230,20 +230,28 @@ namespace CTRPluginFramework {
         }
     };
 
-    struct PersonalID {
+    struct PlayerID {
         u16 PID;
         u16/*wchar*/ PlayerName[9];
         u8 Gender;
         u8 ZeroPad;
+
+        bool operator==(const PlayerID& playerID) const {
+            return PID == playerID.PID && 
+                    std::equal(std::begin(PlayerName), std::end(PlayerName), std::begin(playerID.PlayerName)) && 
+                    Gender == playerID.Gender && 
+                    ZeroPad == playerID.ZeroPad;
+        }
+    };
+
+    struct PersonalID {
+        PlayerID PlayerData;
         TownID TownData;
         u8 TPC_Country;
         u8 TPC_County;
 
         bool operator==(const PersonalID& personalID) const {
-            return PID == personalID.PID && 
-                    std::equal(std::begin(PlayerName), std::end(PlayerName), std::begin(personalID.PlayerName)) && 
-                    Gender == personalID.Gender && 
-                    ZeroPad == personalID.ZeroPad && 
+            return PlayerData == personalID.PlayerData && 
                     TownData == personalID.TownData && 
                     TPC_Country == personalID.TPC_Country && 
                     TPC_County == personalID.TPC_County;
@@ -1409,9 +1417,7 @@ namespace CTRPluginFramework {
         u8 Unknown12; //0x5D923
         u8 Unknown13; //0x5D924
         u8 Unknown14; //0x5D925
-        u8 LightSourceAmount; //0x5D926 //How many lights are active
-
-
+        u8 LowLight; //0x5D926 //dim light?
         u8 Unknown16; //0x5D927
         u8 Unknown17; //0x5D928
         u8 Unknown18; //0x5D929
@@ -1419,7 +1425,6 @@ namespace CTRPluginFramework {
         u8 Unknown20; //0x5D92B
         u8 Unknown21; //0x5D92C
         u8 Unknown22; //0x5D92D
-
         u8 LightSwitchState; //0x5D92E //0 = Light OFF; 1 = Light ON
         u8 Unknown24; //0x5D92F
         u8 Unknown25; //0x5D930

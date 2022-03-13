@@ -27,14 +27,9 @@ namespace CTRPluginFramework {
 		bool 			SaveExists(ACNL_Player *player);
 
 		bool 			SetUnlockableBitField(ACNL_Player *player, u8 ID, bool state);
-	};
 
-	namespace PlayerName {
-		void 				UpdateReference(u8 pIndex, const std::string& pName, u8 pGender);
-		void				Set(const std::string& name);
-		void 				SetDesigns(const std::string& name);
-		void				SetLetters(const std::string& name);
-		void				SetVillagers(const std::string& name);
-	}
+		void 			EditGender(u8 pIndex, u8 pGender);
+		void 			EditName(u8 pIndex, const std::string& name);
+	};
 }
 #endif
