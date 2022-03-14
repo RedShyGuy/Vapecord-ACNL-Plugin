@@ -25,9 +25,6 @@ namespace CTRPluginFramework {
         for(int i = 0; i < data.entry.size(); ++i)
             data.ID.push_back(i);
 
-        OSD::Notify(Utils::Format("Data Size : %04X", data.entry.size()));
-        OSD::Notify(Utils::Format("ID Size : %04X", data.ID.size()));
-
     //reads file which holds ID data of the hidden entrys
         File f_quickm(Utils::Format(PATH_QUICKM, regionName.c_str()), File::READ);
         s8* buffer = new s8[f_quickm.GetSize()];
@@ -36,9 +33,6 @@ namespace CTRPluginFramework {
         for(int i = 0; i < f_quickm.GetSize(); ++i) {
             q_quickMenuFile.push_back(buffer[i]);
         }
-
-        OSD::Notify(Utils::Format("QM File Size : %04X", f_quickm.GetSize()));
-        OSD::Notify(Utils::Format("QM Buffer Size : %04X", q_quickMenuFile.size()));
 
     //reads through all entry ID's and hides all entrys which have their ID inside of the file 
         for(int i = 0; i <= data.entry.size(); ++i) {

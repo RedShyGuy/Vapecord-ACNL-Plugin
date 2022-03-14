@@ -165,27 +165,25 @@ namespace CTRPluginFramework {
 		else
 			OSD::Notify("Inventory Full!");
 
-		static Address argData(0x8499E4, 0, 0, 0, 0, 0, 0, 0);
+		static Address argData(0x8499E4, 0x8489DC, 0x848870, 0x848870, 0x84886C, 0x84786C, 0x84786C, 0x84786C);
 
-		const HookContext &curr = HookContext::GetCurrent();
-		static Address restoreButton(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+		static Address restoreButton(0x81825C, 0, 0, 0, 0, 0, 0, 0);
 		restoreButton.Call<void>(invData, *(u32 *)argData.addr, *(u32 *)(argData.addr + 4));
 	}
 
 	static bool isCatalogOpen = false;
 //Catalog To Pockets
 	void catalog(MenuEntry *entry) {
-		static Hook hook;
-		static Address AllItemsBuyable(0x70E494, 0, 0, 0, 0, 0, 0, 0);
-		static Address NoWindow(0x21C748, 0, 0, 0, 0, 0, 0, 0);
+		static Hook catalogHook;
+		static Address AllItemsBuyable(0x70E494, 0x70D944, 0x70D4B4, 0x70D48C, 0x70CC60, 0x70CC38, 0x70C808, 0x70C7E0);
 		static Address cHook(0x21B4B0, 0, 0, 0, 0, 0, 0, 0);
 
 		if(entry->WasJustActivated()) {
-			hook.Initialize(cHook.addr, (u32)CatalogGetItem);
-			hook.SetFlags(USE_LR_TO_RETURN);
-			hook.Enable();
+			catalogHook.Initialize(cHook.addr, (u32)CatalogGetItem);
+			catalogHook.SetFlags(USE_LR_TO_RETURN);
 
-			Process::Patch(NoWindow.addr, 0xEB000000);
+			catalogHook.Enable();
+
 			Process::Patch(AllItemsBuyable.addr, 0xE3A00000);
 			Process::Patch(AllItemsBuyable.addr + 4, 0xEA00000B);
 		}
@@ -212,8 +210,7 @@ namespace CTRPluginFramework {
 		}
 		
 		if(!entry->IsActivated()) {
-			hook.Disable();
-			Process::Patch(NoWindow.addr, 0xE3A00001);
+			catalogHook.Disable();
 			Process::Patch(AllItemsBuyable.addr, 0x03A00001);
 			Process::Patch(AllItemsBuyable.addr + 4, 0x0A00000B);
 
