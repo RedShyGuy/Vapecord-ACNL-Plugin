@@ -12,7 +12,7 @@ namespace CTRPluginFramework {
 	Keyboard optKb("");
 
 	ACNL_Date GameHelper::GetCurrentDate(void) {
-		static Address getDateData(0x2FB394, 0, 0, 0, 0, 0, 0, 0);
+		static Address getDateData(0x2FB394, 0x2FB378, 0x2FB41C, 0x2FB41C, 0x2FB3A4, 0x2FB3A4, 0x2FB3B0, 0x2FB3B0);
 		static Address convertToDate(0x30F6DC, 0, 0, 0, 0, 0, 0, 0);
 
 		ACNL_Date date;

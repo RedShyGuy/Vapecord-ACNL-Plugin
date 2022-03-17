@@ -167,7 +167,7 @@ namespace CTRPluginFramework {
 
 		static Address argData(0x8499E4, 0x8489DC, 0x848870, 0x848870, 0x84886C, 0x84786C, 0x84786C, 0x84786C);
 
-		static Address restoreButton(0x81825C, 0, 0, 0, 0, 0, 0, 0);
+		static Address restoreButton(0x81825C, 0x81715C, 0x817264, 0x81723C, 0x816A04, 0x8169DC, 0x8165A4, 0x81657C);
 		restoreButton.Call<void>(invData, *(u32 *)argData.addr, *(u32 *)(argData.addr + 4));
 	}
 
@@ -176,7 +176,7 @@ namespace CTRPluginFramework {
 	void catalog(MenuEntry *entry) {
 		static Hook catalogHook;
 		static Address AllItemsBuyable(0x70E494, 0x70D944, 0x70D4B4, 0x70D48C, 0x70CC60, 0x70CC38, 0x70C808, 0x70C7E0);
-		static Address cHook(0x21B4B0, 0, 0, 0, 0, 0, 0, 0);
+		static Address cHook(0x21B4B0, 0x21AEF4, 0x21B4D0, 0x21B4D0, 0x21B3F0, 0x21B3F0, 0x21B3BC, 0x21B3BC);
 
 		if(entry->WasJustActivated()) {
 			catalogHook.Initialize(cHook.addr, (u32)CatalogGetItem);

@@ -248,13 +248,9 @@ namespace CTRPluginFramework {
 				return;
 			}
 
-			/*for(const MenuEntry* entrys : CogEntrys.entry) {
+			for(const MenuEntry* entrys : CogEntrys.entry) {
 				CogNames.push_back(entrys->Name());
 				cogNotes.push_back(entrys->Note());
-			}*/
-			for(int i = 0; i < CogEntrys.entry.size(); ++i) {
-				CogNames.push_back(CogEntrys.entry[i]->Name() + Utils::Format("%02X", CogEntrys.ID[i]));
-				cogNotes.push_back(CogEntrys.entry[i]->Note());
 			}
 
 			Sleep(Milliseconds(100));
