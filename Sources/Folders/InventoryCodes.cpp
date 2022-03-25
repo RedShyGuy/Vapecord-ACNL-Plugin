@@ -140,15 +140,12 @@ namespace CTRPluginFramework {
 		if(!player) 
 			return;
 
-		Item dupe;
 		if(entry->Hotkeys[0].IsPressed()) {
-			Inventory::ReadSlot(0, dupe);
-			Inventory::WriteSlot(1, dupe, player->InventoryItemLocks[0]);
+			Inventory::WriteSlot(1, player->Inventory[0], player->InventoryItemLocks[0]);
 		}
 		else if(entry->Hotkeys[1].IsPressed()) {
-			Inventory::ReadSlot(0, dupe);
 			for(int i = 0; i <= 0xF; ++i) 
-				Inventory::WriteSlot(i, dupe, player->InventoryItemLocks[0]);
+				Inventory::WriteSlot(i, player->Inventory[0], player->InventoryItemLocks[0]);
 		}
 	}
 

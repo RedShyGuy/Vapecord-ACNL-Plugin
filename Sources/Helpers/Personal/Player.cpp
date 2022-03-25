@@ -131,10 +131,10 @@ Get Player Save Offset for loaded players
 		if(!player)
 			return false;
 
-		static Address SetUp1(0x5360A8, 0, 0, 0, 0, 0, 0, 0);
-		static Address SetUp2(0x6BA680, 0, 0, 0, 0, 0, 0, 0);
-		static Address SetStack(0x2FCC14, 0, 0, 0, 0, 0, 0, 0);
-		static Address ReadStack(0x769DBC, 0, 0, 0, 0, 0, 0, 0);
+		static Address SetUp1(0x5360A8, 0x5359FC, 0x5350F0, 0x5350F0, 0x5349DC, 0x5349DC, 0x534700, 0x534700);
+		static Address SetUp2(0x6BA680, 0x6B9B30, 0x6B96B8, 0x6B9690, 0x6B8FB0, 0x6B8F88, 0x6B8B58, 0x6B8B30);
+		static Address SetStack(0x2FCC14, 0x2FCBB0, 0x2FCC9C, 0x2FCC9C, 0x2FCBB4, 0x2FCBB4, 0x2FCBC0, 0x2FCBC0);
+		static Address ReadStack(0x769DBC, 0x768DA0, 0x768DC4, 0x768D9C, 0x76855C, 0x768534, 0x768104, 0x7680DC);
 
 		u32 val = SetUp1.Call<u32>(ID);
 		u32 uVar5 = *(u32 *)(val + 4);

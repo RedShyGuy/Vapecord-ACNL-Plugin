@@ -75,7 +75,7 @@ namespace CTRPluginFramework {
 	
 		GardenPlus = Address(0x2FB344, 0x2FB328, 0x2FB340, 0x2FB340, 0x2FB354, 0x2FB354, 0x2FB360, 0x2FB360);
 
-		CalcBitField = Address(0x2FF76C, 0, 0, 0, 0, 0, 0, 0);
+		CalcBitField = Address(0x2FF76C, 0x2FFAD8, 0x2FF7F4, 0x2FF7F4, 0x2FF9CC, 0x2FF9CC, 0x2FFA18, 0x2FFA18);
 	}
 	
 	Address		Code::IslPointer;

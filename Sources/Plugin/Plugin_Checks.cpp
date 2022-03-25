@@ -30,8 +30,8 @@ namespace CTRPluginFramework {
 
 //check for accidental invalid item eat/drop/show off etc
 	void PluginHooks(void) {
-		u32 found = Utils::Search<u32>(0x07000000, 0xF608B, { 0xE5C01068, 0xE12FFF1E });
-		*(u32 *)found = 0xE1A00000;
+		//u32 found = Utils::Search<u32>(0x07000000, 0xF608B, { 0xE5C01068, 0xE12FFF1E });
+		//*(u32 *)found = 0xE1A00000;
 
 		/*
 		static Hook suspendHook;

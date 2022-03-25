@@ -316,10 +316,10 @@ namespace CTRPluginFramework {
 
 //Shovel Knockback
 	void shovelknockback(MenuEntry *entry) {
-		static Address rockHitting(0x66E9F4, 0, 0, 0, 0, 0, 0, 0);
-		static Address itemHitting(0x672120, 0, 0, 0, 0, 0, 0, 0);
+		static Address rockHitting(0x66E9F4, 0x66DF1C, 0x66DA2C, 0x66DA2C, 0x66D4EC, 0x66D4EC, 0x66D094, 0x66D094);
+		static Address itemHitting(0x672120, 0x671648, 0x671158, 0x671158, 0x670C18, 0x670C18, 0x6707C0, 0x6707C0);
 
-		static Address coordChangeFUNC(0x6511EC, 0, 0, 0, 0, 0, 0, 0);
+		static Address coordChangeFUNC(0x6511EC, 0x650714, 0x650224, 0x650224, 0x64FCE4, 0x64FCE4, 0x64F88C, 0x64F88C);
 
 		u32 res = 0;
 

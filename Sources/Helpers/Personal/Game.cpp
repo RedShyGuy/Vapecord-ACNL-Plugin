@@ -13,7 +13,7 @@ namespace CTRPluginFramework {
 
 	ACNL_Date GameHelper::GetCurrentDate(void) {
 		static Address getDateData(0x2FB394, 0x2FB378, 0x2FB41C, 0x2FB41C, 0x2FB3A4, 0x2FB3A4, 0x2FB3B0, 0x2FB3B0);
-		static Address convertToDate(0x30F6DC, 0, 0, 0, 0, 0, 0, 0);
+		static Address convertToDate(0x30F6DC, 0x30F56C, 0x30F78C, 0x30F78C, 0x30F5F4, 0x30F5F4, 0x30F6B0, 0x30F6B0);
 
 		ACNL_Date date;
 		convertToDate.Call<void>(&date, getDateData.Call<u32>());
@@ -27,7 +27,7 @@ namespace CTRPluginFramework {
 	}
 
 	Item_Categories GameHelper::GetItemCategorie(Item itemID) {
-		static Address getCategorie(0x2FCBC4, 0, 0, 0, 0, 0, 0, 0);
+		static Address getCategorie(0x2FCBC4, 0x2FCB34, 0x2FCC4C, 0x2FCC4C, 0x2FCB64, 0x2FCB64, 0x2FCB4C, 0x2FCB4C);
 		return getCategorie.Call<Item_Categories>(itemID);
 	}
 
