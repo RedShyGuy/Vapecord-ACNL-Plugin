@@ -613,7 +613,7 @@ namespace CTRPluginFramework {
 				playerFlag->CanTravel = set; 
 			break; //i.e. can use train
 			case 124:
-				playerFlag->Unknown125 = set; 
+				playerFlag->HasTPCPicture = set; 
 			break;
 			case 125:
 				playerFlag->Unknown126 = set; 

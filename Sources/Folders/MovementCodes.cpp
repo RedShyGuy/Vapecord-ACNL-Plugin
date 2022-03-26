@@ -316,24 +316,17 @@ namespace CTRPluginFramework {
 
 //Shovel Knockback
 	void shovelknockback(MenuEntry *entry) {
-		static Address rockHitting(0x66E9F4, 0x66DF1C, 0x66DA2C, 0x66DA2C, 0x66D4EC, 0x66D4EC, 0x66D094, 0x66D094);
-		static Address itemHitting(0x672120, 0x671648, 0x671158, 0x671158, 0x670C18, 0x670C18, 0x6707C0, 0x6707C0);
-
-		static Address coordChangeFUNC(0x6511EC, 0x650714, 0x650224, 0x650224, 0x64FCE4, 0x64FCE4, 0x64F88C, 0x64F88C);
-
-		u32 res = 0;
+		static Address rockHitting(0x66E9F0, 0x66DF18, 0x66DA28, 0x66DA28, 0x66D4E8, 0x66D4E8, 0x66D090, 0x66D090);
+		static Address itemHitting(0x67211C, 0x671644, 0x671154, 0x671154, 0x670C14, 0x670C14, 0x6707BC, 0x6707BC);
 
 		if(entry->WasJustActivated()) {
-			Process::Patch(rockHitting.addr, 0xE1A00000);
-			Process::Patch(itemHitting.addr, 0xE1A00000);
+			Process::Patch(rockHitting.addr, 0xEB000000);
+			Process::Patch(itemHitting.addr, 0xEB000000);
 		}
 		
 		else if(!entry->IsActivated()) {
-			res = Wrap::CalculateBranchInstruction(rockHitting.addr, coordChangeFUNC.addr);
-			Process::Patch(rockHitting.addr, 0xEB000000 + res);
-
-			res = Wrap::CalculateBranchInstruction(itemHitting.addr, coordChangeFUNC.addr);
-			Process::Patch(itemHitting.addr, 0xEB000000 + res);
+			Process::Patch(rockHitting.addr, 0xE1A00004);
+			Process::Patch(itemHitting.addr, 0xE1A00004);
 		}
 	}
 }

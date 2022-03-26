@@ -7,7 +7,7 @@
 #include "Files.h"
 
 namespace CTRPluginFramework {
-	static const u8 CONFIG_V = 0xC8;
+	static const u8 CONFIG_V = 0xC9;
 
 	void WriteConfig(CONFIG config, u8 byte) {
 		File file(Utils::Format(CONFIGNAME, regionName.c_str()), File::WRITE);

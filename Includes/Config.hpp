@@ -24,6 +24,7 @@ namespace CTRPluginFramework {
 		GermanLang,	
 		ItalianLang,
 		SpanishLang,
+		KoreanLang, 
 		MaxLang
 	};
 

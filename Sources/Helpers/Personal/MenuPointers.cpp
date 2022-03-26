@@ -1,6 +1,7 @@
 #include <cstdarg>
 #include "MenuPointers.hpp"
 #include "TextFileParser.hpp"
+#include "Helpers/QuickMenu.hpp"
 
 namespace CTRPluginFramework {
 //MenuEntry Names for Color Changer/Language Changer
@@ -198,6 +199,52 @@ namespace CTRPluginFramework {
 		return str;
 	}
 
+	enum Folders_ {
+		SaveCodes = 0,
+		MovementCodes,
+		InventoryCodes,
+		PlayerSaveCodes,
+		PlayerCodes,
+		AnimationCodes,
+		SeedCodes,
+		SeedingCodes,
+		DropCodes,
+		TreeCodes,
+		MoneyCodes,
+		IslandCodes,
+		NPCCodes,
+		FunCodes,
+		FishCodes,
+		ChatCodes,
+		ExtraCodes,
+		MiscCodes
+	};
+
+	std::vector<MenuEntry *> MenuEntrys[18];
+	bool loadedEntry = false;
+
+	void LoadEntrys(void) {
+		MenuEntrys[SaveCodes] = SAVEC->GetEntryList();
+		MenuEntrys[MovementCodes] = MOVEC->GetEntryList();
+		MenuEntrys[InventoryCodes] = INVC->GetEntryList();
+		MenuEntrys[PlayerSaveCodes] = PSAVEC->GetEntryList();
+		MenuEntrys[PlayerCodes] = PLAYC->GetEntryList();
+		MenuEntrys[AnimationCodes] = ANIMC->GetEntryList();
+		//MenuEntrys[SeedCodes] = SEEDC->GetEntryList();
+		MenuEntrys[SeedingCodes] = SEED1C->GetEntryList();
+		MenuEntrys[DropCodes] = DROPC->GetEntryList();
+		MenuEntrys[TreeCodes] = TREEC->GetEntryList();
+		MenuEntrys[MoneyCodes] = MONC->GetEntryList();
+		MenuEntrys[IslandCodes] = ISLC->GetEntryList();
+		MenuEntrys[NPCCodes] = NPCC->GetEntryList();
+		MenuEntrys[FunCodes] = FUNC->GetEntryList();
+		MenuEntrys[FishCodes] = FISC->GetEntryList();
+		MenuEntrys[ChatCodes] = CHAC->GetEntryList();
+		MenuEntrys[ExtraCodes] = EXTC->GetEntryList();
+		MenuEntrys[MiscCodes] = MISC->GetEntryList();
+		loadedEntry = true;
+	}
+
 	void UpdateEntry(MenuEntry *entry, const std::string& name, const std::string& note) {
 		if(entry == nullptr)
 			return;
@@ -213,8 +260,8 @@ namespace CTRPluginFramework {
 		entry->RefreshNote();
 	} 
 
-	void UpdateHotkey(MenuFolder *folder, HotkeyDat data) {
-		std::vector<MenuEntry *> F_entrys = folder->GetEntryList();
+	void UpdateHotkey(int pos, HotkeyDat data) {
+		std::vector<MenuEntry *> F_entrys = MenuEntrys[pos];
 
 		int count = F_entrys[data.Pos]->Hotkeys.Count();
 
@@ -226,7 +273,7 @@ namespace CTRPluginFramework {
 	}
 
 	void SaveCodesUpdate(Color color) {	
-		std::vector<MenuEntry *> Entrys = SAVEC->GetEntryList();
+		std::vector<MenuEntry *> Entrys = MenuEntrys[SaveCodes];
 
 		const static std::string Names[2][15] = {
 			{ "TOWN_NAME_CHANGER", "SAVE_BACKUP_NAME", "BULL_BOARD_DUMPER", 
@@ -251,15 +298,15 @@ namespace CTRPluginFramework {
 	}
 	
 	void MovementCodesUpdate(Color color) {	
-		std::vector<MenuEntry *> Entrys = MOVEC->GetEntryList();	
-		const static std::string Names[2][11] = {
+		std::vector<MenuEntry *> Entrys = MenuEntrys[MovementCodes];	
+		const static std::string Names[2][12] = {
 			{ "CANT_PUSH", "COORD_MOD", "MOON_JUMP", "TOUCH_WARP", 
-			"WALK_OVER", "MOVEMENT_CHANGE", "WALK_PARTICLE_CHANGE", "PLAYER_TELEPORT", "VISIBILITY_MOD", 
-			"SPEED_MOD", "ROOM_WARPING" },
+			"WALK_OVER", "MOVEMENT_CHANGE", "WALK_PARTICLE_CHANGE", "PLAYER_TELEPORT", 
+			"VISIBILITY_MOD", "SPEED_MOD", "ROOM_WARPING", "SHOVEL_KNOCKBACK" },
 
-			{ "CANT_PUSH_NOTE", "COORD_MOD_NOTE", "MOON_JUMP_NOTE", 
-			"TOUCH_WARP_NOTE", "WALK_OVER_NOTE", "MOVEMENT_CHANGE_NOTE", "WALK_PARTICLE_CHANGE_NOTE", 
-			"PLAYER_TELEPORT_NOTE", "VISIBILITY_MOD_NOTE", "SPEED_MOD_NOTE", "ROOM_WARPING_NOTE" },
+			{ "CANT_PUSH_NOTE", "COORD_MOD_NOTE", "MOON_JUMP_NOTE", "TOUCH_WARP_NOTE", 
+			"WALK_OVER_NOTE", "MOVEMENT_CHANGE_NOTE", "WALK_PARTICLE_CHANGE_NOTE", "PLAYER_TELEPORT_NOTE", 
+			"VISIBILITY_MOD_NOTE", "SPEED_MOD_NOTE", "ROOM_WARPING_NOTE", "SHOVEL_KNOCKBACK_NOTE" },
 		};
 
 		const static HotkeyDat Hotkeys[8] = {
@@ -277,13 +324,13 @@ namespace CTRPluginFramework {
 			UpdateEntry(Entrys[i], Color(color) << Language->Get(Names[0][i]), Language->Get(Names[1][i]));
 
 		for(int i = 0; i < 8; ++i) 
-			UpdateHotkey(MOVEC, Hotkeys[i]);
+			UpdateHotkey(MovementCodes, Hotkeys[i]);
 
 		MOVEC->Name() = Color(color) << Language->Get("MOVEMENT_CODES");
 	}
 	
 	void InventoryCodesUpdate(Color color) {
-		std::vector<MenuEntry *> Entrys = INVC->GetEntryList();
+		std::vector<MenuEntry *> Entrys = MenuEntrys[InventoryCodes];
 
 		const static std::string Names[2][9] = {
 			{ "TEXT_2_ITEM", "DUPE_ITEMS", "CATALOG_TO_POCKET", "CHAT_T2I", 
@@ -306,14 +353,14 @@ namespace CTRPluginFramework {
 			UpdateEntry(Entrys[i], Color(color) << Language->Get(Names[0][i]), Language->Get(Names[1][i]));
 
 		for(int i = 0; i < 4; ++i) 
-			UpdateHotkey(INVC, Hotkeys[i]);
+			UpdateHotkey(InventoryCodes, Hotkeys[i]);
 
 		INVC->Name() = Color(color) << Language->Get("INVENTORY_CODES");
 	}
 	
 	void PlayerCodesUpdate(Color color) {
-		std::vector<MenuEntry *> Entrys1 = PSAVEC->GetEntryList();
-		std::vector<MenuEntry *> Entrys2 = PLAYC->GetEntryList();
+		std::vector<MenuEntry *> Entrys1 = MenuEntrys[PlayerSaveCodes];
+		std::vector<MenuEntry *> Entrys2 = MenuEntrys[PlayerCodes];
 
 		const static std::string Names1[2][13] = {
 			{ "NAME_CHANGER", "PLAYER_APPEARANCE", "RANDOM_PLAYER", 
@@ -349,14 +396,14 @@ namespace CTRPluginFramework {
 			UpdateEntry(Entrys2[i], Color(color) << Language->Get(Names2[0][i]), Language->Get(Names2[1][i]));
 
 		for(int i = 0; i < 3; ++i) 
-			UpdateHotkey(PLAYC, Hotkeys[i]);
+			UpdateHotkey(PlayerCodes, Hotkeys[i]);
 
 		PLAYC->Name() = Color(color) << Language->Get("PLAYER_CODES");
 		PSAVEC->Name() = Color(color) << Language->Get("PLAYER_SAVE_CODES");
 	}
 	
 	void AnimationCodesUpdate(Color color) {
-		std::vector<MenuEntry *> Entrys = ANIMC->GetEntryList();
+		std::vector<MenuEntry *> Entrys = MenuEntrys[AnimationCodes];
 
 		const static std::string Names[2][7] = {
 			{ "PLAYER_SELECTOR", "ANTI_ANIM", "ANIMATION_MOD", "EMOTION_LOOP", 
@@ -379,15 +426,15 @@ namespace CTRPluginFramework {
 			UpdateEntry(Entrys[i], Color(color) << Language->Get(Names[0][i]), Language->Get(Names[1][i]));
 
 		for(int i = 0; i < 6; ++i) 
-			UpdateHotkey(ANIMC, Hotkeys[i]);
+			UpdateHotkey(AnimationCodes, Hotkeys[i]);
 
 		ANIMC->Name() = Color(color) << Language->Get("ANIMATION_CODES");	
 	}
 	
 	void SeedingCodesUpdate(Color color) {
-		std::vector<MenuEntry *> Entrys1 = SEED1C->GetEntryList();
-		std::vector<MenuEntry *> Entrys2 = DROPC->GetEntryList();
-		std::vector<MenuEntry *> Entrys3 = TREEC->GetEntryList();
+		std::vector<MenuEntry *> Entrys1 = MenuEntrys[SeedingCodes];
+		std::vector<MenuEntry *> Entrys2 = MenuEntrys[DropCodes];
+		std::vector<MenuEntry *> Entrys3 = MenuEntrys[TreeCodes];
 
 		const static std::string Names1[2][5] = {
 			{ "PICK_SEEDER", "WALK_SEEDER", "FIREWORK_SEEDER", "MAP_EDITOR", 
@@ -437,11 +484,11 @@ namespace CTRPluginFramework {
 			UpdateEntry(Entrys3[i], Color(color) << Language->Get(Names3[0][i]), Language->Get(Names3[1][i]));
 
 		for(int i = 0; i < 4; ++i) 
-			UpdateHotkey(SEED1C, Hotkeys1[i]);
+			UpdateHotkey(SeedingCodes, Hotkeys1[i]);
 		for(int i = 0; i < 5; ++i) 
-			UpdateHotkey(DROPC, Hotkeys2[i]);
+			UpdateHotkey(DropCodes, Hotkeys2[i]);
 		for(int i = 0; i < 1; ++i) 
-			UpdateHotkey(TREEC, Hotkeys3[i]);
+			UpdateHotkey(TreeCodes, Hotkeys3[i]);
 
 		SEEDC->Name() = Color(color) << Language->Get("SEEDING_CODES");
 		SEED1C->Name() = Color(color) << Language->Get("SEED_CODES");
@@ -450,7 +497,7 @@ namespace CTRPluginFramework {
 	}
 	
 	void MoneyCodesUpdate(Color color) {
-		std::vector<MenuEntry *> Entrys = MONC->GetEntryList();
+		std::vector<MenuEntry *> Entrys = MenuEntrys[MoneyCodes];
 
 		const static std::string Names[2][6] = {
 			{ "WALLET", "BANK", "MEOW_COUPONS", "BADGES", 
@@ -467,7 +514,7 @@ namespace CTRPluginFramework {
 	}
 	
 	void IslandCodesUpdate(Color color) {
-		std::vector<MenuEntry *> Entrys = ISLC->GetEntryList();
+		std::vector<MenuEntry *> Entrys = MenuEntrys[IslandCodes];
 
 		const static std::string Names[2][10] = {
 			{ "UNLOCK_ISLAND", "FILL_INV_ORE", "FILL_INV_FRUIT", 
@@ -488,7 +535,7 @@ namespace CTRPluginFramework {
 	}
 
 	void NPCCodesUpdate(Color color) {
-		std::vector<MenuEntry *> Entrys = NPCC->GetEntryList();
+		std::vector<MenuEntry *> Entrys = MenuEntrys[NPCCodes];
 
 		const static std::string Names[2][5] = {
 			{ "NPC_SELECTOR", "NPC_ANIMATION", "NPC_COORDINATE", 
@@ -510,13 +557,13 @@ namespace CTRPluginFramework {
 			UpdateEntry(Entrys[i], Color(color) << Language->Get(Names[0][i]), Language->Get(Names[1][i]));
 
 		for(int i = 0; i < 5; ++i) 
-			UpdateHotkey(NPCC, Hotkeys[i]);
+			UpdateHotkey(NPCCodes, Hotkeys[i]);
 
 		NPCC->Name() = Color(color) << Language->Get("NPC_CODES");
 	}
 	
 	void FunCodesUpdate(Color color) {
-		std::vector<MenuEntry *> Entrys = FUNC->GetEntryList();
+		std::vector<MenuEntry *> Entrys = MenuEntrys[FunCodes];
 
 		const static std::string Names[2][7] = {
 			{ "SIZE_CODES", "T_POSE", "TAKE_TPC_PIC", 
@@ -537,15 +584,15 @@ namespace CTRPluginFramework {
 			UpdateEntry(Entrys[i], Color(color) << Language->Get(Names[0][i]), Language->Get(Names[1][i]));
 
 		for(int i = 0; i < 2; ++i) 
-			UpdateHotkey(FUNC, Hotkeys[i]);
+			UpdateHotkey(FunCodes, Hotkeys[i]);
 
 		FUNC->Name() = Color(color) << Language->Get("FUN_CODES");
 	}
 	
 	void ExtraCodesUpdate(Color color) {
-		std::vector<MenuEntry *> Entrys1 = FISC->GetEntryList();
-		std::vector<MenuEntry *> Entrys2 = CHAC->GetEntryList();
-		std::vector<MenuEntry *> Entrys3 = EXTC->GetEntryList();
+		std::vector<MenuEntry *> Entrys1 = MenuEntrys[FishCodes];
+		std::vector<MenuEntry *> Entrys2 = MenuEntrys[ChatCodes];
+		std::vector<MenuEntry *> Entrys3 = MenuEntrys[ExtraCodes];
 
 		const static std::string Names1[2][2] = {
 			{ "FISH_ALWAYS_BITE_NAME", "FISH_CANT_SCARE_NAME" },
@@ -593,17 +640,17 @@ namespace CTRPluginFramework {
 			UpdateEntry(Entrys3[i], Color(color) << Language->Get(Names3[0][i]), Language->Get(Names3[1][i]));
 
 		for(int i = 0; i < 2; ++i) 
-			UpdateHotkey(CHAC, Hotkeys1[i]);
+			UpdateHotkey(ChatCodes, Hotkeys1[i]);
 		for(int i = 0; i < 4; ++i) 
-			UpdateHotkey(EXTC, Hotkeys2[i]);
+			UpdateHotkey(ExtraCodes, Hotkeys2[i]);
 
-		EXTC->Name() = Color(color) << Language->Get("EXTRA_CODES");
 		FISC->Name() = Color(color) << Language->Get("FISH_CODES");
 		CHAC->Name() = Color(color) << Language->Get("CHAT_CODES");
+		EXTC->Name() = Color(color) << Language->Get("EXTRA_CODES");
 	}
 	
 	void MiscCodesUpdate(Color color) {
-		std::vector<MenuEntry *> Entrys = MISC->GetEntryList();
+		std::vector<MenuEntry *> Entrys = MenuEntrys[MiscCodes];
 
 		const static std::string Names[2][19] = {
 			{ "TOOL_ANIM", "GAME_TYPE", "UNBREAK_FLOWER", 
@@ -633,7 +680,7 @@ namespace CTRPluginFramework {
 			UpdateEntry(Entrys[i], Color(color) << Language->Get(Names[0][i]), Language->Get(Names[1][i]));
 
 		for(int i = 0; i < 3; ++i) 
-			UpdateHotkey(MISC, Hotkeys[i]);
+			UpdateHotkey(MiscCodes, Hotkeys[i]);
 	
 		MISC->Name() = Color(color) << Language->Get("MISC_CODES");
 	}

@@ -16,7 +16,8 @@ namespace CTRPluginFramework {
             entry->SetArg(new std::string(entry->Name()));
             entry->Name() += " " + hotkey.ToString();
             entry->Hotkeys.OnHotkeyChangeCallback([](MenuEntry *entry, int index) {
-				UpdateAll();
+				if(loadedEntry)
+					UpdateAll();
             });
         }
         return(entry);
@@ -83,6 +84,7 @@ namespace CTRPluginFramework {
 		MOVEC->Append(EntryWithHotkey(new MenuEntry(FolderColors[1] << "Room Warping", roomWarp, "note"), { 
 			Hotkey(Key::L | Key::X, "Key") 
 		})),
+		MOVEC->Append(new MenuEntry(FolderColors[1] << "No Shovel Knockback", shovelknockback, "note")),
 		menu->Append(MOVEC);
 
 	//////////////////////////

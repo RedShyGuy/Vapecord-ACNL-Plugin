@@ -2,7 +2,6 @@
 #define FILES_H
 
 #define PATH_PRESET		    "E:/Vapecord/Data/PreSet"
-#define PATH_LOGO		    "E:/Vapecord/Data/logo.bin"
 #define PATH_ACRE		    "E:/Vapecord/Data/Acre/acre%X.bin"
 #define PATH_PICON		    "E:/Vapecord/Data/PlayerIcon/Player%d.bin"
 #define ITEMLIST            "E:/Vapecord/Data/item.txt"
@@ -15,6 +14,7 @@
 #define PATH_GERMANTEXT     "E:/Vapecord/Data/Language/german.txt"
 #define PATH_ITALIANTEXT    "E:/Vapecord/Data/Language/italian.txt"
 #define PATH_SPANISHTEXT    "E:/Vapecord/Data/Language/spanish.txt"
+#define PATH_KOREANTEXT     "E:/Vapecord/Data/Language/korean.txt"
 
 #define PATH_ISLAND	        "E:/Vapecord/%s/Island"
 #define PATH_BULLETIN	    "E:/Vapecord/%s/Bulletin"

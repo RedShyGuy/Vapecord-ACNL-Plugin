@@ -3,8 +3,6 @@
 namespace CTRPluginFramework {
 
 	int UI_Pos = 0;
-	c_RGBA* logoArray = nullptr;
-	bool logoExists = true;
 
 	std::string GetLoad(void) {
 		switch(UI_Pos) {
@@ -21,25 +19,9 @@ namespace CTRPluginFramework {
 	}
 
 	bool OSD_SplashScreen(const Screen &Splash) {
-		int Pixels = 0,
-			XLocation = 40, YLocation = 10,
-			XResult = 50 + XLocation, YResult = 50 + YLocation;
-
-		if(Splash.IsTop) {
-			if(logoExists) {
-				for(int X = XLocation; X < XResult; ++X) {
-					for(int Y = YLocation; Y < YResult; ++Y) {
-						Color cPix = Color(logoArray[Pixels].R, logoArray[Pixels].G, logoArray[Pixels].B, logoArray[Pixels].A);
-						if(cPix != Color(0, 0, 0, 0))
-							Splash.DrawPixel(X, Y, cPix);
-							
-						Pixels++;
-					}
-				}
-			}
+		if(Splash.IsTop) 
+			Splash.DrawSysfont("Loading Plugin " << GetLoad(), 7, 10, Color(255, 0, 247));
 			
-			Splash.DrawSysfont("Loading Plugin " << GetLoad(), XLocation - 33, logoExists ? (YLocation + 42) : (YLocation), Color(255, 0, 247));
-		}
 		return true;
 	}
 }

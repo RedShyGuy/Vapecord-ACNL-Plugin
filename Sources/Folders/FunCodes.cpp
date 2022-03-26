@@ -128,6 +128,8 @@ namespace CTRPluginFramework {
 
 			CreateTPC.Call<void>(*(u32 *)TPCPoint.addr, &player->HasTPCPic);
 			GameHelper::PlaySound(0x4A7);
+
+			player->PlayerFlags.HasTPCPicture = true;
 		}
 	
 		if(entry->Hotkeys[1].IsDown()) {

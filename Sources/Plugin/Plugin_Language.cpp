@@ -5,13 +5,14 @@
 #include "Files.h"
 
 namespace CTRPluginFramework {
-	const std::string LanguageTXT[6] {
+	const std::vector<std::string> LanguageTXT {
 		PATH_JAPANESETEXT,
 		PATH_ENGLISHTEXT,
 		PATH_FRENCHTEXT,
 		PATH_GERMANTEXT,
 		PATH_ITALIANTEXT,
-		PATH_SPANISHTEXT
+		PATH_SPANISHTEXT,
+		PATH_KOREANTEXT
 	};
 
     void SetupLanguage(bool SetInMenu) {
@@ -21,7 +22,8 @@ namespace CTRPluginFramework {
 			"French",
 			"German",
             "Italian",
-            "Spanish"
+            "Spanish",
+			"Korean"
 		};
 
 		u8 u_byte = f_Language::NoLang;
@@ -37,7 +39,7 @@ namespace CTRPluginFramework {
 
             int found = 0;
 		//If File is missing it gets red if not it gets green
-			for(int i = 0; i <= 5; ++i) {
+			for(int i = 0; i < LanguageTXT.size(); ++i) {
 				if(!File::Exists(LanguageTXT[i])) 
 					v_Lang[i] = Color(pRed) << v_Lang[i];
 				else {
@@ -74,6 +76,9 @@ namespace CTRPluginFramework {
                 case 5:
                     u_byte = f_Language::SpanishLang; //Spanish MODE ON
                 break;
+				case 6:
+					u_byte = f_Language::KoreanLang; //Korean MODE ON
+				break;
             }
 
 			WriteConfig(CONFIG::Language, u_byte); //write language mode

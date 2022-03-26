@@ -506,7 +506,7 @@ namespace CTRPluginFramework {
         u8 Unknown122 : 1;
         u8 Unknown123 : 1;
         u8 CanTravel : 1; //i.e. can use train
-        u8 Unknown125 : 1;
+        u8 HasTPCPicture : 1;
         u8 Unknown126 : 1;
         u8 Unknown127 : 1;
         u8 Unknown128 : 1;

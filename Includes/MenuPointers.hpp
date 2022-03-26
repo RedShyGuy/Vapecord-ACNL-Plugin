@@ -43,6 +43,9 @@ namespace CTRPluginFramework {
 	*/
 	FuncPointer GetMenuFunc(MenuEntry *entry);
 
+	extern bool loadedEntry;
+	void LoadEntrys(void);
+
 //Functions
 	std::string RemoveColorFromString(const std::string &str);
 	std::string FormatColor(const char *fmt, ...);
