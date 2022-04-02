@@ -35,19 +35,14 @@ Randomizes colors of Menu Folders
 */
 	void RainbowEntrys(Time time) {
 		static Clock timer(time);
-		if(timer.HasTimePassed(Milliseconds(500)) && RainBowON) {   
-			SaveCodesUpdate(Rainbow());
-			MovementCodesUpdate(Rainbow());
-			InventoryCodesUpdate(Rainbow());
-			PlayerCodesUpdate(Rainbow());
-			AnimationCodesUpdate(Rainbow());
-			SeedingCodesUpdate(Rainbow());
-			MoneyCodesUpdate(Rainbow());
-			IslandCodesUpdate(Rainbow());
-			NPCCodesUpdate(Rainbow());
-			FunCodesUpdate(Rainbow());
-			ExtraCodesUpdate(Rainbow());
-			MiscCodesUpdate(Rainbow());
+		if(timer.HasTimePassed(Milliseconds(500)) && RainBowON) {  
+			Color color[12] = {
+				Rainbow(), Rainbow(), Rainbow(), Rainbow(),
+				Rainbow(), Rainbow(), Rainbow(), Rainbow(),
+				Rainbow(), Rainbow(), Rainbow(), Rainbow()
+			};
+			
+			UpdateAll(color);
 			timer.Restart();
 		}
 	}

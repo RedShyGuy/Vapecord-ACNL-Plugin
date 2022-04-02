@@ -9,12 +9,7 @@ namespace CTRPluginFramework {
 		const char* Name; //name of ID
 		u8 ID; //ID
 	};
-
-	struct Furniture {
-		std::string Name;
-		Item Items[16];
-	};
-
+	
 	struct Range {
 		u32 start;
 		u32 end;

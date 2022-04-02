@@ -35,7 +35,6 @@ Will be called at the start of the plugin to load the language, colors and the d
 		if(menu == nullptr) //if menu didn't load yet
 			return;
 
-		LoadEntrys();
 		CustomFWK(false);
 		SetupLanguage(false);
 		SetupColors(false);

@@ -4,26 +4,7 @@
 #include <CTRPluginFramework.hpp>
 
 namespace CTRPluginFramework {
-//MenuEntry Names for Color Changer/Language Changer
-	extern MenuFolder *SAVEC; //SAVE_CODES
-	extern MenuFolder *PSAVEC; //PLAYER_SAVE_CODES
-	extern MenuFolder *MOVEC; //MOVEMENT_CODES
-	extern MenuFolder *INVC; //INVENTORY_CODES
-	extern MenuFolder *PLAYC; //PLAYER_CODES
-	extern MenuFolder *ANIMC; //ANIMATION_CODES
-	extern MenuFolder *SEEDC; //SEEDING_CODES
-	extern MenuFolder *SEED1C; //SEED_CODES
-	extern MenuFolder *DROPC; //DROP_CODES
-	extern MenuFolder *TREEC; //TREE_CODES
-	extern MenuFolder *MONC; //MONEY_CODES
-	extern MenuFolder *ISLC; //ISLAND_CODES
-	extern MenuFolder *NPCC; //NPC_CODES
-	extern MenuFolder *FUNC; //FUN_CODES
-	extern MenuFolder *EXTC; //EXTRA_CODES
-	extern MenuFolder *FISC; //FISH_CODES
-	extern MenuFolder *CHAC; //CHAT_CODES
-	extern MenuFolder *MISC; //MISC_CODES
-	extern MenuFolder *DEVC; //DEV_CODES
+	extern MenuFolder *DEVC;
 
 	extern Color FolderColors[12];
 
@@ -31,6 +12,26 @@ namespace CTRPluginFramework {
 		std::vector<std::string> Name;
 		int Pos;
 	};
+
+	struct EntryData {
+		MenuEntry *entry;
+		Color IndexColor;
+		std::string IndexName;
+		std::string IndexNote;
+		std::vector<std::string> IndexHotkeys;
+	};
+
+	struct FolderData {
+		MenuFolder *folder;
+		Color IndexColor;
+		std::string IndexName;
+		std::string IndexNote;
+		bool IsSubFolder;
+
+		std::vector<EntryData *> entryData;
+	};
+
+	extern std::vector<FolderData *> folderData;
 
 	using FuncPointer = void (*)(MenuEntry *);
 
@@ -43,8 +44,7 @@ namespace CTRPluginFramework {
 	*/
 	FuncPointer GetMenuFunc(MenuEntry *entry);
 
-	extern bool loadedEntry;
-	void LoadEntrys(void);
+	std::string GetHotkeyName(Hotkey hotkey);
 
 //Functions
 	std::string RemoveColorFromString(const std::string &str);
@@ -54,18 +54,6 @@ namespace CTRPluginFramework {
 	void SetFWK(FwkSettings &settings, const Color arr[25]);
 	void UpdateAll(const Color arr[12]);
 	void UpdateAll(void);
-	void SaveCodesUpdate(Color color);
-	void MovementCodesUpdate(Color color);
-	void InventoryCodesUpdate(Color color);
-	void PlayerCodesUpdate(Color color);
-	void AnimationCodesUpdate(Color color);
-	void SeedingCodesUpdate(Color color);
-	void MoneyCodesUpdate(Color color);
-	void IslandCodesUpdate(Color color);
-	void NPCCodesUpdate(Color color);
-	void FunCodesUpdate(Color color);
-	void ExtraCodesUpdate(Color color);
-	void MiscCodesUpdate(Color color);
 }
 
 #endif

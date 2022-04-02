@@ -14,406 +14,442 @@ namespace CTRPluginFramework {
         if(entry != nullptr) {
             entry->Hotkeys += hotkey;
             entry->SetArg(new std::string(entry->Name()));
-            entry->Name() += " " + hotkey.ToString();
-            entry->Hotkeys.OnHotkeyChangeCallback([](MenuEntry *entry, int index) {
-				if(loadedEntry)
-					UpdateAll();
-            });
+            //entry->Name() += " " + hotkey.ToString();
+            /*entry->Hotkeys.OnHotkeyChangeCallback([](MenuEntry *entry, int index) {
+				UpdateAll();
+            });*/
         }
         return(entry);
     }
+
+	static void SetUp(MenuFolder *objfolder, bool isSubFolder = false) {
+		if(objfolder != nullptr) {
+			std::vector<EntryData *> objentryData;
+
+			std::vector<MenuEntry *> entrys = objfolder->GetEntryList();
+			
+			OSD::Notify(Utils::Format("SetUp %d", entrys.size()));
+
+			for(auto obj_entry : entrys) {
+				if(obj_entry != nullptr) {
+					std::vector<std::string> hotkeys;
+					for(int i = 0; i < obj_entry->Hotkeys.Count(); ++i) 
+						hotkeys.push_back(GetHotkeyName(obj_entry->Hotkeys[i]));
+
+					EntryData *edata = new EntryData();
+					edata->entry = obj_entry;
+					edata->IndexColor = GetColorFromString(obj_entry->Name());
+					edata->IndexName = RemoveColorFromString(obj_entry->Name());
+					edata->IndexNote = obj_entry->Note();
+					edata->IndexHotkeys = hotkeys;
+
+					objentryData.push_back(edata);
+				}
+			}
+
+			FolderData *data = new FolderData();
+			data->folder = objfolder;
+			data->IndexColor = GetColorFromString(objfolder->Name());
+			data->IndexName = RemoveColorFromString(objfolder->Name());
+			data->IndexNote = objfolder->Note();
+			data->IsSubFolder = isSubFolder;
+			data->entryData = objentryData;
+
+			folderData.push_back(data);
+		}
+	}
 
 /*This will load all the folders and entrys*/
     void InitMenu(PluginMenu *menu) {
 	/////////////////////
 	/*Save Codes Folder*/
 	/////////////////////
-		SAVEC = new MenuFolder(FolderColors[0] << "Save Codes");
-	    SAVEC->Append(new MenuEntry(FolderColors[0] << "Town Name Changer", nullptr, townnamechanger, "note")),
-		SAVEC->Append(new MenuEntry(FolderColors[0] << "Save Options", nullptr, savebackup, "note")),	
-		SAVEC->Append(new MenuEntry(FolderColors[0] << "Bulleting Board Dumper", nullptr, bullboard, "note")),
-		SAVEC->Append(new MenuEntry(FolderColors[0] << "Tree Size", nullptr, TreeSizeChanger, "note")),	
-		SAVEC->Append(new MenuEntry(FolderColors[0] << "Change Native Fruit", nullptr, ChangeNativeFruit, "note")),
-		SAVEC->Append(new MenuEntry(FolderColors[0] << "Unlock PWP's", nullptr, PWPUnlock, "note")),
-		SAVEC->Append(new MenuEntry(FolderColors[0] << "Grass Type Changer", nullptr, GrassChanger, "note")),
-		SAVEC->Append(new MenuEntry(FolderColors[0] << "Caravan Changer", nullptr, caravanchange, "note")),
-		SAVEC->Append(new MenuEntry(FolderColors[0] << "Camping Villager Changer", nullptr, SetCampingVillager, "note")),
-		SAVEC->Append(new MenuEntry(FolderColors[0] << "Shop Unlocker", nullptr, shopunlocks, "note")),
-	//SAVEC->Append(new MenuEntry(FolderColors[0] << "House Editor", nullptr, HouseChanger, "note")),
-		SAVEC->Append(new MenuEntry(FolderColors[0] << "Unlock QR Machine", nullptr, unlockqrmachine, "note")),
-		SAVEC->Append(new MenuEntry(FolderColors[0] << "Building Modifier", nullptr, BuildingMod, "note")),
-		SAVEC->Append(new MenuEntry(FolderColors[0] << "Fill Museum", nullptr, CompleteMuseum, "note")),
-		SAVEC->Append(new MenuEntry(FolderColors[0] << "Mayor Permit 100%", Permit100, "note")),
-		SAVEC->Append(new MenuEntry(FolderColors[0] << "Real Time Acre Editor", MapEditor, "note")),
+		MenuFolder *SAVEC = new MenuFolder(FolderColors[0] << "SAVE_CODES");
+	    SAVEC->Append(new MenuEntry(FolderColors[0] << "TOWN_NAME_CHANGER", nullptr, townnamechanger, "TOWN_NAME_CHANGER_NOTE")),
+		SAVEC->Append(new MenuEntry(FolderColors[0] << "SAVE_BACKUP_NAME", nullptr, savebackup, "SAVE_BACKUP_NOTE")),	
+		SAVEC->Append(new MenuEntry(FolderColors[0] << "BULL_BOARD_DUMPER", nullptr, bullboard, "BULL_BOARD_DUMPER_NOTE")),
+		SAVEC->Append(new MenuEntry(FolderColors[0] << "TREESIZE_NAME", nullptr, TreeSizeChanger, "TREESIZE_NOTE")),	
+		SAVEC->Append(new MenuEntry(FolderColors[0] << "CHANGE_NATIVE_NAME", nullptr, ChangeNativeFruit, "CHANGE_NATIVE_NOTE")),
+		SAVEC->Append(new MenuEntry(FolderColors[0] << "PWP_UNLOCK_NAME", nullptr, PWPUnlock, "PWP_UNLOCK_NOTE")),
+		SAVEC->Append(new MenuEntry(FolderColors[0] << "GRASS_CHANGER_NAME", nullptr, GrassChanger, "GRASS_CHANGER_NOTE")),
+		SAVEC->Append(new MenuEntry(FolderColors[0] << "CARAVAN_SET", nullptr, caravanchange, "CARAVAN_SET_NOTE")),
+		SAVEC->Append(new MenuEntry(FolderColors[0] << "CAMPING_SET", nullptr, SetCampingVillager, "CAMPING_SET_NOTE")),
+		SAVEC->Append(new MenuEntry(FolderColors[0] << "SHOP_UPGRADE", nullptr, shopunlocks, "SHOP_UPGRADE_NOTE")),
+	//SAVEC->Append(new MenuEntry(FolderColors[0] << "HOUSE_EDITOR_NAME", nullptr, HouseChanger, "HOUSE_EDITOR_NOTE")),
+		SAVEC->Append(new MenuEntry(FolderColors[0] << "QR_MACHINE_NAME", nullptr, unlockqrmachine, "QR_MACHINE_NOTE")),
+		SAVEC->Append(new MenuEntry(FolderColors[0] << "BUILDING_MOD_NAME", nullptr, BuildingMod, "BUILDING_MOD_NOTE")),
+		SAVEC->Append(new MenuEntry(FolderColors[0] << "FILL_MUSEUM_NAME", nullptr, CompleteMuseum, "FILL_MUSEUM_NOTE")),
+		SAVEC->Append(new MenuEntry(FolderColors[0] << "MAYOR_PERMIT_NAME", Permit100, "MAYOR_PERMIT_NOTE")),
+		SAVEC->Append(new MenuEntry(FolderColors[0] << "REAL_TIME_ACRE", MapEditor, "REAL_TIME_ACRE_NOTE")),
 		menu->Append(SAVEC);
-
+		
 	/////////////////////////
 	/*Movement Codes Folder*/
 	/////////////////////////
-		MOVEC = new MenuFolder(FolderColors[1] << "Movement Codes");
-		MOVEC->Append(new MenuEntry(FolderColors[1] << "Other Players Can't Push You", noPush, "note")),
-		MOVEC->Append(EntryWithHotkey(new MenuEntry(FolderColors[1] << "Coordinate Modifier", coordinate, coordspeed, "note"), {
-			Hotkey(Key::A, "Key"), 
-			Hotkey(Key::DPadRight, "Key2"), 
-			Hotkey(Key::DPadLeft, "Key3"), 
-			Hotkey(Key::DPadDown, "Key4"), 
-			Hotkey(Key::DPadUp, "Key5") 
+		MenuFolder *MOVEC = new MenuFolder(FolderColors[1] << "MOVEMENT_CODES");
+		MOVEC->Append(new MenuEntry(FolderColors[1] << "CANT_PUSH", noPush, "CANT_PUSH_NOTE")),
+		MOVEC->Append(EntryWithHotkey(new MenuEntry(FolderColors[1] << "COORD_MOD", coordinate, coordspeed, "COORD_MOD_NOTE"), {
+			Hotkey(Key::A, "COORD_MOD_KEY1"), 
+			Hotkey(Key::DPadRight, "COORD_MOD_KEY2"), 
+			Hotkey(Key::DPadLeft, "COORD_MOD_KEY3"), 
+			Hotkey(Key::DPadDown, "COORD_MOD_KEY4"), 
+			Hotkey(Key::DPadUp, "COORD_MOD_KEY5") 
 		})),
-		MOVEC->Append(EntryWithHotkey(new MenuEntry(FolderColors[1] << "Moon Jump", moonjump, "note"), { 
-			Hotkey(Key::L | Key::DPadUp, "Key"), 
-			Hotkey(Key::L | Key::DPadDown, "Key2") 
+		MOVEC->Append(EntryWithHotkey(new MenuEntry(FolderColors[1] << "MOON_JUMP", moonjump, "MOON_JUMP_NOTE"), { 
+			Hotkey(Key::L | Key::DPadUp, "MOON_JUMP_KEY1"), 
+			Hotkey(Key::L | Key::DPadDown, "MOON_JUMP_KEY2") 
 		})),
-		MOVEC->Append(new MenuEntry(FolderColors[1] << "Touch Warp", tch_warp, "note")),
-		MOVEC->Append(EntryWithHotkey(new MenuEntry(FolderColors[1] << "Walk Over Things", walkOver, "note"), { 
-			Hotkey(Key::L | Key::DPadUp, "Key") 
+		MOVEC->Append(new MenuEntry(FolderColors[1] << "TOUCH_WARP", tch_warp, "TOUCH_WARP_NOTE")),
+		MOVEC->Append(EntryWithHotkey(new MenuEntry(FolderColors[1] << "WALK_OVER", walkOver, "WALK_OVER_NOTE"), { 
+			Hotkey(Key::L | Key::DPadUp, "WALK_OVER") 
 		})),		   
-		MOVEC->Append(EntryWithHotkey(new MenuEntry(FolderColors[1] << "Movement Changer", MovementChanger, "note"), { 
-			Hotkey(Key::L | Key::B, "Key") 
+		MOVEC->Append(EntryWithHotkey(new MenuEntry(FolderColors[1] << "MOVEMENT_CHANGE", MovementChanger, "MOVEMENT_CHANGE_NOTE"), { 
+			Hotkey(Key::L | Key::B, "MOVEMENT_CHANGE") 
 		})),
-		MOVEC->Append(EntryWithHotkey(new MenuEntry(FolderColors[1] << "Walk Particle Changer", Walkparticle, "note"), { 
-			Hotkey(Key::L | Key::X, "Key")
+		MOVEC->Append(EntryWithHotkey(new MenuEntry(FolderColors[1] << "WALK_PARTICLE_CHANGE", Walkparticle, "WALK_PARTICLE_CHANGE_NOTE"), { 
+			Hotkey(Key::L | Key::X, "WALK_PARTICLE_CHANGE")
 		})),
-		MOVEC->Append(EntryWithHotkey(new MenuEntry(FolderColors[1] << "Player Teleporter", stalk, "note"), { 
-			Hotkey(Key::R | Key::DPadLeft, "Key"), 
-			Hotkey(Key::R | Key::DPadRight, "Key2") 
+		MOVEC->Append(EntryWithHotkey(new MenuEntry(FolderColors[1] << "PLAYER_TELEPORT", stalk, "PLAYER_TELEPORT_NOTE"), { 
+			Hotkey(Key::R | Key::DPadLeft, "PLAYER_TELEPORT_KEY1"), 
+			Hotkey(Key::R | Key::DPadRight, "PLAYER_TELEPORT_KEY2") 
 		})),
-		MOVEC->Append(EntryWithHotkey(new MenuEntry(FolderColors[1] << "Visibility Modifier", onlineplayermod, "note"), { 
-			Hotkey(Key::L | Key::A, "Key") 
+		MOVEC->Append(EntryWithHotkey(new MenuEntry(FolderColors[1] << "VISIBILITY_MOD", onlineplayermod, "VISIBILITY_MOD_NOTE"), { 
+			Hotkey(Key::L | Key::A, "VISIBILITY_MOD_KEY1") 
 		})),
-		MOVEC->Append(new MenuEntry(FolderColors[1] << "Speed Modifier", speedMod, menuSpeedMod, "note")),
-		MOVEC->Append(EntryWithHotkey(new MenuEntry(FolderColors[1] << "Room Warping", roomWarp, "note"), { 
-			Hotkey(Key::L | Key::X, "Key") 
+		MOVEC->Append(new MenuEntry(FolderColors[1] << "SPEED_MOD", speedMod, menuSpeedMod, "SPEED_MOD_NOTE")),
+		MOVEC->Append(EntryWithHotkey(new MenuEntry(FolderColors[1] << "ROOM_WARPING", roomWarp, "ROOM_WARPING_NOTE"), { 
+			Hotkey(Key::L | Key::X, "ROOM_WARPING") 
 		})),
-		MOVEC->Append(new MenuEntry(FolderColors[1] << "No Shovel Knockback", shovelknockback, "note")),
+		MOVEC->Append(new MenuEntry(FolderColors[1] << "SHOVEL_KNOCKBACK", shovelknockback, "SHOVEL_KNOCKBACK_NOTE")),
 		menu->Append(MOVEC);
 
 	//////////////////////////
 	/*Inventory Codes Folder*/
 	//////////////////////////
-		INVC = new MenuFolder(FolderColors[2] << "Inventory Codes");
-		INVC->Append(EntryWithHotkey(new MenuEntry(FolderColors[2] << "Text To Items", t2i, "note"), { 
-			Hotkey(Key::X | Key::DPadRight, "Key"), 
-			Hotkey(Key::X |Key::DPadUp, "Key2"), 
-			Hotkey(Key::X | Key::DPadDown, "Key3"),
-			Hotkey(Key::X | Key::DPadLeft, "Key4"),
+		MenuFolder *INVC = new MenuFolder(FolderColors[2] << "INVENTORY_CODES");
+		INVC->Append(EntryWithHotkey(new MenuEntry(FolderColors[2] << "TEXT_2_ITEM", t2i, "TEXT_2_ITEM_NOTE"), { 
+			Hotkey(Key::X | Key::DPadRight, "TEXT_2_ITEM_KEY1"), 
+			Hotkey(Key::X |Key::DPadUp, "TEXT_2_ITEM_KEY2"), 
+			Hotkey(Key::X | Key::DPadDown, "TEXT_2_ITEM_KEY3"),
+			Hotkey(Key::X | Key::DPadLeft, "TEXT_2_ITEM_KEY4"),
 		})),
-		INVC->Append(EntryWithHotkey(new MenuEntry(FolderColors[2] << "Duplicate Items", duplication, "note"), { 
-			Hotkey(Key::R, "Key"), 
-			Hotkey(Key::R | Key::X, "Key2") 
+		INVC->Append(EntryWithHotkey(new MenuEntry(FolderColors[2] << "DUPE_ITEMS", duplication, "DUPE_ITEMS_NOTE"), { 
+			Hotkey(Key::R, "DUPE_ITEMS_KEY1"), 
+			Hotkey(Key::R | Key::X, "DUPE_ITEMS_KEY2") 
 		})),
-		INVC->Append(EntryWithHotkey(new MenuEntry(FolderColors[2] << "Catalog To Pockets", catalog, "note"), { 
-			Hotkey(Key::L | Key::DPadRight, "Key"), 
-			Hotkey(Key::L | Key::Y, "Key2") 
+		INVC->Append(EntryWithHotkey(new MenuEntry(FolderColors[2] << "CATALOG_TO_POCKET", catalog, "CATALOG_TO_POCKET_NOTE"), { 
+			Hotkey(Key::L | Key::DPadRight, "CATALOG_TO_POCKET_KEY1"), 
+			Hotkey(Key::L | Key::Y, "CATALOG_TO_POCKET_KEY2") 
 		})),
-		INVC->Append(EntryWithHotkey(new MenuEntry(FolderColors[2] << "Chat Text2Item", chatt2i, "note"), { 
-			Hotkey(Key::R | Key::DPadLeft, "Key") 
+		INVC->Append(EntryWithHotkey(new MenuEntry(FolderColors[2] << "CHAT_T2I", chatt2i, "CHAT_T2I_NOTE"), { 
+			Hotkey(Key::R | Key::DPadLeft, "CHAT_T2I_KEY1") 
 		})),
-		INVC->Append(new MenuEntry(FolderColors[2] << "Clear Inventory", nullptr, ClearInventory, "note")),
-		INVC->Append(new MenuEntry(FolderColors[2] << "Item Settings", nullptr, itemsettings, "note")),
-		INVC->Append(new MenuEntry(FolderColors[2] << "Design Menu Changer", nullptr, MenuChanger, "note")),
-		INVC->Append(new MenuEntry(FolderColors[2] << "Get Set", nullptr, getset, "note")),
-		INVC->Append(new MenuEntry(FolderColors[2] << "Custom Buttons", nullptr, SettingsButton, "note")),
+		INVC->Append(new MenuEntry(FolderColors[2] << "CLEAR_INV_NAME", nullptr, ClearInventory, "CLEAR_INV_NOTE")),
+		INVC->Append(new MenuEntry(FolderColors[2] << "ITEM_SETTINGS", nullptr, itemsettings, "ITEM_SETTINGS_NOTE")),
+		INVC->Append(new MenuEntry(FolderColors[2] << "SAVE_MENU_CHANGER", nullptr, MenuChanger, "SAVE_MENU_CHANGER_NOTE")),
+		INVC->Append(new MenuEntry(FolderColors[2] << "GET_SET", nullptr, getset, "GET_SET_NOTE")),
+		INVC->Append(new MenuEntry(FolderColors[2] << "CUSTOM_BUTTON", nullptr, SettingsButton, "CUSTOM_BUTTON_NOTE")),
 		menu->Append(INVC);
 
 	///////////////////////
 	/*Player Codes Folder*/
 	///////////////////////
-		PLAYC = new MenuFolder(FolderColors[3] << "Player Codes");
+		MenuFolder *PLAYC = new MenuFolder(FolderColors[3] << "PLAYER_CODES");
 	////////////////////////////
 	/*Player Save Codes Folder*/
 	////////////////////////////
-		PSAVEC = new MenuFolder(FolderColors[3] << "Player Save Codes");
-		PSAVEC->Append(new MenuEntry(FolderColors[3] << "Player Name Changer", nullptr, NameChanger, "note")),
-		PSAVEC->Append(new MenuEntry(FolderColors[3] << "Player Appearance", nullptr, playermod, "note")),
-		PSAVEC->Append(new MenuEntry(FolderColors[3] << "Random Player", nullptr, randomoutfit, "note")),
-		PSAVEC->Append(new MenuEntry(FolderColors[3] << "Player Backup", nullptr, playerbackup, "note")),
-		PSAVEC->Append(new MenuEntry(FolderColors[3] << "TPC Message Changer", nullptr, tpcmessage, "note")),
-		PSAVEC->Append(new MenuEntry(FolderColors[3] << "TPC Settings", nullptr, tpc, "note")),
-		PSAVEC->Append(new MenuEntry(FolderColors[3] << "Design Dumper", nullptr, DesignDumper, "note")),
-		PSAVEC->Append(new MenuEntry(FolderColors[3] << "Emotion List", nullptr, emotelist, "note")),
-		PSAVEC->Append(new MenuEntry(FolderColors[3] << "Encyclopedia List", nullptr, enzyklopedia, "note")),
-		PSAVEC->Append(new MenuEntry(FolderColors[3] << "Dream Code Modifier", nullptr, comodifier, "note")),
-		PSAVEC->Append(new MenuEntry(FolderColors[3] << "Census Menu", nullptr, debug1, "note")),
-		PSAVEC->Append(new MenuEntry(FolderColors[3] << "Song List", nullptr, FillSongs, "note")),
-		PSAVEC->Append(new MenuEntry(FolderColors[3] << "Fill Catalog", nullptr, FillCatalog, "note")),
+		MenuFolder *PSAVEC = new MenuFolder(FolderColors[3] << "PLAYER_SAVE_CODES");
+		PSAVEC->Append(new MenuEntry(FolderColors[3] << "NAME_CHANGER", nullptr, NameChanger, "NAME_CHANGER_NOTE")),
+		PSAVEC->Append(new MenuEntry(FolderColors[3] << "PLAYER_APPEARANCE", nullptr, playermod, "PLAYER_APPEARANCE_NOTE")),
+		PSAVEC->Append(new MenuEntry(FolderColors[3] << "RANDOM_PLAYER", nullptr, randomoutfit, "RANDOM_PLAYER_NOTE")),
+		PSAVEC->Append(new MenuEntry(FolderColors[3] << "PLAYER_BACKUP_NAME", nullptr, playerbackup, "PLAYER_BACKUP_NOTE")),
+		PSAVEC->Append(new MenuEntry(FolderColors[3] << "TPC_MESSAGE", nullptr, tpcmessage, "TPC_MESSAGE_NOTE")),
+		PSAVEC->Append(new MenuEntry(FolderColors[3] << "TPC_SETTINGS", nullptr, tpc, "TPC_SETTINGS_NOTE")),
+		PSAVEC->Append(new MenuEntry(FolderColors[3] << "DESIGN_DUMP", nullptr, DesignDumper, "DESIGN_DUMP_NOTE")),
+		PSAVEC->Append(new MenuEntry(FolderColors[3] << "EMOTION_LIST", nullptr, emotelist, "EMOTION_LIST_NOTE")),
+		PSAVEC->Append(new MenuEntry(FolderColors[3] << "ENCY_LIST", nullptr, enzyklopedia, "ENCY_LIST_NOTE")),
+		PSAVEC->Append(new MenuEntry(FolderColors[3] << "DREAM_CODE", nullptr, comodifier, "DREAM_CODE_NOTE")),
+		PSAVEC->Append(new MenuEntry(FolderColors[3] << "DEBUG_MENU", nullptr, debug1, "DEBUG_MENU_NOTE")),
+		PSAVEC->Append(new MenuEntry(FolderColors[3] << "SONG_LIST_NAME", nullptr, FillSongs, "SONG_LIST_NOTE")),
+		PSAVEC->Append(new MenuEntry(FolderColors[3] << "FILL_CATALOG_NAME", nullptr, FillCatalog, "FILL_CATALOG_NOTE")),
 		PLAYC->Append(PSAVEC);
-		PLAYC->Append(new MenuEntry(FolderColors[3] << "Player Info", debug, "note")),
-	//PLAYC->Append(new MenuEntry(FolderColors[3] << "Player Loader", nullptr, pLoaderEntry, "note")),
-		PLAYC->Append(EntryWithHotkey(new MenuEntry(FolderColors[3] << "Neck Position", neckentry, "note"), { 
-			Hotkey(Key::L | Key::DPadDown, "Key") 
+		PLAYC->Append(new MenuEntry(FolderColors[3] << "PLAYER_INFO", debug, "PLAYER_INFO_NOTE")),
+	//PLAYC->Append(new MenuEntry(FolderColors[3] << "PLAYER_LOADER", nullptr, pLoaderEntry, "PLAYER_LOADER_NOTE")),
+		PLAYC->Append(EntryWithHotkey(new MenuEntry(FolderColors[3] << "NECK_POSITION", neckentry, "NECK_POSITION_NOTE"), { 
+			Hotkey(Key::L | Key::DPadDown, "NECK_POSITION") 
 		})),
-		PLAYC->Append(EntryWithHotkey(new MenuEntry(FolderColors[3] << "Custom Hair&Eye Colors", App_ColorMod, SaveColor, "note"), { 
-			Hotkey(Key::R, "Key")
+		PLAYC->Append(EntryWithHotkey(new MenuEntry(FolderColors[3] << "CUSTOM_HAIR_EYE", App_ColorMod, SaveColor, "CUSTOM_HAIR_EYE_NOTE"), { 
+			Hotkey(Key::R, "CUSTOM_HAIR_EYE_KEY1")
 		})),
-		PLAYC->Append(new MenuEntry(FolderColors[3] << "Wear Helmet And Accessory", hatz, "note")),
-		PLAYC->Append(EntryWithHotkey(new MenuEntry(FolderColors[3] << "Player Faint", Faint, "note"), {
-			Hotkey(Key::R | Key::A, "Key")
+		PLAYC->Append(new MenuEntry(FolderColors[3] << "WEAR_HELMET", hatz, "WEAR_HELMET_NOTE")),
+		PLAYC->Append(EntryWithHotkey(new MenuEntry(FolderColors[3] << "FAINT", Faint, "FAINT_NOTE"), {
+			Hotkey(Key::R | Key::A, "FAINT")
 		})),
-		PLAYC->Append(new MenuEntry(FolderColors[3] << "Show Players On The Map", map, "note")),
+		PLAYC->Append(new MenuEntry(FolderColors[3] << "PLAYERS_ON_MAP", map, "PLAYERS_ON_MAP_NOTE")),
 
-		PLAYC->Append(new MenuEntry(FolderColors[3] << "Never Bedhead", NeverBedHead, "note")),
+		PLAYC->Append(new MenuEntry(FolderColors[3] << "NEVER_BEDHEAD", NeverBedHead, "NEVER_BEDHEAD_NOTE")),
 		menu->Append(PLAYC);
 
 	//////////////////////////
 	/*Animation Codes Folder*/
 	//////////////////////////
-		ANIMC = new MenuFolder(FolderColors[4] << "Animation Codes");
-		ANIMC->Append(EntryWithHotkey(new MenuEntry(FolderColors[4] << "Player Selector", playerSelector, "note"), { 
-			Hotkey(Key::L | Key::DPadRight, "Key"), 
-			Hotkey(Key::L | Key::DPadLeft, "Key2") 
+		MenuFolder *ANIMC = new MenuFolder(FolderColors[4] << "ANIMATION_CODES");
+		ANIMC->Append(EntryWithHotkey(new MenuEntry(FolderColors[4] << "PLAYER_SELECTOR", playerSelector, "PLAYER_SELECTOR_NOTE"), { 
+			Hotkey(Key::L | Key::DPadRight, "PLAYER_SELECTOR_KEY1"), 
+			Hotkey(Key::L | Key::DPadLeft, "PLAYER_SELECTOR_KEY2") 
 		})),
-		ANIMC->Append(new MenuEntry(FolderColors[4] << "Anti Animation", anticheat, "note")),
-		ANIMC->Append(EntryWithHotkey(new MenuEntry(FolderColors[4] << "Animation Modifier", execAnim, "note"), { 
-			Hotkey(Key::A | Key::DPadRight, "Key"), 
-			Hotkey(Key::A | Key::DPadLeft, "Key2"), 
-			Hotkey(Key::A | Key::DPadUp, "Key3"), 
-			Hotkey(Key::A | Key::B, "Key4") 
+		ANIMC->Append(new MenuEntry(FolderColors[4] << "ANTI_ANIM", anticheat, "ANTI_ANIM_NOTE")),
+		ANIMC->Append(EntryWithHotkey(new MenuEntry(FolderColors[4] << "ANIMATION_MOD", execAnim, "ANIMATION_MOD_NOTE"), { 
+			Hotkey(Key::A | Key::DPadRight, "ANIMATIONS_NOTE_HOTKEY1"), 
+			Hotkey(Key::A | Key::DPadLeft, "ANIMATIONS_NOTE_HOTKEY2"), 
+			Hotkey(Key::A | Key::DPadUp, "ANIMATIONS_NOTE_HOTKEY3"), 
+			Hotkey(Key::A | Key::B, "ANIMATIONS_NOTE_HOTKEY4") 
 		})),
-		ANIMC->Append(EntryWithHotkey(new MenuEntry(FolderColors[4] << "Emotion Loop", inf_expression, "note"), { 
-			Hotkey(Key::B, "Key") 
+		ANIMC->Append(EntryWithHotkey(new MenuEntry(FolderColors[4] << "EMOTION_LOOP", inf_expression, "EMOTION_LOOP_NOTE"), { 
+			Hotkey(Key::B, "EMOTION_LOOP") 
 		})),
-		ANIMC->Append(EntryWithHotkey(new MenuEntry(FolderColors[4] << "Idle", idle, "note"), { 
-			Hotkey(Key::R, "Key") 
+		ANIMC->Append(EntryWithHotkey(new MenuEntry(FolderColors[4] << "IDLE", idle, "IDLE_NOTE"), { 
+			Hotkey(Key::R, "IDLE") 
 		})),
-		ANIMC->Append(EntryWithHotkey(new MenuEntry(FolderColors[4] << "Slow-Motion Animations", slmoanms, "note"), { 
-			Hotkey(Key::L | Key::DPadLeft, "Key") 
+		ANIMC->Append(EntryWithHotkey(new MenuEntry(FolderColors[4] << "SLOW_MO_ANIM", slmoanms, "SLOW_MO_ANIM_NOTE"), { 
+			Hotkey(Key::L | Key::DPadLeft, "SLOW_MO_ANIM") 
 		})),
-		ANIMC->Append(EntryWithHotkey(new MenuEntry(FolderColors[4] << "Set Animations On Everyone", doonall, "note"), { 
-			Hotkey(Key::R | Key::A, "Key"), 
-			Hotkey(Key::R | Key::B, "Key2"), 
-			Hotkey(Key::R | Key::Y, "Key3") 
+		ANIMC->Append(EntryWithHotkey(new MenuEntry(FolderColors[4] << "ANIM_ON_ALL", doonall, "ANIM_ON_ALL_NOTE"), { 
+			Hotkey(Key::R | Key::A, "ANIM_ON_ALL_KEY1"), 
+			Hotkey(Key::R | Key::B, "ANIM_ON_ALL_KEY2"), 
+			Hotkey(Key::R | Key::Y, "ANIM_ON_ALL_KEY3") 
 		})),
 		menu->Append(ANIMC);
 
 	////////////////////////
 	/*Seeding Codes Folder*/
 	////////////////////////
-		SEEDC = new MenuFolder(FolderColors[5] << "Seeding Codes");
+		MenuFolder *SEEDC = new MenuFolder(FolderColors[5] << "SEEDING_CODES");
 	////////////////////////
 	/*Seed Codes SubFolder*/
 	////////////////////////
-		SEED1C = new MenuFolder(FolderColors[5] << "Seed Codes");
-		SEED1C->Append(EntryWithHotkey(new MenuEntry(FolderColors[5] << "PickUp Seeder", pickseeder, "note"), { 
-			Hotkey(Key::B | Key::DPadLeft, "Key"), 
-			Hotkey(Key::B | Key::DPadDown, "Key2"), 
-			Hotkey(Key::B | Key::DPadUp, "Key3"), 
-			Hotkey(Key::B | Key::DPadRight, "Key4"), 
-			Hotkey(Key::B | Key::L, "Key5") 
+		MenuFolder *SEED1C = new MenuFolder(FolderColors[5] << "SEED_CODES");
+		SEED1C->Append(EntryWithHotkey(new MenuEntry(FolderColors[5] << "PICK_SEEDER", pickseeder, "PICK_SEEDER_NOTE"), { 
+			Hotkey(Key::B | Key::DPadLeft, "PICK_SEEDER_KEY1"), 
+			Hotkey(Key::B | Key::DPadDown, "PICK_SEEDER_KEY2"), 
+			Hotkey(Key::B | Key::DPadUp, "PICK_SEEDER_KEY3"), 
+			Hotkey(Key::B | Key::DPadRight, "PICK_SEEDER_KEY4"), 
+			Hotkey(Key::B | Key::L, "PICK_SEEDER_KEY5") 
 		})),
-		SEED1C->Append(EntryWithHotkey(new MenuEntry(FolderColors[5] << "Walking Remover", Walkseeder, "note"), { 
-			Hotkey(Key::R | Key::B, "Key") 
+		SEED1C->Append(EntryWithHotkey(new MenuEntry(FolderColors[5] << "WALK_SEEDER", Walkseeder, "WALK_SEEDER_NOTE"), { 
+			Hotkey(Key::R | Key::B, "WALK_SEEDER") 
 		})),
-		SEED1C->Append(new MenuEntry(FolderColors[5] << "Firework Seeder", nullptr, fireworkentry, "note")),
-		SEED1C->Append(EntryWithHotkey(new MenuEntry(FolderColors[5] << "Map Editor", tileSelector, "note"), { 
-			Hotkey(Key::Start | Key::DPadUp, "Key"), 
-			Hotkey(Key::DPadRight, "Key2"), 
-			Hotkey(Key::DPadLeft, "Key3"), 
-			Hotkey(Key::DPadDown, "Key4"), 
-			Hotkey(Key::DPadUp, "Key5"), 
-			Hotkey(Key::L, "Key6"), 
-			Hotkey(Key::R, "Key7"), 
-			Hotkey(Key::Start | Key::DPadDown, "Key8"), 
-			Hotkey(Key::Start | Key::DPadLeft, "Key9"), 
-			Hotkey(Key::A, "Key10"), 
-			Hotkey(Key::Start | Key::DPadRight, "Key11") 
+		SEED1C->Append(new MenuEntry(FolderColors[5] << "FIREWORK_SEEDER", nullptr, fireworkentry, "FIREWORK_SEEDER_NOTE")),
+		SEED1C->Append(EntryWithHotkey(new MenuEntry(FolderColors[5] << "MAP_EDITOR", tileSelector, "MAP_EDITOR_NOTE"), { 
+			Hotkey(Key::Start | Key::DPadUp, "MAP_EDITOR_KEY1"), 
+			Hotkey(Key::DPadRight, "MAP_EDITOR_KEY2"), 
+			Hotkey(Key::DPadLeft, "MAP_EDITOR_KEY3"), 
+			Hotkey(Key::DPadDown, "MAP_EDITOR_KEY4"), 
+			Hotkey(Key::DPadUp, "MAP_EDITOR_KEY5"), 
+			Hotkey(Key::L, "MAP_EDITOR_KEY6"), 
+			Hotkey(Key::R, "MAP_EDITOR_KEY7"), 
+			Hotkey(Key::Start | Key::DPadDown, "MAP_EDITOR_KEY8"), 
+			Hotkey(Key::Start | Key::DPadLeft, "MAP_EDITOR_KEY9"), 
+			Hotkey(Key::A, "MAP_EDITOR_KEY10"), 
+			Hotkey(Key::Start | Key::DPadRight, "MAP_EDITOR_KEY11") 
 		})),
-		SEED1C->Append(EntryWithHotkey(new MenuEntry(FolderColors[5] << "Everything Seeder", everythingseeder, E_Seeder_KB, "note"), { 
-			Hotkey(Key::L, "Key") 
+		SEED1C->Append(EntryWithHotkey(new MenuEntry(FolderColors[5] << "ALL_SEEDER", everythingseeder, E_Seeder_KB, "ALL_SEEDER_NOTE"), { 
+			Hotkey(Key::L, "ALL_SEEDER_KEY1") 
 		})),
 		SEEDC->Append(SEED1C);
 	////////////////////////
 	/*Drop Codes SubFolder*/
 	////////////////////////
-		DROPC = new MenuFolder(FolderColors[5] << "Drop Codes");
-		DROPC->Append(new MenuEntry(FolderColors[5] << "Item Sequencer", nullptr, Entry_itemsequence, "note")),
-	    DROPC->Append(EntryWithHotkey(new MenuEntry(FolderColors[5] << "Drop Modifiers", dropMod, "note"), { 
-			Hotkey(Key::A | Key::DPadRight, "Key"), 
-			Hotkey(Key::A | Key::DPadLeft, "Key2"), 
-			Hotkey(Key::A | Key::DPadDown, "Key3"), 
-			Hotkey(Key::A | Key::DPadUp, "Key4") 
+		MenuFolder *DROPC = new MenuFolder(FolderColors[5] << "DROP_CODES");
+		DROPC->Append(new MenuEntry(FolderColors[5] << "ITEM_SEQUENCER", nullptr, Entry_itemsequence, "ITEM_SEQUENCER_NOTE")),
+	    DROPC->Append(EntryWithHotkey(new MenuEntry(FolderColors[5] << "DROP_MODS", dropMod, "DROP_MODS_NOTE"), { 
+			Hotkey(Key::A | Key::DPadRight, "DROP_MODS_KEY1"), 
+			Hotkey(Key::A | Key::DPadLeft, "DROP_MODS_KEY2"), 
+			Hotkey(Key::A | Key::DPadDown, "DROP_MODS_KEY3"), 
+			Hotkey(Key::A | Key::DPadUp, "DROP_MODS_KEY4") 
 		})),
-		DROPC->Append(EntryWithHotkey(new MenuEntry(FolderColors[5] << "Drop Items", instantDrop, "note"), { 
-			Hotkey(Key::Y | Key::DPadRight, "Key"), 
-			Hotkey(Key::L | Key::DPadDown, "Key2") 
+		DROPC->Append(EntryWithHotkey(new MenuEntry(FolderColors[5] << "DROP_ITEMS", instantDrop, "DROP_ITEMS_NOTE"), { 
+			Hotkey(Key::Y | Key::DPadRight, "DROP_ITEMS_KEY1"), 
+			Hotkey(Key::L | Key::DPadDown, "DROP_ITEMS_KEY2") 
 		})),
-		DROPC->Append(EntryWithHotkey(new MenuEntry(FolderColors[5] << "Auto Drop", autoDrop, "note"), { 
-			Hotkey(Key::Y | Key::DPadRight, "Key"), 
-			Hotkey(Key::Y | Key::DPadLeft, "Key2") 
+		DROPC->Append(EntryWithHotkey(new MenuEntry(FolderColors[5] << "AUTO_DROP", autoDrop, "AUTO_DROP_NOTE"), { 
+			Hotkey(Key::Y | Key::DPadRight, "AUTO_DROP_KEY1"), 
+			Hotkey(Key::Y | Key::DPadLeft, "AUTO_DROP_KEY2") 
 		})),
-		DROPC->Append(EntryWithHotkey(new MenuEntry(FolderColors[5] << "Touch Drop", touchDrop, "note"), { 
-			Hotkey(Key::Y | Key::DPadRight, "Key") 
+		DROPC->Append(EntryWithHotkey(new MenuEntry(FolderColors[5] << "TOUCH_DROP", touchDrop, "TOUCH_DROP_NOTE"), { 
+			Hotkey(Key::Y | Key::DPadRight, "TOUCH_DROP_KEY1") 
 		})),
-		DROPC->Append(EntryWithHotkey(new MenuEntry(FolderColors[5] << "Slot Drop", ShowInvSlotID, "note"), { 
-			Hotkey(Key::R | Key::Y, "Key"), 
-			Hotkey(Key::R | Key::X, "Key2") 
+		DROPC->Append(EntryWithHotkey(new MenuEntry(FolderColors[5] << "SLOT_DROP", ShowInvSlotID, "SLOT_DROP_NOTE"), { 
+			Hotkey(Key::R | Key::Y, "SLOT_DROP_KEY1"), 
+			Hotkey(Key::R | Key::X, "SLOT_DROP_KEY2") 
 		})),
 		SEEDC->Append(DROPC);
 	////////////////////////
 	/*Tree Codes SubFolder*/
 	////////////////////////
-		TREEC = new MenuFolder(FolderColors[5] << "Tree Codes");
-		TREEC->Append(new MenuEntry(FolderColors[5] << "Infinite Fruit Tree", fruitStays, "note")),
-		TREEC->Append(new MenuEntry(FolderColors[5] << "Axe Tree Shake", shakechop, "note")),
-		TREEC->Append(EntryWithHotkey(new MenuEntry(FolderColors[5] << "Fruit Tree Item Modifier", fruititemmod, "note"), { 
-			Hotkey(Key::A | Key::DPadLeft, "Key") 
+		MenuFolder *TREEC = new MenuFolder(FolderColors[5] << "TREE_CODES");
+		TREEC->Append(new MenuEntry(FolderColors[5] << "INF_FRUIT_TREE", fruitStays, "INF_FRUIT_TREE_NOTE")),
+		TREEC->Append(new MenuEntry(FolderColors[5] << "AXE_TREE_SHAKE", shakechop, "AXE_TREE_SHAKE_NOTE")),
+		TREEC->Append(EntryWithHotkey(new MenuEntry(FolderColors[5] << "FRUIT_TREE_MOD", fruititemmod, "FRUIT_TREE_MOD_NOTE"), { 
+			Hotkey(Key::A | Key::DPadLeft, "FRUIT_TREE_MOD_KEY1") 
 		})),
-		TREEC->Append(new MenuEntry(FolderColors[5] << "Instant Tree Chop", instantchop, "note")),
+		TREEC->Append(new MenuEntry(FolderColors[5] << "INST_TREE_CHOP", instantchop, "INST_TREE_CHOP_NOTE")),
 		SEEDC->Append(TREEC);
 		menu->Append(SEEDC);
 
 	//////////////////////
 	/*Money Codes Folder*/
 	//////////////////////
-		MONC = new MenuFolder(FolderColors[6] << "Money Codes");
-		MONC->Append(new MenuEntry(FolderColors[6] << "Wallet", nullptr, wallet, "note")),
-		MONC->Append(new MenuEntry(FolderColors[6] << "Bank", nullptr, bank, "note")),
-		MONC->Append(new MenuEntry(FolderColors[6] << "Meow Coupons", nullptr, coupon, "note")),
-		MONC->Append(new MenuEntry(FolderColors[6] << "Badges", nullptr, badges, "note")),
-		MONC->Append(new MenuEntry(FolderColors[6] << "Medals", nullptr, medals, "note")),
-		MONC->Append(new MenuEntry(FolderColors[6] << "Turnips", nullptr, turnips, "note")),
+		MenuFolder *MONC = new MenuFolder(FolderColors[6] << "MONEY_CODES");
+		MONC->Append(new MenuEntry(FolderColors[6] << "WALLET", nullptr, wallet, "WALLET_NOTE")),
+		MONC->Append(new MenuEntry(FolderColors[6] << "BANK", nullptr, bank, "BANK_NOTE")),
+		MONC->Append(new MenuEntry(FolderColors[6] << "MEOW_COUPONS", nullptr, coupon, "MEOW_COUPONS_NOTE")),
+		MONC->Append(new MenuEntry(FolderColors[6] << "BADGES", nullptr, badges, "BADGES_NOTE")),
+		MONC->Append(new MenuEntry(FolderColors[6] << "MEDALS", nullptr, medals, "MEDALS_NOTE")),
+		MONC->Append(new MenuEntry(FolderColors[6] << "TURNIPS", nullptr, turnips, "TURNIPS_NOTE")),
 		menu->Append(MONC);
 
 	///////////////////////
 	/*Island Codes Folder*/
 	///////////////////////
-		ISLC = new MenuFolder(FolderColors[7] << "Island Codes");
-		ISLC->Append(new MenuEntry(FolderColors[7] << "Unlock Island", nullptr, UnlockIsland, "note")),
-		ISLC->Append(new MenuEntry(FolderColors[7] << "Always Bonus Ore", bonusOre, "note")),
-		ISLC->Append(new MenuEntry(FolderColors[7] << "Instant Fruit Finish", instantFruit, "note")),
-		ISLC->Append(new MenuEntry(FolderColors[7] << "Hacker Island Spoof", nullptr, Hackerisland, "note")),
-		ISLC->Append(new MenuEntry(FolderColors[7] << "Island Country Spoof", nullptr, Countryspoof, "note")),
-		ISLC->Append(new MenuEntry(FolderColors[7] << "Free Kappn Rides", FreeKappn, "note")),
-		ISLC->Append(new MenuEntry(FolderColors[7] << "Island Shop Slot Modifier", IslandShop, IslandSettings, "note")),
-		ISLC->Append(new MenuEntry(FolderColors[7] << "All Tours Selectable", alltour, "note")),
-		ISLC->Append(new MenuEntry(FolderColors[7] << "Island Acre Modifier", acreMod, menuAcreMod, "note")),
-		ISLC->Append(new MenuEntry(FolderColors[7] << "Island Building Modifier", buildingMod, menuBuildingMod, "note")),
+		MenuFolder *ISLC = new MenuFolder(FolderColors[7] << "ISLAND_CODES");
+		ISLC->Append(new MenuEntry(FolderColors[7] << "UNLOCK_ISLAND", nullptr, UnlockIsland, "UNLOCK_ISLAND_NOTE")),
+		ISLC->Append(new MenuEntry(FolderColors[7] << "FILL_INV_ORE", bonusOre, "FILL_INV_ORE_NOTE")),
+		ISLC->Append(new MenuEntry(FolderColors[7] << "FILL_INV_FRUIT", instantFruit, "FILL_INV_FRUIT_NOTE")),
+		ISLC->Append(new MenuEntry(FolderColors[7] << "HACKER_ISLAND", nullptr, Hackerisland, "HACKER_ISLAND_NOTE")),
+		ISLC->Append(new MenuEntry(FolderColors[7] << "ISLAND_COUNTRY", nullptr, Countryspoof, "ISLAND_COUNTRY_NOTE")),
+		ISLC->Append(new MenuEntry(FolderColors[7] << "FREE_KAPPN", FreeKappn, "FREE_KAPPN_NOTE")),
+		ISLC->Append(new MenuEntry(FolderColors[7] << "ISLAND_SHOP_MOD", IslandShop, IslandSettings, "ISLAND_SHOP_MOD_NOTE")),
+		ISLC->Append(new MenuEntry(FolderColors[7] << "ALL_TOURS", alltour, "ALL_TOURS_NOTE")),
+		ISLC->Append(new MenuEntry(FolderColors[7] << "ISLAND_ACRE", acreMod, menuAcreMod, "ISLAND_ACRE_NOTE")),
+		ISLC->Append(new MenuEntry(FolderColors[7] << "ISLAND_BUILDING", buildingMod, menuBuildingMod, "ISLAND_BUILDING_NOTE")),
 		menu->Append(ISLC);
 
 	//////////////
 	/*NPC Folder*/
 	//////////////
-		NPCC = new MenuFolder(FolderColors[8] << "NPC Codes");
-		NPCC->Append(EntryWithHotkey(new MenuEntry(FolderColors[8] << "NPC Selector", NPCFunction, "note"), { 
-			Hotkey(Key::L | Key::A, "Key") 
+		MenuFolder *NPCC = new MenuFolder(FolderColors[8] << "NPC_CODES");
+		NPCC->Append(EntryWithHotkey(new MenuEntry(FolderColors[8] << "NPC_SELECTOR", NPCFunction, "NPC_SELECTOR_NOTE"), { 
+			Hotkey(Key::L | Key::A, "NPC_SELECTOR_KEY1") 
 		})),
-		NPCC->Append(EntryWithHotkey(new MenuEntry(FolderColors[8] << "NPC Animation Modifier",  NPCAnimation, NPCSetAnim, "note"), { 
-			Hotkey(Key::L | Key::B, "Key") 
+		NPCC->Append(EntryWithHotkey(new MenuEntry(FolderColors[8] << "NPC_ANIMATION",  NPCAnimation, NPCSetAnim, "NPC_ANIMATION_NOTE"), { 
+			Hotkey(Key::L | Key::B, "NPC_ANIMATION_KEY1") 
 		})),
-		NPCC->Append(EntryWithHotkey(new MenuEntry(FolderColors[8] << "NPC Coordinates Modifier", NPCCoordinates, "note"), { 
-			Hotkey(Key::L, "Key"),
-			Hotkey(Key::DPadRight, "Key2"), 
-			Hotkey(Key::DPadLeft, "Key3"), 
-			Hotkey(Key::DPadDown, "Key4"), 
-			Hotkey(Key::DPadUp, "Key5")
+		NPCC->Append(EntryWithHotkey(new MenuEntry(FolderColors[8] << "NPC_COORDINATE", NPCCoordinates, "NPC_COORDINATE_NOTE"), { 
+			Hotkey(Key::L, "NPC_COORDINATE_KEY1"),
+			Hotkey(Key::DPadRight, "NPC_COORDINATE_KEY2"), 
+			Hotkey(Key::DPadLeft, "NPC_COORDINATE_KEY3"), 
+			Hotkey(Key::DPadDown, "NPC_COORDINATE_KEY4"), 
+			Hotkey(Key::DPadUp, "NPC_COORDINATE_KEY5")
 		})),
-		NPCC->Append(EntryWithHotkey(new MenuEntry(FolderColors[8] << "NPC Teleport To You", NPCTeleportToYou, "note"), { 
-			Hotkey(Key::L | Key::Y, "Key") 
+		NPCC->Append(EntryWithHotkey(new MenuEntry(FolderColors[8] << "NPC_TELEPORT", NPCTeleportToYou, "NPC_TELEPORT_NOTE"), { 
+			Hotkey(Key::L | Key::Y, "NPC_TELEPORT_KEY1") 
 		})),
-		NPCC->Append(EntryWithHotkey(new MenuEntry(FolderColors[8] << "NPC Rotation Modifier", NPCRotate, "note"), { 
-			Hotkey(Key::L, "Key") 
+		NPCC->Append(EntryWithHotkey(new MenuEntry(FolderColors[8] << "NPC_ROTATION", NPCRotate, "NPC_ROTATION_NOTE"), { 
+			Hotkey(Key::L, "NPC_ROTATION_KEY1") 
 		})),
 		menu->Append(NPCC);
 
 	////////////////////
 	/*Fun Codes Folder*/
 	////////////////////
-		FUNC = new MenuFolder(FolderColors[9] << "Fun Codes"); 
-		FUNC->Append(new MenuEntry(FolderColors[9] << "Size Codes", nullptr, sizecodes, "note")),
-		FUNC->Append(new MenuEntry(FolderColors[9] << "T-Pose", tposeentry, "note")),
-		FUNC->Append(EntryWithHotkey(new MenuEntry(FolderColors[9] << "Take TPC Pic", freezeframe, "note"), { 
-			Hotkey(Key::L, "Key"), 
-			Hotkey(Key::A, "Key2") 
+		MenuFolder *FUNC = new MenuFolder(FolderColors[9] << "FUN_CODES"); 
+		FUNC->Append(new MenuEntry(FolderColors[9] << "SIZE_CODES", nullptr, sizecodes, "SIZE_CODES_NOTE")),
+		FUNC->Append(new MenuEntry(FolderColors[9] << "T_POSE", tposeentry, "T_POSE_NOTE")),
+		FUNC->Append(EntryWithHotkey(new MenuEntry(FolderColors[9] << "TAKE_TPC_PIC", freezeframe, "TAKE_TPC_PIC_NOTE"), { 
+			Hotkey(Key::L, "TAKE_TPC_PIC_KEY1"), 
+			Hotkey(Key::A, "TAKE_TPC_PIC_KEY2") 
 		})),
-		FUNC->Append(new MenuEntry(FolderColors[9] << "Max Turbo Presses", maxturbo, "note")),
-		FUNC->Append(new MenuEntry(FolderColors[9] << "Multi-Presses", asmpresses, "note")),
-		FUNC->Append(EntryWithHotkey(new MenuEntry(FolderColors[9] << "Ultimate Party Popper", partypopper, "note"), { 
-			Hotkey(Key::B | Key::DPadLeft, "Key") 
+		FUNC->Append(new MenuEntry(FolderColors[9] << "MAX_TURBO", maxturbo, "MAX_TURBO_NOTE")),
+		FUNC->Append(new MenuEntry(FolderColors[9] << "MULTI_PRESS", asmpresses, "MULTI_PRESS_NOTE")),
+		FUNC->Append(EntryWithHotkey(new MenuEntry(FolderColors[9] << "ULTIMATE_POPPER", partypopper, "ULTIMATE_POPPER_NOTE"), { 
+			Hotkey(Key::B | Key::DPadLeft, "ULTIMATE_POPPER_KEY1") 
 		})),
-	    FUNC->Append(new MenuEntry(FolderColors[9] << "Camera Mod", cameramod, "note")),
+	    FUNC->Append(new MenuEntry(FolderColors[9] << "CAMERA_MOD", cameramod, "CAMERA_MOD_NOTE")),
 		menu->Append(FUNC);
 
 	//////////////////////
 	/*Extra Codes Folder*/
 	//////////////////////
-		EXTC = new MenuFolder(FolderColors[10] << "Extra Codes");
+		MenuFolder *EXTC = new MenuFolder(FolderColors[10] << "EXTRA_CODES");
 	/////////////////////
 	/*Fish Codes Folder*/
 	/////////////////////
-		FISC = new MenuFolder(FolderColors[10] << "Fish Codes");
-		FISC->Append(new MenuEntry(FolderColors[10] << "Fish Bite Always", FishAlwaysBiteRightAway, "note")),
-		FISC->Append(new MenuEntry(FolderColors[10] << "Fish Can't Be Scared", FishCantBeScared, "note")),
+		MenuFolder *FISC = new MenuFolder(FolderColors[10] << "FISH_CODES");
+		FISC->Append(new MenuEntry(FolderColors[10] << "FISH_ALWAYS_BITE_NAME", FishAlwaysBiteRightAway, "FISH_ALWAYS_BITE_NOTE")),
+		FISC->Append(new MenuEntry(FolderColors[10] << "FISH_CANT_SCARE_NAME", FishCantBeScared, "FISH_CANT_SCARE_NOTE")),
 		EXTC->Append(FISC);
 	/////////////////////
 	/*Chat Codes Folder*/
 	/////////////////////
-		CHAC = new MenuFolder(FolderColors[10] << "Chat Codes");
-		CHAC->Append(new MenuEntry(FolderColors[10] << "Chat Bubbles Don't Disappear", bubblesDisappear, "note")),
-		CHAC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "Chat Copy/Paste", ChatCopyPaste, "note"), {
-			Hotkey(Key::L | Key::DPadRight, "Key"),
-			Hotkey(Key::L | Key::DPadUp, "Key2"),
-			Hotkey(Key::L | Key::DPadDown, "Key3"),
-			Hotkey(Key::L | Key::DPadLeft, "Key4")
+		MenuFolder *CHAC = new MenuFolder(FolderColors[10] << "CHAT_CODES");
+		CHAC->Append(new MenuEntry(FolderColors[10] << "CHAT_DONT_DISSAPEAR", bubblesDisappear, "CHAT_DONT_DISSAPEAR_NOTE")),
+		CHAC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "CHATCOPYPASTE", ChatCopyPaste, "CHATCOPYPASTE_NOTE"), {
+			Hotkey(Key::L | Key::DPadRight, "CHATCOPYPASTE_KEY1"),
+			Hotkey(Key::L | Key::DPadUp, "CHATCOPYPASTE_KEY2"),
+			Hotkey(Key::L | Key::DPadDown, "CHATCOPYPASTE_KEY3"),
+			Hotkey(Key::L | Key::DPadLeft, "CHATCOPYPASTE_KEY4")
 		})),
-		CHAC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "Force Send Chat", Forcesendchat, "note"), { 
-			Hotkey(Key::R, "Key") 
+		CHAC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "FORCE_CHAT", Forcesendchat, "FORCE_CHAT_NOTE"), { 
+			Hotkey(Key::R, "FORCE_CHAT") 
 		})),
 		EXTC->Append(CHAC);
-		EXTC->Append(new MenuEntry(FolderColors[10] << "Shops Always Open", ShopsAlwaysOpen, "note")),
-		EXTC->Append(new MenuEntry(FolderColors[10] << "Disable Save Menus", nonesave, "note")),
-		EXTC->Append(new MenuEntry(FolderColors[10] << "Disable Item Locks", bypass, "note")),
-		EXTC->Append(new MenuEntry(FolderColors[10] << "Can't Fall In Holes Or Pitfalls", noTrap, "note")),
-		EXTC->Append(new MenuEntry(FolderColors[10] << "Set Spot State", nullptr, SetSpotState, "note")),
-		EXTC->Append(new MenuEntry(FolderColors[10] << "Search And Replace", nullptr, SearchReplace, "note")),
-		EXTC->Append(new MenuEntry(FolderColors[10] << "Remove All Town Items", nullptr, RemoveItemsCheat, "note")),
-	    EXTC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "Water All Flowers", WaterAllFlowers, "note"), { 
-			Hotkey(Key::R | Key::DPadLeft, "Key") 
+		EXTC->Append(new MenuEntry(FolderColors[10] << "SHOP_ALWAYS_OPEN_NAME", ShopsAlwaysOpen, "SHOP_ALWAYS_OPEN_NOTE")),
+		EXTC->Append(new MenuEntry(FolderColors[10] << "DISABLE_SAVE", nonesave, "DISABLE_SAVE_NOTE")),
+		EXTC->Append(new MenuEntry(FolderColors[10] << "DISABLE_ITEM_LOCKS", bypass, "DISABLE_ITEM_LOCKS_NOTE")),
+		EXTC->Append(new MenuEntry(FolderColors[10] << "CANT_FALL_HOLE", noTrap, "CANT_FALL_HOLE_NOTE")),
+		EXTC->Append(new MenuEntry(FolderColors[10] << "SET_SPOT_STATE_NAME", nullptr, SetSpotState, "SET_SPOT_STATE_NOTE")),
+		EXTC->Append(new MenuEntry(FolderColors[10] << "SEARCH_REPLACE_NAME", nullptr, SearchReplace, "SEARCH_REPLACE_NOTE")),
+		EXTC->Append(new MenuEntry(FolderColors[10] << "REMOVE_TOWNITEMS_NAME", nullptr, RemoveItemsCheat, "REMOVE_TOWNITEMS_NOTE")),
+	    EXTC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "WATER_FLOWERS_NAME", WaterAllFlowers, "WATER_FLOWERS_NOTE"), { 
+			Hotkey(Key::R | Key::DPadLeft, "WATER_FLOWRES_HOTKEY1") 
 		})),
-		EXTC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "Weed Remover", weedremover, "note"), { 
-			Hotkey(Key::L | Key::DPadRight, "Key"), 
-			Hotkey(Key::L | Key::DPadLeft, "Key2") 
+		EXTC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "WEED_REMOVER_NAME", weedremover, "WEED_REMOVER_NOTE"), { 
+			Hotkey(Key::L | Key::DPadRight, "WEED_REMOVER_HOTKEY1"), 
+			Hotkey(Key::L | Key::DPadLeft, "WEED_REMOVER_HOTKEY2") 
 		})),
-		EXTC->Append(new MenuEntry(FolderColors[10] << "Edit Every Pattern", editpattern, "note")),
-		EXTC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "Grass Editor", grasseditor, grasscomplete, "note"), { 
-			Hotkey(Key::R | Key::DPadDown, "Key"), 
-			Hotkey(Key::R | Key::DPadUp, "Key2"), 
-			Hotkey(Key::R | Key::DPadRight, "Key3") 
+		EXTC->Append(new MenuEntry(FolderColors[10] << "EDIT_PATTERN_NAME", editpattern, "EDIT_PATTERN_NOTE")),
+		EXTC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "GRASS_EDITOR", grasseditor, grasscomplete, "GRASS_EDITOR_NOTE"), { 
+			Hotkey(Key::R | Key::DPadDown, "GRASS_EDITOR_HOTKEY1"), 
+			Hotkey(Key::R | Key::DPadUp, "GRASS_EDITOR_HOTKEY2"), 
+			Hotkey(Key::R | Key::DPadRight, "GRASS_EDITOR_HOTKEY3") 
 		})),
-		EXTC->Append(new MenuEntry(FolderColors[10] << "Amiibo Spoofer", AmiiboSpoofer, "note")),
-		EXTC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "Time Travel", TimeTravel, TTKeyboard, "note"), { 
-			Hotkey(Key::R | Key::DPadRight, "Key"), 
-			Hotkey(Key::R | Key::DPadLeft, "Key2") 
+		EXTC->Append(new MenuEntry(FolderColors[10] << "AMIIBO_SPOOFER", AmiiboSpoofer, "AMIIBO_SPOOFER_NOTE")),
+		EXTC->Append(EntryWithHotkey(new MenuEntry(FolderColors[10] << "TIME_TRAVEL", TimeTravel, TTKeyboard, "TIME_TRAVEL_NOTE"), { 
+			Hotkey(Key::R | Key::DPadRight, "TIME_FORWARD"), 
+			Hotkey(Key::R | Key::DPadLeft, "TIME_BACKWARDS") 
 		})),
 		menu->Append(EXTC);
 
 	/////////////////////
 	/*Misc Codes Folder*/
 	/////////////////////
-		MISC = new MenuFolder(FolderColors[11] << "Misc Codes");		
-		MISC->Append(new MenuEntry(FolderColors[11] << "Change Tool Animation", nullptr, tooltype, "note")),
-		MISC->Append(new MenuEntry(FolderColors[11] << "Change Gametype", nullptr, mgtype, "note")),
-		MISC->Append(new MenuEntry(FolderColors[11] << "Unbreakable Flowers", unbreakableflower, "note")),
-		MISC->Append(new MenuEntry(FolderColors[11] << "Weather Modifier", nullptr, Weathermod , "note")),
-		MISC->Append(new MenuEntry(FolderColors[11] << "Always Aurora Lights", auroralights , "note")),
-		MISC->Append(new MenuEntry(FolderColors[11] << "Disable Non-Hacker Commands", nullptr, disablecommands, "note")),
-		MISC->Append(new MenuEntry(FolderColors[11] << "Reload Room", nullptr, ReloadRoomCheat, "note")),
-		MISC->Append(EntryWithHotkey(new MenuEntry(FolderColors[11] << "Quick Menu", QuickMenuEntry, "note"), {
-			Hotkey(Key::Y | Key::DPadDown, "Key")
+		MenuFolder *MISC = new MenuFolder(FolderColors[11] << "MISC_CODES");		
+		MISC->Append(new MenuEntry(FolderColors[11] << "TOOL_ANIM", nullptr, tooltype, "TOOL_ANIM_NOTE")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "GAME_TYPE", nullptr, mgtype, "GAME_TYPE_NOTE")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "UNBREAK_FLOWER", unbreakableflower, "UNBREAK_FLOWER_NOTE")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "WEATHER_MOD", nullptr, Weathermod , "WEATHER_MOD_NOTE")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "ALWAYS_AURORA_MOD", auroralights , "ALWAYS_AURORA_MOD_NOTE")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "DISABLECOMMAND", nullptr, disablecommands, "DISABLECOMMAND_NOTE")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "RELOAD_ROOM_NAME", nullptr, ReloadRoomCheat, "RELOAD_ROOM_NOTE")),
+		MISC->Append(EntryWithHotkey(new MenuEntry(FolderColors[11] << "QUICK_MENU", QuickMenuEntry, "QUICK_MENU_NOTE"), {
+			Hotkey(Key::Y | Key::DPadDown, "QUICK_MENU")
 		})),
-		MISC->Append(new MenuEntry(FolderColors[11] << "More Than 3 Number On Island",  morenumberisland, "note")),
-		MISC->Append(new MenuEntry(FolderColors[11] << "Large FOV", fovlarge, "note")),
-		MISC->Append(new MenuEntry(FolderColors[11] << "Move Furniture", roomSeeder, "note")),
-		MISC->Append(new MenuEntry(FolderColors[11] << "Can Walk When Talk", walktalkentry, "note")),
-		MISC->Append(new MenuEntry(FolderColors[11] << "Keyboard Extender", key_limit, "note")),
-		MISC->Append(new MenuEntry(FolderColors[11] << "Custom Keyboard Symbols", CustomKeyboard, "note")),
-		MISC->Append(EntryWithHotkey(new MenuEntry(FolderColors[11] << "Beans Particle Changer", BeansParticleChanger, "note"), { 
-			Hotkey(Key::L | Key::DPadLeft, "Key") 
+		MISC->Append(new MenuEntry(FolderColors[11] << "MORE_NUMBERS",  morenumberisland, "MORE_NUMBERS_NOTE")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "LARGE_FOV", fovlarge, "LARGE_FOV_NOTE")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "MOVE_FURN", roomSeeder, "MOVE_FURN_NOTE")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "WALK_TALK", walktalkentry, "WALK_TALK_NOTE")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "KEY_EXTEND", key_limit, "KEY_EXTEND_NOTE")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "CUSTOM_KEY", CustomKeyboard, "CUSTOM_KEY_NOTE")),
+		MISC->Append(EntryWithHotkey(new MenuEntry(FolderColors[11] << "BEANS_PARTICLE", BeansParticleChanger, "BEANS_PARTICLE_NOTE"), { 
+			Hotkey(Key::L | Key::DPadLeft, "BEANS_PARTICLE") 
 		})),
-		MISC->Append(new MenuEntry(FolderColors[11] << "Always Daytime", Daytime, "note")),    
-		MISC->Append(EntryWithHotkey(new MenuEntry(FolderColors[11] << "Fast Mode", fast, "note"), { 
-			Hotkey(Key::R | Key::DPadDown, "Key")
+		MISC->Append(new MenuEntry(FolderColors[11] << "DAYTIME", Daytime, "DAYTIME_NOTE")),    
+		MISC->Append(EntryWithHotkey(new MenuEntry(FolderColors[11] << "FAST_MODE", fast, "FAST_MODE_NOTE"), { 
+			Hotkey(Key::R | Key::DPadDown, "FAST_MODE")
 		})),
-		MISC->Append(new MenuEntry(FolderColors[11] << "Fast Text Speed", fasttalk, "note")),
-		MISC->Append(new MenuEntry(FolderColors[11] << "Fast Game Speed", speedentry, "note")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "FAST_TEXT_SPEED", fasttalk, "FAST_TEXT_SPEED_NOTE")),
+		MISC->Append(new MenuEntry(FolderColors[11] << "FAST_GAME_SPEED", speedentry, "FAST_GAME_SPEED_NOTE")),
 		menu->Append(MISC);
 
 	////////////////////
@@ -451,5 +487,24 @@ namespace CTRPluginFramework {
 		menu->Append(new MenuEntry("Plugin Settings", nullptr, pluginsettings)),
 		//menu->Append(new MenuEntry("Game Settings", nullptr, gamesettings)),
 		menu->Append(new MenuEntry("Random Folder Colors", rainbow, "This will randomize the cheat folders colors.\nNote: If you randomize the color and reset the plugin, the color will not be the randomized one, it will instead stay at the color option you selected!"));
+	
+		SetUp(SAVEC);
+		SetUp(MOVEC);
+		SetUp(INVC);
+		SetUp(PSAVEC, true);
+		SetUp(PLAYC);
+		SetUp(ANIMC);
+		SetUp(SEED1C, true);
+		SetUp(DROPC, true);
+		SetUp(TREEC, true);
+		SetUp(SEEDC);
+		SetUp(MONC);
+		SetUp(ISLC);
+		SetUp(NPCC);
+		SetUp(FUNC);
+		SetUp(FISC, true);
+		SetUp(CHAC, true);
+		SetUp(EXTC);
+		SetUp(MISC);
 	}
 }
