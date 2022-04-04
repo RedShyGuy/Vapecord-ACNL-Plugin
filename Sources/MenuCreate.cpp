@@ -22,40 +22,45 @@ namespace CTRPluginFramework {
         return(entry);
     }
 
-	static void SetUp(MenuFolder *objfolder, bool isSubFolder = false) {
+	std::vector<FolderData> PluginMenuData::folderData;
+
+	bool PluginMenuData::GetFolderData(std::vector<FolderData> &fData) {
+		if(!folderData.empty()) {
+			fData = folderData; 
+			return true;
+		}
+
+		return false;
+	}
+
+	void PluginMenuData::SetUp(MenuFolder *objfolder, bool isSubFolder) {
 		if(objfolder != nullptr) {
-			std::vector<EntryData *> objentryData;
+			folderData.push_back(FolderData());
+			int pos = (folderData.size() - 1);
+
+			folderData[pos].folder = objfolder;
+			folderData[pos].IndexColor = GetColorFromString(objfolder->Name());
+			folderData[pos].IndexName = RemoveColorFromString(objfolder->Name());
+			folderData[pos].IndexNote = objfolder->Note();
+			folderData[pos].IsSubFolder = isSubFolder;
 
 			std::vector<MenuEntry *> entrys = objfolder->GetEntryList();
-			
-			OSD::Notify(Utils::Format("SetUp %d", entrys.size()));
+			for(auto objentry = entrys.begin(); objentry != entrys.end(); ++objentry) {
+				if(*objentry != nullptr) {
+					folderData[pos].entryData.push_back(EntryData());
+					int pos2 = (folderData[pos].entryData.size() - 1);
 
-			for(auto obj_entry : entrys) {
-				if(obj_entry != nullptr) {
-					std::vector<std::string> hotkeys;
-					for(int i = 0; i < obj_entry->Hotkeys.Count(); ++i) 
-						hotkeys.push_back(GetHotkeyName(obj_entry->Hotkeys[i]));
+					folderData[pos].entryData[pos2].entry = *objentry;
+					folderData[pos].entryData[pos2].IndexColor = GetColorFromString((*objentry)->Name());
+					folderData[pos].entryData[pos2].IndexName = RemoveColorFromString((*objentry)->Name());
+					folderData[pos].entryData[pos2].IndexNote = (*objentry)->Note();
 
-					EntryData *edata = new EntryData();
-					edata->entry = obj_entry;
-					edata->IndexColor = GetColorFromString(obj_entry->Name());
-					edata->IndexName = RemoveColorFromString(obj_entry->Name());
-					edata->IndexNote = obj_entry->Note();
-					edata->IndexHotkeys = hotkeys;
-
-					objentryData.push_back(edata);
+					for(int i = 0; i < (*objentry)->Hotkeys.Count(); ++i) 
+						folderData[pos].entryData[pos2].IndexHotkeys.push_back(GetHotkeyName((*objentry)->Hotkeys[i]));
 				}
 			}
 
-			FolderData *data = new FolderData();
-			data->folder = objfolder;
-			data->IndexColor = GetColorFromString(objfolder->Name());
-			data->IndexName = RemoveColorFromString(objfolder->Name());
-			data->IndexNote = objfolder->Note();
-			data->IsSubFolder = isSubFolder;
-			data->entryData = objentryData;
-
-			folderData.push_back(data);
+			OSD::Notify(Utils::Format("Edata 2: %d", folderData[0].entryData.size()));
 		}
 	}
 
@@ -488,23 +493,23 @@ namespace CTRPluginFramework {
 		//menu->Append(new MenuEntry("Game Settings", nullptr, gamesettings)),
 		menu->Append(new MenuEntry("Random Folder Colors", rainbow, "This will randomize the cheat folders colors.\nNote: If you randomize the color and reset the plugin, the color will not be the randomized one, it will instead stay at the color option you selected!"));
 	
-		SetUp(SAVEC);
-		SetUp(MOVEC);
-		SetUp(INVC);
-		SetUp(PSAVEC, true);
-		SetUp(PLAYC);
-		SetUp(ANIMC);
-		SetUp(SEED1C, true);
-		SetUp(DROPC, true);
-		SetUp(TREEC, true);
-		SetUp(SEEDC);
-		SetUp(MONC);
-		SetUp(ISLC);
-		SetUp(NPCC);
-		SetUp(FUNC);
-		SetUp(FISC, true);
-		SetUp(CHAC, true);
-		SetUp(EXTC);
-		SetUp(MISC);
+		PluginMenuData::SetUp(SAVEC);
+		/*PluginMenuData::SetUp(MOVEC);
+		PluginMenuData::SetUp(INVC);
+		PluginMenuData::SetUp(PSAVEC, true);
+		PluginMenuData::SetUp(PLAYC);
+		PluginMenuData::SetUp(ANIMC);
+		PluginMenuData::SetUp(SEED1C, true);
+		PluginMenuData::SetUp(DROPC, true);
+		PluginMenuData::SetUp(TREEC, true);
+		PluginMenuData::SetUp(SEEDC);
+		PluginMenuData::SetUp(MONC);
+		PluginMenuData::SetUp(ISLC);
+		PluginMenuData::SetUp(NPCC);
+		PluginMenuData::SetUp(FUNC);
+		PluginMenuData::SetUp(FISC, true);
+		PluginMenuData::SetUp(CHAC, true);
+		PluginMenuData::SetUp(EXTC);
+		PluginMenuData::SetUp(MISC);*/
 	}
 }

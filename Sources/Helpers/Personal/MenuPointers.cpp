@@ -30,11 +30,10 @@ namespace CTRPluginFramework {
 	}
 
 	std::string GetHotkeyName(Hotkey hotkey) {
+		return "";
 		char *str = (char *)*(u32 *)((u32)&hotkey + 4);
 		return std::string(str);
 	}
-
-	std::vector<FolderData *> folderData;
 
 //Functions for easier color changes
 	void UpdateAll(const Color arr[12]) {
@@ -73,9 +72,19 @@ namespace CTRPluginFramework {
 	}
 //Update
 	void UpdateAll(void) {
-		for(auto fdata : folderData) {
-			OSD::Notify(Utils::Format("Update %d", fdata->entryData.size()));
-			for(auto edata : fdata->entryData) {
+		std::vector<FolderData> objfData;
+		if(!PluginMenuData::GetFolderData(objfData)) {
+			OSD::Notify("empty");
+			return;
+		}
+
+		OSD::Notify(Utils::Format("%d", objfData[0].entryData.size()));
+
+		return;
+
+		for(auto fdata : objfData) {
+			for(auto edata : fdata.entryData) {
+				/*
 				std::string hotkey = "";
 				int count = edata->entry->Hotkeys.Count();
 
@@ -89,10 +98,12 @@ namespace CTRPluginFramework {
 				edata->entry->Name() = edata->IndexColor << Language->Get(edata->IndexName) + " " + hotkey;
 				edata->entry->Note() = Language->Get(edata->IndexNote);
 				edata->entry->RefreshNote();
+				*/
+
 			}
 
-			fdata->folder->Name() = fdata->IndexColor << Language->Get(fdata->IndexName);
-			fdata->folder->Note() = Language->Get(fdata->IndexNote);
+			fdata.folder->Name() = fdata.IndexColor << Language->Get(fdata.IndexName);
+			fdata.folder->Note() = Language->Get(fdata.IndexNote);
 		}
 	}
 

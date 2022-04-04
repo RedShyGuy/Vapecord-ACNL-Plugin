@@ -19,6 +19,15 @@ namespace CTRPluginFramework {
 		std::string IndexName;
 		std::string IndexNote;
 		std::vector<std::string> IndexHotkeys;
+		/*
+		EntryData(MenuEntry *a, Color b, std::string c, std::string d, std::vector<std::string> e) {
+			entry = a;
+			IndexColor = b;
+			IndexName = c;
+			IndexNote = d;
+			IndexHotkeys = e;
+		}
+		*/
 	};
 
 	struct FolderData {
@@ -27,11 +36,25 @@ namespace CTRPluginFramework {
 		std::string IndexName;
 		std::string IndexNote;
 		bool IsSubFolder;
+		std::vector<EntryData> entryData;
 
-		std::vector<EntryData *> entryData;
+		/*FolderData(MenuFolder *a, Color b, std::string c, std::string d, bool e, std::vector<EntryData *> f) {
+			folder = a;
+			IndexColor = b;
+			IndexName = c;
+			IndexNote = d;
+			IsSubFolder = e;
+			entryData = f;
+		}*/
 	};
 
-	extern std::vector<FolderData *> folderData;
+	class PluginMenuData {
+		public:
+			static void SetUp(MenuFolder *objfolder, bool isSubFolder = false);
+			static bool GetFolderData(std::vector<FolderData> &fData);
+		private:
+			static std::vector<FolderData> folderData;
+	};
 
 	using FuncPointer = void (*)(MenuEntry *);
 
