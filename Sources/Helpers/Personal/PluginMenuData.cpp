@@ -21,6 +21,8 @@ namespace CTRPluginFramework {
 		return std::string(str);
 	}
 
+	static int obj_CogID = 0;
+
 	void PluginMenuData::SetUp(MenuFolder *objfolder, bool isSubFolder) {
 		if(objfolder != nullptr) {
 			folderData.push_back(FolderData());
@@ -45,6 +47,13 @@ namespace CTRPluginFramework {
 					
 					for(int i = 0; i < objentry->Hotkeys.Count(); ++i) 
 						folderData[pos].entryData[pos2].IndexHotkeys.push_back(GetHotkeyName(objentry->Hotkeys[i]));
+
+					if(PluginMenuData::GetGameFunc(objentry) == nullptr && PluginMenuData::GetMenuFunc(objentry) != nullptr) {
+						folderData[pos].entryData[pos2].CogID = obj_CogID;
+						obj_CogID++;
+					}
+					else
+						folderData[pos].entryData[pos2].CogID = -1;
 				}
 			}
 		}

@@ -17,6 +17,7 @@ namespace CTRPluginFramework {
 		Color IndexColor;
 		std::string IndexName;
 		std::string IndexNote;
+		int CogID; //-1 if no cog cheat
 		std::vector<std::string> IndexHotkeys;
 	};
 

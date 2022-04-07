@@ -101,39 +101,13 @@ namespace CTRPluginFramework {
 
 //This lists all available cog entrys of the plugin (ignoring hidden ones)
     void QuickMenu::ListAvailableCogEntrys(std::vector<MenuEntry*> &cogEntrys, std::vector<s8> &ID) {
-        PluginMenu *menu = PluginMenu::GetRunningInstance();
-        if(menu == nullptr) //if menu somehow isn't loaded
-            return;
-
-        cogEntrys.clear();
-        std::vector<MenuEntry *> AllEntrys;
-
-        std::vector<MenuFolder *> Folders = menu->GetFolderList();
-        std::vector<MenuEntry *> Entrys = menu->GetEntryList();
-        std::vector<MenuFolder *> SubFolders;
-
-        for(MenuEntry *entry : Entrys)
-            AllEntrys.push_back(entry);
-
-        for(MenuFolder *folder : Folders) {
-            SubFolders = folder->GetFolderList();
-            for(MenuFolder *subfolder : SubFolders) {
-                Entrys = subfolder->GetEntryList();
-                for(MenuEntry *entry : Entrys)
-                    AllEntrys.push_back(entry);
+        for(auto obj_folder : PluginMenuData::folderData) {
+            for(auto obj_entry : obj_folder.entryData) {
+                if(obj_entry.CogID != -1 && obj_entry.entry->IsVisible()) {
+                    cogEntrys.push_back(obj_entry.entry);
+                    ID.push_back((s8)obj_entry.CogID);
+                }
             }
-
-            Entrys = folder->GetEntryList();
-            for(MenuEntry *entry : Entrys) 
-                AllEntrys.push_back(entry);
         }
-
-        for(MenuEntry *entry : AllEntrys) {
-            if(PluginMenuData::GetGameFunc(entry) == nullptr && PluginMenuData::GetMenuFunc(entry) != nullptr && entry->IsVisible())
-                cogEntrys.push_back(entry);
-        }
-
-        if(!data.ID.empty()) 
-            ID = data.ID;
     }
 }
