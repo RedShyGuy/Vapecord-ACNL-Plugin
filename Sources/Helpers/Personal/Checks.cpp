@@ -53,29 +53,9 @@ namespace CTRPluginFramework {
 
 		return 0xFFFFFFFF;
 	}
-
-//hook invalid show off	
-	u32 InvalidShowOffStop(u32 pOffset, u32 ItemOffset) {
-		if(IDList::ItemValid(*(Item *)ItemOffset)) {
-			const HookContext &curr = HookContext::GetCurrent();
-			static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
-			return func.Call<u32>(pOffset, ItemOffset);
-		}
-		return 0;
-	}
-	
-//Hook invalid eat
-	u32 InvalidEatStop(u32 pOffset, u32 ItemOffset, u32 InvData, u32 u0) {			
-		if(IDList::ItemValid(*(Item *)ItemOffset)) {
-			const HookContext &curr = HookContext::GetCurrent();
-			static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
-			return func.Call<u32>(pOffset, ItemOffset, InvData, u0);
-		}
-		return 0;
-	}
-//Hook to initialize	
-	void InvalidSpriteStop(u32 pData, Item SpriteItem) {
-		if(IDList::ItemValid(SpriteItem)) {
+//Hook to initialize
+	void InvalidSpriteStop(u32 pData, Item *SpriteItem) {
+		if(IDList::ItemValid(*SpriteItem)) {
 			const HookContext &curr = HookContext::GetCurrent();
 			static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
 			func.Call<void>(pData, SpriteItem);

@@ -11,9 +11,7 @@ namespace CTRPluginFramework {
 
 	u32 InvalidPickStop(u8 ID, Item *ItemToReplace, Item *ItemToPlace, Item *ItemToShow, u8 worldx, u8 worldy);
 	u32 InvalidDropStop(u8 ID, Item *ItemToReplace, Item *ItemToPlace, Item *ItemToShow);
-	u32 InvalidShowOffStop(u32 pOffset, u32 ItemOffset);
-	u32 InvalidEatStop(u32 pOffset, u32 ItemOffset, u32 InvData, u32 u0);
-	void InvalidSpriteStop(u32 pData, Item SpriteItem);
+	void InvalidSpriteStop(u32 pData, Item *SpriteItem);
 	bool InvalidHoleStop(Item* item, Item Hole);
 	bool InvalidItemStop(Item* item);
 	bool ConvertFlower(Item *item);
@@ -30,9 +28,6 @@ namespace CTRPluginFramework {
 
 //check for accidental invalid item eat/drop/show off etc
 	void PluginHooks(void) {
-		//u32 found = Utils::Search<u32>(0x07000000, 0xF608B, { 0xE5C01068, 0xE12FFF1E });
-		//*(u32 *)found = 0xE1A00000;
-
 		/*
 		static Hook suspendHook;
 		static const Address suspendAddress(0x124EB8, 0x124928, 0x124EDC, 0x124EDC, 0x124EA4, 0x124EA4, 0x124EA4, 0x124EA4);
@@ -56,15 +51,7 @@ namespace CTRPluginFramework {
 		static Hook IPHook;	
 		static const Address IPOffset(0x59A258, 0x599770, 0x5992A0, 0x5992A0, 0x598B90, 0x598B90, 0x598864, 0x598864);
 		SetHook(IPHook, IPOffset.addr, (u32)InvalidPickStop, USE_LR_TO_RETURN);
-		
-		static Hook IEHook;
-		static const Address IEOffset(0x5C0A38, 0x5BFF68, 0x5BFA80, 0x5BFA80, 0x5BF370, 0x5BF370, 0x5BF044, 0x5BF044);
-		SetHook(IEHook, IEOffset.addr, (u32)InvalidEatStop, USE_LR_TO_RETURN);
-		
-		static Hook ISOHook;
-		static const Address ISOOffset(0x5C0AFC, 0x5C002C, 0x5BFB44, 0x5BFB44, 0x5BF434, 0x5BF434, 0x5BF108, 0x5BF108);
-		SetHook(ISOHook, ISOOffset.addr, (u32)InvalidShowOffStop, USE_LR_TO_RETURN);
-		
+
 		static Hook InvDropHook, InvPlantHook;
 		static const Address InvDropOffset(0x597850, 0x596D68, 0x596898, 0x596898, 0x596188, 0x596188, 0x595E5C, 0x595E5C);
 		static const Address InvPlantOffset(0x597724, 0x596C3C, 0x59676C, 0x59676C, 0x59605C, 0x59605C, 0x595D30, 0x595D30);
