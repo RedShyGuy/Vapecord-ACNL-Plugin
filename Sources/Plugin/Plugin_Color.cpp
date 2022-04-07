@@ -1,5 +1,5 @@
 #include "Config.hpp"
-#include "MenuPointers.hpp"
+#include "Helpers/PluginMenuData.hpp"
 #include "TextFileParser.hpp"
 #include "Files.h"
 
@@ -89,13 +89,13 @@ namespace CTRPluginFramework {
     //loads mode to entrys
         switch(u_byte) {
             case f_Color::ColorMode:
-                UpdateAll(c_Colorful); 
+                PluginMenuData::UpdateAll(c_Colorful); 
             break;
             case f_Color::LiteMode:
-                UpdateAll(c_Lite);
+                PluginMenuData::UpdateAll(c_Lite);
             break;
             case f_Color::LuxuryMode:
-                UpdateAll(c_Luxury);
+                PluginMenuData::UpdateAll(c_Luxury);
             break;			
             case f_Color::CustomMode:
                 if(!File::Exists(PATH_CUSTOMCOLOR)) {
@@ -113,7 +113,7 @@ namespace CTRPluginFramework {
                     Color(std::stoul(colorparser->Get("NPCCODES"), 0, 16)), Color(std::stoul(colorparser->Get("FUNCODES"), 0, 16)), 
 					Color(std::stoul(colorparser->Get("EXTRACODES"), 0, 16)), Color(std::stoul(colorparser->Get("MISCCODES"), 0, 16))
                 };
-                UpdateAll(c_Custom);
+                PluginMenuData::UpdateAll(c_Custom);
             break;  
         }
     }
@@ -151,7 +151,7 @@ namespace CTRPluginFramework {
 		if(c_fwk == nullptr)
 			return 0;
 
-		SetFWK(settings, c_fwk);
+		PluginMenuData::SetFWK(settings, c_fwk);
 		return 1;
 	}
 
@@ -194,7 +194,7 @@ namespace CTRPluginFramework {
 		}
 		else {
 			FwkSettings &settings = FwkSettings::Get();
-			SetVapecordStandardTheme(settings);
+			PluginMenuData::SetVapecordStandardTheme(settings);
 
 			WriteConfig(CONFIG::FWKColor, fwk_Color::NoFWK);
 		}

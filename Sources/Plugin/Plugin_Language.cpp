@@ -1,6 +1,6 @@
 #include "Config.hpp"
 #include "TextFileParser.hpp"
-#include "MenuPointers.hpp"
+#include "Helpers/PluginMenuData.hpp"
 #include "Color.h"
 #include "Files.h"
 
@@ -97,6 +97,6 @@ namespace CTRPluginFramework {
 
 		Language->Parse(LanguageTXT[pos]);
 
-		UpdateAll();
+		PluginMenuData::UpdateAll();
     }
 }

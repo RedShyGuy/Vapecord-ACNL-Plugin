@@ -2,7 +2,6 @@
 #include "Helpers/Dropper.hpp"
 #include "TextFileParser.hpp"
 
-
 namespace CTRPluginFramework {
 	std::vector<Item> ItemID;
 	std::vector<std::string> KBItems;

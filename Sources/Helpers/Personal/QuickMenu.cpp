@@ -1,5 +1,5 @@
 #include "Helpers/QuickMenu.hpp"
-#include "MenuPointers.hpp"
+#include "Helpers/PluginMenuData.hpp"
 #include "Files.h"
 #include "Helpers/Address.hpp"
 
@@ -129,7 +129,7 @@ namespace CTRPluginFramework {
         }
 
         for(MenuEntry *entry : AllEntrys) {
-            if(GetGameFunc(entry) == nullptr && GetMenuFunc(entry) != nullptr && entry->IsVisible())
+            if(PluginMenuData::GetGameFunc(entry) == nullptr && PluginMenuData::GetMenuFunc(entry) != nullptr && entry->IsVisible())
                 cogEntrys.push_back(entry);
         }
 

@@ -5,7 +5,7 @@
 #include "Helpers/Inventory.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/QuickMenu.hpp"
-#include "MenuPointers.hpp"
+#include "Helpers/PluginMenuData.hpp"
 #include "NonHacker.hpp"
 
 #include <stdio.h>

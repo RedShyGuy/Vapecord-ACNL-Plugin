@@ -1,7 +1,7 @@
 #include "Config.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/Save.hpp"
-#include "MenuPointers.hpp"
+#include "Helpers/PluginMenuData.hpp"
 #include "Helpers/KeySequence.hpp"
 #include "Helpers/Address.hpp"
 #include "Files.h"

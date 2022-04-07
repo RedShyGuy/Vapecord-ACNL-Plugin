@@ -3,7 +3,7 @@
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/Address.hpp"
 #include "TextFileParser.hpp"
-#include "MenuPointers.hpp"
+#include "Helpers/PluginMenuData.hpp"
 #include "Files.h"
 #include "Config.hpp"
 
@@ -42,7 +42,7 @@ namespace CTRPluginFramework {
 
 		for(MenuEntry *entry : Entrys) {
 			if(entry->IsActivated())
-				str += RemoveColorFromString(entry->Name()) + "\n";
+				str += PluginMenuData::RemoveColorFromString(entry->Name()) + "\n";
 		}
 
 		for(MenuFolder *folder : Folders) {
@@ -51,14 +51,14 @@ namespace CTRPluginFramework {
 				Entrys = subfolder->GetEntryList();
 				for(MenuEntry *entry : Entrys) {
 					if(entry->IsActivated())
-						str += (RemoveColorFromString(folder->Name()) + " -> " + RemoveColorFromString(subfolder->Name()) + " -> " + RemoveColorFromString(entry->Name())) + "\n";
+						str += (PluginMenuData::RemoveColorFromString(folder->Name()) + " -> " + PluginMenuData::RemoveColorFromString(subfolder->Name()) + " -> " + PluginMenuData::RemoveColorFromString(entry->Name())) + "\n";
 				}	
 			}
 
 			Entrys = folder->GetEntryList();
 			for(MenuEntry *entry : Entrys) {
 				if(entry->IsActivated())
-					str += (RemoveColorFromString(folder->Name()) + " -> " + RemoveColorFromString(entry->Name())) + "\n";
+					str += (PluginMenuData::RemoveColorFromString(folder->Name()) + " -> " + PluginMenuData::RemoveColorFromString(entry->Name())) + "\n";
 			}
 		}
 

@@ -1,6 +1,6 @@
 #include "cheats.hpp"
 #include "Files.h"
-#include "MenuPointers.hpp"
+#include "Helpers/PluginMenuData.hpp"
 #include "Helpers/Game.hpp"
 #include "Color.h"
 
@@ -42,7 +42,7 @@ Randomizes colors of Menu Folders
 				Rainbow(), Rainbow(), Rainbow(), Rainbow()
 			};
 			
-			UpdateAll(color);
+			PluginMenuData::UpdateAll(color);
 			timer.Restart();
 		}
 	}

@@ -12,7 +12,7 @@
 #include "Helpers/Inventory.hpp"
 #include "Helpers/GameKeyboard.hpp"
 #include "Helpers/QuickMenu.hpp"
-#include "MenuPointers.hpp"
+#include "Helpers/PluginMenuData.hpp"
 #include "NonHacker.hpp"
 #include "Color.h"
 
@@ -262,7 +262,7 @@ namespace CTRPluginFramework {
 			if(res >= 0) {
 				QuickMenu::AddEntry(CogEntrys.entry[res], CogEntrys.ID[res]);
 				Sleep(Milliseconds(100));
-				MessageBox(Utils::Format("Added %s to the Quick Menu!", RemoveColorFromString(CogEntrys.entry[res]->Name()).c_str())).SetClear(ClearScreen::Top)();
+				MessageBox(Utils::Format("Added %s to the Quick Menu!", PluginMenuData::RemoveColorFromString(CogEntrys.entry[res]->Name()).c_str())).SetClear(ClearScreen::Top)();
 			}
 		}
 
@@ -287,7 +287,7 @@ namespace CTRPluginFramework {
 			if(res >= 0) {
 				QuickMenu::RemoveEntry(QMEntrys.entry[res], QMEntrys.ID[res]);
 				Sleep(Milliseconds(100));
-				MessageBox(Utils::Format("Removed %s from the Quick Menu!", RemoveColorFromString(QMEntrys.entry[res]->Name()).c_str())).SetClear(ClearScreen::Top)();
+				MessageBox(Utils::Format("Removed %s from the Quick Menu!", PluginMenuData::RemoveColorFromString(QMEntrys.entry[res]->Name()).c_str())).SetClear(ClearScreen::Top)();
 			}
 		}
 	}
@@ -320,7 +320,7 @@ namespace CTRPluginFramework {
 			if(res < 0)
 				return;
 
-			GetMenuFunc(QMEntrys.entry[res])(entry);
+			PluginMenuData::GetMenuFunc(QMEntrys.entry[res])(entry);
 		}	
 	}
 //More Than 3 Numbers On Island

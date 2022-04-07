@@ -2,7 +2,7 @@
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/Address.hpp"
 #include "TextFileParser.hpp"
-#include "MenuPointers.hpp"
+#include "Helpers/PluginMenuData.hpp"
 #include "Files.h"
 #include "Config.hpp"
 
