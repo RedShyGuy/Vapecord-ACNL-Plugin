@@ -151,7 +151,7 @@ namespace CTRPluginFramework {
 				return;	
 
 			Sleep(Milliseconds(100));
-			static Address func(funcaddress);
+			Address func(funcaddress);
 			switch(size) {
 				case 0: result = func.Call<u32>(); break;
 				case 1: result = func.Call<u32>(p[0]); break;

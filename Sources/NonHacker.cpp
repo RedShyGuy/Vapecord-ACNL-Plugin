@@ -72,7 +72,7 @@ namespace CTRPluginFramework {
 			Animation::ExecuteAnimationWrapper(pID, animID, {0, 0}, 0, 0, 0, 0, x, y, true);
 			Sleep(Seconds(2));
 			Animation::ExecuteAnimationWrapper(pID, 6, {0, 0}, 0, 0, 0, 0, x, y, true);
-			OSD::Notify("Player: " << pName);
+			OSD::Notify(Utils::Format("Player: %s", pName.c_str()));
 			OSD::Notify(Utils::Format("Animation: %02X", animID)); 
 		}
 	}
@@ -89,7 +89,7 @@ namespace CTRPluginFramework {
 			Animation::ExecuteAnimationWrapper(pID, 0xAF, {0, 0}, emotionID, 0, 0, 0, x, y, true);
 			Sleep(Seconds(2));
 			Animation::ExecuteAnimationWrapper(pID, 6, {0, 0}, 0, 0, 0, 0, x, y, true);
-			OSD::Notify("Player: " << pName); 
+			OSD::Notify(Utils::Format("Player: %s", pName.c_str()));
 			OSD::Notify(Utils::Format("Emotion: %02X", emotionID));
 		}
 	}
@@ -106,7 +106,7 @@ namespace CTRPluginFramework {
 			Animation::ExecuteAnimationWrapper(pID, 0xC5, {0, 0}, 0, snakeID, 0, 0, x, y, true);
 			Sleep(Seconds(2));
 			Animation::ExecuteAnimationWrapper(pID, 6, {0, 0}, 0, 0, 0, 0, x, y, true);
-			OSD::Notify("Player: " << pName);
+			OSD::Notify(Utils::Format("Player: %s", pName.c_str()));
 			OSD::Notify(Utils::Format("Snake: %03X", snakeID)); 
 		}
 	}
@@ -123,7 +123,7 @@ namespace CTRPluginFramework {
 			Animation::ExecuteAnimationWrapper(pID, 0xC4, {0, 0}, 0, 0, musicID, 0, x, y, true);
 			Sleep(Milliseconds(100));
 			Animation::ExecuteAnimationWrapper(pID, 6, {0, 0}, 0, 0, 0, 0, x, y, true);
-			OSD::Notify("Player: " << pName); 
+			OSD::Notify(Utils::Format("Player: %s", pName.c_str()));
 			OSD::Notify(Utils::Format("Music: %03X", musicID)); 
 		}
 	}
@@ -135,7 +135,7 @@ namespace CTRPluginFramework {
 		u32 x, y;
 		if(PlayerClass::GetInstance(pID)->GetWorldCoords(&x, &y)) {	
 			Dropper::PlaceItemWrapper(0xA, ReplaceEverything, &itemID, &itemID, x, y, 0, 0, 0, 0, 0, 0x56, 0xA5, false);
-			OSD::Notify("Player: " << pName); 
+			OSD::Notify(Utils::Format("Player: %s", pName.c_str()));
 			OSD::Notify(Utils::Format("Item: %08X", *(u32*)&itemID));
 		}	
 	}

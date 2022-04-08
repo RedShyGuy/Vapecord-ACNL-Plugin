@@ -249,7 +249,7 @@ get room
 	}
 
 	ACNL_Player *Player::GetSaveData(u8 PlayerIndex) {
-		u32 *addr = (u32 *)GetSpecificSave(PlayerIndex >= 4 ? GameHelper::GetOnlinePlayerIndex() : PlayerIndex);
+		u32 *addr = (u32 *)GetSpecificSave(PlayerIndex >= 4 ? (u8)Player::GetPlayerStatus(4) : PlayerIndex);
 		return (ACNL_Player *)addr;
 	}
 
