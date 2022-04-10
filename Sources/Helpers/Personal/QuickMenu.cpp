@@ -4,11 +4,7 @@
 #include "Helpers/Address.hpp"
 
 namespace CTRPluginFramework {
-    quickMenuData QuickMenu::g_quickMenu; //Holds data of non hidden entrys, with their ID and all
-
-    std::vector<s8> QuickMenu::q_quickMenuFile; //will hold ID of an entry, obtained from a file
-
-    quickMenuData QuickMenu::data; //Holds actual data of entrys, with their ID and all
+    std::vector<EntryData> QuickMenu::obj_QuickMenu;
 
 //this initializes the quick menu from file
     void QuickMenu::Init() {
@@ -18,12 +14,8 @@ namespace CTRPluginFramework {
         }
 
     //Pushes all available entrys (including hidden ones) with their ID to the data
-        std::vector<s8> empty;
-        QuickMenu::ListAvailableCogEntrys(data.entry, empty);
-        empty.clear();
-
-        for(int i = 0; i < data.entry.size(); ++i)
-            data.ID.push_back(i);
+        std::vector<EntryData> cogEntrys;
+        ListAvailableCogEntrys(cogEntrys);
 
     //reads file which holds ID data of the hidden entrys
         File f_quickm(Utils::Format(PATH_QUICKM, regionName.c_str()), File::READ);
@@ -31,81 +23,72 @@ namespace CTRPluginFramework {
         f_quickm.Read(buffer, f_quickm.GetSize());
         
         for(int i = 0; i < f_quickm.GetSize(); ++i) {
-            q_quickMenuFile.push_back(buffer[i]);
-        }
-
-    //reads through all entry ID's and hides all entrys which have their ID inside of the file 
-        for(int i = 0; i <= data.entry.size(); ++i) {
-            for(int j = 0; j < q_quickMenuFile.size(); ++j) {
-                if(q_quickMenuFile[j] == data.ID[i]) {
-                    data.entry[i]->Hide();
-
-                    g_quickMenu.entry.push_back(data.entry[i]);
-                    g_quickMenu.ID.push_back(data.ID[i]);
-
-                    data.entry.erase(data.entry.begin() + i);
-                    data.ID.erase(data.ID.begin() + i);
+            for(auto edata : cogEntrys) {
+            //look for ID in all available entrys and push its data into the quick menu
+                if(edata.CogID == buffer[i]) {
+                    obj_QuickMenu.push_back(edata);
+                    break;
                 }
             }
         }
 
+        PluginMenuData::UpdateAll();
+
         delete[] buffer;
     }
 
-//This will list all the entrys with their ID of the Quick Menu
-    void QuickMenu::ListEntrys(quickMenuData &quickmenu) {
-        quickmenu = g_quickMenu;
+    void QuickMenu::UpdateFile(void) {
+        File::Remove(Utils::Format(PATH_QUICKM, regionName.c_str()));
+        File::Create(Utils::Format(PATH_QUICKM, regionName.c_str()));
+
+        std::vector<s8> ID;
+        for(auto qdata : obj_QuickMenu) {
+            ID.push_back(qdata.CogID);
+        }
+
+        File f_quickm(Utils::Format(PATH_QUICKM, regionName.c_str()), File::WRITE);
+        f_quickm.Write(ID.data(), ID.size());
     }
 
 //This will add a entry with their ID to the Quick Menu
-    void QuickMenu::AddEntry(MenuEntry* entry, s8 ID) {
-        g_quickMenu.entry.push_back(entry);
-        g_quickMenu.ID.push_back(ID);
-
-        for(int i = 0; i < data.entry.size(); ++i) {
-            if(data.ID[i] == ID) {
-                data.entry.erase(data.entry.begin() + i);
-                data.ID.erase(data.ID.begin() + i);
+    void QuickMenu::AddEntry(EntryData entry) {
+        std::vector<EntryData> cogEntrys;
+        ListAvailableCogEntrys(cogEntrys);
+       
+        for(auto edata : cogEntrys) {
+        //adds new entry to quick menu if it exists
+            if(edata.entry == entry.entry) {
+                obj_QuickMenu.push_back(entry);
+                break;
             }
         }
 
-        if(!File::Exists(Utils::Format(PATH_QUICKM, regionName.c_str()))) 
-            File::Create(Utils::Format(PATH_QUICKM, regionName.c_str()));
+        UpdateFile();
 
-        File f_quickm(Utils::Format(PATH_QUICKM, regionName.c_str()), File::WRITE);
-        f_quickm.Write(g_quickMenu.ID.data(), g_quickMenu.ID.size());
-
-        entry->Hide();
+        PluginMenuData::UpdateAll();
     }
 
 //This will remove a entry from the Quick Menu
-    void QuickMenu::RemoveEntry(MenuEntry* entry, s8 ID) {
-        data.entry.push_back(entry);
-        data.ID.push_back(ID);
-
-        for(int i = 0; i < g_quickMenu.entry.size(); ++i) {
-            if(g_quickMenu.ID[i] == ID) {
-                g_quickMenu.entry.erase(g_quickMenu.entry.begin() + i);
-                g_quickMenu.ID.erase(g_quickMenu.ID.begin() + i);
+    void QuickMenu::RemoveEntry(EntryData entry) {
+        for(int i = 0; i < obj_QuickMenu.size(); ++i) {
+        //if entry is in quick menu, it will be removed
+            if(obj_QuickMenu[i].CogID == entry.CogID) {
+                obj_QuickMenu.erase(obj_QuickMenu.begin() + i);
+                break;
             }
         }
 
-        if(!File::Exists(Utils::Format(PATH_QUICKM, regionName.c_str()))) 
-            File::Create(Utils::Format(PATH_QUICKM, regionName.c_str()));
-
-        File f_quickm(Utils::Format(PATH_QUICKM, regionName.c_str()), File::WRITE | File::TRUNCATE);
-        f_quickm.Write(g_quickMenu.ID.data(), g_quickMenu.ID.size());
-
-        entry->Show();
+        UpdateFile();
+        
+        PluginMenuData::UpdateAll();
     }
 
 //This lists all available cog entrys of the plugin (ignoring hidden ones)
-    void QuickMenu::ListAvailableCogEntrys(std::vector<MenuEntry*> &cogEntrys, std::vector<s8> &ID) {
+    void QuickMenu::ListAvailableCogEntrys(std::vector<EntryData> &data) {
         for(auto obj_folder : PluginMenuData::folderData) {
             for(auto obj_entry : obj_folder.entryData) {
                 if(obj_entry.CogID != -1 && obj_entry.entry->IsVisible()) {
-                    cogEntrys.push_back(obj_entry.entry);
-                    ID.push_back((s8)obj_entry.CogID);
+                    data.push_back(obj_entry);
                 }
             }
         }

@@ -101,6 +101,20 @@ namespace CTRPluginFramework {
 				edata.entry->Name() = edata.IndexColor << Language->Get(edata.IndexName) + " " + hotkey;
 				edata.entry->Note() = Language->Get(edata.IndexNote);
 				edata.entry->RefreshNote();
+
+			//update quick menu
+				if(edata.CogID != -1) {
+					for(auto qdata : QuickMenu::obj_QuickMenu) {
+					//if entry is stored in the quick menu, hide it
+						if(edata.CogID == qdata.CogID) {
+							edata.entry->Hide();
+							goto hidden;
+						}
+					}
+
+					edata.entry->Show();
+				}
+				hidden: continue;
 			}
 
 			fdata.folder->Name() = fdata.IndexColor << Language->Get(fdata.IndexName);
