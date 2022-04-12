@@ -218,7 +218,12 @@ prevent any issues with freezing of the plugin
 	//Load Callbacks
 		menu->Callback(devcallback);
 		menu->Callback(IndoorsSeedItemCheck);
-		menu->Callback(NonHackerCallBack);
+
+		menu->Callback(NonHacker_Player00);
+		menu->Callback(NonHacker_Player01);
+		menu->Callback(NonHacker_Player02);
+		menu->Callback(NonHacker_Player03);
+
 		menu->Callback(UpdateInstance);
 
 		menu->OnNewFrame = OnNewFrameCallback;

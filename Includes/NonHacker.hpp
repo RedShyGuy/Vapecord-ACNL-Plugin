@@ -8,6 +8,7 @@ namespace CTRPluginFramework {
 	class NonHacker {
 		public:
 			NonHacker(u8 playerID);
+			~NonHacker(void);
 
 			u32 GetPlayerMessageData(void);
 			std::string GetPlayerMessage(void);
@@ -24,8 +25,6 @@ namespace CTRPluginFramework {
 
 			bool IsCommand(const std::string& command, bool secondary = false);
 
-			~NonHacker();
-
 			u8 pID = 4;
 			std::string pMessage = "";
 			std::string pName = "";
@@ -38,7 +37,10 @@ namespace CTRPluginFramework {
 
 			static bool Accessible[5];
 	};
-
-	void NonHackerCallBack(void);
+	
+	void NonHacker_Player00(void);
+	void NonHacker_Player01(void);
+	void NonHacker_Player02(void);
+	void NonHacker_Player03(void);
 }
 #endif

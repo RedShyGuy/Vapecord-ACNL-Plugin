@@ -13,16 +13,21 @@ namespace CTRPluginFramework {
 	bool NonHacker::Accessible[5] = { true, true, true, true, true };
 
 	NonHacker::NonHacker(u8 playerID) {
-	//set player ID
 		pID = playerID;
-	//set player message
 		Process::ReadString(GetPlayerMessageData() + 0x40C, pMessage, 0x64, StringFormat::Utf16);
-	//set player name
 		Process::ReadString(GetPlayerMessageData() + 0x3FA, pName, 0x16, StringFormat::Utf16);
 	}
 
-	NonHacker::~NonHacker() {
-		
+	NonHacker::~NonHacker(void) {
+		pID = 0;
+		pMessage.clear();
+		pName.clear();
+
+		animID = 6;
+		emotionID = 1;
+		snakeID = 1;
+		musicID = 0x660;
+		itemID = { 0x7FFE, 0 };
 	}
 
 	u32 NonHacker::GetPlayerMessageData() {
@@ -140,16 +145,14 @@ namespace CTRPluginFramework {
 		}	
 	}
 
-	void NonHackerCommands(u8 pID) {
-		NonHacker nHack(pID);
+	bool NonHackerCommands(NonHacker *nHack) {
+		if(!nHack->IsPlayerMessageOnScreen()) 
+			return false;
 
-		if(!nHack.IsPlayerMessageOnScreen()) 
-			return;
-
-		std::string PlayerText = nHack.GetPlayerMessage();
+		std::string PlayerText = nHack->GetPlayerMessage();
 
 		if(PlayerText.empty())
-			return;
+			return false;
 
 		PlayerText.resize(25, ' ');
 
@@ -171,51 +174,51 @@ namespace CTRPluginFramework {
 		std::string ItemName = PlayerText.substr(2, 23);
 
 		if(Command == "a:") {
-			nHack.animID = StringToHex<u8>(ID_8Bit, 6); //sets animation
-			if(IDList::AnimationValid(nHack.animID)) {
-				nHack.Animation();
+			nHack->animID = StringToHex<u8>(ID_8Bit, 6); //sets animation
+			if(IDList::AnimationValid(nHack->animID)) {
+				nHack->Animation();
 			}
-			else return;
+			else return false;
 		}
 
 		else if(Command == "e:") {
-			nHack.emotionID = StringToHex<u8>(ID_8Bit, 1); //sets emotion
-			if(IDList::EmotionValid(nHack.emotionID)) {
-				nHack.Emotion();
+			nHack->emotionID = StringToHex<u8>(ID_8Bit, 1); //sets emotion
+			if(IDList::EmotionValid(nHack->emotionID)) {
+				nHack->Emotion();
 			}
-			else return;
+			else return false;
 		}
 
 		else if(Command == "s:") {
-			nHack.snakeID = StringToHex<u16>(ID_12Bit, 1); //sets snake
-			if(IDList::SnakeValid(nHack.snakeID)) {
-				nHack.Snake();
+			nHack->snakeID = StringToHex<u16>(ID_12Bit, 1); //sets snake
+			if(IDList::SnakeValid(nHack->snakeID)) {
+				nHack->Snake();
 			}
-			else return;
+			else return false;
 		}
 
 		else if(Command == "m:") {
-			nHack.musicID = StringToHex<u16>(ID_12Bit, 0x660); //sets music
-			if(IDList::MusicValid(nHack.musicID)) {
-				nHack.Music();
+			nHack->musicID = StringToHex<u16>(ID_12Bit, 0x660); //sets music
+			if(IDList::MusicValid(nHack->musicID)) {
+				nHack->Music();
 			}
-			else return;
+			else return false;
 		}
 
 		else if(Command == "i:") {
-			nHack.itemID.ID = StringToHex<u16>(ID_16Bit, 0x2001); //sets item
-			if(IDList::ItemValid(nHack.itemID)) {
+			nHack->itemID.ID = StringToHex<u16>(ID_16Bit, 0x2001); //sets item
+			if(IDList::ItemValid(nHack->itemID)) {
 				if(SPCommand == "f:") 
-					nHack.itemID.Flags = StringToHex<u16>(SPID_16Bit, 0); //sets flag
+					nHack->itemID.Flags = StringToHex<u16>(SPID_16Bit, 0); //sets flag
 
-				nHack.Item();
+				nHack->Item();
 			}
-			else return;
+			else return false;
 		}
 
 		else if(Command == "n:") {
 			if(!ItemFileExists) 
-				return;
+				return false;
 
 			ConvertToLowcase(ItemName);
 
@@ -224,7 +227,7 @@ namespace CTRPluginFramework {
 			ItemVec match;
 			int res = ItemSearch(ItemName, match);
 			if(res == 0) //no item found
-				return;
+				return false;
 
 			int pos = 0;
 		//if exact name was found
@@ -235,22 +238,37 @@ namespace CTRPluginFramework {
 				}
 			}
 
-			nHack.itemID = match.ID[pos]; //sets item
-			if(!IDList::ItemValid(nHack.itemID)) //should always be true if orig file is used
-				return;
+			nHack->itemID = match.ID[pos]; //sets item
+			if(!IDList::ItemValid(nHack->itemID)) //should always be true if orig file is used
+				return false;
 
-			nHack.Item();
+			nHack->Item();
 		}
-
 		else 
-			return;
+			return false;
 
-		nHack.ClearPlayerMessage();
+		nHack->ClearPlayerMessage();
+		return true;
 	}
 	
-	void NonHackerCallBack(void) {
-		for(int i = 0; i < 4; ++i) {
-			NonHackerCommands(i);
-		}
+	void NonHacker_Player00(void) {
+		NonHacker *nHack = new NonHacker(0);
+		NonHackerCommands(nHack);
+		delete nHack;
+	}
+	void NonHacker_Player01(void) {
+		NonHacker *nHack = new NonHacker(1);
+		NonHackerCommands(nHack);
+		delete nHack;
+	}
+	void NonHacker_Player02(void) {
+		NonHacker *nHack = new NonHacker(2);
+		NonHackerCommands(nHack);
+		delete nHack;
+	}
+	void NonHacker_Player03(void) {
+		NonHacker *nHack = new NonHacker(3);
+		NonHackerCommands(nHack);
+		delete nHack;
 	}
 }

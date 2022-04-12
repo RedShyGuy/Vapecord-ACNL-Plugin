@@ -55,11 +55,17 @@ namespace CTRPluginFramework {
 		if(choice == 5) {
 			PluginMenu *menu = PluginMenu::GetRunningInstance();
 			if(AllOFF) {
-				*menu += NonHackerCallBack;
+				*menu += NonHacker_Player00;
+				*menu += NonHacker_Player01;
+				*menu += NonHacker_Player02;
+				*menu += NonHacker_Player03;
 				AllOFF = false;
 			}
 			else {
-				*menu -= NonHackerCallBack;
+				*menu -= NonHacker_Player00;
+				*menu -= NonHacker_Player01;
+				*menu -= NonHacker_Player02;
+				*menu -= NonHacker_Player03;
 				AllOFF = true;
 			}
 			goto update;
