@@ -25,7 +25,7 @@ namespace CTRPluginFramework {
 
 			bool IsCommand(const std::string& command, bool secondary = false);
 
-			u8 pID = 4;
+			s8 pID = -1;
 			std::string pMessage = "";
 			std::string pName = "";
 

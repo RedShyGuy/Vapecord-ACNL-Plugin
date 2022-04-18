@@ -190,12 +190,12 @@ namespace CTRPluginFramework {
 		switch(randkb.Open()) {
 			default: break;			
 			case 0: 
-				Player::WriteOutfit(GameHelper::GetOnlinePlayerIndex(), U32_TO_ITEM(Utils::Random(0x280B, 0x28F3)), 
-																		U32_TO_ITEM(Utils::Random(0x28F5, 0x295B)), 
-																		U32_TO_ITEM(Utils::Random(0x2493, 0x26F5)), 
-																		U32_TO_ITEM(Utils::Random(0x26F8, 0x2776)), 
-																		U32_TO_ITEM(Utils::Random(0x2777, 0x279E)), 
-																		U32_TO_ITEM(Utils::Random(0x279F, 0x27E5)));
+				Player::WriteOutfit(GameHelper::GetOnlinePlayerIndex(), (Item)Utils::Random(0x280B, 0x28F3), 
+																		(Item)Utils::Random(0x28F5, 0x295B), 
+																		(Item)Utils::Random(0x2493, 0x26F5), 
+																		(Item)Utils::Random(0x26F8, 0x2776), 
+																		(Item)Utils::Random(0x2777, 0x279E), 
+																		(Item)Utils::Random(0x279F, 0x27E5));
 			break;
 			case 1: {
 				player->PlayerFeatures.HairStyle = Utils::Random(0, 0x21);

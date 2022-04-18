@@ -105,12 +105,12 @@ Custom Buttons
 	}
 	
 	void CustomButton::RandomOutfit(u32 ItemData) {
-		Player::WriteOutfit(4, U32_TO_ITEM(Utils::Random(0x280B, 0x28F3)), 
-							   U32_TO_ITEM(Utils::Random(0x28F5, 0x295B)), 
-							   U32_TO_ITEM(Utils::Random(0x2493, 0x26F5)), 
-							   U32_TO_ITEM(Utils::Random(0x26F8, 0x2776)), 
-							   U32_TO_ITEM(Utils::Random(0x2777, 0x279E)), 
-							   U32_TO_ITEM(Utils::Random(0x279F, 0x27E5)));
+		Player::WriteOutfit(4, (Item)Utils::Random(0x280B, 0x28F3), 
+							   (Item)Utils::Random(0x28F5, 0x295B), 
+							   (Item)Utils::Random(0x2493, 0x26F5), 
+							   (Item)Utils::Random(0x26F8, 0x2776), 
+							   (Item)Utils::Random(0x2777, 0x279E), 
+							   (Item)Utils::Random(0x279F, 0x27E5));
 		
 		Code::RestoreOutfitWindow.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}

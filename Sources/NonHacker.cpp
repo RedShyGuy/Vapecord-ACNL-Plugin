@@ -19,7 +19,7 @@ namespace CTRPluginFramework {
 	}
 
 	NonHacker::~NonHacker(void) {
-		pID = 0;
+		pID = -1;
 		pMessage.clear();
 		pName.clear();
 

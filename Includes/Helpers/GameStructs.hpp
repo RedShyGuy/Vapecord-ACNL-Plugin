@@ -194,14 +194,22 @@ namespace CTRPluginFramework {
         bool operator>(const Item&item) const {
             return (ID + Flags) > (item.ID + item.Flags);
         }
-    };
 
-    static inline Item U32_TO_ITEM(const u32& val) {
-        Item item;
-        item.ID = val;
-        item.Flags = val >> 16;
-        return item;
-    }
+        Item() {
+            ID = 0;
+            Flags = 0;
+        }
+
+        Item(const u32 &val) {
+            ID = val;
+            Flags = val >> 16;
+        }
+
+        Item(u16 v_ID, u16 v_Flags) {
+            ID = v_ID;
+            Flags = v_Flags;
+        }
+    };
 
     struct Emoticons {
         u8 emoticons[40];

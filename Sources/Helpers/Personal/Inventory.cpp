@@ -28,7 +28,7 @@ namespace CTRPluginFramework {
 		u32 lineNumber = 0;
 		int count = 0;
 
-	//Read alll ines in file
+	//Read all lines in file
 		for(; reader(line); lineNumber++) {
 		//If line is empty, skip it
 			if(line.empty())
@@ -40,7 +40,7 @@ namespace CTRPluginFramework {
 
 			std::string Name = lowcaseInput.substr(5, 30); //lets make max 30 for now
 			std::string SID = lowcaseInput.substr(0, 4); 
-			Item ID = U32_TO_ITEM(StringToHex<u16>(SID, 0xFFFF));
+			Item ID = (Item)StringToHex<u16>(SID, 0xFFFF);
 			out->Name.push_back(Name);
 			out->ID.push_back(ID);
 			ItemFileLenght++; //adds to file lenght to know how many items are in it

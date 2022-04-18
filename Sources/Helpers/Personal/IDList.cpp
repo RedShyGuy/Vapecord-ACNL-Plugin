@@ -24,7 +24,7 @@ namespace CTRPluginFramework {
 
 	void ItemChange(Keyboard& keyboard, KeyboardEvent& event) {
 		std::string& input = keyboard.GetInput();	
-		Item ID = U32_TO_ITEM(StringToHex<u32>(input, 0xFFFF));
+		Item ID = (Item)StringToHex<u32>(input, 0xFFFF);
 		if(!IDList::ItemValid(ID)) {
 			keyboard.SetError(Color::Red << "Invalid ID!");
 			return;
@@ -33,7 +33,7 @@ namespace CTRPluginFramework {
 
 	void TextItemChange(Keyboard& keyboard, KeyboardEvent& event) {
 		std::string& input = keyboard.GetInput();
-		Item ID = U32_TO_ITEM(StringToHex<u32>(input, 0xFFFF));
+		Item ID = (Item)StringToHex<u32>(input, 0xFFFF);
 
 		if(!IDList::ItemValid(ID, false)) {
 			keyboard.GetMessage() = "";
