@@ -1537,16 +1537,7 @@ namespace CTRPluginFramework {
 		}
 
 		if(Controller::IsKeysPressed(Key::ZR + Key::DPadDown)) {
-			PluginMenu *menu = PluginMenu::GetRunningInstance();
-			std::vector<MenuFolder *> folder = menu->GetFolderList();
-			std::vector<MenuEntry *> entry = folder[1]->GetEntryList();
-			HotkeyManager hotkey = entry[4]->Hotkeys;
-			OSD::Notify(Utils::Format("%s", entry[4]->Name().c_str()));
-			OSD::Notify(Utils::Format("1st: %08X", hotkey[0]));
-			OSD::Notify(Utils::Format("2nd: %08X", (u32 *)&hotkey[0]));
-			OSD::Notify(Utils::Format("3rd: %s", (char *)((u32)&hotkey[0] + 0xC)));
-			
-			//OSD::Notify(Utils::Format("UnknownPattern %08X", (u32)std::addressof(Town::GetSaveData()->UnknownPattern) - 0x31F26F80));
+				//OSD::Notify(Utils::Format("UnknownPattern %08X", (u32)std::addressof(Town::GetSaveData()->UnknownPattern) - 0x31F26F80));
 		}
 
 		ACNL_Player *player = Player::GetSaveData();

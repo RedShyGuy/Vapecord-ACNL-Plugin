@@ -255,7 +255,7 @@ namespace CTRPluginFramework {
 			Hotkey(Key::A | Key::DPadLeft, "FRUIT_TREE_MOD_KEY1") 
 		})),
 		TREEC->Append(new MenuEntry("INST_TREE_CHOP", instantchop, "INST_TREE_CHOP_NOTE")),
-		SEEDC->Append(TREEC);
+		SEEDC->Append(TREEC),
 		menu->Append(SEEDC);
 
 	//////////////////////
@@ -449,23 +449,8 @@ namespace CTRPluginFramework {
 		//menu->Append(new MenuEntry("Game Settings", nullptr, gamesettings)),
 		menu->Append(new MenuEntry("Random Folder Colors", rainbow, "This will randomize the cheat folders colors.\nNote: If you randomize the color and reset the plugin, the color will not be the randomized one, it will instead stay at the color option you selected!"));
 	
-		PluginMenuData::SetUp(SAVEC);
-		PluginMenuData::SetUp(MOVEC);
-		PluginMenuData::SetUp(INVC);
-		PluginMenuData::SetUp(PSAVEC, true);
-		PluginMenuData::SetUp(PLAYC);
-		PluginMenuData::SetUp(ANIMC);
-		PluginMenuData::SetUp(SEED1C, true);
-		PluginMenuData::SetUp(DROPC, true);
-		PluginMenuData::SetUp(TREEC, true);
-		PluginMenuData::SetUp(SEEDC);
-		PluginMenuData::SetUp(MONC);
-		PluginMenuData::SetUp(ISLC);
-		PluginMenuData::SetUp(NPCC);
-		PluginMenuData::SetUp(FUNC);
-		PluginMenuData::SetUp(FISC, true);
-		PluginMenuData::SetUp(CHAC, true);
-		PluginMenuData::SetUp(EXTC);
-		PluginMenuData::SetUp(MISC);
+	//load all folders in menu and SetUp (excluding Dev Codes)
+		for(int i = 0; i < menu->GetFolderList().size()-1; ++i) 
+			PluginMenuData::SetUp(menu->GetFolderList().at(i));
 	}
 }
