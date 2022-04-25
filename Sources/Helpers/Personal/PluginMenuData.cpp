@@ -8,14 +8,6 @@ namespace CTRPluginFramework {
 
 	std::vector<FolderData> PluginMenuData::folderData;
 
-	FuncPointer PluginMenuData::GetGameFunc(MenuEntry *entry) {
-		return *(FuncPointer *)(*(u32 *)((u32)entry + 0x14) + 0x5C);
-	}
-
-	FuncPointer PluginMenuData::GetMenuFunc(MenuEntry *entry) {
-		return *(FuncPointer *)(*(u32 *)((u32)entry + 0x14) + 0x60);
-	}
-
 	std::string PluginMenuData::GetHotkeyName(Hotkey hotkey) {
 		char *str = (char *)*(u32 *)((u32)&hotkey + 4);
 		return std::string(str);
@@ -48,7 +40,7 @@ namespace CTRPluginFramework {
 					for(int i = 0; i < objentry->Hotkeys.Count(); ++i) 
 						folderData[pos].entryData[pos2].IndexHotkeys.push_back(GetHotkeyName(objentry->Hotkeys[i]));
 
-					if(PluginMenuData::GetGameFunc(objentry) == nullptr && PluginMenuData::GetMenuFunc(objentry) != nullptr) {
+					if(objentry->GetGameFunc() == nullptr && objentry->GetMenuFunc() != nullptr) {
 						folderData[pos].entryData[pos2].CogID = obj_CogID;
 						obj_CogID++;
 					}

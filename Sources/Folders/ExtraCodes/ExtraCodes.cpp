@@ -422,4 +422,8 @@ namespace CTRPluginFramework {
 		else if(Controller::IsKeysReleased(entry->Hotkeys[0].GetKeys()) || Controller::IsKeysReleased(entry->Hotkeys[1].GetKeys())) 
 			PressedTicks = 0;
 	}
+
+	void FossilInspector(MenuEntry *entry) {
+		
+	}
 }

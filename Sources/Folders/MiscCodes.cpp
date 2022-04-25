@@ -325,7 +325,7 @@ namespace CTRPluginFramework {
 			if(res < 0)
 				return;
 
-			PluginMenuData::GetMenuFunc(QuickMenu::obj_QuickMenu[res].entry)(entry);
+			QuickMenu::obj_QuickMenu[res].entry->GetMenuFunc()(entry);
 		}	
 	}
 //More Than 3 Numbers On Island

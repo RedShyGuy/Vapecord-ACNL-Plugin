@@ -35,15 +35,6 @@ namespace CTRPluginFramework {
 	class PluginMenuData {
 		public:
 			/**
-			* \brief Get the gamefunction of this entry
-			*/
-			static FuncPointer GetGameFunc(MenuEntry *entry);
-			/**
-			* \brief Get the menu funuction of this entry
-			*/
-			static FuncPointer GetMenuFunc(MenuEntry *entry);
-
-			/**
 			* \brief Get the name of this hotkey
 			*/
 			static std::string GetHotkeyName(Hotkey hotkey);

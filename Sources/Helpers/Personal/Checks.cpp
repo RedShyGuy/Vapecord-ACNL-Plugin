@@ -216,4 +216,13 @@ namespace CTRPluginFramework {
 		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
 		func.Call<void>(param);
 	}
+
+	bool ThinkToBuriedItems(u32 *item) {
+		Item obj_item = *item;
+		if(obj_item.Flags == 0x8000) {
+			*item = obj_item.ID;
+		}
+
+		return (*item & 0xFFFF7FFF) - 0x2000 < 0x172B;
+	}
 }

@@ -448,9 +448,24 @@ namespace CTRPluginFramework {
 		menu->Append(new MenuEntry("Plugin Settings", nullptr, pluginsettings)),
 		//menu->Append(new MenuEntry("Game Settings", nullptr, gamesettings)),
 		menu->Append(new MenuEntry("Random Folder Colors", rainbow, "This will randomize the cheat folders colors.\nNote: If you randomize the color and reset the plugin, the color will not be the randomized one, it will instead stay at the color option you selected!"));
-	
-	//load all folders in menu and SetUp (excluding Dev Codes)
-		for(int i = 0; i < menu->GetFolderList().size()-1; ++i) 
-			PluginMenuData::SetUp(menu->GetFolderList().at(i));
+
+		PluginMenuData::SetUp(SAVEC);
+		PluginMenuData::SetUp(MOVEC);
+		PluginMenuData::SetUp(INVC);
+		PluginMenuData::SetUp(PLAYC);
+		PluginMenuData::SetUp(PSAVEC, true);
+		PluginMenuData::SetUp(ANIMC);
+		PluginMenuData::SetUp(SEEDC);
+		PluginMenuData::SetUp(SEED1C, true);
+		PluginMenuData::SetUp(DROPC, true);
+		PluginMenuData::SetUp(TREEC, true);
+		PluginMenuData::SetUp(MONC);
+		PluginMenuData::SetUp(ISLC);
+		PluginMenuData::SetUp(NPCC);
+		PluginMenuData::SetUp(FUNC);
+		PluginMenuData::SetUp(EXTC);
+		PluginMenuData::SetUp(FISC, true);
+		PluginMenuData::SetUp(CHAC, true);
+		PluginMenuData::SetUp(MISC);
 	}
 }
