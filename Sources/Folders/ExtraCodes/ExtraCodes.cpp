@@ -400,6 +400,7 @@ namespace CTRPluginFramework {
 			if(cho < 0)
 				return;
 		}
+		
 		GameHelper::SetCurrentTime(ch, timedat[0], timedat[1], timedat[2], timedat[3], timedat[4]);
 	}
 	
@@ -442,8 +443,8 @@ namespace CTRPluginFramework {
 
 	void BuriedInspector(MenuEntry *entry) {
 		static Hook BuriedHook, PickBuriedHook;
-		static const Address BuriedAddress(0x665534, 0, 0, 0, 0, 0, 0, 0);
-		static const Address PickBuriedAddress(0x59A0BC, 0, 0, 0, 0, 0, 0, 0);
+		static const Address BuriedAddress(0x665534, 0x664A5C, 0x66456C, 0x66456C, 0x66402C, 0x66402C, 0x663BD4, 0x663BD4);
+		static const Address PickBuriedAddress(0x59A0BC, 0x5995D4, 0x599104, 0x599104, 0x5989F4, 0x5989F4, 0x5986C8, 0x5986C8);
 
 		if(entry->WasJustActivated()) {
 			BuriedHook.Initialize(BuriedAddress.addr, (u32)ThinkToBuriedItems);
