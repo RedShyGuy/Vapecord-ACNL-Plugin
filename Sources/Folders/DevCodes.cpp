@@ -1511,7 +1511,6 @@ namespace CTRPluginFramework {
 		return fCode;
 	}
 
-
 //Message Box Debug	
 	void msgboxtest(MenuEntry *entry) {
 		static std::string text;

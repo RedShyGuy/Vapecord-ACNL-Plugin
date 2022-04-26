@@ -380,6 +380,7 @@ namespace CTRPluginFramework {
 			Hotkey(Key::R | Key::DPadRight, "TIME_FORWARD"), 
 			Hotkey(Key::R | Key::DPadLeft, "TIME_BACKWARDS") 
 		})),
+		EXTC->Append(new MenuEntry("BURIED_INSPECTOR", BuriedInspector, "BURIED_INSPECTOR_NOTE")),
 		menu->Append(EXTC);
 
 	/////////////////////
@@ -444,28 +445,28 @@ namespace CTRPluginFramework {
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Island Saver", nullptr, IslandSaver, "")),
 		menu->Append(DEVC);
 
-	/*Other Cheats*/
-		menu->Append(new MenuEntry("Plugin Settings", nullptr, pluginsettings)),
-		//menu->Append(new MenuEntry("Game Settings", nullptr, gamesettings)),
-		menu->Append(new MenuEntry("Random Folder Colors", rainbow, "This will randomize the cheat folders colors.\nNote: If you randomize the color and reset the plugin, the color will not be the randomized one, it will instead stay at the color option you selected!"));
-
 		PluginMenuData::SetUp(SAVEC);
 		PluginMenuData::SetUp(MOVEC);
 		PluginMenuData::SetUp(INVC);
-		PluginMenuData::SetUp(PLAYC);
 		PluginMenuData::SetUp(PSAVEC, true);
+		PluginMenuData::SetUp(PLAYC);
 		PluginMenuData::SetUp(ANIMC);
-		PluginMenuData::SetUp(SEEDC);
 		PluginMenuData::SetUp(SEED1C, true);
 		PluginMenuData::SetUp(DROPC, true);
 		PluginMenuData::SetUp(TREEC, true);
+		PluginMenuData::SetUp(SEEDC);
 		PluginMenuData::SetUp(MONC);
 		PluginMenuData::SetUp(ISLC);
 		PluginMenuData::SetUp(NPCC);
 		PluginMenuData::SetUp(FUNC);
-		PluginMenuData::SetUp(EXTC);
 		PluginMenuData::SetUp(FISC, true);
 		PluginMenuData::SetUp(CHAC, true);
+		PluginMenuData::SetUp(EXTC);
 		PluginMenuData::SetUp(MISC);
+
+	/*Other Cheats*/
+		menu->Append(new MenuEntry("Plugin Settings", nullptr, pluginsettings)),
+		//menu->Append(new MenuEntry("Game Settings", nullptr, gamesettings)),
+		menu->Append(new MenuEntry("Random Folder Colors", rainbow, "This will randomize the cheat folders colors.\nNote: If you randomize the color and reset the plugin, the color will not be the randomized one, it will instead stay at the color option you selected!"));
 	}
 }

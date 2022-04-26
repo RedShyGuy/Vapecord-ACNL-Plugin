@@ -70,7 +70,6 @@ namespace CTRPluginFramework {
 		u8					NextRoomCheck();
 		bool				MapBoolCheck();
 		bool				LoadRoomBool();
-		bool				InvFull();
 		bool				SetItem(Item *item);
 		void				OpenMenu(u8 menuID, bool NoMenCall = false);
 		void				ChangeGameType(u8 GameType);

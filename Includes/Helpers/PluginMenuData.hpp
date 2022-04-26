@@ -35,11 +35,6 @@ namespace CTRPluginFramework {
 	class PluginMenuData {
 		public:
 			/**
-			* \brief Get the name of this hotkey
-			*/
-			static std::string GetHotkeyName(Hotkey hotkey);
-
-			/**
 			* \brief Sets up PluginMenuData for folders (call this right after you init the menu)
 			*/
 			static void SetUp(MenuFolder *objfolder, bool isSubFolder = false);

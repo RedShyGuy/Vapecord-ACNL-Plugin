@@ -423,7 +423,40 @@ namespace CTRPluginFramework {
 			PressedTicks = 0;
 	}
 
-	void FossilInspector(MenuEntry *entry) {
-		
+	bool ThinkToBuriedItems(Item *item) {
+		if(((*item).Flags >> 12) == 8) 
+			(*item).Flags &= 0x0FFF;
+
+		const HookContext &curr = HookContext::GetCurrent();
+		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+		return func.Call<bool>(item);
+	}
+
+	Item* PickBuriedItems(u32 pInstance, u8 wX, u8 wY) {
+		Item* item = GameHelper::GetItemAtWorldCoords(wX, wY);
+		if((item->Flags >> 12) == 8)
+			item->Flags &= 0x0FFF;
+
+		return item;
+	}
+
+	void BuriedInspector(MenuEntry *entry) {
+		static Hook BuriedHook, PickBuriedHook;
+		static const Address BuriedAddress(0x665534, 0, 0, 0, 0, 0, 0, 0);
+		static const Address PickBuriedAddress(0x59A0BC, 0, 0, 0, 0, 0, 0, 0);
+
+		if(entry->WasJustActivated()) {
+			BuriedHook.Initialize(BuriedAddress.addr, (u32)ThinkToBuriedItems);
+			BuriedHook.SetFlags(USE_LR_TO_RETURN);
+			BuriedHook.Enable();
+
+			PickBuriedHook.Initialize(PickBuriedAddress.addr, (u32)PickBuriedItems);
+			PickBuriedHook.SetFlags(USE_LR_TO_RETURN);
+			PickBuriedHook.Enable();
+		}
+		else if(!entry->IsActivated()) {
+			BuriedHook.Disable();
+			PickBuriedHook.Disable();
+		}
 	}
 }

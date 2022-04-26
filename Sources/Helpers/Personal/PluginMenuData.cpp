@@ -8,11 +8,6 @@ namespace CTRPluginFramework {
 
 	std::vector<FolderData> PluginMenuData::folderData;
 
-	std::string PluginMenuData::GetHotkeyName(Hotkey hotkey) {
-		char *str = (char *)*(u32 *)((u32)&hotkey + 4);
-		return std::string(str);
-	}
-
 	static int obj_CogID = 0;
 
 	void PluginMenuData::SetUp(MenuFolder *objfolder, bool isSubFolder) {
@@ -36,9 +31,9 @@ namespace CTRPluginFramework {
 					folderData[pos].entryData[pos2].IndexColor = GetColorFromString(objentry->Name());
 					folderData[pos].entryData[pos2].IndexName = RemoveColorFromString(objentry->Name());
 					folderData[pos].entryData[pos2].IndexNote = objentry->Note();
-					
+		
 					for(int i = 0; i < objentry->Hotkeys.Count(); ++i) 
-						folderData[pos].entryData[pos2].IndexHotkeys.push_back(GetHotkeyName(objentry->Hotkeys[i]));
+						folderData[pos].entryData[pos2].IndexHotkeys.push_back(objentry->Hotkeys[i].GetName());
 
 					if(objentry->GetGameFunc() == nullptr && objentry->GetMenuFunc() != nullptr) {
 						folderData[pos].entryData[pos2].CogID = obj_CogID;

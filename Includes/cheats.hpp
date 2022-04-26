@@ -174,6 +174,7 @@ namespace CTRPluginFramework {
 	void AmiiboSpoof(MenuEntry *entry);
 	void TTKeyboard(MenuEntry *entry);
 	void TimeTravel(MenuEntry *entry);
+	void BuriedInspector(MenuEntry *entry);
 	
 //Misc Codes
 	void disablecommands(MenuEntry *entry);

@@ -597,11 +597,7 @@ namespace CTRPluginFramework {
 		static Address trample3(0x59F144, 0x59E65C, 0x59E18C, 0x59E18C, 0x59DA7C, 0x59DA7C, 0x59D750, 0x59D750);
 		trample3.Call<void>(wX, wY, 1);
 	}
-//checks if inv is full
-	bool GameHelper::InvFull() {
-		static Address fullinv(0x7631EC, 0x7621D0, 0x7621F4, 0x7621CC, 0x76198C, 0x761964, 0x761534, 0x76150C);
-		return fullinv.Call<bool>(PlayerClass::GetInstance()->Offset());
-	}
+
 //sets first empty slot
 	bool GameHelper::SetItem(Item *item) {		
 		if(Player::GetSaveOffset(4) == 0) 

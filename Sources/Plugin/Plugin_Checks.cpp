@@ -25,7 +25,6 @@ namespace CTRPluginFramework {
 	void SetTitle(u32 dataParam, u32 *stack);
 	void SetText(u32 dataParam, u32 *stack);
 	void SuspendCallBack(u32 param);
-	bool ThinkToBuriedItems(u32 *item);
 
 //check for accidental invalid item eat/drop/show off etc
 	void PluginHooks(void) {
@@ -102,10 +101,6 @@ namespace CTRPluginFramework {
 		SetHook(PlantHook2, Plant2.addr, (u32)IsItemPlantable, USE_LR_TO_RETURN);
 		SetHook(PlantHook3, Plant3.addr, (u32)IsItemPlantable, USE_LR_TO_RETURN);
 		SetHook(PlantHook4, Plant4.addr, (u32)IsItemPlantable, USE_LR_TO_RETURN);
-
-		static Hook BuriedHook;
-		static const Address BuriedAddress(0x665534, 0, 0, 0, 0, 0, 0, 0);
-		SetHook(BuriedHook, BuriedAddress.addr, (u32)ThinkToBuriedItems, USE_LR_TO_RETURN);
 
 		/*static Hook hook;
 		static const u32 address(0x323424, 0, 0, 0, 0, 0, 0, 0);
