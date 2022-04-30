@@ -1,6 +1,5 @@
 #include "Config.hpp"
 #include "Helpers/PluginMenuData.hpp"
-#include "TextFileParser.hpp"
 #include "Files.h"
 
 namespace CTRPluginFramework {

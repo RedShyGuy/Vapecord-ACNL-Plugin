@@ -1,5 +1,4 @@
 #include "cheats.hpp"
-#include "TextFileParser.hpp"
 #include "Helpers/Player.hpp"
 #include "Helpers/Game.hpp"
 #include "RegionCodes.hpp"

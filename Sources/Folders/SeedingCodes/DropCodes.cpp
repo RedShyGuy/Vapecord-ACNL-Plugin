@@ -2,7 +2,6 @@
 #include <algorithm>
 #include "cheats.hpp"
 #include "Helpers/ItemSequence.hpp"
-#include "TextFileParser.hpp"
 #include "RegionCodes.hpp"
 #include "Helpers/Dropper.hpp"
 #include "Helpers/Wrapper.hpp"

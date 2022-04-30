@@ -1,7 +1,6 @@
 #include "cheats.hpp"
 #include "Helpers/IDList.hpp"
 #include "Helpers/NPC.hpp"
-#include "TextFileParser.hpp"
 #include "Helpers/Address.hpp"
 
 /*

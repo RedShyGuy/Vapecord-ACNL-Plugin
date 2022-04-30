@@ -2,6 +2,15 @@
 *.d
 *.lst
 Build/
+libctrpf/.vscode
+libctrpf/debug
+libctrpf/include
+libctrpf/libcwav
+libctrpf/release
+libctrpf/source
+libctrpf/build.bat
+libctrpf/.gitignore
+libctrpf/Makefile
 *.3gx
 *.elf
 *.lnk

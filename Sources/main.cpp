@@ -7,7 +7,6 @@
 #include "Helpers/QuickMenu.hpp"
 #include "Helpers/PluginMenuData.hpp"
 #include "NonHacker.hpp"
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

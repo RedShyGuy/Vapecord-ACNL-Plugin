@@ -434,12 +434,12 @@ namespace CTRPluginFramework {
 		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Extra Save Restore", nullptr, RestoreAll, "")),
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Fish Thrower", FishThrower, "")),
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Wand Ability", wandability, "Gives the different wands abilitys.\n" +
-																			  PluginMenuData::FormatColor("%cBlue Wand: %cNULL\n", Color(0x0089FFFF), Color::White) +
-																			  PluginMenuData::FormatColor("%cGreen Wand: %cRestores wilted flowers instantly\n", Color(0x2BFF00FF), Color::White) +
-																			  PluginMenuData::FormatColor("%cPink Wand: %cNULL\n", Color(0xFF00E6FF), Color::White) +
-																			  PluginMenuData::FormatColor("%cYellow Wand: %cNULL\n", Color(0xEFFF00FF), Color::White) +
-																			  PluginMenuData::FormatColor("%cFlower Fairy Wand: %cGrows Tree instantly\n", Color(0xCD00FFFF), Color::White) +
-																			  PluginMenuData::FormatColor("%cKiki and Lala Wand: %cNULL", Color(0xFF7700FF), Color::White))),
+																			  Color::Format("%cBlue Wand: %cNULL\n", Color(0x0089FFFF), Color::White) +
+																			  Color::Format("%cGreen Wand: %cRestores wilted flowers instantly\n", Color(0x2BFF00FF), Color::White) +
+																			  Color::Format("%cPink Wand: %cNULL\n", Color(0xFF00E6FF), Color::White) +
+																			  Color::Format("%cYellow Wand: %cNULL\n", Color(0xEFFF00FF), Color::White) +
+																			  Color::Format("%cFlower Fairy Wand: %cGrows Tree instantly\n", Color(0xCD00FFFF), Color::White) +
+																			  Color::Format("%cKiki and Lala Wand: %cNULL", Color(0xFF7700FF), Color::White))),
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Light Switch Toggler", lightswitch, "Lets you toggle the light switch.\nHotkeys are:\nL + DPadUp : Toggle light in current room\nL + DPadRight : Set Room ID\nL + DPadLeft : Toggle light in set room")),
 		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Custom Save Settings", CustomSaveScreen, "")),
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Island Saver", nullptr, IslandSaver, "")),

@@ -5,7 +5,6 @@
 #include "Helpers/Save.hpp"
 #include "Helpers/NPC.hpp"
 #include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
 
 #define RANGE(X, START, END)	((X & 0xFFFF) >= START && (X & 0xFFFF) <= END)
 #define IS(X, ADDR)				((X & 0xFFFF) == ADDR)

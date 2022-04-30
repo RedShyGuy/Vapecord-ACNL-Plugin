@@ -1,6 +1,5 @@
 #include "cheats.hpp"
 #include "Helpers/Address.hpp"
-#include "TextFileParser.hpp"
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/Game.hpp"
 #include "Helpers/Animation.hpp"

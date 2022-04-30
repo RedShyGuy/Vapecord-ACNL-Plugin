@@ -2,7 +2,6 @@
 #include "RegionCodes.hpp"
 #include "Helpers/Game.hpp"
 #include "Helpers/PlayerClass.hpp"
-#include "TextFileParser.hpp"
 #include "Helpers/IDList.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/Animation.hpp"

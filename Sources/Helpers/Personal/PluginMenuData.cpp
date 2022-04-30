@@ -1,6 +1,4 @@
-#include <cstdarg>
 #include "Helpers/PluginMenuData.hpp"
-#include "TextFileParser.hpp"
 #include "Helpers/QuickMenu.hpp"
 
 namespace CTRPluginFramework {
@@ -16,8 +14,8 @@ namespace CTRPluginFramework {
 			int pos = (folderData.size() - 1);
 
 			folderData[pos].folder = objfolder;
-			folderData[pos].IndexColor = GetColorFromString(objfolder->Name());
-			folderData[pos].IndexName = RemoveColorFromString(objfolder->Name());
+			folderData[pos].IndexColor = Color::GetColor(objfolder->Name());
+			folderData[pos].IndexName = Color::RemoveColor(objfolder->Name());
 			folderData[pos].IndexNote = objfolder->Note();
 			folderData[pos].IsSubFolder = isSubFolder;
 
@@ -28,8 +26,8 @@ namespace CTRPluginFramework {
 					int pos2 = (folderData[pos].entryData.size() - 1);
 
 					folderData[pos].entryData[pos2].entry = objentry;
-					folderData[pos].entryData[pos2].IndexColor = GetColorFromString(objentry->Name());
-					folderData[pos].entryData[pos2].IndexName = RemoveColorFromString(objentry->Name());
+					folderData[pos].entryData[pos2].IndexColor = Color::GetColor(objentry->Name());
+					folderData[pos].entryData[pos2].IndexName = Color::RemoveColor(objentry->Name());
 					folderData[pos].entryData[pos2].IndexNote = objentry->Note();
 		
 					for(int i = 0; i < objentry->Hotkeys.Count(); ++i) 
@@ -47,6 +45,7 @@ namespace CTRPluginFramework {
 	}
 
 	void PluginMenuData::UpdateAll(const Color arr[12]) {
+		return;
 		int previous = 0;
 
 		for(int i = 0; i < folderData.size(); ++i) {
@@ -70,6 +69,7 @@ namespace CTRPluginFramework {
 	}
 //Update
 	void PluginMenuData::UpdateAll(void) {
+		return;
 		for(auto fdata : folderData) {
 			for(auto edata : fdata.entryData) {
 				
@@ -155,63 +155,5 @@ namespace CTRPluginFramework {
 		settings.CustomKeyboard.ScrollBarThumb = arr[23];
 		settings.Notifications.DefaultBackground = arr[24];
 		settings.Notifications.DefaultForeground = arr[25];
-	}
-
-	std::string PluginMenuData::FormatColor(const char *fmt, ...) {
-		std::string res;
-
-		va_list list;
-		va_start(list, fmt);
-		while(*fmt != '\0') {
-			if(*fmt != '%') {
-				res += *fmt;
-				fmt++;
-				continue;
-			}
-
-			fmt++;
-
-			if(*fmt == '\0') 
-				break;
-
-			if(*fmt == 'c') {
-				void* p = va_arg(list, void *);
-
-				u32 RawColor = (u32)p;
-
-				char strColor[5] = { 
-					0x1B, 
-					std::max((u8)1, (u8)(RawColor & 0x000000FF)), 
-					std::max((u8)1, (u8)((RawColor & 0x0000FF00) >> 8)),
-					std::max((u8)1, (u8)((RawColor & 0x00FF0000) >> 16)), 
-				};
-				res += strColor[0];
-				res += strColor[1];
-				res += strColor[2];
-				res += strColor[3];
-       		}      
-
-			fmt++;
-		}
-
-		return res;
-	}
-
-	Color PluginMenuData::GetColorFromString(const std::string &str) {
-		std::vector<char> r_char(str.begin(), str.end());
-
-		if((u8)r_char[0] == 0x1B) { //if colorcode
-			u32 c_code = ((u8)r_char[1] << 24 | (u8)r_char[2] << 16 | (u8)r_char[3] << 8 | 0xFF);
-			return Color(c_code);
-		}
-		return Color(0xFFFFFFFF);
-	}
-
-	std::string PluginMenuData::RemoveColorFromString(const std::string &str) {
-		std::vector<char> r_char(str.begin(), str.end());
-		if((u8)r_char[0] == 0x1B) { //if colorcode
-			return str.substr(4);
-		}
-		return str;
 	}
 }

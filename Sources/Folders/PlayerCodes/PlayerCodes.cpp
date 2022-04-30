@@ -2,7 +2,6 @@
 #include "Helpers/Game.hpp"
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/Inventory.hpp"
-#include "TextFileParser.hpp"
 #include "Helpers/Player.hpp"
 #include "Helpers/Address.hpp"
 #include "Helpers/Animation.hpp"

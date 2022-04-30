@@ -7,7 +7,7 @@ endif
 TOPDIR 		?= 	$(CURDIR)
 include $(DEVKITARM)/3ds_rules
 
-CTRPFLIB	?=	$(DEVKITPRO)/libctrpf
+CTRPFLIB	?=	$(CURDIR)/libctrpf
 
 TARGET		:= 	$(notdir $(CURDIR))
 PLGINFO 	:= 	CTRPluginFramework.plgInfo

@@ -1,5 +1,4 @@
 #include "cheats.hpp"
-#include "TextFileParser.hpp"
 #include "Helpers/Address.hpp"
 #include "Helpers/CROEditing.hpp"
 

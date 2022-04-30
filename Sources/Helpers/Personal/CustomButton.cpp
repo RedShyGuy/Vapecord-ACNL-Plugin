@@ -5,7 +5,6 @@
 #include "Helpers/Player.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "RegionCodes.hpp"
-#include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
 /*

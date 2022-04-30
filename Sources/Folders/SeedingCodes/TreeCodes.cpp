@@ -1,6 +1,5 @@
 #include "cheats.hpp"
 #include "Helpers/Address.hpp"
-#include "TextFileParser.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Color.h"
 #include "Helpers/GameStructs.hpp"

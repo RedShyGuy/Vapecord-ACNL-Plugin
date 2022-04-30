@@ -2,7 +2,6 @@
 #include "Helpers/QRCodeGen.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/Address.hpp"
-#include "TextFileParser.hpp"
 #include "Helpers/PluginMenuData.hpp"
 #include "Files.h"
 #include "Config.hpp"
@@ -42,7 +41,7 @@ namespace CTRPluginFramework {
 
 		for(MenuEntry *entry : Entrys) {
 			if(entry->IsActivated())
-				str += PluginMenuData::RemoveColorFromString(entry->Name()) + "\n";
+				str += Color::RemoveColor(entry->Name()) + "\n";
 		}
 
 		for(MenuFolder *folder : Folders) {
@@ -51,14 +50,14 @@ namespace CTRPluginFramework {
 				Entrys = subfolder->GetEntryList();
 				for(MenuEntry *entry : Entrys) {
 					if(entry->IsActivated())
-						str += (PluginMenuData::RemoveColorFromString(folder->Name()) + " -> " + PluginMenuData::RemoveColorFromString(subfolder->Name()) + " -> " + PluginMenuData::RemoveColorFromString(entry->Name())) + "\n";
+						str += (Color::RemoveColor(folder->Name()) + " -> " + Color::RemoveColor(subfolder->Name()) + " -> " + Color::RemoveColor(entry->Name())) + "\n";
 				}	
 			}
 
 			Entrys = folder->GetEntryList();
 			for(MenuEntry *entry : Entrys) {
 				if(entry->IsActivated())
-					str += (PluginMenuData::RemoveColorFromString(folder->Name()) + " -> " + PluginMenuData::RemoveColorFromString(entry->Name())) + "\n";
+					str += (Color::RemoveColor(folder->Name()) + " -> " + Color::RemoveColor(entry->Name())) + "\n";
 			}
 		}
 

@@ -1,5 +1,4 @@
 #include "cheats.hpp"
-#include "TextFileParser.hpp"
 #include "NonHacker.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/IDList.hpp"
@@ -266,7 +265,7 @@ namespace CTRPluginFramework {
 
 			if(res >= 0) {
 				Sleep(Milliseconds(100));
-				MessageBox(Utils::Format("Added %s to the Quick Menu!", PluginMenuData::RemoveColorFromString(cogEntrys[res].entry->Name()).c_str())).SetClear(ClearScreen::Top)();
+				MessageBox(Utils::Format("Added %s to the Quick Menu!", Color::RemoveColor(cogEntrys[res].entry->Name()).c_str())).SetClear(ClearScreen::Top)();
 			
 				QuickMenu::AddEntry(cogEntrys[res]);
 			}
@@ -293,7 +292,7 @@ namespace CTRPluginFramework {
 
 			if(res >= 0) {
 				Sleep(Milliseconds(100));
-				MessageBox(Utils::Format("Removed %s from the Quick Menu!", PluginMenuData::RemoveColorFromString(QuickMenu::obj_QuickMenu[res].entry->Name()).c_str())).SetClear(ClearScreen::Top)();
+				MessageBox(Utils::Format("Removed %s from the Quick Menu!", Color::RemoveColor(QuickMenu::obj_QuickMenu[res].entry->Name()).c_str())).SetClear(ClearScreen::Top)();
 
 				QuickMenu::RemoveEntry(QuickMenu::obj_QuickMenu[res]);
 			}

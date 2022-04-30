@@ -30,29 +30,12 @@ namespace CTRPluginFramework {
 		std::vector<EntryData> entryData;
 	};
 
-	using FuncPointer = void (*)(MenuEntry *);
-
 	class PluginMenuData {
 		public:
 			/**
 			* \brief Sets up PluginMenuData for folders (call this right after you init the menu)
 			*/
 			static void SetUp(MenuFolder *objfolder, bool isSubFolder = false);
-
-			/**
-			* \brief Removes the color of a string (only if the color is at the beginning)
-			*/
-			static std::string RemoveColorFromString(const std::string &str);
-
-			/**
-			* \brief Printf for Colors (add %c to string)
-			*/
-			static std::string FormatColor(const char *fmt, ...);
-
-			/**
-			* \brief Get the color of the given string (only if the color is at the beginning)
-			*/
-			static Color GetColorFromString(const std::string &str);
 
 			/**
 			* \brief Set the VapecordStandardTheme for the FwkSettings

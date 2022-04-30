@@ -6,7 +6,6 @@
 #include "Helpers/IDList.hpp"
 #include "Helpers/Game.hpp"
 #include "Helpers/Inventory.hpp"
-#include "TextFileParser.hpp"
 
 namespace CTRPluginFramework {
 
@@ -222,7 +221,7 @@ namespace CTRPluginFramework {
 
 			ConvertToLowcase(ItemName);
 
-			Trim(ItemName);
+			g_Trim(ItemName);
 
 			ItemVec match;
 			int res = ItemSearch(ItemName, match);

@@ -1,6 +1,5 @@
 #include "cheats.hpp"
 #include "Helpers/Game.hpp"
-#include "TextFileParser.hpp"
 #include "Helpers/CROEditing.hpp"
 #include "RegionCodes.hpp"
 #include "Helpers/IDList.hpp"
