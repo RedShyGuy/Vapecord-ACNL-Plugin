@@ -8,12 +8,12 @@ namespace CTRPluginFramework {
     class QuickMenu {
         public:
             static void Init(void);
-            static void AddEntry(EntryData entry);
-            static void RemoveEntry(EntryData entry);
-            static void ListAvailableCogEntrys(std::vector<EntryData> &data);
+            static void AddEntry(MenuEntry *entry);
+            static void RemoveEntry(MenuEntry *entry);
+            static void ListAvailableCogEntrys(std::vector<MenuEntry *> &data);
             static void UpdateFile(void);
 
-            static std::vector<EntryData> obj_QuickMenu;
+            static std::vector<MenuEntry *> obj_QuickMenu;
     };
 }
 #endif

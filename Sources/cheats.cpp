@@ -16,18 +16,6 @@ namespace CTRPluginFramework {
 		Color(pGreen), Color(pYellow),	
 	};
 
-/*
-Returns a randomized RGBA color
-*/
-	u32 Rainbow() {
-		u8 ShiftR = Utils::Random(0, 255);
-        u8 ShiftG = Utils::Random(0, 255);
-        u8 ShiftB = Utils::Random(0, 255);	
-		u8 ShiftA = Utils::Random(0, 255);
-			
-		return(ShiftR << 24 | ShiftG << 16 | ShiftB << 8 | ShiftA);
-    }
-
 	bool RainBowON = false;
 
 /*
@@ -37,9 +25,9 @@ Randomizes colors of Menu Folders
 		static Clock timer(time);
 		if(timer.HasTimePassed(Milliseconds(500)) && RainBowON) {  
 			Color color[12] = {
-				Rainbow(), Rainbow(), Rainbow(), Rainbow(),
-				Rainbow(), Rainbow(), Rainbow(), Rainbow(),
-				Rainbow(), Rainbow(), Rainbow(), Rainbow()
+				Color::Rainbow(), Color::Rainbow(), Color::Rainbow(), Color::Rainbow(),
+				Color::Rainbow(), Color::Rainbow(), Color::Rainbow(), Color::Rainbow(),
+				Color::Rainbow(), Color::Rainbow(), Color::Rainbow(), Color::Rainbow()
 			};
 			
 			PluginMenuData::UpdateAll(color);

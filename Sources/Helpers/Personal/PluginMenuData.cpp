@@ -6,107 +6,43 @@ namespace CTRPluginFramework {
 
 	std::vector<FolderData> PluginMenuData::folderData;
 
-	static int obj_CogID = 0;
-
 	void PluginMenuData::SetUp(MenuFolder *objfolder, bool isSubFolder) {
 		if(objfolder != nullptr) {
 			folderData.push_back(FolderData());
 			int pos = (folderData.size() - 1);
 
 			folderData[pos].folder = objfolder;
-			folderData[pos].IndexColor = Color::GetColor(objfolder->Name());
-			folderData[pos].IndexName = Color::RemoveColor(objfolder->Name());
-			folderData[pos].IndexNote = objfolder->Note();
 			folderData[pos].IsSubFolder = isSubFolder;
 
 			std::vector<MenuEntry *> entrys = objfolder->GetEntryList();
 			for(auto objentry : entrys) {
-				if(objentry != nullptr) {
-					folderData[pos].entryData.push_back(EntryData());
-					int pos2 = (folderData[pos].entryData.size() - 1);
-
-					folderData[pos].entryData[pos2].entry = objentry;
-					folderData[pos].entryData[pos2].IndexColor = Color::GetColor(objentry->Name());
-					folderData[pos].entryData[pos2].IndexName = Color::RemoveColor(objentry->Name());
-					folderData[pos].entryData[pos2].IndexNote = objentry->Note();
-		
-					for(int i = 0; i < objentry->Hotkeys.Count(); ++i) 
-						folderData[pos].entryData[pos2].IndexHotkeys.push_back(objentry->Hotkeys[i].GetName());
-
-					if(objentry->GetGameFunc() == nullptr && objentry->GetMenuFunc() != nullptr) {
-						folderData[pos].entryData[pos2].CogID = obj_CogID;
-						obj_CogID++;
-					}
-					else
-						folderData[pos].entryData[pos2].CogID = -1;
-				}
+				if(objentry != nullptr) 
+					folderData[pos].entryData.push_back(objentry);
 			}
 		}
 	}
 
 	void PluginMenuData::UpdateAll(const Color arr[12]) {
-		return;
 		int previous = 0;
 
 		for(int i = 0; i < folderData.size(); ++i) {
 			if(folderData[i].IsSubFolder) {
-				folderData[i].IndexColor = arr[previous];
+				folderData[i].folder->NameColor() = arr[previous];
 
 				for(int j = 0; j < folderData[i].entryData.size(); ++j) 
-					folderData[i].entryData[j].IndexColor = arr[previous];
+					folderData[i].entryData[j]->NameColor() = arr[previous];
 			}
 			else {
-				folderData[i].IndexColor = arr[previous];
+				folderData[i].folder->NameColor() = arr[previous];
 
 				for(int j = 0; j < folderData[i].entryData.size(); ++j) 
-					folderData[i].entryData[j].IndexColor = arr[previous];
+					folderData[i].entryData[j]->NameColor() = arr[previous];
 
 				previous++;
 			}
 		}
-	
-		UpdateAll();
-	}
-//Update
-	void PluginMenuData::UpdateAll(void) {
-		return;
-		for(auto fdata : folderData) {
-			for(auto edata : fdata.entryData) {
-				
-				std::string hotkey = "";
-				int count = edata.entry->Hotkeys.Count();
 
-				if(count == 1) {//If Entry has only 1 Hotkey append string of it to name
-					hotkey = edata.entry->Hotkeys[0].ToString();
-					edata.entry->Hotkeys[0] = Language->Get(edata.IndexHotkeys[0]);
-				}
-				else {
-					for(int i = 0; i < count; ++i) 
-						edata.entry->Hotkeys[i] = Language->Get(edata.IndexHotkeys[i]);
-				}
-
-				edata.entry->Name() = edata.IndexColor << Language->Get(edata.IndexName) + " " + hotkey;
-				edata.entry->Note() = Language->Get(edata.IndexNote);
-				edata.entry->RefreshNote();
-
-			//update quick menu
-				if(edata.CogID != -1) {
-					for(auto qdata : QuickMenu::obj_QuickMenu) {
-					//if entry is stored in the quick menu, hide it
-						if(edata.CogID == qdata.CogID) {
-							edata.entry->Hide();
-							goto hidden;
-						}
-					}
-
-					edata.entry->Show();
-				}
-				hidden: continue;
-			}
-
-			fdata.folder->Name() = fdata.IndexColor << Language->Get(fdata.IndexName);
-			fdata.folder->Note() = Language->Get(fdata.IndexNote);
-		}
+		PluginMenu::GetRunningInstance()->Reload(QuickMenu::obj_QuickMenu);
 	}
 
 	void PluginMenuData::SetVapecordStandardTheme(FwkSettings &settings) {

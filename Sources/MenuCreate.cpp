@@ -1,5 +1,6 @@
 #include "cheats.hpp"
 #include "Helpers/PluginMenuData.hpp"
+#include "Helpers/QuickMenu.hpp"
 
 namespace CTRPluginFramework {
     static MenuEntry *EntryWithHotkey(MenuEntry *entry, const std::vector<Hotkey> &hotkeys) {
@@ -14,7 +15,7 @@ namespace CTRPluginFramework {
         if(entry != nullptr) {
             entry->Hotkeys += hotkey;
             entry->Hotkeys.OnHotkeyChangeCallback([](MenuEntry *entry, int index) {
-				PluginMenuData::UpdateAll();
+				PluginMenu::GetRunningInstance()->Reload(QuickMenu::obj_QuickMenu);
             });
         }
         return entry;

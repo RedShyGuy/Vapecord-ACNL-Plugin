@@ -1,5 +1,6 @@
 #include "Config.hpp"
 #include "Helpers/PluginMenuData.hpp"
+#include "Helpers/QuickMenu.hpp"
 #include "Color.h"
 #include "Files.h"
 
@@ -96,6 +97,6 @@ namespace CTRPluginFramework {
 
 		Language->Parse(LanguageTXT[pos]);
 
-		PluginMenuData::UpdateAll();
+		PluginMenu::GetRunningInstance()->Reload(QuickMenu::obj_QuickMenu);
     }
 }

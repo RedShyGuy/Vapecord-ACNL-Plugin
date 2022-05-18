@@ -7,27 +7,10 @@
 namespace CTRPluginFramework {
 	extern MenuFolder *DEVC;
 
-	struct HotkeyDat {
-		std::vector<std::string> Name;
-		int Pos;
-	};
-
-	struct EntryData {
-		MenuEntry *entry;
-		Color IndexColor;
-		std::string IndexName;
-		std::string IndexNote;
-		int CogID; //-1 if no cog cheat
-		std::vector<std::string> IndexHotkeys;
-	};
-
 	struct FolderData {
 		MenuFolder *folder;
-		Color IndexColor;
-		std::string IndexName;
-		std::string IndexNote;
 		u32 IsSubFolder;
-		std::vector<EntryData> entryData;
+		std::vector<MenuEntry *> entryData;
 	};
 
 	class PluginMenuData {
@@ -51,11 +34,6 @@ namespace CTRPluginFramework {
 			* \brief Refreshes PluginMenuData colors and strings
 			*/
 			static void UpdateAll(const Color arr[12]);
-
-			/**
-			* \brief Refreshes PluginMenuData strings
-			*/
-			static void UpdateAll(void);
 
 			static std::vector<FolderData> folderData;
 	};

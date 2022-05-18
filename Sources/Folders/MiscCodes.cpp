@@ -237,7 +237,7 @@ namespace CTRPluginFramework {
 		if(res < 0)
 			return;
 
-		std::vector<EntryData> cogEntrys;
+		std::vector<MenuEntry *> cogEntrys;
         QuickMenu::ListAvailableCogEntrys(cogEntrys);
 
 		std::vector<std::string> CogNames;
@@ -254,8 +254,8 @@ namespace CTRPluginFramework {
 
 		//push all existing menu entrys into name/note vector
 			for(auto edata : cogEntrys) {
-				CogNames.push_back(edata.entry->Name());
-				cogNotes.push_back(edata.entry->Note());
+				CogNames.push_back(edata->Name());
+				cogNotes.push_back(edata->Note());
 			}
 
 			Sleep(Milliseconds(100));
@@ -265,7 +265,7 @@ namespace CTRPluginFramework {
 
 			if(res >= 0) {
 				Sleep(Milliseconds(100));
-				MessageBox(Utils::Format("Added %s to the Quick Menu!", Color::RemoveColor(cogEntrys[res].entry->Name()).c_str())).SetClear(ClearScreen::Top)();
+				MessageBox(Utils::Format("Added %s to the Quick Menu!", Color::RemoveColor(cogEntrys[res]->Name()).c_str())).SetClear(ClearScreen::Top)();
 			
 				QuickMenu::AddEntry(cogEntrys[res]);
 			}
@@ -281,8 +281,8 @@ namespace CTRPluginFramework {
 
 		//push all existing quick menu entrys into name/note vector
 			for(auto edata : QuickMenu::obj_QuickMenu) {
-				CogNames.push_back(edata.entry->Name());
-				cogNotes.push_back(edata.entry->Note());
+				CogNames.push_back(edata->Name());
+				cogNotes.push_back(edata->Note());
 			}
 
 			Sleep(Milliseconds(100));
@@ -292,7 +292,7 @@ namespace CTRPluginFramework {
 
 			if(res >= 0) {
 				Sleep(Milliseconds(100));
-				MessageBox(Utils::Format("Removed %s from the Quick Menu!", Color::RemoveColor(QuickMenu::obj_QuickMenu[res].entry->Name()).c_str())).SetClear(ClearScreen::Top)();
+				MessageBox(Utils::Format("Removed %s from the Quick Menu!", Color::RemoveColor(QuickMenu::obj_QuickMenu[res]->Name()).c_str())).SetClear(ClearScreen::Top)();
 
 				QuickMenu::RemoveEntry(QuickMenu::obj_QuickMenu[res]);
 			}
@@ -306,8 +306,8 @@ namespace CTRPluginFramework {
 		if(entry->Hotkeys[0].IsPressed()) {
 			cogNotes.clear();
 			for(auto edata : QuickMenu::obj_QuickMenu) {
-				QMEntryNames.push_back(edata.entry->Name());
-				cogNotes.push_back(edata.entry->Note());
+				QMEntryNames.push_back(edata->Name());
+				cogNotes.push_back(edata->Note());
 			}
 
 			if(QMEntryNames.empty()) {
@@ -324,7 +324,7 @@ namespace CTRPluginFramework {
 			if(res < 0)
 				return;
 
-			QuickMenu::obj_QuickMenu[res].entry->GetMenuFunc()(entry);
+			QuickMenu::obj_QuickMenu[res]->GetMenuFunc()(entry);
 		}	
 	}
 //More Than 3 Numbers On Island
