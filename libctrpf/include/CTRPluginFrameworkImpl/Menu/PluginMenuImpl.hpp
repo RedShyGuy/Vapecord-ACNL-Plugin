@@ -46,6 +46,7 @@ namespace CTRPluginFramework
         static void GetRegionsList(std::vector<Region> &list);
         // Used to forcefully exit a menu
         static void ForceExit(void);
+        static void ForceClose(void);
         static void ForceOpen(void);
 
         static void UnStar(MenuItem *item);

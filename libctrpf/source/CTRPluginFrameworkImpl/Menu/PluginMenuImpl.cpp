@@ -626,10 +626,16 @@ namespace CTRPluginFramework
             _runningInstance->_search->GetRegionsList(list);
     }
 
-    void    PluginMenuImpl::ForceExit(void)
+    void    PluginMenuImpl::ForceClose(void)
     {
         if (_runningInstance != nullptr)
             _runningInstance->_forceClose = true;
+    }
+
+    void    PluginMenuImpl::ForceExit(void)
+    {
+        if (_runningInstance != nullptr)
+            _runningInstance->_pluginRun = true;
     }
 
     void    PluginMenuImpl::ForceOpen(void)
