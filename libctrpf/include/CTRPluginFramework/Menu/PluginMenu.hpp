@@ -129,6 +129,11 @@ namespace CTRPluginFramework
         static void ForceOpen(void);
 
         /**
+         * \brief Forces the exiting of the menu
+         */
+        static void ForceExit(void);
+
+        /**
          * \brief If set to true, the plugin's loop will only be executed 1 per top screen's frame
          * \param useSync Wheter to wait for the top screen's frame or not
          */

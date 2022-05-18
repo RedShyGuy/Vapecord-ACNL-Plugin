@@ -29,6 +29,7 @@ namespace CTRPluginFramework
         _guide(new GuideReader()),
         _hexEditor(0x00100000),
         _forceOpen(false),
+        _forceClose(false),
         _hexEditorState(true)
     {
         SyncOnFrame = false;
@@ -263,6 +264,7 @@ namespace CTRPluginFramework
                         OnFrame(delta);
                     if (_aboutToOpen)
                         home.UpdateNote();
+                    
                     shouldClose = home(eventList, mode, delta);
                 }
                 /*
@@ -313,7 +315,7 @@ namespace CTRPluginFramework
                 delta = clock.Restart();
 
                 // Close menu
-                if (shouldClose || SystemImpl::WantsToSleep())
+                if (shouldClose || SystemImpl::WantsToSleep() || _forceClose)
                 {
                     if (shouldClose)
                         SoundEngine::PlayMenuSound(SoundEngine::Event::CANCEL);
@@ -321,6 +323,8 @@ namespace CTRPluginFramework
                     _isOpen = false;
                     openManager.Clear();
                     shouldClose = false;
+
+                    _forceClose = false;
 
                     // Save settings
                     Preferences::WriteSettings();
@@ -625,7 +629,7 @@ namespace CTRPluginFramework
     void    PluginMenuImpl::ForceExit(void)
     {
         if (_runningInstance != nullptr)
-            _runningInstance->_pluginRun = false;
+            _runningInstance->_forceClose = true;
     }
 
     void    PluginMenuImpl::ForceOpen(void)
