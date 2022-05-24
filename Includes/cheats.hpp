@@ -237,6 +237,8 @@ namespace CTRPluginFramework {
   //Located in Plugin_Settings.cpp
 	void pluginsettings(MenuEntry *entry);
 	void gamesettings(MenuEntry *entry);
+
+	void SendPlayerData(Time time);
 }
 
 #endif

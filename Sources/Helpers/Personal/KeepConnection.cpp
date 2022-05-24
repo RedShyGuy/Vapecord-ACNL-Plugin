@@ -129,8 +129,8 @@ namespace CTRPluginFramework {
 		Address(startFunc).Call<void>(threadfunc, threadargs);
 	}
 
-    void SendPlayerData/*0x1B6C28*/(void) { //needs to be set into OnNewFrame callback
-		if(GameHelper::GetOnlinePlayerCount() <= 1)
+    void SendPlayerData/*0x1B6C28*/(Time time) { //needs to be set into OnNewFrame callback
+		if(GameHelper::GetOnlinePlayerCount() <= 1 || PluginMenu::GetRunningInstance() == nullptr)
 			return;
 
 		static Address sendData1(0x617D20, 0x617248, 0x616D58, 0x616D58, 0x616818, 0x616818, 0x6163C0, 0x6163C0);
@@ -163,5 +163,7 @@ namespace CTRPluginFramework {
 		Process::OnPauseResume = [](bool goingToPause) {
 			keepConnectionInCTRPF(goingToPause);
 		};
+
+		Keyboard::OnNewFrame(SendPlayerData); //to also send player data while in keyboards
     }
 }

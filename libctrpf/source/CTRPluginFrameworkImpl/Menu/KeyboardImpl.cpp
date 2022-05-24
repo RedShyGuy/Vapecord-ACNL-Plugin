@@ -28,6 +28,9 @@ namespace CTRPluginFramework
     std::vector<TouchKey>    KeyboardImpl::_HexaDecimalKeys;
     std::vector<TouchKey>    KeyboardImpl::_QwertyKeys;
 
+    using FrameCallback = void (*)(Time);
+    FrameCallback           KeyboardImpl::_onNewFrame{nullptr};
+
     KeyboardImpl::KeyboardImpl(const std::string &text)
     {
         _owner = nullptr;
@@ -202,6 +205,11 @@ namespace CTRPluginFramework
     void    KeyboardImpl::OnKeyboardEvent(OnEventCallback callback)
     {
         _onKeyboardEvent = callback;
+    }
+
+    void    KeyboardImpl::OnNewFrame(FrameCallback callback)
+    {
+        _onNewFrame = callback;
     }
 
     void	KeyboardImpl::ChangeSelectedEntry(int entry) {
@@ -447,6 +455,8 @@ namespace CTRPluginFramework
         Event               event;
         EventManager        manager(EventManager::EventGroups::GROUP_KEYS | EventManager::EventGroups::GROUP_TOUCH);
         Clock               clock;
+        Time                delta;
+        Clock               frameClock;
 
         // Construct keyboard
         if (!_customKeyboard)
@@ -478,6 +488,9 @@ namespace CTRPluginFramework
                     goto exit;
                 }
             }
+
+            if (_onNewFrame != nullptr && _owner != nullptr)
+                _onNewFrame(delta);
 
             // Update current keys
             _Update(clock.Restart().AsSeconds());
@@ -535,6 +548,9 @@ namespace CTRPluginFramework
                     _isOpen = false;
                 }
             }
+
+            delta = frameClock.Restart();
+
             if (SystemImpl::IsSleeping()) {
                 ret = SLEEP_ABORT;
                 _isOpen = false;

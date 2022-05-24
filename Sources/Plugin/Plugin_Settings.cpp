@@ -4,6 +4,7 @@
 #include "Helpers/PluginMenuData.hpp"
 #include "Helpers/KeySequence.hpp"
 #include "Helpers/Address.hpp"
+#include "cheats.hpp"
 #include "Files.h"
 
 namespace CTRPluginFramework {
@@ -79,7 +80,6 @@ namespace CTRPluginFramework {
             }
 
 		forward:
-
 			WriteConfig(CONFIG::Info, true);
         }
     }

@@ -43,10 +43,8 @@ Randomizes colors of Menu Folders
 		FC = Utils::Format("FC: %s - %s - %s", str.substr(0, 4).c_str(), str.substr(4, 4).c_str(), str.substr(8, 4).c_str());
 	}
 
-	void SendPlayerData(void);
-
 	void OnNewFrameCallback(Time ttime) {
-		SendPlayerData();
+		SendPlayerData(ttime);
 
 		RainbowEntrys(ttime);
 

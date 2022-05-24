@@ -28,6 +28,7 @@ namespace CTRPluginFramework
         using   CompareCallback = bool (*)(const void *, std::string&);
         using   ConvertCallback = void *(*)(std::string&, bool);
         using   OnEventCallback = void(*)(Keyboard&, KeyboardEvent&);
+        using   FrameCallback = void (*)(Time);
         using   KeyIter  = std::vector<TouchKey>::iterator;
         using   KeyStringIter  = std::vector<TouchKeyString>::iterator;
     public:
@@ -50,6 +51,7 @@ namespace CTRPluginFramework
         void        SetConvertCallback(ConvertCallback callback);
         void        SetCompareCallback(CompareCallback callback);
         void        OnKeyboardEvent(OnEventCallback callback);
+        static void OnNewFrame(FrameCallback callback);
         void        ChangeSelectedEntry(int entry);
         int         GetSelectedEntry() {return _manualKey;}
         void        ChangeEntrySound(int entry, SoundEngine::Event soundEvent);
@@ -124,9 +126,10 @@ namespace CTRPluginFramework
 
         CompareCallback         _compare{nullptr};
         ConvertCallback         _convert{nullptr};
-        OnEventCallback   _onKeyboardEvent{nullptr};
-        KeyboardEvent        _KeyboardEvent{};
-        std::vector<TouchKey>    *_keys{nullptr};
+        OnEventCallback         _onKeyboardEvent{nullptr};
+        static FrameCallback    _onNewFrame;
+        KeyboardEvent           _KeyboardEvent{};
+        std::vector<TouchKey>   *_keys{nullptr};
 
         static std::vector<TouchKey>    _DecimalKeys;
         static std::vector<TouchKey>    _HexaDecimalKeys;

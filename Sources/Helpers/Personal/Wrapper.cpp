@@ -4,6 +4,7 @@
 #include "Helpers/PluginMenuData.hpp"
 #include "Files.h"
 #include "Config.hpp"
+#include "cheats.hpp"
 
 namespace CTRPluginFramework {
 	ExHandler Wrap::Dump(const std::string& path, std::string& filename, const std::string& filetype, WrapLoc *dump, ...) {

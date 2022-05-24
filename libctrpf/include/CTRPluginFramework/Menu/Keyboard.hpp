@@ -4,6 +4,7 @@
 #include "CTRPluginFramework/Graphics/CustomIcon.hpp"
 #include "CTRPluginFramework/System/Controller.hpp"
 #include "CTRPluginFramework/Sound.hpp"
+#include "CTRPluginFramework/System/Time.hpp"
 #include "types.h"
 #include <string>
 #include <vector>
@@ -48,6 +49,8 @@ namespace CTRPluginFramework
          * \event event     The event that caused the input to change
          */
         using   OnEventCallback = void(*)(Keyboard&, KeyboardEvent &event);
+
+        using FrameCallback = void (*)(Time);
     public:
 
         /**
@@ -94,6 +97,12 @@ namespace CTRPluginFramework
          * \param callback
          */
         void    OnKeyboardEvent(OnEventCallback callback) const;
+
+        /**
+         * \brief The callback set will be called at each frame rendered while ANY keyboard is open
+         * The function will receive the Time elapsed since last frame
+         */
+        static void    OnNewFrame(FrameCallback callback);
 
         /**
          * \brief Set the error flag and an error message \n

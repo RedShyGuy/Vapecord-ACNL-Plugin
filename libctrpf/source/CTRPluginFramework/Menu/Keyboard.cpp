@@ -775,4 +775,9 @@ namespace CTRPluginFramework
     {
         _keyboard->OnKeyboardEvent(callback);
     }
+
+    void Keyboard::OnNewFrame(FrameCallback callback)
+    {
+        KeyboardImpl::OnNewFrame(callback);
+    }
 } // namespace CTRPluginFramework
