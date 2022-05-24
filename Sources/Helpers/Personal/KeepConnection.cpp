@@ -2,6 +2,10 @@
 #include "RegionCodes.hpp"
 #include "Helpers/Game.hpp"
 
+/*
+Thanks to PabloMK7 for the huge help with the thread loading!
+*/
+
 #define ONLINETHREADSAMOUNT 5
 #define THREADVARS_MAGIC  0x21545624
 
