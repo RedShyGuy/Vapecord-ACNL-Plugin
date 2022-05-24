@@ -2,6 +2,7 @@
 #include <csvc.h>
 #include "Helpers/Address.hpp"
 #include "Helpers/ItemSequence.hpp"
+#include "RegionCodes.hpp"
 
 namespace CTRPluginFramework {
 //This patch the NFC disabling the touchscreen when scanning an amiibo, which prevents ctrpf to be used
@@ -48,13 +49,11 @@ namespace CTRPluginFramework {
     }
 
 	void PluginHooks(void);
-	
+
 //FwkSettings Patch Process/Gets called even if the game is not supported
 	void PatchProcess(FwkSettings &settings) {
 		ToggleTouchscreenForceOn();
 		settings.ThreadPriority = 0x30;
-
-		//settings.CachedDrawMode = true;
 	}
 
 //RAM Changes Only

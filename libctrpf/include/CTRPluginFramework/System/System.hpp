@@ -26,6 +26,18 @@ namespace CTRPluginFramework
     public:
 
         /**
+         * \brief Gets local friend code
+         * \return The local friend code
+         */
+        static u64 GetFriendCode(void);
+
+        /**
+         * \brief Gets current battery percentage
+         * \return The batter percentage
+         */
+        static float GetBatteryPercentage(void);
+
+        /**
          * \brief Check if the current console is a New3DS
          * \return true if the current console is a New3DS,\n false otherwise
          */

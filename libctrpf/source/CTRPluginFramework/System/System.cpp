@@ -7,6 +7,26 @@ namespace CTRPluginFramework
 {
     void    (*System::OnAbort)(void) = nullptr;
 
+    u64     System::GetFriendCode(void) 
+    {
+        return (SystemImpl::FriendCode);
+    }
+    
+    float   System::GetBatteryPercentage(void)
+    {
+        float percentage = 0;
+        u8 data[4];
+		mcuHwcInit();
+		MCUHWC_ReadRegister(0xA, data, 4);
+
+		percentage = data[1] + data[2] / 256.0f;
+        percentage = (u32)((percentage + 0.05f) * 10.0f) / 10.0f;
+
+		mcuHwcExit();
+
+        return percentage;
+    }
+
     bool    System::IsNew3DS(void)
     {
         return (SystemImpl::IsNew3DS);

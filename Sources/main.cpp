@@ -186,6 +186,8 @@ prevent any issues with freezing of the plugin
 		OSD::Stop(OSD_SplashScreen);
 	}
 
+	void InitKeepConnection(void);
+
 	int	main(void) {
 		PluginMenu *menu = new PluginMenu(Color::White << "ACNL Vapecord Plugin " << GetRegionName(), majorV, minorV, revisV, Note);
 		menu->SynchronizeWithFrame(true);
@@ -207,6 +209,8 @@ prevent any issues with freezing of the plugin
 		Code::Load();
 	//RCO only if game is supported
 		RCO();
+	//keeps internet connection when menu is opened
+		InitKeepConnection();
 	//Load MenuFolders and Entrys (located in MenuCreate.cpp)
 		InitMenu(menu);
 

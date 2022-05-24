@@ -19,6 +19,7 @@ namespace CTRPluginFramework
         static u32      RosalinaHotkey;
         static u32      AptStatus;
         static u8       Language;
+        static u64      FriendCode;
     };
 }
 

@@ -2,6 +2,7 @@
 #include "Files.h"
 #include "Helpers/PluginMenuData.hpp"
 #include "Helpers/Game.hpp"
+#include "RegionCodes.hpp"
 #include "Color.h"
 
 namespace CTRPluginFramework {
@@ -38,32 +39,15 @@ Randomizes colors of Menu Folders
 	bool FCLoaded = false;
 
 	void StoreFC(std::string &FC) {
-		frdInit();
-
-		FriendKey key;
-		FRD_GetMyFriendKey(&key);
-
-		u64 localFriendCode = 0;
-		FRD_PrincipalIdToFriendCode(key.principalId, &localFriendCode);
-
-		std::string str = Utils::Format("%012lld", localFriendCode);
+		std::string str = Utils::Format("%012lld", System::GetFriendCode());
 		FC = Utils::Format("FC: %s - %s - %s", str.substr(0, 4).c_str(), str.substr(4, 4).c_str(), str.substr(8, 4).c_str());
-
-		frdExit();
 	}
 
-	void StoreBatteryPercentage(float &percentage) {
-		u8 data[4];
-		mcuHwcInit();
-		MCUHWC_ReadRegister(0xA, data, 4);
-
-		percentage = data[1] + data[2] / 256.0f;
-        percentage = (u32)((percentage + 0.05f) * 10.0f) / 10.0f;
-
-		mcuHwcExit();
-	}
+	void SendPlayerData(void);
 
 	void OnNewFrameCallback(Time ttime) {
+		//SendPlayerData();
+
 		RainbowEntrys(ttime);
 
 		static std::string FC = "";
@@ -84,8 +68,7 @@ Randomizes colors of Menu Folders
 		timeinfo = localtime(&rawtime);
 		strftime(timestamp, 80, "%r | %F", timeinfo);
 
-		float percentage = 0;
-		StoreBatteryPercentage(percentage);
+		float percentage = System::GetBatteryPercentage();
 
 		int coordx = 30, coordy1 = 0, coordy2 = 218;
 

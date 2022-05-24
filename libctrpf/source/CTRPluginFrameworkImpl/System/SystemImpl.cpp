@@ -11,8 +11,9 @@ namespace CTRPluginFramework
     u32     SystemImpl::RosalinaHotkey = 0;
     u32     SystemImpl::AptStatus = 0;
     u8      SystemImpl::Language = CFG_LANGUAGE_EN;
+    u64     SystemImpl::FriendCode = 0;
 
-   static  LightEvent      g_sleepEvent;
+    static  LightEvent      g_sleepEvent;
 
     enum
     {
@@ -26,6 +27,18 @@ namespace CTRPluginFramework
 	    FLAG_SLEEPING     = BIT(7),
 	    FLAG_EXITED       = BIT(31),
     };
+
+    void GetLocalFriendCode(u64 *friendcode)
+    {
+        frdInit();
+
+        FriendKey key;
+		FRD_GetMyFriendKey(&key);
+
+		FRD_PrincipalIdToFriendCode(key.principalId, friendcode);
+
+        frdExit();
+    }
 
     void    SystemImpl::Initialize(void)
     {
@@ -46,6 +59,9 @@ namespace CTRPluginFramework
 
         // Get System's language
         CFGU_GetSystemLanguage(&Language);
+
+        // Get Friend Code
+        GetLocalFriendCode(&FriendCode);
     }
 
     bool    SystemImpl::WantsToSleep(void)
