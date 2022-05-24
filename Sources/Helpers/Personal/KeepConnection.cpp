@@ -1,5 +1,6 @@
 #include <CTRPluginFramework.hpp>
 #include "RegionCodes.hpp"
+#include "Helpers/Game.hpp"
 
 #define ONLINETHREADSAMOUNT 5
 #define THREADVARS_MAGIC  0x21545624
@@ -27,7 +28,7 @@ namespace CTRPluginFramework {
 			Handle onlineThreadHandle;
 			Result res = svcOpenThread(&onlineThreadHandle, CUR_PROCESS_HANDLE, onlineThreadID);
 			if(R_FAILED(res)) 
-				continue;
+				return;
 			
 			if(runOnline) {
 				tlsBackup[i] = *onlineThreadTls;
@@ -97,17 +98,18 @@ namespace CTRPluginFramework {
 	}
 
 	void PatchThreadBegin(u32 threadfunc, u32 threadargs, u32 startFunc, u32 u0) {
+		static Address point(0x953CA0, 0x952C90, 0x952C9C, 0x952C9C, 0x94CC9C, 0x94BC9C, 0x94BC9C, 0x94BC9C);
+		static Address calc(0x2C, 0x30, 0x2C, 0x30, 0x30, 0x30, 0x2C, 0x30);
+
+		static u32 threadAddress = *(u32 *)(*(u32 *)(point.addr) + 0xA8 + 0x80) - calc.addr;
+
 		static u32 onlineThreadArgs[ONLINETHREADSAMOUNT] = {
-			0x082C0FF8, //Region Free
-			0x082C2DD0, //Region Free
-			0x082D7588, //Region Free
-			0x082E5AE0, //Region Free
-
-        //TODO: Find Pointer for it as WL won't work with it
-			Address(0x31F24028, 0x31EE1510, 0x31EFBC80, 0x31EE2788, 0x31F46AD0, 0x31F371F0, 0x31EF0310, 0x31EE22D0).addr //0x31EE2878 = WL
+			0x82C0FF8, //Region Free
+			0x82C2DD0, //Region Free
+			0x82D7588, //Region Free
+			0x82E5AE0, //Region Free
+			threadAddress
 		};
-
-        OSD::Notify(Utils::Format("%08X", threadargs-0x18));
 
 		if(threadargs-0x18 == onlineThreadArgs[0])
 			threadfunc = (u32)GetThreadInfo1;
@@ -117,42 +119,32 @@ namespace CTRPluginFramework {
 			threadfunc = (u32)GetThreadInfo3;
 		else if(threadargs-0x18 == onlineThreadArgs[3])
 			threadfunc = (u32)GetThreadInfo4;
-		else if(threadargs-0x18 == onlineThreadArgs[4])
+		else if(threadargs-0x18 == onlineThreadArgs[4]) 
 			threadfunc = (u32)GetThreadInfo5;
 
 		Address(startFunc).Call<void>(threadfunc, threadargs);
 	}
 
-//TODO: Fix up, port code and remove unnessecary code as some stuff is not needed
-    void SendPlayerData(void) { //needs to be set into OnNewFrame callback
-		int iVar1;
-		int iVar2;
-		u32 uVar3;
+    void SendPlayerData/*0x1B6C28*/(void) { //needs to be set into OnNewFrame callback
+		if(GameHelper::GetOnlinePlayerCount() <= 1)
+			return;
 
-		*(u32 *)0x952680 += 1;
-		Address(0x617D20).Call<void>(*(u32 *)0x954648);
-		iVar2 = Address(0x5CF1AC).Call<int>();
-		if(iVar2 == 0) 
-			Address(0x1B7918).Call<void>(&*(u8 *)0xAD66E0);
+		static Address sendData1(0x617D20, 0x617248, 0x616D58, 0x616D58, 0x616818, 0x616818, 0x6163C0, 0x6163C0);
+		static Address sendData2(0x60758C, 0x606AB4, 0x6065C4, 0x6065C4, 0x605FA4, 0x605FA4, 0x605C2C, 0x605C2C);
+		static Address sendData3(0x618024, 0x61754C, 0x61705C, 0x61705C, 0x616B1C, 0x616B1C, 0x6166C4, 0x6166C4);
 
-		if(*(u8 *)(*(u32 *)0x94F3D8 + 0xFAE) == 0) {
-			Address(0x52BE08).Call<void>(*(u32 *)0x95F0D4);
-			Address(0x52BE08).Call<void>(*(u32 *)0x95F0D8);
-			Address(0x52A9A8).Call<void>(*(u32 *)0x953648);
-			Address(0x52A9A8).Call<void>(*(u32 *)0x95364C);
-		}
+		static Address getData1(0x5204DC, 0x51FE30, 0x51F524, 0x51F524, 0x51EE40, 0x51EE40, 0x51E7D4, 0x51E7D4);
+		static Address getData2(0x520C98, 0x5205EC, 0x51FCE0, 0x51FCE0, 0x51F5FC, 0x51F5FC, 0x51EF90, 0x51EF90);
 
-		Address(0x6A6708).Call<void>();
-		Address(0x1257BC).Call<void>(&*(u32 *)0xA23020);
-		Address(0x51C86C).Call<void>(&*(u32 *)0xA837E8);
+		sendData1.Call<void>(*(u32 *)Code::GamePointer.addr);
 
-		if(*(u8 *)0x95D3F0 == 0) {
-			uVar3 = Address(0x5204DC).Call<u32>();
-			iVar2 = Address(0x520C98).Call<int>(uVar3, 2);
+		if(*(u8 *)(Code::ExGameData.addr-4) == 0) {
+			u32 uVar3 = getData1.Call<u32>();
+			int iVar2 = getData2.Call<int>(uVar3, 2);
 			if(iVar2 == 0) 
-				Address(0x60758C).Call<void>();
+				sendData2.Call<void>();
 
-			Address(0x618024).Call<void>(*(u32 *)0x954648);
+			sendData3.Call<void>(*(u32 *)Code::GamePointer.addr);
 		}
 	}
 

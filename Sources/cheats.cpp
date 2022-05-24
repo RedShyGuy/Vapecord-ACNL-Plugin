@@ -46,7 +46,7 @@ Randomizes colors of Menu Folders
 	void SendPlayerData(void);
 
 	void OnNewFrameCallback(Time ttime) {
-		//SendPlayerData();
+		SendPlayerData();
 
 		RainbowEntrys(ttime);
 
