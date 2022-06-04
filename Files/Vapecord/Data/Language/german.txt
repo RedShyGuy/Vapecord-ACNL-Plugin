@@ -46,12 +46,12 @@ BULLETIN_BOARD_DUMPER_DUMP :: Schwarzes Brett Nachricht sichern\n\nNamen für da
 
 #Tree Size Changer
 TREESIZE_NAME :: Stadtbaum-Größe ändern
-TREESIZE_NOTE :: Ermöglicht es die Größe des Stadtbaums zu manipulieren.
+TREESIZE_NOTE :: Ermöglicht es, die Größe des Stadtbaums zu manipulieren.
 TREESIZE_STATE :: Stufe %d
 
 #Change Native Fruit
 CHANGE_NATIVE_NAME :: Stadtfrucht ändern
-CHANGE_NATIVE_NOTE :: Ermöglicht das Ändern der Stadtfrucht. Die Stadtfrucht ist die am häufigsten vorkommende Frucht in der Stadt.
+CHANGE_NATIVE_NOTE :: Ermöglicht das Ändern der Stadtfrucht. Die Stadtfrucht ist die am häufigsten vorkommende Frucht der Stadt.
 NATIVE_FRUIT_APPLE :: Apfel
 NATIVE_FRUIT_ORANGE :: Orange
 NATIVE_FRUIT_PEAR :: Birne
@@ -67,7 +67,7 @@ NATIVE_FRUIT_BANANA :: Banane
 
 #PWP Unlocker
 PWP_UNLOCK_NAME :: Stadtverschönerungen freischalten
-PWP_UNLOCK_NOTE :: Ermöglicht es alle Stadtverschönerungen freizuschalten/sperren.
+PWP_UNLOCK_NOTE :: Ermöglicht es, alle Stadtverschönerungen freizuschalten/sperren.
 
 #Grass Type Changer
 GRASS_CHANGER_NAME :: Grasmuster ändern
@@ -91,7 +91,7 @@ CAMPING_SET_REMOVE :: Camper entfernen
 
 #shop upgrade
 SHOP_UPGRADE :: Läden freischalten
-SHOP_UPGRADE_NOTE :: Erlaubt es Läden auf der Einkaufmeile zu modifizieren/schließen.
+SHOP_UPGRADE_NOTE :: Erlaubt es, Läden auf der Einkaufmeile zu modifizieren/schließen.
 VECTOR_SHOP_MUSEUM :: Museumsladen
 VECTOR_SHOP_FORTUNE :: Wahrsagerin
 VECTOR_SHOP_DREAM :: Schlummmerhaus
@@ -111,7 +111,7 @@ KEY_CHOOSE_UPGRADE :: Ladenerweiterung auswählen.
 
 #House Editor
 HOUSE_EDITOR_NAME :: Haus Editor
-HOUSE_EDITOR_NOTE :: Ermöglich es das Haus zu bearbeiten!
+HOUSE_EDITOR_NOTE :: Ermöglich es, das Haus zu bearbeiten!
 HOUSE_EDITOR_EXT :: Außengestaltung
 HOUSE_EDITOR_INT :: Inneneinrichtung
 HOUSE_EDITOR_HOUSE_SIZE :: Größe
@@ -169,7 +169,7 @@ CANT_PUSH_NOTE :: Bewohner und andere Spieler können dich nicht mehr schubsen/s
 
 #Coord Mod
 COORD_MOD :: Koordinaten-Bewegung
-COORD_MOD_NOTE :: Ermöglicht es sich mit den Pfeiltasten zu bewegen.
+COORD_MOD_NOTE :: Ermöglicht es, sich mit den Pfeiltasten zu bewegen.
 COORD_MOD_KEY1 :: Bewegung!
 COORD_MOD_KEY2 :: nach rechts bewegen
 COORD_MOD_KEY3 :: nach links bewegen
@@ -188,7 +188,7 @@ TOUCH_WARP :: Touch Teleport
 TOUCH_WARP_NOTE :: Ermöglicht die Bewegung durch Berührung der Karte.
 
 #Walk Over Things
-WALK_OVER :: über alles gehen
+WALK_OVER :: Über alles gehen
 WALK_OVER_NOTE :: Schaltet Kollisionen aus, damit man über alles gehen kann.
 
 #Movement Changer
@@ -202,7 +202,7 @@ WALK_PARTICLE_CHANGE_ENTER_ID :: Gewünschte Partikel-ID eingeben.
 
 #Player Teleport
 PLAYER_TELEPORT :: Spieler Teleporter
-PLAYER_TELEPORT_NOTE :: Ermöglicht es einen ausgewählten Spieler an die eigene Position zu teleportieren.
+PLAYER_TELEPORT_NOTE :: Ermöglicht es, einen ausgewählten Spieler an die eigene Position zu teleportieren.
 PLAYER_TELEPORT_KEY1 :: Spieler auswählen
 PLAYER_TELEPORT_KEY2 :: Spieler teleportieren
 
@@ -259,15 +259,15 @@ CHAT_T2I_KEY1 :: Item erzeugen
 
 #Item Settings
 ITEM_SETTINGS :: Item Einstellungen
-ITEM_SETTINGS_NOTE :: Ermöglicht es alle Items zu präsentieren/essen.
+ITEM_SETTINGS_NOTE :: Ermöglicht es, alle Items zu präsentieren/essen.
 VECTOR_ITEMSETTINGS_SHOWOFF :: alles präsentieren
 VECTOR_ITEMSETTINGS_INFINITE :: unendlich Items
 VECTOR_ITEMSETTINGS_EAT :: alles essen
 
 #Save Menu Changer
 SAVE_MENU_CHANGER :: Speichermenü austauschen
-SAVE_MENU_CHANGER_NOTE :: Ermöglicht es das Menü, welches erscheint wenn man Start drückt, zu jedem beliebigen anderen Menü zu ändern.
-SAVE_MENU_CHANGER_ENTER_ID :: ID des gewünschten Menüs eingeben.
+SAVE_MENU_CHANGER_NOTE :: Ermöglicht es, das Menü, welches erscheint wenn man Start drückt, zu jedem beliebigen anderen Menü zu ändern.
+SAVE_MENU_CHANGER_ENTER_ID :: ID des gewünschten Menüs eingeben
 VECTOR_SAVEMENU_DATETIME :: Zeiteinstellungen
 VECTOR_SAVEMENU_BELLPOINT_DEPO :: Sternis einzahlen
 VECTOR_SAVEMENU_BELLPOINT_WITHDRAW :: Sternis abheben
@@ -278,7 +278,7 @@ VECTOR_SAVEMENU_CUSTOM :: benutzerspezifisch
 
 #Get Set
 GET_SET :: Inventar-Set erhalten
-GET_SET_NOTE :: Ermöglicht es eigene oder vorinstallierte Sets zu erhalten.
+GET_SET_NOTE :: Ermöglicht es, eigene oder vorinstallierte Sets zu erhalten.
 VECTOR_GETSET_FURN :: Möbel-Set erhalten
 VECTOR_GETSET_ITEM :: Item-Set erhalten
 VECTOR_GETSET_CUSTOM :: eigenes Set erhalten
@@ -294,7 +294,7 @@ PLAYER_SAVE_CODES :: Spieler Speicherstand
 
 #Name Changer
 NAME_CHANGER :: Namen ändern
-NAME_CHANGER_NOTE :: Ermöglicht es den eigenen Namen zu ändern. Dafür einfach den gewünschten Namen und die gewünschte Position eingeben.
+NAME_CHANGER_NOTE :: Ermöglicht es, den eigenen Namen zu ändern. Dafür einfach den gewünschten Namen und die gewünschte Position eingeben.
 NAME_CHANGER_ENTER_NAME :: Namen ändern\n\nGewünschten Namen eingeben:
 
 #Player Appearance
@@ -306,7 +306,7 @@ VECTOR_PLAYER_MOD_HAIR_COLOR :: Haarfarbe ändern
 VECTOR_PLAYER_MOD_HAIR_STYLE :: Haarschnitt ändern
 VECTOR_PLAYER_MOD_GENDER :: Geschlecht ändern
 VECTOR_PLAYER_MOD_TAN :: Hautfarbe ändern
-VECTOR_PLAYER_MOD_OUTFIT :: Outfit Modifier
+VECTOR_PLAYER_MOD_OUTFIT :: Outfit ändern
 VECTOR_PLAYER_MOD_GENDER_MALE :: männlich
 VECTOR_PLAYER_MOD_GENDER_FEMALE :: weiblich
 VECTOR_PLAYER_MOD_TAN_DARK :: Hautfarbe 15 (dunkel)
@@ -346,10 +346,10 @@ TPC_MESSAGE_ALLIGN_NORMAL :: normal
 TPC_MESSAGE_ALLIGN_EMPTY :: leer
 
 #TPC Settings
-TPC_SETTINGS :: Bürgerpass Bild
+TPC_SETTINGS :: Bürgerpass-Bild
 TPC_SETTINGS_NOTE :: Ermöglicht es das Bild im Bürgerpass anzupassen. \nAnforderungen für ein benutzerspezifisches Bild: \n1. kleiner als 5024 Bytes \n2. JPG-Format \n3. 64x104 Pixel Größe
 TPC_DUMPER_NAME :: Bürgerpass sichern\n\nNamen für das Backup eingeben.
-TPC_DUMPER_RESTORE :: Bürgerpass, welcher wiederhergestellt werden soll auswählen.
+TPC_DUMPER_RESTORE :: Bürgerpass, welcher wiederhergestellt werden soll, auswählen.
 VECTOR_PLAYER_OWN :: aktueller Spieler
 VECTOR_PLAYER_1 :: Spieler 1
 VECTOR_PLAYER_2 :: Spieler 2
@@ -360,7 +360,7 @@ VECTOR_TPCDUMP_RESTORE :: Bild wiederherstellen
 
 #Design Dumper
 DESIGN_DUMP :: Designs sichern
-DESIGN_DUMP_NOTE :: Ermöglicht es Designs zu sichern und wiederherzustellen.
+DESIGN_DUMP_NOTE :: Ermöglicht es, Designs zu sichern und wiederherzustellen.
 DESIGN_DUMP_NAME :: Design sichern\n\nNamen für das Backup eingeben.
 DESIGN_DUMP_RESTORE :: Design auswählen, welches wiederhergestellt werden soll.
 VECTOR_DESIGNDUMP_DUMP :: Design sichern
@@ -370,7 +370,7 @@ KEYBOARD_DESIGNDUMP :: Platz für das Design auswählen:
 
 #Emotion List
 EMOTION_LIST :: Emotionen
-EMOTION_LIST_NOTE :: Ermöglicht es die Emotionen zu vervollständigen/zu leeren und dieselbe Emotion auf jedem Slot zu haben.
+EMOTION_LIST_NOTE :: Ermöglicht es, die Emotionen zu vervollständigen/zu leeren und dieselbe Emotion auf jedem Slot zu haben.
 EMOTION_LIST_TYPE_ID :: ID für die gewünschte Emotion eingeben:
 VECTOR_EMOTIONLIST_FILL_LIST :: Emotionen vervollständigen
 VECTOR_EMOTIONLIST_FILL_EMOTION :: mit Emotion vervollständigen
@@ -411,7 +411,7 @@ NECK_POSITION_NOTE :: Ermöglicht es den Kopf in eine komische Position zu beweg
 
 #Custom Hair/Eye Color
 CUSTOM_HAIR_EYE :: Benutzerspezifische Haar- und Augenfarbe
-CUSTOM_HAIR_EYE_NOTE :: Ermöglicht es eigene Farben für Haar- und Augenfarbe zu verwenden! Einfach die gewünschte Farbe als RGB-Wert eingeben.\n"Farbe speichern" sichert die aktuelle Farbe und sie wird jedes mal geladen, wenn das Plugin geladen wird.\nHinweis: Dieser Cheat funktioniert nur, wenn die IDs für die Haarfarbe auf 0 und für die Augenfarbe auf 1 gesetzt wurden.
+CUSTOM_HAIR_EYE_NOTE :: Ermöglicht es, eigene Farben für Haar- und Augenfarbe zu verwenden! Einfach die gewünschte Farbe als RGB-Wert eingeben.\n"Farbe speichern" sichert die aktuelle Farbe und sie wird jedes mal geladen, wenn das Plugin geladen wird.\nHinweis: Dieser Cheat funktioniert nur, wenn die IDs für die Haarfarbe auf 0 und für die Augenfarbe auf 1 gesetzt wurden.
 CUSTOM_SET_HAIR :: eigene Haarfarbe
 CUSTOM_SET_EYE :: eigene Augenfarbe
 CUSTOM_SAVE :: Farbe speichern
@@ -423,11 +423,11 @@ CUSTOM_HAIR_EYE_KEY1 :: zufällige Haar- und Augenfarbe
 
 #Wear Helmet
 WEAR_HELMET :: Kopfbedeckung und Accessoire tragen
-WEAR_HELMET_NOTE :: Ermöglicht es Kopfbedeckung und Accesoire gleichzeitig zu tragen. Damit der Cheat funktioniert muss das Accesoire zuerst getragen werden! Danke an Levi.
+WEAR_HELMET_NOTE :: Ermöglicht es, Kopfbedeckung und Accesoire gleichzeitig zu tragen. Damit der Cheat funktioniert muss das Accesoire zuerst getragen werden! Danke an Levi.
 
 #Player Loader
 PLAYER_LOADER :: Spieler wechseln
-PLAYER_LOADER_NOTE :: Ermöglicht es mit einem anderen Spieler zu spielen, ohne das Spiel neuzustarten!
+PLAYER_LOADER_NOTE :: Ermöglicht es, mit einem anderen Spieler zu spielen, ohne das Spiel neuzustarten!
 
 #Players on map
 PLAYERS_ON_MAP :: Spieler auf der Karte anzeigen
@@ -435,36 +435,36 @@ PLAYERS_ON_MAP_NOTE :: Alle auf der Karte geladenen Spieler werden als Punkt ang
 
 #Faint
 FAINT :: Ohnmacht
-FAINT_NOTE :: Ermöglicht es (wie, wenn man von einem Skorpion gestochen wird) in Ohnmacht zu fallen.
+FAINT_NOTE :: Ermöglicht es, (wie, wenn man von einem Skorpion gestochen wird,) in Ohnmacht zu fallen.
 
 #Animation Codes Folder
 ANIMATION_CODES :: Animationen
 
 #Player Select
 PLAYER_SELECTOR :: Spielerauswahl
-PLAYER_SELECTOR_NOTE :: Ermöglicht es andere Spieler auszuwählen, um Animationen und weiteres auf diesen auszuführen!
+PLAYER_SELECTOR_NOTE :: Ermöglicht es, andere Spieler auszuwählen, um Animationen und weiteres auf diesen auszuführen!
 PLAYER_SELECTOR_KEY1 :: Spieler auswählen
 PLAYER_SELECTOR_KEY2 :: Spieler kontrollieren
 
 #Anti Animation
 ANTI_ANIM :: Anti-Animation
-ANTI_ANIM_NOTE :: Hindert andere daran Animationen auf dem eigenen Spieler auszuführen.
+ANTI_ANIM_NOTE :: Hindert andere daran, Animationen auf dem eigenen Spieler auszuführen.
 
 #Animation Mod
 ANIMATION_MOD :: Animationen ändern
-ANIMATION_MOD_NOTE :: Ermöglicht es Animationen auf dem eigenen oder anderen Spielern auszuführen.
-ANIMATIONS_ANIM_NOTE :: Ermöglicht es Animationen auf dem eigenen oder anderen Spielern auszuführen.\nAnimations-ID eingeben:
+ANIMATION_MOD_NOTE :: Ermöglicht es, Animationen auf dem eigenen oder anderen Spielern auszuführen.
+ANIMATIONS_ANIM_NOTE :: Ermöglicht es, Animationen auf dem eigenen oder anderen Spielern auszuführen.\nAnimations-ID eingeben:
 ANIMATIONS_TOOL_NOTE :: Ermöglicht das Ausrüsten von Werkzeugen auf dem eigenen oder anderen Spielern.\nID des Werkzeugs eingeben:
-ANIMATIONS_SNAKE_NOTE :: Ermöglicht es besondere Animationen auszuführen.\nSnake-ID eingeben:
-ANIMATIONS_EMOTE_NOTE :: Ermöglicht es Emotionen auf dem eigenen oder anderen Spielern auszuführen.\nEmotions-ID eingeben:
-ANIMATIONS_SOUND_NOTE :: Ermöglicht es Musik und Sounds überall abzuspielen.\nSound/Musik-ID eingeben:
-ANIMATIONS_APPEAR_NOTE1 :: Ermöglicht es die Frisur des eigenen oder anderer Spieler zu ändern.\nFrisur-ID eingeben:
-ANIMATIONS_APPEAR_NOTE2 :: Ermöglicht es die Haarfarbe des eigenen oder anderer Spieler zu ändern.\nHaarfarbe-ID eingeben:
-ANIMATIONS_APPEAR_NOTE3 :: Ermöglicht es die Augenfarbe des eigenen oder anderer Spieler zu ändern.\nAugenfarbe-ID eingeben:
+ANIMATIONS_SNAKE_NOTE :: Ermöglicht es, besondere Animationen auszuführen.\nSnake-ID eingeben:
+ANIMATIONS_EMOTE_NOTE :: Ermöglicht es, Emotionen auf dem eigenen oder anderen Spielern auszuführen.\nEmotions-ID eingeben:
+ANIMATIONS_SOUND_NOTE :: Ermöglicht es, Musik und Sounds überall abzuspielen.\nSound/Musik-ID eingeben:
+ANIMATIONS_APPEAR_NOTE1 :: Ermöglicht es, die Frisur des eigenen oder anderer Spieler zu ändern.\nFrisur-ID eingeben:
+ANIMATIONS_APPEAR_NOTE2 :: Ermöglicht es, die Haarfarbe des eigenen oder anderer Spieler zu ändern.\nHaarfarbe-ID eingeben:
+ANIMATIONS_APPEAR_NOTE3 :: Ermöglicht es, die Augenfarbe des eigenen oder anderer Spieler zu ändern.\nAugenfarbe-ID eingeben:
 ANIMATIONS_NOTE_HOTKEY1 :: Modus auswählen
 ANIMATIONS_NOTE_HOTKEY2 :: ID eingeben
 ANIMATIONS_NOTE_HOTKEY3 :: Geschwindigkeit einstellen
-ANIMATIONS_NOTE_HOTKEY4 :: ausführen
+ANIMATIONS_NOTE_HOTKEY4 :: Ausführen
 
 #Emotion Loop
 EMOTION_LOOP :: Emotionen Schleife
@@ -480,13 +480,13 @@ SLOW_MO_ANIM_NOTE :: Macht das eine Animation langsamer aussieht für einen cool
 
 #Anim on all
 ANIM_ON_ALL :: Animation auf allen ausführen
-ANIM_ON_ALL_NOTE :: Führt eine Animation auf allen Spielern gleichzeitig aus. Der gamemode wird hierzu auf "online" gesetzt, um Fehler zu vermeiden.
+ANIM_ON_ALL_NOTE :: Führt eine Animation auf allen Spielern gleichzeitig aus. Der Gamemode wird hierzu auf "online" gesetzt, um Fehler zu vermeiden.
 ANIM_ON_ALL_KEY1 :: Animation auf allen ausführen
 ANIM_ON_ALL_KEY2 :: Animationen stoppen
 ANIM_ON_ALL_KEY3 :: Moonjump auf allen ausführen
 
 #Seeding Codes Folder
-SEEDING_CODES :: Seeding Codes
+SEEDING_CODES :: Seeding-Codes
 #Seed Codes Folder
 SEED_CODES :: Items aufsammeln und platzieren
 
@@ -501,18 +501,18 @@ PICK_SEEDER_KEY5 :: Auto-Aufsammeln an/aus
 
 #Walk Seeder
 WALK_SEEDER :: laufen und löschen
-WALK_SEEDER_NOTE :: Ermöglicht es Items durch darübergehen zu löschen.
+WALK_SEEDER_NOTE :: Ermöglicht es, Items durch darübergehen zu löschen.
 
 #Firework Seeder
 FIREWORK_SEEDER :: Feuerwerkskörper Einstellungen
-FIREWORK_SEEDER_NOTE :: Ermöglicht es das Item zu ändern, welches erscheint, wenn ein Feuerwerk platziert wird.
+FIREWORK_SEEDER_NOTE :: Ermöglicht es, das Item zu ändern, welches erscheint, wenn ein Feuerwerk platziert wird.
 VECTOR_FIREWORK_CHANGE_ID :: Item-ID ändern
 VECTOR_FIREWORK_SPAWN :: Feuerwerkskörper in Inventarslot 1 legen
 FIREWORK_SEEDER_ENTER_ID :: Item-ID des Items, welches erscheinen soll eingeben:
 
 #Map Editor
 MAP_EDITOR :: Karten-Editor
-MAP_EDITOR_NOTE :: Ermöglicht es Items akkurater zu platzieren, um zum Beispiel die Insel oder die Stadt zu dekorieren.
+MAP_EDITOR_NOTE :: Ermöglicht es, Items akkurater zu platzieren, um zum Beispiel die Insel oder die Stadt zu dekorieren.
 MAP_EDITOR_KEY1 :: Editor an/aus
 MAP_EDITOR_KEY2 :: nach rechts
 MAP_EDITOR_KEY3 :: nach links
@@ -527,7 +527,7 @@ MAP_EDITOR_KEY11 :: Item-ID eingeben
 
 #Everything Seeder
 ALL_SEEDER :: Andere Items droppen
-ALL_SEEDER_NOTE :: Ermöglicht es Items zu ändern, welche beim aufsammeln, platzieren oder anders mit dem Spieler interagieren zu ändern.\nDie Taste muss gehalten werden, um den Cheat zu nutzen!
+ALL_SEEDER_NOTE :: Ermöglicht es, Items zu ändern, welche beim Aufsammeln, Platzieren u.a., zu ändern.\nDie Taste muss gehalten werden, um den Cheat zu nutzen!
 ALL_SEEDER_KEY1 :: Seeder aktivieren
 
 #Drop Codes Folder
@@ -537,7 +537,7 @@ DROP_CODES :: Drop
 ITEM_SEQUENCER :: Item-Reihenfolge
 ITEM_SEQUENCER_NOTE :: Items werden in einer festen Reihenfolge fallen gelassen. Zur Kombination mit anderen Cheats aus diesem Ordner.\nBeispiel:\nItem Eins ist: 335B (Goldschaufel)\nDas zweite Item ist: 0070 (Geldbaum)\nNun werden anstatt eines Items immer beide Items abwechselnd fallen gelassen. Also: Goldschaufel, Geldbaum, Goldschaufel, ....
 ITEM_SEQUENCER_CHOOSE :: Cheat aktivieren/deaktivieren:
-ITEM_SEQUENCER_ENTER_ID :: neue Item-ID eingeben:\n(B um zu löschen)
+ITEM_SEQUENCER_ENTER_ID :: neue Item-ID eingeben:\n(B zum Löschen)
 
 #Drop Mods
 DROP_MODS :: Drop-Einstellungen
@@ -567,13 +567,13 @@ VECTOR_SHAPE_RESET :: zurücksetzen
 
 #Drop Items
 DROP_ITEMS :: Items sofort droppen
-DROP_ITEMS_NOTE :: Ermöglicht es Items sofort zu droppen, auch ohne das Inventar zu öffnen.
+DROP_ITEMS_NOTE :: Ermöglicht es, Items sofort zu droppen, auch ohne das Inventar zu öffnen.
 DROP_ITEMS_KEY1 :: Item-ID eingeben
 DROP_ITEMS_KEY2 :: Item droppen
 
 #Auto Drop
 AUTO_DROP :: Auto-Item-Dropper
-AUTO_DROP_NOTE :: Ermöglicht es Items automatisch in einem 3x3 Radius (kann mit den Drop Einstellungen geändert werden) fallen zu lassen.
+AUTO_DROP_NOTE :: Ermöglicht es, Items automatisch in einem 3x3 Radius (kann mit den Drop Einstellungen geändert werden) fallen zu lassen.
 AUTO_DROP_KEY1 :: Item-ID eingeben
 AUTO_DROP_KEY2 :: Autodrop an/aus
 
@@ -584,9 +584,9 @@ TOUCH_DROP_KEY1 :: Item-ID eingeben
 
 #Slot Drop
 SLOT_DROP :: Touch-Dropper
-SLOT_DROP_NOTE :: Ermöglicht es Items durch antippen im Inventar fallen zu lassen, ohne dass es verschwindet.
+SLOT_DROP_NOTE :: Ermöglicht es, Items durch antippen im Inventar fallen zu lassen, ohne dass es verschwindet.
 SLOT_DROP_KEY1 :: einzelnes Item droppen
-SLOT_DROP_KEY2 :: viele Items droppen
+SLOT_DROP_KEY2 :: mehrere Items droppen
 
 #Tree Codes Folder
 TREE_CODES :: Bäume
@@ -626,7 +626,7 @@ MEOW_COUPONS_NOTE :: Erzeugt die gewünschte Menge Coupons.
 
 #Badge
 BADGES :: Abzeichen Editor
-BADGES_NOTE :: Ermöglicht es die alle Abzeichen auf Stufe Bronze, Silber oder Gold zu erhalten oder sie zu löschen.
+BADGES_NOTE :: Ermöglicht es, alle Abzeichen auf Stufe Bronze, Silber oder Gold zu erhalten oder sie zu löschen.
 VECTOR_BADGE_GOLD :: Gold
 VECTOR_BADGE_SILVER :: Silber
 VECTOR_BADGE_BRONZE :: Bronze
@@ -646,7 +646,7 @@ ORE_FRUIT_ERROR :: Fehler: funktioniert nur im richtigen Minispiel.
 
 #Island Unlocker
 UNLOCK_ISLAND :: Insel freischalten
-UNLOCK_ISLAND_NOTE :: Ermöglicht es die Insel und den Törtelclub freizuschalten oder zu sperren.
+UNLOCK_ISLAND_NOTE :: Ermöglicht es, die Insel und den Törtelclub freizuschalten oder zu sperren.
 UNLOCK_ISLAND_ISL :: Käpten freischalten
 UNLOCK_ISLAND_CLUB :: Törtelclub freischalten
 LOCK_ISLAND_ISL :: Käpten sperren
@@ -662,21 +662,21 @@ FILL_INV_FRUIT_NOTE :: Beendet die Labyrinth Tour direkt und lässt das Spiel gl
 
 #Hacker Island
 HACKER_ISLAND :: Hacker-Insel
-HACKER_ISLAND_NOTE :: Ermöglicht es eine Insel zu betreten, die nur Leute mit Vapecord betreten können.
+HACKER_ISLAND_NOTE :: Ermöglicht es, eine Insel zu betreten, die nur Leute mit Vapecord betreten können.
 
 #Island Country
 ISLAND_COUNTRY :: Insel-Land ändern
-ISLAND_COUNTRY_NOTE :: Ermöglicht es die Standard-Landes-ID zu ändern, um auch ausländische Inseln besuchen zu können.
+ISLAND_COUNTRY_NOTE :: Ermöglicht es, die Standard-Landes-ID zu ändern, um auch ausländische Inseln besuchen zu können.
 VECTOR_COUNTY_CHANGE :: Landes-ID ändern
 ISLAND_COUNTRY_SET_ID :: ID des gewünschten Landes eingeben.
 
 #Free Kappn Rides
 FREE_KAPPN :: kostenlose Fahrt
-FREE_KAPPN_NOTE :: Ermöglicht es zur Insel zu fahren; ohne Geld und ohne zu bezahlen.
+FREE_KAPPN_NOTE :: Ermöglicht es, zur Insel zu fahren; ohne Geld und ohne zu bezahlen.
 
 #Island Shop
 ISLAND_SHOP_MOD :: Insel-Shop Items ändern
-ISLAND_SHOP_MOD_NOTE :: Ermöglicht es die Items, welche auf der Insel verkauft werden zu ändern.
+ISLAND_SHOP_MOD_NOTE :: Ermöglicht es, die Items, welche auf der Insel verkauft werden zu ändern.
 ISLAND_SHOP_MOD_ENTER_ID :: ID eingeben für Slot: %d.
 
 #All Tour
@@ -700,18 +700,18 @@ NPC_CODES :: Dorfbewohner
 
 #NPC Selector 
 NPC_SELECTOR :: Dorbewohner Selektor
-NPC_SELECTOR_NOTE :: Ermöglicht es jeden geladenen Dorbewohner auszuwählen, um Cheats auszuführen.
+NPC_SELECTOR_NOTE :: Ermöglicht es, jeden geladenen Dorbewohner auszuwählen, um Cheats auszuführen.
 NPC_SELECTOR_KEY1 :: Dorfbewohner auswählen
 
 #NPC Animation
 NPC_ANIMATION :: Dorfbewohner Animation
-NPC_ANIMATION_NOTE :: Ermöglicht es Animationen auf einem ausgewählten Dorfbewohner auszuführen. Dafür zuerst die Animations-ID beim weißen Tastatursymbol eingeben, dann mit dem Tastenkürzel ausführen.
+NPC_ANIMATION_NOTE :: Ermöglicht es, Animationen auf einem ausgewählten Dorfbewohner auszuführen. Dafür zuerst die Animations-ID beim weißen Tastatursymbol eingeben, dann mit dem Tastenkürzel ausführen.
 NPC_ANIMATION_KEY1 :: Animation ausführen
 
 #NPC Coordinate
 NPC_COORDINATE :: Dorfbewohner Koordinaten ändern
-NPC_COORDINATE_NOTE:: Ermöglicht es ausgewählte Dorbewohner herumzubewegen.
-NPC_COORDINATE_KEY1 :: start
+NPC_COORDINATE_NOTE:: Ermöglicht es, ausgewählte Dorbewohner herumzubewegen.
+NPC_COORDINATE_KEY1 :: Start
 NPC_COORDINATE_KEY2 :: nach rechts
 NPC_COORDINATE_KEY3 :: nach links
 NPC_COORDINATE_KEY4 :: nach unten
@@ -720,19 +720,19 @@ NPC_COORDINATE_KEY5 :: nach oben
 #NPC Teleport
 NPC_TELEPORT :: Dorfbewohner teleportieren
 NPC_TELEPORT_NOTE :: Teleportiert einen ausgewählten Dorfbewohner zur Position des Spielers.
-NPC_TELEPORT_KEY1 :: teleportieren
+NPC_TELEPORT_KEY1 :: Teleportieren
 
 #NPC Rotation
 NPC_ROTATION :: Dorfbewohner rotieren
 NPC_ROTATION_NOTE :: Ermöglicht es einen ausgewählten Dorfbewohner zu rotieren.
-NPC_ROTATION_KEY1 :: start
+NPC_ROTATION_KEY1 :: Start
 
 #Fun Codes Folder
 FUN_CODES :: Spaß
 
 #Size Codes
 SIZE_CODES :: Größe ändern
-SIZE_CODES_NOTE :: Ermöglicht es die Größe von Spielern, Dorfbewohner, Insekten, ... zu ändern.
+SIZE_CODES_NOTE :: Ermöglicht es, die Größe von Spielern, Dorfbewohner, Insekten, ... zu ändern.
 VECTOR_SIZE_PLAYER :: Spieler
 VECTOR_SIZE_BUGFISH :: Insekten/Fische
 VECTOR_SIZE_NPC :: Dorfbewohner
@@ -750,11 +750,11 @@ VECTOR_SIZE_SMALLER :: alles kleiner
 
 #TPose
 T_POSE :: T-Pose
-T_POSE_NOTE :: Ermöglicht das alle Spieler und Dorfbewohner in der T-Pose herumlaufen.
+T_POSE_NOTE :: Ermöglicht, dass alle Spieler und Dorfbewohner in der T-Pose herumlaufen.
 
 #Take TPC Pic
 TAKE_TPC_PIC :: Bürgerpassbild aufnehmen
-TAKE_TPC_PIC_NOTE :: Ermöglicht es überall ein Bürgerpassbild aufzunehmen. Tastenkombination drücken, um das Bild aufzunehmen. Der Bildschirm kann außerdem eingefroren werden, um sicherzugehen, dass das Bild gut aussieht.
+TAKE_TPC_PIC_NOTE :: Ermöglicht es, überall ein Bürgerpassbild aufzunehmen. Tastenkombination drücken, um das Bild aufzunehmen. Der Bildschirm kann außerdem eingefroren werden, um sicherzugehen, dass das Bild gut aussieht.
 TAKE_TPC_PIC_KEY1 :: Bild machen
 TAKE_TPC_PIC_KEY2 :: Bildschirm einfrieren
 
@@ -764,7 +764,7 @@ MAX_TURBO_NOTE :: Aktiviert automatisch immerwieder die gedrückte Taste. Man ka
 
 #Multi presses
 MULTI_PRESS :: Schnellnutzung
-MULTI_PRESS_NOTE :: Ermöglicht es Werkzeuge und weiteres schneller zu nutzen, da die Aktion während sie ausgeführt wird abgebrochen werden kann.
+MULTI_PRESS_NOTE :: Ermöglicht es, Werkzeuge und weiteres schneller zu nutzen, da die Aktion während sie ausgeführt wird abgebrochen werden kann.
 
 #Ultimate Popper
 ULTIMATE_POPPER :: ultimativer Partyknaller
@@ -774,7 +774,7 @@ ULTIMATE_PARTY_POPPER_ENTER_EFFECT :: Partyknaller Effekt eingeben:
 
 #Camera Mod
 CAMERA_MOD :: Kamera-Mod
-CAMERA_MOD_NOTE :: Ermöglicht es die Kamera frei zu bewegen.\nR + Schiebepad rotiert die Kamera\nR + X Stoppt die Kamera von der Verfolgung des Spielers\nR + Y friert den Spieler an der Position ein\nB + Steuerkreuz bewegt die Kamera
+CAMERA_MOD_NOTE :: Ermöglicht es, die Kamera frei zu bewegen.\nR + Schiebepad rotiert die Kamera\nR + X Stoppt die Kamera von der Verfolgung des Spielers\nR + Y friert den Spieler an der Position ein\nB + Steuerkreuz bewegt die Kamera
 
 #Extra Codes Folder
 EXTRA_CODES :: Extra
@@ -786,7 +786,7 @@ FISH_ALWAYS_BITE_NAME :: Fische beißen immer
 FISH_ALWAYS_BITE_NOTE :: Fische werden immer sofort anbeißen.
 
 #fish cant be scared
-FISH_CANT_SCARE_NAME :: Fische sind nicht verschreckbar
+FISH_CANT_SCARE_NAME :: Fische nicht verschreckbar
 FISH_CANT_SCARE_NOTE :: Fische können vom Spieler nicht verjagt werden, wenn dieser vorbeirennt.
 
 #Chat Codes Folder
@@ -798,7 +798,7 @@ CHAT_DONT_DISSAPEAR_NOTE :: Die Sprechblasen bleiben auf dem Bildschirm, bis ein
 
 #Chat Copy/Paste
 CHATCOPYPASTE :: Chat Copy/Paste
-CHATCOPYPASTE_NOTE :: Ermöglicht es den Chat zu kopieren und einzufügen. Die kopierten Nachrichten werden auf der Zwischenablage der SD-Karte gespeichert.
+CHATCOPYPASTE_NOTE :: Ermöglicht es, den Chat zu kopieren und einzufügen. Die kopierten Nachrichten werden auf der Zwischenablage der SD-Karte gespeichert.
 CHATCOPYPASTE_KEY1 :: Kontent einfügen
 CHATCOPYPASTE_KEY2 :: Kontent kopieren
 CHATCOPYPASTE_KEY3 :: Kontent ausschneiden
@@ -806,13 +806,13 @@ CHATCOPYPASTE_KEY4 :: Kontent löschen
 
 #Force Chat
 FORCE_CHAT :: Nachrichten spammen
-FORCE_CHAT_NOTE :: Ermöglicht es Chatnachrichten durch drücken von R mehrmals zu senden.
+FORCE_CHAT_NOTE :: Ermöglicht es, Chatnachrichten durch drücken von R mehrmals zu senden.
 
 #--Chat Codes Folder over--
 
 #Shop open
 SHOP_ALWAYS_OPEN_NAME :: Läden sind 24/7 offen
-SHOP_ALWAYS_OPEN_NOTE :: Ermöglicht es die Schließzeit der Läden zu löschen, damit sie immer offen sind.
+SHOP_ALWAYS_OPEN_NOTE :: Ermöglicht es, die Schließzeit der Läden zu löschen, damit sie immer offen sind.
 
 #Disable save
 DISABLE_SAVE :: Speichermenü ausschalten
@@ -837,7 +837,7 @@ WATER_FLOWRES_HOTKEY1:: Blumen wässern
 
 #weed remove
 WEED_REMOVER_NAME :: Unkraut entfernen
-WEED_REMOVER_NOTE :: Ermöglicht es das Gesamte Unkraut in der Stadt/auf der Insel auf einmal zu entfernen.
+WEED_REMOVER_NOTE :: Ermöglicht es, das gesamte Unkraut in der Stadt/auf der Insel zu entfernen.
 WEED_REMOVER_HOTKEY1 :: Radius auswählen
 WEED_REMOVER_HOTKEY2 :: starten
 WEED_REMOVER_OFF :: offline Modus
@@ -850,7 +850,7 @@ EDIT_PATTERN_NOTE :: Ändert das Urheberrecht eines Designs, sodass es bearbeitb
 
 #Grass editor
 GRASS_EDITOR :: Grass Editor
-GRASS_EDITOR_NOTE :: Ermöglicht es das Grass an der Position des Spielers oder auf der gesamten Karte zu füllen/entfernen.
+GRASS_EDITOR_NOTE :: Ermöglicht es, das Grass an der Position des Spielers oder auf der gesamten Karte zu füllen/entfernen.
 GRASS_EDITOR_FILL :: Grass füllen
 GRASS_EDITOR_CLEAR :: Grass entfernen
 GRASS_EDITOR_KB1 :: Was soll gemacht werden?
@@ -862,13 +862,13 @@ GRASS_EDITOR_HOTKEY3 :: Modus wechseln (Grass füllen/löschen)
 
 #Amiibo Spoof
 AMIIBO_SPOOFER :: Amiibo Spoofer
-AMIIBO_SPOOFER_NOTE :: Ermöglicht es jedes Amiibo an jeder Position zu erschaffen. Vielen Dank an Slattz für das Erstellen dieses Cheats!
+AMIIBO_SPOOFER_NOTE :: Ermöglicht es, jedes Amiibo an jeder Position zu erschaffen. Vielen Dank an Slattz für das Erstellen dieses Cheats!
 AMIIBO_SPOOFER_SPECIES :: Spezies auswählen:
 AMIIBO_SPOOFER_VILLAGER :: Dorfbewohner auswählen:
 
 #Time Travel
 TIME_TRAVEL :: Zeitreisen
-TIME_TRAVEL_NOTE :: Ermöglicht es sich in der Zeit vor und zurück zu bewegen. Es ist auch möglich an einen bestimmten Punkt in der Zeit zu springen.
+TIME_TRAVEL_NOTE :: Ermöglicht es, sich in der Zeit vor und zurück zu bewegen. Es ist auch möglich an einen bestimmten Punkt in der Zeit zu springen.
 TIME_FORWARD :: in die Zukunft
 TIME_BACKWARDS :: zurück in die Zukunft
 TIME_KB1 :: Wie viele %s?
@@ -884,7 +884,7 @@ MISC_CODES :: Sonstiges
 
 #Disable Commands
 DISABLECOMMAND :: Commands für nicht-Hacker ausschalten
-DISABLECOMMAND_NOTE :: Schaltet die Commands aus, die auch andere Spieler die nicht hacken können nutzen können.
+DISABLECOMMAND_NOTE :: Schaltet die Commands aus, die auch andere Spieler, die nicht hacken können, nutzen können.
 VECTOR_ANIM_COMM :: Animationen
 VECTOR_EMOT_COMM :: Emotionen
 VECTOR_SNAK_COMM :: Snake
@@ -895,12 +895,12 @@ COMM_CHOOSE :: Commands, die deaktiviert werden sollen auswählen:
 
 #Tool Animation
 TOOL_ANIM :: Werkzeug Animation ändern
-TOOL_ANIM_NOTE :: Ändert die Animation, die bei der Benutzung der Werkzeuge abgespielt wird zu einer anderen Animation.
+TOOL_ANIM_NOTE :: Ändert die Animation, die bei der Benutzung der Werkzeuge abgespielt wird, zu einer anderen Animation.
 TOOL_ANIM_ENTER_ANIM :: Animations-ID eingeben:\n0 eingeben zum zurücksetzen
 
 #Game Type
 GAME_TYPE :: Spielmodus wechseln
-GAME_TYPE_NOTE :: Ermöglicht es den aktuellen Spielmodus zu wechseln. Dadurch wird es z. B. möglich den Modus auf der Insel zu Online (Stadt) zu wechseln, was ermöglicht Freundschaftsanfragen zu senden.
+GAME_TYPE_NOTE :: Ermöglicht es, den aktuellen Spielmodus zu wechseln. Dadurch wird es z.B. möglich den Modus auf der Insel zu Online (Stadt) zu wechseln, was ermöglicht, Freundschaftsanfragen zu senden.
 VECTOR_GAMETYPE_OFFLINE :: Offline
 VECTOR_GAMETYPE_ONLINE1 :: Online (Stadt)
 VECTOR_GAMETYPE_ONLINE2 :: Online (Insel)
@@ -913,7 +913,7 @@ UNBREAK_FLOWER_NOTE :: Ändert die Zerstörbarkeit von Blumen.
 
 #Weather Mod
 WEATHER_MOD :: Wetter ändern
-WEATHER_MOD_NOTE :: Ermöglicht es über das Wetter zu bestimmen.
+WEATHER_MOD_NOTE :: Ermöglicht es, über das Wetter zu bestimmen.
 VECTOR_WEATHER_SUNNY :: Sonne
 VECTOR_WEATHER_CLOUDY :: Bewölkt
 VECTOR_WEATHER_RAINY :: Regen
@@ -922,7 +922,7 @@ VECTOR_WEATHER_SNOWY :: Schnee
 
 #Always Aurora Lights
 ALWAYS_AURORA_MOD :: Immer Polarlichter
-ALWAYS_AURORA_MOD_NOTE :: Egal welche Zeit/welchen Tag du gerade hast, mit diesem cheat werden die Polarlichter immer angezeigt.
+ALWAYS_AURORA_MOD_NOTE :: Egal welche Zeit/welchen Tag du gerade hast, mit diesem Cheat werden die Polarlichter immer angezeigt.
 
 #Quick Menu
 QUICK_MENU :: Schnellauswahl
@@ -939,14 +939,14 @@ VECTOR_QUICK_UNLOCK_MAP :: gesamte Karte freischalten
 QUICK_MENU_PLACE_AT_LOCATION :: an Position des Spielers platzieren...
 QUICK_MENU_MOVE_TO_LOCATION :: zur Position des Spielers bewegen...
 QUICK_MENU_REMOVE_BUILDING :: Gebäude entfernen...
-REMOVE_INV_WARNING :: Warnung\nDies entfernt alle Items aus dem Inventar.\nDrücke ja um fortzufahren oder nein um abzubrechen.
-REMOVE_ITEM_WARNING :: Warnung\nDies entfernt jedes Item auf der Map.\nDrücke ja um fortzufahren oder nein um abzubrechen.
+REMOVE_INV_WARNING :: Warnung\nDies entfernt alle Items aus dem Inventar.\nDrücke ja, um fortzufahren oder nein, um abzubrechen.
+REMOVE_ITEM_WARNING :: Warnung\nDies entfernt jedes Item auf der Map.\nDrücke ja, um fortzufahren oder nein, um abzubrechen.
 QUICK_MENU_SEARCH_REPLACE_SEARCH :: ID des Items, nach dem gesucht werden soll eingeben:\n(0xFFFFFFFF um alles zu ersetzen):
 QUICK_MENU_SEARCH_REPLACE_REPLACE :: ID des Items, welches platziert werden soll eingeben:
 
 #More Numbers
 MORE_NUMBERS :: 3 Nummern sperre aufheben
-MORE_NUMBERS_NOTE :: Ermöglicht es mehr als 3 Nummern auf der Insel zu senden.
+MORE_NUMBERS_NOTE :: Ermöglicht es, mehr als 3 Nummern auf der Insel zu senden.
 
 #Large FOV
 LARGE_FOV :: großes Sichtfeld
@@ -954,11 +954,11 @@ LARGE_FOV_NOTE :: Vergrößert das Sichtfeld, damit man mehr sehen kann.
 
 #Move Furn
 MOVE_FURN :: Möbel bewegen
-MOVE_FURN_NOTE :: Ermöglicht es jedes Möbelstück in jedem Haus zu bewegen (funktioniert auch online).
+MOVE_FURN_NOTE :: Ermöglicht es, jedes Möbelstück in jedem Haus zu bewegen (funktioniert auch online).
 
 #Walk Talk
 WALK_TALK :: beim laufen reden
-WALK_TALK_NOTE :: Ermöglicht es herumzulaufen, während man Schilder liest, mit Dorfbewohnern redet, ....
+WALK_TALK_NOTE :: Ermöglicht es, herumzulaufen, während man Schilder liest, mit Dorfbewohnern redet, ....
 
 #Key Extender
 KEY_EXTEND :: Zeichenlimit aufheben
@@ -983,7 +983,7 @@ FAST_MODE_NOTE :: Funktionen werden doppelt so schnell ausgeführt.
 
 #Fast Text Speed
 FAST_TEXT_SPEED :: schnelle Konversation
-FAST_TEXT_SPEED_NOTE :: Ermöglicht es schneller mit Dorfbewohnern usw. zu reden.
+FAST_TEXT_SPEED_NOTE :: Ermöglicht es, schneller mit Dorfbewohnern usw. zu reden.
 
 #Fast Game Speed
 FAST_GAME_SPEED :: schnelle Spielgeschwindigkeit
@@ -1005,6 +1005,6 @@ RESTORE_MESSAGE :: Welches Backup soll wiederhergestellt werden?
 FILE_DELETE :: Datei löschen
 FILE_PROMPT :: Soll %s gelöscht werden?
 FILE_RES1 :: %s erfolgreich gelöscht!
-FILE_RES2 :: Fehler: keine Datei zum löschen gefunden.
+FILE_RES2 :: Fehler: keine Datei zum Löschen gefunden.
 FILE_RES3 :: Fehler: kann Datei nicht löschen.
 #translated by bkfirmen
