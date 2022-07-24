@@ -24,6 +24,7 @@ namespace CTRPluginFramework
         this->_radioId = -1;
         this->_owner = owner;
         this->cogID = -1;
+        this->cheatID = -1;
     }
 
     MenuEntryImpl::MenuEntryImpl(const std::string &name, FuncPointer func, const std::string &note, MenuEntry *owner) : MenuItem(MenuType::Entry)
@@ -44,6 +45,7 @@ namespace CTRPluginFramework
         this->_radioId = -1;
         this->_owner = owner;
         this->cogID = -1;
+        this->cheatID = -1;
     }
 
     MenuEntryImpl::~MenuEntryImpl()

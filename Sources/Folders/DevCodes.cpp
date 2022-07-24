@@ -1510,6 +1510,55 @@ namespace CTRPluginFramework {
 		return fCode;
 	}
 
+	u8 vill = 0;
+
+	bool villagerInfo(const Screen& screen) {
+		if(screen.IsTop)
+			return false;
+
+		ACNL_VillagerData *villager = NPC::GetSaveData();
+		if(!villager)
+			return false;
+
+		
+		screen.Draw(Color::Purple << /*NPC::GetNName(villager->Villager[vill].Mini1.VillagerID) + */Utils::Format(" (%d)", vill), 0, 0);
+		screen.Draw(("IsBoxed: " + (villager->Villager[vill].Status.IsBoxed ? (Color::Lime << "true") : (Color::Red << "false"))), 0, 10);
+		screen.Draw(("HasMoved: " + (villager->Villager[vill].Status.HasMoved ? (Color::Lime << "true") : (Color::Red << "false"))), 0, 20);
+		screen.Draw(("Unknown3: " + (villager->Villager[vill].Status.Unknown3 ? (Color::Lime << "true") : (Color::Red << "false"))), 0, 30);
+		screen.Draw(("Unknown4: " + (villager->Villager[vill].Status.Unknown4 ? (Color::Lime << "true") : (Color::Red << "false"))), 0, 40);
+		screen.Draw(("Unknown5: " + (villager->Villager[vill].Status.Unknown5 ? (Color::Lime << "true") : (Color::Red << "false"))), 0, 50);
+		screen.Draw(("Unknown6: " + (villager->Villager[vill].Status.Unknown6 ? (Color::Lime << "true") : (Color::Red << "false"))), 0, 60);
+		screen.Draw(("Unknown7: " + (villager->Villager[vill].Status.Unknown7 ? (Color::Lime << "true") : (Color::Red << "false"))), 0, 70);
+		screen.Draw(("Unknown8: " + (villager->Villager[vill].Status.Unknown8 ? (Color::Lime << "true") : (Color::Red << "false"))), 0, 80);
+		screen.Draw(("Unknown9: " + (villager->Villager[vill].Status.Unknown9 ? (Color::Lime << "true") : (Color::Red << "false"))), 0, 90);
+		screen.Draw(("Unknown10: " + (villager->Villager[vill].Status.Unknown10 ? (Color::Lime << "true") : (Color::Red << "false"))), 0, 100);
+		screen.Draw(("Unknown11: " + (villager->Villager[vill].Status.Unknown11 ? (Color::Lime << "true") : (Color::Red << "false"))), 0, 110);
+		screen.Draw(("Unknown12: " + (villager->Villager[vill].Status.Unknown12 ? (Color::Lime << "true") : (Color::Red << "false"))), 0, 120);
+		screen.Draw(("Unknown13: " + (villager->Villager[vill].Status.Unknown13 ? (Color::Lime << "true") : (Color::Red << "false"))), 0, 130);
+		screen.Draw(("RelatedToBelowButUnk: " + (villager->Villager[vill].Status.RelatedToBelowButUnk ? (Color::Lime << "true") : (Color::Red << "false"))), 0, 140);
+		screen.Draw(("MovingToAnotherTown: " + (villager->Villager[vill].Status.MovingToAnotherTown ? (Color::Lime << "true") : (Color::Red << "false"))), 0, 150);
+		screen.Draw(("Unknown16: " + (villager->Villager[vill].Status.Unknown16 ? (Color::Lime << "true") : (Color::Red << "false"))), 0, 160);
+		screen.Draw(("Unknown17: " + (villager->Villager[vill].Status.Unknown17 ? (Color::Lime << "true") : (Color::Red << "false"))), 0, 170);
+		screen.Draw(("Unknown18: " + (villager->Villager[vill].Status.Unknown18 ? (Color::Lime << "true") : (Color::Red << "false"))), 0, 180);
+		screen.Draw(("Unknown19: " + (villager->Villager[vill].Status.Unknown19 ? (Color::Lime << "true") : (Color::Red << "false"))), 0, 190);
+		screen.Draw(("Unknown20: " + (villager->Villager[vill].Status.Unknown20 ? (Color::Lime << "true") : (Color::Red << "false"))), 0, 200);
+		screen.Draw(("Unknown21: " + (villager->Villager[vill].Status.Unknown21 ? (Color::Lime << "true") : (Color::Red << "false"))), 0, 210);
+		screen.Draw(("Unknown22: " + (villager->Villager[vill].Status.Unknown22 ? (Color::Lime << "true") : (Color::Red << "false"))), 0, 220);
+
+		screen.Draw(("Unknown23: " + (villager->Villager[vill].Status.Unknown23 ? (Color::Lime << "true") : (Color::Red << "false"))), 200, 10);
+		screen.Draw(("Unknown24: " + (villager->Villager[vill].Status.Unknown24 ? (Color::Lime << "true") : (Color::Red << "false"))), 200, 20);
+		screen.Draw(("Unknown25: " + (villager->Villager[vill].Status.Unknown25 ? (Color::Lime << "true") : (Color::Red << "false"))), 200, 30);
+		screen.Draw(("Unknown26: " + (villager->Villager[vill].Status.Unknown26 ? (Color::Lime << "true") : (Color::Red << "false"))), 200, 40);
+		screen.Draw(("Unknown27: " + (villager->Villager[vill].Status.Unknown27 ? (Color::Lime << "true") : (Color::Red << "false"))), 200, 50);
+		screen.Draw(("Unknown28: " + (villager->Villager[vill].Status.Unknown28 ? (Color::Lime << "true") : (Color::Red << "false"))), 200, 60);
+		screen.Draw(("Unknown29: " + (villager->Villager[vill].Status.Unknown29 ? (Color::Lime << "true") : (Color::Red << "false"))), 200, 70);
+		screen.Draw(("Unknown30: " + (villager->Villager[vill].Status.Unknown30 ? (Color::Lime << "true") : (Color::Red << "false"))), 200, 80);
+		screen.Draw(("Unknown31: " + (villager->Villager[vill].Status.Unknown31 ? (Color::Lime << "true") : (Color::Red << "false"))), 200, 90);
+		screen.Draw(("Unknown32: " + (villager->Villager[vill].Status.Unknown32 ? (Color::Lime << "true") : (Color::Red << "false"))), 200, 100);
+
+		return true;
+	}
+
 //Message Box Debug	
 	void msgboxtest(MenuEntry *entry) {
 		static std::string text;
@@ -1536,8 +1585,16 @@ namespace CTRPluginFramework {
 		}
 
 		if(Controller::IsKeysPressed(Key::ZR + Key::DPadDown)) {
+			Keyboard kb("Enter Villager:");
+			kb.Open(vill, vill);
+
 			//OSD::Notify(Utils::Format("UnknownPattern %08X", (u32)std::addressof(Town::GetSaveData()->UnknownPattern) - 0x31F26F80));
 		}
+
+		if(entry->WasJustActivated()) 
+			OSD::Run(villagerInfo);
+		else if(!entry->IsActivated())
+			OSD::Stop(villagerInfo);
 
 		ACNL_Player *player = Player::GetSaveData();
 
@@ -2002,7 +2059,7 @@ namespace CTRPluginFramework {
 	void FishThrower(MenuEntry *entry) {				
 		static u8 playerID = 0;
 		static bool random = false;
-		u16 FishID = 0x22E1;
+		Item FishID(0x22E1, 0);
 
 		static Address throwfish(0x5C2DAC);
 
@@ -2020,16 +2077,17 @@ namespace CTRPluginFramework {
 
 		if(Controller::IsKeysDown(Key::R)) {
 			if(random) {
-				FishID = Utils::Random(0x22E1, 0x234A);
-				while(FishID == 0x232C | FishID == 0x232B | FishID == 0x232A  | FishID == 0x2329)
-					FishID = Utils::Random(0x22E1, 0x234A);
+				FishID.ID = Utils::Random(0x22E1, 0x234A);
+				if(GameHelper::GetItemCategorie(FishID) != Item_Categories::Fish) 
+					return;
 			}
 
-			throwfish.Call<void>(&FishID, PlayerClass::GetInstance(playerID)->GetCoordinates(), 1);
+			if(PlayerClass::GetInstance(playerID)->IsLoaded())
+				throwfish.Call<void>(&FishID, PlayerClass::GetInstance(playerID)->GetCoordinates(), 1);
 		}
 
 		if(Controller::IsKeysDown(Key::R + Key::DPadUp)) 
-			Wrap::KB<u16>("Set Fish ID:", true, 4, FishID, FishID);
+			Wrap::KB<u16>("Set Fish ID:", true, 4, FishID.ID, FishID.ID);
 	}
 
 //player_dumper 33077C8A

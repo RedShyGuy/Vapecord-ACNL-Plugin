@@ -21,7 +21,7 @@ namespace CTRPluginFramework {
         File f_quickm(Utils::Format(PATH_QUICKM, regionName.c_str()), File::READ);
         s8* buffer = new s8[f_quickm.GetSize()];
         f_quickm.Read(buffer, f_quickm.GetSize());
-        
+
         for(int i = 0; i < f_quickm.GetSize(); ++i) {
             for(auto edata : cogEntrys) {
             //look for ID in all available entrys and push its data into the quick menu

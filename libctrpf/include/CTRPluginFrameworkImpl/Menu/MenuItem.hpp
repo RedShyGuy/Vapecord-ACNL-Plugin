@@ -54,6 +54,7 @@ namespace CTRPluginFramework
         std::string     firstNote;
         Color           color;
         s8              cogID;
+        s16             cheatID;
 
         void    Hide(void);
         void    Show(void);

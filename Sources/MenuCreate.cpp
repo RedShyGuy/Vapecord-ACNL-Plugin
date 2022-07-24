@@ -328,6 +328,7 @@ namespace CTRPluginFramework {
 			Hotkey(Key::B | Key::DPadLeft, "ULTIMATE_POPPER_KEY1") 
 		})),
 	    FUNC->Append(new MenuEntry("CAMERA_MOD", cameramod, "CAMERA_MOD_NOTE")),
+		FUNC->Append(new MenuEntry("EXPRESSION_MOD", FacialExpressionMod, SetFacialExpression, "EXPRESSION_MOD_NOTE")),
 		menu->Append(FUNC);
 
 	//////////////////////

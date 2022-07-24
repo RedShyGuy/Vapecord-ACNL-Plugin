@@ -45,7 +45,7 @@ namespace CTRPluginFramework {
 		}
 
 		Keyboard KB(Language->Get("TEXT_2_ITEM_SEARCH_KB"), match.Name);
-		s8 kres = KB.Open();
+		int kres = KB.Open();
 		if(kres < 0) {
 			input.clear();
 			return;
@@ -312,7 +312,7 @@ namespace CTRPluginFramework {
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), itemsettopt);
 
 		Sleep(Milliseconds(100));
-		s8 op = optKb.Open();
+		int op = optKb.Open();
 		if(op < 0)
 			return;
 			
@@ -374,7 +374,7 @@ namespace CTRPluginFramework {
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), menuopt);
 
 		Sleep(Milliseconds(100));
-		s8 dChoice = optKb.Open();
+		int dChoice = optKb.Open();
 		if(dChoice < 0)
 			return;
 

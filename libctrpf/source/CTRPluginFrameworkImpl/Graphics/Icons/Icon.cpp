@@ -6,6 +6,11 @@
 
 namespace CTRPluginFramework
 {
+    extern "C" unsigned char *Reset15;
+    extern "C" unsigned char *Hidden15;
+    extern "C" unsigned char *Paint15;
+    extern "C" unsigned char *Color15;
+    extern "C" unsigned char *Language15;
     extern "C" unsigned char *About15;
     extern "C" unsigned char *AddFavorite25;
     extern "C" unsigned char *AddFavoriteFilled25;
@@ -141,6 +146,51 @@ namespace CTRPluginFramework
         }
 
         return (posX + sizeX);
+    }
+
+    /*
+    ** Reset
+    ** 15px * 15px
+    **************/
+    int     Icon::DrawReset(int posX, int posY)
+    {
+        return (DrawImg(Reset15, posX, posY, 15, 15));
+    }
+
+    /*
+    ** Hidden
+    ** 15px * 15px
+    **************/
+    int     Icon::DrawHidden(int posX, int posY)
+    {
+        return (DrawImg(Hidden15, posX, posY, 15, 15));
+    }
+
+    /*
+    ** Paint
+    ** 15px * 15px
+    **************/
+    int     Icon::DrawPaint(int posX, int posY)
+    {
+        return (DrawImg(Paint15, posX, posY, 15, 15));
+    }
+
+    /*
+    ** Color
+    ** 15px * 15px
+    **************/
+    int     Icon::DrawColor(int posX, int posY)
+    {
+        return (DrawImg(Color15, posX, posY, 15, 15));
+    }
+
+    /*
+    ** Language
+    ** 15px * 15px
+    **************/
+    int     Icon::DrawLanguage(int posX, int posY)
+    {
+        return (DrawImg(Language15, posX, posY, 15, 15));
     }
 
     /*

@@ -59,7 +59,7 @@ namespace CTRPluginFramework {
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
 
 		Sleep(Milliseconds(100));
-		s8 op = KB.Open();
+		int op = KB.Open();
 		if(op < 0)
 			return;
 
@@ -106,7 +106,7 @@ namespace CTRPluginFramework {
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
 
 		Sleep(Milliseconds(100));
-		s8 op = optKb.Open();
+		int op = optKb.Open();
 		if(op < 0)
 			return;
 		
@@ -154,7 +154,7 @@ namespace CTRPluginFramework {
 			SetItem.GetMessage() = Utils::Format(Language->Get("ISLAND_SHOP_MOD_ENTER_ID").c_str(), i + 1);
 
 			Sleep(Milliseconds(100));
-			s8 res = SetItem.Open(*(u32 *)&ShopItem[i]);
+			int res = SetItem.Open(*(u32 *)&ShopItem[i]);
 			if(res < 0)
 				break;
 		}
@@ -332,7 +332,7 @@ namespace CTRPluginFramework {
 		Item *endPos = GameHelper::GetItemAtWorldCoords(0x2F, 0x2F);
 
 		Keyboard KB("a", std::vector<std::string>{ "Backup Island", "Restore Island", "Delete Files" });
-		s8 index = KB.Open();
+		int index = KB.Open();
 		switch(index) {
 			default: break;
 			case 0: {

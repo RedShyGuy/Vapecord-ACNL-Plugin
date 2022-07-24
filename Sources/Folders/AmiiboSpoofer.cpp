@@ -21,7 +21,7 @@ namespace CTRPluginFramework {
         keyboard.Populate(keyVec);
 
         Sleep(Milliseconds(100));
-        s8 res = keyboard.Open(); //Pick a species
+        int res = keyboard.Open(); //Pick a species
 
         Process::Write32(offset + 0x10C, 0); //Game always sets this in the original function, so I'll do it too 
         if(res >= 0) { //User picked a species

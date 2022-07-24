@@ -28,7 +28,7 @@ namespace CTRPluginFramework {
 
 	Item_Categories GameHelper::GetItemCategorie(Item itemID) {
 		static Address getCategorie(0x2FCBC4, 0x2FCB34, 0x2FCC4C, 0x2FCC4C, 0x2FCB64, 0x2FCB64, 0x2FCB4C, 0x2FCB4C);
-		return getCategorie.Call<Item_Categories>(itemID);
+		return getCategorie.Call<Item_Categories>(&itemID);
 	}
 
 	void GameHelper::PlaySound(u16 soundID) {
@@ -160,7 +160,7 @@ namespace CTRPluginFramework {
 		}
 		
 		optKb.Populate(buildingOpt);
-		s8 val = optKb.Open();
+		int val = optKb.Open();
 		if(val < 0) 
 			return;
 		
@@ -209,7 +209,7 @@ namespace CTRPluginFramework {
 		}
 		
 		optKb.Populate(buildingOpt);
-		s8 val = optKb.Open();
+		int val = optKb.Open();
 		if(val < 0) 
 			return;
 		

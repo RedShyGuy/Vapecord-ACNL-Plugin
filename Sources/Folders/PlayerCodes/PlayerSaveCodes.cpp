@@ -93,7 +93,7 @@ namespace CTRPluginFramework {
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), playeropt);
 		
 		Sleep(Milliseconds(100));
-		s8 choice = optKb.Open();
+		int choice = optKb.Open();
 		if(choice < 0)
 			return;
 			
@@ -114,7 +114,7 @@ namespace CTRPluginFramework {
 			optKb.Populate(genderopt);
 
 			Sleep(Milliseconds(100));
-			s8 gender = optKb.Open();
+			int gender = optKb.Open();
 			if(gender < 0)
 				return;
 
@@ -142,7 +142,7 @@ namespace CTRPluginFramework {
 			optKb.Populate(outfitplayeropt);
 
 			Sleep(Milliseconds(100));
-			s8 res = optKb.Open();
+			int res = optKb.Open();
 			if(res < 0)
 				return;
 
@@ -312,7 +312,7 @@ namespace CTRPluginFramework {
 				Keyboard PKB(Language->Get("KEY_SELECT_PLAYER"), g_player);
 
 				Sleep(Milliseconds(100));
-				s8 index = PKB.Open();
+				int index = PKB.Open();
 				if(index < 0)
 					return;
 
@@ -363,7 +363,7 @@ namespace CTRPluginFramework {
 		};
 
 		WrapLoc locPattern;
-		s8 dSlot = 0;
+		int dSlot = 0;
 		
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), designselect);
 		
@@ -556,7 +556,7 @@ namespace CTRPluginFramework {
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
 
 		Sleep(Milliseconds(100));
-		s8 op = KB.Open();
+		int op = KB.Open();
 		if(op < 0)
 			return;
 

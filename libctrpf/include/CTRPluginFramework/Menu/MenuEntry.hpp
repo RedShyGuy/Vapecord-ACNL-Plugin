@@ -161,6 +161,12 @@ namespace CTRPluginFramework
         s8      CogID(void) const;
 
         /**
+        * @brief Get the entry's cheat ID
+        * @return The entry's cheat ID
+        */
+        s16     CheatID(void) const;
+
+        /**
         * \brief The hotkey manager of this entry. See MenuEntryHotkeys.hpp for more infos
         */
         HotkeyManager   Hotkeys;

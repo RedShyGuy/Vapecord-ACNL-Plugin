@@ -54,6 +54,8 @@ namespace CTRPluginFramework {
 	void PatchProcess(FwkSettings &settings) {
 		ToggleTouchscreenForceOn();
 		settings.ThreadPriority = 0x30;
+
+		settings.CachedDrawMode = true;
 	}
 
 //RAM Changes Only

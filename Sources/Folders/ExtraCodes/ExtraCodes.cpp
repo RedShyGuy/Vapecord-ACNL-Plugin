@@ -384,7 +384,7 @@ namespace CTRPluginFramework {
 		
 		u8 timedat[5] = { 0, 0, 0, 0, 0 };
 		Keyboard KB("", TTKB);
-		s8 ch = KB.Open();
+		int ch = KB.Open();
 		if(ch < 0)
 			return;
 		
@@ -395,7 +395,7 @@ namespace CTRPluginFramework {
 			KBS.SetCompareCallback(CheckTimeInput);
 
 			Sleep(Milliseconds(100));
-			s8 cho = KBS.Open(timedat[i]);
+			int cho = KBS.Open(timedat[i]);
 			if(cho < 0)
 				return;
 		}

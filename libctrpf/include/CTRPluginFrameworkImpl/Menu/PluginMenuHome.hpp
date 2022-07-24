@@ -50,6 +50,7 @@ namespace CTRPluginFramework
         void    _controllerBtn_OnClick(void);
         void    _keyboardBtn_OnClick(void);
 
+        void    _vSettingsBtn_OnClick(void);
         void    _actionReplayBtn_OnClick(void); // 4
         void    _gameGuideBtn_OnClick(void); // 2
         void    _searchBtn_OnClick(void); // 3
@@ -78,7 +79,7 @@ namespace CTRPluginFramework
 
         // Mode buttons
         Button              _showStarredBtn;
-        Button              _hidMapperBtn;
+        Button              _VSettingsBtn;
         Button              _gameGuideBtn;
         Button              _searchBtn;
         Button              _arBtn;

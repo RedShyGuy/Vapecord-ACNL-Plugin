@@ -129,3 +129,27 @@ FUNCTION    SetWalkParticleID
     LDR         R4, [R4]
 
     POP         {PC}
+
+FUNCTION    SetEyeExpression
+    PUSH        {R0, LR}
+
+    BL          isIndividual
+    CMP         R0, #1
+    LDREQ       R1, =c_eyeID
+    LDREQ       R1, [R1]
+
+    POP         {R0}
+    MOV         R5, R0
+    POP         {PC}
+
+FUNCTION    SetMouthExpression
+    PUSH        {R0, LR}
+
+    BL          isIndividual
+    CMP         R0, #1
+    LDREQ       R1, =c_mouthID
+    LDREQ       R1, [R1]
+
+    POP         {R0}
+    MOV         R4, R0
+    POP         {PC}    

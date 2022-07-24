@@ -20,7 +20,7 @@ namespace CTRPluginFramework
         _noteTB("", "", showNoteBottom ? IntRect(20, 46, 280, 124) : IntRect(40, 30, 320, 180)),
 
         _showStarredBtn(Button::Toggle | Button::Sysfont | Button::Rounded, "Favorite", IntRect(30, 70, 120, 30), Icon::DrawFavorite),
-        _hidMapperBtn(Button::Sysfont | Button::Rounded, "Mapper", IntRect(165, 70, 120, 30), Icon::DrawController),
+        _VSettingsBtn(Button::Sysfont | Button::Rounded, "V-Settings", IntRect(165, 70, 120, 30), Icon::DrawController),
         _gameGuideBtn(Button::Sysfont | Button::Rounded, "Game Guide", IntRect(30, 105, 120, 30), Icon::DrawGuide),
         _searchBtn(Button::Sysfont | Button::Rounded, "Search", IntRect(165, 105, 120, 30), Icon::DrawSearch),
         _arBtn(Button::Sysfont | Button::Rounded, "ActionReplay", IntRect(30, 140, 120, 30)),
@@ -54,10 +54,6 @@ namespace CTRPluginFramework
         _InfoBtn.Disable();
         _keyboardBtn.Disable();
         _controllerBtn.Disable();
-
-
-        // Temporary disable unused buttons
-        _hidMapperBtn.Lock();
 
         // Get strings x position
         g_textXpos[0] = (320 - Renderer::LinuxFontSize(g_ctrpfText)) / 2;
@@ -114,7 +110,7 @@ namespace CTRPluginFramework
         if (!ShowNoteBottom) {
             // Check all buttons
             if (_showStarredBtn()) _showStarredBtn_OnClick();
-            // _hidMapperBtn();
+            if (_VSettingsBtn()) _vSettingsBtn_OnClick();
             if (_gameGuideBtn()) _gameGuideBtn_OnClick();
             if (_searchBtn()) _searchBtn_OnClick();
             if (_arBtn()) _actionReplayBtn_OnClick();
@@ -605,7 +601,7 @@ namespace CTRPluginFramework
         else
         {
             _showStarredBtn.Draw();
-            _hidMapperBtn.Draw();
+            _VSettingsBtn.Draw();
             _gameGuideBtn.Draw();
             _searchBtn.Draw();
             _arBtn.Draw();
@@ -728,7 +724,7 @@ namespace CTRPluginFramework
         {
             // Update buttons
             _showStarredBtn.Update(isTouched, touchPos);
-            //_hidMapperBtn.Update(isTouched, touchPos);
+            _VSettingsBtn.Update(isTouched, touchPos);
             _gameGuideBtn.Update(isTouched, touchPos);
             _searchBtn.Update(isTouched, touchPos);
             _arBtn.Update(isTouched, touchPos);
@@ -897,6 +893,11 @@ namespace CTRPluginFramework
     void    PluginMenuHome::_toolsBtn_OnClick(void)
     {
         _mode = 5;
+    }
+
+    void    PluginMenuHome::_vSettingsBtn_OnClick(void)
+    {
+        _mode = 1;
     }
 
     void    PluginMenuHome::_InfoBtn_OnClick(void)

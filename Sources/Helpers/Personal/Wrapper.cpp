@@ -86,7 +86,7 @@ namespace CTRPluginFramework {
 		kb.Populate(f_All);
 		kb.OnKeyboardEvent(cb);
 
-		s8 uchoice = kb.Open();	
+		int uchoice = kb.Open();	
 		if(uchoice < 0) 
 			return ExHandler::ERROR_UN;
 

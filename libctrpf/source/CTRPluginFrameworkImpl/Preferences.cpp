@@ -141,7 +141,7 @@ namespace CTRPluginFramework
 
         if (OpenConfigFile(settings, header) == 0)
         {
-            MenuHotkeys = header.hotkeys;
+            MenuHotkeys = header.hotkeys & ((System::IsNew3DS() && Settings.AreN3DSButtonsAvailable) ? ~0x0 : ~(Key::CStick | Key::ZL | Key::ZR));
             Flags = header.flags;
             memcpy(reinterpret_cast<void*>(Backlights), &header.lcdbacklights, sizeof(Backlights));
         }

@@ -146,6 +146,8 @@ namespace CTRPluginFramework {
 	void asmpresses(MenuEntry *entry);
 	void partypopper(MenuEntry *entry);
 	void cameramod(MenuEntry *entry);
+	void SetFacialExpression(MenuEntry *entry);
+	void FacialExpressionMod(MenuEntry *entry);
 	void wandability(MenuEntry *entry);
 	
 //Extra Codes

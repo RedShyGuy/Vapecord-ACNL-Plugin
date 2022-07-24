@@ -11,8 +11,12 @@
 #include "Helpers/GameStructs.hpp"
 
 extern "C" void PATCH_PartyPop(void);
+extern "C" void CHECK_Individual(void);
 
 CTRPluginFramework::Item PartyPopperTool = {0x336A, 0};
+
+u32 c_eyeID = 0;
+u32 c_mouthID = 0;
 
 namespace CTRPluginFramework {
 //Size Codes
@@ -60,7 +64,7 @@ namespace CTRPluginFramework {
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), sizeopt);
 
 		Sleep(Milliseconds(100));
-		s8 op = optKb.Open();
+		int op = optKb.Open();
 		if(op < 0)
 			return;
 			
@@ -73,7 +77,7 @@ namespace CTRPluginFramework {
 			optKb.Populate(sizesopt);
 
 			Sleep(Milliseconds(100));
-			s8 op2 = optKb.Open();
+			int op2 = optKb.Open();
 			if(op2 < 0)
 				return;
 
@@ -365,6 +369,52 @@ namespace CTRPluginFramework {
             }
         }
     }
+
+	extern "C" void SetEyeExpression(void);
+	extern "C" void SetMouthExpression(void);
+
+	extern "C" bool isIndividual(u32 individualData) {
+		if(!PlayerClass::GetInstance()->IsLoaded())
+			return false;
+
+		static Address convertData(0x27231C, 0, 0, 0, 0, 0, 0, 0);
+		u32 ownData = convertData.Call<u32>(PlayerClass::GetInstance()->Offset(0x1B4)); //gets actual data of player
+
+		return (ownData == individualData);
+	}
+
+	void SetFacialExpression(MenuEntry *entry) {
+		static const std::vector<std::string> options = {
+			"Eye Expression", "Mouth Expression"
+		};
+		
+		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), options);
+		int res = KB.Open();
+		if(res < 0)
+			return;
+
+		KB.GetMessage() = Language->Get("ENTER_ID");
+		KB.IsHexadecimal(true);
+		KB.Open(res == 0 ? c_eyeID : c_mouthID, res == 0 ? c_eyeID : c_mouthID);
+	}
+
+	void FacialExpressionMod(MenuEntry *entry) {
+		static Hook eyeHook, mouthHook;
+		if(entry->WasJustActivated()) {
+			eyeHook.Initialize(0x31DDE4, (u32)SetEyeExpression);
+			eyeHook.SetFlags(USE_LR_TO_RETURN);
+			eyeHook.Enable();
+
+			mouthHook.Initialize(0x31DF40, (u32)SetMouthExpression);
+			mouthHook.SetFlags(USE_LR_TO_RETURN);
+			mouthHook.Enable();
+		}
+
+		else if(!entry->IsActivated()) {
+			eyeHook.Disable();
+			mouthHook.Disable();
+		}
+	}
 
 //Growing 1 Trees	
 	static const u16 Growing_Trees[79] { 

@@ -35,6 +35,8 @@ namespace CTRPluginFramework
     HotkeysModifier::HotkeysModifier(u32 &keys, const std::string &message) :
     _keys(keys), _message(message)
     {
+        FwkSettings &settings = FwkSettings::Get();
+
         for (int i = 0, posY = 32; i < 7; ++i, posY += 25)
         {
             Button b(Button::Icon | Button::Toggle, IntRect(30, posY, 20, 20), Icon::DrawCheckBox);
@@ -53,7 +55,7 @@ namespace CTRPluginFramework
             }
         }
 
-        if (!System::IsNew3DS())
+        if (!System::IsNew3DS() || !settings.AreN3DSButtonsAvailable)
         {
             // Disable ZL & ZR on O3DS
             _checkboxs[0].Enable(false);
@@ -130,6 +132,8 @@ namespace CTRPluginFramework
 
     void    HotkeysModifier::_DrawBottom(void)
     {
+        FwkSettings &settings = FwkSettings::Get();
+
         Renderer::SetTarget(BOTTOM);
         Window::BottomWindow.Draw();
 
@@ -137,7 +141,7 @@ namespace CTRPluginFramework
         for (auto it = _checkboxs.begin(); it != _checkboxs.end(); it++)
             (*it).Draw();
 
-        int skip = !System::IsNew3DS();
+        int skip = (!System::IsNew3DS() || !settings.AreN3DSButtonsAvailable) ? 1 : 0;
 
         // Draw labels
         for (int i = 0 + skip, posY = 32 + (skip * 25); i < 7; ++i, posY += 9)

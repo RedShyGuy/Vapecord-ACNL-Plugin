@@ -68,7 +68,7 @@ namespace CTRPluginFramework {
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), badgesopt);
 		
 		Sleep(Milliseconds(100));
-		s8 index = optKb.Open();
+		int index = optKb.Open();
 		if(index < 0)
 			return;
 

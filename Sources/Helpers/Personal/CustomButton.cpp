@@ -231,7 +231,7 @@ Custom Buttons
 
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
 		optKb.Populate(cbuttons);
-		s8 op = optKb.Open();
+		int op = optKb.Open();
 		if(op < 0)
 			return;
 

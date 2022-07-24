@@ -95,6 +95,11 @@ namespace CTRPluginFramework
         _enabled = isEnabled;
     }
 
+    bool    TouchKey::IsEnabled(void)
+    {
+        return _enabled;
+    }
+
     void    TouchKey::DrawCharacter(const Color &color)
     {
         // If not a string

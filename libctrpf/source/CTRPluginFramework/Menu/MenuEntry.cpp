@@ -7,6 +7,8 @@ namespace CTRPluginFramework
 {
     static s8 _MenuCount = 0;
 
+    static s16 _cheatID = 0;
+
     MenuEntry::MenuEntry(const std::string &name, const std::string &note) :
         Hotkeys(this),
         _item(new MenuEntryImpl(name, note, this))
@@ -17,7 +19,7 @@ namespace CTRPluginFramework
         Hotkeys(this),
         _item(new MenuEntryImpl(name, func, note, this))
     {
-
+        _item->cheatID = _cheatID++;
     }
 
     MenuEntry::MenuEntry(const std::string &name, FuncPointer GameFunc, FuncPointer MenuFunc, const std::string &note) :
@@ -26,6 +28,7 @@ namespace CTRPluginFramework
     {
         _item->MenuFunc = MenuFunc;
         _item->cogID = _MenuCount++;
+        _item->cheatID = _cheatID++;
     }
 
     MenuEntry::MenuEntry(int radioId, const std::string &name, FuncPointer func, const std::string &note) :
@@ -33,6 +36,7 @@ namespace CTRPluginFramework
         _item(new MenuEntryImpl(name, func, note, this))
     {
         _item->SetRadio(radioId);
+        _item->cheatID = _cheatID++;
     }
 
     MenuEntry::MenuEntry(int radioGroup, const std::string &name, FuncPointer GameFunc, FuncPointer MenuFunc, const std::string &note) :
@@ -42,6 +46,7 @@ namespace CTRPluginFramework
         _item->SetRadio(radioGroup);
         _item->MenuFunc = MenuFunc;
         _item->cogID = _MenuCount++;
+        _item->cheatID = _cheatID++;
     }
 
     MenuEntry::~MenuEntry()
@@ -160,5 +165,10 @@ namespace CTRPluginFramework
     s8      MenuEntry::CogID(void) const
     {
         return (_item->cogID);
+    }
+
+    s16     MenuEntry::CheatID(void) const
+    {
+        return (_item->cheatID);
     }
 }

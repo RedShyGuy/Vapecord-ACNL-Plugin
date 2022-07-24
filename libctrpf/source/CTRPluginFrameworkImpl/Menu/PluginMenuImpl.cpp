@@ -18,9 +18,9 @@ namespace CTRPluginFramework
     Mutex           PluginMenuImpl::_trashBinMutex;
 
     PluginMenuImpl::PluginMenuImpl(std::string &name, std::string &about, u32 menuType) :
-
         OnFirstOpening(nullptr),
         OnOpening(nullptr),
+        _vSettings(new PluginMenuVSettings()),
         _actionReplay{ new PluginMenuActionReplay() },
         _home(new PluginMenuHome(name, (menuType == 1))),
         _search(new PluginMenuSearch(_hexEditor)),
@@ -145,6 +145,7 @@ namespace CTRPluginFramework
         PluginMenuTools         &tools = *_tools;
         PluginMenuSearch        &search = *_search;
         GuideReader             &guide = *_guide;
+        PluginMenuVSettings     &vSet = *_vSettings;
         //PluginMenuExecuteLoop   &executer = *_executeLoop;
 
         Time                    delta;
@@ -267,12 +268,11 @@ namespace CTRPluginFramework
                     
                     shouldClose = home(eventList, mode, delta);
                 }
-                /*
                 else if (mode == 1)
-                { // Mapper
-
+                { // V-Settings
+                    if (vSet(eventList, delta))
+                        mode = 0;
                 }
-                */
                 else if (mode == 2)
                 { /* Guide */
                     if (guide(eventList, delta))
@@ -325,6 +325,8 @@ namespace CTRPluginFramework
                     shouldClose = false;
 
                     _forceClose = false;
+
+                    
 
                     // Save settings
                     Preferences::WriteSettings();

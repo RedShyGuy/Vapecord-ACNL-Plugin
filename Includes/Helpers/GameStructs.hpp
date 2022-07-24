@@ -475,8 +475,8 @@ namespace CTRPluginFramework {
         u8 Unknown83 : 1;
         u8 Unknown84 : 1;
         u8 Unknown85 : 1;
-        u8 Unknown86 : 1;
-        u8 Unknown87 : 1;
+        u8 Unknown86 : 1; 
+        u8 Unknown87 : 1; //isabelle welcomed you in your tent
         u8 Unknown88 : 1; //first talked to pete
         u8 Unknown89 : 1;
         u8 Unknown90 : 1;
@@ -1269,7 +1269,7 @@ namespace CTRPluginFramework {
         u8 Unknown11 : 1;
         u8 Unknown12 : 1;
         u8 Unknown13 : 1;
-        u8 RealtedToBelowButUnk : 1;
+        u8 RelatedToBelowButUnk : 1;
         u8 MovingToAnotherTown : 1;
         u8 Unknown16 : 1;
         u8 Unknown17 : 1;

@@ -11,6 +11,36 @@ namespace CTRPluginFramework
     {
     public:
         /*
+        ** Reset
+        ** 15px * 15px
+        ************/
+        static int      DrawReset(int posX, int posY);
+
+        /*
+        ** Hidden
+        ** 15px * 15px
+        ************/
+        static int      DrawHidden(int posX, int posY);
+
+        /*
+        ** Paint
+        ** 15px * 15px
+        ************/
+        static int      DrawPaint(int posX, int posY);
+
+        /*
+        ** Color
+        ** 15px * 15px
+        ************/
+        static int      DrawColor(int posX, int posY);
+
+        /*
+        ** Language
+        ** 15px * 15px
+        ************/
+        static int      DrawLanguage(int posX, int posY);
+
+        /*
         ** About
         ** 15px * 15px
         ************/

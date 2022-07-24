@@ -47,7 +47,7 @@ namespace CTRPluginFramework {
 		Keyboard keyboard(Language->Get("COMM_CHOOSE"), noncommands);
 
 		Sleep(Milliseconds(100));
-        s8 choice = keyboard.Open();
+        int choice = keyboard.Open();
         if(choice < 0)
 			return;
 
@@ -112,7 +112,7 @@ namespace CTRPluginFramework {
         Keyboard keyboard(Language->Get("GAME_TYPE_CHOOSE"), gametype);
 
 		Sleep(Milliseconds(100));
-        s8 gametchoice = keyboard.Open();
+        int gametchoice = keyboard.Open();
         if(gametchoice < 0)	
 			return;
 	
@@ -153,7 +153,7 @@ namespace CTRPluginFramework {
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), weatheropt);
 
 		Sleep(Milliseconds(100));
-		s8 op = optKb.Open();
+		int op = optKb.Open();
 		if(op < 0)
 			return;
 			
@@ -233,7 +233,7 @@ namespace CTRPluginFramework {
 		Sleep(Milliseconds(100));
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), std::vector<std::string>{ "Add Cog-Cheat", "Remove Cog-Cheat" });
 		IsOnStartMenu = false;
-		s8 res = KB.Open();
+		int res = KB.Open();
 		if(res < 0)
 			return;
 
@@ -319,7 +319,7 @@ namespace CTRPluginFramework {
 			Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), QMEntryNames);
 			KB.OnKeyboardEvent(CogCheatCallback);
 			IsOnStartMenu = true;
-			s8 res = KB.Open();
+			int res = KB.Open();
 			cogNotes.clear();
 			if(res < 0)
 				return;

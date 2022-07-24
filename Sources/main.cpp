@@ -39,6 +39,7 @@ Will be called at the start of the plugin to load the language, colors and the d
 		SetupColors(false);
 		IsDevModeUsable();
 		QuickMenu::Init();
+		PluginMenuData::Init();
 		*menu -= UpdateInstance;
 	}
 

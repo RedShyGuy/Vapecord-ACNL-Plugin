@@ -35,6 +35,11 @@ namespace CTRPluginFramework {
 			*/
 			static void UpdateAll(const Color arr[12]);
 
+			static void SaveEntrys(void);
+			static void GetEntrys(std::vector<MenuEntry *> entry);
+			static void Init(void);
+			static std::vector<MenuEntry*> fullList;
+
 			static std::vector<FolderData> folderData;
 	};
 }

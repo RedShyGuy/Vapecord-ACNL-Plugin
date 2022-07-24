@@ -66,7 +66,7 @@ namespace CTRPluginFramework {
 			Keyboard pKB(Language->Get("KEY_SELECT_PLAYER"), pV);
 			
 			Sleep(Milliseconds(100));
-			s8 pChoice = pKB.Open();
+			int pChoice = pKB.Open();
 			if(pChoice >= 0) {
 				if(pV[pChoice] != Color::Silver << "-Empty-") {
 					PSelector_Set(pChoice);

@@ -22,7 +22,7 @@ namespace CTRPluginFramework {
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
 
 		Sleep(Milliseconds(100));
-		s8 op = optKb.Open();
+		int op = optKb.Open();
 		if(op < 0)
 			return;
 		
@@ -64,7 +64,7 @@ namespace CTRPluginFramework {
 			Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), g_dropmod);
 			
 			Sleep(Milliseconds(100));
-			s8 res = optKb.Open();
+			int res = optKb.Open();
 			if(res < 0)
 				return;
 
@@ -86,7 +86,7 @@ namespace CTRPluginFramework {
 			Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), shapeOpt);
 			
 			Sleep(Milliseconds(100));
-			s8 index = optKb.Open();
+			int index = optKb.Open();
 			switch(index) {
 				default: return;
 			//Full Square

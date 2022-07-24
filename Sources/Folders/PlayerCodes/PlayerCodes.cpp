@@ -139,7 +139,7 @@ namespace CTRPluginFramework {
 		Keyboard pKB(Language->Get("KEY_SELECT_PLAYER"), pV);
 		
 		Sleep(Milliseconds(100));
-		s8 pChoice = pKB.Open();
+		int pChoice = pKB.Open();
 		if((pChoice >= 0) && (pV[pChoice] != Color::Silver << "-Empty-"))
 			Player::Load(pChoice);
 	}
@@ -198,7 +198,7 @@ namespace CTRPluginFramework {
 				kb.IsHexadecimal(true);
 
 				Sleep(Milliseconds(100));
-				s8 res = kb.Open(rval1);
+				int res = kb.Open(rval1);
 				if(res < 0)
 					return;
 
@@ -210,7 +210,7 @@ namespace CTRPluginFramework {
 				kb.IsHexadecimal(true);
 
 				Sleep(Milliseconds(100));
-				s8 res = kb.Open(rval2);
+				int res = kb.Open(rval2);
 				if(res < 0)
 					return;
 

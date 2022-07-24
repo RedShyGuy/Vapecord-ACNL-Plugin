@@ -114,12 +114,36 @@ namespace CTRPluginFramework {
 				IsDevModeUsable();
 			}	
 		}
-	}		
+	}
+
+	void cheatsVisibility(void) {
+		std::vector<MenuEntry*> entrys;
+		PluginMenuData::GetEntrys(entrys);
+
+		std::vector<std::string> nameList;		
+		for(MenuEntry *aEntry : entrys)
+			nameList.push_back(aEntry->Name());
+
+		Keyboard KB("Select cheat to hide/unhide:", nameList);
+		int choice = KB.Open();
+		if(choice < 0)
+			return;
+
+		if(entrys.at(choice)->IsVisible()) {
+			entrys.at(choice)->Hide();
+			OSD::Notify("Cheat hidden!");
+		}
+		else {
+			entrys.at(choice)->Show();
+			OSD::Notify("Cheat shown!");
+		}
+	}
 	
 	const std::vector<std::string> pluginstgns = {
 		"Set Color Mode",
 		"Set Language",
 		"Set Plugin Colors",
+		"Hide/Unhide Cheats",
 		"Reset Settings",
 	};
 //Plugin settings which can be used any time
@@ -137,7 +161,10 @@ namespace CTRPluginFramework {
 			case 2:
 				CustomFWK(true);
 			break;
-			case 3: {
+			case 3:
+				cheatsVisibility();
+			break;
+			case 4: {
 				if(DEVC->IsVisible()) 
 					DEVC->Hide();	
 

@@ -53,6 +53,8 @@ namespace CTRPluginFramework
         // Enabler
         void    Enable(bool enable = true);
 
+        bool    IsEnabled(void);
+
         // Draw
         void    DrawCharacter(const Color &color);
         void    Draw(void) override;

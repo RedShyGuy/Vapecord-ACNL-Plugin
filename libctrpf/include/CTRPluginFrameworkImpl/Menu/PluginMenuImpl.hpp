@@ -10,6 +10,7 @@
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuTools.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuExecuteLoop.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuActionReplay.hpp"
+#include "CTRPluginFrameworkImpl/Menu/PluginMenuVSettings.hpp"
 #include "CTRPluginFrameworkImpl/Preferences.hpp"
 
 #include <vector>
@@ -78,6 +79,7 @@ namespace CTRPluginFramework
         bool                        _pluginRun;
         bool                        _showMsg;
 
+        PluginMenuVSettings         *_vSettings;
         PluginMenuActionReplay      *_actionReplay;
         PluginMenuHome              *_home;
         PluginMenuSearch            *_search;

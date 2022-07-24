@@ -59,7 +59,7 @@ namespace CTRPluginFramework {
 
 	redo:
 		Sleep(Milliseconds(200));
-		s8 res = KB.Open();
+		int res = KB.Open();
 		if(res < 0)
 			return;
 
@@ -76,7 +76,7 @@ namespace CTRPluginFramework {
 		KB.Populate(vec);
 
 		Sleep(Milliseconds(200));
-		s8 res2 = KB.Open();
+		int res2 = KB.Open();
 		if(res2 < 0)
 			return;
 
@@ -98,7 +98,7 @@ namespace CTRPluginFramework {
 		Keyboard KB("Select Option", vec);
 
 		Sleep(Milliseconds(100));
-		s8 op = KB.Open();
+		int op = KB.Open();
 		if(op < 0)
 			return;
 

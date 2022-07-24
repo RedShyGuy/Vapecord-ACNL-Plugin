@@ -457,6 +457,7 @@ namespace CTRPluginFramework
         Clock               clock;
         Time                delta;
         Clock               frameClock;
+        bool                wasKeysLocked = false;
 
         // Construct keyboard
         if (!_customKeyboard)
@@ -464,6 +465,13 @@ namespace CTRPluginFramework
             if (_layout == QWERTY) _Qwerty();
             else if (_layout == DECIMAL) _Decimal();
             else if (_layout == HEXADECIMAL) _Hexadecimal();
+
+            if((!_keys->at(15).IsEnabled() || !_keys->at(16).IsEnabled()) && _mustRelease && (_layout == DECIMAL || _layout == HEXADECIMAL))
+            {
+                _keys->at(15).Enable(true);
+                _keys->at(16).Enable(true);
+                wasKeysLocked = true;
+            }
         }
 
         // Check start input
@@ -558,6 +566,13 @@ namespace CTRPluginFramework
         }
 
     exit:
+        if(wasKeysLocked)
+        {
+            _keys->at(15).Enable(false);
+            _keys->at(16).Enable(false);
+            wasKeysLocked = false;
+        }
+
         PluginMenu *menu = PluginMenu::GetRunningInstance();
         if (menu && !menu->IsOpen() && ret != SLEEP_ABORT)
             ScreenImpl::Clean();

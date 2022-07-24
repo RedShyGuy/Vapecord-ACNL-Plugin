@@ -28,6 +28,7 @@
 #define PATH_COLOR		    "E:/Vapecord/%s/color.bin"
 #define PATH_CBOARD		    "E:/Vapecord/%s/clipboard.txt"
 #define PATH_QUICKM		    "E:/Vapecord/%s/quickmenu.bin"
+#define PATH_HIDECH         "E:/Vapecord/%s/hidden.bin"
 #define CONFIGNAME		    "E:/Vapecord/%s/plugin.bin"
 
 #define V_STANDARD          "E:/Vapecord"

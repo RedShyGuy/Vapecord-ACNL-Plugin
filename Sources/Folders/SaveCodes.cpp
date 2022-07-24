@@ -107,7 +107,7 @@ namespace CTRPluginFramework {
 				optKb.Populate(backmessage);
 
 				Sleep(Milliseconds(100));
-				s8 KBChoice = optKb.Open();
+				int KBChoice = optKb.Open();
 				if(KBChoice >= 0) {
 					std::string filename = "";
 					Keyboard KB(Language->Get("BULLETIN_BOARD_DUMPER_DUMP"));
@@ -125,7 +125,7 @@ namespace CTRPluginFramework {
 				optKb.Populate(backmessage);
 
 				Sleep(Milliseconds(100));
-				s8 KBChoice = optKb.Open();
+				int KBChoice = optKb.Open();
 				if(KBChoice >= 0) {
 					loc = { (u32 *)&town->BBoardMessages[KBChoice], sizeof(ACNL_BulletinBoardMessage) };
 					Wrap::Restore(Utils::Format(PATH_BULLETIN, regionName.c_str()), ".dat", Language->Get("RESTORE_MESSAGE"), nullptr, true, &loc, nullptr); 
@@ -157,7 +157,7 @@ namespace CTRPluginFramework {
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), treesizevec);
 		
 		Sleep(Milliseconds(100));
-		s8 op = optKb.Open();
+		int op = optKb.Open();
 		if(op < 0)
 			return;
 
@@ -200,7 +200,7 @@ namespace CTRPluginFramework {
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), fruitopt);
 
 		Sleep(Milliseconds(100));
-		s8 userChoice = optKb.Open();
+		int userChoice = optKb.Open();
 		if(userChoice < 0)
 			return;
 		
@@ -257,7 +257,7 @@ namespace CTRPluginFramework {
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), grasstypevec);
 
 		Sleep(Milliseconds(100));
-		s8 op = optKb.Open();
+		int op = optKb.Open();
 		if(op < 0)
 			return;
 
@@ -280,7 +280,7 @@ namespace CTRPluginFramework {
 		Keyboard keyboard(Language->Get("CARAVAN_SET_SELECT"), keyVec);
 
 		Sleep(Milliseconds(100));
-		s8 res = keyboard.Open(); //Pick caravan
+		int res = keyboard.Open(); //Pick caravan
 		if(res < 0)
 			return;
 
@@ -330,7 +330,7 @@ namespace CTRPluginFramework {
 		Keyboard keyboard(Language->Get("KEY_CHOOSE_OPTION"), keyVec);	
 
 		Sleep(Milliseconds(100));
-		s8 res = keyboard.Open();
+		int res = keyboard.Open();
        	if(res < 0)
 			return;
 		
@@ -348,7 +348,7 @@ namespace CTRPluginFramework {
 			keyboard.Populate(keyVec);
 
 			Sleep(Milliseconds(100));
-			s8 res = keyboard.Open(); //Pick a species
+			int res = keyboard.Open(); //Pick a species
 			if(res < 0) //User picked a species
 				return;
 
@@ -448,7 +448,7 @@ namespace CTRPluginFramework {
 		Keyboard shopkb(Language->Get("KEY_CHOOSE_STORE"), shopopt);
 
 		Sleep(Milliseconds(100));
-		s8 op = shopkb.Open();
+		int op = shopkb.Open();
 		if(op < 0)
 			return;
 
@@ -461,7 +461,7 @@ namespace CTRPluginFramework {
 				Keyboard nookkb(Language->Get("KEY_CHOOSE_UPGRADE"), nookopt); 
 
 				Sleep(Milliseconds(100));
-				s8 nook = nookkb.Open();
+				int nook = nookkb.Open();
 				if(nook < 0)
 					return;
 
@@ -597,14 +597,14 @@ namespace CTRPluginFramework {
 		Keyboard pKB(Language->Get("KEY_SELECT_PLAYER"), pV);
 	
 		Sleep(Milliseconds(100));
-		s8 pChoice = pKB.Open();
+		int pChoice = pKB.Open();
 		if((pChoice < 0) || (pV[pChoice] == Color::Silver << "-Empty-")) 
 			return;
 		
 		Keyboard hKB(Language->Get("KEY_CHOOSE_OPTION"), HouseSet);
 		
 		Sleep(Milliseconds(100));
-		s8 hChoice = hKB.Open();
+		int hChoice = hKB.Open();
 		if(hChoice < 0)
 			return;
 	
@@ -613,7 +613,7 @@ namespace CTRPluginFramework {
 			Keyboard eKB(Language->Get("HOUSE_EDITOR_SELECT_HOUSE"), HouseSettings);
 
 			Sleep(Milliseconds(100));
-			s8 eChoice = eKB.Open();
+			int eChoice = eKB.Open();
 			if(eChoice < 0)
 				return;
 			
@@ -671,7 +671,7 @@ namespace CTRPluginFramework {
 		Keyboard rKB(Language->Get("HOUSE_EDITOR_SELECT_ROOM"), RoomSet);
 
 		Sleep(Milliseconds(100));
-		s8 rChoice = rKB.Open();
+		int rChoice = rKB.Open();
 		if(rChoice < 0)
 			return;
 		
@@ -730,7 +730,7 @@ namespace CTRPluginFramework {
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
 
 		Sleep(Milliseconds(100));
-		s8 op = optKb.Open();
+		int op = optKb.Open();
 		if(op < 0)
 			return;
 
@@ -955,13 +955,13 @@ namespace CTRPluginFramework {
 
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), musOpt);
 		Sleep(Milliseconds(100));
-		s8 state = optKb.Open();
+		int state = optKb.Open();
 		if(state < 0)
 			return;
 
 		else if(state == 0) {
 			optKb.Populate(pV);
-			s8 player = optKb.Open();
+			int player = optKb.Open();
 			if(player < 0 && pV[player] == (Color::Silver << "-Empty-"))
 				return;
 
