@@ -26,6 +26,8 @@ namespace CTRPluginFramework
         void    UnStar(MenuItem* item);
         void    Init(void);
 
+        bool    RainbowState(void);
+
         void    AddPluginVersion(u32 version);
         void    Close(MenuFolderImpl *folder);
 
@@ -50,6 +52,7 @@ namespace CTRPluginFramework
         void    _controllerBtn_OnClick(void);
         void    _keyboardBtn_OnClick(void);
 
+        void    _rainbowBtn_OnClick(void);
         void    _vSettingsBtn_OnClick(void);
         void    _actionReplayBtn_OnClick(void); // 4
         void    _gameGuideBtn_OnClick(void); // 2
@@ -65,6 +68,7 @@ namespace CTRPluginFramework
 
         int                 _mode;
         bool                _starMode;
+        bool                _rainbowMode;
         int                 _selector;
         int                 _selectedTextSize;
         float               _maxScrollOffset;
@@ -78,6 +82,7 @@ namespace CTRPluginFramework
         TextBox             _noteTB;
 
         // Mode buttons
+        Button              _rainbowBtn;
         Button              _showStarredBtn;
         Button              _VSettingsBtn;
         Button              _gameGuideBtn;

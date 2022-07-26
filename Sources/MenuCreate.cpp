@@ -465,8 +465,5 @@ namespace CTRPluginFramework {
 		PluginMenuData::SetUp(CHAC, true);
 		PluginMenuData::SetUp(EXTC);
 		PluginMenuData::SetUp(MISC);
-
-	/*Other Cheats*/
-		menu->Append(new MenuEntry("Random Folder Colors", rainbow, "This will randomize the cheat folders colors.\nNote: If you randomize the color and reset the plugin, the color will not be the randomized one, it will instead stay at the color option you selected!"));
 	}
 }

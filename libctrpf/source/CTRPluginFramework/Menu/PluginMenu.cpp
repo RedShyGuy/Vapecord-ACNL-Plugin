@@ -191,6 +191,11 @@ namespace CTRPluginFramework
         _menu->GetRoot()->Reload(quickmenu);
     }
 
+    bool                PluginMenu::RainbowState(void)
+    {
+        return _menu->_home->RainbowState();
+    }
+
 //V-Settings
     void                PluginMenu::V_SetColor(CustomFunction cFunc) 
     {

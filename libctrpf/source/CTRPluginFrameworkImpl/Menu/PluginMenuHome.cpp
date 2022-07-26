@@ -11,18 +11,19 @@
 
 namespace CTRPluginFramework
 {
-    static u32 g_textXpos[2] = { 0 };
+    static u32 g_textXpos[4] = { 0 };
 
     // DO NOT REMOVE THIS COPYRIGHT NOTICE
     static const char g_ctrpfText[] = "CTRPluginFramework";
     static const char g_copyrightText[] = "Copyright (c) The Pixellizer Group";
     static const char g_credits[] = "Cheats made by Lukas#4444";
-    #define DISCORDINV "discord.gg/QwqdBpKWf3"
+    static const char g_discord[] = "Discord: discord.gg/QwqdBpKWf3";
 
     PluginMenuHome::PluginMenuHome(std::string &name, bool showNoteBottom) :
 
         _noteTB("", "", showNoteBottom ? IntRect(20, 46, 280, 124) : IntRect(40, 30, 320, 180)),
 
+        _rainbowBtn(Button::Toggle | Button::Sysfont | Button::Rounded, "Rainbow", IntRect(30, 175, 120, 30)),
         _showStarredBtn(Button::Toggle | Button::Sysfont | Button::Rounded, "Favorite", IntRect(30, 70, 120, 30), Icon::DrawFavorite),
         _VSettingsBtn(Button::Sysfont | Button::Rounded, "V-Settings", IntRect(165, 70, 120, 30), Icon::DrawController),
         _gameGuideBtn(Button::Sysfont | Button::Rounded, "Game Guide", IntRect(30, 105, 120, 30), Icon::DrawGuide),
@@ -40,6 +41,7 @@ namespace CTRPluginFramework
         _root = _folder = new MenuFolderImpl(name);
         _starredConst = _starred = new MenuFolderImpl("Favorites");
 
+        _rainbowMode = false;
         _starMode = false;
         _selector = 0;
         _selectedTextSize = 0;
@@ -62,6 +64,8 @@ namespace CTRPluginFramework
         // Get strings x position
         g_textXpos[0] = (320 - Renderer::LinuxFontSize(g_ctrpfText)) / 2;
         g_textXpos[1] = (320 - Renderer::LinuxFontSize(g_copyrightText)) / 2;
+        g_textXpos[2] = (320 - Renderer::LinuxFontSize(g_discord)) / 2;
+        g_textXpos[3] = (320 - Renderer::LinuxFontSize(g_credits)) / 2;
 
         // Are the buttons locked ?
         if (!Preferences::Settings.AllowActionReplay)
@@ -113,6 +117,7 @@ namespace CTRPluginFramework
 
         if (!ShowNoteBottom) {
             // Check all buttons
+            if (_rainbowBtn()) _rainbowBtn_OnClick();
             if (_showStarredBtn()) _showStarredBtn_OnClick();
             if (_VSettingsBtn()) _vSettingsBtn_OnClick();
             if (_gameGuideBtn()) _gameGuideBtn_OnClick();
@@ -615,7 +620,6 @@ namespace CTRPluginFramework
     void PluginMenuHome::_RenderBottom(void)
     {
         const Color& blank = Color::White;
-        const Color &maintext = Preferences::Settings.MainTextColor;
         static Clock creditClock;
         static bool framework = true;
 
@@ -625,18 +629,16 @@ namespace CTRPluginFramework
         Window::BottomWindow_TopBar.Draw();
         Window::BottomWindow_BottomBar.Draw();
 
-        int posY = 3;
+        int posY = 6;
 
         //draw info for top bar
-        std::string discord = "Discord: " + std::string(DISCORDINV);
         if (framework)
-            Renderer::DrawSysString(discord.c_str(), 25, posY, 400, maintext);
+            Renderer::DrawString(g_discord, g_textXpos[2], posY, blank);
         else
-            Renderer::DrawSysString(g_credits, 25, posY, 400, maintext);
+            Renderer::DrawString(g_credits, g_textXpos[3], posY, blank);
 
         //draw info for bottom bar
-
-        posY = 225;
+        posY = 224;
         if (framework)
             Renderer::DrawString(g_ctrpfText, g_textXpos[0], posY, blank);
         else
@@ -657,6 +659,7 @@ namespace CTRPluginFramework
         }
         else
         {
+            _rainbowBtn.Draw();
             _showStarredBtn.Draw();
             _VSettingsBtn.Draw();
             _gameGuideBtn.Draw();
@@ -780,6 +783,7 @@ namespace CTRPluginFramework
         if (!ShowNoteBottom)
         {
             // Update buttons
+            _rainbowBtn.Update(isTouched, touchPos);
             _showStarredBtn.Update(isTouched, touchPos);
             _VSettingsBtn.Update(isTouched, touchPos);
             _gameGuideBtn.Update(isTouched, touchPos);
@@ -955,6 +959,16 @@ namespace CTRPluginFramework
     void    PluginMenuHome::_vSettingsBtn_OnClick(void)
     {
         _mode = 1;
+    }
+
+    bool    PluginMenuHome::RainbowState(void)
+    {
+        return _rainbowMode;
+    }
+
+    void    PluginMenuHome::_rainbowBtn_OnClick(void)
+    {
+        _rainbowMode = _rainbowBtn.GetState();
     }
 
     void    PluginMenuHome::_InfoBtn_OnClick(void)

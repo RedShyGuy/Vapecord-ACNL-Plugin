@@ -70,6 +70,7 @@ namespace CTRPluginFramework
         bool				SyncOnFrame;
     private:
         friend std::string &PluginMenu::Title(void);
+        friend bool PluginMenu::RainbowState(void);
         static PluginMenuImpl       *_runningInstance;
         static Mutex                _trashBinMutex;
 

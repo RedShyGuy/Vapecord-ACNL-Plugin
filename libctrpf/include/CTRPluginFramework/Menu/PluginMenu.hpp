@@ -214,11 +214,14 @@ namespace CTRPluginFramework
          */
         static bool                IsBackgroundLoaded(bool isTopScreen);
 
-        static void                 V_SetColor(CustomFunction cFunc);
-        static void                 V_SetLanguage(CustomFunction cFunc);
-        static void                 V_SetFwk(CustomFunction cFunc);
-        static void                 V_SetVisibility(CustomFunction cFunc);
-        static void                 V_SetReset(CustomFunction cFunc);
+        //state of rainbow button
+        bool                       RainbowState(void);
+
+        static void                V_SetColor(CustomFunction cFunc);
+        static void                V_SetLanguage(CustomFunction cFunc);
+        static void                V_SetFwk(CustomFunction cFunc);
+        static void                V_SetVisibility(CustomFunction cFunc);
+        static void                V_SetReset(CustomFunction cFunc);
 
     private:
         std::unique_ptr<PluginMenuImpl> _menu;
