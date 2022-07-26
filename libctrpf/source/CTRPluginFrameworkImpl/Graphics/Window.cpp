@@ -10,6 +10,12 @@ namespace CTRPluginFramework
     Window  Window::BottomWindow = Window(20, 20, 280, 200, true, nullptr);
     Window  Window::TopWindow = Window(30, 20, 340, 200, false, nullptr);
 
+    Window  Window::TopWindow_TopBar = Window(30, 0, 340, 22, false, nullptr);
+    Window  Window::TopWindow_BottomBar = Window(30, 218, 340, 22, false, nullptr);
+
+    Window  Window::BottomWindow_TopBar = Window(20, 0, 280, 22, false, nullptr);
+    Window  Window::BottomWindow_BottomBar = Window(20, 218, 280, 22, false, nullptr);
+
     Window::Window(u32 posX, u32 posY, u32 width, u32 height, bool closeBtn, BMPImage *image) :
     _rect(posX, posY, width, height),
     _border(posX + 2, posY + 2, width - 4, height - 4),

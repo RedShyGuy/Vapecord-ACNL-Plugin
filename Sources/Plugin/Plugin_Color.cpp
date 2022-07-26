@@ -66,7 +66,6 @@ namespace CTRPluginFramework {
 			k_Color.CanAbort(false);
             k_Color.OnKeyboardEvent(ColorChange);
             
-			Sleep(Milliseconds(100));
             switch(k_Color.Open()) {
 				case 0:
 					u_byte = f_Color::ColorMode; //COLORFUL MODE ON
@@ -98,7 +97,6 @@ namespace CTRPluginFramework {
             break;			
             case f_Color::CustomMode:
                 if(!File::Exists(PATH_CUSTOMCOLOR)) {
-                    Sleep(Milliseconds(500));
                     MessageBox(Utils::Format("Error 606\nYou need the color.txt for the custom color mode to work!\nGet more info and help on the Discord Server: %s", DISCORDINV)).SetClear(ClearScreen::Top)();
                     SetupColors(true); //redo color choosing
                 }
@@ -169,7 +167,6 @@ namespace CTRPluginFramework {
 
             Keyboard fwk_Lang("Lets you change the Main Colors of the plugin, to set custom ones change them in the FWKColors.txt!", FWKOpt);
 			fwk_Lang.CanAbort(false);
-            Sleep(Milliseconds(100));
             switch(fwk_Lang.Open()) {
 				case 0:
 					u_byte = fwk_Color::FWK_Custom; 		
@@ -182,7 +179,6 @@ namespace CTRPluginFramework {
 
 		if(u_byte == fwk_Color::FWK_Custom) {	
 			if(!WrapFWK()) {
-				Sleep(Milliseconds(100));
 				MessageBox(Utils::Format("Error 101\nYou need the FWKColors.txt for the custom main color mode to work!\nGet more info and help on the Discord Server: %s\nStandard Colors will load now!", DISCORDINV)).SetClear(ClearScreen::Top)();
 
 				WriteConfig(CONFIG::FWKColor, fwk_Color::NoFWK);

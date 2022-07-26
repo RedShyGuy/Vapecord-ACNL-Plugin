@@ -190,4 +190,30 @@ namespace CTRPluginFramework
     {
         _menu->GetRoot()->Reload(quickmenu);
     }
+
+//V-Settings
+    void                PluginMenu::V_SetColor(CustomFunction cFunc) 
+    {
+        PluginMenuVSettings::setColor = cFunc;
+    }
+
+    void                PluginMenu::V_SetLanguage(CustomFunction cFunc) 
+    {
+        PluginMenuVSettings::setLanguage = cFunc;
+    }
+
+    void                PluginMenu::V_SetFwk(CustomFunction cFunc) 
+    {
+        PluginMenuVSettings::setFwk = cFunc;
+    }
+
+    void                PluginMenu::V_SetVisibility(CustomFunction cFunc) 
+    {
+        PluginMenuVSettings::setVisibility = cFunc;
+    }
+
+    void                PluginMenu::V_SetReset(CustomFunction cFunc) 
+    {
+        PluginMenuVSettings::setReset = cFunc;
+    }
 }

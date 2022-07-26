@@ -128,8 +128,6 @@ namespace CTRPluginFramework {
 			std::string input = "";
 			Keyboard KB(Language->Get("TEXT_2_ITEM_SEARCH_KB2"));
 			KB.OnKeyboardEvent(ItemListCallBack);
-
-			Sleep(Milliseconds(100));
 			KB.Open(input);
 		}
 	}
@@ -268,12 +266,10 @@ namespace CTRPluginFramework {
 //Clear Inventory
 	void ClearInventory(MenuEntry *entry) {
 		if(!Player::GetSaveData()) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 
-		Sleep(Milliseconds(100));
 		if((MessageBox(Language->Get("REMOVE_INV_WARNING"), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
 			for(int i = 0; i <= 0xF; ++i)
 				Inventory::WriteSlot(i, Item{ 0x7FFE, 0 });
@@ -311,7 +307,6 @@ namespace CTRPluginFramework {
 		
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), itemsettopt);
 
-		Sleep(Milliseconds(100));
 		int op = optKb.Open();
 		if(op < 0)
 			return;
@@ -373,7 +368,6 @@ namespace CTRPluginFramework {
 		
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), menuopt);
 
-		Sleep(Milliseconds(100));
 		int dChoice = optKb.Open();
 		if(dChoice < 0)
 			return;
@@ -474,7 +468,6 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -495,7 +488,6 @@ namespace CTRPluginFramework {
 
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), setopt);
 
-		Sleep(Milliseconds(100));
 		switch(optKb.Open()) {
 			default: return;
 			case 0: {
@@ -506,7 +498,6 @@ namespace CTRPluginFramework {
 			case 1: {
 				optKb.Populate(custinvopt);
 
-				Sleep(Milliseconds(100));
 				switch(optKb.Open()) {
 					default: return;
 					case 0: {

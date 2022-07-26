@@ -20,7 +20,6 @@ namespace CTRPluginFramework {
 
         keyboard.Populate(keyVec);
 
-        Sleep(Milliseconds(100));
         int res = keyboard.Open(); //Pick a species
 
         Process::Write32(offset + 0x10C, 0); //Game always sets this in the original function, so I'll do it too 
@@ -34,7 +33,6 @@ namespace CTRPluginFramework {
 
             keyboard.Populate(keyVec);
 
-            Sleep(Milliseconds(100));
             res = keyboard.Open(); //Pick villager based on species
 
             if(res >= 0) { //User picked a specific villager

@@ -21,7 +21,6 @@ namespace CTRPluginFramework {
 
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
 
-		Sleep(Milliseconds(100));
 		int op = optKb.Open();
 		if(op < 0)
 			return;
@@ -60,10 +59,8 @@ namespace CTRPluginFramework {
 		
 	//Modify Drop Type	
 		if(entry->Hotkeys[0].IsPressed()) { 
-			Sleep(Milliseconds(200));
 			Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), g_dropmod);
 			
-			Sleep(Milliseconds(100));
 			int res = optKb.Open();
 			if(res < 0)
 				return;
@@ -85,7 +82,6 @@ namespace CTRPluginFramework {
 
 			Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), shapeOpt);
 			
-			Sleep(Milliseconds(100));
 			int index = optKb.Open();
 			switch(index) {
 				default: return;

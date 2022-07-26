@@ -40,7 +40,6 @@ namespace CTRPluginFramework {
 	void UnlockIsland(MenuEntry *entry) {
 		ACNL_Player *player = Player::GetSaveData();
 		if(!player) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
 			return;
 		}
@@ -58,7 +57,6 @@ namespace CTRPluginFramework {
 		
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
 
-		Sleep(Milliseconds(100));
 		int op = KB.Open();
 		if(op < 0)
 			return;
@@ -105,7 +103,6 @@ namespace CTRPluginFramework {
 		
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
 
-		Sleep(Milliseconds(100));
 		int op = optKb.Open();
 		if(op < 0)
 			return;
@@ -130,7 +127,6 @@ namespace CTRPluginFramework {
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), countOpt);
         static u8 input = 0;
 		
-		Sleep(Milliseconds(100));
 		switch(optKb.Open()) {
 			default: break;	
 			case 0: 
@@ -153,7 +149,6 @@ namespace CTRPluginFramework {
 		for(int i = 0; i < 4; ++i) {
 			SetItem.GetMessage() = Utils::Format(Language->Get("ISLAND_SHOP_MOD_ENTER_ID").c_str(), i + 1);
 
-			Sleep(Milliseconds(100));
 			int res = SetItem.Open(*(u32 *)&ShopItem[i]);
 			if(res < 0)
 				break;
@@ -211,7 +206,6 @@ namespace CTRPluginFramework {
 		for(u8 i = 0; i < 16; ++i) {
 			kb.GetMessage() = Utils::Format(Language->Get("ISLAND_ACRE_ENTER_ID").c_str(), i + 1);
 
-			Sleep(Milliseconds(100));
 			kb.Open(isl.acres[i], isl.acres[i]);
 		}
 	}
@@ -235,13 +229,12 @@ namespace CTRPluginFramework {
 		kb.IsHexadecimal(true);
 		for(u8 i = 0; i < 2; ++i) {
 			kb.GetMessage() = Language->Get("ISLAND_BUILDING_ENTER_ID") << Utils::Format(" %d", i + 1);
-			Sleep(Milliseconds(100));
 			kb.Open(isl.b[i].id, isl.b[i].id);
+
 			kb.GetMessage() = Language->Get("ISLAND_BUILDING_ENTER_X") << Utils::Format(" %d", i + 1);
-			Sleep(Milliseconds(100));
 			kb.Open(isl.b[i].x, isl.b[i].x);
+
 			kb.GetMessage() = Language->Get("ISLAND_BUILDING_ENTER_Y") << Utils::Format(" %d", i + 1);
-			Sleep(Milliseconds(100));
 			kb.Open(isl.b[i].y, isl.b[i].y);
 		}
 	}
@@ -318,12 +311,10 @@ namespace CTRPluginFramework {
 
 	void IslandSaver(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 		if(!GameHelper::IsInRoom(0x68)) {
-			Sleep(Milliseconds(100));
 			MessageBox("You need to be on the island for this cheat to work").SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -339,7 +330,6 @@ namespace CTRPluginFramework {
 				std::string filename = "";
 				Keyboard KB("Name the island backup:");
 
-				Sleep(Milliseconds(100));
 				if(KB.Open(filename) == -1)
 					return;
 

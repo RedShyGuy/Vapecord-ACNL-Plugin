@@ -43,12 +43,10 @@ namespace CTRPluginFramework {
 				return;
 				
 			case 0:
-				Sleep(Milliseconds(200));
 				AddKB.Open(*(u32 *)&dropitem, *(u32 *)&dropitem);
 			break;
 			
 			default:
-				Sleep(Milliseconds(200));
 			//If new item gets added
 				if(Select + 1 == KBItems.size()) {
 				//Adds new item
@@ -64,7 +62,6 @@ namespace CTRPluginFramework {
 				}
 			break;
 		}
-		Sleep(Milliseconds(200));
 		OpenIS();
 	}
 //if item sequence is enabled

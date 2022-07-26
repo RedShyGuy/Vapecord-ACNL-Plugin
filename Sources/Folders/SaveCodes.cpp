@@ -20,7 +20,6 @@ namespace CTRPluginFramework {
 //Town Name Changer | player specific save code	
 	void townnamechanger(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -29,7 +28,6 @@ namespace CTRPluginFramework {
         std::string input;
         keyboard.SetMaxLength(8);
 
-		Sleep(Milliseconds(100));
         if(keyboard.Open(input) < 0) 
 			return;
 
@@ -48,14 +46,12 @@ namespace CTRPluginFramework {
 		
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), options);
 
-		Sleep(Milliseconds(100));
 		switch(KB.Open()) {
 			default: break;
 			case 0: {
 				std::string filename = "";
 				Keyboard KB(Language->Get("SAVE_DUMPER_DUMP"));
 
-				Sleep(Milliseconds(100));
 				if(KB.Open(filename) == -1)
 					return;
 
@@ -100,19 +96,16 @@ namespace CTRPluginFramework {
 
 		WrapLoc loc;
 	
-		Sleep(Milliseconds(100));
 		switch(optKb.Open()) {
 			default: break;
 			case 0: {
 				optKb.Populate(backmessage);
 
-				Sleep(Milliseconds(100));
 				int KBChoice = optKb.Open();
 				if(KBChoice >= 0) {
 					std::string filename = "";
 					Keyboard KB(Language->Get("BULLETIN_BOARD_DUMPER_DUMP"));
 
-					Sleep(Milliseconds(100));
 					if(KB.Open(filename) < 0)
 						return;
 
@@ -123,8 +116,6 @@ namespace CTRPluginFramework {
 			
 			case 1: {
 				optKb.Populate(backmessage);
-
-				Sleep(Milliseconds(100));
 				int KBChoice = optKb.Open();
 				if(KBChoice >= 0) {
 					loc = { (u32 *)&town->BBoardMessages[KBChoice], sizeof(ACNL_BulletinBoardMessage) };
@@ -155,8 +146,7 @@ namespace CTRPluginFramework {
 		constexpr int played[8] = { 0, 5, 20, 50, 100, 180, 300, 500 };
 		
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), treesizevec);
-		
-		Sleep(Milliseconds(100));
+
 		int op = optKb.Open();
 		if(op < 0)
 			return;
@@ -199,7 +189,6 @@ namespace CTRPluginFramework {
 
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), fruitopt);
 
-		Sleep(Milliseconds(100));
 		int userChoice = optKb.Open();
 		if(userChoice < 0)
 			return;
@@ -221,7 +210,6 @@ namespace CTRPluginFramework {
 			
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), songopt);
 
-		Sleep(Milliseconds(100));
 		switch(optKb.Open()) {
 			default: break;
 			case 0:
@@ -256,7 +244,6 @@ namespace CTRPluginFramework {
 		
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), grasstypevec);
 
-		Sleep(Milliseconds(100));
 		int op = optKb.Open();
 		if(op < 0)
 			return;
@@ -279,7 +266,6 @@ namespace CTRPluginFramework {
 
 		Keyboard keyboard(Language->Get("CARAVAN_SET_SELECT"), keyVec);
 
-		Sleep(Milliseconds(100));
 		int res = keyboard.Open(); //Pick caravan
 		if(res < 0)
 			return;
@@ -293,7 +279,6 @@ namespace CTRPluginFramework {
 
         keyboard.Populate(keyVec);
 
-		Sleep(Milliseconds(100));
         res = keyboard.Open(); //Pick a species
         if(res < 0) //User picked a species
 			return;
@@ -306,7 +291,6 @@ namespace CTRPluginFramework {
 
 		keyboard.Populate(keyVec);
 
-		Sleep(Milliseconds(100));
 		res = keyboard.Open(); //Pick villager based on species
 		if(res < 0)
 			return;
@@ -329,7 +313,6 @@ namespace CTRPluginFramework {
 
 		Keyboard keyboard(Language->Get("KEY_CHOOSE_OPTION"), keyVec);	
 
-		Sleep(Milliseconds(100));
 		int res = keyboard.Open();
        	if(res < 0)
 			return;
@@ -347,7 +330,6 @@ namespace CTRPluginFramework {
 
 			keyboard.Populate(keyVec);
 
-			Sleep(Milliseconds(100));
 			int res = keyboard.Open(); //Pick a species
 			if(res < 0) //User picked a species
 				return;
@@ -360,7 +342,6 @@ namespace CTRPluginFramework {
 
 			keyboard.Populate(keyVec);
 
-			Sleep(Milliseconds(100));
 			res = keyboard.Open(); //Pick villager based on species
 			if(res < 0)
 				return;
@@ -402,7 +383,6 @@ namespace CTRPluginFramework {
 		ACNL_TownData *town = Town::GetSaveData();
 
 		if(!player || !town) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -447,7 +427,6 @@ namespace CTRPluginFramework {
 		
 		Keyboard shopkb(Language->Get("KEY_CHOOSE_STORE"), shopopt);
 
-		Sleep(Milliseconds(100));
 		int op = shopkb.Open();
 		if(op < 0)
 			return;
@@ -460,7 +439,6 @@ namespace CTRPluginFramework {
 				
 				Keyboard nookkb(Language->Get("KEY_CHOOSE_UPGRADE"), nookopt); 
 
-				Sleep(Milliseconds(100));
 				int nook = nookkb.Open();
 				if(nook < 0)
 					return;
@@ -508,13 +486,11 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 		ACNL_TownData *town = Town::GetSaveData();
 		if(!player || !town) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 		
-		if(GameHelper::GetOnlinePlayerCount() != 0) {	
-			Sleep(Milliseconds(100));		
+		if(GameHelper::GetOnlinePlayerCount() != 0) {		
 			MessageBox(Language->Get("ONLY_TOWN_ERROR")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -596,14 +572,12 @@ namespace CTRPluginFramework {
 		
 		Keyboard pKB(Language->Get("KEY_SELECT_PLAYER"), pV);
 	
-		Sleep(Milliseconds(100));
 		int pChoice = pKB.Open();
 		if((pChoice < 0) || (pV[pChoice] == Color::Silver << "-Empty-")) 
 			return;
 		
 		Keyboard hKB(Language->Get("KEY_CHOOSE_OPTION"), HouseSet);
 		
-		Sleep(Milliseconds(100));
 		int hChoice = hKB.Open();
 		if(hChoice < 0)
 			return;
@@ -612,7 +586,6 @@ namespace CTRPluginFramework {
 		if(hChoice == 0) {
 			Keyboard eKB(Language->Get("HOUSE_EDITOR_SELECT_HOUSE"), HouseSettings);
 
-			Sleep(Milliseconds(100));
 			int eChoice = eKB.Open();
 			if(eChoice < 0)
 				return;
@@ -620,7 +593,6 @@ namespace CTRPluginFramework {
 			u8 Value = 0;
 			if(Wrap::KB<u8>(HouseInfo[eChoice], true, 2, Value, Value)) {
 				if(!IDList::ValidID(Value, ValidHouseValues[eChoice][0], ValidHouseValues[eChoice][1])) {
-					Sleep(Milliseconds(100));
 					MessageBox(Language->Get("INVALID_ID")).SetClear(ClearScreen::Top)();
 					return;
 				}
@@ -670,7 +642,6 @@ namespace CTRPluginFramework {
 	/*Interior Room Size Settings*/
 		Keyboard rKB(Language->Get("HOUSE_EDITOR_SELECT_ROOM"), RoomSet);
 
-		Sleep(Milliseconds(100));
 		int rChoice = rKB.Open();
 		if(rChoice < 0)
 			return;
@@ -678,7 +649,6 @@ namespace CTRPluginFramework {
 		u8 RoomSize = 0;
 		if(Wrap::KB<u8>(RoomInfo[rChoice], true, 2, RoomSize, RoomSize)) {
 			if(!IDList::ValidID(RoomSize, ValidRoomValues[rChoice][0], ValidRoomValues[rChoice][1])) {
-				Sleep(Milliseconds(100));
 				MessageBox(Language->Get("INVALID_ID")).SetClear(ClearScreen::Top)();
 				return;
 			}
@@ -712,7 +682,6 @@ namespace CTRPluginFramework {
 		ACNL_TownData *town = Town::GetSaveData();
 
 		if(!player || !town) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -729,7 +698,6 @@ namespace CTRPluginFramework {
 		
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
 
-		Sleep(Milliseconds(100));
 		int op = optKb.Open();
 		if(op < 0)
 			return;
@@ -752,7 +720,6 @@ namespace CTRPluginFramework {
 
 	void BuildingMod(MenuEntry *entry) {
 		if(Player::GetSaveOffset(4) == 0) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -765,7 +732,6 @@ namespace CTRPluginFramework {
 
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), buildingOpt);
 
-		Sleep(Milliseconds(100));
 		switch(optKb.Open()) {
 			case 0:
 				u8 id;
@@ -954,7 +920,6 @@ namespace CTRPluginFramework {
 		}
 
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), musOpt);
-		Sleep(Milliseconds(100));
 		int state = optKb.Open();
 		if(state < 0)
 			return;
@@ -1173,11 +1138,9 @@ namespace CTRPluginFramework {
 			return;
 
 		Keyboard Acre(Utils::Format(Language->Get("MAP_EDITOR_TYPE_ID").c_str(), acre));
-		Sleep(Milliseconds(200));
 		if(Acre.Open(AcreID, AcreID) < 0) 
 			return;
 
-		Sleep(Milliseconds(100));
 		if(!IsAcreOkay(AcreID)) 
 			return;
 

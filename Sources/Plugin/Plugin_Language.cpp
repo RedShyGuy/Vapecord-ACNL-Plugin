@@ -49,14 +49,12 @@ namespace CTRPluginFramework {
 			}
 		//If no file was found do not even show the menu and just output error screen | abort | will prevent user to have to force shut down 3DS		
 			if(found == 0) {
-				Sleep(Milliseconds(100));
 				MessageBox(Utils::Format("Error 505\nYou do not have any language files in your plugin directory. The Plugin can not work without one!\nGet more info and help on the Discord Server: %s\nGame will be closed now!", DISCORDINV)).SetClear(ClearScreen::Top)();
 				Process::ReturnToHomeMenu();
 			}
 
             Keyboard k_Lang(s_Lang, v_Lang);
 			k_Lang.CanAbort(false);
-            Sleep(Milliseconds(100));
             switch(k_Lang.Open()) {
 				case 0:
 					u_byte = f_Language::JapaneseLang; //Japanese MODE ON
@@ -87,7 +85,6 @@ namespace CTRPluginFramework {
 		int pos = (u_byte - 1);
 
 		if(!File::Exists(LanguageTXT[pos])) {
-			Sleep(Milliseconds(100));
 			MessageBox(Utils::Format("Error 404\nYou need the correct language text file for the plugin to work\nGet more info and help on the Discord Server: %s", DISCORDINV)).SetClear(ClearScreen::Top)();
 
 			WriteConfig(CONFIG::Language, f_Language::NoLang); 

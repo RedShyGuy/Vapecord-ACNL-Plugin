@@ -15,7 +15,6 @@ namespace CTRPluginFramework {
 //Name Changer | Player specific save code
 	void NameChanger(MenuEntry* entry) {
 		if(!Player::GetSaveData()) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -24,7 +23,6 @@ namespace CTRPluginFramework {
 		std::string input = "";
 		keyboard.SetMaxLength(8);
 
-		Sleep(Milliseconds(100));
 		if(keyboard.Open(input) < 0) 
 			return;
 
@@ -36,7 +34,6 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
 			return;
 		}	
@@ -92,7 +89,6 @@ namespace CTRPluginFramework {
 
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), playeropt);
 		
-		Sleep(Milliseconds(100));
 		int choice = optKb.Open();
 		if(choice < 0)
 			return;
@@ -113,7 +109,6 @@ namespace CTRPluginFramework {
 		if(choice == 4) {
 			optKb.Populate(genderopt);
 
-			Sleep(Milliseconds(100));
 			int gender = optKb.Open();
 			if(gender < 0)
 				return;
@@ -124,7 +119,6 @@ namespace CTRPluginFramework {
 		if(choice == 5) {
 			optKb.Populate(tanopt);
 
-			Sleep(Milliseconds(100));
 			switch(optKb.Open()) {
 				default: break;	
 				case 0: player->PlayerFeatures.Tan = 0xF; goto tanupdate;
@@ -141,7 +135,6 @@ namespace CTRPluginFramework {
 		if(choice == 6) {
 			optKb.Populate(outfitplayeropt);
 
-			Sleep(Milliseconds(100));
 			int res = optKb.Open();
 			if(res < 0)
 				return;
@@ -174,7 +167,6 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
 			return;
 		}
@@ -185,7 +177,6 @@ namespace CTRPluginFramework {
 		};	
 
 		Keyboard randkb(Language->Get("KEY_RANDOMIZE_PLAYER"), randomopt);
-		Sleep(Milliseconds(100));
 		switch(randkb.Open()) {
 			default: break;			
 			case 0: 
@@ -220,7 +211,6 @@ namespace CTRPluginFramework {
 	void playerbackup(MenuEntry *entry) {
 		ACNL_Player *player = Player::GetSaveData();
 		if(!player) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
 			return;
 		}
@@ -234,14 +224,12 @@ namespace CTRPluginFramework {
 		};
 
 		Keyboard backkb(Language->Get("KEY_CHOOSE_OPTION"), backopt);
-		Sleep(Milliseconds(100));
 		switch(backkb.Open()) {
 			default: break;		
 			case 0: {
 				std::string filename = "";
 				Keyboard KB(Language->Get("RANDOM_PLAYER_DUMP"));
 
-				Sleep(Milliseconds(100));
 				if(KB.Open(filename) == -1)
 					return;
 
@@ -262,7 +250,6 @@ namespace CTRPluginFramework {
 	void tpcmessage(MenuEntry* entry) {
 		ACNL_Player *player = Player::GetSaveData();
 		if(!player) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -272,7 +259,6 @@ namespace CTRPluginFramework {
 		Keyboard KB(Language->Get("TPC_MESSAGE_ENTER_NAME"));
 		KB.SetMaxLength(26);
 
-		Sleep(Milliseconds(100));
 		if(KB.Open(input) >= 0) {
 			Convert::STR_TO_U16(input, player->TPCText);
 		}
@@ -282,7 +268,6 @@ namespace CTRPluginFramework {
 	void tpc(MenuEntry *entry) {
 		ACNL_Player *player = Player::GetSaveData();
 		if(!player) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -304,14 +289,12 @@ namespace CTRPluginFramework {
 			
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), tpcselectopt);
 
-		Sleep(Milliseconds(100));
 		switch(KB.Open()) {
 			default: break;
 			
 			case 0: {
 				Keyboard PKB(Language->Get("KEY_SELECT_PLAYER"), g_player);
 
-				Sleep(Milliseconds(100));
 				int index = PKB.Open();
 				if(index < 0)
 					return;
@@ -321,7 +304,6 @@ namespace CTRPluginFramework {
 					std::string filename = "";
 					Keyboard KB(Language->Get("TPC_DUMPER_NAME"));
 
-					Sleep(Milliseconds(100));
 					if(KB.Open(filename) < 0)
 						return;
 
@@ -346,7 +328,6 @@ namespace CTRPluginFramework {
 	void DesignDumper(MenuEntry *entry) {
 		ACNL_Player *player = Player::GetSaveData();
 		if(!player) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -367,14 +348,12 @@ namespace CTRPluginFramework {
 		
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), designselect);
 		
-		Sleep(Milliseconds(100));
 		switch(KB.Open()) {
 			default: break;
 			
 			case 0: { 
 				Keyboard DKB(Language->Get("KEYBOARD_DESIGNDUMP"), designslots);
 				
-				Sleep(Milliseconds(100));
 				dSlot = DKB.Open();
 				if(dSlot < 0)
 					return;
@@ -382,7 +361,6 @@ namespace CTRPluginFramework {
 				std::string filename = "";
 				Keyboard KB(Language->Get("DESIGN_DUMP_NAME"));
 
-				Sleep(Milliseconds(100));
 				if(KB.Open(filename) < 0)
 					return;
 
@@ -393,7 +371,6 @@ namespace CTRPluginFramework {
 			case 1: {
 				Keyboard DKB(Language->Get("KEYBOARD_DESIGNDUMP"), designslots);
 				
-				Sleep(Milliseconds(100));
 				dSlot = DKB.Open();
 				if(dSlot < 0)
 					return;
@@ -413,7 +390,6 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -432,7 +408,6 @@ namespace CTRPluginFramework {
 		
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), emoteopt);
 	
-		Sleep(Milliseconds(100));
 		switch(KB.Open()) {
 			default: break;
 			case 0: 
@@ -443,7 +418,6 @@ namespace CTRPluginFramework {
 				Keyboard KB(Language->Get("EMOTION_LIST_TYPE_ID"));
 				KB.IsHexadecimal(true);
 				
-				Sleep(Milliseconds(100));
 				if(KB.Open(emotion) < 0)
 					return;
 				
@@ -460,7 +434,6 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -477,7 +450,6 @@ namespace CTRPluginFramework {
 		
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), enzyopt);
 		
-		Sleep(Milliseconds(100));
 		switch(KB.Open()) {
 			default: break;
 			case 0:
@@ -511,7 +483,6 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -522,11 +493,8 @@ namespace CTRPluginFramework {
 		
 		u16 part1, part2, part3;
 
-		Sleep(Milliseconds(100));
 		if(kb.Open(part1, 0) >= 0) {
-			Sleep(Milliseconds(100));
 			if(kb.Open(part2, 0) >= 0) {
-				Sleep(Milliseconds(100));
 				if(kb.Open(part3, 0) >= 0) {
 					player->DreamCode.DCPart1 = (part2 << 16) + part3;
 					player->DreamCode.DCPart2 = (part1 & 0xFF);
@@ -542,7 +510,6 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -555,7 +522,6 @@ namespace CTRPluginFramework {
 		
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
 
-		Sleep(Milliseconds(100));
 		int op = KB.Open();
 		if(op < 0)
 			return;
@@ -570,7 +536,6 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -584,7 +549,6 @@ namespace CTRPluginFramework {
 		
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), songopt);
 		
-		Sleep(Milliseconds(100));
 		switch(optKb.Open()) {
 			default: break;
 			case 0: { 
@@ -607,7 +571,6 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -630,7 +593,6 @@ namespace CTRPluginFramework {
 		
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), songopt);
 		
-		Sleep(Milliseconds(100));
 		switch(optKb.Open()) {
 			default: break;
 			case 0: 

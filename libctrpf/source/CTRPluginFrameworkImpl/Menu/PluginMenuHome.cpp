@@ -2,6 +2,8 @@
 #include "CTRPluginFrameworkImpl/Graphics/Icon.hpp"
 #include "CTRPluginFrameworkImpl/Preferences.hpp"
 #include "CTRPluginFrameworkImpl/Menu/PluginMenuExecuteLoop.hpp"
+#include "CTRPluginFramework/Utils/Utils.hpp"
+#include "CTRPluginFramework/System/System.hpp"
 #include "CTRPluginFramework/Menu/MenuFolder.hpp"
 #include "CTRPluginFramework/Sound.hpp"
 
@@ -14,6 +16,8 @@ namespace CTRPluginFramework
     // DO NOT REMOVE THIS COPYRIGHT NOTICE
     static const char g_ctrpfText[] = "CTRPluginFramework";
     static const char g_copyrightText[] = "Copyright (c) The Pixellizer Group";
+    static const char g_credits[] = "Cheats made by Lukas#4444";
+    #define DISCORDINV "discord.gg/QwqdBpKWf3"
 
     PluginMenuHome::PluginMenuHome(std::string &name, bool showNoteBottom) :
 
@@ -472,6 +476,27 @@ namespace CTRPluginFramework
         }
     }
 
+    void GetTimeStamp(char* out)
+    {
+        time_t rawtime;
+		struct tm * timeinfo;
+
+		time(&rawtime);
+		timeinfo = localtime(&rawtime);
+		strftime(out, 80, "%r | %F", timeinfo);
+    }
+
+    bool FCLoaded = false;
+    void GetStringFC(std::string &FC) 
+    {
+        if(FCLoaded)
+            return;
+
+		std::string str = Utils::Format("%012lld", System::GetFriendCode());
+		FC = Utils::Format("FC: %s - %s - %s", str.substr(0, 4).c_str(), str.substr(4, 4).c_str(), str.substr(8, 4).c_str());
+        FCLoaded = true;
+    }
+
     //###########################################
     // Render Menu
     //###########################################
@@ -482,17 +507,36 @@ namespace CTRPluginFramework
         const Color &unselected = Preferences::Settings.MenuUnselectedItemColor;
         const Color &maintext = Preferences::Settings.MainTextColor;
 
-        int posY = 25;
+        int posY = 3;
         int posX = 40;
-
 
         // Draw background
         Window::TopWindow.Draw();
+        Window::TopWindow_TopBar.Draw();
+        Window::TopWindow_BottomBar.Draw();
+
+        //draw info for top bar
+        char timestamp[80];
+        GetTimeStamp(timestamp);
+        float percentage = System::GetBatteryPercentage();
+        
+        Renderer::DrawSysString(timestamp, 35, posY, 400, maintext);
+        posY = 3;
+        Renderer::DrawSysString(Utils::Format("%d%%", (u32)percentage).c_str(), 310, posY, 400, maintext);
+        
+        //draw info for bottom bar
+        static std::string FC = "";
+        GetStringFC(FC);
+
+        posY = 221;
+        Renderer::DrawSysString(FC.c_str(), 35, posY, 400, maintext);
+
 
         MenuFolderImpl* folder = _starMode ? _starred : _folder;
 
         // Draw Title
         int maxWidth = _showVersion ? _versionPosX - 10 : 360;
+        posY = 25;
         int posYbak = posY;
         int width = Renderer::DrawSysString(folder->name.c_str(), posX, posY, maxWidth, maintext);
         Renderer::DrawLine(posX, posY, width, maintext);
@@ -571,15 +615,28 @@ namespace CTRPluginFramework
     void PluginMenuHome::_RenderBottom(void)
     {
         const Color& blank = Color::White;
+        const Color &maintext = Preferences::Settings.MainTextColor;
         static Clock creditClock;
         static bool framework = true;
 
         Renderer::SetTarget(BOTTOM);
 
         Window::BottomWindow.Draw();
+        Window::BottomWindow_TopBar.Draw();
+        Window::BottomWindow_BottomBar.Draw();
 
-        int posY = 205;
+        int posY = 3;
 
+        //draw info for top bar
+        std::string discord = "Discord: " + std::string(DISCORDINV);
+        if (framework)
+            Renderer::DrawSysString(discord.c_str(), 25, posY, 400, maintext);
+        else
+            Renderer::DrawSysString(g_credits, 25, posY, 400, maintext);
+
+        //draw info for bottom bar
+
+        posY = 225;
         if (framework)
             Renderer::DrawString(g_ctrpfText, g_textXpos[0], posY, blank);
         else

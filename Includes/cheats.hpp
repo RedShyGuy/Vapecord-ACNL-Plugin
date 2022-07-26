@@ -236,9 +236,6 @@ namespace CTRPluginFramework {
 //Helper functions
   //Located in cheats.cpp
 	void rainbow(MenuEntry *entry);
-  //Located in Plugin_Settings.cpp
-	void pluginsettings(MenuEntry *entry);
-	void gamesettings(MenuEntry *entry);
 
 	void SendPlayerData(Time time);
 }

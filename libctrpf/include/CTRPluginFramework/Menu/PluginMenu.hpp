@@ -19,6 +19,7 @@ namespace CTRPluginFramework
         using OnScreenshotCallback = bool (*)(void);
         using FrameCallback = void (*)(Time);
         using DecipherPointer = void(*)(std::string &, void *);
+        using CustomFunction = void (*)(bool);
     public:
 
         /*
@@ -213,10 +214,15 @@ namespace CTRPluginFramework
          */
         static bool                IsBackgroundLoaded(bool isTopScreen);
 
+        static void                 V_SetColor(CustomFunction cFunc);
+        static void                 V_SetLanguage(CustomFunction cFunc);
+        static void                 V_SetFwk(CustomFunction cFunc);
+        static void                 V_SetVisibility(CustomFunction cFunc);
+        static void                 V_SetReset(CustomFunction cFunc);
 
     private:
         std::unique_ptr<PluginMenuImpl> _menu;
-};
+    };
 }
 
 #endif

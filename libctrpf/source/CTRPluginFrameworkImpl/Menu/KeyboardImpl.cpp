@@ -438,6 +438,8 @@ namespace CTRPluginFramework
 
     int     KeyboardImpl::Run(void)
     {
+        Sleep(Milliseconds(100));
+        
         _isOpen = true;
         _userAbort = false;
         _askForExit = false;

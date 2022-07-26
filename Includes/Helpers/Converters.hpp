@@ -2,6 +2,7 @@
 #define CONVERTERS_HPP
 
 #include <CTRPluginFramework.hpp>
+#include <array>
 
 namespace CTRPluginFramework {
     namespace Convert {

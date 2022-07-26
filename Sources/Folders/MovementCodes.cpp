@@ -30,8 +30,6 @@ namespace CTRPluginFramework {
 		kb.GetMessage() = Utils::Format(Language->Get("COORD_MOD_ENTER_SPEED").c_str(), 5);
 		kb.IsHexadecimal(false);
 		kb.SetMaxLength(2);
-
-		Sleep(Milliseconds(100));
 		kb.Open(cspeed);
 	}
 //Coordinate Modifier
@@ -274,8 +272,6 @@ namespace CTRPluginFramework {
 		kb.IsHexadecimal(false);
 		kb.SetMaxLength(2);
 		kb.OnKeyboardEvent(SpeedCheck);
-
-		Sleep(Milliseconds(100));
 		kb.Open(walkSpeed);
 	}	
 //InputChangeEvent for Room Warper	
@@ -298,7 +294,6 @@ namespace CTRPluginFramework {
 			}		
 			
 			u8 val;
-			Sleep(Milliseconds(100));
 			if(Wrap::KB<u8>(Language->Get("ROOM_WARPING_ENTER_ID"), true, 2, val, 0, onRoomChange)) {		
 				s8 res = GameHelper::RoomFunction(val, 1, 1, 0);	
 				if(res == 1)

@@ -64,5 +64,6 @@ namespace CTRPluginFramework {
 	void CustomFWK(bool SetInMenu);
 	void SetupColors(bool SetInMenu);
 	void SetupLanguage(bool SetInMenu);
-	void Check_Color_Language(void);
+	void cheatsVisibility(bool SetInMenu);
+	void resetSettings(bool SetInMenu);
 }

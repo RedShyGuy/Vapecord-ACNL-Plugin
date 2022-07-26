@@ -138,7 +138,6 @@ namespace CTRPluginFramework {
 		
 		Keyboard pKB(Language->Get("KEY_SELECT_PLAYER"), pV);
 		
-		Sleep(Milliseconds(100));
 		int pChoice = pKB.Open();
 		if((pChoice >= 0) && (pV[pChoice] != Color::Silver << "-Empty-"))
 			Player::Load(pChoice);
@@ -197,7 +196,6 @@ namespace CTRPluginFramework {
 				Keyboard kb(Language->Get("CUSTOM_ENTER_HAIR"));
 				kb.IsHexadecimal(true);
 
-				Sleep(Milliseconds(100));
 				int res = kb.Open(rval1);
 				if(res < 0)
 					return;
@@ -209,7 +207,6 @@ namespace CTRPluginFramework {
 				Keyboard kb(Language->Get("CUSTOM_ENTER_EYE"));
 				kb.IsHexadecimal(true);
 
-				Sleep(Milliseconds(100));
 				int res = kb.Open(rval2);
 				if(res < 0)
 					return;
@@ -228,7 +225,6 @@ namespace CTRPluginFramework {
 				f_color.Flush();
                 f_color.Close();
 
-				Sleep(Milliseconds(100));
 				MessageBox(Language->Get("CUSTOM_FILE_SAVED")).SetClear(ClearScreen::Top)();
 			} break;
 		}

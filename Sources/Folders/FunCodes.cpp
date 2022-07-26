@@ -63,7 +63,6 @@ namespace CTRPluginFramework {
 		
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), sizeopt);
 
-		Sleep(Milliseconds(100));
 		int op = optKb.Open();
 		if(op < 0)
 			return;
@@ -75,14 +74,11 @@ namespace CTRPluginFramework {
 			}
 			
 			optKb.Populate(sizesopt);
-
-			Sleep(Milliseconds(100));
 			int op2 = optKb.Open();
 			if(op2 < 0)
 				return;
 
 			if(op2 == 3) {
-				Sleep(Milliseconds(100));
 				if(optKb.Open(size, size) >= 0)
 					Process::WriteFloat(sizer[op], size);
 			}

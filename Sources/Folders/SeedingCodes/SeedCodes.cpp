@@ -207,7 +207,6 @@ namespace CTRPluginFramework {
 		Item input = {0x7FFE, 0};
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), fireOpt);
 		
-		Sleep(Milliseconds(100));
 		switch(optKb.Open()) {
 			default: break;
 			case 0: {

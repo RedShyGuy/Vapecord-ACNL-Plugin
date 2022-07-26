@@ -145,7 +145,6 @@ namespace CTRPluginFramework {
 			return;
 		}
 		
-		Sleep(Milliseconds(100));
 		std::vector<u8> index;
 
 		std::vector<std::string> buildingOpt;
@@ -195,7 +194,6 @@ namespace CTRPluginFramework {
 			return;
 		}
 		
-		Sleep(Milliseconds(100));
 		std::vector<u8> index;
 
 		std::vector<std::string> buildingOpt;

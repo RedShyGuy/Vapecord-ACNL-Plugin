@@ -58,13 +58,11 @@ namespace CTRPluginFramework {
 		Keyboard KB("Select NPC Type:", option);
 
 	redo:
-		Sleep(Milliseconds(200));
 		int res = KB.Open();
 		if(res < 0)
 			return;
 
 		if(npc[res].empty()) {
-			Sleep(Milliseconds(200));
 			MessageBox(Utils::Format("No %s is currently loaded!", option[res].c_str())).SetClear(ClearScreen::Both)();
 			goto redo;
 		}
@@ -75,7 +73,6 @@ namespace CTRPluginFramework {
 		KB.GetMessage() = "Select Loaded NPC:";
 		KB.Populate(vec);
 
-		Sleep(Milliseconds(200));
 		int res2 = KB.Open();
 		if(res2 < 0)
 			return;
@@ -97,7 +94,6 @@ namespace CTRPluginFramework {
 
 		Keyboard KB("Select Option", vec);
 
-		Sleep(Milliseconds(100));
 		int op = KB.Open();
 		if(op < 0)
 			return;

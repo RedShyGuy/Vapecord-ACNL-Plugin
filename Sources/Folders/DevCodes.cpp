@@ -36,7 +36,6 @@ namespace CTRPluginFramework {
 		switch(OKB.Open()) {
 			default: break;
 			case 0: {
-				Sleep(Milliseconds(100));
 				CKB.GetMessage() = ("Set your custom dump offset\nHow to: \n1.Type in the start offset to dump from\n2.Type in the length of the dump\n3. Type in the file type the dump should have\n- Great to test things.\n- If you don't know what you are doing don't\n- restore weird dumps!.");
 				CKB.Populate(customdopt1);
 				
@@ -59,7 +58,6 @@ namespace CTRPluginFramework {
 			} break;
 			
 			case 1: {
-				Sleep(Milliseconds(100));
 				CKB.GetMessage() = ("Now you can dump the file/or restore it\n(the restore function also needs the same start offset/dump length and file type as the dump!).");
 				CKB.Populate(customdopt2);
 				switch(CKB.Open()) {
@@ -95,7 +93,6 @@ namespace CTRPluginFramework {
 
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
 		optKb.Populate(cmnOpt);
-		Sleep(Milliseconds(100));
 		int op = optKb.Open();
 		if(op == -1)
 			return;
@@ -116,7 +113,6 @@ namespace CTRPluginFramework {
 				KB.SetMaxLength(8);
 				KB.IsHexadecimal(true);
 				for(int i = 0; i < 12; i++) {
-					Sleep(Milliseconds(100));
 					KB.GetMessage() = "Enter value for param " << std::to_string(i) << ":" << 
 					"\n" << Color(pBlue) << "0x11111111 for player instance" << 
 					"\n" << Color(pRed) << "0x22222222 for animation instance" << 

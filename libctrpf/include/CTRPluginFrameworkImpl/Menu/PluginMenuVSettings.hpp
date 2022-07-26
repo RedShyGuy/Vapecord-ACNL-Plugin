@@ -17,6 +17,7 @@ namespace CTRPluginFramework
     class PluginMenuVSettings
     {
         using EventList = std::vector<Event>;
+        using CustomVFunction = void (*)(bool);
     public:
         PluginMenuVSettings();
 
@@ -25,8 +26,15 @@ namespace CTRPluginFramework
 
         ~PluginMenuVSettings(){}
 
+        static CustomVFunction setColor;
+        static CustomVFunction setLanguage;
+        static CustomVFunction setFwk;
+        static CustomVFunction setVisibility;
+        static CustomVFunction setReset;
+
         // Return true if the Close Button is pressed, else false
         bool    operator()(EventList &eventList, Time &delta);
+
     private:
         void    _ProcessEvent(Event &event);
         void    _RenderTop(void);

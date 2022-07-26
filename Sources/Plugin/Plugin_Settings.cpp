@@ -104,9 +104,7 @@ namespace CTRPluginFramework {
 		static KeySequence buttoncombo({ Key::DPadUp, Key::DPadUp, Key::DPadDown, Key::DPadDown, Key::DPadLeft, Key::DPadRight, Key::DPadLeft, Key::DPadRight, Key::B, Key::A });
 
 		if(buttoncombo() && !DEVC->IsVisible()) {
-			Sleep(Milliseconds(100));
 			if((MessageBox("Yay you found the secret menu", "Do you want to launch the developer mode?\nDev-Mode will enable new Cheats that are meant for developers or are still in developement!", DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
-				Sleep(Milliseconds(100));
 				MessageBox("Dev-Mode is now active!").SetClear(ClearScreen::Top)();	
 
 				WriteConfig(CONFIG::DevMode, true);
@@ -116,7 +114,19 @@ namespace CTRPluginFramework {
 		}
 	}
 
-	void cheatsVisibility(void) {
+	void resetSettings(bool SetInMenu) {
+		if((MessageBox("Reset V-Settings?", "Do you really want to erase your V-Data?\nThis will erase your color and language selections.", DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
+			if(DEVC->IsVisible()) 
+				DEVC->Hide();	
+
+			ResetConfig();
+
+			MessageBox("Erased Data!").SetClear(ClearScreen::Top)();	
+			Sleep(Milliseconds(100));
+		}
+	}
+
+	void cheatsVisibility(bool SetInMenu) {
 		std::vector<MenuEntry*> entrys;
 		PluginMenuData::GetEntrys(entrys);
 
@@ -131,48 +141,15 @@ namespace CTRPluginFramework {
 
 		if(entrys.at(choice)->IsVisible()) {
 			entrys.at(choice)->Hide();
-			OSD::Notify("Cheat hidden!");
+		
+			MessageBox("Erased Data!").SetClear(ClearScreen::Top)();	
+			Sleep(Milliseconds(100));
 		}
 		else {
 			entrys.at(choice)->Show();
-			OSD::Notify("Cheat shown!");
-		}
-	}
-	
-	const std::vector<std::string> pluginstgns = {
-		"Set Color Mode",
-		"Set Language",
-		"Set Plugin Colors",
-		"Hide/Unhide Cheats",
-		"Reset Settings",
-	};
-//Plugin settings which can be used any time
-	void pluginsettings(MenuEntry *entry) {
-		Sleep(Milliseconds(100));
-		Keyboard colkb("Select Option:");
-		colkb.Populate(pluginstgns);
-		switch(colkb.Open()) {
-			case 0:
-				SetupColors(true);
-			break;
-			case 1:
-				SetupLanguage(true);
-			break;
-			case 2:
-				CustomFWK(true);
-			break;
-			case 3:
-				cheatsVisibility();
-			break;
-			case 4: {
-				if(DEVC->IsVisible()) 
-					DEVC->Hide();	
-
-				ResetConfig();
-
-				MessageBox("Settings resetted!").SetClear(ClearScreen::Top)();
-			} break;
-			default: break;
+			
+			MessageBox("Erased Data!").SetClear(ClearScreen::Top)();	
+			Sleep(Milliseconds(100));
 		}
 	}
 }

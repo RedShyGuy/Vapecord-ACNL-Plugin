@@ -39,7 +39,6 @@ namespace CTRPluginFramework {
 
 		template<typename T>
 		bool		KB(const std::string &msg, bool hex, const int length, T &output, T def, OnChangeCallback cb = nullptr) {
-			Sleep(Milliseconds(100));
 			Keyboard kb(msg);
 			kb.IsHexadecimal(hex);
 			kb.SetMaxLength(length);

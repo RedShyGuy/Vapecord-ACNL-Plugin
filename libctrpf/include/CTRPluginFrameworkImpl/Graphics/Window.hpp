@@ -25,7 +25,12 @@ namespace CTRPluginFramework
         const IntRect &GetRect(void) const;
 
         static Window   TopWindow;
+        static Window   TopWindow_TopBar;
+        static Window   TopWindow_BottomBar;
+
         static Window   BottomWindow;
+        static Window   BottomWindow_TopBar;
+        static Window   BottomWindow_BottomBar;
 
         static void     UpdateBackgrounds(void);
 

@@ -74,7 +74,6 @@ namespace CTRPluginFramework {
 
 	void SetSpotState(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -93,7 +92,6 @@ namespace CTRPluginFramework {
 			Dropper::DropItemLock(false);
 
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), spotVEC);
-		Sleep(Milliseconds(100));
 		switch(KB.Open()) {
 			default: break;
 			case 0: {
@@ -157,7 +155,6 @@ namespace CTRPluginFramework {
 //search and replace
 	void SearchReplace(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -192,12 +189,10 @@ namespace CTRPluginFramework {
 //remove all town items
 	void RemoveItemsCheat(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			Sleep(Milliseconds(100));
 			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 
-		Sleep(Milliseconds(100));
 		if((MessageBox(Language->Get("REMOVE_ITEM_WARNING"), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
 			GameHelper::RemoveItems(true, 0, 0, 0xFF, 0xFF, true, true);
 		}
@@ -239,7 +234,6 @@ namespace CTRPluginFramework {
 		if(entry->Hotkeys[0].IsPressed()) {
 			Keyboard KB(Language->Get("WEED_REMOVER_KEY"), weedopt);
 
-			Sleep(Milliseconds(100));
 			switch(KB.Open()) {
 				case 0: size = 5000; break;
 				case 1: 
@@ -296,7 +290,6 @@ namespace CTRPluginFramework {
 					Language->Get("GRASS_EDITOR_KB2")  << "\n" << Color(0xCD853FFF) << 
 					Language->Get("GRASS_EDITOR_KB3"), GrassKB);
 					
-		Sleep(Milliseconds(100));
 		switch(KB.Open()) {
 			case 0:
 				std::memset((void *)GrassStart, -1, 0x2800);
@@ -394,7 +387,6 @@ namespace CTRPluginFramework {
 			CurrTime = i;
 			KBS.SetCompareCallback(CheckTimeInput);
 
-			Sleep(Milliseconds(100));
 			int cho = KBS.Open(timedat[i]);
 			if(cho < 0)
 				return;

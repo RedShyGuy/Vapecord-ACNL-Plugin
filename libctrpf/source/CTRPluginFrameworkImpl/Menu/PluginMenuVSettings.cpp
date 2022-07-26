@@ -23,6 +23,12 @@
 
 namespace CTRPluginFramework
 {
+    PluginMenuVSettings::CustomVFunction PluginMenuVSettings::setColor = nullptr;
+    PluginMenuVSettings::CustomVFunction PluginMenuVSettings::setLanguage = nullptr;
+    PluginMenuVSettings::CustomVFunction PluginMenuVSettings::setFwk = nullptr;
+    PluginMenuVSettings::CustomVFunction PluginMenuVSettings::setVisibility = nullptr;
+    PluginMenuVSettings::CustomVFunction PluginMenuVSettings::setReset = nullptr;
+
     PluginMenuVSettings::PluginMenuVSettings() :
         _mainMenu("Vapecord Settings"),
         _colorSettings("Set Color Mode"),
@@ -36,39 +42,44 @@ namespace CTRPluginFramework
         InitMenu();
     }
 
-    static void     SetColor(void)
+    static void     V_SetColor(void)
     {
-
+        if(PluginMenuVSettings::setColor != nullptr)
+            PluginMenuVSettings::setColor(true);
     }
 
-    static void     SetLanguage(void)
+    static void     V_SetLanguage(void)
     {
-        
+        if(PluginMenuVSettings::setLanguage != nullptr)
+            PluginMenuVSettings::setLanguage(true);
     }
 
-    static void     SetPluginColor(void)
+    static void     V_SetFwk(void)
     {
-        
+        if(PluginMenuVSettings::setFwk != nullptr)
+            PluginMenuVSettings::setFwk(true);
     }
 
-    static void     HideCheats(void)
+    static void     V_HideCheats(void)
     {
-        
+        if(PluginMenuVSettings::setVisibility != nullptr)
+            PluginMenuVSettings::setVisibility(true);
     }
 
-    static void     Reset(void)
+    static void     V_Reset(void)
     {
-        
+        if(PluginMenuVSettings::setReset != nullptr)
+            PluginMenuVSettings::setReset(true);
     }
 
     void    PluginMenuVSettings::InitMenu(void)
     {
         // Main menu
-        _mainMenu.Append(new MenuEntryTools("Set Color Mode", SetColor, Icon::DrawColor));
-        _mainMenu.Append(new MenuEntryTools("Set Language", SetLanguage, Icon::DrawLanguage));
-        _mainMenu.Append(new MenuEntryTools("Set Plugin Colors", SetPluginColor, Icon::DrawPaint));
-        _mainMenu.Append(new MenuEntryTools("Hide/Unhide Cheats", HideCheats, Icon::DrawHidden));
-        _mainMenu.Append(new MenuEntryTools("Reset Settings", Reset, Icon::DrawReset));
+        _mainMenu.Append(new MenuEntryTools("Set Color Mode", V_SetColor, Icon::DrawColor));
+        _mainMenu.Append(new MenuEntryTools("Set Language", V_SetLanguage, Icon::DrawLanguage));
+        _mainMenu.Append(new MenuEntryTools("Set Plugin Colors", V_SetFwk, Icon::DrawPaint));
+        _mainMenu.Append(new MenuEntryTools("Hide/Unhide Cheats", V_HideCheats, Icon::DrawHidden));
+        _mainMenu.Append(new MenuEntryTools("Reset Settings", V_Reset, Icon::DrawReset));
     }
 
     bool    PluginMenuVSettings::operator()(EventList &eventList, Time &delta)

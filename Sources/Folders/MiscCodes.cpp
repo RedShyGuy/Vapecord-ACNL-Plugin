@@ -46,7 +46,6 @@ namespace CTRPluginFramework {
 
 		Keyboard keyboard(Language->Get("COMM_CHOOSE"), noncommands);
 
-		Sleep(Milliseconds(100));
         int choice = keyboard.Open();
         if(choice < 0)
 			return;
@@ -111,7 +110,6 @@ namespace CTRPluginFramework {
 		
         Keyboard keyboard(Language->Get("GAME_TYPE_CHOOSE"), gametype);
 
-		Sleep(Milliseconds(100));
         int gametchoice = keyboard.Open();
         if(gametchoice < 0)	
 			return;
@@ -152,7 +150,6 @@ namespace CTRPluginFramework {
 		
 		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), weatheropt);
 
-		Sleep(Milliseconds(100));
 		int op = optKb.Open();
 		if(op < 0)
 			return;
@@ -230,7 +227,6 @@ namespace CTRPluginFramework {
 	}
 
 	void QuickMenuOptions(void) {
-		Sleep(Milliseconds(100));
 		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), std::vector<std::string>{ "Add Cog-Cheat", "Remove Cog-Cheat" });
 		IsOnStartMenu = false;
 		int res = KB.Open();
@@ -247,7 +243,6 @@ namespace CTRPluginFramework {
 		if(res == 0) {
 		//all possible entrys have been added to the quick menu
 			if(cogEntrys.size() <= 0) {
-				Sleep(Milliseconds(100));
 				MessageBox("Error", "You have already added every Cog-Cheat to the Quick Menu!").SetClear(ClearScreen::Top)();
 				return;
 			}
@@ -258,13 +253,11 @@ namespace CTRPluginFramework {
 				cogNotes.push_back(edata->Note());
 			}
 
-			Sleep(Milliseconds(100));
 			KB.Populate(CogNames);
 			KB.OnKeyboardEvent(CogCheatCallback);
 			res = KB.Open();
 
 			if(res >= 0) {
-				Sleep(Milliseconds(100));
 				MessageBox(Utils::Format("Added %s to the Quick Menu!", Color::RemoveColor(cogEntrys[res]->Name()).c_str())).SetClear(ClearScreen::Top)();
 			
 				QuickMenu::AddEntry(cogEntrys[res]);
@@ -274,7 +267,6 @@ namespace CTRPluginFramework {
 		else if(res == 1) {
 		//quick menu is empty and can't remove any entrys
 			if(QuickMenu::obj_QuickMenu.size() <= 0) {
-				Sleep(Milliseconds(100));
 				MessageBox("Error", "The Quick Menu is empty!").SetClear(ClearScreen::Top)();
 				return;
 			}
@@ -285,13 +277,11 @@ namespace CTRPluginFramework {
 				cogNotes.push_back(edata->Note());
 			}
 
-			Sleep(Milliseconds(100));
 			KB.Populate(CogNames);
 			KB.OnKeyboardEvent(CogCheatCallback);
 			res = KB.Open();
 
 			if(res >= 0) {
-				Sleep(Milliseconds(100));
 				MessageBox(Utils::Format("Removed %s from the Quick Menu!", Color::RemoveColor(QuickMenu::obj_QuickMenu[res]->Name()).c_str())).SetClear(ClearScreen::Top)();
 
 				QuickMenu::RemoveEntry(QuickMenu::obj_QuickMenu[res]);
@@ -315,7 +305,6 @@ namespace CTRPluginFramework {
 				return;
 			}
 
-			Sleep(Milliseconds(100));
 			Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), QMEntryNames);
 			KB.OnKeyboardEvent(CogCheatCallback);
 			IsOnStartMenu = true;

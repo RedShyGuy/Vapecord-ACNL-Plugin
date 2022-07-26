@@ -40,6 +40,12 @@ Will be called at the start of the plugin to load the language, colors and the d
 		IsDevModeUsable();
 		QuickMenu::Init();
 		PluginMenuData::Init();
+
+		PluginMenu::V_SetColor(SetupColors);
+		PluginMenu::V_SetLanguage(SetupLanguage);
+		PluginMenu::V_SetFwk(CustomFWK);
+		PluginMenu::V_SetVisibility(cheatsVisibility);
+		PluginMenu::V_SetReset(resetSettings);
 		*menu -= UpdateInstance;
 	}
 

@@ -65,7 +65,6 @@ namespace CTRPluginFramework {
 			
 			Keyboard pKB(Language->Get("KEY_SELECT_PLAYER"), pV);
 			
-			Sleep(Milliseconds(100));
 			int pChoice = pKB.Open();
 			if(pChoice >= 0) {
 				if(pV[pChoice] != Color::Silver << "-Empty-") {
@@ -215,9 +214,7 @@ namespace CTRPluginFramework {
 				case 6: {
 					//They cant really crash so no valid check
 					Wrap::KB<u8>(Language->Get("ANIMATIONS_APPEAR_NOTE1"), true, 2, a_AppearanceID[0], a_AppearanceID[0]);
-					Sleep(Milliseconds(100));
 					Wrap::KB<u8>(Language->Get("ANIMATIONS_APPEAR_NOTE2"), true, 2, a_AppearanceID[1], a_AppearanceID[1]);
-					Sleep(Milliseconds(100));
 					Wrap::KB<u8>(Language->Get("ANIMATIONS_APPEAR_NOTE3"), true, 2, a_AppearanceID[2], a_AppearanceID[2]);
 				} break;
 			}
