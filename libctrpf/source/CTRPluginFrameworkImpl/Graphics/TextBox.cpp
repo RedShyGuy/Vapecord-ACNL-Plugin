@@ -254,6 +254,8 @@ namespace CTRPluginFramework
                 Renderer::DrawRect2(_box, settings.BackgroundMainColor, settings.BackgroundSecondaryColor);
                 Renderer::DrawRect(_border, settings.BackgroundBorderColor, false);
             }
+
+            Window::DrawTopInfoBar();
         }
 
         //Window::TopWindow.Draw(_title);

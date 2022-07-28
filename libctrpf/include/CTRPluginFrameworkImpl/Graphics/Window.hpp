@@ -24,6 +24,9 @@ namespace CTRPluginFramework
         void    Close(void) const;
         const IntRect &GetRect(void) const;
 
+        static void    DrawTopInfoBar(void);
+        static void    DrawBottomInfoBar(void);
+
         static Window   TopWindow;
         static Window   TopWindow_TopBar;
         static Window   TopWindow_BottomBar;

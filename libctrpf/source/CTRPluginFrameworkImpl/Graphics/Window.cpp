@@ -4,9 +4,19 @@
 #include "CTRPluginFrameworkImpl/Graphics/Icon.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/Renderer.hpp"
 #include "CTRPluginFramework/System/Lock.hpp"
+#include "CTRPluginFramework/Utils/Utils.hpp"
+#include "CTRPluginFramework/System/System.hpp"
 
 namespace CTRPluginFramework
 {
+    static u32 g_textXpos[4] = { 0 };
+
+    // DO NOT REMOVE THIS COPYRIGHT NOTICE
+    static const char g_ctrpfText[] = "CTRPluginFramework";
+    static const char g_copyrightText[] = "Copyright (c) The Pixellizer Group";
+    static const char g_credits[] = "Cheats made by Lukas#4444";
+    static const char g_discord[] = "Discord: discord.gg/QwqdBpKWf3";
+
     Window  Window::BottomWindow = Window(20, 20, 280, 200, true, nullptr);
     Window  Window::TopWindow = Window(30, 20, 340, 200, false, nullptr);
 
@@ -115,5 +125,97 @@ namespace CTRPluginFramework
     {
         BottomWindow._image = Preferences::bottomBackgroundImage;
         TopWindow._image = Preferences::topBackgroundImage;
+    }
+
+    void GetTimeStamp(char* out)
+    {
+        time_t rawtime;
+		struct tm * timeinfo;
+
+		time(&rawtime);
+		timeinfo = localtime(&rawtime);
+		strftime(out, 80, "%r | %F", timeinfo);
+    }
+
+    bool FCLoaded = false;
+    void GetStringFC(std::string &FC) 
+    {
+        if(FCLoaded)
+            return;
+
+		std::string str = Utils::Format("%012lld", System::GetFriendCode());
+		FC = Utils::Format("FC: %s - %s - %s", str.substr(0, 4).c_str(), str.substr(4, 4).c_str(), str.substr(8, 4).c_str());
+        FCLoaded = true;
+    }
+
+    bool posLoaded = false;
+    void LoadPos(void)
+    {
+        if(posLoaded)
+            return;
+
+        // Get strings x position
+        g_textXpos[0] = (320 - Renderer::LinuxFontSize(g_ctrpfText)) / 2;
+        g_textXpos[1] = (320 - Renderer::LinuxFontSize(g_copyrightText)) / 2;
+        g_textXpos[2] = (320 - Renderer::LinuxFontSize(g_discord)) / 2;
+        g_textXpos[3] = (320 - Renderer::LinuxFontSize(g_credits)) / 2;
+        posLoaded = true;
+    }
+
+    void    Window::DrawTopInfoBar(void)
+    {
+        const Color &maintext = Preferences::Settings.MainTextColor;
+        int posY = 3;
+
+        Window::TopWindow_TopBar.Draw();
+        Window::TopWindow_BottomBar.Draw();
+
+        //draw info for top bar
+        char timestamp[80];
+        GetTimeStamp(timestamp);
+        float percentage = System::GetBatteryPercentage();
+        
+        Renderer::DrawSysString(timestamp, 35, posY, 400, maintext);
+        posY = 3;
+        Renderer::DrawSysString(Utils::Format("%d%%", (u32)percentage).c_str(), 310, posY, 400, maintext);
+        
+        //draw info for bottom bar
+        static std::string FC = "";
+        GetStringFC(FC);
+
+        posY = 221;
+        Renderer::DrawSysString(FC.c_str(), 35, posY, 400, maintext);
+    }
+
+    void    Window::DrawBottomInfoBar(void)
+    {
+        const Color& blank = Color::White;
+        static Clock creditClock;
+        static bool framework = true;
+
+        Window::BottomWindow_TopBar.Draw();
+        Window::BottomWindow_BottomBar.Draw();
+        LoadPos();
+
+        int posY = 6;
+
+        //draw info for top bar
+        if (framework)
+            Renderer::DrawString(g_discord, g_textXpos[2], posY, blank);
+        else
+            Renderer::DrawString(g_credits, g_textXpos[3], posY, blank);
+
+        //draw info for bottom bar
+        posY = 224;
+        if (framework)
+            Renderer::DrawString(g_ctrpfText, g_textXpos[0], posY, blank);
+        else
+            Renderer::DrawString(g_copyrightText, g_textXpos[1], posY, blank);
+
+        if (creditClock.HasTimePassed(Seconds(5)))
+        {
+            creditClock.Restart();
+            framework = !framework;
+        }
     }
 }

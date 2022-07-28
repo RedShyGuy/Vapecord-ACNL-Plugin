@@ -124,6 +124,8 @@ namespace CTRPluginFramework
     void    HotkeysModifier::_DrawTop(void) const
     {
         Renderer::SetTarget(TOP);
+
+        Window::DrawTopInfoBar();
         Window::TopWindow.Draw("Hotkey Modifier");
 
         int posY = 61;
@@ -135,6 +137,7 @@ namespace CTRPluginFramework
         FwkSettings &settings = FwkSettings::Get();
 
         Renderer::SetTarget(BOTTOM);
+        Window::DrawBottomInfoBar();
         Window::BottomWindow.Draw();
 
         // Draw CheckBoxes

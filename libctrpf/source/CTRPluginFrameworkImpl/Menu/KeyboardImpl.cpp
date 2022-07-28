@@ -460,6 +460,7 @@ namespace CTRPluginFramework
         Time                delta;
         Clock               frameClock;
         bool                wasKeysLocked = false;
+        bool                firstRun = true;
 
         // Construct keyboard
         if (!_customKeyboard)
@@ -506,8 +507,7 @@ namespace CTRPluginFramework
             _Update(clock.Restart().AsSeconds());
 
             // Render Top Screen
-            if (DisplayTopScreen)
-                _RenderTop();
+            _RenderTop();
             // Render Bottom Screen
             _RenderBottom();
             Renderer::EndFrame();
@@ -520,6 +520,14 @@ namespace CTRPluginFramework
 
                 if (_errorMessage && inputChanged)
                     _errorMessage = false;
+
+                if(firstRun)
+                {
+                    if (_onKeyboardEvent != nullptr && _owner != nullptr)
+                        _onKeyboardEvent(*_owner, _KeyboardEvent);
+
+                    firstRun = false;
+                }
 
                 if (inputChanged)
                 {
@@ -590,6 +598,15 @@ namespace CTRPluginFramework
 
     void    KeyboardImpl::_RenderTop(void)
     {
+        Renderer::SetTarget(TOP);
+
+        PluginMenu *menu = PluginMenu::GetRunningInstance();
+        if (menu && menu->IsOpen())
+            Window::DrawTopInfoBar();
+
+        if (!DisplayTopScreen)
+            return;
+
         const Color     &red = Color::Red;
         static IntRect  background1(30, 20, 340, 200);
         static IntRect  background2(50, 30, 300, 180);
@@ -601,7 +618,6 @@ namespace CTRPluginFramework
         int   posY =  background.leftTop.y + 5;
         int   posX =  background.leftTop.x + 5;
 
-        Renderer::SetTarget(TOP);
         Window::TopWindow.Draw();
 
         Renderer::DrawSysStringReturn(reinterpret_cast<const u8 *>(_text.c_str()), posX, posY, maxX, Preferences::Settings.MainTextColor, maxY);
@@ -622,6 +638,10 @@ namespace CTRPluginFramework
         static IntRect  clampArea(22, 25, 270, 190);
 
         Renderer::SetTarget(BOTTOM);
+
+        PluginMenu *menu = PluginMenu::GetRunningInstance();
+        if (menu && menu->IsOpen())
+            Window::DrawBottomInfoBar();
 
         // Draw "normal" keyboard
         if (!_customKeyboard)

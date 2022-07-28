@@ -334,6 +334,7 @@ namespace CTRPluginFramework
             // Render bottom screen
 
             Renderer::SetTarget(BOTTOM);
+            Window::DrawBottomInfoBar();
 
             Window::BottomWindow.Draw();
             int posY = 55;

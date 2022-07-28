@@ -102,8 +102,9 @@ namespace CTRPluginFramework
         for (int i = 0; i < 2; ++i)
         {
             Renderer::SetTarget(TOP);
-            if ((u32)_clearScreen & (u32)ClearScreen::Top)
+            if ((u32)_clearScreen & (u32)ClearScreen::Top) 
                 Window::TopWindow.Draw();
+
             Renderer::SetTarget(BOTTOM);
             if ((u32)_clearScreen & (u32)ClearScreen::Bottom)
                 Window::BottomWindow.Draw();
@@ -128,6 +129,7 @@ namespace CTRPluginFramework
             // Draw box
             _Draw();
             Renderer::SetTarget(BOTTOM);
+            Window::DrawBottomInfoBar();
             Renderer::EndFrame();
         }
 
@@ -205,6 +207,8 @@ namespace CTRPluginFramework
         FwkSettings &settings = Preferences::Settings;
 
         Renderer::SetTarget(TOP);
+
+        Window::DrawTopInfoBar();
 
         // Draw Box backgrounds
         Renderer::DrawRect2(_box, settings.BackgroundMainColor, settings.BackgroundSecondaryColor);

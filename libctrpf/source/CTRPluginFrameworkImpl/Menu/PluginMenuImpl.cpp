@@ -326,8 +326,6 @@ namespace CTRPluginFramework
 
                     _forceClose = false;
 
-                    
-
                     // Save settings
                     Preferences::WriteSettings();
 

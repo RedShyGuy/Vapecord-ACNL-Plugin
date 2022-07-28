@@ -148,6 +148,8 @@ namespace CTRPluginFramework
         // Enable renderer
         Renderer::SetTarget(TOP);
 
+        Window::DrawTopInfoBar();
+
         _menu.Draw();
     }
 
@@ -160,6 +162,8 @@ namespace CTRPluginFramework
 
         // Enable renderer
         Renderer::SetTarget(BOTTOM);
+
+        Window::DrawBottomInfoBar();
 
         // Window
         Window::BottomWindow.Draw();

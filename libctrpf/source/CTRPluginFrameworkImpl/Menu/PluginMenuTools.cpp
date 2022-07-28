@@ -735,6 +735,8 @@ namespace CTRPluginFramework
         int xx = Renderer::DrawSysString("Tools", 40, posY, 330, Color::Blank);
         Renderer::DrawLine(40, posY, xx, Color::Blank);*/
 
+        Window::DrawTopInfoBar();
+
         _menu.Draw();
     }
 
@@ -749,6 +751,7 @@ namespace CTRPluginFramework
 
         // Enable renderer
         Renderer::SetTarget(BOTTOM);
+        Window::DrawBottomInfoBar();
 
         // Window
         Window::BottomWindow.Draw();
