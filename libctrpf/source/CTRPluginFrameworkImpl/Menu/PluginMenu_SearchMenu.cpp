@@ -53,7 +53,7 @@ namespace CTRPluginFramework
             // Pressed
             if (event.type == Event::EventType::KeyPressed)
             {
-                //if (_currentSearch != nullptr)
+                if (_currentSearch != nullptr)
                 {
                     switch (event.key.code)
                     {

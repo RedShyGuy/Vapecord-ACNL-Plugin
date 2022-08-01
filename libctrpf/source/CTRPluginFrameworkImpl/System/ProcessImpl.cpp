@@ -288,7 +288,7 @@ namespace CTRPluginFramework
     {
         Lock lock(MemoryMutex);
 
-        for (MemInfo &memInfo : MemRegions)
+        for (MemInfo &memInfo : MemRegions) 
             if (IsInRegion(memInfo, address))
                 return true;
 

@@ -1506,6 +1506,41 @@ namespace CTRPluginFramework {
 		return fCode;
 	}
 
+	static void Cheat_EatEvents(Handle debug) {
+        DebugEventInfo info;
+        Result r;
+
+        while(true) {
+            if((r = svcGetProcessDebugEvent(&info, debug)) != 0) {
+                if(r == (s32)(0xd8402009)) 
+                    break;
+            }
+            svcContinueDebugEvent(debug, (DebugFlags)3);
+        }
+    }
+
+	static u32 ReadWriteBuffer32 = 0;
+
+	void set32(u32 addr, u32 value) {
+		u32 pid = Process::GetProcessID();
+		Handle processHandle;
+		Result res = svcOpenProcess(&processHandle, pid);
+		if (!R_SUCCEEDED(res))
+			return;
+
+    	Handle gHandle;
+        res = svcDebugActiveProcess(&gHandle, Process::GetProcessID());
+        if (!R_SUCCEEDED(res))
+            return;
+
+        Cheat_EatEvents(gHandle);
+
+        *((u32*) (&ReadWriteBuffer32)) = value;
+        svcWriteProcessMemory(gHandle, &ReadWriteBuffer32, addr, 4);
+
+        svcCloseHandle(gHandle);
+	}
+
 //Message Box Debug	
 	void msgboxtest(MenuEntry *entry) {
 		static std::string text;
@@ -1532,11 +1567,10 @@ namespace CTRPluginFramework {
 		}
 
 		if(Controller::IsKeysPressed(Key::ZR + Key::DPadDown)) {
-			u64 value = 0;
-			Keyboard KB("a");
-			KB.Open(value);
-			OSD::Notify(Utils::Format("Value %016lX", value));
-			Process::Write64(0xA00000, value);
+			u32 buffer = 0;
+			//CRO::GetMemAddress("Outdoor", buffer);
+			set32(0xA00000, 0xE3A00000);
+			//OSD::Notify(Utils::Format("%08X", (buffer + 0x1DB44)));
 			//OSD::Notify(Utils::Format("UnknownPattern %08X", (u32)std::addressof(Town::GetSaveData()->UnknownPattern) - 0x31F26F80));
 		}
 
