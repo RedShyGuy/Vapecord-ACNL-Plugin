@@ -233,8 +233,8 @@ namespace CTRPluginFramework {
 
 	void SpeedCheck(Keyboard& keyboard, KeyboardEvent& event) {
 		std::string& input = keyboard.GetInput();	
-		u8 ID = StringToHex<u8>(input, 0xFF);
-		if(ID >= 15) {
+		float ID = atof(input.c_str());
+		if(ID >= 15.0f) {
 			keyboard.SetError(Color::Red << Language->Get("SPEED_MOD_ERROR"));
 			return;
 		}
@@ -270,7 +270,7 @@ namespace CTRPluginFramework {
 		Keyboard kb(Language->Get("ENTER_ID"));
 		kb.GetMessage() = Utils::Format(Language->Get("SPEED_MOD_SPEED").c_str(), 1);
 		kb.IsHexadecimal(false);
-		kb.SetMaxLength(2);
+		kb.SetMaxLength(7);
 		kb.OnKeyboardEvent(SpeedCheck);
 		kb.Open(walkSpeed);
 	}	
