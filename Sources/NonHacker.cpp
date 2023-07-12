@@ -30,9 +30,14 @@ namespace CTRPluginFramework {
 	}
 
 	u32 NonHacker::GetPlayerMessageData() {
+		u8 _pID = pID;
+		//swap your index with player 0 in order to get the correct pointer
+		if(_pID == GameHelper::GetOnlinePlayerIndex()) _pID = 0;
+		else if(_pID == 0) _pID = GameHelper::GetOnlinePlayerIndex();
+		
 	    u32 PTR = *(u32 *)Code::chatpointer.addr; //0x94FD84
 		PTR += 0x464; //33078FA0
-		PTR += (0x530 * pID);
+		PTR += (0x530 * _pID);
 		return PTR;
 	}
 
@@ -137,6 +142,8 @@ namespace CTRPluginFramework {
 			return;
 
 		u32 x, y;
+		u32 x1, y1;
+		u32 x2, y2;
 		if(PlayerClass::GetInstance(pID)->GetWorldCoords(&x, &y)) {	
 			Dropper::PlaceItemWrapper(0xA, ReplaceEverything, &itemID, &itemID, x, y, 0, 0, 0, 0, 0, 0x56, 0xA5, false);
 			OSD::Notify(Utils::Format("Player: %s", pName.c_str()));
