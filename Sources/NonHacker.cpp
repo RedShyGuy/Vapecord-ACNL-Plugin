@@ -142,8 +142,6 @@ namespace CTRPluginFramework {
 			return;
 
 		u32 x, y;
-		u32 x1, y1;
-		u32 x2, y2;
 		if(PlayerClass::GetInstance(pID)->GetWorldCoords(&x, &y)) {	
 			Dropper::PlaceItemWrapper(0xA, ReplaceEverything, &itemID, &itemID, x, y, 0, 0, 0, 0, 0, 0x56, 0xA5, false);
 			OSD::Notify(Utils::Format("Player: %s", pName.c_str()));
