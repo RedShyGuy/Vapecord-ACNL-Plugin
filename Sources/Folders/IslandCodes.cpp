@@ -260,7 +260,8 @@ namespace CTRPluginFramework {
 		}
 	}
 
-	void RestoreIsland(u32 fileData) {
+	void RestoreIsland(std::vector<Item> &fileData) {
+
 		bool ItemSequenceWasON = false;
 
 		if(ItemSequence::Enabled()) {
@@ -273,20 +274,21 @@ namespace CTRPluginFramework {
 
 		u32 count = 0;
 		u32 x = 0x10, y = 0x10;
-		static int nextItem = 0;
+		s32 nextItem = -1;
 
 		bool res = true;
 		while(res) {
 			while(res) {
 				if(GameHelper::GetItemAtWorldCoords(x, y)) {
-					Item var = *(Item *)(fileData + (nextItem++ * 4));
-					if(Dropper::PlaceItemWrapper(1, ReplaceEverything, &var, &var, x, y, 0, 0, 0, 0, 0, 6, 0xA5, false)) {
-						count++;
-						if(count % 300 == 0) 
-							Sleep(Milliseconds(500));
-					}
+					nextItem++;
+					if(*GameHelper::GetItemAtWorldCoords(x, y) != fileData[nextItem])
+						if(Dropper::PlaceItemWrapper(1, ReplaceEverything, &fileData[nextItem], &fileData[nextItem], x, y, 0, 0, 0, 0, 0, 0x3D, 0xA5, false)) {
+							count++;
+							if(count % 300 == 0)
+								Sleep(Milliseconds(500));
+						}
 				}
-				else 
+				else
 					res = false;
 
 				y++;
@@ -295,55 +297,75 @@ namespace CTRPluginFramework {
 			
 			y = 0x10;
 			x++;
-			if(!GameHelper::GetItemAtWorldCoords(x, y)) 
+			if(!GameHelper::GetItemAtWorldCoords(x, y))
 				res = false;
-		}		
+		}
 		
 		OSD::Notify(Utils::Format("%d %s", count, "items placed!"));
 
 	//OFF
 		if(!bypassing) 
-			Dropper::DropItemLock(false);	
+			Dropper::DropItemLock(false);
 
 		if(ItemSequenceWasON)
 			ItemSequence::Switch(true);
 	}
 
 	void IslandSaver(MenuEntry *entry) {
-		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
-			return;
-		}
-		if(!GameHelper::IsInRoom(0x68)) {
-			MessageBox("You need to be on the island for this cheat to work").SetClear(ClearScreen::Top)();
-			return;
-		}
+		if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
+			if(!PlayerClass::GetInstance()->IsLoaded()) {
+				MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+				return;
+			}
+			if(!GameHelper::IsInRoom(0x68)) {
+				MessageBox("You need to be on the island for this cheat to work").SetClear(ClearScreen::Top)();
+				return;
+			}
 
-		Item *startPos = GameHelper::GetItemAtWorldCoords(0x10, 0x10);
-		Item *endPos = GameHelper::GetItemAtWorldCoords(0x2F, 0x2F);
+			Keyboard KB("a", std::vector<std::string>{ "Backup Island", "Restore Island", "Delete Files" });
+			int index = KB.Open();
+			switch(index) {
+				default: break;
+				case 0: {
+					std::vector<u32> dumpVec;
+			
+					for (u32 x = 0x10; x <= 0x2F; x++)
+						for (u32 y = 0x10; y <= 0x2F; y++) {
+							Item* atCoords = GameHelper::GetItemAtWorldCoords(x, y);
+							dumpVec.push_back((atCoords->Flags * 0x10000) ^ atCoords->ID);
+						}
+						
+					WrapLoc backupLoc = WrapLoc{ dumpVec.data(), static_cast<int>(dumpVec.size() * sizeof(u32)) };
+					
+					std::string filename = "";
+					Keyboard KB("Name the island backup:");
 
-		Keyboard KB("a", std::vector<std::string>{ "Backup Island", "Restore Island", "Delete Files" });
-		int index = KB.Open();
-		switch(index) {
-			default: break;
-			case 0: {
-				std::string filename = "";
-				Keyboard KB("Name the island backup:");
-
-				if(KB.Open(filename) == -1)
-					return;
-
-				//Wrap::Dump(Utils::Format(PATH_ISLAND, regionName.c_str()), filename, ".dat", WrapLoc{ *(u32 *)startPos, *(u32 *)(endPos - startPos) }, WrapLoc{ (u32)-1, (u32)-1 });
-			} break;
-			case 1: {
-				u32 islandFileData = 0xA00000;
-				//Wrap::Restore(Utils::Format(PATH_ISLAND, regionName.c_str()), ".dat", "", nullptr, false, WrapLoc{ (u32)islandFileData, 0x1000 }, WrapLoc{ (u32)-1, (u32)-1 });
-
-				RestoreIsland(islandFileData);
-			} break;
-			case 2: {
-				//Wrap::Delete(Utils::Format(PATH_ISLAND, regionName.c_str()), ".dat");
-			} break;
+					if(KB.Open(filename) == -1)
+						return;
+					Wrap::Dump(Utils::Format(PATH_ISLAND, regionName.c_str()), filename, ".dat", &backupLoc, nullptr);
+				} break;
+				case 1: {
+					size_t arrSize = 0x400;//number of elements in array
+					u32 fileData[arrSize];
+					std::vector<Item> IslandItems;
+					if (!fileData) {
+						OSD::Notify("Failed to accolate memory");
+						return;
+					}
+					std::string filename = "restoredump";
+					WrapLoc restoreLoc = WrapLoc{ fileData, static_cast<int>(arrSize * sizeof(u32)) };
+					
+					if(Wrap::Restore(Utils::Format(PATH_ISLAND, regionName.c_str()), ".dat", Language->Get("SAVE_RESTORE_SELECT"), nullptr, false, &restoreLoc, nullptr) == ExHandler::SUCCESS) {
+						for(size_t i = 0; i < arrSize; i++) {
+							IslandItems.push_back({ static_cast<u16>(fileData[i] & 0xFFFF), static_cast<u16>(fileData[i] >> 16) });
+						}
+						RestoreIsland(IslandItems);
+					}
+				} break;
+				case 2: {
+					Wrap::Delete(Utils::Format(PATH_ISLAND, regionName.c_str()), ".dat");
+				} break;
+			}
 		}
 	}
 }

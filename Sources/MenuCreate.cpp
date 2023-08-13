@@ -444,7 +444,9 @@ namespace CTRPluginFramework {
 																			  Color::Format("%cKiki and Lala Wand: %cNULL", Color(0xFF7700FF), Color::White))),
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Light Switch Toggler", lightswitch, "Lets you toggle the light switch.\nHotkeys are:\nL + DPadUp : Toggle light in current room\nL + DPadRight : Set Room ID\nL + DPadLeft : Toggle light in set room")),
 		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Custom Save Settings", CustomSaveScreen, "")),
-		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Island Saver", nullptr, IslandSaver, "")),
+		DEVC->Append(EntryWithHotkey(new MenuEntry(Color(0xFF1A69FF) << "Island Saver", IslandSaver, "Dump/Restore the Island layout. (Works online too)"), { 
+			Hotkey(Key::L | Key::Y, "Open Menu")
+		})),
 		menu->Append(DEVC);
 
 		PluginMenuData::SetUp(SAVEC);
