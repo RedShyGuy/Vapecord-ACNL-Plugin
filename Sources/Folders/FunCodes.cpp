@@ -478,12 +478,12 @@ namespace CTRPluginFramework {
 					return;
 
 			//If Item is 0 return | 0 means no item-offset
-				Item *item = GameHelper::GetItemAtWorldCoords(x, y);	
-				if(!item) 
+				if(!GameHelper::GetItemAtWorldCoords(x, y))
 					return;
+				Item item = *GameHelper::GetItemAtWorldCoords(x, y);
 
 			//If ID is not wilted flower return
-				if(!IDList::ValidID(item->ID, 0xCE, 0xF7))
+				if(!IDList::ValidID(item.ID, 0xCE, 0xF7))
 					return;
 
 			//Removes Wilted Flower	
@@ -495,8 +495,8 @@ namespace CTRPluginFramework {
 				//GameHelper::PlaySound(0);
 
 			//Places Fixed Flower
-				item->ID -= 0x2F; //Jumps to fixed flower 
-				Dropper::PlaceItemWrapper(0xC, ReplaceEverything, item, item, x, y, 0, 0, 0, 0, 0, 0x5C, 0xA5, false);
+				item.ID -= 0x2F; //Jumps to fixed flower 
+				Dropper::PlaceItemWrapper(0xC, ReplaceEverything, &item, &item, x, y, 0, 0, 0, 0, 0, 0x5C, 0xA5, false);
 
 				if(!bypassing) 
 					Dropper::DropItemLock(false);
@@ -518,12 +518,12 @@ namespace CTRPluginFramework {
 				if(!PlayerClass::GetInstance()->GetWorldCoords(&x, &y))
 					return;
 			//If Item is 0 return | 0 means no item-offset
-				Item *item = GameHelper::GetItemAtWorldCoords(x, y);	
-				if(!item) 
+				if(!GameHelper::GetItemAtWorldCoords(x, y)) 
 					return;
+				Item item = *GameHelper::GetItemAtWorldCoords(x, y);
 
 			//If no growing tree found return	
-				if(!(std::find(std::begin(Growing_Trees), std::end(Growing_Trees), item->ID) != std::end(Growing_Trees)))
+				if(!(std::find(std::begin(Growing_Trees), std::end(Growing_Trees), item.ID) != std::end(Growing_Trees)))
 					return;
 				
 			//Removes growing tree
@@ -532,8 +532,8 @@ namespace CTRPluginFramework {
 				for(int i = 0; i <= 20; ++i) 
 					GameHelper::Particles(0x19A, PlayerClass::GetInstance()->GetCoordinates(x, y));				
 			//Places Grown Tree
-				item->ID += 1; //Jumps to next growth level
-				Dropper::PlaceItemWrapper(0xC, ReplaceEverything, item, item, x, y, 0, 0, 0, 0, 0, 0x5C, 0xA5, false);
+				item.ID += 1; //Jumps to next growth level
+				Dropper::PlaceItemWrapper(0xC, ReplaceEverything, &item, &item, x, y, 0, 0, 0, 0, 0, 0x5C, 0xA5, false);
 
 				if(!bypassing) 
 					Dropper::DropItemLock(false);
