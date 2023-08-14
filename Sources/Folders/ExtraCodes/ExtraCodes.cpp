@@ -345,14 +345,14 @@ namespace CTRPluginFramework {
 	
 	bool CheckTimeInput(const void *input, std::string &error) {
 		const std::string TimeMode[5] = { 
-			Language->Get("TIME_MINUTE"), 
-			Language->Get("TIME_HOUR"), 
-			Language->Get("TIME_DAY"), 
-			Language->Get("TIME_MONTH"), 
-			Language->Get("TIME_YEAR") 
+			Language->Get("TIME_MINUTE"),
+			Language->Get("TIME_HOUR"),
+			Language->Get("TIME_DAY"),
+			Language->Get("TIME_MONTH"),
+			Language->Get("TIME_YEAR")
 		};
 
-        int in = *static_cast<const int *>(input);
+        u16 in = *static_cast<const u16 *>(input);
         if(in >= TimeMax[CurrTime]) {
 			error = Utils::Format(Language->Get("TIME_ERROR").c_str(), (TimeMax[CurrTime] - 1), TimeMode[CurrTime].c_str());
             return 0;
@@ -362,12 +362,12 @@ namespace CTRPluginFramework {
     }
 	
 	void TTKeyboard(MenuEntry *entry) {
-		const std::string TimeMode[5] = { 
-			Language->Get("TIME_MINUTE"), 
-			Language->Get("TIME_HOUR"), 
-			Language->Get("TIME_DAY"), 
-			Language->Get("TIME_MONTH"), 
-			Language->Get("TIME_YEAR") 
+		const std::string TimeMode[5] = {
+			Language->Get("TIME_MINUTE"),
+			Language->Get("TIME_HOUR"),
+			Language->Get("TIME_DAY"),
+			Language->Get("TIME_MONTH"),
+			Language->Get("TIME_YEAR")
 		};
 
 		std::vector<std::string> TTKB {
@@ -384,6 +384,7 @@ namespace CTRPluginFramework {
 		for(int i = 0; i < 5; ++i) {			
 			Keyboard KBS(Utils::Format(Language->Get("TIME_KB1").c_str(), TimeMode[i].c_str()));
 			KBS.IsHexadecimal(false);
+			KBS.SetMaxLength(2);
 			CurrTime = i;
 			KBS.SetCompareCallback(CheckTimeInput);
 
