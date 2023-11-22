@@ -130,7 +130,7 @@ namespace CTRPluginFramework
         if (_state == RUNNING)
             return 0;
 
-        ((CThread_tag*)_thread)->arg = arg;
+        ((Thread_tag*)_thread)->arg = arg;
         Result res = __startThread(_thread, priority, affinity);
 
         if (R_SUCCEEDED(res))
@@ -154,7 +154,7 @@ namespace CTRPluginFramework
     Handle ThreadEx::GetHandle(void)
     {
         if (_thread)
-            return ((CThread_tag*)_thread)->handle;
+            return ((Thread_tag*)_thread)->handle;
         return 0;
     }
 

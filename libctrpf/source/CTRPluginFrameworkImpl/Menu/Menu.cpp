@@ -125,7 +125,6 @@ namespace CTRPluginFramework
         int   posX = 40;
 
         Renderer::SetTarget(TOP);
-        Window::DrawTopInfoBar();
         Window::TopWindow.Draw();
 
         // Draw title
@@ -231,7 +230,6 @@ namespace CTRPluginFramework
         if (drawFooter)
         {
             Renderer::SetTarget(BOTTOM);
-            Window::DrawBottomInfoBar();
             Window::BottomWindow.Draw();
 
             if (!_folder->GetNote().empty())

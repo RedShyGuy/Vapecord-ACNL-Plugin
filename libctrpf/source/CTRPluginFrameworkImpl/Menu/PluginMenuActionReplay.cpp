@@ -172,7 +172,6 @@ namespace CTRPluginFramework
     void    PluginMenuActionReplay::_DrawBottom(void)
     {
         Renderer::SetTarget(BOTTOM);
-        
         Window::BottomWindow.Draw();
 
         _noteBtn.Draw();

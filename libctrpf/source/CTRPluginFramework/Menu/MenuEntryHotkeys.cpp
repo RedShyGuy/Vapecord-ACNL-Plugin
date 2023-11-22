@@ -12,7 +12,7 @@ namespace CTRPluginFramework
     }
 
     Hotkey::Hotkey(u32 keys, const std::string& name) :
-    _keys(keys), _name(name), _firstName(name)
+    _keys(keys), _name(name)
     {
     }
 
@@ -196,10 +196,5 @@ namespace CTRPluginFramework
     u32     HotkeyManager::Count(void)
     {
         return (_hotkeys.size());
-    }
-
-    std::vector<Hotkey> HotkeyManager::GetHotkeys(void)
-    {
-        return _hotkeys;
     }
 }

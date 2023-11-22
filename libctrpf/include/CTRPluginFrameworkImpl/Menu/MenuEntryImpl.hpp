@@ -62,6 +62,7 @@ namespace CTRPluginFramework
         int     _executeIndex;
         MenuEntry *_owner;
 
+
         int         _radioId;
         void        *_arg;
     };

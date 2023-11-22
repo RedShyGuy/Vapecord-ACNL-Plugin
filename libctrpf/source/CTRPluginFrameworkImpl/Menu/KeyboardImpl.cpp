@@ -438,8 +438,6 @@ namespace CTRPluginFramework
 
     int     KeyboardImpl::Run(void)
     {
-        Sleep(Milliseconds(100));
-        
         _isOpen = true;
         _userAbort = false;
         _askForExit = false;
@@ -457,10 +455,7 @@ namespace CTRPluginFramework
         Event               event;
         EventManager        manager(EventManager::EventGroups::GROUP_KEYS | EventManager::EventGroups::GROUP_TOUCH);
         Clock               clock;
-        Time                delta;
-        Clock               frameClock;
         bool                wasKeysLocked = false;
-        bool                firstRun = true;
 
         // Construct keyboard
         if (!_customKeyboard)
@@ -469,6 +464,7 @@ namespace CTRPluginFramework
             else if (_layout == DECIMAL) _Decimal();
             else if (_layout == HEXADECIMAL) _Hexadecimal();
 
+            // unlock enter and clear button if hex editor blocked them
             if((!_keys->at(15).IsEnabled() || !_keys->at(16).IsEnabled()) && _mustRelease && (_layout == DECIMAL || _layout == HEXADECIMAL))
             {
                 _keys->at(15).Enable(true);
@@ -500,14 +496,12 @@ namespace CTRPluginFramework
                 }
             }
 
-            if (_onNewFrame != nullptr && _owner != nullptr)
-                _onNewFrame(delta);
-
             // Update current keys
             _Update(clock.Restart().AsSeconds());
 
             // Render Top Screen
-            _RenderTop();
+            if (DisplayTopScreen)
+                _RenderTop();
             // Render Bottom Screen
             _RenderBottom();
             Renderer::EndFrame();
@@ -520,14 +514,6 @@ namespace CTRPluginFramework
 
                 if (_errorMessage && inputChanged)
                     _errorMessage = false;
-
-                if(firstRun)
-                {
-                    if (_onKeyboardEvent != nullptr && _owner != nullptr)
-                        _onKeyboardEvent(*_owner, _KeyboardEvent);
-
-                    firstRun = false;
-                }
 
                 if (inputChanged)
                 {
@@ -566,9 +552,6 @@ namespace CTRPluginFramework
                     _isOpen = false;
                 }
             }
-
-            delta = frameClock.Restart();
-
             if (SystemImpl::IsSleeping()) {
                 ret = SLEEP_ABORT;
                 _isOpen = false;
@@ -576,6 +559,7 @@ namespace CTRPluginFramework
         }
 
     exit:
+        // lock enter and clear button back for the hex editor
         if(wasKeysLocked)
         {
             _keys->at(15).Enable(false);
@@ -618,6 +602,7 @@ namespace CTRPluginFramework
         int   posY =  background.leftTop.y + 5;
         int   posX =  background.leftTop.x + 5;
 
+        Renderer::SetTarget(TOP);
         Window::TopWindow.Draw();
 
         Renderer::DrawSysStringReturn(reinterpret_cast<const u8 *>(_text.c_str()), posX, posY, maxX, Preferences::Settings.MainTextColor, maxY);

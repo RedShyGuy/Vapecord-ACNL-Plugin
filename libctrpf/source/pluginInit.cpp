@@ -243,7 +243,7 @@ namespace CTRPluginFramework
         settings.WaitTimeToBoot = Seconds(5.f);
         settings.AreN3DSButtonsAvailable = true;
         settings.TryLoadSDSounds = true;
-        
+
         // Set default theme
         FwkSettings::SetThemeDefault();
 
@@ -513,7 +513,7 @@ namespace CTRPluginFramework
     void  ThreadExit(void)
     {
         // In which thread are we ?
-        if (reinterpret_cast<u32>(((CThread_tag*)threadGetCurrent())->stacktop) < 0x07000000)
+        if (reinterpret_cast<u32>(((Thread_tag*)threadGetCurrent())->stacktop) < 0x07000000)
         {
             // ## Main Thread ##
 
@@ -558,6 +558,8 @@ namespace CTRPluginFramework
         ProcessImpl::MainThreadTls = (u32)getThreadLocalStorage();
         // Set exception handlers
         ProcessImpl::EnableExceptionHandlers();
+        // Check if we are on citra
+        SystemImpl::CheckCitra();
 
         // Create event
         svcCreateEvent(&g_continueGameEvent, RESET_ONESHOT);

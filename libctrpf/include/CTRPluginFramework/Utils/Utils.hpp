@@ -18,6 +18,8 @@ namespace CTRPluginFramework
         Disassembler = 2
     };
 
+    using string16 = std::basic_string<uint16_t>;
+
     class Color;
     class Utils
     {
@@ -99,6 +101,38 @@ namespace CTRPluginFramework
          * \return The codepoint value of the char removed
          */
         static u32          RemoveLastChar(std::string &str);
+
+        /**
+         * @brief Converts an UTF8 string into an UTF16 string16 (use the .c_str() method to obtain the raw characters).
+         *
+         * @param out Output string16 where the UTF16 characters will be appended.
+         * @param utf8str Input UTF8 C string.
+         */
+        static void         ConvertUTF8ToUTF16(string16& out, const char* utf8str);
+
+        /**
+         * @brief Converts an UTF8 string into an UTF16 string16 (use the .c_str() method to obtain the raw characters).
+         *
+         * @param out Output string16 where the UTF16 characters will be appended.
+         * @param utf8str Input UTF8 string.
+         */
+        static void         ConvertUTF8ToUTF16(string16& out, const std::string &utf8str) {ConvertUTF8ToUTF16(out, utf8str.c_str());}
+
+        /**
+         * @brief Converts an UTF16 string into an UTF8 string (use the .c_str() method to obtain the raw characters).
+         *
+         * @param out Output string where the UTF8 characters will be appended.
+         * @param utf8str Input UTF16 C string.
+         */
+        static void         ConvertUTF16ToUTF8(std::string& out, const u16* utf16str);
+
+        /**
+         * @brief Converts an UTF16 string into an UTF8 string (use the .c_str() method to obtain the raw characters).
+         *
+         * @param out Output string where the UTF8 characters will be appended.
+         * @param utf8str Input UTF16 string16.
+         */
+        static void         ConvertUTF16ToUTF8(std::string& out, const string16 &utf16str) {ConvertUTF16ToUTF8(out, utf16str.c_str());}
 
         template <typename T>
         static u32     Search(const u32 start, const u32 size, const std::vector<T> &pattern)

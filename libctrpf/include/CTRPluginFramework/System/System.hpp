@@ -44,6 +44,12 @@ namespace CTRPluginFramework
         static bool         IsNew3DS(void);
 
         /**
+         * @brief Check if plugin is running on citra emulator
+         * \return true if the plugin is running on citra emulator
+         */
+        static bool         IsCitra(void);
+
+        /**
          * \brief Get the system's language (user defined)
          * \return The language of the system
          */

@@ -18,6 +18,7 @@ namespace CTRPluginFramework
     Mutex           PluginMenuImpl::_trashBinMutex;
 
     PluginMenuImpl::PluginMenuImpl(std::string &name, std::string &about, u32 menuType) :
+
         OnFirstOpening(nullptr),
         OnOpening(nullptr),
         _vSettings(new PluginMenuVSettings()),
@@ -265,9 +266,14 @@ namespace CTRPluginFramework
                         OnFrame(delta);
                     if (_aboutToOpen)
                         home.UpdateNote();
-                    
                     shouldClose = home(eventList, mode, delta);
                 }
+                /*
+                else if (mode == 1)
+                { // Mapper
+
+                }
+                */
                 else if (mode == 1)
                 { // V-Settings
                     if (vSet(eventList, delta))
@@ -315,7 +321,7 @@ namespace CTRPluginFramework
                 delta = clock.Restart();
 
                 // Close menu
-                if (shouldClose || SystemImpl::WantsToSleep() || _forceClose)
+                if (shouldClose || SystemImpl::WantsToSleep())
                 {
                     if (shouldClose)
                         SoundEngine::PlayMenuSound(SoundEngine::Event::CANCEL);
@@ -323,8 +329,6 @@ namespace CTRPluginFramework
                     _isOpen = false;
                     openManager.Clear();
                     shouldClose = false;
-
-                    _forceClose = false;
 
                     // Save settings
                     Preferences::WriteSettings();
@@ -626,22 +630,22 @@ namespace CTRPluginFramework
             _runningInstance->_search->GetRegionsList(list);
     }
 
-    void    PluginMenuImpl::ForceClose(void)
-    {
-        if (_runningInstance != nullptr)
-            _runningInstance->_forceClose = true;
-    }
-
     void    PluginMenuImpl::ForceExit(void)
     {
         if (_runningInstance != nullptr)
-            _runningInstance->_pluginRun = true;
+            _runningInstance->_pluginRun = false;
     }
 
     void    PluginMenuImpl::ForceOpen(void)
     {
         if (_runningInstance != nullptr)
             _runningInstance->_forceOpen = true;
+    }
+
+    void    PluginMenuImpl::ForceClose(void)
+    {
+        if (_runningInstance != nullptr)
+            _runningInstance->_forceClose = true;
     }
 
     void    PluginMenuImpl::UnStar(MenuItem* item)

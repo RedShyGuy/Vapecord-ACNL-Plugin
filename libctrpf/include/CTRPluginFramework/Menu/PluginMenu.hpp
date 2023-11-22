@@ -130,8 +130,8 @@ namespace CTRPluginFramework
         static void ForceOpen(void);
 
         /**
-         * \brief Forces the closing of the menu
-         */
+        * \brief Forces the closing of the menu
+        */
         static void ForceClose(void);
 
         /**
@@ -223,9 +223,10 @@ namespace CTRPluginFramework
         static void                V_SetVisibility(CustomFunction cFunc);
         static void                V_SetReset(CustomFunction cFunc);
 
+
     private:
         std::unique_ptr<PluginMenuImpl> _menu;
-    };
+};
 }
 
 #endif

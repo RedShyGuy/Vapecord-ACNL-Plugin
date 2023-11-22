@@ -1,6 +1,7 @@
 #include "CTRPluginFramework/Graphics/Color.hpp"
 #include "CTRPluginFramework/Utils/Utils.hpp"
 #include <algorithm>
+#include <algorithm>
 #include <cstdarg>
 #include <vector>
 
@@ -112,7 +113,7 @@ namespace CTRPluginFramework
         }
         return (ret);
     }
-
+    
     std::string Color::Format(const char *fmt, ...) 
     {
 		std::string res;
@@ -182,6 +183,7 @@ namespace CTRPluginFramework
 			
 		return(ShiftR << 24 | ShiftG << 16 | ShiftB << 8 | ShiftA);
     }
+
 
     bool Color::operator < (const Color &right) const
     {

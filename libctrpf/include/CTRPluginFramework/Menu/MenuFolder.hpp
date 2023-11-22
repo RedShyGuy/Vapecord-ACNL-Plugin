@@ -2,7 +2,6 @@
 #define CTRPLUGINFRAMEWORK_MENUFOLDER_HPP
 
 #include "types.h"
-#include "CTRPluginFramework/Graphics/Color.hpp"
 #include <string>
 #include <memory>
 

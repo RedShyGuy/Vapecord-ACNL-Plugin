@@ -351,7 +351,6 @@ namespace CTRPluginFramework
             return;
 
         Window::TopWindow.Draw("Search");
-        Window::DrawTopInfoBar();
         _searchMenu.Draw();
     }
 
@@ -367,7 +366,6 @@ namespace CTRPluginFramework
 
         // Enable renderer
         Renderer::SetTarget(BOTTOM);
-        Window::DrawBottomInfoBar();
 
         Window::BottomWindow.Draw();
 

@@ -9,15 +9,15 @@
 #define PA_FROM_VA_PTR(addr)    PA_FROM_VA(addr)
 
 // Needed to override ctrulib Thread_tag
-struct CThread_tag
+struct Thread_tag
 {
-    Handle handle;
-    ThreadFunc ep;
-    void* arg;
-    int rc;
-    bool detached, finished;
-    struct _reent reent;
-    void* stacktop;
+	Handle handle;
+	ThreadFunc ep;
+	void* arg;
+	int rc;
+	bool detached, finished;
+	struct _reent reent;
+	void* stacktop;
 };
 
 // Keep this structure under 0x80 bytes
@@ -38,6 +38,9 @@ typedef struct
 	// FS session override
 	u32    fs_magic;
 	Handle fs_session;
+
+	// Whether srvGetServiceHandle is non-blocking in case of full service ports.
+	bool srv_blocking_policy;
 } ThreadVars;
 
 static inline ThreadVars* getThreadVars(void)
@@ -45,9 +48,20 @@ static inline ThreadVars* getThreadVars(void)
 	return (ThreadVars*)getThreadLocalStorage();
 }
 
+static inline size_t alignTo(const size_t base, const size_t align) {
+	return (base + (align - 1)) & ~(align - 1);
+}
+
+void initThreadVars(struct Thread_tag *thread);
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+extern const size_t __tdata_align;
+extern const u8 __tdata_lma[];
+extern const u8 __tdata_lma_end[];
+extern u8 __tls_start[];
+extern u8 __tls_end[];
 // font extension
 Result fontEnsureMappedExtension(void);
 extern u32 __apt_appid;

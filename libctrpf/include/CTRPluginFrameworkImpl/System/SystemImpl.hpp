@@ -7,6 +7,7 @@ namespace CTRPluginFramework
     {
     public:
         static void     Initialize(void);
+        static void     CheckCitra(void);
         static bool     WantsToSleep(void);
         static bool     IsSleeping(void);
         static void     ReadyToSleep(void);
@@ -15,6 +16,7 @@ namespace CTRPluginFramework
         static bool     Status(void);
 
         static bool     IsNew3DS;
+        static bool     IsCitra;
         static u32      CFWVersion;
         static u32      RosalinaHotkey;
         static u32      AptStatus;

@@ -11,6 +11,12 @@
 
 namespace CTRPluginFramework
 {
+    static u32 g_textXpos[2] = { 0 };
+
+    // DO NOT REMOVE THIS COPYRIGHT NOTICE
+    static const char g_ctrpfText[] = "CTRPluginFramework";
+    static const char g_copyrightText[] = "Copyright (c) The Pixellizer Group";
+
     PluginMenuHome::PluginMenuHome(std::string &name, bool showNoteBottom) :
 
         _noteTB("", "", showNoteBottom ? IntRect(20, 46, 280, 124) : IntRect(40, 30, 320, 180)),
@@ -18,6 +24,7 @@ namespace CTRPluginFramework
         _rainbowBtn(Button::Toggle | Button::Sysfont | Button::Rounded, "Rainbow", IntRect(30, 175, 120, 30)),
         _showStarredBtn(Button::Toggle | Button::Sysfont | Button::Rounded, "Favorite", IntRect(30, 70, 120, 30), Icon::DrawFavorite),
         _VSettingsBtn(Button::Sysfont | Button::Rounded, "V-Settings", IntRect(165, 70, 120, 30), Icon::DrawController),
+        //_hidMapperBtn(Button::Sysfont | Button::Rounded, "Mapper", IntRect(165, 70, 120, 30), Icon::DrawController),
         _gameGuideBtn(Button::Sysfont | Button::Rounded, "Game Guide", IntRect(30, 105, 120, 30), Icon::DrawGuide),
         _searchBtn(Button::Sysfont | Button::Rounded, "Search", IntRect(165, 105, 120, 30), Icon::DrawSearch),
         _arBtn(Button::Sysfont | Button::Rounded, "ActionReplay", IntRect(30, 140, 120, 30)),
@@ -33,7 +40,6 @@ namespace CTRPluginFramework
         _root = _folder = new MenuFolderImpl(name);
         _starredConst = _starred = new MenuFolderImpl("Favorites");
 
-        _rainbowMode = false;
         _starMode = false;
         _selector = 0;
         _selectedTextSize = 0;
@@ -52,6 +58,14 @@ namespace CTRPluginFramework
         _InfoBtn.Disable();
         _keyboardBtn.Disable();
         _controllerBtn.Disable();
+
+
+        // Temporary disable unused buttons
+        //_hidMapperBtn.Lock();
+
+        // Get strings x position
+        g_textXpos[0] = (320 - Renderer::LinuxFontSize(g_ctrpfText)) / 2;
+        g_textXpos[1] = (320 - Renderer::LinuxFontSize(g_copyrightText)) / 2;
 
         // Are the buttons locked ?
         if (!Preferences::Settings.AllowActionReplay)
@@ -106,6 +120,7 @@ namespace CTRPluginFramework
             if (_rainbowBtn()) _rainbowBtn_OnClick();
             if (_showStarredBtn()) _showStarredBtn_OnClick();
             if (_VSettingsBtn()) _vSettingsBtn_OnClick();
+            // _hidMapperBtn();
             if (_gameGuideBtn()) _gameGuideBtn_OnClick();
             if (_searchBtn()) _searchBtn_OnClick();
             if (_arBtn()) _actionReplayBtn_OnClick();
@@ -480,6 +495,7 @@ namespace CTRPluginFramework
         int posY = 25;
         int posX = 40;
 
+
         // Draw background
         Window::DrawTopInfoBar();
         Window::TopWindow.Draw();
@@ -565,10 +581,29 @@ namespace CTRPluginFramework
 
     void PluginMenuHome::_RenderBottom(void)
     {
+        const Color& blank = Color::White;
+        static Clock creditClock;
+        static bool framework = true;
+
         Renderer::SetTarget(BOTTOM);
         Window::DrawBottomInfoBar();
 
         Window::BottomWindow.Draw();
+
+        int posY = 205;
+
+        if (framework)
+            Renderer::DrawString(g_ctrpfText, g_textXpos[0], posY, blank);
+        else
+            Renderer::DrawString(g_copyrightText, g_textXpos[1], posY, blank);
+
+        if (creditClock.HasTimePassed(Seconds(5)))
+        {
+            creditClock.Restart();
+            framework = !framework;
+        }
+
+        posY = 35;
 
         // Draw buttons
         if (ShowNoteBottom)
@@ -580,6 +615,7 @@ namespace CTRPluginFramework
             _rainbowBtn.Draw();
             _showStarredBtn.Draw();
             _VSettingsBtn.Draw();
+            //_hidMapperBtn.Draw();
             _gameGuideBtn.Draw();
             _searchBtn.Draw();
             _arBtn.Draw();
@@ -704,6 +740,7 @@ namespace CTRPluginFramework
             _rainbowBtn.Update(isTouched, touchPos);
             _showStarredBtn.Update(isTouched, touchPos);
             _VSettingsBtn.Update(isTouched, touchPos);
+            //_hidMapperBtn.Update(isTouched, touchPos);
             _gameGuideBtn.Update(isTouched, touchPos);
             _searchBtn.Update(isTouched, touchPos);
             _arBtn.Update(isTouched, touchPos);

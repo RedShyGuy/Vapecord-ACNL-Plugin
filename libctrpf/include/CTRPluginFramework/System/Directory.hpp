@@ -135,7 +135,7 @@ namespace CTRPluginFramework
         mutable Mutex   _mutex;
         struct DirectoryEntry
         {
-            DirectoryEntry(u32 attrib, u8 *name);
+            DirectoryEntry(u32 attrib, const char *name);
             u32         attributes;
             std::string name;
         };

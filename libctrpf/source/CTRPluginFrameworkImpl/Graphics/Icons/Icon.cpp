@@ -147,7 +147,7 @@ namespace CTRPluginFramework
 
         return (posX + sizeX);
     }
-
+    
     /*
     ** Reset
     ** 15px * 15px

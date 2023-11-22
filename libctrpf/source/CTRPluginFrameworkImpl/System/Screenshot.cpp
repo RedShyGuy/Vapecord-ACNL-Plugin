@@ -35,6 +35,7 @@ namespace CTRPluginFramework
     u32         Screenshot::_filecount;
     u32         Screenshot::_display = 0;
     Clock       Screenshot::_timer;
+    Clock       Screenshot::_hotkeyTimer;
     Task        Screenshot::_task(Screenshot::TaskCallback, nullptr);
 
     LightEvent  Screenshot::_readyEvent;
@@ -71,9 +72,10 @@ namespace CTRPluginFramework
         if (!IsEnabled)
             return IsEnabled;
 
-        if (!_mode && (Controller::GetKeysDown() & Hotkeys) == Hotkeys  && (!ScreenshotCallback || ScreenshotCallback()))
+        if (!_mode && (Controller::GetKeysDown() & Hotkeys) == Hotkeys && _hotkeyTimer.HasTimePassed(Seconds(0.25f)) && (!ScreenshotCallback || ScreenshotCallback()))
         {
             _mode = Screens;
+            _hotkeyTimer.Restart();
             OSDImpl::WaitingForScreenshot = _mode & SCREENSHOT_BOTTOM;
         }
 
@@ -131,7 +133,7 @@ namespace CTRPluginFramework
                 Renderer::DrawString("Screenshot: An error occured", 0, posY, Color::Red, Color::White);
             else
                 _display = -1;
-            svcFlushProcessDataCache(Process::GetHandle(), (u32)addr, stride * 320);
+            if (!SystemImpl::IsCitra) svcFlushProcessDataCache(Process::GetHandle(), (u32)addr, stride * 320);
             ++_display;
         }
 

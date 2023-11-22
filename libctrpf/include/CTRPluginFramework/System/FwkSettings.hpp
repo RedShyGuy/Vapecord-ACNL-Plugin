@@ -30,7 +30,7 @@ namespace CTRPluginFramework
         bool    AllowSearchEngine; ///< If false then the search engine won't be available | Default: true
         Time    WaitTimeToBoot; ///< Time to wait for the plugin to starts (from when the game will starts) | Default: 5 seconds
         bool    CachedDrawMode; ///< Set to true if your plugin heavily uses OSD to draw to the screen to improve performance (only change it in PatchProcess). | Default: false
-                
+
         // Controller options
         bool    UseGameHidMemory; ///< Set to true to prevent using hidInit and use the game hid memory and capabilities (only change it in PatchProcess). | Default: false
         bool    AreN3DSButtonsAvailable; ///< Set to false to signal if the N3DS buttons are available (only change it in PatchProcess). | Default: true

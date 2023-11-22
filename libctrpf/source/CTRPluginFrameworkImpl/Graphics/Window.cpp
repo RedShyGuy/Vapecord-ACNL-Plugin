@@ -126,7 +126,7 @@ namespace CTRPluginFramework
         BottomWindow._image = Preferences::bottomBackgroundImage;
         TopWindow._image = Preferences::topBackgroundImage;
     }
-
+    
     void GetTimeStamp(char* out)
     {
         time_t rawtime;
@@ -164,6 +164,8 @@ namespace CTRPluginFramework
 
     void    Window::DrawTopInfoBar(void)
     {
+        if (System::IsCitra())
+            return;
         const Color &maintext = Preferences::Settings.MainTextColor;
         int posY = 3;
 
