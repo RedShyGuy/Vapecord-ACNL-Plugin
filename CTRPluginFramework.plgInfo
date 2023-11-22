@@ -3,7 +3,7 @@ Author: RedShyGuy
 Version: # Plugin version
     Major: 1
     Minor: 9
-    Revision: 5
+    Revision: 6
 
 Targets: # Low TitleId of games which are compatibles with this plugin (0 for all)
 
@@ -21,3 +21,5 @@ Description: |
     - Code import from file
     - Action Replay engine with extra capabilities
     - Super fast screenshot engine
+
+Compatibility: any

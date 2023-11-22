@@ -7,7 +7,7 @@ endif
 TOPDIR 		?= 	$(CURDIR)
 include $(DEVKITARM)/3ds_rules
 
-CTRPFLIB	?=	$(CURDIR)/libctrpf
+CTRPFLIB	?=	$(CURDIR)/Library
 
 TARGET		:= 	$(notdir $(CURDIR))
 PLGINFO 	:= 	CTRPluginFramework.plgInfo
@@ -109,6 +109,7 @@ $(OUTPUT).elf : $(OFILES)
 	@$(bin2o)
 
 #---------------------------------------------------------------------------------
+.PRECIOUS: %.elf
 %.3gx: %.elf
 #---------------------------------------------------------------------------------
 	@echo creating $(notdir $@)
