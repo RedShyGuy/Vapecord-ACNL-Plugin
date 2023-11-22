@@ -581,18 +581,18 @@ namespace CTRPluginFramework
 
     void PluginMenuHome::_RenderBottom(void)
     {
-        const Color& blank = Color::White;
-        static Clock creditClock;
-        static bool framework = true;
+        //const Color& blank = Color::White;
+        //static Clock creditClock;
+        //static bool framework = true;
 
         Renderer::SetTarget(BOTTOM);
         Window::DrawBottomInfoBar();
 
         Window::BottomWindow.Draw();
 
-        int posY = 205;
+        //int posY = 205;
 
-        if (framework)
+        /*if (framework)
             Renderer::DrawString(g_ctrpfText, g_textXpos[0], posY, blank);
         else
             Renderer::DrawString(g_copyrightText, g_textXpos[1], posY, blank);
@@ -603,7 +603,7 @@ namespace CTRPluginFramework
             framework = !framework;
         }
 
-        posY = 35;
+        posY = 35;*/
 
         // Draw buttons
         if (ShowNoteBottom)

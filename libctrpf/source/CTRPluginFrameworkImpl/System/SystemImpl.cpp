@@ -64,6 +64,8 @@ namespace CTRPluginFramework
 
         // Get System's language
         CFGU_GetSystemLanguage(&Language);
+
+        GetLocalFriendCode(&FriendCode);
     }
 
     void     SystemImpl::CheckCitra(void)
