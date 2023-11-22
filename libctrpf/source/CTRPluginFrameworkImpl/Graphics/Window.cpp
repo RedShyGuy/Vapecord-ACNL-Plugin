@@ -126,7 +126,7 @@ namespace CTRPluginFramework
         BottomWindow._image = Preferences::bottomBackgroundImage;
         TopWindow._image = Preferences::topBackgroundImage;
     }
-
+    
     void GetTimeStamp(char* out)
     {
         time_t rawtime;
@@ -171,14 +171,17 @@ namespace CTRPluginFramework
         Window::TopWindow_BottomBar.Draw();
 
         //draw info for top bar
-        char timestamp[80];
-        GetTimeStamp(timestamp);
-        float percentage = System::GetBatteryPercentage();
-        
-        Renderer::DrawSysString(timestamp, 35, posY, 400, maintext);
-        posY = 3;
-        Renderer::DrawSysString(Utils::Format("%d%%", (u32)percentage).c_str(), 310, posY, 400, maintext);
-        
+        if (!System::IsCitra()) {
+            char timestamp[80];
+            GetTimeStamp(timestamp);
+            float percentage = System::GetBatteryPercentage();
+            
+            Renderer::DrawSysString(timestamp, 35, posY, 400, maintext);
+            posY = 3;
+            Renderer::DrawSysString(Utils::Format("%d%%", (u32)percentage).c_str(), 310, posY, 400, maintext);
+        }
+        else
+            Renderer::DrawSysString("Citra", 35, posY, 400, maintext);
         //draw info for bottom bar
         static std::string FC = "";
         GetStringFC(FC);

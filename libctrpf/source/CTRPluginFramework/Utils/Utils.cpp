@@ -334,7 +334,6 @@ namespace CTRPluginFramework
             // Render bottom screen
 
             Renderer::SetTarget(BOTTOM);
-            Window::DrawBottomInfoBar();
 
             Window::BottomWindow.Draw();
             int posY = 55;
@@ -496,5 +495,51 @@ namespace CTRPluginFramework
             }
         }
         return (0);
+    }
+
+    void Utils::ConvertUTF8ToUTF16(string16& out, const char* utf8str)
+    {
+        u32 utf32;
+        u16 utf16[2+1]; // Size + NULL
+        out.reserve(out.size() + strlen(utf8str)); // Output size will be approximately the amount of chars of input
+        while (*utf8str)
+        {
+            int consumed = decode_utf8(&utf32, reinterpret_cast<const uint8_t*>(utf8str));
+            if (consumed < 0)
+                break;
+            utf8str += consumed;
+            int created = encode_utf16(utf16, utf32);
+            if (created < 0)
+                break;
+            utf16[created] = 0;
+            out.append(utf16);
+        }
+        out.shrink_to_fit();
+    }
+
+    static int __strwlen(const u16* in) {
+        int count = 0;
+        while(*in++) count++;
+        return count;
+    }
+
+    void Utils::ConvertUTF16ToUTF8(std::string& out, const u16* utf16str)
+    {
+        u32 utf32;
+        char utf8[4+1]; // Size + NULL
+        out.reserve(out.size() + __strwlen(utf16str)); // Output size will be approximately the amount of chars of input
+        while (*utf16str)
+        {
+            int consumed = decode_utf16(&utf32, utf16str);
+            if (consumed < 0)
+                break;
+            utf16str += consumed;
+            int created = encode_utf8(reinterpret_cast<uint8_t*>(utf8), utf32);
+            if (created < 0)
+                break;
+            utf8[created] = 0;
+            out.append(utf8);
+        }
+        out.shrink_to_fit();
     }
 }

@@ -217,7 +217,6 @@ namespace CTRPluginFramework
 
         int   posY = 61;
 
-        Window::DrawTopInfoBar();
         Window::TopWindow.Draw("HexEditor");
 
         // Render common elements
@@ -271,7 +270,6 @@ namespace CTRPluginFramework
     {
         _keyboard._RenderBottom();
 
-        Window::DrawBottomInfoBar();
         Window::BottomWindow.DrawButton();
     }
 

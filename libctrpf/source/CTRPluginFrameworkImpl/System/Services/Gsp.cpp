@@ -621,7 +621,10 @@ namespace Services
 
         static u32 *plgVAtoGameVa(u32 *va)
         {
-            return reinterpret_cast<u32 *>(svcConvertVAToPA(va, false) - 0xC000000);
+            if (SystemImpl::IsCitra)
+                return va;
+            else
+                return reinterpret_cast<u32 *>(svcConvertVAToPA(va, false) - 0xC000000);
         }
 
         void    SetFrameBufferInfo(FrameBufferInfoShared& src, int screen, bool convert)

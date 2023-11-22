@@ -49,6 +49,7 @@ namespace CTRPluginFramework
         static u32          _filecount;
         static u32          _display;
         static Clock        _timer;
+        static Clock        _hotkeyTimer;
         static Task         _task;
 
         static LightEvent   _readyEvent;

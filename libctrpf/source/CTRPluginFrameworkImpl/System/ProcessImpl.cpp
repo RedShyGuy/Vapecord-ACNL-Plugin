@@ -43,45 +43,88 @@ namespace CTRPluginFramework
         char    kproc[0x100] = {0};
         bool    isNew3DS = System::IsNew3DS();
 
-        // Get current KProcess
-        KProcessPtr = KProcess::GetCurrent();
-        KProcessPtr->PatchMaxThreads();
+        if (SystemImpl::IsCitra) {
+            MainThread = new KThread();
+            KProcessPtr = new KProcess();
 
-        // Copy KProcess data
-        Kernel::Memcpy(kproc, KProcessPtr, 0x100);
+            s64 out;
+            u32 out32;
+            svcGetThreadId(&out32, CUR_THREAD_HANDLE);
+            MainThread->threadId = out32;
+            svcGetProcessId(&ProcessId, CUR_PROCESS_HANDLE);
 
-        if (isNew3DS)
-        {
-            // Copy KCodeSet
-            Kernel::Memcpy(&CodeSet, (void *)*(u32 *)(kproc + 0xB8), sizeof(KCodeSet));
+            MainThread->tls = MainThreadTls;
 
-            // Copy process id
-            ProcessId = *(u32 *)(kproc + 0xBC);
+            svcGetProcessInfo(&out, CUR_PROCESS_HANDLE, 0x10000);
+            memcpy(CodeSet.processName, &out, 8);
 
-            // Get main thread
-            MainThread = (KThread *)*(u32 *)(kproc + 0xC8);
+            svcGetProcessInfo(&out, CUR_PROCESS_HANDLE, 0x10001);
+            CodeSet.titleId = out;
+            TitleId = out;
 
-            // Patch KProcess to allow creating threads on Core2
-            KProcessPtr->PatchCore2Access();
+            svcGetProcessInfo(&out, CUR_PROCESS_HANDLE, 0x10002);
+            CodeSet.text.totalPages = out >> 12;
+            CodeSet.textPages = out >> 12;
+
+            svcGetProcessInfo(&out, CUR_PROCESS_HANDLE, 0x10003);
+            CodeSet.rodata.totalPages = out >> 12;
+            CodeSet.rodataPages = out >> 12;
+
+            svcGetProcessInfo(&out, CUR_PROCESS_HANDLE, 0x10004);
+            CodeSet.data.totalPages = out >> 12;
+            CodeSet.rwPages = out >> 12;
+
+            svcGetProcessInfo(&out, CUR_PROCESS_HANDLE, 0x10005);
+            CodeSet.text.startAddress = out;
+
+            svcGetProcessInfo(&out, CUR_PROCESS_HANDLE, 0x10006);
+            CodeSet.rodata.startAddress = out;
+
+            svcGetProcessInfo(&out, CUR_PROCESS_HANDLE, 0x10007);
+            CodeSet.data.startAddress = out;
+
+            // Create handle for this process
+            ProcessHandle = CUR_PROCESS_HANDLE;
+        } else {
+            // Get current KProcess
+            KProcessPtr = KProcess::GetCurrent();
+            KProcessPtr->PatchMaxThreads();
+
+            // Copy KProcess data
+            Kernel::Memcpy(kproc, KProcessPtr, 0x100);
+
+            if (isNew3DS)
+            {
+                // Copy KCodeSet
+                Kernel::Memcpy(&CodeSet, (void *)*(u32 *)(kproc + 0xB8), sizeof(KCodeSet));
+
+                // Copy process id
+                ProcessId = *(u32 *)(kproc + 0xBC);
+
+                // Get main thread
+                MainThread = (KThread *)*(u32 *)(kproc + 0xC8);
+
+                // Patch KProcess to allow creating threads on Core2
+                KProcessPtr->PatchCore2Access();
+            }
+            else
+            {
+                // Copy KCodeSet
+                Kernel::Memcpy(&CodeSet, (void *)*(u32 *)(kproc + 0xB0), sizeof(KCodeSet));
+
+                // Copy process id
+                ProcessId = *(u32 *)(kproc + 0xB4);
+
+                // Get main thread
+                MainThread = (KThread *)*(u32 *)(kproc + 0xC0);
+            }
+
+            // Copy title id
+            TitleId = CodeSet.titleId;
+
+            // Create handle for this process
+            svcOpenProcess(&ProcessHandle, ProcessId);
         }
-        else
-        {
-            // Copy KCodeSet
-            Kernel::Memcpy(&CodeSet, (void *)*(u32 *)(kproc + 0xB0), sizeof(KCodeSet));
-
-            // Copy process id
-            ProcessId = *(u32 *)(kproc + 0xB4);
-
-            // Get main thread
-            MainThread = (KThread *)*(u32 *)(kproc + 0xC0);
-        }
-
-        // Copy title id
-        TitleId = CodeSet.titleId;
-
-        // Create handle for this process
-        svcOpenProcess(&ProcessHandle, ProcessId);
-
         UpdateMemRegions();
 
         // Init wait for exit event
@@ -210,12 +253,18 @@ namespace CTRPluginFramework
 
     void    ProcessImpl::LockGameThreads(void)
     {
-        svcControlProcess(CUR_PROCESS_HANDLE, PROCESSOP_SCHEDULE_THREADS, 1, (u32)ThreadPredicate);
+        if (SystemImpl::IsCitra)
+            svcControlProcess(CUR_PROCESS_HANDLE, PROCESSOP_SCHEDULE_THREADS_WITHOUT_TLS_MAGIC, 1, THREADVARS_MAGIC);
+        else
+            svcControlProcess(CUR_PROCESS_HANDLE, PROCESSOP_SCHEDULE_THREADS, 1, (u32)ThreadPredicate);
     }
 
     void    ProcessImpl::UnlockGameThreads(void)
     {
-        svcControlProcess(CUR_PROCESS_HANDLE, PROCESSOP_SCHEDULE_THREADS, 0, (u32)ThreadPredicate);
+        if (SystemImpl::IsCitra)
+            svcControlProcess(CUR_PROCESS_HANDLE, PROCESSOP_SCHEDULE_THREADS_WITHOUT_TLS_MAGIC, 0, THREADVARS_MAGIC);
+        else
+            svcControlProcess(CUR_PROCESS_HANDLE, PROCESSOP_SCHEDULE_THREADS, 0, (u32)ThreadPredicate);
     }
 
     static bool     IsInRegion(MemInfo &memInfo, u32 addr)
@@ -288,7 +337,7 @@ namespace CTRPluginFramework
     {
         Lock lock(MemoryMutex);
 
-        for (MemInfo &memInfo : MemRegions) 
+        for (MemInfo &memInfo : MemRegions)
             if (IsInRegion(memInfo, address))
                 return true;
 

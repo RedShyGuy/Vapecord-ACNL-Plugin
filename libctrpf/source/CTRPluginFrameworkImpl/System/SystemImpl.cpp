@@ -4,16 +4,21 @@
 #include "CTRPluginFrameworkImpl/System/Scheduler.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/OSDImpl.hpp"
 
+extern "C" {
+    bool _g_isCitra = false;
+}
+
 namespace CTRPluginFramework
 {
     bool    SystemImpl::IsNew3DS = false;
+    bool    SystemImpl::IsCitra = false;
     u32     SystemImpl::CFWVersion = 0;
     u32     SystemImpl::RosalinaHotkey = 0;
     u32     SystemImpl::AptStatus = 0;
     u8      SystemImpl::Language = CFG_LANGUAGE_EN;
     u64     SystemImpl::FriendCode = 0;
 
-    static  LightEvent      g_sleepEvent;
+   static  LightEvent      g_sleepEvent;
 
     enum
     {
@@ -60,8 +65,15 @@ namespace CTRPluginFramework
         // Get System's language
         CFGU_GetSystemLanguage(&Language);
 
-        // Get Friend Code
         GetLocalFriendCode(&FriendCode);
+    }
+
+    void     SystemImpl::CheckCitra(void)
+    {
+        s64 output = 0;
+        svcGetSystemInfo(&output, 0x20000, 0);
+        IsCitra = output;
+        _g_isCitra = output;
     }
 
     bool    SystemImpl::WantsToSleep(void)

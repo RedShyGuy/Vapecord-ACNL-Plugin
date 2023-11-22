@@ -283,7 +283,6 @@ namespace CTRPluginFramework
     void    FreeCheats::_DrawBottom(void)
     {
         Renderer::SetTarget(BOTTOM);
-        Window::DrawBottomInfoBar();
         Window::BottomWindow.Draw();
         const Color &textcolor = Preferences::Settings.MainTextColor;
 

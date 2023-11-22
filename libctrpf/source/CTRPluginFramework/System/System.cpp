@@ -32,6 +32,11 @@ namespace CTRPluginFramework
         return (SystemImpl::IsNew3DS);
     }
 
+    bool    System::IsCitra(void)
+    {
+        return (SystemImpl::IsCitra);
+    }
+
     LanguageId  System::GetSystemLanguage(void)
     {
         return (static_cast<LanguageId>(SystemImpl::Language));

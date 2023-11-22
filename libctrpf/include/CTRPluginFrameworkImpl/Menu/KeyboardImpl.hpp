@@ -126,10 +126,10 @@ namespace CTRPluginFramework
 
         CompareCallback         _compare{nullptr};
         ConvertCallback         _convert{nullptr};
-        OnEventCallback         _onKeyboardEvent{nullptr};
+        OnEventCallback   _onKeyboardEvent{nullptr};
         static FrameCallback    _onNewFrame;
-        KeyboardEvent           _KeyboardEvent{};
-        std::vector<TouchKey>   *_keys{nullptr};
+        KeyboardEvent        _KeyboardEvent{};
+        std::vector<TouchKey>    *_keys{nullptr};
 
         static std::vector<TouchKey>    _DecimalKeys;
         static std::vector<TouchKey>    _HexaDecimalKeys;

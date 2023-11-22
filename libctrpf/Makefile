@@ -13,7 +13,7 @@ export CTRPF_VERSION_MAJOR	:=	$(shell git describe --always --tags | cut -f1 -d-
 export CTRPF_VERSION_MINOR	:=	$(shell git describe --always --tags | cut -f1 -d- | cut -f2 -d.)
 export CTRPF_VERSION_BUILD	:=	$(shell git describe --always --tags | cut -f1 -d- | cut -f3 -d.)
 export COMMIT			:=	$(shell git rev-parse --short=8 HEAD)
-export COMPILE_DATE 	:=  $(shell date)
+export COMPILE_DATE 	:=  $(shell date -u +"%Y-%m-%dT%H:%M:%S%Z")
 
 #ifeq ($(strip $(CTRPF_REVISION)),)
 #	export CTRPF_REVISION			:=	v0.0.0-0
@@ -179,8 +179,21 @@ lib/libctrpf.a : libcwav-build lib release
 	@mv $@ $@tmp
 	@$(AR) -M <<< $$'create $@ \naddlib $@tmp \naddlib lib/libcwav.a\naddlib lib/libncsnd.a\nsave\nend'
 	@rm $@tmp
-	@rm lib/libcwav.a
-	@rm lib/libncsnd.a
+#	@rm lib/libcwav.a
+#	@rm lib/libncsnd.a
+
+lib/libctrpfd.a : SHELL := /bin/bash
+lib/libctrpfd.a : libcwav-build lib debug
+	@$(MAKE) BUILD=debug OUTPUT=$(CURDIR)/$@ BUILD_CFLAGS="-DDEBUG=1" G=-g \
+	DEPSDIR=$(CURDIR)/debug --no-print-directory -C debug -f $(CURDIR)/Makefile
+	@rm debug/PluginMenuTools.o # Force update of revision, date etc.
+	@cp $(CURDIR)/libcwav/lib/libcwav.a lib/libcwav.a
+	@cp $(CURDIR)/libcwav/libncsnd/lib/libncsnd.a lib/libncsnd.a
+	@mv $@ $@tmp
+	@$(AR) -M <<< $$'create $@ \naddlib $@tmp \naddlib lib/libcwav.a\naddlib lib/libncsnd.a\nsave\nend'
+	@rm $@tmp
+#	@rm lib/libcwav.a
+#	@rm lib/libncsnd.a
 
 #---------------------------------------------------------------------------------
 clean:

@@ -339,8 +339,6 @@ namespace CTRPluginFramework
 
         Renderer::SetTarget(TOP);
 
-        Window::DrawTopInfoBar();
-
         Window::TopWindow.Draw("Gateway RAM Dumper");
 
         int posY = 116;
@@ -362,7 +360,6 @@ namespace CTRPluginFramework
         Renderer::DrawRect(progBarFill, limegreen);
 
         Renderer::SetTarget(BOTTOM);
-        Window::DrawBottomInfoBar();
 
         Window::BottomWindow.Draw();
 

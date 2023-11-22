@@ -103,8 +103,6 @@ namespace CTRPluginFramework
         ** Top Screen
         **************************************************/
         Renderer::SetTarget(TOP);
-
-        Window::DrawTopInfoBar();
         // If a textbox exist
         if (_guideTB.IsOpen())
         {
@@ -119,7 +117,6 @@ namespace CTRPluginFramework
         ** Bottom Screen
         **************************************************/
         Renderer::SetTarget(BOTTOM);
-        Window::DrawBottomInfoBar();
 
         static IntRect  background(20, 20, 280, 200);
         const Color     &black = Color::Black;

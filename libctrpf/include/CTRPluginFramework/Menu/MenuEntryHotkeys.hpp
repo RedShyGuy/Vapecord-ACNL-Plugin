@@ -79,7 +79,7 @@ namespace CTRPluginFramework
          * if withName is true the output will be: "Hotkey's name : A + B"
          */
         std::string  ToString(bool withName = false) const;
-        
+
     private:
         friend class HotkeyManager;
         friend class PluginMenuImpl;
@@ -145,12 +145,6 @@ namespace CTRPluginFramework
          */
         u32         Count(void);
 
-        /**
-         * \brief Get all hotkeys
-         * \return hotkeys
-         */
-        std::vector<Hotkey> GetHotkeys(void);
-
     private:
         friend class PluginMenuHome;
         friend class PluginMenuImpl;
@@ -158,6 +152,7 @@ namespace CTRPluginFramework
         MenuEntry           *_owner;
         OnHotkeyChangeClbk  _callback;
         std::vector<Hotkey> _hotkeys;
+
     };
 }
 

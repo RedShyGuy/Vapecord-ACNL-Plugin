@@ -211,22 +211,15 @@ namespace CTRPluginFramework
 
     static u32      FsTryOpenFileCallback(u32 a1, u16 *fileName, u32 mode)
     {
-        u8      buffer[256] = {0};
         std::string str;
-        int     units;
 
         LightLock_Lock(&g_OpenFileLock);
 
         if (g_HookMode & OSD)
         {
             // Convert utf16 to utf8
-            units = utf16_to_utf8(buffer, fileName, 255);
-
-            if (units > 0)
-            {
-                str = (char *)buffer;
-                OSD::Notify(str);
-            }
+            Utils::ConvertUTF16ToUTF8(str, fileName);
+            OSD::Notify(str);
         }
 
         if (g_HookMode & FILE)
@@ -234,9 +227,7 @@ namespace CTRPluginFramework
             // Convert utf16 to utf8 if necessary
             if (str.empty())
             {
-                units = utf16_to_utf8(buffer, fileName, 255);
-                if (units > 0)
-                    str = (char *)buffer;
+                Utils::ConvertUTF16ToUTF8(str, fileName);
             }
 
             // If string isn't empty, write to file

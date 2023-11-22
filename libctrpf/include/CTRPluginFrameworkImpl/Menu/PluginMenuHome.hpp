@@ -85,6 +85,7 @@ namespace CTRPluginFramework
         Button              _rainbowBtn;
         Button              _showStarredBtn;
         Button              _VSettingsBtn;
+        //Button              _hidMapperBtn;
         Button              _gameGuideBtn;
         Button              _searchBtn;
         Button              _arBtn;

@@ -302,7 +302,7 @@ namespace CTRPluginFramework
         FwkSettings &settings = FwkSettings::Get();
         u32 ret;
 
-        if (settings.CachedDrawMode)
+        if (settings.CachedDrawMode || SystemImpl::IsCitra)
         {
             ret = addr;
         }
@@ -451,9 +451,9 @@ namespace CTRPluginFramework
             g_fpsCounter[isBottom].Display();
 
         if (settings.CachedDrawMode) {
-            svcFlushProcessDataCache(CUR_PROCESS_HANDLE, reinterpret_cast<u32>(addr), isBottom ? stride * 320 : stride * 400);
+            if (!SystemImpl::IsCitra) svcFlushProcessDataCache(CUR_PROCESS_HANDLE, reinterpret_cast<u32>(addr), isBottom ? stride * 320 : stride * 400);
             if (!isBottom && addrB && addrB != addr)
-                svcFlushProcessDataCache(CUR_PROCESS_HANDLE, reinterpret_cast<u32>(addrB), stride * 400);
+                if (!SystemImpl::IsCitra) svcFlushProcessDataCache(CUR_PROCESS_HANDLE, reinterpret_cast<u32>(addrB), stride * 400);
         }
     }
 

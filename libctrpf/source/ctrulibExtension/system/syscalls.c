@@ -8,10 +8,6 @@
 
 void __ctru_exit(int rc);
 
-extern const u8 __tdata_lma[];
-extern const u8 __tdata_lma_end[];
-extern u8 __tls_start[];
-
 static ThreadVars * g_mainThreadVars;
 
 ThreadVars* __ctrpf_getThreadVars(ThreadVars * mainThreadVars);
@@ -111,6 +107,37 @@ void __SYSCALL(lock_release_recursive) (_LOCK_RECURSIVE_T *lock)
 void __SYSCALL(exit)(int rc) {
 	__ctru_exit(rc);
 }
+
+void initThreadVars(struct Thread_tag *thread)
+{
+	ThreadVars* tv = getThreadVars();
+	tv->magic = THREADVARS_MAGIC;
+	tv->reent = thread != NULL ? &thread->reent : _impure_ptr;
+	tv->thread_ptr = thread;
+	tv->tls_tp = (thread != NULL ? (u8*)thread->stacktop : __tls_start) - 8; // Arm ELF TLS ABI mandates an 8-byte header
+	tv->srv_blocking_policy = false;
+
+	// Kernel does not initialize fpscr at all, so we must do it ourselves
+	// https://developer.arm.com/documentation/ddi0360/f/vfp-programmers-model/vfp11-system-registers/floating-point-status-and-control-register--fpscr
+
+	// All flags clear, all interrupts disabled, all instruction scalar.
+	// As for the 3 below fields: default NaN mode, flush-to-zero both enabled & round to nearest.
+	__builtin_arm_set_fpscr(BIT(25) | BIT(24) | (0u << 22));
+}
+/*
+void __system_initSyscalls(void)
+{
+	// Initialize thread vars for the main thread
+	initThreadVars(NULL);
+	ThreadVars* tv = getThreadVars();
+
+    g_mainThreadVars = tv;
+
+	u32 tls_size = __tdata_lma_end - __tdata_lma;
+	size_t tdata_start = alignTo((size_t)__tls_start, __tdata_align);
+	if (tls_size)
+		memcpy((void*)tdata_start, __tdata_lma, tls_size);
+}*/
 
 void __system_initSyscalls(void)
 {

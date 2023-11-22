@@ -11,9 +11,10 @@ namespace CTRPluginFramework
     extern "C" u32 __ctru_heap;
     extern "C" u32 __ctru_heap_size;
 
-    static u32 Fail(u32 res)
+    static void Fail(u32 res)
     {
-        return *(u32 *)0xDEADC0DE = res;
+        *(u32 *)0xDEADC0DE = res;
+        for(;;);
     }
 
     struct ScreensFramebuffers

@@ -16,6 +16,12 @@ namespace CTRPluginFramework
     // Makes the text draw function skip to the specified X pixel.
     std::string     SkipToPixel(u16 px);
 
+    // Sets the random text shake for the specified direction (horzontal or vertical). The amount can be from 0 (disabled) to 62 (maximum).
+    std::string     SetShake(bool setHDir, bool setVDir, u8 amount);
+
+    // Sets replacing all the coming characters with a random choice from the specified setID (see Render.hpp). Use value -1 to disable.
+    std::string     SetRandomText(int randomSetID);
+
     // Aligns the string to the center of the specified borders. (Default values = top window size)
     std::string     CenterAlign(const std::string& str, u16 leftBorder = 35, u16 rightBorder = 370);
 

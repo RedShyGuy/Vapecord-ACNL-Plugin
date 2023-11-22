@@ -221,7 +221,7 @@ namespace CTRPluginFramework
         u32 size = GetFrameBufferSize();
 
         // Flush currentBuffer
-        svcFlushProcessDataCache(CUR_PROCESS_HANDLE, (u32)GetLeftFrameBuffer(), size);
+        if (!SystemImpl::IsCitra) svcFlushProcessDataCache(CUR_PROCESS_HANDLE, (u32)GetLeftFrameBuffer(), size);
     }
 
     void    ScreenImpl::Invalidate(void)
@@ -379,7 +379,7 @@ namespace CTRPluginFramework
 
     void    ScreenImpl::SwapBuffer(void)
     {
-        svcFlushDataCacheRange(GetLeftFrameBuffer(), GetFrameBufferSize());
+        if (!SystemImpl::IsCitra) svcFlushDataCacheRange(GetLeftFrameBuffer(), GetFrameBufferSize());
 
         GSP::SwapBuffer(!_isTopScreen);
 

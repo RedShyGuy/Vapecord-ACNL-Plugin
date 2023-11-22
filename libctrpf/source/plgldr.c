@@ -4,7 +4,7 @@
 #include "csvc.h"
 
 static Handle   plgLdrHandle;
-static Handle   plgLdrArbiter;
+static Handle   plgLdrArbiter = 0;
 static s32*     plgEvent;
 static s32*     plgReply;
 static int      plgLdrRefCount;
@@ -36,13 +36,16 @@ Result  plgLdrInit(void)
     if (AtomicPostIncrement(&plgLdrRefCount) == 0)
         res = svcConnectToPort(&plgLdrHandle, "plg:ldr");
 
-    if (R_SUCCEEDED(res)
-       && R_SUCCEEDED((res = PLGLDR__GetArbiter())))
+    if (R_SUCCEEDED(res))
     {
-        PluginHeader *header = (PluginHeader *)0x07000000;
+        u32 res2 = PLGLDR__GetArbiter();
+        if (R_SUCCEEDED(res2) || res2 == 0xE0E01BF4) { // Succeeded or not implemented (citra)
+            PluginHeader *header = (PluginHeader *)0x07000000;
 
-        plgEvent = header->plgldrEvent;
-        plgReply = header->plgldrReply;
+            plgEvent = header->plgldrEvent;
+            plgReply = header->plgldrReply;
+        } else
+            plgLdrExit();
     }
     else
         plgLdrExit();

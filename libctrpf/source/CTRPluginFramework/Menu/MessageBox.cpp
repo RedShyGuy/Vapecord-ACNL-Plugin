@@ -1,6 +1,5 @@
 #include "CTRPluginFramework/Menu/MessageBox.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/MessageBoxImpl.hpp"
-#include "CTRPluginFramework/System/Sleep.hpp"
 
 namespace CTRPluginFramework
 {
@@ -28,7 +27,6 @@ namespace CTRPluginFramework
 
     bool MessageBox::operator()(void) const
     {
-        Sleep(Milliseconds(100));
         return ((*_messageBox)());
     }
 }
