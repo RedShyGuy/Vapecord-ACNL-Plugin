@@ -158,6 +158,8 @@ namespace CTRPluginFramework {
 	void bubblesDisappear(MenuEntry *entry);
 	void Forcesendchat(MenuEntry *entry);
 	void ChatCopyPaste(MenuEntry *entry);
+	void ShowChatMessage(MenuEntry *entry);
+	void ChatButton(MenuEntry *entry);
 
 	void AmiiboSpoofer(MenuEntry *entry);
 	void ShopsAlwaysOpen(MenuEntry *entry);
@@ -198,6 +200,7 @@ namespace CTRPluginFramework {
 	void fast(MenuEntry *entry);
 	void fasttalk(MenuEntry *entry);
 	void speedentry(MenuEntry *entry);
+	void IsabelleSkip(MenuEntry *entry);
 
 //Dev Codes	
 	void customdump(MenuEntry *entry);

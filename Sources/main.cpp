@@ -14,7 +14,7 @@
 namespace CTRPluginFramework {
 	static const std::string Note = "Creator: Lukas#4444 (RedShyGuy) \n\n"
 									"Code Credits: Nico, Jay, Levi, Slattz, Kominost, Elominator and more \n\n"
-									"Translators: みるえもん(Japanese), im a book(spanish), Fedecrash02(italian), Youssef & Arisa(french), bkfirmen(german), Soopoolleaf(korean) \n\n"
+									"Translators: みるえもん & みなと(Japanese), im a book(spanish), Fedecrash02(italian), Youssef & Arisa(french), bkfirmen(german), Soopoolleaf(korean) \n\n"
 									"" << Utils::Format("Discord: %s", DISCORDINV);
 
 	extern int UI_Pos;
@@ -25,6 +25,10 @@ namespace CTRPluginFramework {
 	void InitMenu(PluginMenu *menu);
 	void GetPlayerInfoData(void);
 	void RCO(void);
+	void GetMessage_p1(void);
+	void GetMessage_p2(void);
+	void GetMessage_p3(void);
+	void GetMessage_p4(void);
 
 /*
 Will be called at the start of the plugin to load the language, colors and the dev check

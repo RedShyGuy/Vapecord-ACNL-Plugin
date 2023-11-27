@@ -497,4 +497,54 @@ namespace CTRPluginFramework {
 		if(!entry->IsActivated()) 
 			Process::Patch(speed.addr, 0xE59400A0); 
 	}
+
+//しずえスキップ関係
+	bool TouchSkipButton(void)
+	{
+		static UIntRect skip_coord(13, 190, 5*6, 30);
+		if (skip_coord.Contains(Touch::GetPosition())) return 1;
+		return 0;
+	}
+
+	bool SkipButton(const Screen &scr)
+	{
+		if ( scr.IsTop ) return false;
+		scr.Draw( "Skip", 16, 200, Color::Green, Color::White);
+		
+		return true;
+	}
+
+	bool on_run = false;
+
+	void IsabelleSkip(MenuEntry *entry) {
+		// FastGameSpeed
+		static const Address speed(0x54DDB4, 0x54D2CC, 0x54CDFC, 0x54CDFC, 0x54C6E8, 0x54C6E8, 0x54C40C, 0x54C40C);
+
+		u8 roomID = GameHelper::RoomCheck();
+		if(!entry->IsActivated()) {
+			if (on_run) OSD::Stop(SkipButton); 
+			Process::Patch(speed.addr, 0xE59400A0);
+			on_run = false;
+		}
+		else if (roomID == 0x63) { // Isabelle
+			// Speedup
+			Process::Patch(speed.addr, GameHelper::GameSaving() ? 0xE59400A0 : 0xE3E004FF); 
+
+			if (!on_run) OSD::Run(SkipButton); 
+			
+			on_run = true;
+			if (Controller::IsKeyPressed(Touchpad) && TouchSkipButton()) {
+				static Address roomfunc(0x304A60, 0x304C68, 0x304AEC, 0x304AEC, 0x304A94, 0x304A94, 0x304A3C, 0x304A3C);	
+				roomfunc.Call<u32>(0, 1, 1, 0);
+			}
+		}
+		else {
+			if (on_run){
+				OSD::Stop(SkipButton);
+				Process::Patch(speed.addr, 0xE59400A0);
+				on_run = false;
+			}
+		}
+		
+	}
 }

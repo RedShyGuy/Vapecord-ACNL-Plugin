@@ -356,6 +356,8 @@ namespace CTRPluginFramework {
 		CHAC->Append(EntryWithHotkey(new MenuEntry("FORCE_CHAT", Forcesendchat, "FORCE_CHAT_NOTE"), { 
 			Hotkey(Key::R, "FORCE_CHAT") 
 		})),
+		CHAC->Append(new MenuEntry("ShowChatMessage", ShowChatMessage, "ShowChatMessage_NOTE")),
+		CHAC->Append(new MenuEntry("ChatButton", ChatButton, "ChatButton_NOTE")),
 		EXTC->Append(CHAC);
 		EXTC->Append(new MenuEntry("SHOP_ALWAYS_OPEN_NAME", ShopsAlwaysOpen, "SHOP_ALWAYS_OPEN_NOTE")),
 		EXTC->Append(new MenuEntry("DISABLE_SAVE", nonesave, "DISABLE_SAVE_NOTE")),
@@ -414,6 +416,7 @@ namespace CTRPluginFramework {
 		})),
 		MISC->Append(new MenuEntry("FAST_TEXT_SPEED", fasttalk, "FAST_TEXT_SPEED_NOTE")),
 		MISC->Append(new MenuEntry("FAST_GAME_SPEED", speedentry, "FAST_GAME_SPEED_NOTE")),
+		MISC->Append(new MenuEntry("Isabelle_Skip", IsabelleSkip, "Isabelle_Skip_NOTE")),
 		menu->Append(MISC);
 
 	////////////////////
