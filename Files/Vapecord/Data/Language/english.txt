@@ -989,6 +989,13 @@ FAST_TEXT_SPEED_NOTE :: Lets you speed up text boxes.
 FAST_GAME_SPEED :: Fast Game Speed
 FAST_GAME_SPEED_NOTE :: Lets you speed up the game.
 
+ShowChatMessage :: ShowChatMessage
+ShowChatMessage_NOTE :: Chat messages are displayed on the screen.
+ChatButton :: ChatButton
+ChatButton_NOTE :: The button appears when you open a chat.
+Isabelle_Skip :: Isabelle Skip
+Isabelle_Skip_NOTE :: You can skip the conversation with Isabelle at the beginning of the game. \n*If you do not skip it when the screen is brightened, the lower screen will go black.
+
 #Other Stuff
 
 #Dumper & Restorer & Deleter

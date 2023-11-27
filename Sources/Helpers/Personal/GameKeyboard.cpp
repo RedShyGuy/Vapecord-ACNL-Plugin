@@ -29,6 +29,20 @@ namespace CTRPluginFramework {
 		return true;
 	}
 
+	bool GameKeyboard::Delete(void) {
+		if(!GameKeyboard::IsOpen())
+			return false;
+		if(GameKeyboard::IsEmpty())
+			return false;
+
+		static Address DeleteFunc(0x523780, 0x5230D4, 0x5227C8, 0x5227C8, 0x5220D4, 0x5220D4, 0x521DCC, 0x521DCC);
+
+		DeleteFunc.Call<void>(*(u32 *)Code::ChatPoint.addr, 0, 100);
+
+		*(bool *)(*(u32 *)(Code::ChatPoint.addr) + 0x20) = 0; //unselects
+		return true;
+	}
+
 	bool GameKeyboard::CopySelected(std::string& res) {
 		if(!GameKeyboard::IsOpen())
 			return false;
