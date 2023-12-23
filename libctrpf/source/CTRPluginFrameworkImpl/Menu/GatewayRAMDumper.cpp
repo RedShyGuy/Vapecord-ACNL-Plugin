@@ -338,6 +338,7 @@ namespace CTRPluginFramework
         static ProcessingLogo   logo;
 
         Renderer::SetTarget(TOP);
+        //Window::DrawTopInfoBar();
 
         Window::TopWindow.Draw("Gateway RAM Dumper");
 

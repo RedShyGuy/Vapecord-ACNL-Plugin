@@ -103,6 +103,7 @@ namespace CTRPluginFramework
         ** Top Screen
         **************************************************/
         Renderer::SetTarget(TOP);
+        //Window::DrawTopInfoBar();
         // If a textbox exist
         if (_guideTB.IsOpen())
         {

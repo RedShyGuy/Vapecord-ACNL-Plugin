@@ -256,6 +256,8 @@ namespace CTRPluginFramework
             }
         }
 
+        //Window::DrawTopInfoBar();
+
         //Window::TopWindow.Draw(_title);
 
         int posX = _box.leftTop.x + 5;

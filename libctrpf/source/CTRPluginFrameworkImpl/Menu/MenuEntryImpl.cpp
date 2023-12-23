@@ -9,8 +9,11 @@ namespace CTRPluginFramework
     MenuEntryImpl::MenuEntryImpl(const std::string &name, const std::string &note, MenuEntry *owner) : MenuItem(MenuType::Entry)
     {
         this->name = name;
+        this->firstName = Color::RemoveColor(name);
         this->firstName = name;
         this->note = note;
+        this->firstNote = note;
+        this->color = Color::GetColor(name);
         this->GameFunc = nullptr;
         this->MenuFunc = nullptr;
         this->_arg = nullptr;
@@ -21,13 +24,18 @@ namespace CTRPluginFramework
         this->_flags.isUnselectable = false;
         this->_radioId = -1;
         this->_owner = owner;
+        this->cogID = -1;
+        this->cheatID = -1;
     }
 
     MenuEntryImpl::MenuEntryImpl(const std::string &name, FuncPointer func, const std::string &note, MenuEntry *owner) : MenuItem(MenuType::Entry)
     {
         this->name = name;
+        this->firstName = Color::RemoveColor(name);
         this->firstName = name;
         this->note = note;
+        this->firstNote = note;
+        this->color = Color::GetColor(name);
         this->GameFunc = func;
         this->MenuFunc = nullptr;
         this->_arg = nullptr;
@@ -38,6 +46,8 @@ namespace CTRPluginFramework
         this->_flags.isUnselectable = false;
         this->_radioId = -1;
         this->_owner = owner;
+        this->cogID = -1;
+        this->cheatID = -1;
     }
 
     MenuEntryImpl::~MenuEntryImpl()

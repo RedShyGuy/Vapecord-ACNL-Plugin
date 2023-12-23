@@ -216,7 +216,7 @@ namespace CTRPluginFramework
         //const Color     &red = Color::Red;
 
         int   posY = 61;
-
+        //Window::DrawTopInfoBar();
         Window::TopWindow.Draw("HexEditor");
 
         // Render common elements
@@ -269,7 +269,7 @@ namespace CTRPluginFramework
     void    HexEditor::_RenderBottom(void)
     {
         _keyboard._RenderBottom();
-
+        //Window::DrawTopInfoBar();
         Window::BottomWindow.DrawButton();
     }
 

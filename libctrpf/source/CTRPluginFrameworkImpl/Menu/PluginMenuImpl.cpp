@@ -321,7 +321,7 @@ namespace CTRPluginFramework
                 delta = clock.Restart();
 
                 // Close menu
-                if (shouldClose || SystemImpl::WantsToSleep())
+                if (shouldClose || SystemImpl::WantsToSleep() || _forceClose)
                 {
                     if (shouldClose)
                         SoundEngine::PlayMenuSound(SoundEngine::Event::CANCEL);

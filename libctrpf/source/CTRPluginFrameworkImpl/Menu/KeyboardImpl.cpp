@@ -455,7 +455,10 @@ namespace CTRPluginFramework
         Event               event;
         EventManager        manager(EventManager::EventGroups::GROUP_KEYS | EventManager::EventGroups::GROUP_TOUCH);
         Clock               clock;
+        Time                delta;
+        Clock               frameClock;
         bool                wasKeysLocked = false;
+        bool                firstRun = true;
 
         // Construct keyboard
         if (!_customKeyboard)
@@ -499,6 +502,9 @@ namespace CTRPluginFramework
             // Update current keys
             _Update(clock.Restart().AsSeconds());
 
+            if (_onNewFrame != nullptr && _owner != nullptr)
+                _onNewFrame(delta);
+
             // Render Top Screen
             if (DisplayTopScreen)
                 _RenderTop();
@@ -514,6 +520,15 @@ namespace CTRPluginFramework
 
                 if (_errorMessage && inputChanged)
                     _errorMessage = false;
+
+                
+                if(firstRun)
+                {
+                    if (_onKeyboardEvent != nullptr && _owner != nullptr)
+                        _onKeyboardEvent(*_owner, _KeyboardEvent);
+
+                    firstRun = false;
+                }
 
                 if (inputChanged)
                 {
@@ -552,6 +567,9 @@ namespace CTRPluginFramework
                     _isOpen = false;
                 }
             }
+
+            delta = frameClock.Restart();
+
             if (SystemImpl::IsSleeping()) {
                 ret = SLEEP_ABORT;
                 _isOpen = false;

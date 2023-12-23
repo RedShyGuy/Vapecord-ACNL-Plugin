@@ -169,6 +169,23 @@ namespace CTRPluginFramework
             }
             else
             {
+                /*std::string copy(input);
+                u64 half[2] = { 0 };
+
+                copy.resize(16);
+                const char *cstr[2] = { copy.substr(0, 8).c_str(), copy.substr(8).c_str() };
+                char *cstro[2] = { nullptr };
+
+                for(int i = 0; i < 2; ++i) 
+                {
+                    half[i] = static_cast<u32>(strtoul(cstr[i], &cstro[i], 16));
+                }
+
+                int shift = (half[1] != 0 ? (std::string(cstr[1]).length()*4) : 0);
+                temp = ((half[0] << shift) + (half[1]));
+
+                if ((cstro[0] == cstr[0]) && (cstro[1] == cstr[1]))
+                    temp = UINT64_MAX;   */
                 const char *cstr = input.c_str();
                 char *cstro = nullptr;
                 temp = static_cast<u32>(strtoul(cstr, &cstro, 16));
