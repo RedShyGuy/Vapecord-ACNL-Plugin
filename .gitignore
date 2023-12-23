@@ -13,3 +13,6 @@ libctrpf/libcwav
 *.elf
 *.lnk
 desktop.ini
+send.bat
+send.py
+sendpost.txt
