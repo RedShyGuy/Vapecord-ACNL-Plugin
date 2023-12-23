@@ -128,6 +128,11 @@ namespace CTRPluginFramework
             // Draw box
             _Draw();
             Renderer::SetTarget(BOTTOM);
+
+            PluginMenu *menu = PluginMenu::GetRunningInstance();
+            if (menu && menu->IsOpen())
+                Window::DrawBottomInfoBar();
+
             Renderer::EndFrame();
         }
 
@@ -205,6 +210,10 @@ namespace CTRPluginFramework
         FwkSettings &settings = Preferences::Settings;
 
         Renderer::SetTarget(TOP);
+
+        PluginMenu *menu = PluginMenu::GetRunningInstance();
+        if (menu && menu->IsOpen())
+            Window::DrawTopInfoBar();
 
         // Draw Box backgrounds
         Renderer::DrawRect2(_box, settings.BackgroundMainColor, settings.BackgroundSecondaryColor);

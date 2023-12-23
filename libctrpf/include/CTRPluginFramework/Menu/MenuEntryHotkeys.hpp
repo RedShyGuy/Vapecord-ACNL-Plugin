@@ -145,6 +145,12 @@ namespace CTRPluginFramework
          */
         u32         Count(void);
 
+        /**
+         * \brief Get all hotkeys
+         * \return hotkeys
+         */
+        std::vector<Hotkey> GetHotkeys(void);
+
     private:
         friend class PluginMenuHome;
         friend class PluginMenuImpl;

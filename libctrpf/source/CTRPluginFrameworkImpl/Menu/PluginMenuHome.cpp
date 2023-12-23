@@ -40,6 +40,7 @@ namespace CTRPluginFramework
         _root = _folder = new MenuFolderImpl(name);
         _starredConst = _starred = new MenuFolderImpl("Favorites");
 
+        _rainbowMode = false;
         _starMode = false;
         _selector = 0;
         _selectedTextSize = 0;

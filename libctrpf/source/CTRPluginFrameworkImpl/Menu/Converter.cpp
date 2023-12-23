@@ -118,7 +118,7 @@ namespace CTRPluginFramework
     void    Converter::_Draw()
     {
         Renderer::SetTarget(BOTTOM);
-
+        //Window::DrawBottomInfoBar();
         Window::BottomWindow.Draw("Converter");
 
         _decimalTB.Draw();

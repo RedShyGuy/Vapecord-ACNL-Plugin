@@ -205,6 +205,8 @@ namespace CTRPluginFramework
 
         FS_DirectoryEntry   *entry = (FS_DirectoryEntry *)Heap::Alloc(sizeof(FS_DirectoryEntry) * 100);
         u32                 entriesNb = 0;
+        u8                  filename[PATH_LENGTH_MAX];
+        int                 units;
 
         if (entry != nullptr)
             while (R_SUCCEEDED(FSDIR_Read(_handle, &entriesNb, 100, entry)))
@@ -215,7 +217,12 @@ namespace CTRPluginFramework
                 for (u32 i = 0; i < entriesNb; ++i)
                 {
                     // Convert name from utf16 to utf8
-                    _list.push_back(DirectoryEntry(entry[i].attributes, ""));
+                    units = utf16_to_utf8(filename, entry[i].name, PATH_LENGTH_MAX - 1);
+                    if (units == -1)
+                        continue;
+                    filename[units] = 0;
+                    _list.push_back(DirectoryEntry(entry[i].attributes, filename));
+                    //_list.push_back(DirectoryEntry(entry[i].attributes, ""));
                     Utils::ConvertUTF16ToUTF8(_list.back().name, entry[i].name);
                 }
             }
@@ -250,9 +257,10 @@ namespace CTRPluginFramework
         Heap::Free(entry);
         return (0);
     }
-
-    Directory::DirectoryEntry::DirectoryEntry(u32 attrib, const char *fname) :
-    attributes{ attrib }, name{fname}
+    Directory::DirectoryEntry::DirectoryEntry(u32 attrib, u8 *fname) :
+    attributes{ attrib }, name{reinterpret_cast<char *>(fname)}
+    //Directory::DirectoryEntry::DirectoryEntry(u32 attrib, const char *fname) :
+    //attributes{ attrib }, name{fname}
     {
     }
 
