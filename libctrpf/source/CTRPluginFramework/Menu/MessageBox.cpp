@@ -1,5 +1,6 @@
 #include "CTRPluginFramework/Menu/MessageBox.hpp"
 #include "CTRPluginFrameworkImpl/Graphics/MessageBoxImpl.hpp"
+#include "CTRPluginFramework/System/Sleep.hpp"
 
 namespace CTRPluginFramework
 {
@@ -27,6 +28,9 @@ namespace CTRPluginFramework
 
     bool MessageBox::operator()(void) const
     {
+        // スリープなしだと連続で開いたときにフリーズする。
+        // Without sleep, it freezes when opened continuously.
+        Sleep(Milliseconds(100));
         return ((*_messageBox)());
     }
 }
