@@ -438,6 +438,10 @@ namespace CTRPluginFramework
 
     int     KeyboardImpl::Run(void)
     {
+        // スリープなしだと連続で開いたときにフリーズする。
+        // Without sleep, it freezes when opened continuously.
+        Sleep(Milliseconds(100));
+
         _isOpen = true;
         _userAbort = false;
         _askForExit = false;
