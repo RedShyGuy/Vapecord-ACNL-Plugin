@@ -285,6 +285,9 @@ namespace CTRPluginFramework {
 		ISLC->Append(new MenuEntry("ALL_TOURS", alltour, "ALL_TOURS_NOTE")),
 		ISLC->Append(new MenuEntry("ISLAND_ACRE", acreMod, menuAcreMod, "ISLAND_ACRE_NOTE")),
 		ISLC->Append(new MenuEntry("ISLAND_BUILDING", buildingMod, menuBuildingMod, "ISLAND_BUILDING_NOTE")),
+		ISLC->Append(EntryWithHotkey(new MenuEntry("ISLAND_SAVER", IslandSaver, "ISLAND_SAVER_NOTE"), { 
+			Hotkey(Key::L | Key::Y, "Open Menu")
+		})),
 		menu->Append(ISLC);
 
 	//////////////
@@ -447,9 +450,6 @@ namespace CTRPluginFramework {
 																			  Color::Format("%cKiki and Lala Wand: %cNULL", Color(0xFF7700FF), Color::White))),
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Light Switch Toggler", lightswitch, "Lets you toggle the light switch.\nHotkeys are:\nL + DPadUp : Toggle light in current room\nL + DPadRight : Set Room ID\nL + DPadLeft : Toggle light in set room")),
 		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Custom Save Settings", CustomSaveScreen, "")),
-		DEVC->Append(EntryWithHotkey(new MenuEntry(Color(0xFF1A69FF) << "Island Saver", IslandSaver, "Dump/Restore the Island layout. (Works online too)"), { 
-			Hotkey(Key::L | Key::Y, "Open Menu")
-		})),
 		menu->Append(DEVC);
 
 		PluginMenuData::SetUp(SAVEC);
