@@ -695,6 +695,15 @@ ISLAND_BUILDING_ENTER_ID :: Enter building ID:
 ISLAND_BUILDING_ENTER_X :: Enter building coord X:
 ISLAND_BUILDING_ENTER_Y :: Enter building coord Y:
 
+#Island Saver
+ISLAND_SAVER :: Island Saver
+ISLAND_SAVER_NOTE :: Dump/restore the island layout.
+ISLAND_SAVER_NO :: You need to be on the island for this cheat to work!
+ISLAND_SAVER_BACKUP_ISLAND :: Backup Island
+ISLAND_SAVER_RESTORE_ISLAND :: Restore Island
+ISLAND_SAVER_NAME_BACKUP :: Name the island backup:
+ISLAND_SAVER_DUMPER_DUMP :: Island Saver\n\nName the backup you'd like to create.
+
 #NPC Codes Folder
 NPC_CODES :: NPC Codes
 
