@@ -318,11 +318,11 @@ namespace CTRPluginFramework {
 				return;
 			}
 			if(!GameHelper::IsInRoom(0x68)) {
-				MessageBox("You need to be on the island for this cheat to work").SetClear(ClearScreen::Top)();
+				MessageBox(Language->Get("ISLAND_SAVER_NO")).SetClear(ClearScreen::Top)();
 				return;
 			}
 
-			Keyboard KB("a", std::vector<std::string>{ "Backup Island", "Restore Island", "Delete Files" });
+			Keyboard KB(Language->Get("ISLAND_SAVER_DUMPER_DUMP"), std::vector<std::string>{ Language->Get("ISLAND_SAVER_BACKUP_ISLAND"), Language->Get("ISLAND_SAVER_RESTORE_ISLAND"), Language->Get("FILE_DELETE") });
 			int index = KB.Open();
 			switch(index) {
 				default: break;
@@ -338,7 +338,7 @@ namespace CTRPluginFramework {
 					WrapLoc backupLoc = WrapLoc{ dumpVec.data(), static_cast<int>(dumpVec.size() * sizeof(u32)) };
 					
 					std::string filename = "";
-					Keyboard KB("Name the island backup:");
+					Keyboard KB(Language->Get("ISLAND_SAVER_NAME_BACKUP"));
 
 					if(KB.Open(filename) == -1)
 						return;
