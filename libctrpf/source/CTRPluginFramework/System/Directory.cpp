@@ -223,7 +223,7 @@ namespace CTRPluginFramework
                     filename[units] = 0;
                     _list.push_back(DirectoryEntry(entry[i].attributes, filename));
                     //_list.push_back(DirectoryEntry(entry[i].attributes, ""));
-                    Utils::ConvertUTF16ToUTF8(_list.back().name, entry[i].name);
+                    //Utils::ConvertUTF16ToUTF8(_list.back().name, entry[i].name);
                 }
             }
 
