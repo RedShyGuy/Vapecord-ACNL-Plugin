@@ -331,7 +331,6 @@ namespace CTRPluginFramework {
 			Hotkey(Key::B | Key::DPadLeft, "ULTIMATE_POPPER_KEY1") 
 		})),
 	    FUNC->Append(new MenuEntry("CAMERA_MOD", cameramod, "CAMERA_MOD_NOTE")),
-		FUNC->Append(new MenuEntry("EXPRESSION_MOD", FacialExpressionMod, SetFacialExpression, "EXPRESSION_MOD_NOTE")),
 		menu->Append(FUNC);
 
 	//////////////////////
@@ -449,6 +448,7 @@ namespace CTRPluginFramework {
 																			  Color::Format("%cFlower Fairy Wand: %cGrows Tree instantly\n", Color(0xCD00FFFF), Color::White) +
 																			  Color::Format("%cKiki and Lala Wand: %cNULL", Color(0xFF7700FF), Color::White))),
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Light Switch Toggler", lightswitch, "Lets you toggle the light switch.\nHotkeys are:\nL + DPadUp : Toggle light in current room\nL + DPadRight : Set Room ID\nL + DPadLeft : Toggle light in set room")),
+		DEVC->Append(new MenuEntry("EXPRESSION_MOD", FacialExpressionMod, SetFacialExpression, "EXPRESSION_MOD_NOTE")),
 		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Custom Save Settings", CustomSaveScreen, "")),
 		menu->Append(DEVC);
 
