@@ -213,11 +213,11 @@ namespace CTRPluginFramework {
 		switch(optKb.Open()) {
 			default: break;
 			case 0:
-				for(int i = 0; i < 104; ++i) 
+				for(int i = 0; i < 20 * 8; ++i) 
 					building->UnlockedPWPs[i >> 5] |= (1 << (i & 0x1F));
 			break;
 			case 1: 
-				for(int i = 0; i < 104; ++i) 
+				for(int i = 0; i < 20 * 8; ++i) 
 					building->UnlockedPWPs[i >> 5] &= ~(1 << (i & 0x1F));
 			break;
 		}

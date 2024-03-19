@@ -1381,7 +1381,7 @@ namespace CTRPluginFramework {
         ACNL_Pattern UnkPattern7;
         u64 FF_Padding7;
         ACNL_Pattern UnkPattern8;
-        u32 UnlockedPWPs[3]; //Devs use bitfield for unlocked PWPS
+        u32 UnlockedPWPs[5]; //Devs use bitfield for unlocked PWPS
     };
 
     struct ACNL_MinigameData {
