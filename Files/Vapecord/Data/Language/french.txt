@@ -84,10 +84,10 @@ CARAVAN_SET_LEFT :: Caravane gauche
 CARAVAN_SET_RIGHT :: Caravane droite
 
 #Camping Changer
-CAMPING_SET :: Camping Villager Changer
-CAMPING_SET_NOTE :: Lets you edit/remove the current villager in your camping ground.
-CAMPING_SET_SET :: Set Camping Villager
-CAMPING_SET_REMOVE :: Remove Camping Villager
+CAMPING_SET :: Changeur de village de camping
+CAMPING_SET_NOTE :: Permet de modifier/supprimer le villageois actuel dans votre terrain de camping.
+CAMPING_SET_SET :: Définir un villageois du camping
+CAMPING_SET_REMOVE :: Retirer un villageois du camping
 
 #shop upgrade
 SHOP_UPGRADE :: débloquer la rue commerçante
