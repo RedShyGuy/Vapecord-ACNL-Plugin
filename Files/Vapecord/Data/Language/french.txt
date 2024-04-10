@@ -90,7 +90,7 @@ CAMPING_SET_SET :: Définir un villageois du camping
 CAMPING_SET_REMOVE :: Retirer un villageois du camping
 
 #shop upgrade
-SHOP_UPGRADE :: débloquer la rue commerçante
+SHOP_UPGRADE :: Débloquer la rue commerçante
 SHOP_UPGRADE_NOTE :: Vous permet de débloquer/bloquer la rue commerçante.
 VECTOR_SHOP_MUSEUM :: Magasin du musée
 VECTOR_SHOP_FORTUNE :: Maison de la fortune 
