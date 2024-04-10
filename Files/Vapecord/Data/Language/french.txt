@@ -993,7 +993,7 @@ FAST_GAME_SPEED_NOTE :: Vous permet d'accélerer le jeu.
 #Other Stuff
 
 #Dumper & Restorer & Deleter
-DUMP_DUMPED :: Fichier sauvegarder dans:\n
+DUMP_DUMPED :: Fichier sauvegardé dans:\n
 DUMP_ERROR1 :: Erreur\nLe fichier n'a pas pu être sauvegarder.
 DUMP_ERROR2 :: Erreur\nLe fichier n'a pas pu être créé/ouvert.
 
