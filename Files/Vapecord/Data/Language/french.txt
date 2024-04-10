@@ -47,7 +47,7 @@ BULLETIN_BOARD_DUMPER_DUMP :: Sauvegardez le message du " "\n\nNommez la sauvega
 #Tree Size Changer
 TREESIZE_NAME :: Taille de l'arbre
 TREESIZE_NOTE :: Vous permet de changer la taille de l'arbre de votre île.
-TREESIZE_STATE :: Etat
+TREESIZE_STATE :: État
 
 #Change Native Fruit
 CHANGE_NATIVE_NAME :: Changer le fruit autochtones
@@ -148,8 +148,8 @@ HOUSE_EDITOR_SELECT_HOUSE :: Sélectionner les paramètres de la maison
 HOUSE_EDITOR_SELECT_ROOM :: Sélectionner une chambre\nPour voir les changements sauvegardez et quittez le jeu (ou sautez au prochain jour)!
 
 #QR Machine Unlocker
-QR_MACHINE_NAME :: Débloquer la Machine à QR
-QR_MACHINE_NOTE :: Vous permet de bloquer/débloquer la machine à QR.
+QR_MACHINE_NAME :: Débloquer la Machine à QR codes
+QR_MACHINE_NOTE :: Vous permet de bloquer/débloquer la machine à QR codes.
 
 #Mayor Permit
 MAYOR_PERMIT_NAME :: Côte de popularité 100%
@@ -265,9 +265,9 @@ VECTOR_ITEMSETTINGS_INFINITE :: Objets infinis
 VECTOR_ITEMSETTINGS_EAT :: Tout manger
 
 #Save Menu Changer
-SAVE_MENU_CHANGER :: Save Menu Changer
-SAVE_MENU_CHANGER_NOTE :: Lets you change the save menu to a any other menu you want.
-SAVE_MENU_CHANGER_ENTER_ID :: Type the menu ID you want to load.
+SAVE_MENU_CHANGER :: Modificateur de menu de sauvegarde
+SAVE_MENU_CHANGER_NOTE :: Vous permet de changer le menu de sauvegarde en n'importe quel autre menu de votre choix.
+SAVE_MENU_CHANGER_ENTER_ID :: Écrivez l'ID du menu que vous souhaitez charger.
 VECTOR_SAVEMENU_DATETIME :: Date et heure
 VECTOR_SAVEMENU_BELLPOINT_DEPO :: Dêpot de points de clochettes
 VECTOR_SAVEMENU_BELLPOINT_WITHDRAW :: Retrait de point de clochettesBellpoint Withdrawal
@@ -290,7 +290,7 @@ GET_SET_RESTORE :: Sélectionnez la sauvegarde a restaurer.
 #Player Codes Folder
 PLAYER_CODES :: Codes de joueur
 #Player Save Codes Folder
-PLAYER_SAVE_CODES :: Player Save Codes
+PLAYER_SAVE_CODES :: Codes de sauvegarde des joueurs
 
 #Name Changer
 NAME_CHANGER :: Editeur de nom
@@ -931,8 +931,8 @@ VECTOR_WEATHER_STORMY :: Orageux
 VECTOR_WEATHER_SNOWY :: Enneigé
 
 #Always Aurora Lights
-ALWAYS_AURORA_MOD :: Always Aurora Lights
-ALWAYS_AURORA_MOD_NOTE :: Will make aurora lights always appear no matter the time or date!
+ALWAYS_AURORA_MOD :: Toujours des lumières aurores
+ALWAYS_AURORA_MOD_NOTE :: Les aurores apparaîtront toujours, quelle que soit l'heure ou la date !
 
 #Quick Menu
 QUICK_MENU :: Menu rapide
