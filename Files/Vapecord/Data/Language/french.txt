@@ -5,16 +5,16 @@
 
 #Keyboards
 KEY_CHOOSE_OPTION :: Choisir une option:
-KEY_SELECT_PLAYER :: Sélectionnez votre joueur joueur
+KEY_SELECT_PLAYER :: Sélectionnez votre joueur
 #Options
-VECTOR_ENABLE :: Activé
-VECTOR_DISABLE :: Désactivé
-VECTOR_ENABLED :: Enabled
-VECTOR_DISABLED :: Disabled
+VECTOR_ENABLE :: Activer
+VECTOR_DISABLE :: Désactiver
+VECTOR_ENABLED :: Activé
+VECTOR_DISABLED :: Désactivé
 ENTER_ID :: Entrez l'ID:
 ONLY_TOWN_ERROR :: Erreur: Fonctionne uniquement en ville!
-INVALID :: Invalid
-INVALID_ID :: Error: Invalid ID!
+INVALID :: Invalide
+INVALID_ID :: Erreur: Identifiant invalide!
 
 #Save Codes Folder
 SAVE_CODES :: Codes de Sauvegarde
@@ -47,7 +47,7 @@ BULLETIN_BOARD_DUMPER_DUMP :: Sauvegardez le message du " "\n\nNommez la sauvega
 #Tree Size Changer
 TREESIZE_NAME :: Taille de l'arbre
 TREESIZE_NOTE :: Vous permet de changer la taille de l'arbre de votre île.
-TREESIZE_STATE :: Etat
+TREESIZE_STATE :: État
 
 #Change Native Fruit
 CHANGE_NATIVE_NAME :: Changer le fruit autochtones
@@ -73,24 +73,24 @@ PWP_UNLOCK_NOTE :: Vous permet de débloquer tout les travaux publiques
 GRASS_CHANGER_NAME :: Changeur du type d'herbe
 GRASS_CHANGER_NOTE :: Vous permet de changer le type d'herbe.
 GRASS_CHANGER_TRIANGLE :: Triangle
-GRASS_CHANGER_CIRCLE :: Circle
-GRASS_CHANGER_SQUARE :: Square
+GRASS_CHANGER_CIRCLE :: Cercle
+GRASS_CHANGER_SQUARE :: Carré
 
 #Caravan Set
 CARAVAN_SET :: Changeur de caravane
 CARAVAN_SET_NOTE :: Vous permet de cahnger la caravane au campement
-CARAVAN_SET_SELECT:: Sélectionner la caravane:
+CARAVAN_SET_SELECT:: Sélectionnez la caravane:
 CARAVAN_SET_LEFT :: Caravane gauche
 CARAVAN_SET_RIGHT :: Caravane droite
 
 #Camping Changer
-CAMPING_SET :: Camping Villager Changer
-CAMPING_SET_NOTE :: Lets you edit/remove the current villager in your camping ground.
-CAMPING_SET_SET :: Set Camping Villager
-CAMPING_SET_REMOVE :: Remove Camping Villager
+CAMPING_SET :: Changeur de village de camping
+CAMPING_SET_NOTE :: Permet de modifier/supprimer le villageois actuel dans votre terrain de camping.
+CAMPING_SET_SET :: Définir un villageois du camping
+CAMPING_SET_REMOVE :: Retirer un villageois du camping
 
 #shop upgrade
-SHOP_UPGRADE :: débloquer la rue commerçante
+SHOP_UPGRADE :: Débloquer la rue commerçante
 SHOP_UPGRADE_NOTE :: Vous permet de débloquer/bloquer la rue commerçante.
 VECTOR_SHOP_MUSEUM :: Magasin du musée
 VECTOR_SHOP_FORTUNE :: Maison de la fortune 
@@ -144,12 +144,12 @@ HOUSE_EDITOR_ROOM_SET3 :: Définir la taille du Sous-sol\nIntervalle: \n01 Pas d
 HOUSE_EDITOR_ROOM_SET4 :: Définir la taille du RDC (Droite)\nIntervalle: \n01 Pas de chambres\n02 Création de la chambre\n03 Expansion de la chambre 1\n04 Expansion de la chambre 2
 HOUSE_EDITOR_ROOM_SET5 :: Définir la taille du RDC (Gauche)\nIntervalle: \n01 Pas de chambres\n02 Création de la chambre\n03 Expansion de la chambre 1\n04 Expansion de la chambre 2
 HOUSE_EDITOR_ROOM_SET6 :: Définir la taille du RDC (Arrière)\nIntervalle: \n01 Pas de chambres\n02 Création de la chambre\n03 Expansion de la chambre 1\n04 Expansion de la chambre 2
-HOUSE_EDITOR_SELECT_HOUSE :: Sélectionner les paramètres de la maison
+HOUSE_EDITOR_SELECT_HOUSE :: Sélectionnez les paramètres de la maison
 HOUSE_EDITOR_SELECT_ROOM :: Sélectionner une chambre\nPour voir les changements sauvegardez et quittez le jeu (ou sautez au prochain jour)!
 
 #QR Machine Unlocker
-QR_MACHINE_NAME :: Débloquer la Machine à QR
-QR_MACHINE_NOTE :: Vous permet de bloquer/débloquer la machine à QR.
+QR_MACHINE_NAME :: Débloquer la Machine à QR codes
+QR_MACHINE_NOTE :: Vous permet de bloquer/débloquer la machine à QR codes.
 
 #Mayor Permit
 MAYOR_PERMIT_NAME :: Côte de popularité 100%
@@ -215,7 +215,7 @@ VISIBILITY_MOD_KEY1 :: Changez les apparences
 SPEED_MOD :: Modifieur de vitesse
 SPEED_MOD_NOTE :: Touchez l'îcone du clavier blanc puis entrez un nombre décimal pour votre marche,course et à la nage.
 SPEED_MOD_SPEED :: Entrez la vitesse:\n1 est la vitesse par défaut
-SPEED_MOD_ERROR :: Error: Choose a smaller amount
+SPEED_MOD_ERROR :: Erreur : Choisissez un montant inférieur
 
 #Room Warp
 ROOM_WARPING :: Téléportation à une pièce
@@ -237,8 +237,8 @@ TEXT_2_ITEM_SEARCH_ERR1 :: Entrez les lettres!
 TEXT_2_ITEM_SEARCH_ERR2 :: Lettres insuffisantes, Entrez plus de lettres!
 TEXT_2_ITEM_SEARCH_ERR3 :: Aucun objet trouvé, recherchez autre chose!
 TEXT_2_ITEM_SEARCH_ERR4 :: Beaucoup de correspondances! Entrez plus de lettres\nCorrespondances:
-TEXT_2_ITEM_SEARCH_KB :: Choose Item:
-TEXT_2_ITEM_SEARCH_KB2 :: Enter Name Of Item:
+TEXT_2_ITEM_SEARCH_KB :: Choisir l'item:
+TEXT_2_ITEM_SEARCH_KB2 :: Entrez le nom de l'item:
 
 #Duplication
 DUPE_ITEMS :: Dupliquer un objet
@@ -249,8 +249,8 @@ DUPE_ITEMS_KEY2 :: Tout dupliquer
 #Catalog To Pocket
 CATALOG_TO_POCKET :: Du catalogue vers la poche
 CATALOG_TO_POCKET_NOTE :: Vous permet de faire apparaître un objet du catalogue instantanément dans votre inventaire.\n 
-CATALOG_TO_POCKET_KEY1 :: Open Catalog/Get Item
-CATALOG_TO_POCKET_KEY2 :: Hide Info
+CATALOG_TO_POCKET_KEY1 :: Ouvrir le catalogue/Obtenir un item
+CATALOG_TO_POCKET_KEY2 :: Masquer les infos
 
 #Chat Text2Item
 CHAT_T2I :: Chat Text-vers-item
@@ -265,9 +265,9 @@ VECTOR_ITEMSETTINGS_INFINITE :: Objets infinis
 VECTOR_ITEMSETTINGS_EAT :: Tout manger
 
 #Save Menu Changer
-SAVE_MENU_CHANGER :: Save Menu Changer
-SAVE_MENU_CHANGER_NOTE :: Lets you change the save menu to a any other menu you want.
-SAVE_MENU_CHANGER_ENTER_ID :: Type the menu ID you want to load.
+SAVE_MENU_CHANGER :: Modificateur de menu de sauvegarde
+SAVE_MENU_CHANGER_NOTE :: Vous permet de changer le menu de sauvegarde en n'importe quel autre menu de votre choix.
+SAVE_MENU_CHANGER_ENTER_ID :: Écrivez l'ID du menu que vous souhaitez charger.
 VECTOR_SAVEMENU_DATETIME :: Date et heure
 VECTOR_SAVEMENU_BELLPOINT_DEPO :: Dêpot de points de clochettes
 VECTOR_SAVEMENU_BELLPOINT_WITHDRAW :: Retrait de point de clochettesBellpoint Withdrawal
@@ -290,7 +290,7 @@ GET_SET_RESTORE :: Sélectionnez la sauvegarde a restaurer.
 #Player Codes Folder
 PLAYER_CODES :: Codes de joueur
 #Player Save Codes Folder
-PLAYER_SAVE_CODES :: Player Save Codes
+PLAYER_SAVE_CODES :: Codes de sauvegarde des joueurs
 
 #Name Changer
 NAME_CHANGER :: Editeur de nom
@@ -419,15 +419,15 @@ CUSTOM_ENTER_HAIR :: Entrez le code couleur RGB pour la couleur des cheveux:
 CUSTOM_ENTER_EYE :: Entrez le code couleur RGB pour la couleur des yeux:
 CUSTOM_FILE_SAVED :: Couleurs sauvegardez dans le fichier!
 CUSTOM_FILE_LOADED :: Couleurs chargées du fichier!
-CUSTOM_HAIR_EYE_KEY1 :: Random Hair/Eye Colors
+CUSTOM_HAIR_EYE_KEY1 :: Couleurs aléatoires des cheveux et des yeux
 
 #Wear Helmet
 WEAR_HELMET :: Mettre un casque et un accessoire
 WEAR_HELMET_NOTE :: Mettre un casque et accessoire en même temps. Il faut mettre l'accessoire d'abord! Merci à Levi.
 
 #Player Loader
-PLAYER_LOADER :: Player Loader
-PLAYER_LOADER_NOTE :: Lets you load a specific player of yours withou the need to restart the game!
+PLAYER_LOADER :: Chargeur de joueur
+PLAYER_LOADER_NOTE :: Permet de charger un de vos joueurs spécifiques sans avoir besoin de redémarrer le jeu !
 
 #Players on map
 PLAYERS_ON_MAP :: Montrer les joueurs sur la carte.
@@ -506,9 +506,9 @@ WALK_SEEDER_NOTE :: Vous permet d'enlever les items quand vous les marcher au de
 #Firework Seeder
 FIREWORK_SEEDER :: Seeder de Feu d'artifice 
 FIREWORK_SEEDER_NOTE :: Vous permet d'éditer l'objet qui apparaît quand vous laissez tomber un feu d'artifice.
-VECTOR_FIREWORK_CHANGE_ID :: Change Item ID
-VECTOR_FIREWORK_SPAWN :: Spawn Firework to Slot 1
-FIREWORK_SEEDER_ENTER_ID :: Type the item ID you'd like to seed.
+VECTOR_FIREWORK_CHANGE_ID :: Modifier l'ID de l'objet
+VECTOR_FIREWORK_SPAWN :: Générer un feu d'artifice sur le slot 1
+FIREWORK_SEEDER_ENTER_ID :: Écrivez l'ID de l'élément que vous souhaitez générer.
 
 #Map Editor
 MAP_EDITOR :: Editeur de carte
@@ -560,7 +560,7 @@ VECTOR_SHAPE_FULL_SQUARE :: Carré complet
 VECTOR_SHAPE_CIRCLE :: Cercle
 VECTOR_SHAPE_HORI_LINE :: Ligne horizontale
 VECTOR_SHAPE_VERT_LINE :: Ligne verticale
-VECTOR_SHAPE_SQUAREE :: Square
+VECTOR_SHAPE_SQUAREE :: Carré
 VECTOR_SHAPE_NE_TO_SW :: NE à SO diagonale
 VECTOR_SHAPE_NW_TO_SE :: NO to SE diagonale
 VECTOR_SHAPE_RESET :: Réintialiser
@@ -653,16 +653,16 @@ LOCK_ISLAND_ISL :: Bloquer Amiral
 LOCK_ISLAND_CLUB :: Bloquer le club Tortimer
 
 #Instant Ore Hunt Finish
-FILL_INV_ORE :: Max Ore Hunting Points
-FILL_INV_ORE_NOTE :: Makes the game think you have a inventory filled with the bonus ore, therefore receiving max points at the tour results.
+FILL_INV_ORE :: Points de chasse de minerai au maximum
+FILL_INV_ORE_NOTE :: Fait croire au jeu que vous avez un inventaire rempli de minerai bonus, recevant ainsi un maximum de points lors des résultats de la tournée.
 
 #Instant Labyrinth Tour Finish
-FILL_INV_FRUIT :: Instant Labyrinth Tour
-FILL_INV_FRUIT_NOTE :: Makes the game think you already have all the needed fruits for the tour to finish.
+FILL_INV_FRUIT :: Visite instantanée du labyrinthe
+FILL_INV_FRUIT_NOTE :: Fait croire au jeu que vous avez déjà tous les fruits nécessaires pour terminer la visite.
 
 #Hacker Island
 HACKER_ISLAND :: L'île des Hackeur
-HACKER_ISLAND_NOTE :: Vous permet d'aller sur une île là où seul les personnes possédant ce code  peuvent y aller.
+HACKER_ISLAND_NOTE :: Vous permet d'aller sur une île là où seul les personnes possédant ce code peuvent y aller.
 
 #Island Country
 ISLAND_COUNTRY :: Modifieur du pays de l'île
@@ -671,8 +671,8 @@ VECTOR_COUNTY_CHANGE :: Changer le pays
 ISLAND_COUNTRY_SET_ID :: Entrez l'ID du pays que vous voulez définir.
 
 #Free Kappn Rides
-FREE_KAPPN :: Free Kappn Rides
-FREE_KAPPN_NOTE :: Lets you go to the island without the need of paying or having money at all.
+FREE_KAPPN :: Promenades d'Amiral gratuites
+FREE_KAPPN_NOTE :: Vous permet d'aller sur l'île sans avoir besoin de payer ni d'avoir de l'argent.
 
 #Island Shop
 ISLAND_SHOP_MOD :: Modifieur des objets du magasin de l'île.
@@ -695,37 +695,46 @@ ISLAND_BUILDING_ENTER_ID :: Entrez l'ID du bâtiment:
 ISLAND_BUILDING_ENTER_X :: Entrez les coordonnées X du bâtiment:
 ISLAND_BUILDING_ENTER_Y :: Entrez les coordonnées Y du bâtiment:
 
+#Island Saver
+ISLAND_SAVER :: Sauvegarde de l'île
+ISLAND_SAVER_NOTE :: Sauvegarder/retaurer l'êtat de l'île
+ISLAND_SAVER_NO :: Vous devez être sur l’île pour utiliser ce cheat !
+ISLAND_SAVER_BACKUP_ISLAND :: Sauvegarder l'île
+ISLAND_SAVER_RESTORE_ISLAND :: Retaurer l'île
+ISLAND_SAVER_NAME_BACKUP :: Nom de la sauvegarde de l'île:
+ISLAND_SAVER_DUMPER_DUMP :: Sauvegarde de l'île\n\nNommez la sauvegarde que vous souhaitez créer.
+
 #NPC Codes Folder
-NPC_CODES :: NPC Codes
+NPC_CODES :: Codes PNJ
 
 #NPC Selector 
-NPC_SELECTOR :: NPC Selector
-NPC_SELECTOR_NOTE :: Lets you select any loaded NPC to be able to use the other NPC Cheats.
-NPC_SELECTOR_KEY1 :: Select NPC
+NPC_SELECTOR :: Sélecteur de PNJ
+NPC_SELECTOR_NOTE :: Vous permet de sélectionner n'importe quel PNJ chargé pour pouvoir utiliser les autres cheats PNJ.
+NPC_SELECTOR_KEY1 :: Sélectionner un PNJ
 
 #NPC Animation
-NPC_ANIMATION :: NPC Animation Modifier
-NPC_ANIMATION_NOTE :: Lets you set animations onto selected NPC's. First set the animation ID by clicking the keyboard and then execute it by pressing the hotkeys.
-NPC_ANIMATION_KEY1 :: Execute Animation
+NPC_ANIMATION :: Modificateur d'animation PNJ
+NPC_ANIMATION_NOTE :: Vous permet de définir des animations sur les PNJ sélectionnés. Définissez d’abord l’ID de l’animation à l'aide du clavier, puis exécutez-le en appuyant sur les touches de raccourci.
+NPC_ANIMATION_KEY1 :: Lancer l'animation
 
 #NPC Coordinate
-NPC_COORDINATE :: NPC Coordinate Modifier
-NPC_COORDINATE_NOTE:: Lets you move around selected NPC's.
-NPC_COORDINATE_KEY1 :: Initial Button
-NPC_COORDINATE_KEY2 :: Move Right
-NPC_COORDINATE_KEY3 :: Move Left
-NPC_COORDINATE_KEY4 :: Move Down
-NPC_COORDINATE_KEY5 :: Move Up
+NPC_COORDINATE :: Modificateur de coordonnées PNJ
+NPC_COORDINATE_NOTE:: Vous permet de vous déplacer les PNJ sélectionnés.
+NPC_COORDINATE_KEY1 :: Bouton initial
+NPC_COORDINATE_KEY2 :: Déplacer à droite
+NPC_COORDINATE_KEY3 :: Déplacer à gauche
+NPC_COORDINATE_KEY4 :: Déplacer vers le bas
+NPC_COORDINATE_KEY5 :: Déplacer vers le haut
 
 #NPC Teleport
-NPC_TELEPORT :: NPC Teleport To You
-NPC_TELEPORT_NOTE :: Lets you teleport selected NPC's to your location.
-NPC_TELEPORT_KEY1 :: Teleport To You
+NPC_TELEPORT :: Un PNJ se téléporte vers vous
+NPC_TELEPORT_NOTE :: Vous permet de téléporter les PNJ sélectionnés vers votre emplacement.
+NPC_TELEPORT_KEY1 :: Se téléporte vers vous
 
 #NPC Rotation
-NPC_ROTATION :: NPC Rotation Modifier
-NPC_ROTATION_NOTE :: Lets you rotate selected NPC's.
-NPC_ROTATION_KEY1 :: Initial Button
+NPC_ROTATION :: Modificateur de rotation des PNJ
+NPC_ROTATION_NOTE :: Vous permet de faire pivoter les PNJ sélectionnés.
+NPC_ROTATION_KEY1 :: Bouton initial
 
 #Fun Codes Folder
 FUN_CODES :: Codes Fun
@@ -764,7 +773,7 @@ MAX_TURBO_NOTE :: Ceci spamme tout ce qui est activé avec les touches A,B,X,Y e
 
 #multi presses
 MULTI_PRESS :: Appui-multiple
-MULTI_PRESS_NOTE :: Vous pouvez appuyez plusieurs fois avec des outils et plein d'autres choses.
+MULTI_PRESS_NOTE :: Vous permet d'appuyer plusieurs fois avec des outils et plein d'autres choses.
 
 #Ultimate Popper
 ULTIMATE_POPPER :: Bombe de fête ultime
@@ -790,19 +799,19 @@ FISH_CANT_SCARE_NAME :: Poissons pas effrayés
 FISH_CANT_SCARE_NOTE :: Les poissons ne seront plus effrayés.
 
 #Chat Codes Folder
-CHAT_CODES :: Chat Codes
+CHAT_CODES :: Codes de discussion
 
 #chat dont dissaper
 CHAT_DONT_DISSAPEAR :: Bulle de chat toujours affichée
 CHAT_DONT_DISSAPEAR_NOTE :: La bulle du chat sera toujours affichée jusqu'à ce que vous écrivez un nouveau message.
 
 #Chat Copy/Paste
-CHATCOPYPASTE :: Chat Copy/Paste
-CHATCOPYPASTE_NOTE :: Lets you copy and paste your chat. Copied content will be saved to a clipboard on your sdcard.
-CHATCOPYPASTE_KEY1 :: Paste Content
-CHATCOPYPASTE_KEY2 :: Copy Content
-CHATCOPYPASTE_KEY3 :: Cut Content
-CHATCOPYPASTE_KEY4 :: Delete Content
+CHATCOPYPASTE :: Tchat Copier/Coller
+CHATCOPYPASTE_NOTE :: Vous permet de copier et coller votre discussion. Le contenu copié sera enregistré dans un presse-papiers sur votre carte SD.
+CHATCOPYPASTE_KEY1 :: Coller
+CHATCOPYPASTE_KEY2 :: Copier
+CHATCOPYPASTE_KEY3 :: Coller
+CHATCOPYPASTE_KEY4 :: Supprimer
 
 #Force Chat
 FORCE_CHAT :: Forcer l'envoie d'un message (Chat)
@@ -863,8 +872,8 @@ GRASS_EDITOR_HOTKEY3 :: Changer le mode
 #Amiibo Spoofer
 AMIIBO_SPOOFER :: Amiibo Spoofer
 AMIIBO_SPOOFER_NOTE :: Vous permet d'utiliser tout les amiibo n'importe où. Merci beaucoup à Slattz pour avoir créer ce code!
-AMIIBO_SPOOFER_SPECIES :: Sélectionner une espèce:
-AMIIBO_SPOOFER_VILLAGER :: Sélectionner un villageois à utiliser:
+AMIIBO_SPOOFER_SPECIES :: Sélectionnez une espèce:
+AMIIBO_SPOOFER_VILLAGER :: Sélectionnez un villageois à utiliser:
 
 #Time Travel
 TIME_TRAVEL :: Voyage temporel
@@ -886,13 +895,13 @@ MISC_CODES :: Codes divers
 #Disable Commands
 DISABLECOMMAND :: Désactiver les commandes Non-Hacker
 DISABLECOMMAND_NOTE :: Vous permet de désactiver les commandes Non-Hacker.
-VECTOR_ANIM_COMM :: Animation Commands
-VECTOR_EMOT_COMM :: Emotion Commands
-VECTOR_SNAK_COMM :: Snake Commands
-VECTOR_MUSI_COMM :: Music Commands
-VECTOR_ITEM_COMM :: Item Commands
-VECTOR_ALL_COMM :: Switch OFF All
-COMM_CHOOSE :: Choose which mode to disable:
+VECTOR_ANIM_COMM :: Commandes animations
+VECTOR_EMOT_COMM :: Commandes émotions
+VECTOR_SNAK_COMM :: Commandes serpent
+VECTOR_MUSI_COMM :: Commandes musique
+VECTOR_ITEM_COMM :: Commandes d'objet
+VECTOR_ALL_COMM :: Tout Désactiver
+COMM_CHOOSE :: Mode à désactiver:
 
 #Tool Animation
 TOOL_ANIM :: Changer l'animation des outils
@@ -922,8 +931,8 @@ VECTOR_WEATHER_STORMY :: Orageux
 VECTOR_WEATHER_SNOWY :: Enneigé
 
 #Always Aurora Lights
-ALWAYS_AURORA_MOD :: Always Aurora Lights
-ALWAYS_AURORA_MOD_NOTE :: Will make aurora lights always appear no matter the time or date!
+ALWAYS_AURORA_MOD :: Toujours des lumières aurores
+ALWAYS_AURORA_MOD_NOTE :: Les aurores apparaîtront toujours, quelle que soit l'heure ou la date !
 
 #Quick Menu
 QUICK_MENU :: Menu rapide
@@ -990,10 +999,17 @@ FAST_TEXT_SPEED_NOTE :: Permet au texte des dialogues de défiler rapidement.
 FAST_GAME_SPEED :: Vitesse de jeu rapide
 FAST_GAME_SPEED_NOTE :: Vous permet d'accélerer le jeu.
 
+ShowChatMessage :: Afficher le message de discussion
+ShowChatMessage_NOTE :: Les messages de discussion sont affichés à l'écran.
+ChatButton :: Bouton de discussion
+ChatButton_NOTE :: Le bouton apparaît lorsque vous ouvrez une discussion.
+Isabelle_Skip :: Skip Marie
+Isabelle_Skip_NOTE :: Vous pouvez sauter la conversation avec Marie au début du jeu. \n*Si vous ne l'ignorez pas lorsque l'écran est éclairci, l'écran inférieur deviendra noir.
+
 #Other Stuff
 
 #Dumper & Restorer & Deleter
-DUMP_DUMPED :: Fichier sauvegarder dans:\n
+DUMP_DUMPED :: Fichier sauvegardé dans:\n
 DUMP_ERROR1 :: Erreur\nLe fichier n'a pas pu être sauvegarder.
 DUMP_ERROR2 :: Erreur\nLe fichier n'a pas pu être créé/ouvert.
 
