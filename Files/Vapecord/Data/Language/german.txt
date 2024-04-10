@@ -695,6 +695,15 @@ ISLAND_BUILDING_ENTER_ID :: Gebäude-ID eingeben:
 ISLAND_BUILDING_ENTER_X :: X-Koordinate des Gebäudes eingeben:
 ISLAND_BUILDING_ENTER_Y :: Y-Koordinate des Gebäudes eingeben:
 
+#Island Saver
+ISLAND_SAVER :: Island Saver
+ISLAND_SAVER_NOTE :: Speicher/Lade ein Insellayout.
+ISLAND_SAVER_NO :: Du musst auf der Insel sein, damit dieser Cheat funktioniert!
+ISLAND_SAVER_BACKUP_ISLAND :: Insel speichern
+ISLAND_SAVER_RESTORE_ISLAND :: Insel laden
+ISLAND_SAVER_NAME_BACKUP :: Benenne das Backup
+ISLAND_SAVER_DUMPER_DUMP :: Island Saver\n\nBenenne das Backup, das du speichern willst.
+
 #NPC Codes Folder
 NPC_CODES :: Dorfbewohner
 
