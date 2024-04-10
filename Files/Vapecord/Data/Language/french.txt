@@ -5,16 +5,16 @@
 
 #Keyboards
 KEY_CHOOSE_OPTION :: Choisir une option:
-KEY_SELECT_PLAYER :: Sélectionnez votre joueur joueur
+KEY_SELECT_PLAYER :: Sélectionnez votre joueur
 #Options
-VECTOR_ENABLE :: Activé
-VECTOR_DISABLE :: Désactivé
-VECTOR_ENABLED :: Enabled
-VECTOR_DISABLED :: Disabled
+VECTOR_ENABLE :: Activer
+VECTOR_DISABLE :: Désactiver
+VECTOR_ENABLED :: Activé
+VECTOR_DISABLED :: Désactivé
 ENTER_ID :: Entrez l'ID:
 ONLY_TOWN_ERROR :: Erreur: Fonctionne uniquement en ville!
-INVALID :: Invalid
-INVALID_ID :: Error: Invalid ID!
+INVALID :: Invalide
+INVALID_ID :: Erreur: Identifiant invalide!
 
 #Save Codes Folder
 SAVE_CODES :: Codes de Sauvegarde
@@ -73,13 +73,13 @@ PWP_UNLOCK_NOTE :: Vous permet de débloquer tout les travaux publiques
 GRASS_CHANGER_NAME :: Changeur du type d'herbe
 GRASS_CHANGER_NOTE :: Vous permet de changer le type d'herbe.
 GRASS_CHANGER_TRIANGLE :: Triangle
-GRASS_CHANGER_CIRCLE :: Circle
-GRASS_CHANGER_SQUARE :: Square
+GRASS_CHANGER_CIRCLE :: Cercle
+GRASS_CHANGER_SQUARE :: Carré
 
 #Caravan Set
 CARAVAN_SET :: Changeur de caravane
 CARAVAN_SET_NOTE :: Vous permet de cahnger la caravane au campement
-CARAVAN_SET_SELECT:: Sélectionner la caravane:
+CARAVAN_SET_SELECT:: Sélectionnez la caravane:
 CARAVAN_SET_LEFT :: Caravane gauche
 CARAVAN_SET_RIGHT :: Caravane droite
 
@@ -144,7 +144,7 @@ HOUSE_EDITOR_ROOM_SET3 :: Définir la taille du Sous-sol\nIntervalle: \n01 Pas d
 HOUSE_EDITOR_ROOM_SET4 :: Définir la taille du RDC (Droite)\nIntervalle: \n01 Pas de chambres\n02 Création de la chambre\n03 Expansion de la chambre 1\n04 Expansion de la chambre 2
 HOUSE_EDITOR_ROOM_SET5 :: Définir la taille du RDC (Gauche)\nIntervalle: \n01 Pas de chambres\n02 Création de la chambre\n03 Expansion de la chambre 1\n04 Expansion de la chambre 2
 HOUSE_EDITOR_ROOM_SET6 :: Définir la taille du RDC (Arrière)\nIntervalle: \n01 Pas de chambres\n02 Création de la chambre\n03 Expansion de la chambre 1\n04 Expansion de la chambre 2
-HOUSE_EDITOR_SELECT_HOUSE :: Sélectionner les paramètres de la maison
+HOUSE_EDITOR_SELECT_HOUSE :: Sélectionnez les paramètres de la maison
 HOUSE_EDITOR_SELECT_ROOM :: Sélectionner une chambre\nPour voir les changements sauvegardez et quittez le jeu (ou sautez au prochain jour)!
 
 #QR Machine Unlocker
@@ -215,7 +215,7 @@ VISIBILITY_MOD_KEY1 :: Changez les apparences
 SPEED_MOD :: Modifieur de vitesse
 SPEED_MOD_NOTE :: Touchez l'îcone du clavier blanc puis entrez un nombre décimal pour votre marche,course et à la nage.
 SPEED_MOD_SPEED :: Entrez la vitesse:\n1 est la vitesse par défaut
-SPEED_MOD_ERROR :: Error: Choose a smaller amount
+SPEED_MOD_ERROR :: Erreur : Choisissez un montant inférieur
 
 #Room Warp
 ROOM_WARPING :: Téléportation à une pièce
@@ -237,8 +237,8 @@ TEXT_2_ITEM_SEARCH_ERR1 :: Entrez les lettres!
 TEXT_2_ITEM_SEARCH_ERR2 :: Lettres insuffisantes, Entrez plus de lettres!
 TEXT_2_ITEM_SEARCH_ERR3 :: Aucun objet trouvé, recherchez autre chose!
 TEXT_2_ITEM_SEARCH_ERR4 :: Beaucoup de correspondances! Entrez plus de lettres\nCorrespondances:
-TEXT_2_ITEM_SEARCH_KB :: Choose Item:
-TEXT_2_ITEM_SEARCH_KB2 :: Enter Name Of Item:
+TEXT_2_ITEM_SEARCH_KB :: Choisir l'item:
+TEXT_2_ITEM_SEARCH_KB2 :: Entrez le nom de l'item:
 
 #Duplication
 DUPE_ITEMS :: Dupliquer un objet
@@ -249,8 +249,8 @@ DUPE_ITEMS_KEY2 :: Tout dupliquer
 #Catalog To Pocket
 CATALOG_TO_POCKET :: Du catalogue vers la poche
 CATALOG_TO_POCKET_NOTE :: Vous permet de faire apparaître un objet du catalogue instantanément dans votre inventaire.\n 
-CATALOG_TO_POCKET_KEY1 :: Open Catalog/Get Item
-CATALOG_TO_POCKET_KEY2 :: Hide Info
+CATALOG_TO_POCKET_KEY1 :: Ouvrir le catalogue/Obtenir un item
+CATALOG_TO_POCKET_KEY2 :: Masquer les infos
 
 #Chat Text2Item
 CHAT_T2I :: Chat Text-vers-item
@@ -419,15 +419,15 @@ CUSTOM_ENTER_HAIR :: Entrez le code couleur RGB pour la couleur des cheveux:
 CUSTOM_ENTER_EYE :: Entrez le code couleur RGB pour la couleur des yeux:
 CUSTOM_FILE_SAVED :: Couleurs sauvegardez dans le fichier!
 CUSTOM_FILE_LOADED :: Couleurs chargées du fichier!
-CUSTOM_HAIR_EYE_KEY1 :: Random Hair/Eye Colors
+CUSTOM_HAIR_EYE_KEY1 :: Couleurs aléatoires des cheveux et des yeux
 
 #Wear Helmet
 WEAR_HELMET :: Mettre un casque et un accessoire
 WEAR_HELMET_NOTE :: Mettre un casque et accessoire en même temps. Il faut mettre l'accessoire d'abord! Merci à Levi.
 
 #Player Loader
-PLAYER_LOADER :: Player Loader
-PLAYER_LOADER_NOTE :: Lets you load a specific player of yours withou the need to restart the game!
+PLAYER_LOADER :: Chargeur de joueur
+PLAYER_LOADER_NOTE :: Permet de charger un de vos joueurs spécifiques sans avoir besoin de redémarrer le jeu !
 
 #Players on map
 PLAYERS_ON_MAP :: Montrer les joueurs sur la carte.
@@ -506,9 +506,9 @@ WALK_SEEDER_NOTE :: Vous permet d'enlever les items quand vous les marcher au de
 #Firework Seeder
 FIREWORK_SEEDER :: Seeder de Feu d'artifice 
 FIREWORK_SEEDER_NOTE :: Vous permet d'éditer l'objet qui apparaît quand vous laissez tomber un feu d'artifice.
-VECTOR_FIREWORK_CHANGE_ID :: Change Item ID
-VECTOR_FIREWORK_SPAWN :: Spawn Firework to Slot 1
-FIREWORK_SEEDER_ENTER_ID :: Type the item ID you'd like to seed.
+VECTOR_FIREWORK_CHANGE_ID :: Modifier l'ID de l'objet
+VECTOR_FIREWORK_SPAWN :: Générer un feu d'artifice sur le slot 1
+FIREWORK_SEEDER_ENTER_ID :: Écrivez l'ID de l'élément que vous souhaitez générer.
 
 #Map Editor
 MAP_EDITOR :: Editeur de carte
@@ -560,7 +560,7 @@ VECTOR_SHAPE_FULL_SQUARE :: Carré complet
 VECTOR_SHAPE_CIRCLE :: Cercle
 VECTOR_SHAPE_HORI_LINE :: Ligne horizontale
 VECTOR_SHAPE_VERT_LINE :: Ligne verticale
-VECTOR_SHAPE_SQUAREE :: Square
+VECTOR_SHAPE_SQUAREE :: Carré
 VECTOR_SHAPE_NE_TO_SW :: NE à SO diagonale
 VECTOR_SHAPE_NW_TO_SE :: NO to SE diagonale
 VECTOR_SHAPE_RESET :: Réintialiser
@@ -653,12 +653,12 @@ LOCK_ISLAND_ISL :: Bloquer Amiral
 LOCK_ISLAND_CLUB :: Bloquer le club Tortimer
 
 #Instant Ore Hunt Finish
-FILL_INV_ORE :: Max Ore Hunting Points
-FILL_INV_ORE_NOTE :: Makes the game think you have a inventory filled with the bonus ore, therefore receiving max points at the tour results.
+FILL_INV_ORE :: Points de chasse de minerai au maximum
+FILL_INV_ORE_NOTE :: Fait croire au jeu que vous avez un inventaire rempli de minerai bonus, recevant ainsi un maximum de points lors des résultats de la tournée.
 
 #Instant Labyrinth Tour Finish
-FILL_INV_FRUIT :: Instant Labyrinth Tour
-FILL_INV_FRUIT_NOTE :: Makes the game think you already have all the needed fruits for the tour to finish.
+FILL_INV_FRUIT :: Visite instantanée du labyrinthe
+FILL_INV_FRUIT_NOTE :: Fait croire au jeu que vous avez déjà tous les fruits nécessaires pour terminer la visite.
 
 #Hacker Island
 HACKER_ISLAND :: L'île des Hackeur
@@ -671,8 +671,8 @@ VECTOR_COUNTY_CHANGE :: Changer le pays
 ISLAND_COUNTRY_SET_ID :: Entrez l'ID du pays que vous voulez définir.
 
 #Free Kappn Rides
-FREE_KAPPN :: Free Kappn Rides
-FREE_KAPPN_NOTE :: Lets you go to the island without the need of paying or having money at all.
+FREE_KAPPN :: Promenades d'Amiral gratuites
+FREE_KAPPN_NOTE :: Vous permet d'aller sur l'île sans avoir besoin de payer ni d'avoir de l'argent.
 
 #Island Shop
 ISLAND_SHOP_MOD :: Modifieur des objets du magasin de l'île.
@@ -872,8 +872,8 @@ GRASS_EDITOR_HOTKEY3 :: Changer le mode
 #Amiibo Spoofer
 AMIIBO_SPOOFER :: Amiibo Spoofer
 AMIIBO_SPOOFER_NOTE :: Vous permet d'utiliser tout les amiibo n'importe où. Merci beaucoup à Slattz pour avoir créer ce code!
-AMIIBO_SPOOFER_SPECIES :: Sélectionner une espèce:
-AMIIBO_SPOOFER_VILLAGER :: Sélectionner un villageois à utiliser:
+AMIIBO_SPOOFER_SPECIES :: Sélectionnez une espèce:
+AMIIBO_SPOOFER_VILLAGER :: Sélectionnez un villageois à utiliser:
 
 #Time Travel
 TIME_TRAVEL :: Voyage temporel
@@ -895,13 +895,13 @@ MISC_CODES :: Codes divers
 #Disable Commands
 DISABLECOMMAND :: Désactiver les commandes Non-Hacker
 DISABLECOMMAND_NOTE :: Vous permet de désactiver les commandes Non-Hacker.
-VECTOR_ANIM_COMM :: Animation Commands
-VECTOR_EMOT_COMM :: Emotion Commands
-VECTOR_SNAK_COMM :: Snake Commands
-VECTOR_MUSI_COMM :: Music Commands
-VECTOR_ITEM_COMM :: Item Commands
-VECTOR_ALL_COMM :: Switch OFF All
-COMM_CHOOSE :: Choose which mode to disable:
+VECTOR_ANIM_COMM :: Commandes animations
+VECTOR_EMOT_COMM :: Commandes émotions
+VECTOR_SNAK_COMM :: Commandes serpent
+VECTOR_MUSI_COMM :: Commandes musique
+VECTOR_ITEM_COMM :: Commandes d'objet
+VECTOR_ALL_COMM :: Tout Désactiver
+COMM_CHOOSE :: Mode à désactiver:
 
 #Tool Animation
 TOOL_ANIM :: Changer l'animation des outils
@@ -998,6 +998,13 @@ FAST_TEXT_SPEED_NOTE :: Permet au texte des dialogues de défiler rapidement.
 #Fast Game Speed
 FAST_GAME_SPEED :: Vitesse de jeu rapide
 FAST_GAME_SPEED_NOTE :: Vous permet d'accélerer le jeu.
+
+ShowChatMessage :: Afficher le message de discussion
+ShowChatMessage_NOTE :: Les messages de discussion sont affichés à l'écran.
+ChatButton :: Bouton de discussion
+ChatButton_NOTE :: Le bouton apparaît lorsque vous ouvrez une discussion.
+Isabelle_Skip :: Skip Marie
+Isabelle_Skip_NOTE :: Vous pouvez sauter la conversation avec Marie au début du jeu. \n*Si vous ne l'ignorez pas lorsque l'écran est éclairci, l'écran inférieur deviendra noir.
 
 #Other Stuff
 
