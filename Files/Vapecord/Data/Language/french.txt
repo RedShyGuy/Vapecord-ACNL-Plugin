@@ -662,7 +662,7 @@ FILL_INV_FRUIT_NOTE :: Makes the game think you already have all the needed frui
 
 #Hacker Island
 HACKER_ISLAND :: L'île des Hackeur
-HACKER_ISLAND_NOTE :: Vous permet d'aller sur une île là où seul les personnes possédant ce code  peuvent y aller.
+HACKER_ISLAND_NOTE :: Vous permet d'aller sur une île là où seul les personnes possédant ce code peuvent y aller.
 
 #Island Country
 ISLAND_COUNTRY :: Modifieur du pays de l'île
@@ -705,36 +705,36 @@ ISLAND_SAVER_NAME_BACKUP :: Nom de la sauvegarde de l'île:
 ISLAND_SAVER_DUMPER_DUMP :: Sauvegarde de l'île\n\nNommez la sauvegarde que vous souhaitez créer.
 
 #NPC Codes Folder
-NPC_CODES :: NPC Codes
+NPC_CODES :: Codes PNJ
 
 #NPC Selector 
-NPC_SELECTOR :: NPC Selector
-NPC_SELECTOR_NOTE :: Lets you select any loaded NPC to be able to use the other NPC Cheats.
-NPC_SELECTOR_KEY1 :: Select NPC
+NPC_SELECTOR :: Sélecteur de PNJ
+NPC_SELECTOR_NOTE :: Vous permet de sélectionner n'importe quel PNJ chargé pour pouvoir utiliser les autres cheats PNJ.
+NPC_SELECTOR_KEY1 :: Sélectionner un PNJ
 
 #NPC Animation
-NPC_ANIMATION :: NPC Animation Modifier
-NPC_ANIMATION_NOTE :: Lets you set animations onto selected NPC's. First set the animation ID by clicking the keyboard and then execute it by pressing the hotkeys.
-NPC_ANIMATION_KEY1 :: Execute Animation
+NPC_ANIMATION :: Modificateur d'animation PNJ
+NPC_ANIMATION_NOTE :: Vous permet de définir des animations sur les PNJ sélectionnés. Définissez d’abord l’ID de l’animation à l'aide du clavier, puis exécutez-le en appuyant sur les touches de raccourci.
+NPC_ANIMATION_KEY1 :: Lancer l'animation
 
 #NPC Coordinate
-NPC_COORDINATE :: NPC Coordinate Modifier
-NPC_COORDINATE_NOTE:: Lets you move around selected NPC's.
-NPC_COORDINATE_KEY1 :: Initial Button
-NPC_COORDINATE_KEY2 :: Move Right
-NPC_COORDINATE_KEY3 :: Move Left
-NPC_COORDINATE_KEY4 :: Move Down
-NPC_COORDINATE_KEY5 :: Move Up
+NPC_COORDINATE :: Modificateur de coordonnées PNJ
+NPC_COORDINATE_NOTE:: Vous permet de vous déplacer les PNJ sélectionnés.
+NPC_COORDINATE_KEY1 :: Bouton initial
+NPC_COORDINATE_KEY2 :: Déplacer à droite
+NPC_COORDINATE_KEY3 :: Déplacer à gauche
+NPC_COORDINATE_KEY4 :: Déplacer vers le bas
+NPC_COORDINATE_KEY5 :: Déplacer vers le haut
 
 #NPC Teleport
-NPC_TELEPORT :: NPC Teleport To You
-NPC_TELEPORT_NOTE :: Lets you teleport selected NPC's to your location.
-NPC_TELEPORT_KEY1 :: Teleport To You
+NPC_TELEPORT :: Un PNJ se téléporte vers vous
+NPC_TELEPORT_NOTE :: Vous permet de téléporter les PNJ sélectionnés vers votre emplacement.
+NPC_TELEPORT_KEY1 :: Se téléporte vers vous
 
 #NPC Rotation
-NPC_ROTATION :: NPC Rotation Modifier
-NPC_ROTATION_NOTE :: Lets you rotate selected NPC's.
-NPC_ROTATION_KEY1 :: Initial Button
+NPC_ROTATION :: Modificateur de rotation des PNJ
+NPC_ROTATION_NOTE :: Vous permet de faire pivoter les PNJ sélectionnés.
+NPC_ROTATION_KEY1 :: Bouton initial
 
 #Fun Codes Folder
 FUN_CODES :: Codes Fun
