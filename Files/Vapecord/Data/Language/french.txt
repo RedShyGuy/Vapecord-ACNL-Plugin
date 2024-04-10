@@ -773,7 +773,7 @@ MAX_TURBO_NOTE :: Ceci spamme tout ce qui est activé avec les touches A,B,X,Y e
 
 #multi presses
 MULTI_PRESS :: Appui-multiple
-MULTI_PRESS_NOTE :: Vous pouvez appuyez plusieurs fois avec des outils et plein d'autres choses.
+MULTI_PRESS_NOTE :: Vous permet d'appuyer plusieurs fois avec des outils et plein d'autres choses.
 
 #Ultimate Popper
 ULTIMATE_POPPER :: Bombe de fête ultime
@@ -799,19 +799,19 @@ FISH_CANT_SCARE_NAME :: Poissons pas effrayés
 FISH_CANT_SCARE_NOTE :: Les poissons ne seront plus effrayés.
 
 #Chat Codes Folder
-CHAT_CODES :: Chat Codes
+CHAT_CODES :: Codes de discussion
 
 #chat dont dissaper
 CHAT_DONT_DISSAPEAR :: Bulle de chat toujours affichée
 CHAT_DONT_DISSAPEAR_NOTE :: La bulle du chat sera toujours affichée jusqu'à ce que vous écrivez un nouveau message.
 
 #Chat Copy/Paste
-CHATCOPYPASTE :: Chat Copy/Paste
-CHATCOPYPASTE_NOTE :: Lets you copy and paste your chat. Copied content will be saved to a clipboard on your sdcard.
-CHATCOPYPASTE_KEY1 :: Paste Content
-CHATCOPYPASTE_KEY2 :: Copy Content
-CHATCOPYPASTE_KEY3 :: Cut Content
-CHATCOPYPASTE_KEY4 :: Delete Content
+CHATCOPYPASTE :: Tchat Copier/Coller
+CHATCOPYPASTE_NOTE :: Vous permet de copier et coller votre discussion. Le contenu copié sera enregistré dans un presse-papiers sur votre carte SD.
+CHATCOPYPASTE_KEY1 :: Coller
+CHATCOPYPASTE_KEY2 :: Copier
+CHATCOPYPASTE_KEY3 :: Coller
+CHATCOPYPASTE_KEY4 :: Supprimer
 
 #Force Chat
 FORCE_CHAT :: Forcer l'envoie d'un message (Chat)
