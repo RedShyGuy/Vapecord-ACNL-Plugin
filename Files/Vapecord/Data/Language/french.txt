@@ -695,6 +695,15 @@ ISLAND_BUILDING_ENTER_ID :: Entrez l'ID du bâtiment:
 ISLAND_BUILDING_ENTER_X :: Entrez les coordonnées X du bâtiment:
 ISLAND_BUILDING_ENTER_Y :: Entrez les coordonnées Y du bâtiment:
 
+#Island Saver
+ISLAND_SAVER :: Sauvegarde de l'île
+ISLAND_SAVER_NOTE :: Sauvegarder/retaurer l'êtat de l'île
+ISLAND_SAVER_NO :: Vous devez être sur l’île pour utiliser ce cheat !
+ISLAND_SAVER_BACKUP_ISLAND :: Sauvegarder l'île
+ISLAND_SAVER_RESTORE_ISLAND :: Retaurer l'île
+ISLAND_SAVER_NAME_BACKUP :: Nom de la sauvegarde de l'île:
+ISLAND_SAVER_DUMPER_DUMP :: Sauvegarde de l'île\n\nNommez la sauvegarde que vous souhaitez créer.
+
 #NPC Codes Folder
 NPC_CODES :: NPC Codes
 
