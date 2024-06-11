@@ -136,7 +136,7 @@ Checks game version
 			return true;
 
 		std::string currentVersion = "";
-		u8 res = IsNewestVersion(currentVersion, realGameVersion);
+		s8 res = IsNewestVersion(currentVersion, realGameVersion);
 
 		if(res == -2) {
 			Sleep(Seconds(5));
