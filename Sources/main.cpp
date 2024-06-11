@@ -108,7 +108,7 @@ Checks game version
 -2 = wrong version
 0 = correct version
 */
-	u8 IsNewestVersion(std::string& versionSTR, const std::string& gameVersion) {
+	s8 IsNewestVersion(std::string& versionSTR, const std::string& gameVersion) {
 		versionSTR.clear();
 
 		static const std::vector<u16> Pattern = { 0x0056, 0x0065, 0x0072, 0x002E, 0x0020 };
