@@ -45,7 +45,7 @@ namespace CTRPluginFramework {
                 Process::Write32(offset + 0x38C, (amiibo.ID0 >> 8)); //amiibo ID (3 bytes, converted to 4)
                 Process::Write8(offset + 0x390, (amiibo.ID0 & 0xFF)); //Tag type (1 byte)
                 Process::Write8(offset + 0x391, ((amiibo.ID1 >> 8) & 0xFF)); //series ID (1 byte)
-                Process::Write16(offset + 0x393, (amiibo.ID1 >> 16)); //Amiibo number (2 bytes)
+                Process::Write16(offset + 0x392, (amiibo.ID1 >> 16)); //Amiibo number (2 bytes)
             }
 
             amiiboVec.clear();
