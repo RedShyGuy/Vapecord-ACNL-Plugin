@@ -693,6 +693,8 @@ namespace CTRPluginFramework {
 		bool IsON2 = player->PlayerFlags.BefriendSable1 &&
 					player->PlayerFlags.BefriendSable2 &&
 					player->PlayerFlags.BefriendSable3;
+
+		bool active = (IsON1 && IsON2);
 		
 		cmnOpt[0] = (IsON1 && IsON2) ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
 		
@@ -702,11 +704,11 @@ namespace CTRPluginFramework {
 		if(op < 0)
 			return;
 
-		town->TownFlags.QRMachineUnlocked = !town->TownFlags.QRMachineUnlocked;
+		town->TownFlags.QRMachineUnlocked = !active;
 
-		player->PlayerFlags.BefriendSable1 = !player->PlayerFlags.BefriendSable1;
-		player->PlayerFlags.BefriendSable2 = !player->PlayerFlags.BefriendSable2;
-		player->PlayerFlags.BefriendSable3 = !player->PlayerFlags.BefriendSable3;
+		player->PlayerFlags.BefriendSable1 = !active;
+		player->PlayerFlags.BefriendSable2 = !active;
+		player->PlayerFlags.BefriendSable3 = !active;
 		unlockqrmachine(entry);
 	}
 
