@@ -43,6 +43,17 @@ namespace CTRPluginFramework {
 		}
 		return 0xFFFFFFFF;
 	}
+//Hook invalid give item 
+	void InvalidGiveItem(bool var1, Item* item, u32 data) {
+		bool isItemBuried = (item->Flags >> 12) == 8;
+		if (isItemBuried) {
+			item->Flags &= 0x0FFF;
+		}
+
+		const HookContext &curr = HookContext::GetCurrent();
+		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+		func.Call<void>(var1, item, data);
+	}
 //Hook invalid drop
 	u32 InvalidDropStop(u8 ID, Item *ItemToReplace, Item *ItemToPlace, Item *ItemToShow) {
 		if(IDList::ItemValid(*ItemToPlace)) {

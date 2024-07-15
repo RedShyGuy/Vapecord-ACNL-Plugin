@@ -9,6 +9,7 @@ namespace CTRPluginFramework {
 		hook.Enable();
 	}
 
+	void InvalidGiveItem(bool var1, Item* item, u32 data);
 	u32 InvalidPickStop(u8 ID, Item *ItemToReplace, Item *ItemToPlace, Item *ItemToShow, u8 worldx, u8 worldy);
 	u32 InvalidDropStop(u8 ID, Item *ItemToReplace, Item *ItemToPlace, Item *ItemToShow);
 	void InvalidSpriteStop(u32 pData, Item *SpriteItem);
@@ -61,6 +62,10 @@ namespace CTRPluginFramework {
 		static Hook ISHook;
 		static const Address ISOffset(0x670EA0, 0x6703C8, 0x66FED8, 0x66FED8, 0x66F998, 0x66F998, 0x66F540, 0x66F540);
 		SetHook(ISHook, ISOffset.addr, (u32)InvalidSpriteStop, USE_LR_TO_RETURN);
+
+		static Hook InvalidGiveItemHook;
+		static const Address InvalidGiveItemAddress(0x2339CC, 0x233410, 0x2339EC, 0x2339EC, 0x23390C, 0x23390C, 0x2338D8, 0x2338D8);
+		SetHook(InvalidGiveItemHook, InvalidGiveItemAddress.addr, (u32)InvalidGiveItem, USE_LR_TO_RETURN);
 		
 		static Hook IHHook;
 		static const Address IHOffset(0x5980F4, 0x59760C, 0x59713C, 0x59713C, 0x596A2C, 0x596A2C, 0x596700, 0x596700);
@@ -101,6 +106,8 @@ namespace CTRPluginFramework {
 		SetHook(PlantHook2, Plant2.addr, (u32)IsItemPlantable, USE_LR_TO_RETURN);
 		SetHook(PlantHook3, Plant3.addr, (u32)IsItemPlantable, USE_LR_TO_RETURN);
 		SetHook(PlantHook4, Plant4.addr, (u32)IsItemPlantable, USE_LR_TO_RETURN);
+
+		
 
 		/*static Hook hook;
 		static const u32 address(0x323424, 0, 0, 0, 0, 0, 0, 0);
