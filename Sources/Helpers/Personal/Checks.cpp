@@ -4,6 +4,7 @@
 #include "Helpers/ACSystem.hpp"
 #include "Helpers/Player.hpp"
 #include "Helpers/IDList.hpp"
+#include "Helpers/Game.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "RegionCodes.hpp"
 
@@ -26,7 +27,42 @@ extern "C" bool __IsPlayerHouse() {
 	return 0;
 }
 
+extern "C" bool __IsPuzzleLeagueRoom() {
+	u8 stageID = CTRPluginFramework::GameHelper::RoomCheck();
+	return stageID == 0x9E;
+}
+
+extern "C" void SetProperParticle(void);
+
 namespace CTRPluginFramework {
+	/*
+		This was needed as the particle hook needs to check the room too early, rooms are not initialized yet
+		That is why we wait until the title screen appears to check the room for the particle fix
+
+		The particle fix is only needed in the puzzle league game, so it won't be an issue to patch it later
+	*/
+	void OnTitleScreen(u8 roomId, bool u0, bool u1, bool u2) {
+		if (roomId == 0x5E) {
+			static Hook ParticleHook1, ParticleHook2;
+			static const Address partc1(0x5506D4, 0x54FBEC, 0x54F71C, 0x54F71C, 0x54F008, 0x54F008, 0x54ED2C, 0x54ED2C);
+			static const Address partc2(0x5509CC, 0x54FEE4, 0x54FA14, 0x54FA14, 0x54F300, 0x54F300, 0x54F024, 0x54F024);
+
+			ParticleHook1.Initialize(partc1.addr, (u32)SetProperParticle);
+			ParticleHook1.SetFlags(USE_LR_TO_RETURN);
+			ParticleHook1.Enable();
+
+			ParticleHook2.Initialize(partc2.addr, (u32)SetProperParticle);
+			ParticleHook2.SetFlags(USE_LR_TO_RETURN);
+			ParticleHook2.Enable();
+
+			OSD::Notify("Test");
+		}
+
+		const HookContext &curr = HookContext::GetCurrent();
+		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+		func.Call<void>(roomId, u0, u1, u2);
+	}
+
 //Hook invalid pickup
 	u32 InvalidPickStop(u8 ID, Item *ItemToReplace, Item *ItemToPlace, Item *ItemToShow, u8 worldx, u8 worldy) {	
 		if(IDList::ItemValid(*ItemToReplace, true)) {
@@ -226,5 +262,32 @@ namespace CTRPluginFramework {
 		const HookContext &curr = HookContext::GetCurrent();
 		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
 		func.Call<void>(param);
+	}
+
+	const char* SetProDesignStyle(Item *ItemID, u32 data, u32 data2) {
+		switch(ItemID->ID) {
+			case 0x33AA: //Umbrella
+				return "icn_313";
+
+			case 0x33AB: //Horned Hat
+			case 0x33AC: //Female Hat
+			case 0x33AD: //Knit Hat
+				return "icn_314";
+
+			case 0x33AE: //T-Shirt
+			case 0x33AF: //Tank Shirt
+			case 0x33B0: //Distorted Sleeves T-Shirt
+			case 0x33B1: //Long Sleeve Shirt
+				return "icn_312";
+
+			case 0x33B2: //Tank Dress
+			case 0x33B3: //Sleeve Dress
+			case 0x33B4: //Long Sleeve Dress
+				return "icn_385";
+		}
+
+		const HookContext &curr = HookContext::GetCurrent();
+		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+		return func.Call<const char*>(ItemID, data, data2);
 	}
 }

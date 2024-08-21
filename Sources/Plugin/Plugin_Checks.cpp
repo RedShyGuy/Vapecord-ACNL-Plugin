@@ -9,6 +9,7 @@ namespace CTRPluginFramework {
 		hook.Enable();
 	}
 
+	void OnTitleScreen(u8 roomId, bool u0, bool u1, bool u2);
 	void InvalidGiveItem(bool var1, Item* item, u32 data);
 	u32 InvalidPickStop(u8 ID, Item *ItemToReplace, Item *ItemToPlace, Item *ItemToShow, u8 worldx, u8 worldy);
 	u32 InvalidDropStop(u8 ID, Item *ItemToReplace, Item *ItemToPlace, Item *ItemToShow);
@@ -26,6 +27,7 @@ namespace CTRPluginFramework {
 	void SetTitle(u32 dataParam, u32 *stack);
 	void SetText(u32 dataParam, u32 *stack);
 	void SuspendCallBack(u32 param);
+	const char* SetProDesignStyle(Item *ItemID, u32 data, u32 data2);
 
 //check for accidental invalid item eat/drop/show off etc
 	void PluginHooks(void) {
@@ -107,7 +109,13 @@ namespace CTRPluginFramework {
 		SetHook(PlantHook3, Plant3.addr, (u32)IsItemPlantable, USE_LR_TO_RETURN);
 		SetHook(PlantHook4, Plant4.addr, (u32)IsItemPlantable, USE_LR_TO_RETURN);
 
-		
+		static Hook OnTitleScreenHook;
+		static const Address titleScreenWarp(0x109D52, 0x109D56, 0x109D56, 0x109D56, 0x109D56, 0x109D56, 0x109D56, 0x109D56);
+		SetHook(OnTitleScreenHook, titleScreenWarp.addr, (u32)OnTitleScreen, USE_LR_TO_RETURN);
+
+		static Hook OnProDesignHook;
+		static const Address setItemIcon(0x2B9110, 0x2B8B44, 0x2B910C, 0x2B910C, 0x2B9004, 0x2B9004, 0x2B8FE4, 0x2B8FE4);
+		SetHook(OnProDesignHook, setItemIcon.addr, (u32)SetProDesignStyle, USE_LR_TO_RETURN);
 
 		/*static Hook hook;
 		static const u32 address(0x323424, 0, 0, 0, 0, 0, 0, 0);

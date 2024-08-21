@@ -118,8 +118,8 @@ namespace CTRPluginFramework {
 		static const Address partc1(0x5506D4, 0x54FBEC, 0x54F71C, 0x54F71C, 0x54F008, 0x54F008, 0x54ED2C, 0x54ED2C);
 		static const Address partc2(0x5509CC, 0x54FEE4, 0x54FA14, 0x54FA14, 0x54F300, 0x54F300, 0x54F024, 0x54F024);
 		static const Address partc3(0x721418, 0x720760, 0x720420, 0x7203F8, 0x71FBB4, 0x71FB8C, 0x71F75C, 0x71F75C);
-		Process::Patch(partc1.addr, 0xE3A0C000);
-		Process::Patch(partc2.addr, 0xE3A0C000);
+		//Process::Patch(partc1.addr, 0xE3A0C000);
+		//Process::Patch(partc2.addr, 0xE3A0C000);
 		Process::Patch(partc3.addr, 0xE3A0C000);
 		
 	//Bypass Checks

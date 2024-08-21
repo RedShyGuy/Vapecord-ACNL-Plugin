@@ -373,7 +373,7 @@ namespace CTRPluginFramework {
 		if(!PlayerClass::GetInstance()->IsLoaded())
 			return false;
 
-		static Address convertData(0x27231C, 0, 0, 0, 0, 0, 0, 0);
+		static Address convertData(0x27231C, 0x271D60, 0x272318, 0x272318, 0x272224, 0x272224, 0x2721F0, 0x2721F0);
 		u32 ownData = convertData.Call<u32>(PlayerClass::GetInstance()->Offset(0x1B4)); //gets actual data of player
 
 		return (ownData == individualData);

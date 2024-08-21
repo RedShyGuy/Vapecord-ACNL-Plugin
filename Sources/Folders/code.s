@@ -153,3 +153,13 @@ FUNCTION    SetMouthExpression
     POP         {R0}
     MOV         R4, R0
     POP         {PC}    
+
+FUNCTION    SetProperParticle
+    PUSH        {R0, LR}
+
+    BL          __IsPuzzleLeagueRoom
+    CMP         R0, #1
+    LDREQ       R12, [SP, #0x70]
+    MOVNE       R12, #0
+
+    POP         {R0, PC}
