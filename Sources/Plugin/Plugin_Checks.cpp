@@ -28,7 +28,7 @@ namespace CTRPluginFramework {
 	void SetText(u32 dataParam, u32 *stack);
 	void SuspendCallBack(u32 param);
 	const char* SetProDesignStyle(Item *ItemID, u32 data, u32 data2);
-
+	
 //check for accidental invalid item eat/drop/show off etc
 	void PluginHooks(void) {
 		/*

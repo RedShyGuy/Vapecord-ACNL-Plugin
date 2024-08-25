@@ -1872,11 +1872,18 @@ namespace CTRPluginFramework {
 	32239378 = ModuleKotobuki.cro
 	*/
 
+	int sound = 0x113;
 //Item Island Code
 	void islanditems(MenuEntry *entry) {
+		if (Controller::IsKeysPressed(Key::L)) {
+			GameHelper::PlaySound(sound);
+			OSD::Notify(Utils::Format("%08X", sound));
+			sound++;
+		}
+
 		static std::string str = "";
 		static u32 buffer = 0;
-
+ 
 		if(Controller::IsKeysPressed(Key::R + Key::DPadUp)) {
 			if(Wrap::KB<std::string>("Enter Cro Name:", false, 15, str, str)) {
 				if(CRO::GetMemAddress(str.c_str(), buffer)) {

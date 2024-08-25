@@ -5,6 +5,8 @@
 #include "RegionCodes.hpp"
 
 namespace CTRPluginFramework {
+	void InitCustomPresentOpeningFunction(); 
+
 //This patch the NFC disabling the touchscreen when scanning an amiibo, which prevents ctrpf to be used
     static void ToggleTouchscreenForceOn(void) {
         static u32 original = 0;
@@ -63,6 +65,8 @@ namespace CTRPluginFramework {
 		ItemSequence::Init();
 	
 		PluginHooks();
+
+		InitCustomPresentOpeningFunction();
 		
 	//Online Drop Lag Remover
 		static const Address host1(0x5A1454, 0x5A096C, 0x5A049C, 0x5A049C, 0x59FD8C, 0x59FD8C, 0x59FA60, 0x59FA60);

@@ -324,4 +324,25 @@ Custom Buttons
 			NameHook.Enable();
 		}
 	}
+
+//Used for plugin checks
+
+	void CustomPresentOpening() {
+		Item itemslotid = {0x7FFE, 0};
+		u8 slot = 0;
+		Inventory::GetSelectedSlot(slot);
+
+		Inventory::ReadSlot(slot, itemslotid);
+		Inventory::WriteSlot(slot, itemslotid, 0);
+
+		GameHelper::PlaySound(0x407);
+
+		Code::RestoreItemWindow.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+	}
+
+	void InitCustomPresentOpeningFunction() {
+		static const Address pointer_FUNC(0x9509FC, 0x94F9EC, 0x94F9FC, 0x94F9FC, 0x9499FC, 0x9489FC, 0x9489FC, 0x9489FC);
+		ItemFuncData* FuncPointer = (ItemFuncData *)pointer_FUNC.addr;
+		FuncPointer[19].FunctionPointer = (u32)CustomPresentOpening;
+	}
 }

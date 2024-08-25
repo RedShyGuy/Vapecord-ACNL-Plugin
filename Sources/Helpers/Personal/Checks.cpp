@@ -284,10 +284,80 @@ namespace CTRPluginFramework {
 			case 0x33B3: //Sleeve Dress
 			case 0x33B4: //Long Sleeve Dress
 				return "icn_385";
+
+			case 0x22: //tree (growing 1)
+			case 0x23: //tree (growing 2)
+			case 0x24: //tree (growing 3)
+			case 0x25: //tree (growing 4)
+			case 0x26: //tree
+				return "icn_prsnt2_04";
+
+			case 0x27: //cedar (growing 1)
+			case 0x28: //cedar (growing 2)
+			case 0x29: //cedar (growing 3)
+			case 0x2A: //cedar (growing 4)
+			case 0x2B: //cedar
+				return "icn_prsnt2_02";
+
+			case 0x2C: //coconut palm tree (growing 1)
+			case 0x2D: //coconut palm tree (growing 2)
+			case 0x2E: //coconut palm tree (growing 3)
+			case 0x2F: //coconut palm tree (growing 3)
+			case 0x30: //coconut palm tree
+				return "icn_prsnt2_03";
+
+			case 0x31: //banana palm tree (growing 1)
+			case 0x32: //banana palm tree (growing 2)
+			case 0x33: //banana palm tree (growing 3)
+			case 0x34: //banana palm tree (growing 4)
+			case 0x35: //banana palm tree
+				return "icn_prsnt2_03";
+
+			case 0x36: //bamboo (growing 1)
+			case 0x37: //bamboo (growing 2)
+			case 0x38: //bamboo (growing 3)
+			case 0x39: //bamboo
+				return "icn_prsnt2_01";
+
+			case 0xCD: //rafflesia
+				return "icn_prsnt_04";
+		}
+
+		if (ItemID->ID >= 1 && ItemID->ID <= 6) { //wilted trees
+			return  "icn_prsnt2_06";
+		}
+
+		if (ItemID->ID >= 0xCE && ItemID->ID <= 0xF8) { //wilted flowers
+			return  "icn_prsnt2_06";
+		}
+
+		if (ItemID->ID >= 7 && ItemID->ID <= 0x21) { //stumps
+			return  "icn_prsnt_01";
+		}
+
+		if (ItemID->ID >= 0x3A && ItemID->ID <= 0x75) { //trees
+			return "icn_prsnt2_04";
+		}
+
+		if (ItemID->ID >= 0x76 && ItemID->ID <= 0x7B) { //cedar trees
+			return "icn_prsnt2_02";
+		}
+
+		if (ItemID->ID >= 0x80 && ItemID->ID <= 0x97) { //bushes
+			return "icn_prsnt2_05";
+		}
+
+		if (ItemID->ID >= 0x7C && ItemID->ID <= 0x7F) { //weed
+			return "icn_prsnt_03";
+		}
+
+		if (ItemID->ID >= 0x98 && ItemID->ID <= 0x9C) { //rocks
+			return "icn_prsnt_02";
 		}
 
 		const HookContext &curr = HookContext::GetCurrent();
 		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
 		return func.Call<const char*>(ItemID, data, data2);
 	}
+
 }
