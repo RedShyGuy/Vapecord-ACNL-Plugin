@@ -1,5 +1,7 @@
 @echo off
 cls
-make clean
+cd libctrpf
+make -j 8
+cd ..
 make -j 8
 pause
