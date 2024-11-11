@@ -83,6 +83,8 @@ namespace CTRPluginFramework
         bool            _wasPressed{false};
         bool            _execute{false};
         bool            _enabled{true};
+        
+        using Drawable::operator();
     };
 }
 
