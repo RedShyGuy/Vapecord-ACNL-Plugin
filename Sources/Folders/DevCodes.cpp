@@ -1491,7 +1491,7 @@ namespace CTRPluginFramework {
 		if(gPoint == 0)
 			return 0;
 
-		frdInit();
+		frdInit(false);
 
 		u32 pID = *(u32 *)((gPoint + 0xC0) + (0x18 * pIndex));
 
