@@ -1,0 +1,243 @@
+###############################
+#        Action Replay        #
+#   Code Types supported by   #
+#      CTRPluginFramework     #
+#          v0.5.0             #
+###############################
+
+==============
+INFO
+==============
+
+You have access to:
+ - 2 offset registers (not persistent)
+ - 2 data registers (not persistent)
+ - 2 storage registers (persistent)
+
+persistent = register's value is kept between code execution
+not persistent = register's value is set to default value when the code starts
+
+Default value of offset (#1 and #2), data (#1 and #2) and storage (#1 and #2) registers is zero.
+Default mode of all the registers is integer mode.
+
+The active offset and data register is set to #1 when the code starts.
+When a register index (#1 or #2) is not precised in the description, the active register is used.
+
+====================
+Shared Memory Page
+====================
+CTRPF creates an empty memory page at 0x01E81000 which allows you to
+store and share values between your codes.
+All of your codes have access to this memory range : 0x01E81000 - 0x01E82000
+
+The way you use it is entirely up to you.
+
+==============
+CODE TYPES
+==============
+
+Memory Writes:
+---------------
+0XXXXXXX YYYYYYYY – 32bit write to [XXXXXXX + offset]
+1XXXXXXX 0000YYYY – 16bit write to [XXXXXXX + offset]
+2XXXXXXX 000000YY – 8bit write to [XXXXXXX + offset]
+
+Conditional 32bit codes:
+-------------------------
+3XXXXXXX YYYYYYYY – Greater Than (YYYYYYYY > [XXXXXXX + offset])
+4XXXXXXX YYYYYYYY – Less Than (YYYYYYYY < [XXXXXXX + offset])
+5XXXXXXX YYYYYYYY – Equal To (YYYYYYYY == [XXXXXXX + offset])
+6XXXXXXX YYYYYYYY – Not Equal To (YYYYYYYY != [XXXXXXX + offset])
+
+Conditional 16bit codes:
+-------------------------
+7XXXXXXX ZZZZYYYY – Greater Than (YYYY > [XXXXXXX + offset] & ~ZZZZ)
+8XXXXXXX ZZZZYYYY – Less Than (YYYY < [XXXXXXX + offset] & ~ZZZZ)
+9XXXXXXX ZZZZYYYY – Equal To (YYYY == [XXXXXXX + offset] & ~ZZZZ)
+AXXXXXXX ZZZZYYYY – Not Equal To (YYYY != [XXXXXXX + offset] & ~ZZZZ)
+
+Conditional mode:
+-----------------------
+DFFFFFFF 00000000 - Conditional codes: value of address is compared to YYYY (immediate value)
+DFFFFFFF 00000001 - Conditional codes: value of address is compared to active data register
+DFFFFFFF 00000002 - Conditional codes: active data register is compared to YYYY (immediate value)
+DFFFFFFF 00000003 - Conditional codes: active storage register is compared to YYYY (immediate value)
+DFFFFFFF 00000004 - Conditional codes: active data register is compared to active storage register
+
+Offset Codes:
+--------------
+BXXXXXXX 00000000 – offset = *(XXXXXXX + offset)
+D3000000 XXXXXXXX – offset#1 = XXXXXXXX
+D3000001 XXXXXXXX - offset#2 = XXXXXXXX
+DC000000 XXXXXXXX – Adds a value to the current offset
+
+Loop Codes:
+------------
+C0000000 YYYYYYYY – Execute next block YYYYYYYY times (immediate value)
+C1000000 00000000 – Execute next block as many times as the value stored in data#1
+C2000000 00000000 – Execute next block as many times as the value stored in data#2
+D1000000 00000000 – Loop execute
+D0000000 00000001 - Stops a loop execution directly (jump to next block) - Doesn't ends blocks
+
+Terminators:
+-------------
+D0000000 00000000 – Ends a conditional block
+D2000000 00000000 - Ends all block / Execute loops
+D2000000 00000001 - Ends the code execution (ignore all blocks / next instructions). Doesn't ends blocks, so it can be conditional
+
+Data Register Codes:
+---------------------
+D4000000 XXXXXXXX – Adds XXXXXXXX to the active data register
+D4000001 XXXXXXXX – data#1 = data#1 + data#2 + XXXXXXXX
+D4000002 XXXXXXXX - data#2 = data#2 + data#1 + XXXXXXXX
+
+D5000000 XXXXXXXX – data = XXXXXXXX
+D5000001 XXXXXXXX - data#1 = XXXXXXXX
+D5000002 XXXXXXXX - data#2 = XXXXXXXX
+
+D6000000 XXXXXXXX – (32bit) [XXXXXXXX+offset] = data ; offset += 4
+D6000001 XXXXXXXX – (32bit) [XXXXXXXX+offset] = data#1 ; offset += 4
+D6000002 XXXXXXXX – (32bit) [XXXXXXXX+offset] = data#2 ; offset += 4
+
+D7000000 XXXXXXXX – (16bit) [XXXXXXXX+offset] = data & 0xffff ; offset += 2
+D7000001 XXXXXXXX – (16bit) [XXXXXXXX+offset] = data#1 & 0xffff ; offset += 2
+D7000002 XXXXXXXX – (16bit) [XXXXXXXX+offset] = data#2 & 0xffff ; offset += 2
+
+D8000000 XXXXXXXX – (8bit) [XXXXXXXX+offset] = data & 0xff ; offset++
+D8000001 XXXXXXXX – (8bit) [XXXXXXXX+offset] = data#1 & 0xff ; offset++
+D8000002 XXXXXXXX – (8bit) [XXXXXXXX+offset] = data#2 & 0xff ; offset++
+
+D9000000 XXXXXXXX – (32bit) sets data to [XXXXXXXX+offset]
+D9000001 XXXXXXXX – (32bit) sets data#1 to [XXXXXXXX+offset]
+D9000002 XXXXXXXX – (32bit) sets data#2 to [XXXXXXXX+offset]
+
+DA000000 XXXXXXXX – (16bit) sets data to [XXXXXXXX+offset] & 0xFFFF
+DA000001 XXXXXXXX – (16bit) sets data#1 to [XXXXXXXX+offset] & 0xFFFF
+DA000002 XXXXXXXX – (16bit) sets data#2 to [XXXXXXXX+offset] & 0xFFFF
+
+DB000000 XXXXXXXX – (8bit) sets data to [XXXXXXXX+offset] & 0xFF
+DB000001 XXXXXXXX – (8bit) sets data#1 to [XXXXXXXX+offset] & 0xFF
+DB000002 XXXXXXXX – (8bit) sets data#2 to [XXXXXXXX+offset] & 0xFF
+
+Patch Code:
+--------------
+EXXXXXXX YYYYYYYY - Copy Y bytes (Z) to [XXXXXXX + offset]
+ZZZZZZZZ ZZZZZZZZ
+
+Input Codes:
+----------------
+DD000000 XXXXXXXX – if KEYPAD has value XXXXXXXX execute next block (see SPECIAL KEY CODE for values)
+DE000000 AAAABBBB - if touchpos X is between AAAA >= X >= BBBB execute next block
+DE000001 AAAABBBB - if touchpos Y is between AAAA >= Y >= BBBB execute next block
+
+Floating point mode:
+-----------------------
+DFFFFFFE 00000000 - Set active data register as integer, no conversion
+DFFFFFFE 00000001 - Set active data register as float, no conversion
+DFFFFFFE 00000010 - Set active data register as integer, convert from float value encoding to integer
+DFFFFFFE 00000011 - Set active data register as float, convert from integer value encoding to float
+
+Registers operations:
+-----------------------
+DF000000 00000000 - Set offset register #1 as active (default)
+DF000000 00000001 - Set offset register #2 as active
+DF000001 00000000 - Set data register #1 as active (default)
+DF000001 00000001 - Set data register #2 as active
+DF000002 00000000 - Set storage register #1 as active (default)
+DF000002 00000001 - Set storage register #2 as active
+
+DF000000 00010000 - Copy offset #1 to offset #2
+DF000000 00010001 - Copy offset #2 to offset #1
+DF000001 00010000 - Copy data #1 to data #2
+DF000001 00010001 - Copy data #2 to data #1
+DF000002 00010000 - Copy storage #1 to data #1
+DF000002 00010001 - Copy storage #2 to data #2
+
+DF000000 00020000 - Copy offset #1 to data #1
+DF000000 00020001 - Copy offset #2 to data #2
+DF000001 00020000 - Copy data #1 to offset #1
+DF000001 00020001 - Copy data #2 to offset #2
+DF000002 00020000 - Copy data #1 to storage #1
+DF000002 00020001 - Copy data #2 to storage #2
+
+Arithmetic operations:
+-----------------------
+F0000001 00000000 - Disable float mode for F1, F2, F3 codes
+F0000001 00000001 - Enable float mode for F1, F2, F3 codes
+
+F1XXXXXX YYYYYYYY - *(XXXXXX + offset) += YYYYYYYY
+F2XXXXXX YYYYYYYY - *(XXXXXX + offset) *= YYYYYYYY
+F3XXXXXX YYYYYYYY - *(XXXXXX + offset) /= YYYYYYYY
+F4000000 YYYYYYYY - MUL - data *= YYYYYYYY
+F5000000 YYYYYYYY - DIV - data /= YYYYYYYY
+F6000000 YYYYYYYY - AND - data &= YYYYYYYY
+F7000000 YYYYYYYY - OR - data |= YYYYYYYY
+F8000000 YYYYYYYY - XOR - data ^= YYYYYYYY
+F9000000 00000000 - NOT - data = ~data
+FA000000 YYYYYYYY - Left shift - data <<= YYYYYYYY
+FB000000 YYYYYYYY - Right shift - data >>= YYYYYYYY
+
+Data copy:
+---------------------
+FC000000 YYYYYYYY - Copy YYYYYYYY bytes from [offset#2] to [offset#1]
+
+Data search:
+---------------------
+FE00XXXX YYYYYYYY - Search pattern (Z) from offset to offset + Y, XXXX is pattern size (in bytes)
+ZZZZZZZZ ZZZZZZZZ   Next block of code is executed if the pattern is found and offset is updated with the address
+
+Random generator:
+---------------------
+FFXXXXXX YYYYYYYY - data = random number between XXXXXX and YYYYYYYY
+
+Custom ASM routines:
+---------------------
+F0F00000 ZZZZZZZZ - ZZZZZZZZ code size in bytes - XXXXXXXX ASM instructions (ARM32)
+XXXXXXXX XXXXXXXX - Execute asm instructions embedded in the AR code
+
+# Thread ctx on code entry
+---------------------
+# r0:
+# r1:
+# r2: 
+# r3:
+# r4: offset#1 ptr
+# r5: offset#2 ptr
+# r6: data#1 ptr
+# r7: data#2 ptr
+# r8: storage#1 ptr
+# r9: storage#2 ptr
+# r10: shared memory page ptr
+# r11: 
+# r12:
+# sp: a stack of 0x1000 bytes available
+# lr: address to return to to exit the code
+
+All the registers (including VFP) are backed/restored so they can be used freely.
+
+===================
+SPECIAL KEYPAD CODE
+===================
+0x1         A
+0x2         B
+0x4         Select
+0x8         Start
+0x10        Right
+0x20        Left
+0x40        Up
+0x80        Down
+0x100       R
+0x200       L
+0x400       X
+0x800       Y
+0x4000      ZL (N3DS Only)
+0x8000      ZR (N3DS Only)
+0x100000    Touchpad (any position)
+0x1000000   CStick-Right (N3DS Only)
+0x2000000   CStick-Left (N3DS Only)
+0x4000000   CStick-Up (N3DS Only)
+0x8000000   CStick-Down (N3DS Only)
+0x10000000  CPad-Right
+0x20000000  CPad-Left
+0x40000000  CPad-Up
+0x80000000  CPad-Down
