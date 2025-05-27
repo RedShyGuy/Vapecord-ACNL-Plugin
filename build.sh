@@ -1,7 +1,7 @@
 #! /bin/bash
 clear
-cd libctrpf
+cd libctrpf/Library
 make -j 8
-cd ..
+cd ../..
 make -j 8
 echo finished
