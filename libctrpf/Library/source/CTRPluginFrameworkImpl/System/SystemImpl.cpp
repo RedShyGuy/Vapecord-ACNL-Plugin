@@ -34,6 +34,19 @@ namespace CTRPluginFramework
 	    FLAG_EXITED       = BIT(31),
     };
 
+	//vapecord infobar
+    void GetLocalFriendCode(u64 *friendcode)
+    {
+        frdInit(false);
+
+        FriendKey key;
+		FRD_GetMyFriendKey(&key);
+
+		FRD_PrincipalIdToFriendCode(key.principalId, friendcode);
+
+        frdExit();
+    }
+
     void    SystemImpl::Initialize(void)
     {
         s64 out;
@@ -53,6 +66,9 @@ namespace CTRPluginFramework
 
         // Get System's language
         CFGU_GetSystemLanguage(&Language);
+        
+        //vapecord infobar
+        GetLocalFriendCode(&FriendCode);
     }
 
     void     SystemImpl::CheckCitra(void)

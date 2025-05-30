@@ -109,10 +109,14 @@ namespace CTRPluginFramework
         if (!ShowNoteBottom) {
             // Check all buttons
             if (_showStarredBtn()) _showStarredBtn_OnClick();
+            //V-settings
+            if (_VSettingsBtn()) _vSettingsBtn_OnClick();
             // _hidMapperBtn();
             if (_gameGuideBtn()) _gameGuideBtn_OnClick();
             if (_searchBtn()) _searchBtn_OnClick();
             if (_arBtn()) _actionReplayBtn_OnClick();
+            //rainbow button
+            if (_rainbowBtn()) _rainbowBtn_OnClick();
             if (_AddFavoriteBtn()) _StarItem();
             if (_InfoBtn()) _InfoBtn_OnClick();
             if (_keyboardBtn()) _keyboardBtn_OnClick();

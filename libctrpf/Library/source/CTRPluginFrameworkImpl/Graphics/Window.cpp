@@ -200,7 +200,7 @@ namespace CTRPluginFramework
 
         Window::BottomWindow_TopBar.Draw();
         Window::BottomWindow_BottomBar.Draw();
-        //LoadPos();
+        LoadPos();
 
         int posY = 6;
 
