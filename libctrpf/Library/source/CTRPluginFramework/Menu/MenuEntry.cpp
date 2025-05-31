@@ -38,6 +38,8 @@ namespace CTRPluginFramework
         _item(new MenuEntryImpl(name, func, note, this))
     {
         _item->SetRadio(radioId);
+        //vapecord
+        _item->cheatID = _cheatID++;
     }
 
     MenuEntry::MenuEntry(int radioGroup, const std::string &name, FuncPointer GameFunc, FuncPointer MenuFunc, const std::string &note) :
