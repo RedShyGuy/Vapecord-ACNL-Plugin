@@ -35,6 +35,8 @@ namespace CTRPluginFramework
         _root = _folder = new MenuFolderImpl(name);
         _starredConst = _starred = new MenuFolderImpl("Favorites");
 
+	//vapecord
+	_rainbowMode = false;
         _starMode = false;
         _selector = 0;
         _selectedTextSize = 0;
@@ -577,8 +579,8 @@ namespace CTRPluginFramework
     {
         Renderer::SetTarget(BOTTOM);
 		
-		//vapecord infobar
-		Window::DrawBottomInfoBar();
+	//vapecord infobar
+	Window::DrawBottomInfoBar();
         Window::BottomWindow.Draw();
 
         // Draw buttons
@@ -897,6 +899,7 @@ namespace CTRPluginFramework
         _mode = 1;
     }
 
+    //rainbow button
     bool    PluginMenuHome::RainbowState(void)
     {
         return _rainbowMode;

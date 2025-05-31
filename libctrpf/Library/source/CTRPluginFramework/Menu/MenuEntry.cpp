@@ -5,7 +5,7 @@
 
 namespace CTRPluginFramework
 {
-	//vapecord
+    //vapecord
     static s8 _MenuCount = 0;
     static s16 _cheatID = 0;
     
@@ -19,8 +19,8 @@ namespace CTRPluginFramework
         Hotkeys(this),
         _item(new MenuEntryImpl(name, func, note, this))
     {
-		//vapecord
-		_item->cheatID = _cheatID++;
+	//vapecord
+	_item->cheatID = _cheatID++;
     }
 
     MenuEntry::MenuEntry(const std::string &name, FuncPointer GameFunc, FuncPointer MenuFunc, const std::string &note) :

@@ -12,7 +12,10 @@ namespace CTRPluginFramework
     }
 
     Hotkey::Hotkey(u32 keys, const std::string& name) :
-    _keys(keys), _name(name)
+    _keys(keys), _name(name),
+    //vapecord
+    _firstName(name)
+    
     {
     }
 

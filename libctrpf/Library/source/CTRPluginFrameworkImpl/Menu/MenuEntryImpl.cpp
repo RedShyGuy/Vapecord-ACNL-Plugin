@@ -8,8 +8,8 @@ namespace CTRPluginFramework
 {
     MenuEntryImpl::MenuEntryImpl(const std::string &name, const std::string &note, MenuEntry *owner) : MenuItem(MenuType::Entry)
     {
-		/*
-		this->name = name;
+	/*
+	this->name = name;
         this->firstName = name;
         this->note = note;
         this->GameFunc = func;
@@ -22,11 +22,11 @@ namespace CTRPluginFramework
         this->_flags.isUnselectable = false;
         this->_radioId = -1;
         this->_owner = owner;
-		*/
-		//vapecord
+	*/
+	//vapecord
         this->name = name;
         this->firstName = Color::RemoveColor(name);
-        //this->firstName = name;//was this on purpose? it doesn't seem like it so I will comment it out
+        //this->firstName = name;//what? why?
         this->note = note;
         this->firstNote = note;
         this->color = Color::GetColor(name);
@@ -46,8 +46,8 @@ namespace CTRPluginFramework
 
     MenuEntryImpl::MenuEntryImpl(const std::string &name, FuncPointer func, const std::string &note, MenuEntry *owner) : MenuItem(MenuType::Entry)
     {
-		/*
-		this->name = name;
+	/*
+	this->name = name;
         this->firstName = name;
         this->note = note;
         this->GameFunc = func;
@@ -60,8 +60,8 @@ namespace CTRPluginFramework
         this->_flags.isUnselectable = false;
         this->_radioId = -1;
         this->_owner = owner;
-		*/
-		//vapecord
+	*/
+	//vapecord
         this->name = name;
         this->firstName = Color::RemoveColor(name);
         //this->firstName = name;

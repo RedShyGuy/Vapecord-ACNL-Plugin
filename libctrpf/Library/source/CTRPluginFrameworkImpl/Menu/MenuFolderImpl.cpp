@@ -222,7 +222,7 @@ namespace CTRPluginFramework
     }
     
     //V-settings
-	void SetStrings(MenuItem *item, std::vector<MenuEntry *> quickMenu) {
+    void SetStrings(MenuItem *item, std::vector<MenuEntry *> quickMenu) {
         std::string _strName = Language->Get(item->firstName.c_str());
         std::string _strNote = Language->Get(item->firstNote.c_str());
 
