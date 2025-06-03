@@ -1,7 +1,7 @@
 @echo off
 cls
-cd libctrpf
+cd libctrpf/Library
 make -j 8
-cd ..
+cd ../..
 make -j 8
 pause
