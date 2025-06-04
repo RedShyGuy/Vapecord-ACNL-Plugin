@@ -3,12 +3,11 @@
 *.lst
 Build/
 libctrpf/debug
-libctrpf/.gitignore
-libctrpf/debug
-libctrpf.vscode
-libctrpf/release
-libctrpf/libcwav
-.vscode/
+libctrpf/Library/.gitignore
+libctrpf/Library/debug
+libctrpf/Library/.vscode
+libctrpf/Library/release
+libctrpf/Library/libcwav
 *.3gx
 *.elf
 *.lnk
