@@ -151,6 +151,14 @@ HOUSE_EDITOR_SELECT_ROOM :: Select Room\nTo see changes Save and Quit your Game 
 QR_MACHINE_NAME :: Unlock QR Machine
 QR_MACHINE_NOTE :: Lets you unlock/lock the QR Machine.
 
+#Building Mod
+BUILDING_MOD_NAME :: Building Mod
+BUILDING_MOD_NOTE :: Lets you place, move, and remove buildings in your town.
+
+#Museum Mod
+FILL_MUSEUM_NAME :: Museum Mod
+FILL_MUSEUM_NOTE :: Fills/clears the contents of the museum.
+
 #Mayor Permit
 MAYOR_PERMIT_NAME :: 100% Mayor Permit
 MAYOR_PERMIT_NOTE :: Completes your mayor permit to 100%.
@@ -222,6 +230,10 @@ ROOM_WARPING :: Room Warping
 ROOM_WARPING_NOTE :: Press the hotkeys to open up a menu where you can choose a room ID to warp to.
 ROOM_WARPING_ENTER_ID :: Enter room ID:
 
+#Disable Shovel Knockback
+SHOVEL_KNOCKBACK :: Disable Shovel Knockback
+SHOVEL_KNOCKBACK_NOTE :: Disables Knockback when hitting rocks or walls with a shovel.
+
 #Inventory Codes Folder
 INVENTORY_CODES :: Inventory Codes
 
@@ -257,6 +269,10 @@ CHAT_T2I :: Chat Text To Item
 CHAT_T2I_NOTE :: Lets you use your In-Game Chat to spawn in items into your inventory\nJust input the ID into the chat and press the hotkeys, don't send the message.
 CHAT_T2I_KEY1 :: Spawn Item
 
+#Clear Inventory
+CLEAR_INV_NAME :: Clear Inventory
+CLEAR_INV_NOTE :: Removes all items from your inventory.
+
 #Item Settings
 ITEM_SETTINGS :: Item Settings
 ITEM_SETTINGS_NOTE :: Lets you show off all items/eat all items etc.
@@ -286,6 +302,10 @@ VECTOR_GETSET_CUSTOM_BACKUP :: Backup Custom Set
 VECTOR_GETSET_CUSTOM_RESTORE :: Restore Custom Set
 GET_SET_DUMP :: Backup your custom inventory set\n\nName the backup you'd like to create.
 GET_SET_RESTORE :: Select which backup to restore.
+
+#Custom Buttons
+CUSTOM_BUTTON :: Custom Buttons
+CUSTOM_BUTTON_NOTE :: Adds buttons to the pop-ups in your inventory.
 
 #Player Codes Folder
 PLAYER_CODES :: Player Codes
@@ -432,6 +452,10 @@ PLAYER_LOADER_NOTE :: Lets you load a specific player of yours without the need 
 #Players on map
 PLAYERS_ON_MAP :: Show Players On The Map
 PLAYERS_ON_MAP_NOTE :: Shows every loaded player on the map.
+
+#Never Bedhead
+NEVER_BEDHEAD :: Never Bedhead
+NEVER_BEDHEAD_NOTE :: Prevents your hair from getting messy when starting the game.
 
 #Faint
 FAINT :: Player Faint
@@ -835,6 +859,18 @@ DISABLE_ITEM_LOCKS_NOTE :: Removes the "delay-lock" of dropping. This lets you d
 CANT_FALL_HOLE :: Can't Fall In Holes Or Pitfalls
 CANT_FALL_HOLE_NOTE :: Makes holes and pitfalls non functional so you won't fall into them.
 
+#Set Spot State
+SET_SPOT_STATE_NAME :: Set Spots
+SET_SPOT_STATE_NOTE :: Locks/unlocks the map or only spot where you are standing.
+
+#Search Replace
+SEARCH_REPLACE_NAME :: Search and Replace
+SEARCH_REPLACE_NOTE :: Lets you replace all instances of a searched item on the map with a different item.\n(Search for 0xFFFFFFFF to replace everything)
+
+#remove map items
+REMOVE_MAP_ITEMS_NAME :: Clear Map
+REMOVE_MAP_ITEMS_NOTE :: Lets you remove all items from the map.
+
 #show mail text
 SHOW_MAIL_TEXT :: Show Mail Text
 SHOW_MAIL_TEXT_NOTE :: Shows you mail text with just clicking on the mailslot\nCan even read unopened letters!
@@ -888,6 +924,10 @@ TIME_MONTH :: Months
 TIME_YEAR :: Years
 TIME_ERROR :: Error: %d is the highest amount for %s!
 
+#Buried Inspector
+BURIED_INSPECTOR :: Buried Item Inspector
+BURIED_INSPECTOR_NOTE :: Lets you dig up items by picking them up by hand.
+
 #Misc Codes Folder
 MISC_CODES :: Misc Codes
 
@@ -901,6 +941,10 @@ VECTOR_MUSI_COMM :: Music Commands
 VECTOR_ITEM_COMM :: Item Commands
 VECTOR_ALL_COMM :: Switch OFF All
 COMM_CHOOSE :: Choose which mode to disable:
+
+#Reload Room
+RELOAD_ROOM_NOTE :: Reload Room.
+RELOAD_ROOM_NAME :: Quickly reload the current room.
 
 #Tool Animation
 TOOL_ANIM :: Change Tool Animation
