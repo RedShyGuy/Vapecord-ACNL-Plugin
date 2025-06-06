@@ -367,7 +367,7 @@ namespace CTRPluginFramework {
 		EXTC->Append(new MenuEntry("CANT_FALL_HOLE", noTrap, "CANT_FALL_HOLE_NOTE")),
 		EXTC->Append(new MenuEntry("SET_SPOT_STATE_NAME", nullptr, SetSpotState, "SET_SPOT_STATE_NOTE")),
 		EXTC->Append(new MenuEntry("SEARCH_REPLACE_NAME", nullptr, SearchReplace, "SEARCH_REPLACE_NOTE")),
-		EXTC->Append(new MenuEntry("REMOVE_TOWNITEMS_NAME", nullptr, RemoveItemsCheat, "REMOVE_TOWNITEMS_NOTE")),
+		EXTC->Append(new MenuEntry("REMOVE_MAP_ITEMS_NAME", nullptr, RemoveItemsCheat, "REMOVE_MAP_ITEMS_NOTE")),
 	    EXTC->Append(EntryWithHotkey(new MenuEntry("WATER_FLOWERS_NAME", WaterAllFlowers, "WATER_FLOWERS_NOTE"), { 
 			Hotkey(Key::R | Key::DPadLeft, "WATER_FLOWRES_HOTKEY1") 
 		})),
