@@ -943,8 +943,8 @@ VECTOR_ALL_COMM :: Switch OFF All
 COMM_CHOOSE :: Choose which mode to disable:
 
 #Reload Room
-RELOAD_ROOM_NOTE :: Reload Room.
-RELOAD_ROOM_NAME :: Quickly reload the current room.
+RELOAD_ROOM_NAME :: Reload Room
+RELOAD_ROOM_NOTE :: Quickly reload the current room.
 
 #Tool Animation
 TOOL_ANIM :: Change Tool Animation
