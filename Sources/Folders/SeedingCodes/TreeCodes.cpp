@@ -46,7 +46,7 @@ namespace CTRPluginFramework {
 		}
 		
 		if(entry->Hotkeys[0].IsDown()) {
-			if(Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, *(u32 *)&val, *(u32 *)&val)) 
+			if(Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, *(u32 *)&val, *(u32 *)&val, TextItemChange))
 				Process::Patch(fruitmod.addr + 0x28, *(u32 *)&val);
 		}
 		
