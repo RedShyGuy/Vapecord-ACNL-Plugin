@@ -152,15 +152,15 @@ QR_MACHINE_NAME :: Sblocca Macchina QR
 QR_MACHINE_NOTE :: Sblocca la macchina QR code.
 
 #Building Modifier
-BUILDING_MOD_NAME :: Editor di Edifici
-BUILDING_MOD_NOTE :: Piazza/rimuove e sposta gli edifici nella tua citta'.
+BUILDING_MOD_NAME :: Mod Edifici
+BUILDING_MOD_NOTE :: Ti permette di posizionare, spostare e rimuovere edifici nella tua città.
 QUICK_MENU_PLACE_AT_LOCATION :: Piazza nella posizione...
 QUICK_MENU_MOVE_TO_LOCATION :: Muovi alla tua posizione...
 QUICK_MENU_REMOVE_BUILDING :: Rimuovi edificio...
 
 #Fill Museum
-FILL_MUSEUM_NAME :: Completa il Museo
-FILL_MUSEUM_NOTE :: Comando che riempie/svuota il museo.
+FILL_MUSEUM_NAME :: Mod Museo
+FILL_MUSEUM_NOTE :: Ti permette di completare/svuotare il museo.
 
 #Mayor Permit
 MAYOR_PERMIT_NAME :: Reputazione Sindaco 100%
@@ -234,7 +234,7 @@ ROOM_WARPING_ENTER_ID :: Inserisci ID Stanza:
 
 #No Shovel Knockback
 SHOVEL_KNOCKBACK :: Disabilita Contraccolpo Pala
-SHOVEL_KNOCKBACK_NOTE :: Disabilita il contraccolpo della pala nel momento in cui sbatte al suolo.
+SHOVEL_KNOCKBACK_NOTE :: Disabilita il contraccolpo quando colpisci rocce o muri con una pala.
 
 #Inventory Codes Folder
 INVENTORY_CODES :: Codici Inventario
@@ -272,8 +272,8 @@ CHAT_T2I_NOTE :: Puoi usare la Chat di gioco per generare gli oggetti direttamen
 CHAT_T2I_KEY1 :: Genera oggetto
 
 #clear inventory
-CLEAR_INV_NAME :: Svuota Inventario
-CLEAR_INV_NOTE :: Svuota il tuo inventario.
+CLEAR_INV_NAME :: Cancella Inventario
+CLEAR_INV_NOTE :: Rimuove tutti gli oggetti dal tuo inventario.
 REMOVE_INV_WARNING :: Attenzione\nOgni oggetto nell'inventario sara' rimosso\nPremi Si per procedere, No per annullare
 
 #Item Settings
@@ -307,8 +307,8 @@ GET_SET_DUMP :: Salva il tuo set personalizzato\n\nDai un nome al salvataggio ch
 GET_SET_RESTORE :: Scegli quale salvataggio ripristinare.
 
 #Custom Button
-CUSTOM_BUTTON :: Pulsanti Inventario Personalizzati
-CUSTOM_BUTTON_NOTE :: Aggiunge opzioni personalizzabili nell'inventario (attenzione: le opzioni rimpiazzano quelle gia' esistenti)
+CUSTOM_BUTTON :: Pulsanti Personalizzati
+CUSTOM_BUTTON_NOTE :: Aggiunge pulsanti ai pop-up nel tuo inventario.
 
 #Player Codes Folder
 PLAYER_CODES :: Codici Giocatore
@@ -459,8 +459,8 @@ FAINT :: Svieni
 FAINT_NOTE :: Fa svenire il tuo giocatore.
 
 #Never bedhead
-NEVER_BEDHEAD :: Disabilita Capelli Arruffati
-NEVER_BEDHEAD_NOTE :: Quando questo cheat e' abilitato, il tuo player non otterra' dei capelli arruffati.
+NEVER_BEDHEAD :: Mai Capelli Scompigliati
+NEVER_BEDHEAD_NOTE :: Impedisce ai tuoi capelli di diventare scompigliati all'avvio del gioco.
 
 #Animation Codes Folder
 ANIMATION_CODES :: Codici Animazione
@@ -723,6 +723,15 @@ ISLAND_BUILDING_ENTER_ID :: Inserisci l'ID di un edificio
 ISLAND_BUILDING_ENTER_X :: Inserisci le coordinate X:
 ISLAND_BUILDING_ENTER_Y :: Inserisci le coordinate Y:
 
+#Island Saver
+ISLAND_SAVER :: Salva Isola
+ISLAND_SAVER_NOTE :: Salva/ripristina il layout dell'isola.
+ISLAND_SAVER_NO :: Devi essere sull'isola affinche' questo trucco funzioni!
+ISLAND_SAVER_BACKUP_ISLAND :: Backup Isola
+ISLAND_SAVER_RESTORE_ISLAND :: Ripristina Isola
+ISLAND_SAVER_NAME_BACKUP :: Nomina il backup dell'isola:
+ISLAND_SAVER_DUMPER_DUMP :: Salva Isola\n\nDai un nome al backup che vorresti creare.
+
 #NPC Codes Folder
 NPC_CODES :: NPC Codes
 
@@ -855,22 +864,22 @@ CANT_FALL_HOLE :: Non puoi cascare nelle Trappole/Buchi
 CANT_FALL_HOLE_NOTE :: Non puoi cascare nelle Trappole e/o Buchi.
 
 #set spot state
-SET_SPOT_STATE_NAME :: Imposta Stato Area
-SET_SPOT_STATE_NOTE :: Blocca/Sblocca un'area nella mappa (o la mappa intera).
+SET_SPOT_STATE_NAME :: Imposta Punti
+SET_SPOT_STATE_NOTE :: Blocca/sblocca la mappa o solo il punto in cui ti trovi.
 VECTOR_QUICK_LOCK_SPOT :: Blocca il punto
 VECTOR_QUICK_UNLOCK_SPOT :: Sblocca il punto
 VECTOR_QUICK_LOCK_MAP :: Blocca Mappa
 VECTOR_QUICK_UNLOCK_MAP :: Sblocca Mappa
 
 #search and replace
-SEARCH_REPLACE_NAME :: Cerca e sostituisci
-SEARCH_REPLACE_NOTE :: Cerca e rimpiazza un qualsiasi oggetto nella mappa, con un altro.
+SEARCH_REPLACE_NAME :: Cerca e Sostituisci
+SEARCH_REPLACE_NOTE :: Ti permette di sostituire tutte le istanze di un oggetto cercato sulla mappa con un oggetto diverso.\n(Cerca 0xFFFFFFFF per sostituire tutto)
 QUICK_MENU_SEARCH_REPLACE_SEARCH :: Inserisci l'ID che\nvorresti cercare\n(0xFFFFFFFF per sostituire tutto):
 QUICK_MENU_SEARCH_REPLACE_REPLACE :: Inserisci l'ID \nche vorresti piazzare:
 
-#remove all items
-REMOVE_TOWNITEMS_NAME :: Remove All Items
-REMOVE_TOWNITEMS_NOTE :: Lets you remove every item on the map.
+#remove map items
+REMOVE_MAP_ITEMS_NAME :: Pulisci Mappa
+REMOVE_MAP_ITEMS_NOTE :: Ti permette di rimuovere tutti gli oggetti dalla mappa.
 REMOVE_ITEM_WARNING :: Attenzione\nOgni oggetto nella mappa sara' rimosso\nPremi si per procedere, no per annullare
 
 #water flowers
@@ -922,6 +931,10 @@ TIME_MONTH :: Mesi
 TIME_YEAR :: Anni
 TIME_ERROR :: Errore: %d e' il valore massimo per %s!
 
+#Buried Inspector
+BURIED_INSPECTOR :: Ispeziona Oggetti Sepolti
+BURIED_INSPECTOR_NOTE :: Ti permette di dissotterrare oggetti raccogliendoli a mano.
+
 #Misc Codes Folder
 MISC_CODES :: Codici Aggiuntivi
 
@@ -969,7 +982,7 @@ ALWAYS_AURORA_MOD_NOTE :: Fa apparire l'Aurora Boreale indipendentemente dalla d
 
 #reload room
 RELOAD_ROOM_NAME :: Ricarica Stanza
-RELOAD_ROOM_NOTE :: Ricarica la stanza attuale.
+RELOAD_ROOM_NOTE :: Ricarica rapidamente la stanza corrente.
 
 #Quick Menu
 QUICK_MENU :: Menu Rapido
