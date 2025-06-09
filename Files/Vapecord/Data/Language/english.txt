@@ -1,4 +1,4 @@
-﻿#This File is used for the Vapecord ACNL Plugin 1.9.5
+﻿#This File is used for the Vapecord ACNL Plugin 1.9.6
 #If you want to edit Text inside the Plugin Change the Text behind the "::" 
 #"\n" means new line so do not remove that
 #Every Line that starts with "#" is just a note and does not need to be changed
@@ -154,6 +154,9 @@ QR_MACHINE_NOTE :: Lets you unlock/lock the QR Machine.
 #Building Mod
 BUILDING_MOD_NAME :: Building Mod
 BUILDING_MOD_NOTE :: Lets you place, move, and remove buildings in your town.
+QUICK_MENU_PLACE_AT_LOCATION :: Place at your location...
+QUICK_MENU_MOVE_TO_LOCATION :: Move to your location...
+QUICK_MENU_REMOVE_BUILDING :: Remove building...
 
 #Museum Mod
 FILL_MUSEUM_NAME :: Museum Mod
@@ -272,6 +275,8 @@ CHAT_T2I_KEY1 :: Spawn Item
 #Clear Inventory
 CLEAR_INV_NAME :: Clear Inventory
 CLEAR_INV_NOTE :: Removes all items from your inventory.
+REMOVE_INV_WARNING :: Warning\nThis will remove every Item in your Inventory\nPress Yes to proceed or No to Cancel
+
 
 #Item Settings
 ITEM_SETTINGS :: Item Settings
@@ -862,14 +867,21 @@ CANT_FALL_HOLE_NOTE :: Makes holes and pitfalls non functional so you won't fall
 #Set Spot State
 SET_SPOT_STATE_NAME :: Set Spots
 SET_SPOT_STATE_NOTE :: Locks/unlocks the map or only spot where you are standing.
+VECTOR_QUICK_LOCK_SPOT :: Lock spot
+VECTOR_QUICK_UNLOCK_SPOT :: Unlock spot
+VECTOR_QUICK_LOCK_MAP :: Lock Map
+VECTOR_QUICK_UNLOCK_MAP :: Unlock Map
 
 #Search Replace
 SEARCH_REPLACE_NAME :: Search and Replace
 SEARCH_REPLACE_NOTE :: Lets you replace all instances of a searched item on the map with a different item.\n(Search for 0xFFFFFFFF to replace everything)
+QUICK_MENU_SEARCH_REPLACE_SEARCH :: Enter the ID of the item you\nwould like to search\n(0xFFFFFFFF to replace everything):
+QUICK_MENU_SEARCH_REPLACE_REPLACE :: Enter the ID of the item you\nwould like to place:
 
 #remove map items
 REMOVE_MAP_ITEMS_NAME :: Clear Map
 REMOVE_MAP_ITEMS_NOTE :: Lets you remove all items from the map.
+REMOVE_ITEM_WARNING :: Warning\nThis will remove every Item on your Map\nPress Yes to proceed or No to Cancel
 
 #show mail text
 SHOW_MAIL_TEXT :: Show Mail Text
@@ -980,22 +992,6 @@ ALWAYS_AURORA_MOD_NOTE :: Will make aurora lights always appear no matter the ti
 #Quick Menu
 QUICK_MENU :: Quick Menu
 QUICK_MENU_NOTE :: This has a lot of tools for quick hacks.
-VECTOR_QUICK_BUILDING :: Building Modifier
-VECTOR_QUICK_REMOVE :: Remove All Items
-VECTOR_COMMANDS_CLEAR_INV :: Clear Inventory
-VECTOR_QUICK_S_A_R :: Search and replace
-VECTOR_QUICK_RELOAD :: Reload Room
-VECTOR_QUICK_LOCK_SPOT :: Lock spot
-VECTOR_QUICK_UNLOCK_SPOT :: Unlock spot
-VECTOR_QUICK_LOCK_MAP :: Lock Map
-VECTOR_QUICK_UNLOCK_MAP :: Unlock Map
-QUICK_MENU_PLACE_AT_LOCATION :: Place at your location...
-QUICK_MENU_MOVE_TO_LOCATION :: Move to your location...
-QUICK_MENU_REMOVE_BUILDING :: Remove building...
-REMOVE_INV_WARNING :: Warning\nThis will remove every Item in your Inventory\nPress Yes to proceed or No to Cancel
-REMOVE_ITEM_WARNING :: Warning\nThis will remove every Item on your Map\nPress Yes to proceed or No to Cancel
-QUICK_MENU_SEARCH_REPLACE_SEARCH :: Enter the ID of the item you\nwould like to search\n(0xFFFFFFFF to replace everything):
-QUICK_MENU_SEARCH_REPLACE_REPLACE :: Enter the ID of the item you\nwould like to place:
 
 #More Numbers
 MORE_NUMBERS :: Disable 3 Number Lock
