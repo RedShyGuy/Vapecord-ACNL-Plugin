@@ -1,4 +1,4 @@
-#This File is used for the Vapecord ACNL Plugin 1.9.5
+#This File is used for the Vapecord ACNL Plugin 1.9.6
 #If you want to edit Text inside the Plugin Change the Text behind the "::" 
 #"\n" means new line so do not remove that
 #Every Line that starts with "#" is just a note and does not need to be changed
@@ -13,8 +13,8 @@ VECTOR_ENABLED :: Abilitato
 VECTOR_DISABLED :: Disabilitato
 ENTER_ID :: Inserisci ID:
 ONLY_TOWN_ERROR :: Errore: funziona solo in citta'!
-INVALID :: Invalid
-INVALID_ID :: Error: Invalid ID!
+INVALID :: Invalido
+INVALID_ID :: Errore: ID non valido!
 
 #Save Codes Folder
 SAVE_CODES :: Codici Salvataggio
@@ -84,10 +84,10 @@ CARAVAN_SET_LEFT :: Caravan a sinistra
 CARAVAN_SET_RIGHT :: Caravan a destra
 
 #Camping Changer
-CAMPING_SET :: Camping Villager Changer
-CAMPING_SET_NOTE :: Lets you edit/remove the current villager in your camping ground.
-CAMPING_SET_SET :: Set Camping Villager
-CAMPING_SET_REMOVE :: Remove Camping Villager
+CAMPING_SET :: Modifica Personaggio Campeggio
+CAMPING_SET_NOTE :: Modifica o rimuove l'abitante attuale nel campeggio della citta'.
+CAMPING_SET_SET :: Seleziona Personaggio
+CAMPING_SET_REMOVE :: Rimuovi Personaggio
 
 #shop upgrade
 SHOP_UPGRADE :: Sblocca Negozi
@@ -150,6 +150,17 @@ HOUSE_EDITOR_SELECT_ROOM :: Seleziona stanza\nPer vedere i cambiamenti salva ed 
 #QR Machine Unlocker
 QR_MACHINE_NAME :: Sblocca Macchina QR
 QR_MACHINE_NOTE :: Sblocca la macchina QR code.
+
+#Building Modifier
+BUILDING_MOD_NAME :: Editor di Edifici
+BUILDING_MOD_NOTE :: Piazza/rimuove e sposta gli edifici nella tua citta'.
+QUICK_MENU_PLACE_AT_LOCATION :: Piazza nella posizione...
+QUICK_MENU_MOVE_TO_LOCATION :: Muovi alla tua posizione...
+QUICK_MENU_REMOVE_BUILDING :: Rimuovi edificio...
+
+#Fill Museum
+FILL_MUSEUM_NAME :: Completa il Museo
+FILL_MUSEUM_NOTE :: Comando che riempie/svuota il museo.
 
 #Mayor Permit
 MAYOR_PERMIT_NAME :: Reputazione Sindaco 100%
@@ -220,10 +231,10 @@ SPEED_MOD_SPEED :: Inserisci velocita':\n1 e' la velocita' normale
 ROOM_WARPING :: Teletrasporto presso una stanza
 ROOM_WARPING_NOTE :: Premi i tasti di scelta rapida per aprire un menu dove puoi scegliere l'ID della stanza in cui vuoi teletrasportarti, o un metodo di teletrasporto per teletrasportare tutti
 ROOM_WARPING_ENTER_ID :: Inserisci ID Stanza:
-VECTOR_ROOM_TO_ISLAND :: Rotta verso l'isola
-VECTOR_ROOM_AT_HUT :: Arriva sull'isola
-VECTOR_ROOM_TO_TOWN :: Ritorna in citta'
-VECTOR_ROOM_LEAVE_ISLAND :: Lascia l'isola
+
+#No Shovel Knockback
+SHOVEL_KNOCKBACK :: Disabilita Contraccolpo Pala
+SHOVEL_KNOCKBACK_NOTE :: Disabilita il contraccolpo della pala nel momento in cui sbatte al suolo.
 
 #Inventory Codes Folder
 INVENTORY_CODES :: Codici Inventario
@@ -239,9 +250,9 @@ TEXT_2_ITEM_SET :: Inserisci ID per ottenere un Set.´
 TEXT_2_ITEM_SEARCH_ERR1 :: Inserisci le lettere!
 TEXT_2_ITEM_SEARCH_ERR2 :: Hai inserito poche lettere, inseriscine altre!
 TEXT_2_ITEM_SEARCH_ERR3 :: Nessun oggetto trovato, prova qualcos'altro!
-TEXT_2_ITEM_SEARCH_ERR4 :: Troppi risultati! Inserisci più lettere\nRisultati:
+TEXT_2_ITEM_SEARCH_ERR4 :: Troppi risultati! Inserisci piu' lettere\nRisultati:
 TEXT_2_ITEM_SEARCH_KB :: Scegli Oggetto:
-TEXT_2_ITEM_SEARCH_KB2 :: Enter Name Of Item:
+TEXT_2_ITEM_SEARCH_KB2 :: Inserisci nome oggetto:
 
 #Duplication
 DUPE_ITEMS :: Duplica Oggetto
@@ -252,13 +263,18 @@ DUPE_ITEMS_KEY2 :: Duplica Tutto
 #Catalog To Pocket
 CATALOG_TO_POCKET :: Oggetti Catalogo
 CATALOG_TO_POCKET_NOTE :: Genera gli oggetti del catalogo direttamente nel tuo inventario.\n 
-CATALOG_TO_POCKET_KEY1 :: Open Catalog/Get Item
-CATALOG_TO_POCKET_KEY2 :: Hide Info
+CATALOG_TO_POCKET_KEY1 :: Apri Catalogo/Ottieni Oggetto
+CATALOG_TO_POCKET_KEY2 :: Nascondi Info
 
 #Chat Text2Item
 CHAT_T2I :: Chat Text2Item
 CHAT_T2I_NOTE :: Puoi usare la Chat di gioco per generare gli oggetti direttamente nell'inventario.
 CHAT_T2I_KEY1 :: Genera oggetto
+
+#clear inventory
+CLEAR_INV_NAME :: Svuota Inventario
+CLEAR_INV_NOTE :: Svuota il tuo inventario.
+REMOVE_INV_WARNING :: Attenzione\nOgni oggetto nell'inventario sara' rimosso\nPremi Si per procedere, No per annullare
 
 #Item Settings
 ITEM_SETTINGS :: Impostazioni Oggetti
@@ -268,9 +284,9 @@ VECTOR_ITEMSETTINGS_INFINITE :: Oggetti Infiniti
 VECTOR_ITEMSETTINGS_EAT :: Mangia Oggetti
 
 #Save Menu Changer
-SAVE_MENU_CHANGER :: Save Menu Changer
-SAVE_MENU_CHANGER_NOTE :: Lets you change the save menu to a any other menu you want.
-SAVE_MENU_CHANGER_ENTER_ID :: Type the menu ID you want to load.
+SAVE_MENU_CHANGER :: Modifica menu di salvataggio
+SAVE_MENU_CHANGER_NOTE :: Modifica il menu di salvataggio con un altro desiderato.
+SAVE_MENU_CHANGER_ENTER_ID :: Inserisci l'ID che vuoi caricare
 VECTOR_SAVEMENU_DATETIME :: Data e Ora
 VECTOR_SAVEMENU_BELLPOINT_DEPO :: Deposito Stellomat 
 VECTOR_SAVEMENU_BELLPOINT_WITHDRAW :: Ritiro Stellomat
@@ -289,6 +305,10 @@ VECTOR_GETSET_CUSTOM_BACKUP :: Salva Set Personalizzato
 VECTOR_GETSET_CUSTOM_RESTORE :: Ripristina Set Personalizzato
 GET_SET_DUMP :: Salva il tuo set personalizzato\n\nDai un nome al salvataggio che vorresti creare.
 GET_SET_RESTORE :: Scegli quale salvataggio ripristinare.
+
+#Custom Button
+CUSTOM_BUTTON :: Pulsanti Inventario Personalizzati
+CUSTOM_BUTTON_NOTE :: Aggiunge opzioni personalizzabili nell'inventario (attenzione: le opzioni rimpiazzano quelle gia' esistenti)
 
 #Player Codes Folder
 PLAYER_CODES :: Codici Giocatore
@@ -412,7 +432,7 @@ NECK_POSITION_NOTE :: Sposta in giro la tua testa
 
 #Custom Hair/Eye Color
 CUSTOM_HAIR_EYE :: Colore Capelli&Occhi personalizzato
-CUSTOM_HAIR_EYE_NOTE :: Imposta un colore personalizzato per i capelli e gli occhi del giocatore! Basta inserire il valore RGB del nuovo colore che desideri.\nSe premi "Salva", il colore attuale verrà salvato e caricato ogni volta che avvii il plugin.
+CUSTOM_HAIR_EYE_NOTE :: Imposta un colore personalizzato per i capelli e gli occhi del giocatore! Basta inserire il valore RGB del nuovo colore che desideri.\nSe premi "Salva", il colore attuale verra' salvato e caricato ogni volta che avvii il plugin.
 CUSTOM_SET_HAIR :: Imposta Colore Capelli
 CUSTOM_SET_EYE :: Imposta Colore Occhi
 CUSTOM_SAVE :: Salva Colori
@@ -420,15 +440,15 @@ CUSTOM_ENTER_HAIR :: Imposta il codice RGB per il colore dei Capelli:
 CUSTOM_ENTER_EYE :: Imposta il codice RGB per il colore degli Occhi:
 CUSTOM_FILE_SAVED :: Colori salvati nel file!
 CUSTOM_FILE_LOADED :: Colori caricati dal file!
-CUSTOM_HAIR_EYE_KEY1 :: Random Hair/Eye Colors
+CUSTOM_HAIR_EYE_KEY1 :: Colori casuali Capelli/Occhi
 
 #Wear Helmet
 WEAR_HELMET :: Indossa Casco + Accessorio
 WEAR_HELMET_NOTE :: Fa indossare un casco ed un accessorio allo stesso tempo. Assicurati che l'accessorio sia messo prima del casco! Grazie Levi.
 
 #Player Loader
-PLAYER_LOADER :: Player Loader
-PLAYER_LOADER_NOTE :: Lets you load a specific player of yours withou the need to restart the game!
+PLAYER_LOADER :: Carica Giocatore
+PLAYER_LOADER_NOTE :: Carica un personaggio specifico senza riavviare il gioco!
 
 #Players on map
 PLAYERS_ON_MAP :: Mostra Giocatori sulla Mappa
@@ -436,7 +456,11 @@ PLAYERS_ON_MAP_NOTE :: Mostra ogni giocatore sulla mappa.
 
 #Faint
 FAINT :: Svieni
-FAINT_NOTE :: Fa svenire il tuo giocatore.\n
+FAINT_NOTE :: Fa svenire il tuo giocatore.
+
+#Never bedhead
+NEVER_BEDHEAD :: Disabilita Capelli Arruffati
+NEVER_BEDHEAD_NOTE :: Quando questo cheat e' abilitato, il tuo player non otterra' dei capelli arruffati.
 
 #Animation Codes Folder
 ANIMATION_CODES :: Codici Animazione
@@ -657,16 +681,16 @@ LOCK_ISLAND_ISL :: Blocca Remo
 LOCK_ISLAND_CLUB :: Blocca il Club Tortimer.
 
 #Instant Ore Hunt Finish
-FILL_INV_ORE :: Max Ore Hunting Points
-FILL_INV_ORE_NOTE :: Makes the game think you have a inventory filled with the bonus ore, therefore receiving max points at the tour results.
+FILL_INV_ORE :: Punti Max in Caccia ai Minerali
+FILL_INV_ORE_NOTE :: Fa credere al gioco che hai un inventario pieno di minerali, ricevendo i punti massimi alla fine del tour.
 
 #Instant Labyrinth Tour Finish
-FILL_INV_FRUIT :: Instant Labyrinth Tour
-FILL_INV_FRUIT_NOTE :: Makes the game think you already have all the needed fruits for the tour to finish.
+FILL_INV_FRUIT :: Tour Labirinto Istantaneo
+FILL_INV_FRUIT_NOTE :: Fa credere al gioco che hai tutti i frutti necessari per finire il tour.
 
 #Hacker Island
 HACKER_ISLAND :: Isola solo Hacker
-HACKER_ISLAND_NOTE :: Porta ad un'isola in cui solo chi ha questo trucco attivato puo' entrare.
+HACKER_ISLAND_NOTE :: Verrai portato ad un'isola in cui solo chi ha questo trucco attivato puo' entrare.
 
 #Island Country
 ISLAND_COUNTRY :: Modifica Nazione dell'isola
@@ -675,8 +699,8 @@ VECTOR_COUNTY_CHANGE :: Cambia Nazione
 ISLAND_COUNTRY_SET_ID :: Scrivi l'ID della nazione che vorresti impostare.
 
 #Free Kappn Rides
-FREE_KAPPN :: Free Kappn Rides
-FREE_KAPPN_NOTE :: Lets you go to the island without the need of paying or having money at all.
+FREE_KAPPN :: Viaggi Gratuiti in Isola
+FREE_KAPPN_NOTE :: Puoi andare sull'isola senza pagare, anche non avendo un soldo nel portafoglio.
 
 #Island Shop
 ISLAND_SHOP_MOD :: Modifica oggetti in vendita Isola
@@ -703,33 +727,33 @@ ISLAND_BUILDING_ENTER_Y :: Inserisci le coordinate Y:
 NPC_CODES :: NPC Codes
 
 #NPC Selector 
-NPC_SELECTOR :: NPC Selector
-NPC_SELECTOR_NOTE :: Lets you select any loaded NPC to be able to use the other NPC Cheats.
-NPC_SELECTOR_KEY1 :: Select NPC
+NPC_SELECTOR :: Selettore NPC
+NPC_SELECTOR_NOTE :: Imposta un personaggio caricato per essere in grado di usare gli altri cheat riguardanti gli NPC.
+NPC_SELECTOR_KEY1 :: Seleziona NPC
 
 #NPC Animation
-NPC_ANIMATION :: NPC Animation Modifier
-NPC_ANIMATION_NOTE :: Lets you set animations onto selected NPC's. First set the animation ID by clicking the keyboard and then execute it by pressing the hotkeys.
-NPC_ANIMATION_KEY1 :: Execute Animation
+NPC_ANIMATION :: Modifica Animazione NPC
+NPC_ANIMATION_NOTE :: Imposta annimazioni nell'NPC selezionato. Per iniziare, imposta l'ID animazione con la tastiera ed eseguilo premendo il comando.
+NPC_ANIMATION_KEY1 :: Esegui Animazione
 
 #NPC Coordinate
-NPC_COORDINATE :: NPC Coordinate Modifier
-NPC_COORDINATE_NOTE:: Lets you move around selected NPC's.
-NPC_COORDINATE_KEY1 :: Initial Button
-NPC_COORDINATE_KEY2 :: Move Right
-NPC_COORDINATE_KEY3 :: Move Left
-NPC_COORDINATE_KEY4 :: Move Down
-NPC_COORDINATE_KEY5 :: Move Up
+NPC_COORDINATE :: Modifica coordinate NPC
+NPC_COORDINATE_NOTE:: Fa spostare l'NPC selezionato.
+NPC_COORDINATE_KEY1 :: Pulsante Iniziale
+NPC_COORDINATE_KEY2 :: Muovi a Destra
+NPC_COORDINATE_KEY3 :: Muovi a Sinistra
+NPC_COORDINATE_KEY4 :: Muovi Giu
+NPC_COORDINATE_KEY5 :: Muovi Su
 
 #NPC Teleport
-NPC_TELEPORT :: NPC Teleport To You
-NPC_TELEPORT_NOTE :: Lets you teleport selected NPC's to your location.
-NPC_TELEPORT_KEY1 :: Teleport To You
+NPC_TELEPORT :: Teletrasporta NPC da te
+NPC_TELEPORT_NOTE :: Teletrasporta l'NPC selezionato alla tua posizione.
+NPC_TELEPORT_KEY1 :: Teletrasporta da Te
 
 #NPC Rotation
-NPC_ROTATION :: NPC Rotation Modifier
-NPC_ROTATION_NOTE :: Lets you rotate selected NPC's.
-NPC_ROTATION_KEY1 :: Initial Button
+NPC_ROTATION :: Modifica orientamento NPC
+NPC_ROTATION_NOTE :: Ruota l'NPC selezionato.
+NPC_ROTATION_KEY1 :: Pulsante Iniziale
 
 #Fun Codes Folder
 FUN_CODES :: Codici Divertenti
@@ -783,7 +807,7 @@ CAMERA_MOD_NOTE :: Modifica liberamente l'angolatura della telecamera\nR + CPad 
 #Extra Codes Folder
 EXTRA_CODES :: Codici Extra
 #Fish Codes Folder
-FISH_CODES :: Fish Codes
+FISH_CODES :: Codici Pesci
 
 #fish always bite
 FISH_ALWAYS_BITE_NAME :: I pesci abboccano sempre
@@ -794,19 +818,19 @@ FISH_CANT_SCARE_NAME :: I pesci non scappano
 FISH_CANT_SCARE_NOTE :: I pesci non verranno spaventati
 
 #Chat Codes Folder
-CHAT_CODES :: Chat Codes
+CHAT_CODES :: Codici Chat
 
 #chat dont dissaper
 CHAT_DONT_DISSAPEAR :: I Messaggi non Scompaiono
 CHAT_DONT_DISSAPEAR_NOTE :: I messaggi rimarrano sullo schermo fin quando non ne viene inviato un'altro
 
 #Chat Copy/Paste
-CHATCOPYPASTE :: Chat Copy/Paste
-CHATCOPYPASTE_NOTE :: Lets you copy and paste your chat. Copied content will be saved to a clipboard on your sdcard.
-CHATCOPYPASTE_KEY1 :: Paste Content
-CHATCOPYPASTE_KEY2 :: Copy Content
-CHATCOPYPASTE_KEY3 :: Cut Content
-CHATCOPYPASTE_KEY4 :: Delete Content
+CHATCOPYPASTE :: Copia/Incolla Chat
+CHATCOPYPASTE_NOTE :: Copia ed incolla la chat. Il testo copiato sara' salvato in un foglio di appunti nella scheda SD.
+CHATCOPYPASTE_KEY1 :: Incolla Contenuto
+CHATCOPYPASTE_KEY2 :: Copia Contenuto
+CHATCOPYPASTE_KEY3 :: Taglia Contenuto
+CHATCOPYPASTE_KEY4 :: Elimina Contenuto
 
 #Force Chat
 FORCE_CHAT :: Forza Invio Messaggi
@@ -815,8 +839,8 @@ FORCE_CHAT_NOTE :: Forza l'invio dei messaggi.
 #--Chat Codes Folder over--
 
 #Shop open
-SHOP_ALWAYS_OPEN_NAME :: Shops Always Open
-SHOP_ALWAYS_OPEN_NOTE :: Lets you remove the closing times of shops so they always stay open.
+SHOP_ALWAYS_OPEN_NAME :: Negozi Sempre Aperti
+SHOP_ALWAYS_OPEN_NOTE :: Disabilita l'orario di chiusura dei negozi per mantenerli sempre aperti.
 
 #Disable save
 DISABLE_SAVE :: Disabilita Menu di Salvataggio
@@ -830,9 +854,24 @@ DISABLE_ITEM_LOCKS_NOTE :: Droppa gli oggetti piu facilmente.
 CANT_FALL_HOLE :: Non puoi cascare nelle Trappole/Buchi
 CANT_FALL_HOLE_NOTE :: Non puoi cascare nelle Trappole e/o Buchi.
 
-#show mail text
-SHOW_MAIL_TEXT :: Mostra Testo Lettere
-SHOW_MAIL_TEXT_NOTE :: Mostra il testo delle lettere semplicemente cliccando nello slot.\nPossono essere lette anche lettere non aperte!
+#set spot state
+SET_SPOT_STATE_NAME :: Imposta Stato Area
+SET_SPOT_STATE_NOTE :: Blocca/Sblocca un'area nella mappa (o la mappa intera).
+VECTOR_QUICK_LOCK_SPOT :: Blocca il punto
+VECTOR_QUICK_UNLOCK_SPOT :: Sblocca il punto
+VECTOR_QUICK_LOCK_MAP :: Blocca Mappa
+VECTOR_QUICK_UNLOCK_MAP :: Sblocca Mappa
+
+#search and replace
+SEARCH_REPLACE_NAME :: Cerca e sostituisci
+SEARCH_REPLACE_NOTE :: Cerca e rimpiazza un qualsiasi oggetto nella mappa, con un altro.
+QUICK_MENU_SEARCH_REPLACE_SEARCH :: Inserisci l'ID che\nvorresti cercare\n(0xFFFFFFFF per sostituire tutto):
+QUICK_MENU_SEARCH_REPLACE_REPLACE :: Inserisci l'ID \nche vorresti piazzare:
+
+#remove all items
+REMOVE_TOWNITEMS_NAME :: Remove All Items
+REMOVE_TOWNITEMS_NOTE :: Lets you remove every item on the map.
+REMOVE_ITEM_WARNING :: Attenzione\nOgni oggetto nella mappa sara' rimosso\nPremi si per procedere, no per annullare
 
 #water flowers
 WATER_FLOWERS_NAME :: Innaffia tutti i fiori
@@ -881,7 +920,7 @@ TIME_HOUR :: Ore
 TIME_DAY :: Giorni
 TIME_MONTH :: Mesi
 TIME_YEAR :: Anni
-TIME_ERROR :: Error: %d is the highest amount for %s!
+TIME_ERROR :: Errore: %d e' il valore massimo per %s!
 
 #Misc Codes Folder
 MISC_CODES :: Codici Aggiuntivi
@@ -889,13 +928,13 @@ MISC_CODES :: Codici Aggiuntivi
 #Disable Commands
 DISABLECOMMAND :: Disabilita comandi Anti-Hacker
 DISABLECOMMAND_NOTE :: Disabilita i comandi di prevenzione Hacker
-VECTOR_ANIM_COMM :: Animation Commands
-VECTOR_EMOT_COMM :: Emotion Commands
-VECTOR_SNAK_COMM :: Snake Commands
-VECTOR_MUSI_COMM :: Music Commands
-VECTOR_ITEM_COMM :: Item Commands
-VECTOR_ALL_COMM :: Switch OFF All
-COMM_CHOOSE :: Choose which mode to disable:
+VECTOR_ANIM_COMM :: Comandi Animazione
+VECTOR_EMOT_COMM :: Comandi Emozioni
+VECTOR_SNAK_COMM :: Comandi Snake
+VECTOR_MUSI_COMM :: Comandi Musicali
+VECTOR_ITEM_COMM :: Comandi Oggetti
+VECTOR_ALL_COMM :: Disattiva Tutto
+COMM_CHOOSE :: Scegli quale modalita' disabilitare
 
 #Tool Animation
 TOOL_ANIM :: Modifica animazione oggetti
@@ -925,28 +964,16 @@ VECTOR_WEATHER_STORMY :: Temporale
 VECTOR_WEATHER_SNOWY :: Neve
 
 #Always Aurora Lights
-ALWAYS_AURORA_MOD :: Always Aurora Lights
-ALWAYS_AURORA_MOD_NOTE :: Will make aurora lights always appear no matter the time or date!
+ALWAYS_AURORA_MOD :: Aurora Boreale sempre attiva
+ALWAYS_AURORA_MOD_NOTE :: Fa apparire l'Aurora Boreale indipendentemente dalla data e ora!
+
+#reload room
+RELOAD_ROOM_NAME :: Ricarica Stanza
+RELOAD_ROOM_NOTE :: Ricarica la stanza attuale.
 
 #Quick Menu
 QUICK_MENU :: Menu Rapido
-QUICK_MENU_NOTE :: Abilita rapidamente diversi trucchi. Tutti i trucchi (tranne la modifica degli edifici) funzionera' anche online. Assicurati di essere molto prudente nell'usarli.\n\nModifica Edifici: Piazza gli edifici. \n\nCambia mod. di Gioco: Modifica la modalita' che stai giocando. Ad esempio, carica il gioco in modalita' SOGNO \n\nRimuovi Oggetti: Rimuove tutti gli oggetti. \n\nCerca e Sostituisci: Scrivi l'ID di un oggetto per trovarlo, scrivi un secondo ID per impostare l'oggetto che rimpiazzera' il primo.\n
-VECTOR_QUICK_BUILDING :: Editor Edifici
-VECTOR_QUICK_REMOVE :: Rimuovi tutti gli oggetti
-VECTOR_COMMANDS_CLEAR_INV :: Svuota Inventario
-VECTOR_QUICK_S_A_R :: Cerca e sostituisci
-VECTOR_QUICK_RELOAD :: Ricarica Stanza
-VECTOR_QUICK_LOCK_SPOT :: Blocca il punto
-VECTOR_QUICK_UNLOCK_SPOT :: Sblocca il punto
-VECTOR_QUICK_LOCK_MAP :: Blocca Mappa
-VECTOR_QUICK_UNLOCK_MAP :: Sblocca Mappa
-QUICK_MENU_PLACE_AT_LOCATION :: Piazza nella posizione...
-QUICK_MENU_MOVE_TO_LOCATION :: Muovi alla tua posizione...
-QUICK_MENU_REMOVE_BUILDING :: Rimuovi edificio...
-REMOVE_INV_WARNING :: Attenzione\nOgni oggetto nell'inventario sara' rimosso\nPremi Si per procedere, No per annullare
-REMOVE_ITEM_WARNING :: Attenzione\nOgni oggetto nella mappa sara' rimosso\nPremi si per procedere, no per annullare
-QUICK_MENU_SEARCH_REPLACE_SEARCH :: Inserisci l'ID che\nvorresti cercare\n(0xFFFFFFFF per sostituire tutto):
-QUICK_MENU_SEARCH_REPLACE_REPLACE :: Inserisci l'ID \nche vorresti piazzare:
+QUICK_MENU_NOTE :: Abilita rapidamente diversi trucchi.
 
 #More Numbers
 MORE_NUMBERS :: Piu di 3 Numeri in Chat
