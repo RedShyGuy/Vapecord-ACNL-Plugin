@@ -2,6 +2,7 @@
 #include "Helpers/Address.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Color.h"
+#include "Helpers/IDList.hpp"
 #include "Helpers/GameStructs.hpp"
 
 namespace CTRPluginFramework {

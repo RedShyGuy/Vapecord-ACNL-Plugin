@@ -12,7 +12,7 @@
                 "C:/devkitPro/devkitARM/arm-none-eabi/include/**",
                 "C:/devkitPro/devkitARM/lib/**",
                 "C:/devkitPro/libctru/include",
-                "${workspaceFolder}/libctrpf/include",
+                "${workspaceFolder}/libctrpf/Library/include",
                 "C:/devkitPro/portlibs/3ds/bin",
                 "${workspaceFolder}/includes"
             ],
@@ -20,7 +20,7 @@
             "compilerPath": "C:/devkitPro/devkitARM/bin/arm-none-eabi-g++.exe",
             "browse": {
                 "path": [
-                    "${workspaceFolder}/libctrpf/include/**",
+                    "${workspaceFolder}/libctrpf/Library/include/**",
                     "C:/devkitPro/libctru/include/**"
                 ],
                 "limitSymbolsToIncludedHeaders": true,

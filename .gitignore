@@ -15,3 +15,6 @@ desktop.ini
 send.bat
 send.py
 sendpost.txt
+.vscode/settings.json
+libctrpf/Library/lib/libctrpf.a
+libctrpf/Library/lib/libctrpfd.a
