@@ -5,7 +5,7 @@ echo 'Build libctrpf? (y/n):'
 
 read buildLib
 
-if ["$buildLib" = 'y']; then
+if [ "$buildLib" == "y" ]; then
 	cd libctrpf/Library
 	make -j 8
 	cd ../..
