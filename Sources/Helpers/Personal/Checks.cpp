@@ -219,8 +219,8 @@ namespace CTRPluginFramework {
 		return ACSystem::IsKeyDown(GameKey::B);
 	}
 
-	bool IsSTARTPressed(u32 data, u32 key) {
-		return Controller::IsKeyPressed(Key::Start);
+	bool IsSTARTDown(u32 data, u32 key) {
+		return Controller::IsKeyDown(Key::Start);
 	}
 
     void SetTitle(u32 dataParam, u32 *stack) {
