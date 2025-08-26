@@ -23,7 +23,7 @@ namespace CTRPluginFramework {
 	bool IsItemPlantable(u32 ItemData, Item *ItemID);
 	int CatalogPatch_Keyboard(u32 u0, u32 u1, u32 u2);
 	bool CatalogPatch_SearchFunction(void);
-	bool IsSTARTPressed(u32 data, u32 key);
+	bool IsSTARTDown(u32 data, u32 key);
 	void SetTitle(u32 dataParam, u32 *stack);
 	void SetText(u32 dataParam, u32 *stack);
 	void SuspendCallBack(u32 param);
@@ -43,7 +43,7 @@ namespace CTRPluginFramework {
 		SetHook(textHook, warningTXT.addr + 0xA8, (u32)SetText, USE_LR_TO_RETURN);*/
 
 		static Hook SaveButtonCheck;
-		SetHook(SaveButtonCheck, Code::nosave.addr - 0x10, (u32)IsSTARTPressed, USE_LR_TO_RETURN);
+		SetHook(SaveButtonCheck, Code::nosave.addr - 0x10, (u32)IsSTARTDown, USE_LR_TO_RETURN);
 
 		static Hook CatalogPHook1, CatalogPHook2;
 		static const Address CatalogPOffset1(0x21C408, 0x21BE4C, 0x21C428, 0x21C428, 0x21C348, 0x21C348, 0x21C314, 0x21C314);
