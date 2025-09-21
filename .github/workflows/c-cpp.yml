@@ -17,11 +17,32 @@ jobs:
     - name: make libctrpf
       working-directory: ${{github.workspace}}/libctrpf/Library
       run: make
-    - name: make root
+    - name: make plugin
       working-directory: ${{github.workspace}}
       run: |
            chmod +x 3gxtool
            cp 3gxtool /opt/devkitpro/tools/bin/
            make
+
+    - name: Upload Binary
+      uses: actions/upload-artifact@v4
+      with:
+        name: binary
+        path: |
+              Vapecord-ACNL-Plugin.elf
+              Vapecord-ACNL-Plugin.3gx
       
-      
+  deploy:
+  
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - name: Download Binary
+      uses: actions/download-artifact@v4
+      with:
+        name: binary
+        path: |
+              Vapecord-ACNL-Plugin.elf
+              Vapecord-ACNL-Plugin.3gx
+    
