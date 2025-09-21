@@ -16,10 +16,8 @@ jobs:
     - uses: actions/checkout@v4
     - name: make libctrpf
       working-directory: ${{github.workspace}}/libctrpf/Library
-      run: make 
-    - name: export 3gxtool
-      run: export PATH="$PATH/${{github.workspace}}" && echo $PATH
+      run: make
     - name: make root
-      run: echo $PATH && make
+      run: export PATH="$PATH/${{github.workspace}}" && echo $PATH && make
       
       
