@@ -18,7 +18,8 @@ jobs:
       working-directory: ${{github.workspace}}/libctrpf/Library
       run: make
     - name: make root
-      run: cp ${{github.workspace}}/3gxtool /opt/devkitpro/tools/bin/
+      run: |
+           cp ${{github.workspace}}/3gxtool /opt/devkitpro/tools/bin/
            make
       
       
