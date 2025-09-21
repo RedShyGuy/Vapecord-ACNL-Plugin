@@ -1,0 +1,28 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    container: devkitpro/devkitarm
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: configure
+      run: ./configure
+    - name: cd libctrpf
+      run: cd libctrpf/Library
+    - name: run make
+      run: make
+    - name: cd root
+      run: cd ../..
+    - name: run make
+      run: make
+      
+      
