@@ -20,6 +20,6 @@ jobs:
     - name: export 3gxtool
       run: export PATH="$PATH/${{github.workspace}}" && echo $PATH
     - name: make root
-      run: make
+      run: echo $PATH && make
       
       
