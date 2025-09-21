@@ -20,6 +20,7 @@ jobs:
     - name: make root
       working-directory: ${{github.workspace}}
       run: |
+           chmod=+x 3gxtool
            cp 3gxtool /opt/devkitpro/tools/bin/
            make
       
