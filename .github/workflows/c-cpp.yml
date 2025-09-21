@@ -17,8 +17,9 @@ jobs:
     - name: make libctrpf
       working-directory: ${{github.workspace}}/libctrpf/Library
       run: make 
+    - name: export 3gxtool
+      run: export PATH="$PATH/${{github.workspace}}"
     - name: make root
-      working-directory: ${{github.workspace}}
       run: make
       
       
