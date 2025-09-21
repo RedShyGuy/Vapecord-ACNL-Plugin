@@ -14,15 +14,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: configure
-      run: ./configure
     - name: cd libctrpf
       run: cd libctrpf/Library
-    - name: run make
+    - name: make libctrpf
       run: make
     - name: cd root
       run: cd ../..
-    - name: run make
+    - name: make root
       run: make
       
       
