@@ -15,11 +15,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: cd libctrpf
-      run: cd libctrpf/Library
+      run: cd ${{github.workspace}}/libctrpf/Library
     - name: make libctrpf
       run: make
     - name: cd root
-      run: cd ../..
+      run: cd ${{github.workspace}}
     - name: make root
       run: make
       
