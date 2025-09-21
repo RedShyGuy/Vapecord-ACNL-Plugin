@@ -19,6 +19,7 @@ jobs:
       run: make
     - name: make root
       run: |
+           ls ${{github.workspace}}
            cp ${{github.workspace}}/3gxtool /opt/devkitpro/tools/bin/
            make
       
