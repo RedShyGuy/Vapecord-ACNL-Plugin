@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/usr/bin/env bash
 clear
 cd libctrpf/Library
 make clean
