@@ -31,18 +31,3 @@ jobs:
         path: |
               Vapecord-ACNL-Plugin.elf
               Vapecord-ACNL-Plugin.3gx
-      
-  deploy:
-  
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-    - name: Download Binary
-      uses: actions/download-artifact@v4
-      with:
-        name: binary
-        path: |
-              Vapecord-ACNL-Plugin.elf
-              Vapecord-ACNL-Plugin.3gx
-    
