@@ -418,7 +418,7 @@ namespace CTRPluginFramework {
 		})),
 		MISC->Append(new MenuEntry("FAST_TEXT_SPEED", fasttalk, "FAST_TEXT_SPEED_NOTE")),
 		MISC->Append(new MenuEntry("FAST_GAME_SPEED", speedentry, "FAST_GAME_SPEED_NOTE")),
-		MISC->Append(new MenuEntry("Isabelle_Skip", IsabelleSkip, "Isabelle_Skip_NOTE")),
+		MISC->Append(new MenuEntry("FAST_ISABELLE", fastisabelle, "FAST_ISABELLE_NOTE")),
 		menu->Append(MISC);
 
 	////////////////////
