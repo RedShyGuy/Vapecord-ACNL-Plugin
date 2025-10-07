@@ -492,59 +492,28 @@ namespace CTRPluginFramework {
 //Fast Game Speed	
 	void speedentry(MenuEntry *entry) {
 		static const Address speed(0x54DDB4, 0x54D2CC, 0x54CDFC, 0x54CDFC, 0x54C6E8, 0x54C6E8, 0x54C40C, 0x54C40C);
-		Process::Patch(speed.addr, GameHelper::GameSaving() ? 0xE59400A0 : 0xE3E004FF); 
+		Process::Patch(speed.addr, GameHelper::GameSaving() ? 0xE59400A0 : 0xE3E004FF);
 		
-		if(!entry->IsActivated()) 
-			Process::Patch(speed.addr, 0xE59400A0); 
+		if(!entry->IsActivated())
+			Process::Patch(speed.addr, 0xE59400A0);
 	}
-
-//しずえスキップ関係
-	bool TouchSkipButton(void)
-	{
-		static UIntRect skip_coord(13, 190, 5*6, 30);
-		if (skip_coord.Contains(Touch::GetPosition())) return 1;
-		return 0;
-	}
-
-	bool SkipButton(const Screen &scr)
-	{
-		if ( scr.IsTop ) return false;
-		scr.Draw( "Skip", 16, 200, Color::Green, Color::White);
-		
-		return true;
-	}
-
-	bool on_run = false;
-
-	void IsabelleSkip(MenuEntry *entry) {
-		// FastGameSpeed
+//Fast Isabelle (Fast Text + Game Speed when in the Isabelle greeting room)
+	void fastisabelle(MenuEntry *entry) {
 		static const Address speed(0x54DDB4, 0x54D2CC, 0x54CDFC, 0x54CDFC, 0x54C6E8, 0x54C6E8, 0x54C40C, 0x54C40C);
+		static const Address fastt(0x5FC6AC, 0x5FBBDC, 0x5FB6E4, 0x5FB6E4, 0x5FAF64, 0x5FAF64, 0x5FABEC, 0x5FABEC);
 
 		u8 roomID = GameHelper::RoomCheck();
-		if(!entry->IsActivated()) {
-			if (on_run) OSD::Stop(SkipButton); 
-			Process::Patch(speed.addr, 0xE59400A0);
-			on_run = false;
-		}
-		else if (roomID == 0x63) { // Isabelle
-			// Speedup
-			Process::Patch(speed.addr, GameHelper::GameSaving() ? 0xE59400A0 : 0xE3E004FF); 
-
-			if (!on_run) OSD::Run(SkipButton); 
+		if (roomID == 0x63 && entry->IsActivated()) { // Isabelle
+			Process::Patch(speed.addr, GameHelper::GameSaving() ? 0xE59400A0 : 0xE3E004FF);
 			
-			on_run = true;
-			if (Controller::IsKeyPressed(Touchpad) && TouchSkipButton()) {
-				static Address roomfunc(0x304A60, 0x304C68, 0x304AEC, 0x304AEC, 0x304A94, 0x304A94, 0x304A3C, 0x304A3C);	
-				roomfunc.Call<u32>(0, 1, 1, 0);
-			}
+			Process::Patch(fastt.addr, 0xEA000000);
+			Process::Patch(fastt.addr + 8, 0xE3500001);
 		}
 		else {
-			if (on_run){
-				OSD::Stop(SkipButton);
-				Process::Patch(speed.addr, 0xE59400A0);
-				on_run = false;
-			}
+			Process::Patch(speed.addr, 0xE59400A0);
+
+			Process::Patch(fastt.addr, 0xE1A00004);
+			Process::Patch(fastt.addr + 8, 0xE3500000);
 		}
-		
 	}
 }
