@@ -1,5 +1,4 @@
 # Vapecord-ACNL-Plugin
-![](https://cdn.discordapp.com/attachments/809117521746722827/900748590358601838/vapecordTopScreen.png)
 
 ## Plugin
 The Vapecord-ACNL-Plugin is an Animal Crossing New Leaf Cheat Menu, it works for every Region of the game.
