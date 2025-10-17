@@ -2,6 +2,11 @@ name: C/C++ CI
 
 on:
   push:
+    # ignore paths that don't affect this workflow
+    paths-ignore:
+      - '**.md'
+      - '**.sh'
+      - '**.bat'
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
