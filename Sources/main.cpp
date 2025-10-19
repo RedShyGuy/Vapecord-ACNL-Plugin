@@ -4,15 +4,11 @@
 #include "RegionCodes.hpp"
 #include "Helpers/Inventory.hpp"
 #include "Helpers/Wrapper.hpp"
-#include "Helpers/QuickMenu.hpp"
 #include "Helpers/PluginMenuData.hpp"
 #include "NonHacker.hpp"
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 
 namespace CTRPluginFramework {
-	static const std::string Note = "Creator: Lukas#4444 (RedShyGuy) \n\n"
+	static const std::string Note = "Creator: Lukas \n\n"
 									"Code Credits: Nico, Jay, Levi, Slattz, Kominost, Elominator and more \n\n"
 									"Translators: みるえもん & みなと(Japanese), im a book(spanish), Fedecrash02(italian), Youssef, Arisa, & Lenoch(french), bkfirmen & Toby(german), Soopoolleaf(korean) \n\n"
 									"" << Utils::Format("Discord: %s", DISCORDINV);
@@ -20,7 +16,6 @@ namespace CTRPluginFramework {
 	extern int UI_Pos;
 	bool OSD_SplashScreen(const Screen &Splash);
 	void IndoorsSeedItemCheck(void);
-	void devcallback(void);
 	void OnNewFrameCallback(Time ttime);
 	void InitMenu(PluginMenu *menu);
 	void GetPlayerInfoData(void);
@@ -29,29 +24,6 @@ namespace CTRPluginFramework {
 	void GetMessage_p2(void);
 	void GetMessage_p3(void);
 	void GetMessage_p4(void);
-
-/*
-Will be called at the start of the plugin to load the language, colors and the dev check
-*/
-	void UpdateInstance(void) {
-		PluginMenu *menu = PluginMenu::GetRunningInstance();
-		if(menu == nullptr) //if menu didn't load yet
-			return;
-
-		CustomFWK(false);
-		SetupLanguage(false);
-		SetupColors(false);
-		IsDevModeUsable();
-		QuickMenu::Init();
-		PluginMenuData::Init();
-
-		PluginMenu::V_SetColor(SetupColors);
-		PluginMenu::V_SetLanguage(SetupLanguage);
-		PluginMenu::V_SetFwk(CustomFWK);
-		PluginMenu::V_SetVisibility(cheatsVisibility);
-		PluginMenu::V_SetReset(resetSettings);
-		*menu -= UpdateInstance;
-	}
 
 /*
 Gets region name to append to plugin title | also sets current region
@@ -102,81 +74,12 @@ Gets region name to append to plugin title | also sets current region
 		return regionName;
 	}
 
-/*
-Checks game version
--1 = string not found
--2 = wrong version
-0 = correct version
-*/
-	s8 IsNewestVersion(std::string& versionSTR, const std::string& gameVersion) {
-		versionSTR.clear();
-
-		static const std::vector<u16> Pattern = { 0x0056, 0x0065, 0x0072, 0x002E, 0x0020 };
-		u16* found = (u16 *)Utils::Search<u16>(0x00800000, 0x00200000, Pattern);
-		if(found == nullptr)
-			return -1;
-
-		versionSTR = Utils::Format("%c.%c", (char)found[5], (char)found[7]);
-		if(versionSTR != gameVersion)
-			return -2;
-
-		return 0;
-	}
-
-	static const std::string GameVersion = "1.5";
-	static const std::string GameVersionUSAWA = "1.1"; //seems to be an exception, I am guessing the Devs of ACNL messed something up there
-
-	bool CheckGameVersion(void) {
-		static const Address isUSAWA(0, 1, 0, 0, 0, 0, 0, 0);
-		std::string realGameVersion = (bool)isUSAWA.addr ? GameVersionUSAWA : GameVersion;
-		
-		u8 u_byte = f_GameVer::NoneVer;
-		ReadConfig(CONFIG::GameVer, u_byte);
-		if(u_byte == f_GameVer::Accepted)
-			return true;
-
-		std::string currentVersion = "";
-		s8 res = IsNewestVersion(currentVersion, realGameVersion);
-
-		if(res == -2) {
-			Sleep(Seconds(5));
-			static const std::string str = Utils::Format("Your game has the version %s\nThis plugin only supports the game version %s. Make sure you have the correct game version before you use this plugin!\nIgnore this warning?", currentVersion.c_str(), realGameVersion.c_str());
-            if(!(MessageBox(Color(0xDC143CFF) << "Warning, wrong game version!", str, DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
-				WriteConfig(CONFIG::GameVer, f_GameVer::Declined);
-				return false;
-			}
-			else {
-				WriteConfig(CONFIG::GameVer, f_GameVer::Accepted);
-				return true;
-			}
-		}
-
-		else if(res == -1) {
-			OSD::Notify("Game Version Not Found!");
-			WriteConfig(CONFIG::GameVer, f_GameVer::Declined);
-			return false;
-		}
-
-		WriteConfig(CONFIG::GameVer, f_GameVer::Accepted);
-		return true;
-	}
-
 	bool CheckGameTitleID(void) {
-		u8 u_byte = f_GameID::NoneID;
-		ReadConfig(CONFIG::GameID, u_byte);
-		if(u_byte == f_GameID::CorrectID)
-			return true;
-		else if(u_byte == f_GameID::WrongID)
-			return false;
-
 		if(!GameHelper::IsACNL()) {
 			Sleep(Seconds(5));
 			MessageBox("Error 999", "Game Not Supported!\nCheats will not load\nPlugin Main Features are still usable!").SetClear(ClearScreen::Top)();
-			WriteConfig(CONFIG::GameID, f_GameID::WrongID);
 			return false;
 		}
-
-		WriteConfig(CONFIG::GameID, f_GameID::CorrectID);
 		return true;
 	}
 
@@ -203,16 +106,13 @@ prevent any issues with freezing of the plugin
 		PluginMenu *menu = new PluginMenu(Color::White << "ACNL Vapecord Plugin " << GetRegionName(), majorV, minorV, revisV, Note);
 		menu->SynchronizeWithFrame(true);
 
-		CheckForCONFIG();
+		CheckForLanguageFile();
 
 	//If title isn't ACNL
 		if(!CheckGameTitleID()) {
 			menu->Run();
 			return 0;
 		}
-
-	//Check if the game has the correct version
-		CheckGameVersion();
 
 		SleepTime();
 
@@ -222,23 +122,20 @@ prevent any issues with freezing of the plugin
 		RCO();
 	//keeps internet connection when menu is opened
 		InitKeepConnection();
+
+		SetupLanguage(false);
 	//Load MenuFolders and Entrys (located in MenuCreate.cpp)
 		InitMenu(menu);
 
 		ReserveItemData(ItemList);
 
-		menu->OnFirstOpening = StartingMsg;
-
 	//Load Callbacks
-		menu->Callback(devcallback);
 		menu->Callback(IndoorsSeedItemCheck);
 
 		menu->Callback(NonHacker_Player00);
 		menu->Callback(NonHacker_Player01);
 		menu->Callback(NonHacker_Player02);
 		menu->Callback(NonHacker_Player03);
-
-		menu->Callback(UpdateInstance);
 
 		menu->OnNewFrame = OnNewFrameCallback;
 

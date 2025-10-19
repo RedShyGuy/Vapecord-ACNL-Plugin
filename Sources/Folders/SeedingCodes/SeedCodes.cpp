@@ -82,7 +82,7 @@ namespace CTRPluginFramework {
 		}
 		
 		if(entry->Hotkeys[0].IsPressed()) {
-			Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, *(u32 *)&PickupSeederItemID, *(u32 *)&PickupSeederItemID, ItemChange);
+			Wrap::KB<u32>(Language::getInstance()->get("ENTER_ID"), true, 8, *(u32 *)&PickupSeederItemID, *(u32 *)&PickupSeederItemID, ItemChange);
         }	
 		
 	//Switches Seed Item to Remove Item
@@ -199,18 +199,18 @@ namespace CTRPluginFramework {
 		static const Address firework(0x597870, 0x596D88, 0x5968B8, 0x5968B8, 0x5961A8, 0x5961A8, 0x595E7C, 0x595E7C);
 		
 		const std::vector<std::string> fireOpt = {
-			Language->Get("VECTOR_FIREWORK_CHANGE_ID"),
-			Language->Get("VECTOR_FIREWORK_SPAWN"),
-			Language->Get("VECTOR_DISABLE")
+			Language::getInstance()->get("VECTOR_FIREWORK_CHANGE_ID"),
+			Language::getInstance()->get("VECTOR_FIREWORK_SPAWN"),
+			Language::getInstance()->get("VECTOR_DISABLE")
 		};
 		
 		Item input = {0x7FFE, 0};
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), fireOpt);
+		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), fireOpt);
 		
 		switch(optKb.Open()) {
 			default: break;
 			case 0: {
-				if(Wrap::KB<u16>(Language->Get("FIREWORK_SEEDER_ENTER_ID"), true, 4, *(u16 *)&input, *(u16 *)&input, ItemChange)) 
+				if(Wrap::KB<u16>(Language::getInstance()->get("FIREWORK_SEEDER_ENTER_ID"), true, 4, *(u16 *)&input, *(u16 *)&input, ItemChange)) 
 					Process::Patch(firework.addr, *(u16 *)&input);
 			} break;
 			case 1: Inventory::WriteSlot(0, {0x339F, 0}); break;
@@ -381,7 +381,7 @@ namespace CTRPluginFramework {
 			}
 			
 			if(entry->Hotkeys[10].IsPressed()) 
-				Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, *(u32 *)&dropitem, *(u32 *)&dropitem, ItemChange);
+				Wrap::KB<u32>(Language::getInstance()->get("ENTER_ID"), true, 8, *(u32 *)&dropitem, *(u32 *)&dropitem, ItemChange);
 		}
 		
 		if(!entry->IsActivated()) { 
@@ -395,7 +395,7 @@ namespace CTRPluginFramework {
 	}
 
 	void E_Seeder_KB(MenuEntry *entry) {
-		Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, *(u32 *)&EverythingSeederItemID, *(u32 *)&EverythingSeederItemID, ItemChange);
+		Wrap::KB<u32>(Language::getInstance()->get("ENTER_ID"), true, 8, *(u32 *)&EverythingSeederItemID, *(u32 *)&EverythingSeederItemID, ItemChange);
 	}
 
 	void everythingseeder(MenuEntry *entry) {

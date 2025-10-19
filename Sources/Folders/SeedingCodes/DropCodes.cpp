@@ -17,9 +17,9 @@ namespace CTRPluginFramework {
 	void Entry_itemsequence(MenuEntry *entry) {	
 		std::vector<std::string> cmnOpt = { "" };
 
-		cmnOpt[0] = (ItemSequence::Enabled() ? Color(pGreen) << Language->Get("VECTOR_ENABLED") : Color(pRed) << Language->Get("VECTOR_DISABLED"));
+		cmnOpt[0] = (ItemSequence::Enabled() ? Color(pGreen) << Language::getInstance()->get("VECTOR_ENABLED") : Color(pRed) << Language::getInstance()->get("VECTOR_DISABLED"));
 
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
+		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), cmnOpt);
 
 		int op = optKb.Open();
 		if(op < 0)
@@ -31,25 +31,25 @@ namespace CTRPluginFramework {
 //Drop Modifier /*Radius calculations done by Nico*/
 	void dropMod(MenuEntry *entry) {		
 		const std::vector<std::string> g_dropmod = {
-			Language->Get("VECTOR_DROP_PICK"), 
-			Language->Get("VECTOR_DROP_PULL"),
-			Language->Get("VECTOR_DROP_DROP"),
-			Language->Get("VECTOR_DROP_BURY"),
-			Language->Get("VECTOR_DROP_PLANT"),
-			Language->Get("VECTOR_DROP_PATTERN"),
-			Language->Get("VECTOR_DROP_ROCK"),
-			Language->Get("VECTOR_DROP_DIG"),
+			Language::getInstance()->get("VECTOR_DROP_PICK"), 
+			Language::getInstance()->get("VECTOR_DROP_PULL"),
+			Language::getInstance()->get("VECTOR_DROP_DROP"),
+			Language::getInstance()->get("VECTOR_DROP_BURY"),
+			Language::getInstance()->get("VECTOR_DROP_PLANT"),
+			Language::getInstance()->get("VECTOR_DROP_PATTERN"),
+			Language::getInstance()->get("VECTOR_DROP_ROCK"),
+			Language::getInstance()->get("VECTOR_DROP_DIG"),
 		};
 		
 		const std::vector<std::string> shapeOpt = {
-			Language->Get("VECTOR_SHAPE_FULL_SQUARE"), //0x15 max
-			Language->Get("VECTOR_SHAPE_CIRCLE"), //9 max
-			Language->Get("VECTOR_SHAPE_HORI_LINE"), //0x10 max
-			Language->Get("VECTOR_SHAPE_VERT_LINE"), //0x10 max
-			Language->Get("VECTOR_SHAPE_SQUAREE"), //0x10 max
-			Language->Get("VECTOR_SHAPE_NE_TO_SW"), //0x10 max
-			Language->Get("VECTOR_SHAPE_NW_TO_SE"), //0x10 max
-			Language->Get("VECTOR_SHAPE_RESET"),
+			Language::getInstance()->get("VECTOR_SHAPE_FULL_SQUARE"), //0x15 max
+			Language::getInstance()->get("VECTOR_SHAPE_CIRCLE"), //9 max
+			Language::getInstance()->get("VECTOR_SHAPE_HORI_LINE"), //0x10 max
+			Language::getInstance()->get("VECTOR_SHAPE_VERT_LINE"), //0x10 max
+			Language::getInstance()->get("VECTOR_SHAPE_SQUAREE"), //0x10 max
+			Language::getInstance()->get("VECTOR_SHAPE_NE_TO_SW"), //0x10 max
+			Language::getInstance()->get("VECTOR_SHAPE_NW_TO_SE"), //0x10 max
+			Language::getInstance()->get("VECTOR_SHAPE_RESET"),
 		};
 
 		if(entry->WasJustActivated()) {
@@ -59,7 +59,7 @@ namespace CTRPluginFramework {
 		
 	//Modify Drop Type	
 		if(entry->Hotkeys[0].IsPressed()) { 
-			Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), g_dropmod);
+			Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), g_dropmod);
 			
 			int res = optKb.Open();
 			if(res < 0)
@@ -80,14 +80,14 @@ namespace CTRPluginFramework {
 
 			u8 range, count, val;
 
-			Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), shapeOpt);
+			Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), shapeOpt);
 			
 			int index = optKb.Open();
 			switch(index) {
 				default: return;
 			//Full Square
 				case 0: {
-					if(Wrap::KB<u8>(Language->Get("DROP_MODS_RADIUS") << "\nMax Value: 0x15", true, 1, val, 0)) {
+					if(Wrap::KB<u8>(Language::getInstance()->get("DROP_MODS_RADIUS") << "\nMax Value: 0x15", true, 1, val, 0)) {
 						if(val > 0x15)
 							val = 0x15;
 
@@ -107,7 +107,7 @@ namespace CTRPluginFramework {
 				} break;
 			//circle	
 				case 1: {
-					if(Wrap::KB<u8>(Language->Get("DROP_MODS_RADIUS") << "\nMax Value: 9", true, 1, val, 0)) {
+					if(Wrap::KB<u8>(Language::getInstance()->get("DROP_MODS_RADIUS") << "\nMax Value: 9", true, 1, val, 0)) {
 						if(val > 9)
 							val = 9;
 
@@ -124,7 +124,7 @@ namespace CTRPluginFramework {
 				} break;
 			//horizontal line	
 				case 2: {
-					if(Wrap::KB<u8>(Language->Get("DROP_MODS_RADIUS") << "\nMax Value: 0x10", true, 2, val, 0)) {
+					if(Wrap::KB<u8>(Language::getInstance()->get("DROP_MODS_RADIUS") << "\nMax Value: 0x10", true, 2, val, 0)) {
 						if(val > 0x10)
 							val = 0x10;
 
@@ -141,7 +141,7 @@ namespace CTRPluginFramework {
 				} break;
 			//Vertical line	
 				case 3: {
-					if(Wrap::KB<u8>(Language->Get("DROP_MODS_RADIUS") << "\nMax Value: 0x10", true, 2, val, 0)) {
+					if(Wrap::KB<u8>(Language::getInstance()->get("DROP_MODS_RADIUS") << "\nMax Value: 0x10", true, 2, val, 0)) {
 						if(val > 0x10)
 							val = 0x10;
 
@@ -158,7 +158,7 @@ namespace CTRPluginFramework {
 				} break;	
 			//square	
 				case 4: {
-					if(Wrap::KB<u8>(Language->Get("DROP_MODS_RADIUS") << "\nMax Value: 0x10", true, 2, val, 0)) {
+					if(Wrap::KB<u8>(Language::getInstance()->get("DROP_MODS_RADIUS") << "\nMax Value: 0x10", true, 2, val, 0)) {
 						if(val > 0x10)
 							val = 0x10;
 
@@ -181,7 +181,7 @@ namespace CTRPluginFramework {
 				} break;
 			//NE to SW line	
 				case 5: {
-					if(Wrap::KB<u8>(Language->Get("DROP_MODS_RADIUS") << "\nMax Value: 0x10", true, 2, val, 0)) {
+					if(Wrap::KB<u8>(Language::getInstance()->get("DROP_MODS_RADIUS") << "\nMax Value: 0x10", true, 2, val, 0)) {
 						if(val > 0x10)
 							val = 0x10;
 
@@ -197,7 +197,7 @@ namespace CTRPluginFramework {
 				} break;
 			//NW to SE line	
 				case 6:	{
-					if(Wrap::KB<u8>(Language->Get("DROP_MODS_RADIUS") << "\nMax Value: 0x10", true, 2, val, 0)) {
+					if(Wrap::KB<u8>(Language::getInstance()->get("DROP_MODS_RADIUS") << "\nMax Value: 0x10", true, 2, val, 0)) {
 						if(val > 0x10)
 							val = 0x10;
 
@@ -230,7 +230,7 @@ namespace CTRPluginFramework {
 
 	//set replace item	
 		if(entry->Hotkeys[2].IsPressed()) {
-			if(Wrap::KB<u32>(Language->Get("DROP_MODS_ENTER_ID"), true, 8, *(u32 *)&ItemIDToReplace, 0x7FFE))
+			if(Wrap::KB<u32>(Language::getInstance()->get("DROP_MODS_ENTER_ID"), true, 8, *(u32 *)&ItemIDToReplace, 0x7FFE))
 				OSD::Notify("Now replacing: " << (ItemIDToReplace == ReplaceEverything ? "everything" : Utils::Format("%08X", ItemIDToReplace)));
 		}
 
@@ -259,7 +259,7 @@ namespace CTRPluginFramework {
 //Drop Items	
 	void instantDrop(MenuEntry *entry) {
 		if(entry->Hotkeys[0].IsPressed()) 
-			Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, *(u32 *)&dropitem, *(u32 *)&dropitem, ItemChange);
+			Wrap::KB<u32>(Language::getInstance()->get("ENTER_ID"), true, 8, *(u32 *)&dropitem, *(u32 *)&dropitem, ItemChange);
 		
 		if(turbo ? entry->Hotkeys[1].IsDown() : entry->Hotkeys[1].IsPressed()) {//Key::L + Key::DPadDown
 			u32 wX, wY, u0;
@@ -275,7 +275,7 @@ namespace CTRPluginFramework {
 		u32 wX, wY, u0;
 		
 		if(entry->Hotkeys[0].IsPressed()) 
-			Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, *(u32 *)&dropitem, *(u32 *)&dropitem, ItemChange);
+			Wrap::KB<u32>(Language::getInstance()->get("ENTER_ID"), true, 8, *(u32 *)&dropitem, *(u32 *)&dropitem, ItemChange);
 		
 		else if(entry->Hotkeys[1].IsPressed()) {
 			enabled = !enabled;
@@ -290,7 +290,7 @@ namespace CTRPluginFramework {
 //Touch Drop
 	void touchDrop(MenuEntry *entry) {
 		if(entry->Hotkeys[0].IsPressed()) 
-			Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, *(u32 *)&dropitem, *(u32 *)&dropitem, ItemChange);
+			Wrap::KB<u32>(Language::getInstance()->get("ENTER_ID"), true, 8, *(u32 *)&dropitem, *(u32 *)&dropitem, ItemChange);
 		
 		if((turbo ? Touch::IsDown() : Controller::IsKeyPressed(Key::Touchpad)) && GameHelper::MapBoolCheck() == 1) {
 			UIntVector pos = Touch::GetPosition();

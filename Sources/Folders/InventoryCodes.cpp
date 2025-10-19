@@ -22,12 +22,12 @@ namespace CTRPluginFramework {
 			c = std::tolower(c);
 
 		if(event.type == KeyboardEvent::CharacterRemoved) {
-			keyboard.SetError(Language->Get("TEXT_2_ITEM_SEARCH_ERR1"));
+			keyboard.SetError(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_ERR1"));
 			return;
 		}
 
 		if(lowcaseInput.size() < 3) {
-			keyboard.SetError(Language->Get("TEXT_2_ITEM_SEARCH_ERR2"));
+			keyboard.SetError(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_ERR2"));
 			return;
 		}
 
@@ -35,16 +35,16 @@ namespace CTRPluginFramework {
 		int res = ItemSearch(lowcaseInput, match);
 
 		if(res == 0) {
-			keyboard.SetError(Language->Get("TEXT_2_ITEM_SEARCH_ERR3"));
+			keyboard.SetError(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_ERR3"));
 			return;
 		}
 
 		if(res > MAXCOUNT) {
-			keyboard.SetError(Utils::Format(Language->Get("TEXT_2_ITEM_SEARCH_ERR4").c_str(), res));
+			keyboard.SetError(Utils::Format(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_ERR4").c_str(), res));
 			return;
 		}
 
-		Keyboard KB(Language->Get("TEXT_2_ITEM_SEARCH_KB"), match.Name);
+		Keyboard KB(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_KB"), match.Name);
 		int kres = KB.Open();
 		if(kres < 0) {
 			input.clear();
@@ -81,7 +81,7 @@ namespace CTRPluginFramework {
 			}
 
 			Inventory::ReadSlot(0, val);
-			if(Wrap::KB<u32>(Language->Get("ENTER_ID"), true, 8, *(u32 *)&val, *(u32 *)&val, TextItemChange)) 		
+			if(Wrap::KB<u32>(Language::getInstance()->get("ENTER_ID"), true, 8, *(u32 *)&val, *(u32 *)&val, TextItemChange)) 		
 				Inventory::WriteSlot(0, val);
 		}
 		
@@ -91,7 +91,7 @@ namespace CTRPluginFramework {
 				return;
 			}
 
-			if(Wrap::KB<u32>(Language->Get("TEXT_2_ITEM_SET"), true, 8, *(u32 *)&val, 0x7FFE, TextItemChange)) {
+			if(Wrap::KB<u32>(Language::getInstance()->get("TEXT_2_ITEM_SET"), true, 8, *(u32 *)&val, 0x7FFE, TextItemChange)) {
 				for(u16 i = 0; i < 0x10; ++i) {
 					Item item = {(u16)(val.ID + i), 0};
 					Inventory::WriteSlot(i, item);
@@ -126,7 +126,7 @@ namespace CTRPluginFramework {
 				return;
 			}
 			std::string input = "";
-			Keyboard KB(Language->Get("TEXT_2_ITEM_SEARCH_KB2"));
+			Keyboard KB(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_KB2"));
 			KB.OnKeyboardEvent(ItemListCallBack);
 			KB.Open(input);
 		}
@@ -266,11 +266,11 @@ namespace CTRPluginFramework {
 //Clear Inventory
 	void ClearInventory(MenuEntry *entry) {
 		if(!Player::GetSaveData()) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 
-		if((MessageBox(Language->Get("REMOVE_INV_WARNING"), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
+		if((MessageBox(Language::getInstance()->get("REMOVE_INV_WARNING"), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
 			for(int i = 0; i <= 0xF; ++i)
 				Inventory::WriteSlot(i, Item{ 0x7FFE, 0 });
 		}
@@ -284,9 +284,9 @@ namespace CTRPluginFramework {
 		static const Address eat(0x19C1F0, 0x19BC38, 0x19C210, 0x19C210, 0x19C150, 0x19C150, 0x19C150, 0x19C150);
 		
 		std::vector<std::string> itemsettopt = {
-			Language->Get("VECTOR_ITEMSETTINGS_SHOWOFF"),
-			Language->Get("VECTOR_ITEMSETTINGS_INFINITE"),
-			Language->Get("VECTOR_ITEMSETTINGS_EAT"),
+			Language::getInstance()->get("VECTOR_ITEMSETTINGS_SHOWOFF"),
+			Language::getInstance()->get("VECTOR_ITEMSETTINGS_INFINITE"),
+			Language::getInstance()->get("VECTOR_ITEMSETTINGS_EAT"),
 		};
 		
 		static const u32 settings[3] = {
@@ -305,7 +305,7 @@ namespace CTRPluginFramework {
 			itemsettopt[i] = IsON ? (Color(pGreen) << itemsettopt[i]) : (Color(pRed) << itemsettopt[i]);
 		}
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), itemsettopt);
+		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), itemsettopt);
 
 		int op = optKb.Open();
 		if(op < 0)
@@ -349,14 +349,14 @@ namespace CTRPluginFramework {
 		static Hook hook;
 		
 		std::vector<std::string> menuopt = {
-			Language->Get("VECTOR_SAVEMENU_DATETIME"),
-			Language->Get("VECTOR_SAVEMENU_BELLPOINT_DEPO"),
-			Language->Get("VECTOR_SAVEMENU_BELLPOINT_WITHDRAW"),
-			Language->Get("VECTOR_SAVEMENU_LOCKER"),
-			Language->Get("VECTOR_SAVEMENU_TOWNTUNE"),
-			Language->Get("VECTOR_SAVEMENU_HOUSESTORAGE"),
-			Language->Get("VECTOR_SAVEMENU_CUSTOM"),
-			Language->Get("VECTOR_DISABLE")
+			Language::getInstance()->get("VECTOR_SAVEMENU_DATETIME"),
+			Language::getInstance()->get("VECTOR_SAVEMENU_BELLPOINT_DEPO"),
+			Language::getInstance()->get("VECTOR_SAVEMENU_BELLPOINT_WITHDRAW"),
+			Language::getInstance()->get("VECTOR_SAVEMENU_LOCKER"),
+			Language::getInstance()->get("VECTOR_SAVEMENU_TOWNTUNE"),
+			Language::getInstance()->get("VECTOR_SAVEMENU_HOUSESTORAGE"),
+			Language::getInstance()->get("VECTOR_SAVEMENU_CUSTOM"),
+			Language::getInstance()->get("VECTOR_DISABLE")
 		};
 
 		bool IsON;
@@ -366,7 +366,7 @@ namespace CTRPluginFramework {
 			menuopt[i] = (IsON ? Color(pGreen) :  Color(pRed)) << menuopt[i];
 		}
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), menuopt);
+		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), menuopt);
 
 		int dChoice = optKb.Open();
 		if(dChoice < 0)
@@ -377,12 +377,12 @@ namespace CTRPluginFramework {
 
 	//If Custom Menu is chosen
 		if(dChoice == 6) {
-			if(Wrap::KB<u8>(Language->Get("SAVE_MENU_CHANGER_ENTER_ID"), true, 2, CurrentMenu, 0)) {
+			if(Wrap::KB<u8>(Language::getInstance()->get("SAVE_MENU_CHANGER_ENTER_ID"), true, 2, CurrentMenu, 0)) {
 				if(IDList::MenuValid(CurrentMenu))
 					hook.Enable();
 				else {
 					hook.Disable();
-					MessageBox(Language->Get("INVALID_ID")).SetClear(ClearScreen::Top)();
+					MessageBox(Language::getInstance()->get("INVALID_ID")).SetClear(ClearScreen::Top)();
 				}
 			}
 			return;
@@ -468,30 +468,30 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 	
 		static const std::vector<std::string> setopt = {
-			Language->Get("VECTOR_GETSET_FURN"),
-			Language->Get("VECTOR_GETSET_CUSTOM"),
+			Language::getInstance()->get("VECTOR_GETSET_FURN"),
+			Language::getInstance()->get("VECTOR_GETSET_CUSTOM"),
 		};
 	
 		static const std::vector<std::string> custinvopt = {
-			Language->Get("VECTOR_GETSET_CUSTOM_BACKUP"),
-			Language->Get("VECTOR_GETSET_CUSTOM_RESTORE"),
-			Language->Get("FILE_DELETE"),  
+			Language::getInstance()->get("VECTOR_GETSET_CUSTOM_BACKUP"),
+			Language::getInstance()->get("VECTOR_GETSET_CUSTOM_RESTORE"),
+			Language::getInstance()->get("FILE_DELETE"),  
 		};
 
 		WrapLoc LocInv = { (u32 *)player->Inventory, sizeof(player->Inventory) };
 		WrapLoc LocLock = { (u32 *)player->InventoryItemLocks, sizeof(player->InventoryItemLocks) };
 
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), setopt);
+		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), setopt);
 
 		switch(optKb.Open()) {
 			default: return;
 			case 0: {
-				Wrap::Restore(PATH_PRESET, ".inv", Language->Get("GET_SET_RESTORE"), GetCustomView, false, &LocInv, &LocLock, nullptr); 
+				Wrap::Restore(PATH_PRESET, ".inv", Language::getInstance()->get("GET_SET_RESTORE"), GetCustomView, false, &LocInv, &LocLock, nullptr); 
 				Inventory::ReloadIcons();
 			} return;
 
@@ -502,7 +502,7 @@ namespace CTRPluginFramework {
 					default: return;
 					case 0: {
 						std::string filename = "";
-						Keyboard KB(Language->Get("GET_SET_DUMP"));
+						Keyboard KB(Language::getInstance()->get("GET_SET_DUMP"));
 						if(KB.Open(filename) == -1)
 							return;
 
@@ -510,7 +510,7 @@ namespace CTRPluginFramework {
 					} return;
 					
 					case 1: {			
-						Wrap::Restore(Utils::Format(PATH_ITEMSET, regionName.c_str()), ".inv", Language->Get("GET_SET_RESTORE"), GetCustomView, true, &LocInv, &LocLock, nullptr); 
+						Wrap::Restore(Utils::Format(PATH_ITEMSET, regionName.c_str()), ".inv", Language::getInstance()->get("GET_SET_RESTORE"), GetCustomView, true, &LocInv, &LocLock, nullptr); 
 						Inventory::ReloadIcons();
 					} return;
 					

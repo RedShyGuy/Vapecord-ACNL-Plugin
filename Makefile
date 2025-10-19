@@ -1,29 +1,33 @@
+#---------------------------------------------------------------------------------
 .SUFFIXES:
+#---------------------------------------------------------------------------------
 
 ifeq ($(strip $(DEVKITARM)),)
 $(error "Please set DEVKITARM in your environment. export DEVKITARM=<path to>devkitARM")
 endif
 
-TOPDIR 		?= 	$(CURDIR)
+export TOPDIR ?= $(CURDIR)
 include $(DEVKITARM)/3ds_rules
 
-CTRPFLIB	?=	$(CURDIR)/libctrpf/Library
+CTRPFLIB	?=	$(DEVKITPRO)/libctrpf
 
 TARGET		:= 	$(notdir $(CURDIR))
-PLGINFO 	:= 	CTRPluginFramework.plgInfo
 
 BUILD		:= 	Build
-INCLUDES	:= 	Includes
+INCLUDES	:= 	Includes \
+				Includes/Helpers \
+				Includes/LibCtrpfExtras
 SOURCES 	:= 	Sources \
                 Sources/Folders \
 				Sources/Folders/SeedingCodes \
 				Sources/Folders/ExtraCodes \
 				Sources/Folders/PlayerCodes \
 				Sources/Helpers \
-				Sources/Helpers/Personal \
-				Sources/Helpers/Other \
+				Sources/LibCtrpfExtras \
 				Sources/Plugin
-				
+
+PSF 		:= 	$(notdir $(TOPDIR)).plgInfo
+
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
@@ -51,7 +55,6 @@ LIBDIRS		:= 	$(CTRPFLIB) $(CTRULIB) $(PORTLIBS)
 #---------------------------------------------------------------------------------
 ifneq ($(BUILD),$(notdir $(CURDIR)))
 #---------------------------------------------------------------------------------
-
 export OUTPUT	:=	$(CURDIR)/$(TARGET)
 export TOPDIR	:=	$(CURDIR)
 export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
@@ -89,17 +92,24 @@ re: clean all
 
 #---------------------------------------------------------------------------------
 
-else
+relink:
+	@rm -f *.elf *.3gx
+	@$(MAKE)
 
-DEPENDS	:=	$(OFILES:.o=.d)
+#---------------------------------------------------------------------------------
+
+else
 
 #---------------------------------------------------------------------------------
 # main targets
 #---------------------------------------------------------------------------------
+
+DEPENDS	:=	$(OFILES:.o=.d)
+
+
 $(OUTPUT).3gx : $(OUTPUT).elf
 
 $(OUTPUT).elf : $(OFILES)
-
 #---------------------------------------------------------------------------------
 # you need a rule like this for each extension you use as binary data
 #---------------------------------------------------------------------------------
@@ -109,13 +119,12 @@ $(OUTPUT).elf : $(OFILES)
 	@$(bin2o)
 
 #---------------------------------------------------------------------------------
-.PRECIOUS: %.elf
 %.3gx: %.elf
-#---------------------------------------------------------------------------------
 	@echo creating $(notdir $@)
-	@3gxtool -s -d $(word 1, $^) $(TOPDIR)/$(PLGINFO) $@
+	@3gxtool -s $^ $(TOPDIR)/$(PSF) $@
 
 -include $(DEPENDS)
 
-#---------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------
 endif
+#---------------------------------------------------------------------------------------

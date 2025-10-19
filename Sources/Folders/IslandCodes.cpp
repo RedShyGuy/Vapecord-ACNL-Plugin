@@ -40,13 +40,13 @@ namespace CTRPluginFramework {
 	void UnlockIsland(MenuEntry *entry) {
 		ACNL_Player *player = Player::GetSaveData();
 		if(!player) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
 			return;
 		}
 
 		std::vector<std::string> cmnOpt =  {
-			Language->Get("UNLOCK_ISLAND_ISL"),
-			Language->Get("UNLOCK_ISLAND_CLUB")
+			Language::getInstance()->get("UNLOCK_ISLAND_ISL"),
+			Language::getInstance()->get("UNLOCK_ISLAND_CLUB")
 		};
 
 		bool IsON1 = player->PlayerFlags.UnlockedKappn == 1;
@@ -55,7 +55,7 @@ namespace CTRPluginFramework {
 		cmnOpt[0] = (IsON1 ? Color(pGreen) : Color(pRed)) << cmnOpt[0];
 		cmnOpt[1] = (IsON2 ? Color(pGreen) : Color(pRed)) << cmnOpt[1];
 		
-		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
+		Keyboard KB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), cmnOpt);
 
 		int op = KB.Open();
 		if(op < 0)
@@ -99,9 +99,9 @@ namespace CTRPluginFramework {
 
 		bool IsON = *(u32 *)Code::country.addr == 0xE3A000FF;
 
-		cmnOpt[0] = IsON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
+		cmnOpt[0] = IsON ? (Color(pGreen) << Language::getInstance()->get("VECTOR_ENABLED")) : (Color(pRed) << Language::getInstance()->get("VECTOR_DISABLED"));
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
+		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), cmnOpt);
 
 		int op = optKb.Open();
 		if(op < 0)
@@ -120,17 +120,17 @@ namespace CTRPluginFramework {
 //Country Spoof	
 	void Countryspoof(MenuEntry *entry) {
 		static const std::vector<std::string> countOpt = {
-			Language->Get("VECTOR_COUNTY_CHANGE"), 
-			Language->Get("VECTOR_DISABLE")
+			Language::getInstance()->get("VECTOR_COUNTY_CHANGE"), 
+			Language::getInstance()->get("VECTOR_DISABLE")
 		};
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), countOpt);
+		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), countOpt);
         static u8 input = 0;
 		
 		switch(optKb.Open()) {
 			default: break;	
 			case 0: 
-				if(Wrap::KB<u8>(Language->Get("ISLAND_COUNTRY_SET_ID"), true, 2, input, 0, onCountryChange)) 
+				if(Wrap::KB<u8>(Language::getInstance()->get("ISLAND_COUNTRY_SET_ID"), true, 2, input, 0, onCountryChange)) 
 					Process::Patch(Code::country.addr, 0xE3A00000 + input); 
 			break;	
 			case 1: 
@@ -147,7 +147,7 @@ namespace CTRPluginFramework {
 		SetItem.OnKeyboardEvent(ItemChange);
 
 		for(int i = 0; i < 4; ++i) {
-			SetItem.GetMessage() = Utils::Format(Language->Get("ISLAND_SHOP_MOD_ENTER_ID").c_str(), i + 1);
+			SetItem.GetMessage() = Utils::Format(Language::getInstance()->get("ISLAND_SHOP_MOD_ENTER_ID").c_str(), i + 1);
 
 			int res = SetItem.Open(*(u32 *)&ShopItem[i]);
 			if(res < 0)
@@ -200,11 +200,11 @@ namespace CTRPluginFramework {
 	}
 //Island Acre Mod Keyboard
 	void menuAcreMod(MenuEntry *entry) {
-		Keyboard kb(Language->Get("ENTER_ID"));
+		Keyboard kb(Language::getInstance()->get("ENTER_ID"));
 		kb.SetMaxLength(2);
 		kb.IsHexadecimal(true);
 		for(u8 i = 0; i < 16; ++i) {
-			kb.GetMessage() = Utils::Format(Language->Get("ISLAND_ACRE_ENTER_ID").c_str(), i + 1);
+			kb.GetMessage() = Utils::Format(Language::getInstance()->get("ISLAND_ACRE_ENTER_ID").c_str(), i + 1);
 
 			kb.Open(isl.acres[i], isl.acres[i]);
 		}
@@ -224,17 +224,17 @@ namespace CTRPluginFramework {
 	}
 //Island Building Mod Keyboard
 	void menuBuildingMod(MenuEntry *entry) {
-		Keyboard kb(Language->Get("ENTER_ID"));
+		Keyboard kb(Language::getInstance()->get("ENTER_ID"));
 		kb.SetMaxLength(2);
 		kb.IsHexadecimal(true);
 		for(u8 i = 0; i < 2; ++i) {
-			kb.GetMessage() = Language->Get("ISLAND_BUILDING_ENTER_ID") << Utils::Format(" %d", i + 1);
+			kb.GetMessage() = Language::getInstance()->get("ISLAND_BUILDING_ENTER_ID") << Utils::Format(" %d", i + 1);
 			kb.Open(isl.b[i].id, isl.b[i].id);
 
-			kb.GetMessage() = Language->Get("ISLAND_BUILDING_ENTER_X") << Utils::Format(" %d", i + 1);
+			kb.GetMessage() = Language::getInstance()->get("ISLAND_BUILDING_ENTER_X") << Utils::Format(" %d", i + 1);
 			kb.Open(isl.b[i].x, isl.b[i].x);
 
-			kb.GetMessage() = Language->Get("ISLAND_BUILDING_ENTER_Y") << Utils::Format(" %d", i + 1);
+			kb.GetMessage() = Language::getInstance()->get("ISLAND_BUILDING_ENTER_Y") << Utils::Format(" %d", i + 1);
 			kb.Open(isl.b[i].y, isl.b[i].y);
 		}
 	}
@@ -314,15 +314,15 @@ namespace CTRPluginFramework {
 	void IslandSaver(MenuEntry *entry) {
 		if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
 			if(!PlayerClass::GetInstance()->IsLoaded()) {
-				MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+				MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 				return;
 			}
 			if(!GameHelper::IsInRoom(0x68)) {
-				MessageBox(Language->Get("ISLAND_SAVER_NO")).SetClear(ClearScreen::Top)();
+				MessageBox(Language::getInstance()->get("ISLAND_SAVER_NO")).SetClear(ClearScreen::Top)();
 				return;
 			}
 
-			Keyboard KB(Language->Get("ISLAND_SAVER_DUMPER_DUMP"), std::vector<std::string>{ Language->Get("ISLAND_SAVER_BACKUP_ISLAND"), Language->Get("ISLAND_SAVER_RESTORE_ISLAND"), Language->Get("FILE_DELETE") });
+			Keyboard KB(Language::getInstance()->get("ISLAND_SAVER_DUMPER_DUMP"), std::vector<std::string>{ Language::getInstance()->get("ISLAND_SAVER_BACKUP_ISLAND"), Language::getInstance()->get("ISLAND_SAVER_RESTORE_ISLAND"), Language::getInstance()->get("FILE_DELETE") });
 			int index = KB.Open();
 			switch(index) {
 				default: break;
@@ -338,7 +338,7 @@ namespace CTRPluginFramework {
 					WrapLoc backupLoc = WrapLoc{ dumpVec.data(), static_cast<int>(dumpVec.size() * sizeof(u32)) };
 					
 					std::string filename = "";
-					Keyboard KB(Language->Get("ISLAND_SAVER_NAME_BACKUP"));
+					Keyboard KB(Language::getInstance()->get("ISLAND_SAVER_NAME_BACKUP"));
 
 					if(KB.Open(filename) == -1)
 						return;
@@ -355,7 +355,7 @@ namespace CTRPluginFramework {
 					std::string filename = "restoredump";
 					WrapLoc restoreLoc = WrapLoc{ fileData, static_cast<int>(arrSize * sizeof(u32)) };
 					
-					if(Wrap::Restore(Utils::Format(PATH_ISLAND, regionName.c_str()), ".dat", Language->Get("SAVE_RESTORE_SELECT"), nullptr, false, &restoreLoc, nullptr) == ExHandler::SUCCESS) {
+					if(Wrap::Restore(Utils::Format(PATH_ISLAND, regionName.c_str()), ".dat", Language::getInstance()->get("SAVE_RESTORE_SELECT"), nullptr, false, &restoreLoc, nullptr) == ExHandler::SUCCESS) {
 						for(size_t i = 0; i < arrSize; i++) {
 							IslandItems.push_back({ static_cast<u16>(fileData[i] & 0xFFFF), static_cast<u16>(fileData[i] >> 16) });
 						}

@@ -11,6 +11,22 @@ namespace CTRPluginFramework {
 
 	bool NonHacker::Accessible[5] = { true, true, true, true, true };
 
+	static inline std::string& Ltrim(std::string& str) {
+		auto it = std::find_if(str.begin(), str.end(), [](char ch) { return (!std::isspace(ch)); });
+		str.erase(str.begin(), it);
+		return str;
+	}
+
+	static inline std::string& Rtrim(std::string& str) {
+		auto it = std::find_if(str.rbegin(), str.rend(), [](char ch) { return (!std::isspace(ch)); });
+		str.erase(it.base(), str.end());
+		return str;
+	}
+
+	std::string& g_Trim(std::string& str) {
+		return (Ltrim(Rtrim(str)));
+	}
+
 	NonHacker::NonHacker(u8 playerID) {
 		pID = playerID;
 		Process::ReadString(GetPlayerMessageData() + 0x40C, pMessage, 0x64, StringFormat::Utf16);

@@ -26,8 +26,8 @@ namespace CTRPluginFramework {
 	float cspeed = 5.0;
 //Coordinate Mod Speed Changer Keyboard
 	void coordspeed(MenuEntry *entry) {
-		Keyboard kb(Language->Get("ENTER_ID"));
-		kb.GetMessage() = Utils::Format(Language->Get("COORD_MOD_ENTER_SPEED").c_str(), 5);
+		Keyboard kb(Language::getInstance()->get("ENTER_ID"));
+		kb.GetMessage() = Utils::Format(Language::getInstance()->get("COORD_MOD_ENTER_SPEED").c_str(), 5);
 		kb.IsHexadecimal(false);
 		kb.SetMaxLength(2);
 		kb.Open(cspeed);
@@ -147,7 +147,7 @@ namespace CTRPluginFramework {
 		}
 
         if(entry->Hotkeys[0].IsPressed()) {
-			if(Wrap::KB<u32>(Language->Get("WALK_PARTICLE_CHANGE_ENTER_ID"), true, 3, WalkParticleID, WalkParticleID)) {
+			if(Wrap::KB<u32>(Language::getInstance()->get("WALK_PARTICLE_CHANGE_ENTER_ID"), true, 3, WalkParticleID, WalkParticleID)) {
 				hook.Enable();
 			}
 		}
@@ -235,7 +235,7 @@ namespace CTRPluginFramework {
 		std::string& input = keyboard.GetInput();	
 		float ID = atof(input.c_str());
 		if(ID >= 15.0f) {
-			keyboard.SetError(Color::Red << Language->Get("SPEED_MOD_ERROR"));
+			keyboard.SetError(Color::Red << Language::getInstance()->get("SPEED_MOD_ERROR"));
 			return;
 		}
 	}
@@ -267,8 +267,8 @@ namespace CTRPluginFramework {
 	}
 //Player Speed Changer Keyboard
 	void menuSpeedMod(MenuEntry *entry) {
-		Keyboard kb(Language->Get("ENTER_ID"));
-		kb.GetMessage() = Utils::Format(Language->Get("SPEED_MOD_SPEED").c_str(), 1);
+		Keyboard kb(Language::getInstance()->get("ENTER_ID"));
+		kb.GetMessage() = Utils::Format(Language::getInstance()->get("SPEED_MOD_SPEED").c_str(), 1);
 		kb.IsHexadecimal(false);
 		kb.SetMaxLength(7);
 		kb.OnKeyboardEvent(SpeedCheck);
@@ -279,11 +279,11 @@ namespace CTRPluginFramework {
 		std::string& input = k.GetInput();	
 		u8 ID = StringToHex<u8>(input, 0xFF);
 		if(!IDList::RoomValid(ID & 0xFF)) {
-			k.SetError(Color::Red << Language->Get("INVALID_ID"));
+			k.SetError(Color::Red << Language::getInstance()->get("INVALID_ID"));
 			return;
 		}
 		
-		k.GetMessage() = Language->Get("ROOM_WARPING_ENTER_ID") << "\n\n" << IDList::GetRoomName(!input.empty() ? ID : 0);
+		k.GetMessage() = Language::getInstance()->get("ROOM_WARPING_ENTER_ID") << "\n\n" << IDList::GetRoomName(!input.empty() ? ID : 0);
 	}
 //Room Warper
 	void roomWarp(MenuEntry *entry) {	
@@ -294,7 +294,7 @@ namespace CTRPluginFramework {
 			}		
 			
 			u8 val;
-			if(Wrap::KB<u8>(Language->Get("ROOM_WARPING_ENTER_ID"), true, 2, val, 0, onRoomChange)) {		
+			if(Wrap::KB<u8>(Language::getInstance()->get("ROOM_WARPING_ENTER_ID"), true, 2, val, 0, onRoomChange)) {		
 				s8 res = GameHelper::RoomFunction(val, 1, 1, 0);	
 				if(res == 1)
 					OSD::Notify(Utils::Format("Warping to room %02X", val));

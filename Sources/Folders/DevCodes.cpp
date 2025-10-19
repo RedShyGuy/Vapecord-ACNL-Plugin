@@ -31,7 +31,7 @@ namespace CTRPluginFramework {
 
 		Keyboard CKB("text");
 
-		Keyboard OKB(Language->Get("KEY_CHOOSE_OPTION"));
+		Keyboard OKB(Language::getInstance()->get("KEY_CHOOSE_OPTION"));
 		OKB.Populate(customdopt);
 		switch(OKB.Open()) {
 			default: break;
@@ -87,11 +87,11 @@ namespace CTRPluginFramework {
 		std::vector<std::string> cmnOpt =  { "" };
 
 		if(Turbo_Call) 
-			cmnOpt[0] = Color(pGreen) << Language->Get("VECTOR_ENABLED");
+			cmnOpt[0] = Color(pGreen) << Language::getInstance()->get("VECTOR_ENABLED");
 		else 
-			cmnOpt[0] = Color(pRed) << Language->Get("VECTOR_DISABLED");
+			cmnOpt[0] = Color(pRed) << Language::getInstance()->get("VECTOR_DISABLED");
 
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
+		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"));
 		optKb.Populate(cmnOpt);
 		int op = optKb.Open();
 		if(op == -1)
@@ -107,7 +107,7 @@ namespace CTRPluginFramework {
 		u32 result;
 		static int size;
 
-        if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
+        if(Controller::IsKeysPressed(Key::R | Key::DPadRight)) {
             if(Wrap::KB<u32>("Enter address of function:", true, 8, funcaddress, funcaddress, nullptr)) {
 				Keyboard KB("Enter ID:");
 				KB.SetMaxLength(8);
@@ -141,7 +141,7 @@ namespace CTRPluginFramework {
 			}
         }
 
-		if(Turbo_Call ? Controller::IsKeysDown(entry->Hotkeys[1].GetKeys()) : Controller::IsKeysPressed(entry->Hotkeys[1].GetKeys())) {
+		if(Turbo_Call ? Controller::IsKeysDown(Key::R | Key::DPadDown) : Controller::IsKeysPressed(Key::R | Key::DPadDown)) {
 			if(!Process::CheckAddress(funcaddress))
 				return;	
 
@@ -169,7 +169,7 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO"))();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO"))();
 			return;
 		}
 		
@@ -188,7 +188,7 @@ namespace CTRPluginFramework {
 
 		WrapLoc locPlayer;
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
+		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"));
 		optKb.Populate(select);
 		switch(optKb.Open()) {
 			default: break;
@@ -204,7 +204,7 @@ namespace CTRPluginFramework {
 					}
 				}
 		
-				Keyboard pKB(Language->Get("KEY_SELECT_PLAYER"));
+				Keyboard pKB(Language::getInstance()->get("KEY_SELECT_PLAYER"));
 				pKB.Populate(pV);
 				int pChoice = pKB.Open();
 				

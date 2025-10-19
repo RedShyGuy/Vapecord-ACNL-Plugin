@@ -15,11 +15,11 @@ namespace CTRPluginFramework {
 //Name Changer | Player specific save code
 	void NameChanger(MenuEntry* entry) {
 		if(!Player::GetSaveData()) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 		
-		Keyboard keyboard(Language->Get("NAME_CHANGER_ENTER_NAME"));
+		Keyboard keyboard(Language::getInstance()->get("NAME_CHANGER_ENTER_NAME"));
 		std::string input = "";
 		keyboard.SetMaxLength(8);
 
@@ -34,7 +34,7 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
 			return;
 		}	
 
@@ -53,41 +53,41 @@ namespace CTRPluginFramework {
 		};
 		
 		static const std::vector<std::string> playeropt = {
-			Language->Get("VECTOR_PLAYER_MOD_HAIR_STYLE"),
-			Language->Get("VECTOR_PLAYER_MOD_HAIR_COLOR"),
-			Language->Get("VECTOR_PLAYER_MOD_EYE_STYLE"),
-			Language->Get("VECTOR_PLAYER_MOD_EYE_COLOR"),
+			Language::getInstance()->get("VECTOR_PLAYER_MOD_HAIR_STYLE"),
+			Language::getInstance()->get("VECTOR_PLAYER_MOD_HAIR_COLOR"),
+			Language::getInstance()->get("VECTOR_PLAYER_MOD_EYE_STYLE"),
+			Language::getInstance()->get("VECTOR_PLAYER_MOD_EYE_COLOR"),
 			
-			Language->Get("VECTOR_PLAYER_MOD_GENDER"),
-			Language->Get("VECTOR_PLAYER_MOD_TAN"),
-			Language->Get("VECTOR_PLAYER_MOD_OUTFIT")
+			Language::getInstance()->get("VECTOR_PLAYER_MOD_GENDER"),
+			Language::getInstance()->get("VECTOR_PLAYER_MOD_TAN"),
+			Language::getInstance()->get("VECTOR_PLAYER_MOD_OUTFIT")
 		};
 		
 		static const std::vector<std::string> genderopt = {
-			Language->Get("VECTOR_PLAYER_MOD_GENDER_MALE"), 
-			Language->Get("VECTOR_PLAYER_MOD_GENDER_FEMALE"),
+			Language::getInstance()->get("VECTOR_PLAYER_MOD_GENDER_MALE"), 
+			Language::getInstance()->get("VECTOR_PLAYER_MOD_GENDER_FEMALE"),
 		};
 		
 		static const std::vector<std::string> tanopt = {
-			Language->Get("VECTOR_PLAYER_MOD_TAN_DARK"),
-			Language->Get("VECTOR_PLAYER_MOD_TAN_TAN"),
-			Language->Get("VECTOR_PLAYER_MOD_TAN_FAIR"),
-			Language->Get("VECTOR_PLAYER_MOD_TAN_CUSTOM"),
+			Language::getInstance()->get("VECTOR_PLAYER_MOD_TAN_DARK"),
+			Language::getInstance()->get("VECTOR_PLAYER_MOD_TAN_TAN"),
+			Language::getInstance()->get("VECTOR_PLAYER_MOD_TAN_FAIR"),
+			Language::getInstance()->get("VECTOR_PLAYER_MOD_TAN_CUSTOM"),
 		};
 		
 		static const std::vector<std::string> outfitplayeropt = {
-			Language->Get("VECTOR_OUTFIT_HEADGEAR"), 
-			Language->Get("VECTOR_OUTFIT_GLASSES"), 
-			Language->Get("VECTOR_OUTFIT_SHIRT"), 
-			Language->Get("VECTOR_OUTFIT_PANTS"), 
-			Language->Get("VECTOR_OUTFIT_SOCKS"), 
-			Language->Get("VECTOR_OUTFIT_SHOES")
+			Language::getInstance()->get("VECTOR_OUTFIT_HEADGEAR"), 
+			Language::getInstance()->get("VECTOR_OUTFIT_GLASSES"), 
+			Language::getInstance()->get("VECTOR_OUTFIT_SHIRT"), 
+			Language::getInstance()->get("VECTOR_OUTFIT_PANTS"), 
+			Language::getInstance()->get("VECTOR_OUTFIT_SOCKS"), 
+			Language::getInstance()->get("VECTOR_OUTFIT_SHOES")
 		};
 
 		u8 ID = 0;
 		u16 item = 0;
 
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), playeropt);
+		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), playeropt);
 		
 		int choice = optKb.Open();
 		if(choice < 0)
@@ -96,7 +96,7 @@ namespace CTRPluginFramework {
 	//Standard Face Appearance Change
 		if(choice < 4) {
 			KeyRange::Set({ ValidID[choice][0], ValidID[choice][1] });
-			if(Wrap::KB<u8>(Language->Get("ENTER_ID") << Utils::Format("%02X -> %02X", ValidID[choice][0], ValidID[choice][1]), true, 2, ID, ID, ValidKeyboardCheck)) {
+			if(Wrap::KB<u8>(Language::getInstance()->get("ENTER_ID") << Utils::Format("%02X -> %02X", ValidID[choice][0], ValidID[choice][1]), true, 2, ID, ID, ValidKeyboardCheck)) {
 				switch(choice) {
 					case 0: player->PlayerFeatures.HairStyle = ID; goto update;
 					case 1: player->PlayerFeatures.HairColor = ID; goto update;
@@ -126,7 +126,7 @@ namespace CTRPluginFramework {
 				case 2: player->PlayerFeatures.Tan = 0; goto tanupdate;
 				case 3: {
 					u8 val = 0;
-					if(Wrap::KB<u8>(Language->Get("PLAYER_APPEARANCE_TAN_LEVEL") << "0x00 -> 0x0F", false, 2, val, 0)) 
+					if(Wrap::KB<u8>(Language::getInstance()->get("PLAYER_APPEARANCE_TAN_LEVEL") << "0x00 -> 0x0F", false, 2, val, 0)) 
 						player->PlayerFeatures.Tan = val;
 				} goto tanupdate;
 			}
@@ -140,7 +140,7 @@ namespace CTRPluginFramework {
 				return;
 
 			KeyRange::Set({ ValidID2[res][0], ValidID2[res][1] });
-			if(Wrap::KB<u16>(Language->Get("ENTER_ID") << Utils::Format("%04X -> %04X", ValidID2[res][0], ValidID2[res][1]), true, 4, item, item, ValidKeyboardCheck)) {
+			if(Wrap::KB<u16>(Language::getInstance()->get("ENTER_ID") << Utils::Format("%04X -> %04X", ValidID2[res][0], ValidID2[res][1]), true, 4, item, item, ValidKeyboardCheck)) {
 				switch(res) {
 					case 0: player->Hat.ID = item; break;
 					case 1: player->Accessory.ID = item; break;
@@ -167,16 +167,16 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
 			return;
 		}
 	
 		static const std::vector<std::string> randomopt = {
-			Language->Get("VECTOR_RANDOM_OUTFIT"),
-			Language->Get("VECTOR_RANDOM_PLAYER")
+			Language::getInstance()->get("VECTOR_RANDOM_OUTFIT"),
+			Language::getInstance()->get("VECTOR_RANDOM_PLAYER")
 		};	
 
-		Keyboard randkb(Language->Get("KEY_RANDOMIZE_PLAYER"), randomopt);
+		Keyboard randkb(Language::getInstance()->get("KEY_RANDOMIZE_PLAYER"), randomopt);
 		switch(randkb.Open()) {
 			default: break;			
 			case 0: 
@@ -211,24 +211,24 @@ namespace CTRPluginFramework {
 	void playerbackup(MenuEntry *entry) {
 		ACNL_Player *player = Player::GetSaveData();
 		if(!player) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
 			return;
 		}
 
 		WrapLoc locPlayer = { (u32 *)player, sizeof(ACNL_Player) };
 		
 		static const std::vector<std::string> backopt = {
-			Language->Get("VECTOR_RANDOM_BACKUP"),
-			Language->Get("VECTOR_RANDOM_RESTORE"),
-			Language->Get("FILE_DELETE"),  
+			Language::getInstance()->get("VECTOR_RANDOM_BACKUP"),
+			Language::getInstance()->get("VECTOR_RANDOM_RESTORE"),
+			Language::getInstance()->get("FILE_DELETE"),  
 		};
 
-		Keyboard backkb(Language->Get("KEY_CHOOSE_OPTION"), backopt);
+		Keyboard backkb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), backopt);
 		switch(backkb.Open()) {
 			default: break;		
 			case 0: {
 				std::string filename = "";
-				Keyboard KB(Language->Get("RANDOM_PLAYER_DUMP"));
+				Keyboard KB(Language::getInstance()->get("RANDOM_PLAYER_DUMP"));
 
 				if(KB.Open(filename) == -1)
 					return;
@@ -236,7 +236,7 @@ namespace CTRPluginFramework {
 				Wrap::Dump(Utils::Format(PATH_PLAYER, regionName.c_str()), filename, ".player", &locPlayer, nullptr);
 			} break;
 			case 1: {
-				Wrap::Restore(Utils::Format(PATH_PLAYER, regionName.c_str()), ".player", Language->Get("RANDOM_PLAYER_RESTORE"), nullptr, true, &locPlayer, nullptr); 
+				Wrap::Restore(Utils::Format(PATH_PLAYER, regionName.c_str()), ".player", Language::getInstance()->get("RANDOM_PLAYER_RESTORE"), nullptr, true, &locPlayer, nullptr); 
 				Player::UpdateTan();
 				Player::UpdateStyle();
 			} break;	
@@ -250,13 +250,13 @@ namespace CTRPluginFramework {
 	void tpcmessage(MenuEntry* entry) {
 		ACNL_Player *player = Player::GetSaveData();
 		if(!player) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 		
 		std::string input = "";
 
-		Keyboard KB(Language->Get("TPC_MESSAGE_ENTER_NAME"));
+		Keyboard KB(Language::getInstance()->get("TPC_MESSAGE_ENTER_NAME"));
 		KB.SetMaxLength(26);
 
 		if(KB.Open(input) >= 0) {
@@ -268,32 +268,32 @@ namespace CTRPluginFramework {
 	void tpc(MenuEntry *entry) {
 		ACNL_Player *player = Player::GetSaveData();
 		if(!player) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 
 		static const std::vector<std::string> g_player = {
-			Language->Get("VECTOR_PLAYER_1"), 
-			Language->Get("VECTOR_PLAYER_2"), 
-			Language->Get("VECTOR_PLAYER_3"), 
-			Language->Get("VECTOR_PLAYER_4"), 
+			Language::getInstance()->get("VECTOR_PLAYER_1"), 
+			Language::getInstance()->get("VECTOR_PLAYER_2"), 
+			Language::getInstance()->get("VECTOR_PLAYER_3"), 
+			Language::getInstance()->get("VECTOR_PLAYER_4"), 
 		};
 		
 		static const std::vector<std::string> tpcselectopt = {
-			Language->Get("VECTOR_TPCDUMP_DUMP"),
-			Language->Get("VECTOR_TPCDUMP_RESTORE"),
-			Language->Get("FILE_DELETE"),  
+			Language::getInstance()->get("VECTOR_TPCDUMP_DUMP"),
+			Language::getInstance()->get("VECTOR_TPCDUMP_RESTORE"),
+			Language::getInstance()->get("FILE_DELETE"),  
 		};
 
 		WrapLoc locTPC;
 			
-		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), tpcselectopt);
+		Keyboard KB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), tpcselectopt);
 
 		switch(KB.Open()) {
 			default: break;
 			
 			case 0: {
-				Keyboard PKB(Language->Get("KEY_SELECT_PLAYER"), g_player);
+				Keyboard PKB(Language::getInstance()->get("KEY_SELECT_PLAYER"), g_player);
 
 				int index = PKB.Open();
 				if(index < 0)
@@ -302,7 +302,7 @@ namespace CTRPluginFramework {
 				player = Player::GetSaveData(index);
 				if(player) {
 					std::string filename = "";
-					Keyboard KB(Language->Get("TPC_DUMPER_NAME"));
+					Keyboard KB(Language::getInstance()->get("TPC_DUMPER_NAME"));
 
 					if(KB.Open(filename) < 0)
 						return;
@@ -315,7 +315,7 @@ namespace CTRPluginFramework {
 			case 1: 
 				player = Player::GetSaveData();
 				locTPC = { (u32 *)player->TPCPic, sizeof(player->TPCPic) };
-				Wrap::Restore(Utils::Format(PATH_TPC, regionName.c_str()), ".jpg", Language->Get("TPC_DUMPER_RESTORE"), nullptr, true, &locTPC, nullptr);
+				Wrap::Restore(Utils::Format(PATH_TPC, regionName.c_str()), ".jpg", Language::getInstance()->get("TPC_DUMPER_RESTORE"), nullptr, true, &locTPC, nullptr);
 			break;
 			
 			case 2: 
@@ -328,38 +328,38 @@ namespace CTRPluginFramework {
 	void DesignDumper(MenuEntry *entry) {
 		ACNL_Player *player = Player::GetSaveData();
 		if(!player) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 		
 		std::vector<std::string> designslots;
 		
 		for(int i = 1; i <= 10; ++i)
-			designslots.push_back(Utils::Format(Language->Get("VECTOR_DESIGN").c_str(), i));
+			designslots.push_back(Utils::Format(Language::getInstance()->get("VECTOR_DESIGN").c_str(), i));
 		
 		static const std::vector<std::string> designselect = {
-			Language->Get("VECTOR_DESIGNDUMP_DUMP"), 
-			Language->Get("VECTOR_DESIGNDUMP_RESTORE"), 
-			Language->Get("FILE_DELETE"),  
+			Language::getInstance()->get("VECTOR_DESIGNDUMP_DUMP"), 
+			Language::getInstance()->get("VECTOR_DESIGNDUMP_RESTORE"), 
+			Language::getInstance()->get("FILE_DELETE"),  
 		};
 
 		WrapLoc locPattern;
 		int dSlot = 0;
 		
-		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), designselect);
+		Keyboard KB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), designselect);
 		
 		switch(KB.Open()) {
 			default: break;
 			
 			case 0: { 
-				Keyboard DKB(Language->Get("KEYBOARD_DESIGNDUMP"), designslots);
+				Keyboard DKB(Language::getInstance()->get("KEYBOARD_DESIGNDUMP"), designslots);
 				
 				dSlot = DKB.Open();
 				if(dSlot < 0)
 					return;
 
 				std::string filename = "";
-				Keyboard KB(Language->Get("DESIGN_DUMP_NAME"));
+				Keyboard KB(Language::getInstance()->get("DESIGN_DUMP_NAME"));
 
 				if(KB.Open(filename) < 0)
 					return;
@@ -369,14 +369,14 @@ namespace CTRPluginFramework {
 			} break;
 			
 			case 1: {
-				Keyboard DKB(Language->Get("KEYBOARD_DESIGNDUMP"), designslots);
+				Keyboard DKB(Language::getInstance()->get("KEYBOARD_DESIGNDUMP"), designslots);
 				
 				dSlot = DKB.Open();
 				if(dSlot < 0)
 					return;
 
 				locPattern = { (u32 *)&player->Patterns[player->PatternOrder[dSlot]], sizeof(ACNL_Pattern) };
-				Wrap::Restore(Utils::Format(PATH_DESIGN, regionName.c_str()), ".acnl", Language->Get("DESIGN_DUMP_RESTORE"), nullptr, true, &locPattern, nullptr);
+				Wrap::Restore(Utils::Format(PATH_DESIGN, regionName.c_str()), ".acnl", Language::getInstance()->get("DESIGN_DUMP_RESTORE"), nullptr, true, &locPattern, nullptr);
 				Player::ReloadDesign(player->PatternOrder[dSlot]);
 			} break;
 			
@@ -390,14 +390,14 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 		
 		static const std::vector<std::string> emoteopt = {
-			Language->Get("VECTOR_EMOTIONLIST_FILL_LIST"),
-			Language->Get("VECTOR_EMOTIONLIST_FILL_EMOTION"),
-			Language->Get("VECTOR_EMOTIONLIST_CLEAR_LIST"),
+			Language::getInstance()->get("VECTOR_EMOTIONLIST_FILL_LIST"),
+			Language::getInstance()->get("VECTOR_EMOTIONLIST_FILL_EMOTION"),
+			Language::getInstance()->get("VECTOR_EMOTIONLIST_CLEAR_LIST"),
 		};
 
 		static Address emoticons(0x8902A4, 0x88F29C, 0x88F130, 0x88F130, 0x889550, 0x888550, 0x888500, 0x888500);
@@ -406,7 +406,7 @@ namespace CTRPluginFramework {
 		if(!gameEmotes)
 			return;
 		
-		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), emoteopt);
+		Keyboard KB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), emoteopt);
 	
 		switch(KB.Open()) {
 			default: break;
@@ -415,7 +415,7 @@ namespace CTRPluginFramework {
 			break; 
 			case 1: {
 				u8 emotion = 0; 
-				Keyboard KB(Language->Get("EMOTION_LIST_TYPE_ID"));
+				Keyboard KB(Language::getInstance()->get("EMOTION_LIST_TYPE_ID"));
 				KB.IsHexadecimal(true);
 				
 				if(KB.Open(emotion) < 0)
@@ -434,13 +434,13 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 		
 		static const std::vector<std::string> enzyopt = {
-			Language->Get("VECTOR_ENZY_FILL"),
-			Language->Get("VECTOR_ENZY_CLEAR"),
+			Language::getInstance()->get("VECTOR_ENZY_FILL"),
+			Language::getInstance()->get("VECTOR_ENZY_CLEAR"),
 		};
 
 		static const Item_Categories EncyclopediaID[3] = { 
@@ -448,7 +448,7 @@ namespace CTRPluginFramework {
 			Item_Categories::SeaCreatures
 		};
 		
-		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), enzyopt);
+		Keyboard KB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), enzyopt);
 		
 		switch(KB.Open()) {
 			default: break;
@@ -483,11 +483,11 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 
-		Keyboard kb(Language->Get("DREAM_CODE_ENTER_ID"));
+		Keyboard kb(Language::getInstance()->get("DREAM_CODE_ENTER_ID"));
 		kb.IsHexadecimal(true);
 		kb.DisplayTopScreen = true;
 		
@@ -510,7 +510,7 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 		
@@ -518,9 +518,9 @@ namespace CTRPluginFramework {
 		
 		bool IsON = player->PlayerFlags.CanUseCensusMenu == 1;
 
-		cmnOpt[0] = IsON ? (Color(pGreen) << Language->Get("VECTOR_ENABLED")) : (Color(pRed) << Language->Get("VECTOR_DISABLED"));
+		cmnOpt[0] = IsON ? (Color(pGreen) << Language::getInstance()->get("VECTOR_ENABLED")) : (Color(pRed) << Language::getInstance()->get("VECTOR_DISABLED"));
 		
-		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), cmnOpt);
+		Keyboard KB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), cmnOpt);
 
 		int op = KB.Open();
 		if(op < 0)
@@ -536,18 +536,18 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 		
 		static const std::vector<std::string> songopt = {
-			Language->Get("VECTOR_ENZY_FILL"),
-			Language->Get("VECTOR_ENZY_CLEAR"),
+			Language::getInstance()->get("VECTOR_ENZY_FILL"),
+			Language::getInstance()->get("VECTOR_ENZY_CLEAR"),
 		};
 
 		static const std::pair<u16, u16> Pairs = { 0x212B, 0x2186 };
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), songopt);
+		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), songopt);
 		
 		switch(optKb.Open()) {
 			default: break;
@@ -571,13 +571,13 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 		
 		static const std::vector<std::string> songopt = {
-			Language->Get("VECTOR_ENZY_FILL"),
-			Language->Get("VECTOR_ENZY_CLEAR"),
+			Language::getInstance()->get("VECTOR_ENZY_FILL"),
+			Language::getInstance()->get("VECTOR_ENZY_CLEAR"),
 		};	
 
 		static const Item_Categories CatalogID[15] = {
@@ -591,7 +591,7 @@ namespace CTRPluginFramework {
 			Item_Categories::AnalyzedFossils
 		};
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), songopt);
+		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), songopt);
 		
 		switch(optKb.Open()) {
 			default: break;

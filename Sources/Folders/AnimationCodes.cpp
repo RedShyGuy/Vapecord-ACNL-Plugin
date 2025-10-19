@@ -63,7 +63,7 @@ namespace CTRPluginFramework {
 					pV[i] = pColor[i] << "Player: " << std::to_string(i);
 			}
 			
-			Keyboard pKB(Language->Get("KEY_SELECT_PLAYER"), pV);
+			Keyboard pKB(Language::getInstance()->get("KEY_SELECT_PLAYER"), pV);
 			
 			int pChoice = pKB.Open();
 			if(pChoice >= 0) {
@@ -121,7 +121,7 @@ namespace CTRPluginFramework {
 		std::string& input = keyboard.GetInput();	
 		u8 ID = StringToHex<u8>(input, 0xFF);
 		if(!IDList::AnimationValid((ID & 0xFF))) {
-			keyboard.SetError(Color::Red << Language->Get("INVALID_ID"));
+			keyboard.SetError(Color::Red << Language::getInstance()->get("INVALID_ID"));
 			return;
 		}
 	}
@@ -129,7 +129,7 @@ namespace CTRPluginFramework {
 		std::string& input = keyboard.GetInput();	
 		u16 ID = StringToHex<u16>(input, 0xFFFF);
 		if(!IDList::SnakeValid((ID & 0xFFFF))) {
-			keyboard.SetError(Color::Red << Language->Get("INVALID_ID"));
+			keyboard.SetError(Color::Red << Language::getInstance()->get("INVALID_ID"));
 			return;
 		}
 	}
@@ -137,7 +137,7 @@ namespace CTRPluginFramework {
 		std::string& input = keyboard.GetInput();	
 		u8 ID = StringToHex<u8>(input, 0xFF);
 		if(!IDList::EmotionValid((ID & 0xFF))) {
-			keyboard.SetError(Color::Red << Language->Get("INVALID_ID"));
+			keyboard.SetError(Color::Red << Language::getInstance()->get("INVALID_ID"));
 			return;
 		}
 	}
@@ -145,7 +145,7 @@ namespace CTRPluginFramework {
 		std::string& input = keyboard.GetInput();	
 		u16 ID = StringToHex<u16>(input, 0xFFFF);
 		if(!IDList::MusicValid((ID & 0xFFFF))) {
-			keyboard.SetError(Color::Red << Language->Get("INVALID_ID"));
+			keyboard.SetError(Color::Red << Language::getInstance()->get("INVALID_ID"));
 			return;
 		}
 	}
@@ -197,25 +197,25 @@ namespace CTRPluginFramework {
 			switch(setmode) {
 				case 0: return;
 				case 1: 
-					Wrap::KB<u8>(Language->Get("ANIMATIONS_ANIM_NOTE"), true, 2, a_AnimID, a_AnimID, AnimChange);
+					Wrap::KB<u8>(Language::getInstance()->get("ANIMATIONS_ANIM_NOTE"), true, 2, a_AnimID, a_AnimID, AnimChange);
 				break;
 				case 2:
-					Wrap::KB<u32>(Language->Get("ANIMATIONS_TOOL_NOTE"), true, 8, *(u32 *)&a_ItemID, *(u32 *)&a_ItemID, ItemChange);
+					Wrap::KB<u32>(Language::getInstance()->get("ANIMATIONS_TOOL_NOTE"), true, 8, *(u32 *)&a_ItemID, *(u32 *)&a_ItemID, ItemChange);
 				break;
 				case 3:
-					Wrap::KB<u16>(Language->Get("ANIMATIONS_SNAKE_NOTE"), true, 3, a_SnakeID, a_SnakeID, SnakeChange);
+					Wrap::KB<u16>(Language::getInstance()->get("ANIMATIONS_SNAKE_NOTE"), true, 3, a_SnakeID, a_SnakeID, SnakeChange);
 				break;
 				case 4:
-					Wrap::KB<u8>(Language->Get("ANIMATIONS_EMOTE_NOTE"), true, 2, a_EmoteID, a_EmoteID, EmotionChange);
+					Wrap::KB<u8>(Language::getInstance()->get("ANIMATIONS_EMOTE_NOTE"), true, 2, a_EmoteID, a_EmoteID, EmotionChange);
 				break;
 				case 5:
-					Wrap::KB<u16>(Language->Get("ANIMATIONS_SOUND_NOTE"), true, 3, a_SoundID, a_SoundID, MusicChange);
+					Wrap::KB<u16>(Language::getInstance()->get("ANIMATIONS_SOUND_NOTE"), true, 3, a_SoundID, a_SoundID, MusicChange);
 				break;
 				case 6: {
 					//They cant really crash so no valid check
-					Wrap::KB<u8>(Language->Get("ANIMATIONS_APPEAR_NOTE1"), true, 2, a_AppearanceID[0], a_AppearanceID[0]);
-					Wrap::KB<u8>(Language->Get("ANIMATIONS_APPEAR_NOTE2"), true, 2, a_AppearanceID[1], a_AppearanceID[1]);
-					Wrap::KB<u8>(Language->Get("ANIMATIONS_APPEAR_NOTE3"), true, 2, a_AppearanceID[2], a_AppearanceID[2]);
+					Wrap::KB<u8>(Language::getInstance()->get("ANIMATIONS_APPEAR_NOTE1"), true, 2, a_AppearanceID[0], a_AppearanceID[0]);
+					Wrap::KB<u8>(Language::getInstance()->get("ANIMATIONS_APPEAR_NOTE2"), true, 2, a_AppearanceID[1], a_AppearanceID[1]);
+					Wrap::KB<u8>(Language::getInstance()->get("ANIMATIONS_APPEAR_NOTE3"), true, 2, a_AppearanceID[2], a_AppearanceID[2]);
 				} break;
 			}
 		}

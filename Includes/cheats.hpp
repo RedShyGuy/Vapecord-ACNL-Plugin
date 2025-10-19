@@ -4,6 +4,7 @@
 #include <3ds.h>
 #include <CTRPluginFramework.hpp>
 #include "Helpers/GameStructs.hpp"
+#include "Language.hpp"
 
 extern CTRPluginFramework::Item PickupSeederItemID;
 
@@ -188,7 +189,6 @@ namespace CTRPluginFramework {
 	void Weathermod(MenuEntry *entry);
 	void auroralights(MenuEntry *entry);
 	void ReloadRoomCheat(MenuEntry *entry);
-	void QuickMenuEntry(MenuEntry *entry);
 	void morenumberisland(MenuEntry *entry);
 	void fovlarge(MenuEntry *entry);
 	void roomSeeder(MenuEntry *entry);
@@ -238,8 +238,6 @@ namespace CTRPluginFramework {
 	
 //Helper functions
   //Located in cheats.cpp
-	void rainbow(MenuEntry *entry);
-
 	void SendPlayerData(Time time);
 }
 

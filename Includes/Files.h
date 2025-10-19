@@ -5,16 +5,8 @@
 #define PATH_ACRE		    "E:/Vapecord/Data/Acre/acre%X.bin"
 #define PATH_PICON		    "E:/Vapecord/Data/PlayerIcon/Player%d.bin"
 #define ITEMLIST            "E:/Vapecord/Data/item.txt"
-#define PATH_FWKCOLOR       "E:/Vapecord/Data/FWKColors.txt"
-#define PATH_CUSTOMCOLOR    "E:/Vapecord/Data/color.txt"
 
-#define PATH_JAPANESETEXT   "E:/Vapecord/Data/Language/japanese.txt"
-#define PATH_ENGLISHTEXT    "E:/Vapecord/Data/Language/english.txt"
-#define PATH_FRENCHTEXT     "E:/Vapecord/Data/Language/french.txt"
-#define PATH_GERMANTEXT     "E:/Vapecord/Data/Language/german.txt"
-#define PATH_ITALIANTEXT    "E:/Vapecord/Data/Language/italian.txt"
-#define PATH_SPANISHTEXT    "E:/Vapecord/Data/Language/spanish.txt"
-#define PATH_KOREANTEXT     "E:/Vapecord/Data/Language/korean.txt"
+#define PATH_LANGUAGE_BIN   "E:/Vapecord/Data/language.bin"
 
 #define PATH_ISLAND	        "E:/Vapecord/%s/Island"
 #define PATH_BULLETIN	    "E:/Vapecord/%s/Bulletin"
@@ -27,9 +19,7 @@
 #define PATH_CRASH		    "E:/Vapecord/%s/CrashDump"
 #define PATH_COLOR		    "E:/Vapecord/%s/color.bin"
 #define PATH_CBOARD		    "E:/Vapecord/%s/clipboard.txt"
-#define PATH_QUICKM		    "E:/Vapecord/%s/quickmenu.bin"
-#define PATH_HIDECH         "E:/Vapecord/%s/hidden.bin"
-#define CONFIGNAME		    "E:/Vapecord/%s/plugin.bin"
+#define CONFIGNAME		    "E:/Vapecord/%s/set_language.bin"
 
 #define V_STANDARD          "E:/Vapecord"
 #define V_DIRECTORY	        "E:/Vapecord/%s"

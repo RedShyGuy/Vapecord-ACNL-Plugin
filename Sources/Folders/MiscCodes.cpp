@@ -10,7 +10,6 @@
 #include "Helpers/Dropper.hpp"
 #include "Helpers/Inventory.hpp"
 #include "Helpers/GameKeyboard.hpp"
-#include "Helpers/QuickMenu.hpp"
 #include "Helpers/PluginMenuData.hpp"
 #include "NonHacker.hpp"
 #include "Color.h"
@@ -31,12 +30,12 @@ namespace CTRPluginFramework {
 //disable commands
 	void disablecommands(MenuEntry *entry) {
 		std::vector<std::string> noncommands = {
-			Language->Get("VECTOR_ANIM_COMM"),
-			Language->Get("VECTOR_EMOT_COMM"),
-			Language->Get("VECTOR_SNAK_COMM"),
-			Language->Get("VECTOR_MUSI_COMM"),
-			Language->Get("VECTOR_ITEM_COMM"),
-			Language->Get("VECTOR_ALL_COMM")
+			Language::getInstance()->get("VECTOR_ANIM_COMM"),
+			Language::getInstance()->get("VECTOR_EMOT_COMM"),
+			Language::getInstance()->get("VECTOR_SNAK_COMM"),
+			Language::getInstance()->get("VECTOR_MUSI_COMM"),
+			Language::getInstance()->get("VECTOR_ITEM_COMM"),
+			Language::getInstance()->get("VECTOR_ALL_COMM")
 		};
 
 		for(int i = 0; i < 5; ++i) 
@@ -44,7 +43,7 @@ namespace CTRPluginFramework {
 
 		noncommands[5] = (AllOFF ? Color(pGreen) : Color(pRed)) << noncommands[5];
 
-		Keyboard keyboard(Language->Get("COMM_CHOOSE"), noncommands);
+		Keyboard keyboard(Language::getInstance()->get("COMM_CHOOSE"), noncommands);
 
         int choice = keyboard.Open();
         if(choice < 0)
@@ -78,7 +77,7 @@ namespace CTRPluginFramework {
 //Change Tool Animation
 	void tooltype(MenuEntry *entry) {
 		static Hook hook;
-		if(Wrap::KB<u8>(Language->Get("TOOL_ANIM_ENTER_ANIM"), true, 2, toolTypeAnimID, toolTypeAnimID)) {
+		if(Wrap::KB<u8>(Language::getInstance()->get("TOOL_ANIM_ENTER_ANIM"), true, 2, toolTypeAnimID, toolTypeAnimID)) {
 			if(toolTypeAnimID == 0) { //if switched OFF
 				hook.Disable();
 				return;
@@ -95,10 +94,10 @@ namespace CTRPluginFramework {
 //Change Gametype
 	void mgtype(MenuEntry *entry) {
 		std::vector<std::string> gametype = {
-			Language->Get("VECTOR_GAMETYPE_OFFLINE"),
-			Language->Get("VECTOR_GAMETYPE_ONLINE1"),
-			Language->Get("VECTOR_GAMETYPE_ONLINE2"),
-			Language->Get("VECTOR_GAMETYPE_DREAM"),
+			Language::getInstance()->get("VECTOR_GAMETYPE_OFFLINE"),
+			Language::getInstance()->get("VECTOR_GAMETYPE_ONLINE1"),
+			Language::getInstance()->get("VECTOR_GAMETYPE_ONLINE2"),
+			Language::getInstance()->get("VECTOR_GAMETYPE_DREAM"),
 		};
 
 		bool IsON;
@@ -108,7 +107,7 @@ namespace CTRPluginFramework {
 			gametype[i] = (IsON ? Color(pGreen) : Color(pRed)) << gametype[i];
 		}
 		
-        Keyboard keyboard(Language->Get("GAME_TYPE_CHOOSE"), gametype);
+        Keyboard keyboard(Language::getInstance()->get("GAME_TYPE_CHOOSE"), gametype);
 
         int gametchoice = keyboard.Open();
         if(gametchoice < 0)	
@@ -129,12 +128,12 @@ namespace CTRPluginFramework {
 		static const Address weather(0x62FC30, 0x62F158, 0x62EC68, 0x62EC68, 0x62E728, 0x62E728, 0x62E2D0, 0x62E2D0);
 		
 		std::vector<std::string> weatheropt = {
-			Language->Get("VECTOR_WEATHER_SUNNY"),
-			Language->Get("VECTOR_WEATHER_CLOUDY"),
-			Language->Get("VECTOR_WEATHER_RAINY"),
-			Language->Get("VECTOR_WEATHER_STORMY"),
-			Language->Get("VECTOR_WEATHER_SNOWY"),
-			Language->Get("VECTOR_DISABLE")
+			Language::getInstance()->get("VECTOR_WEATHER_SUNNY"),
+			Language::getInstance()->get("VECTOR_WEATHER_CLOUDY"),
+			Language::getInstance()->get("VECTOR_WEATHER_RAINY"),
+			Language::getInstance()->get("VECTOR_WEATHER_STORMY"),
+			Language::getInstance()->get("VECTOR_WEATHER_SNOWY"),
+			Language::getInstance()->get("VECTOR_DISABLE")
 		};
 		
 		static constexpr u32 Weathers[5] = {
@@ -148,7 +147,7 @@ namespace CTRPluginFramework {
 			weatheropt[i] = (IsON ? Color(pGreen) : Color(pRed)) << weatheropt[i];
 		}
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"), weatheropt);
+		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), weatheropt);
 
 		int op = optKb.Open();
 		if(op < 0)
@@ -224,97 +223,6 @@ namespace CTRPluginFramework {
 		cheatDesc.clear();
 		cheatDesc += ToggleDrawMode(Render::UNDERLINE) + "Cheat Description:\n" + ToggleDrawMode(Render::UNDERLINE);
 		cheatDesc += cogNotes[event.selectedIndex];
-	}
-
-	void QuickMenuOptions(void) {
-		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), std::vector<std::string>{ "Add Cog-Cheat", "Remove Cog-Cheat" });
-		IsOnStartMenu = false;
-		int res = KB.Open();
-		if(res < 0)
-			return;
-
-		std::vector<MenuEntry *> cogEntrys;
-        QuickMenu::ListAvailableCogEntrys(cogEntrys);
-
-		std::vector<std::string> CogNames;
-
-		cogNotes.clear();
-	//add entry to quick menu
-		if(res == 0) {
-		//all possible entrys have been added to the quick menu
-			if(cogEntrys.size() <= 0) {
-				MessageBox("Error", "You have already added every Cog-Cheat to the Quick Menu!").SetClear(ClearScreen::Top)();
-				return;
-			}
-
-		//push all existing menu entrys into name/note vector
-			for(auto edata : cogEntrys) {
-				CogNames.push_back(edata->Name());
-				cogNotes.push_back(edata->Note());
-			}
-
-			KB.Populate(CogNames);
-			KB.OnKeyboardEvent(CogCheatCallback);
-			res = KB.Open();
-
-			if(res >= 0) {
-				MessageBox(Utils::Format("Added %s to the Quick Menu!", Color::RemoveColor(cogEntrys[res]->Name()).c_str())).SetClear(ClearScreen::Top)();
-			
-				QuickMenu::AddEntry(cogEntrys[res]);
-			}
-		}
-
-		else if(res == 1) {
-		//quick menu is empty and can't remove any entrys
-			if(QuickMenu::obj_QuickMenu.size() <= 0) {
-				MessageBox("Error", "The Quick Menu is empty!").SetClear(ClearScreen::Top)();
-				return;
-			}
-
-		//push all existing quick menu entrys into name/note vector
-			for(auto edata : QuickMenu::obj_QuickMenu) {
-				CogNames.push_back(edata->Name());
-				cogNotes.push_back(edata->Note());
-			}
-
-			KB.Populate(CogNames);
-			KB.OnKeyboardEvent(CogCheatCallback);
-			res = KB.Open();
-
-			if(res >= 0) {
-				MessageBox(Utils::Format("Removed %s from the Quick Menu!", Color::RemoveColor(QuickMenu::obj_QuickMenu[res]->Name()).c_str())).SetClear(ClearScreen::Top)();
-
-				QuickMenu::RemoveEntry(QuickMenu::obj_QuickMenu[res]);
-			}
-		}
-	}
-
-//Quick Menu
-	void QuickMenuEntry(MenuEntry *entry) {	
-		std::vector<std::string> QMEntryNames;
-		
-		if(entry->Hotkeys[0].IsPressed()) {
-			cogNotes.clear();
-			for(auto edata : QuickMenu::obj_QuickMenu) {
-				QMEntryNames.push_back(edata->Name());
-				cogNotes.push_back(edata->Note());
-			}
-
-			if(QMEntryNames.empty()) {
-				QuickMenuOptions();
-				return;
-			}
-
-			Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), QMEntryNames);
-			KB.OnKeyboardEvent(CogCheatCallback);
-			IsOnStartMenu = true;
-			int res = KB.Open();
-			cogNotes.clear();
-			if(res < 0)
-				return;
-
-			QuickMenu::obj_QuickMenu[res]->GetMenuFunc()(entry);
-		}	
 	}
 //More Than 3 Numbers On Island
 	void morenumberisland(MenuEntry *entry) {
@@ -435,7 +343,7 @@ namespace CTRPluginFramework {
         static u16 input = 0; 
 		
         if(entry->Hotkeys[0].IsDown()) {
-			if(Wrap::KB<u16>(Language->Get("BEANS_PARTICLE_ENTER_ID"), true, 3, input, 0)) 
+			if(Wrap::KB<u16>(Language::getInstance()->get("BEANS_PARTICLE_ENTER_ID"), true, 3, input, 0)) 
 				Process::Patch(beans.addr, input);
 		}
 		

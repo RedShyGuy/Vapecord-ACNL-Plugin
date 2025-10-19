@@ -111,7 +111,7 @@ namespace CTRPluginFramework {
 /*
 	void pLoaderEntry(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
 			return;
 		}
 
@@ -136,7 +136,7 @@ namespace CTRPluginFramework {
 			}
 		}
 		
-		Keyboard pKB(Language->Get("KEY_SELECT_PLAYER"), pV);
+		Keyboard pKB(Language::getInstance()->get("KEY_SELECT_PLAYER"), pV);
 		
 		int pChoice = pKB.Open();
 		if((pChoice >= 0) && (pV[pChoice] != Color::Silver << "-Empty-"))
@@ -183,9 +183,9 @@ namespace CTRPluginFramework {
 
 	void SaveColor(MenuEntry *entry) {
 		std::vector<std::string> opt = {
-			Language->Get("CUSTOM_SET_HAIR"),
-			Language->Get("CUSTOM_SET_EYE"),
-			Language->Get("CUSTOM_SAVE"),
+			Language::getInstance()->get("CUSTOM_SET_HAIR"),
+			Language::getInstance()->get("CUSTOM_SET_EYE"),
+			Language::getInstance()->get("CUSTOM_SAVE"),
 		};
 
 		Keyboard KB("", opt);
@@ -193,7 +193,7 @@ namespace CTRPluginFramework {
 		switch(KB.Open()) {
 			default: break;
 			case 0: {
-				Keyboard kb(Language->Get("CUSTOM_ENTER_HAIR"));
+				Keyboard kb(Language::getInstance()->get("CUSTOM_ENTER_HAIR"));
 				kb.IsHexadecimal(true);
 
 				int res = kb.Open(rval1);
@@ -204,7 +204,7 @@ namespace CTRPluginFramework {
 			} break;
 
 			case 1: {
-				Keyboard kb(Language->Get("CUSTOM_ENTER_EYE"));
+				Keyboard kb(Language::getInstance()->get("CUSTOM_ENTER_EYE"));
 				kb.IsHexadecimal(true);
 
 				int res = kb.Open(rval2);
@@ -225,7 +225,7 @@ namespace CTRPluginFramework {
 				f_color.Flush();
                 f_color.Close();
 
-				MessageBox(Language->Get("CUSTOM_FILE_SAVED")).SetClear(ClearScreen::Top)();
+				MessageBox(Language::getInstance()->get("CUSTOM_FILE_SAVED")).SetClear(ClearScreen::Top)();
 			} break;
 		}
 	}

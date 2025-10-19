@@ -74,15 +74,15 @@ namespace CTRPluginFramework {
 
 	void SetSpotState(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 
 		const std::vector<std::string> spotVEC = {
-			Language->Get("VECTOR_QUICK_LOCK_SPOT"), 
-			Language->Get("VECTOR_QUICK_UNLOCK_SPOT"),
-			Language->Get("VECTOR_QUICK_LOCK_MAP"),
-			Language->Get("VECTOR_QUICK_UNLOCK_MAP")
+			Language::getInstance()->get("VECTOR_QUICK_LOCK_SPOT"), 
+			Language::getInstance()->get("VECTOR_QUICK_UNLOCK_SPOT"),
+			Language::getInstance()->get("VECTOR_QUICK_LOCK_MAP"),
+			Language::getInstance()->get("VECTOR_QUICK_UNLOCK_MAP")
 		};
 
 		u32 x = 0, y = 0;
@@ -91,7 +91,7 @@ namespace CTRPluginFramework {
 		if(bypassing) 
 			Dropper::DropItemLock(false);
 
-		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), spotVEC);
+		Keyboard KB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), spotVEC);
 		switch(KB.Open()) {
 			default: break;
 			case 0: {
@@ -155,7 +155,7 @@ namespace CTRPluginFramework {
 //search and replace
 	void SearchReplace(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 
@@ -164,10 +164,10 @@ namespace CTRPluginFramework {
 		Item ItemToSearch = {0x7FFE, 0};
 		Item ItemToReplace = {0x7FFE, 0};
 		
-		if(!Wrap::KB<u32>(Language->Get("QUICK_MENU_SEARCH_REPLACE_SEARCH"), true, 8, *(u32 *)&ItemToSearch, 0x7FFE)) 
+		if(!Wrap::KB<u32>(Language::getInstance()->get("QUICK_MENU_SEARCH_REPLACE_SEARCH"), true, 8, *(u32 *)&ItemToSearch, 0x7FFE)) 
 			return;
 		
-		if(!Wrap::KB<u32>(Language->Get("QUICK_MENU_SEARCH_REPLACE_REPLACE"), true, 8, *(u32 *)&ItemToReplace, *(u32 *)&ItemToReplace)) 
+		if(!Wrap::KB<u32>(Language::getInstance()->get("QUICK_MENU_SEARCH_REPLACE_REPLACE"), true, 8, *(u32 *)&ItemToReplace, *(u32 *)&ItemToReplace)) 
 			return;
 		
 		if(!IDList::ItemValid(ItemToReplace)) {
@@ -189,11 +189,11 @@ namespace CTRPluginFramework {
 //remove all town items
 	void RemoveItemsCheat(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 
-		if((MessageBox(Language->Get("REMOVE_ITEM_WARNING"), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
+		if((MessageBox(Language::getInstance()->get("REMOVE_ITEM_WARNING"), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
 			GameHelper::RemoveItems(true, 0, 0, 0xFF, 0xFF, true, true);
 		}
 	}
@@ -226,13 +226,13 @@ namespace CTRPluginFramework {
 //Weed Remover
 	void weedremover(MenuEntry *entry) {	
 		const std::vector<std::string> weedopt = {
-			Language->Get("WEED_REMOVER_OFF"), 
-			Language->Get("WEED_REMOVER_ON")
+			Language::getInstance()->get("WEED_REMOVER_OFF"), 
+			Language::getInstance()->get("WEED_REMOVER_ON")
 		};
 		
 		static int size = 400;
 		if(entry->Hotkeys[0].IsPressed()) {
-			Keyboard KB(Language->Get("WEED_REMOVER_KEY"), weedopt);
+			Keyboard KB(Language::getInstance()->get("WEED_REMOVER_KEY"), weedopt);
 
 			switch(KB.Open()) {
 				case 0: size = 5000; break;
@@ -276,19 +276,19 @@ namespace CTRPluginFramework {
 	
 	void grasscomplete(MenuEntry *entry) {		
 		const std::vector<std::string> GrassKB {
-			Language->Get("GRASS_EDITOR_FILL"),
-			Language->Get("GRASS_EDITOR_CLEAR")
+			Language::getInstance()->get("GRASS_EDITOR_FILL"),
+			Language::getInstance()->get("GRASS_EDITOR_CLEAR")
 		};
 		
 		if(!GameHelper::IsInRoom(0)) {
-			MessageBox(Color::Red << Language->Get("ONLY_TOWN_ERROR")).SetClear(ClearScreen::Top)();
+			MessageBox(Color::Red << Language::getInstance()->get("ONLY_TOWN_ERROR")).SetClear(ClearScreen::Top)();
 			return;
 		}
 		
 		const u32 GrassStart = *(u32 *)(GameHelper::GetCurrentMap() + 0x28);
-		Keyboard KB(Language->Get("GRASS_EDITOR_KB1") << "\n" << Color(0x228B22FF) << 
-					Language->Get("GRASS_EDITOR_KB2")  << "\n" << Color(0xCD853FFF) << 
-					Language->Get("GRASS_EDITOR_KB3"), GrassKB);
+		Keyboard KB(Language::getInstance()->get("GRASS_EDITOR_KB1") << "\n" << Color(0x228B22FF) << 
+					Language::getInstance()->get("GRASS_EDITOR_KB2")  << "\n" << Color(0xCD853FFF) << 
+					Language::getInstance()->get("GRASS_EDITOR_KB3"), GrassKB);
 					
 		switch(KB.Open()) {
 			case 0:
@@ -345,16 +345,16 @@ namespace CTRPluginFramework {
 	
 	bool CheckTimeInput(const void *input, std::string &error) {
 		const std::string TimeMode[5] = { 
-			Language->Get("TIME_MINUTE"),
-			Language->Get("TIME_HOUR"),
-			Language->Get("TIME_DAY"),
-			Language->Get("TIME_MONTH"),
-			Language->Get("TIME_YEAR")
+			Language::getInstance()->get("TIME_MINUTE"),
+			Language::getInstance()->get("TIME_HOUR"),
+			Language::getInstance()->get("TIME_DAY"),
+			Language::getInstance()->get("TIME_MONTH"),
+			Language::getInstance()->get("TIME_YEAR")
 		};
 
         u16 in = *static_cast<const u16 *>(input);
         if(in >= TimeMax[CurrTime]) {
-			error = Utils::Format(Language->Get("TIME_ERROR").c_str(), (TimeMax[CurrTime] - 1), TimeMode[CurrTime].c_str());
+			error = Utils::Format(Language::getInstance()->get("TIME_ERROR").c_str(), (TimeMax[CurrTime] - 1), TimeMode[CurrTime].c_str());
             return 0;
         }
 
@@ -363,16 +363,16 @@ namespace CTRPluginFramework {
 	
 	void TTKeyboard(MenuEntry *entry) {
 		const std::string TimeMode[5] = {
-			Language->Get("TIME_MINUTE"),
-			Language->Get("TIME_HOUR"),
-			Language->Get("TIME_DAY"),
-			Language->Get("TIME_MONTH"),
-			Language->Get("TIME_YEAR")
+			Language::getInstance()->get("TIME_MINUTE"),
+			Language::getInstance()->get("TIME_HOUR"),
+			Language::getInstance()->get("TIME_DAY"),
+			Language::getInstance()->get("TIME_MONTH"),
+			Language::getInstance()->get("TIME_YEAR")
 		};
 
 		std::vector<std::string> TTKB {
-			Language->Get("TIME_BACKWARDS"),
-			Language->Get("TIME_FORWARD")
+			Language::getInstance()->get("TIME_BACKWARDS"),
+			Language::getInstance()->get("TIME_FORWARD")
 		};
 		
 		u8 timedat[5] = { 0, 0, 0, 0, 0 };
@@ -382,7 +382,7 @@ namespace CTRPluginFramework {
 			return;
 		
 		for(int i = 0; i < 5; ++i) {			
-			Keyboard KBS(Utils::Format(Language->Get("TIME_KB1").c_str(), TimeMode[i].c_str()));
+			Keyboard KBS(Utils::Format(Language::getInstance()->get("TIME_KB1").c_str(), TimeMode[i].c_str()));
 			KBS.IsHexadecimal(false);
 			KBS.SetMaxLength(2);
 			CurrTime = i;
