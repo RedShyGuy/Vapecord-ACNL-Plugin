@@ -1,71 +1,56 @@
 import json
 import struct
+from pathlib import Path
 
-INPUT_JSON = "addresses.json"
-OUTPUT_BIN = "addresses.bin"
+BASE_DIR = Path(__file__).parent
+INPUT_JSON = BASE_DIR / "addresses.json"
+OUTPUT_BIN = BASE_DIR / "addresses.bin"
 
 with open(INPUT_JSON, "r", encoding="utf-8") as f:
     data = json.load(f)
 
 addresses = data["addresses"]
 
+# Group by region
 by_region = {}
 for symbol, regions in addresses.items():
     for region, addr in regions.items():
         by_region.setdefault(region, {})[symbol] = int(addr, 16)
 
-region_names = sorted(by_region.keys())
+# Build data blocks
+region_blocks = {}
+for region, symbols in by_region.items():
+    block = bytearray()
+    block += struct.pack("<H", len(symbols))  # entryCount (u16)
+    for key, addr_value in symbols.items():
+        key_b = key.encode("utf-8")
+        block += struct.pack("<B", len(key_b))  # keyLen (u8)
+        block += key_b
+        block += struct.pack("<I", addr_value)  # address (u32)
+    region_blocks[region] = bytes(block)
 
-region_headers = []  # (region_name_bytes, region_data_offset)
-region_data_blocks = []
-current_offset = 0
+header = bytearray()
+header += struct.pack("<H", len(region_blocks))  # regionCount (u16)
 
-for region in region_names:
-    entries = by_region[region]
-    region_name_bytes = region.encode("utf-8")
+# Calculate header offsets
+offset = 2  # after region count
+for region in region_blocks:
+    offset += 1 + len(region.encode("utf-8")) + 8  # nameLen + name + offset + size
+data_start = offset
 
-    # Build datablocks for regions
-    block = struct.pack("<H", len(entries))
-    for symbol, addr_value in entries.items():
-        symbol_bytes = symbol.encode("utf-8")
-        block += struct.pack("<B", len(symbol_bytes))
-        block += symbol_bytes
-        block += struct.pack("<I", addr_value)
-
-    region_data_blocks.append(block)
-    region_headers.append((region_name_bytes, current_offset))
+# Create header
+current_offset = data_start
+for region, block in region_blocks.items():
+    name_b = region.encode("utf-8")
+    header += struct.pack("<B", len(name_b))
+    header += name_b
+    header += struct.pack("<II", current_offset, len(block))
     current_offset += len(block)
 
-with open(OUTPUT_BIN, "wb") as f:
-    # Count of regions
-    f.write(struct.pack("<H", len(region_names)))
+# Write to file
+with open(OUTPUT_BIN, "wb") as out:
+    out.write(header)
+    for region in region_blocks:
+        out.write(region_blocks[region])
 
-    # Placeholder for RegionTableOffset
-    region_table_offset = f.tell()
-    f.write(struct.pack("<I", 0))
-
-    region_table = b""
-    data_offset = f.tell() + sum(2 + 1 + len(name) + 4 for name, _ in region_headers)
-
-    # RegionTable: [Len][Name][DataOffset]
-    running_offset = data_offset
-    for name_bytes, rel_off in region_headers:
-        region_table += struct.pack("<B", len(name_bytes))
-        region_table += name_bytes
-        region_table += struct.pack("<I", running_offset)
-        running_offset += len(region_data_blocks[region_names.index(name_bytes.decode("utf-8"))])
-
-    # Write RegionTable-Offset
-    end_header = f.tell()
-    f.seek(region_table_offset)
-    f.write(struct.pack("<I", end_header))
-    f.seek(end_header)
-
-    f.write(region_table)
-
-    # Write all datablocks next to next
-    for block in region_data_blocks:
-        f.write(block)
-
-print(f"Binary successfully written: {OUTPUT_BIN}")
-print(f"Regions: {len(region_names)}")
+print(f"Created {OUTPUT_BIN.name} with {len(region_blocks)} regions")

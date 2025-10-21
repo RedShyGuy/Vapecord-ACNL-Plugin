@@ -3199,6 +3199,416 @@
       "JPNWA": "0x57A2F8",
       "KOR": "0x57A018",
       "KORWA": "0x57A018"
+    },
+    "COUNTRY": {
+        "USA": "0x350B18",
+        "USAWA": "0x35052C",
+        "EUR": "0x34FC60",
+        "EURWA": "0x34FC60",
+        "JPN": "0x34F8F8",
+        "JPNWA": "0x34F8F8",
+        "KOR": "0x0034F7BC",
+        "KORWA": "0x34F7BC"
+    },
+    "UNBREAKABLEFLOWER": {
+        "USA": "0x597F64",
+        "USAWA": "0x59747C",
+        "EUR": "0x596FAC",
+        "EURWA": "0x596FAC",
+        "JPN": "0x59689C",
+        "JPNWA": "0x59689C",
+        "KOR": "0x596570",
+        "KORWA": "0x596570"
+    },
+    "FOV": {
+        "USA": "0x47E48C",
+        "USAWA": "0x47DE04",
+        "EUR": "0x47D4D4",
+        "EURWA": "0x47D4D4",
+        "JPN": "0x47D16C",
+        "JPNWA": "0x47D16C",
+        "KOR": "0x47D02C",
+        "KORWA": "0x47D02C"
+    },
+    "NOSAVE": {
+        "USA": "0x1A0980",
+        "USAWA": "0x1A03C8",
+        "EUR": "0x1A09A0",
+        "EURWA": "0x1A09A0",
+        "JPN": "0x1A08E0",
+        "JPNWA": "0x1A08E0",
+        "KOR": "0x1A08E0",
+        "KORWA": "0x1A08E0"
+    },
+    "CLOSEHOLEITEM": {
+        "USA": "0x598DBC",
+        "USAWA": "0x5982D4",
+        "EUR": "0x597E04",
+        "EURWA": "0x597E04",
+        "JPN": "0x5976F4",
+        "JPNWA": "0x5976F4",
+        "KOR": "0x5973C8",
+        "KORWA": "0x5973C8"
+    },
+    "PICKUPITEM": {
+        "USA": "0x59A268",
+        "USAWA": "0x599780",
+        "EUR": "0x5992B0",
+        "EURWA": "0x5992B0",
+        "JPN": "0x598BA0",
+        "JPNWA": "0x598BA0",
+        "KOR": "0x598874",
+        "KORWA": "0x598874"
+    },
+    "DROPPATTERN": {
+        "USA": "0x85FE58",
+        "USAWA": "0x85EE50",
+        "EUR": "0x85ECE4",
+        "EURWA": "0x85ECE4",
+        "JPN": "0x859104",
+        "JPNWA": "0x858104",
+        "KOR": "0x8580B4",
+        "KORWA": "0x8580B4"
+    },
+    "DROPM2": {
+        "USA": "0x30B83C",
+        "USAWA": "0x30B6DC",
+        "EUR": "0x30B820",
+        "EURWA": "0x30B820",
+        "JPN": "0x30B844",
+        "JPNWA": "0x30B844",
+        "KOR": "0x30B7EC",
+        "KORWA": "0x30B7EC"
+    },
+    "DROPM3": {
+        "USA": "0x19CFFC",
+        "USAWA": "0x19CA44",
+        "EUR": "0x19D01C",
+        "EURWA": "0x19D01C",
+        "JPN": "0x19CF5C",
+        "JPNWA": "0x19CF5C",
+        "KOR": "0x19CF5C",
+        "KORWA": "0x19CF5C"
+    },
+    "DROPM4": {
+        "USA": "0x660430",
+        "USAWA": "0x66FDC8",
+        "EUR": "0x66F8D8",
+        "EURWA": "0x66F8D8",
+        "JPN": "0x66F398",
+        "JPNWA": "0x65EF28",
+        "KOR": "0x66EF40",
+        "KORWA": "0x66EF40"
+    },
+    "DROPM5": {
+        "USA": "0x59771C",
+        "USAWA": "0x596C34",
+        "EUR": "0x596764",
+        "EURWA": "0x596764",
+        "JPN": "0x596054",
+        "JPNWA": "0x596054",
+        "KOR": "0x595D28",
+        "KORWA": "0x595D28"
+    },
+    "DROPM6": {
+        "USA": "0x599348",
+        "USAWA": "0x598860",
+        "EUR": "0x598390",
+        "EURWA": "0x598390",
+        "JPN": "0x597C80",
+        "JPNWA": "0x597C80",
+        "KOR": "0x597954",
+        "KORWA": "0x597954"
+    },
+    "DROPM7": {
+        "USA": "0x59915C",
+        "USAWA": "0x598674",
+        "EUR": "0x5981A4",
+        "EURWA": "0x5981A4",
+        "JPN": "0x597A94",
+        "JPNWA": "0x597A94",
+        "KOR": "0x597768",
+        "KORWA": "0x597768"
+    },
+    "DROPM8": {
+        "USA": "0x599248",
+        "USAWA": "0x598760",
+        "EUR": "0x598290",
+        "EURWA": "0x598290",
+        "JPN": "0x597B80",
+        "JPNWA": "0x597B80",
+        "KOR": "0x597854",
+        "KORWA": "0x597854"
+    },
+    "DROPM9": {
+        "USA": "0x5991E8",
+        "USAWA": "0x598700",
+        "EUR": "0x598230",
+        "EURWA": "0x598230",
+        "JPN": "0x597B20",
+        "JPNWA": "0x597B20",
+        "KOR": "0x5977F4",
+        "KORWA": "0x5977F4"
+    },
+    "PLAYSELECTOR": {
+        "USA": "0x75F010",
+        "USAWA": "0x75DFF4",
+        "EUR": "0x75E018",
+        "EURWA": "0x75DFF0",
+        "JPN": "0x75D7B0",
+        "JPNWA": "0x75D788",
+        "KOR": "0x75D358",
+        "KORWA": "0x75D358"
+    },
+    "PLACEITEMOFFSET": {
+        "USA": "0x59FC7C",
+        "USAWA": "0x59F194",
+        "EUR": "0x59ECC4",
+        "EURWA": "0x59ECC4",
+        "JPN": "0x59E5B4",
+        "JPNWA": "0x59E5B4",
+        "KOR": "0x59E288",
+        "KORWA": "0x59E288"
+    },
+    "UNLOCKCAMERA": {
+        "USA": "0x1A51C8",
+        "USAWA": "0x1A4C10",
+        "EUR": "0x1A51E8",
+        "EURWA": "0x1A51E8",
+        "JPN": "0x1A5128",
+        "JPNWA": "0x1A5128",
+        "KOR": "0x1A5128",
+        "KORWA": "0x1A5128"
+    },
+    "COPYPASTEFUNC": {
+        "USA": "0x2FC978",
+        "USAWA": "0x2FC8E8",
+        "EUR": "0x2FC8B8",
+        "EURWA": "0x2FC8B8",
+        "JPN": "0x2FC878",
+        "JPNWA": "0x2FC878",
+        "KOR": "0x2FC8E0",
+        "KORWA": "0x2FC8E0"
+    },
+    "LOADICON": {
+        "USA": "0x26DC00",
+        "USAWA": "0x26D644",
+        "EUR": "0x26DBFC",
+        "EURWA": "0x26DBFC",
+        "JPN": "0x26DB1C",
+        "JPNWA": "0x26DB1C",
+        "KOR": "0x26DAE8",
+        "KORWA": "0x26DAE8"
+    },
+    "INDEXCHANGE": {
+        "USA": "0x628B54",
+        "USAWA": "0x62807C",
+        "EUR": "0x627B8C",
+        "EURWA": "0x627B8C",
+        "JPN": "0x62764C",
+        "JPNWA": "0x62764C",
+        "KOR": "0x6271F4",
+        "KORWA": "0x6271F4"
+    },
+    "ANIMCONDITIONPATCH": {
+        "USA": "0x677504",
+        "USAWA": "0x676A2C",
+        "EUR": "0x67653C",
+        "EURWA": "0x67653C",
+        "JPN": "0x675FFC",
+        "JPNWA": "0x675FFC",
+        "KOR": "0x675BA4",
+        "KORWA": "0x675BA4"
+    },
+    "PLAYERSAVE": {
+        "USA": "0x2FBA60",
+        "USAWA": "0x2FB96C",
+        "EUR": "0x2FBAE8",
+        "EURWA": "0x2FBAE8",
+        "JPN": "0x2FB920",
+        "JPNWA": "0x2FB920",
+        "KOR": "0x2FB8F8",
+        "KORWA": "0x2FB8F8"
+    },
+    "LOADEDPLAYERSAVE": {
+        "USA": "0x2FEB2C",
+        "USAWA": "0x2FE8A8",
+        "EUR": "0x2FEBB4",
+        "EURWA": "0x2FEBB4",
+        "JPN": "0x2FEB60",
+        "JPNWA": "0x2FEB60",
+        "KOR": "0x2FEA98",
+        "KORWA": "0x2FEA98"
+    },
+    "PLAYERINSTANCE": {
+        "USA": "0x5C3EA0",
+        "USAWA": "0x5C33D0",
+        "EUR": "0x5C2EE8",
+        "EURWA": "0x5C2EE8",
+        "JPN": "0x5C27D8",
+        "JPNWA": "0x5C27D8",
+        "KOR": "0x5C24AC",
+        "KORWA": "0x5C24AC"
+    },
+    "DISABLECHATREMOVAL": {
+        "USA": "0x1939EC",
+        "USAWA": "0x193434",
+        "EUR": "0x193A0C",
+        "EURWA": "0x193A0C",
+        "JPN": "0x19395C",
+        "JPNWA": "0x19395C",
+        "KOR": "0x19395C",
+        "KORWA": "0x19395C"
+    },
+    "A_GETONLINEPLAYERINDEX": {
+        "USA": "0x305EF0",
+        "USAWA": "0x305F44",
+        "EUR": "0x305EF0",
+        "EURWA": "0x305EF0",
+        "JPN": "0x305F6C",
+        "JPNWA": "0x305F6C",
+        "KOR": "0x305F3C",
+        "KORWA": "0x305F3C"
+    },
+    "ANIMFUNCTION": {
+        "USA": "0x64DB90",
+        "USAWA": "0x64D0B8",
+        "EUR": "0x64CBC8",
+        "EURWA": "0x64CBC8",
+        "JPN": "0x64C688",
+        "JPNWA": "0x64C688",
+        "KOR": "0x64C230",
+        "KORWA": "0x64C230"
+    },
+    "SETUPSTACKDATA": {
+        "USA": "0x81F9D0",
+        "USAWA": "0x81E8D0",
+        "EUR": "0x81E9D8",
+        "EURWA": "0x81E9B0",
+        "JPN": "0x81E150",
+        "JPNWA": "0x81E128",
+        "KOR": "0x81DD10",
+        "KORWA": "0x81DCE8"
+    },
+    "RESTOREITEMWINDOW": {
+        "USA": "0x19B380",
+        "USAWA": "0x19ADC8",
+        "EUR": "0x19B3A0",
+        "EURWA": "0x19B3A0",
+        "JPN": "0x19B2E0",
+        "JPNWA": "0x19B2E0",
+        "KOR": "0x19B2E0",
+        "KORWA": "0x19B2E0"
+    },
+    "RESTOREOUTFITWINDOW": {
+        "USA": "0x19D2A0",
+        "USAWA": "0x19CCE8",
+        "EUR": "0x19D2C0",
+        "EURWA": "0x19D2C0",
+        "JPN": "0x19D200",
+        "JPNWA": "0x19D200",
+        "KOR": "0x19D200",
+        "KORWA": "0x19D200"
+    },
+    "ISLPOINTER": {
+        "USA": "0x953708",
+        "USAWA": "0x9526F8",
+        "EUR": "0x952704",
+        "EURWA": "0x952704",
+        "JPN": "0x94C704",
+        "JPNWA": "0x94B704",
+        "KOR": "0x94B704",
+        "KORWA": "0x94B704"
+    },
+    "GAMEPOINTER": {
+        "USA": "0x954648",
+        "USAWA": "0x953630",
+        "EUR": "0x953648",
+        "EURWA": "0x953648",
+        "JPN": "0x94D648",
+        "JPNWA": "0x94C648",
+        "KOR": "0x94C648",
+        "KORWA": "0x94C648"
+    },
+    "CHATPOINTER": {
+        "USA": "0x94FD84",
+        "USAWA": "0x94ED74",
+        "EUR": "0x94ED84",
+        "EURWA": "0x94ED84",
+        "JPN": "0x948D84",
+        "JPNWA": "0x947D84",
+        "KOR": "0x947D84",
+        "KORWA": "0x947D84"
+    },
+    "MAX": {
+        "USA": "0x95D3FC",
+        "USAWA": "0x95C3DC",
+        "EUR": "0x95C3F4",
+        "EURWA": "0x95C3F4",
+        "JPN": "0x9563F4",
+        "JPNWA": "0x9553F4",
+        "KOR": "0x9553F4",
+        "KORWA": "0x9553F4"
+    },
+    "MAPBOOL": {
+        "USA": "0x950C30",
+        "USAWA": "0x94FC20",
+        "EUR": "0x94FC30",
+        "EURWA": "0x94FC30",
+        "JPN": "0x949C30",
+        "JPNWA": "0x948C30",
+        "KOR": "0x948C30",
+        "KORWA": "0x948C30"
+    },
+    "CHATPOINT": {
+        "USA": "0x95F11C",
+        "USAWA": "0x95E0FC",
+        "EUR": "0x95E114",
+        "EURWA": "0x95E114",
+        "JPN": "0x958114",
+        "JPNWA": "0x957114",
+        "KOR": "0x957114",
+        "KORWA": "0x957114"
+    },
+    "DATAPOINTER": {
+        "USA": "0x95EEDC",
+        "USAWA": "0x95DEBC",
+        "EUR": "0x95DED4",
+        "EURWA": "0x95DED4",
+        "JPN": "0x957ED4",
+        "JPNWA": "0x956ED4",
+        "KOR": "0x956ED4",
+        "KORWA": "0x956ED4"
+    },
+    "EXGAMEDATA": {
+        "USA": "0x95D3F4",
+        "USAWA": "0x95C3D4",
+        "EUR": "0x95C3EC",
+        "EURWA": "0x95C3EC",
+        "JPN": "0x9563EC",
+        "JPNWA": "0x9553EC",
+        "KOR": "0x9553EC",
+        "KORWA": "0x9553EC"
+    },
+    "GARDENPLUS": {
+        "USA": "0x2FB344",
+        "USAWA": "0x2FB328",
+        "EUR": "0x2FB340",
+        "EURWA": "0x2FB340",
+        "JPN": "0x2FB354",
+        "JPNWA": "0x2FB354",
+        "KOR": "0x2FB360",
+        "KORWA": "0x2FB360"
+    },
+    "CALCBITFIELD": {
+        "USA": "0x2FF76C",
+        "USAWA": "0x2FFAD8",
+        "EUR": "0x2FF7F4",
+        "EURWA": "0x2FF7F4",
+        "JPN": "0x2FF9CC",
+        "JPNWA": "0x2FF9CC",
+        "KOR": "0x2FFA18",
+        "KORWA": "0x2FFA18"
     }
   }
 }
