@@ -123,7 +123,7 @@ $(OUTPUT).elf : $(OFILES)
 #---------------------------------------------------------------------------------
 %.3gx: %.elf
 	@echo creating $(notdir $@)
-	@3gxtool -s $^ $(TOPDIR)/$(PSF) $@
+	@3gxtool -s -d $^ $(TOPDIR)/$(PSF) $@
 
 -include $(DEPENDS)
 
