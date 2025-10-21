@@ -2,7 +2,7 @@
 #include <algorithm>
 #include "cheats.hpp"
 #include "Helpers/ItemSequence.hpp"
-#include "RegionCodes.hpp"
+
 #include "Helpers/Dropper.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/Game.hpp"
@@ -53,8 +53,8 @@ namespace CTRPluginFramework {
 		};
 
 		if(entry->WasJustActivated()) {
-			Process::Patch(Code::dropm3.addr, 0xE1A00000);
-			Process::Write8(Code::dropm4.addr, 6); //set anim after bury
+			Process::Patch(Address("DROPM3").addr, 0xE1A00000);
+			Process::Write8(Address("DROPM4").addr, 6); //set anim after bury
 		}
 		
 	//Modify Drop Type	
@@ -67,7 +67,7 @@ namespace CTRPluginFramework {
 
 			waitAnim = DropTypes[res].dropAnim;
 			DropType = DropTypes[res].dropID;
-			Process::Write8(Code::dropm5.addr, DropType);
+			Process::Write8(Address("DROPM5").addr, DropType);
 			return;
 		}
 
@@ -94,12 +94,12 @@ namespace CTRPluginFramework {
 						val = val & 0xF;
 						range = val * 2 + 1;
 						count = range * range;
-						Process::Write8(Code::dropm6.addr, count);
-						Process::Write8(Code::dropm7.addr, count);
+						Process::Write8(Address("DROPM6").addr, count);
+						Process::Write8(Address("DROPM7").addr, count);
 						for(s8 i = 0 - (s8)val; i <= (s8)val; ++i) {
 							for(u8 j = 0; j < range; ++j) {
-								Process::Write8(Code::DropPattern.addr + j + ((i + val) * range), (0 - (s8)val) + j);
-								Process::Write8(Code::DropPattern.addr + count + j + ((i + val) * range), i);
+								Process::Write8(Address("DROPPATTERN").addr + j + ((i + val) * range), (0 - (s8)val) + j);
+								Process::Write8(Address("DROPPATTERN").addr + count + j + ((i + val) * range), i);
 							}
 						}	
 					} 
@@ -113,11 +113,11 @@ namespace CTRPluginFramework {
 
 						val = val & 0xFF;
 						count = 2 * val * val - 6 * val + 16;
-						Process::Write8(Code::dropm6.addr, count);
-						Process::Write8(Code::dropm7.addr, count);
+						Process::Write8(Address("DROPM6").addr, count);
+						Process::Write8(Address("DROPM7").addr, count);
 						for(u8 i = 0; i < count; ++i) {
-							Process::Write8(Code::DropPattern.addr + i, (s8)nearbyint((float)(val * cos((6.28318530 / count) * i))));
-							Process::Write8(Code::DropPattern.addr + count + i, (s8)nearbyint((float)(val * sin((6.28318530 / count) * i))));
+							Process::Write8(Address("DROPPATTERN").addr + i, (s8)nearbyint((float)(val * cos((6.28318530 / count) * i))));
+							Process::Write8(Address("DROPPATTERN").addr + count + i, (s8)nearbyint((float)(val * sin((6.28318530 / count) * i))));
 						}
 					}
 					DropPatternON = true;
@@ -129,11 +129,11 @@ namespace CTRPluginFramework {
 							val = 0x10;
 
 						range = val * 2 + 1;
-						Process::Write8(Code::dropm6.addr, range);
-						Process::Write8(Code::dropm7.addr, range);
+						Process::Write8(Address("DROPM6").addr, range);
+						Process::Write8(Address("DROPM7").addr, range);
 						for(s8 i = 0 - (s8)val; i <= (s8)val; ++i) {
-							Process::Write8(Code::DropPattern.addr + (i + val), i);
-							Process::Write8(Code::DropPattern.addr + range + (i + val), 0);
+							Process::Write8(Address("DROPPATTERN").addr + (i + val), i);
+							Process::Write8(Address("DROPPATTERN").addr + range + (i + val), 0);
 						}
 
 					}
@@ -146,11 +146,11 @@ namespace CTRPluginFramework {
 							val = 0x10;
 
 						range = val * 2 + 1;
-						Process::Write8(Code::dropm6.addr, range);
-						Process::Write8(Code::dropm7.addr, range);
+						Process::Write8(Address("DROPM6").addr, range);
+						Process::Write8(Address("DROPM7").addr, range);
 						for(s8 i = 0 - (s8)val; i <= (s8)val; ++i) {
-							Process::Write8(Code::DropPattern.addr + (i + val), 0);
-							Process::Write8(Code::DropPattern.addr + range + (i + val), i);
+							Process::Write8(Address("DROPPATTERN").addr + (i + val), 0);
+							Process::Write8(Address("DROPPATTERN").addr + range + (i + val), i);
 						}
 
 					}
@@ -164,17 +164,17 @@ namespace CTRPluginFramework {
 
 						range = val * 2 + 1;
 						count = range * 4;
-						Process::Write8(Code::dropm6.addr, count);
-						Process::Write8(Code::dropm7.addr, count);
+						Process::Write8(Address("DROPM6").addr, count);
+						Process::Write8(Address("DROPM7").addr, count);
 						for(u8 i = 0; i < range; ++i) {
-							Process::Write8(Code::DropPattern.addr + i * 4, i - val);
-							Process::Write8(Code::DropPattern.addr + count + i * 4, 0 - val);
-							Process::Write8(Code::DropPattern.addr + 1 + i * 4, 0 - val);
-							Process::Write8(Code::DropPattern.addr + 1 + count + i * 4, i - val);
-							Process::Write8(Code::DropPattern.addr + 2 + i * 4, i - val);
-							Process::Write8(Code::DropPattern.addr + 2 + count + i * 4, val);
-							Process::Write8(Code::DropPattern.addr + 3 + i * 4, val);
-							Process::Write8(Code::DropPattern.addr + 3 + count + i * 4, i - val);
+							Process::Write8(Address("DROPPATTERN").addr + i * 4, i - val);
+							Process::Write8(Address("DROPPATTERN").addr + count + i * 4, 0 - val);
+							Process::Write8(Address("DROPPATTERN").addr + 1 + i * 4, 0 - val);
+							Process::Write8(Address("DROPPATTERN").addr + 1 + count + i * 4, i - val);
+							Process::Write8(Address("DROPPATTERN").addr + 2 + i * 4, i - val);
+							Process::Write8(Address("DROPPATTERN").addr + 2 + count + i * 4, val);
+							Process::Write8(Address("DROPPATTERN").addr + 3 + i * 4, val);
+							Process::Write8(Address("DROPPATTERN").addr + 3 + count + i * 4, i - val);
 						}
 					}
 					DropPatternON = true;
@@ -186,11 +186,11 @@ namespace CTRPluginFramework {
 							val = 0x10;
 
 						range = val * 2 + 1;
-						Process::Write8(Code::dropm6.addr, range);
-						Process::Write8(Code::dropm7.addr, range);
+						Process::Write8(Address("DROPM6").addr, range);
+						Process::Write8(Address("DROPM7").addr, range);
 						for(s8 i = 0 - (s8)val; i <= (s8)val; ++i) {
-							Process::Write8(Code::DropPattern.addr + (i + val), -i);
-							Process::Write8(Code::DropPattern.addr + range + (i + val), i);
+							Process::Write8(Address("DROPPATTERN").addr + (i + val), -i);
+							Process::Write8(Address("DROPPATTERN").addr + range + (i + val), i);
 						}
 					}
 					DropPatternON = true;
@@ -202,29 +202,29 @@ namespace CTRPluginFramework {
 							val = 0x10;
 
 						range = val * 2 + 1;
-						Process::Write8(Code::dropm6.addr, range);
-						Process::Write8(Code::dropm7.addr, range);
+						Process::Write8(Address("DROPM6").addr, range);
+						Process::Write8(Address("DROPM7").addr, range);
 						for(s8 i = 0 - (s8)val; i <= (s8)val; ++i) {
-							Process::Write8(Code::DropPattern.addr + (i + val), i);
-							Process::Write8(Code::DropPattern.addr + range + (i + val), i);
+							Process::Write8(Address("DROPPATTERN").addr + (i + val), i);
+							Process::Write8(Address("DROPPATTERN").addr + range + (i + val), i);
 						}
 					}
 					DropPatternON = true;
 				} break;
 			//reset drop pattern	
 				case 7: {
-					Process::Write8(Code::dropm6.addr, 9);
-					Process::Write8(Code::dropm7.addr, 9);
-					Process::Patch(Code::dropm8.addr, 0x0A000006);
-					Process::Patch(Code::dropm9.addr, 0xE7971100);
+					Process::Write8(Address("DROPM6").addr, 9);
+					Process::Write8(Address("DROPM7").addr, 9);
+					Process::Patch(Address("DROPM8").addr, 0x0A000006);
+					Process::Patch(Address("DROPM9").addr, 0xE7971100);
 					
 					Dropper::RestorePattern();
 					DropPatternON = false;
 				} return;
 			}
 			
-			Process::Patch(Code::dropm8.addr, 0xEA000006);
-			Process::Patch(Code::dropm9.addr, 0xE1A01000);
+			Process::Patch(Address("DROPM8").addr, 0xEA000006);
+			Process::Patch(Address("DROPM9").addr, 0xE1A01000);
 			return;
 		}
 
@@ -239,19 +239,19 @@ namespace CTRPluginFramework {
 			ItemSequence::OpenIS();
 
 		if(GameHelper::GetActualPlayerIndex() == 0) 
-			Process::Patch(Code::dropm2.addr, 0x13A00001);
+			Process::Patch(Address("DROPM2").addr, 0x13A00001);
 		else 
-			Process::Patch(Code::dropm2.addr, 0x13A00000);
+			Process::Patch(Address("DROPM2").addr, 0x13A00000);
 		
 		if(!entry->IsActivated()) {
-			Process::Patch(Code::dropm2.addr, 0x13A00001);
-			Process::Patch(Code::dropm3.addr, 0x0A000003);
-			Process::Patch(Code::dropm4.addr, 0xE3A01016);
-			Process::Patch(Code::dropm5.addr, 0xE3A0000C);
-			Process::Patch(Code::dropm6.addr, 0xE3540009);
-			Process::Patch(Code::dropm7.addr, 0xE28AB009);
-			Process::Patch(Code::dropm8.addr, 0x0A000006);
-			Process::Patch(Code::dropm9.addr, 0xE7971100);
+			Process::Patch(Address("DROPM2").addr, 0x13A00001);
+			Process::Patch(Address("DROPM3").addr, 0x0A000003);
+			Process::Patch(Address("DROPM4").addr, 0xE3A01016);
+			Process::Patch(Address("DROPM5").addr, 0xE3A0000C);
+			Process::Patch(Address("DROPM6").addr, 0xE3540009);
+			Process::Patch(Address("DROPM7").addr, 0xE28AB009);
+			Process::Patch(Address("DROPM8").addr, 0x0A000006);
+			Process::Patch(Address("DROPM9").addr, 0xE7971100);
 
 			Dropper::RestorePattern();
 		}

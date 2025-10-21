@@ -2,7 +2,7 @@
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/Town.hpp"
 #include "Helpers/Wrapper.hpp"
-#include "Helpers/Address.hpp"
+#include "Address/Address.hpp"
 #include "Helpers/Player.hpp"
 #include "Helpers/Game.hpp"
 #include "Helpers/IDList.hpp"
@@ -14,7 +14,7 @@
 #include "Helpers/GameStructs.hpp"
 #include "Color.h"
 #include "Files.h"
-#include "RegionCodes.hpp"
+
 
 namespace CTRPluginFramework {
 //Town Name Changer | player specific save code	
@@ -42,7 +42,7 @@ namespace CTRPluginFramework {
 			Language::getInstance()->get("FILE_DELETE"),  
 		};
 
-		WrapLoc lock = { (u32 *)Code::GardenPlus.Call<u32>(), 0x89B00 };
+		WrapLoc lock = { (u32 *)Address("GARDENPLUS").Call<u32>(), 0x89B00 };
 		
 		Keyboard KB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), options);
 
@@ -55,11 +55,11 @@ namespace CTRPluginFramework {
 				if(KB.Open(filename) == -1)
 					return;
 
-				Wrap::Dump(Utils::Format(PATH_SAVE, regionName.c_str()), filename, ".dat", &lock, nullptr);		
+				Wrap::Dump(Utils::Format(PATH_SAVE, Address::regionName.c_str()), filename, ".dat", &lock, nullptr);		
 			} break;
 			case 1: {
-				if(Wrap::Restore(Utils::Format(PATH_SAVE, regionName.c_str()), ".dat", Language::getInstance()->get("SAVE_RESTORE_SELECT"), nullptr, true, &lock, nullptr) == ExHandler::SUCCESS) {
-					static Address fixfurno(0x6A6EE0, 0x6A6408, 0x6A5F18, 0x6A5F18, 0x6A59B0, 0x6A59B0, 0x6A5558, 0x6A5558);	
+				if(Wrap::Restore(Utils::Format(PATH_SAVE, Address::regionName.c_str()), ".dat", Language::getInstance()->get("SAVE_RESTORE_SELECT"), nullptr, true, &lock, nullptr) == ExHandler::SUCCESS) {
+					static Address fixfurno("FIXFURNO");	
 					u32 orig[1] = { 0 };
 
 					Process::Patch(fixfurno.addr + 0x41C, 0xE1A00000, orig);
@@ -70,7 +70,7 @@ namespace CTRPluginFramework {
 				} 
 			} break;
 			case 2: 
-				Wrap::Delete(Utils::Format(PATH_SAVE, regionName.c_str()), ".dat");
+				Wrap::Delete(Utils::Format(PATH_SAVE, Address::regionName.c_str()), ".dat");
 			break;
 		}
 	} 
@@ -110,7 +110,7 @@ namespace CTRPluginFramework {
 						return;
 
 					loc = { (u32 *)&town->BBoardMessages[KBChoice], sizeof(ACNL_BulletinBoardMessage) };
-					Wrap::Dump(Utils::Format(PATH_BULLETIN, regionName.c_str()), filename, ".dat", &loc, nullptr);
+					Wrap::Dump(Utils::Format(PATH_BULLETIN, Address::regionName.c_str()), filename, ".dat", &loc, nullptr);
 				}
 			} break;
 			
@@ -119,12 +119,12 @@ namespace CTRPluginFramework {
 				int KBChoice = optKb.Open();
 				if(KBChoice >= 0) {
 					loc = { (u32 *)&town->BBoardMessages[KBChoice], sizeof(ACNL_BulletinBoardMessage) };
-					Wrap::Restore(Utils::Format(PATH_BULLETIN, regionName.c_str()), ".dat", Language::getInstance()->get("RESTORE_MESSAGE"), nullptr, true, &loc, nullptr); 
+					Wrap::Restore(Utils::Format(PATH_BULLETIN, Address::regionName.c_str()), ".dat", Language::getInstance()->get("RESTORE_MESSAGE"), nullptr, true, &loc, nullptr); 
 				}
 			} break;
 			
 			case 2: 
-				Wrap::Delete(Utils::Format(PATH_BULLETIN, regionName.c_str()), ".dat");
+				Wrap::Delete(Utils::Format(PATH_BULLETIN, Address::regionName.c_str()), ".dat");
 			break;
 		}
 	}
@@ -317,8 +317,8 @@ namespace CTRPluginFramework {
        	if(res < 0)
 			return;
 		
-		static Address SetNPCFunc(0x3081A8, 0x308380, 0x308234, 0x308234, 0x3081C8, 0x3081C8, 0x3081DC, 0x3081DC);
-		static Address DeleteNPCFunc(0x30836C, 0x3084D0, 0x308384, 0x308384, 0x308474, 0x308474, 0x30832C, 0x30832C);
+		static Address SetNPCFunc("SETNPCFUNC");
+		static Address DeleteNPCFunc("DELETENPCFUNC");
 
 		if(res == 0) {
 			Keyboard keyboard("a");
@@ -934,7 +934,7 @@ namespace CTRPluginFramework {
 
 			for(int j = 0; j < 6; ++j) {
 				for(u16 i = Pairs[j].first; i < Pairs[j].second; ++i) {
-					int field = Code::CalcBitField.Call<int>(&i);
+					int field = Address("CALCBITFIELD").Call<int>(&i);
 					town->MuseumDonations[Addage[j] + field] = player + 1;
 
 					town->MuseumDonationDates[Addage[j] + field] = GameHelper::GetCurrentDate();
@@ -945,7 +945,7 @@ namespace CTRPluginFramework {
 		else if(state == 1) {
 			for(int j = 0; j < 6; ++j) {
 				for(u16 i = Pairs[j].first; i < Pairs[j].second; ++i) {
-					int field = Code::CalcBitField.Call<int>(&i);
+					int field = Address("CALCBITFIELD").Call<int>(&i);
 					town->MuseumDonations[Addage[j] + field] = 0;
 
 					town->MuseumDonationDates[Addage[j] + field] = { 0, 0, 0 };

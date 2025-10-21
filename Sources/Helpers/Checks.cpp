@@ -1,4 +1,4 @@
-#include "Helpers/Address.hpp"
+#include "Address/Address.hpp"
 #include "Helpers/Inventory.hpp"
 #include "Helpers/Dropper.hpp"
 #include "Helpers/ACSystem.hpp"
@@ -6,7 +6,7 @@
 #include "Helpers/IDList.hpp"
 #include "Helpers/Game.hpp"
 #include "Helpers/Wrapper.hpp"
-#include "RegionCodes.hpp"
+
 
 extern "C" bool __IsPlayerHouse() {
 	u8 pID = (u8)CTRPluginFramework::Player::GetPlayerStatus(4);
@@ -44,8 +44,8 @@ namespace CTRPluginFramework {
 	void OnTitleScreen(u8 roomId, bool u0, bool u1, bool u2) {
 		if (roomId == 0x5E) {
 			static Hook ParticleHook1, ParticleHook2;
-			static const Address partc1(0x5506D4, 0x54FBEC, 0x54F71C, 0x54F71C, 0x54F008, 0x54F008, 0x54ED2C, 0x54ED2C);
-			static const Address partc2(0x5509CC, 0x54FEE4, 0x54FA14, 0x54FA14, 0x54F300, 0x54F300, 0x54F024, 0x54F024);
+			static const Address partc1("PARTC1");
+			static const Address partc2("PARTC2");
 
 			ParticleHook1.Initialize(partc1.addr, (u32)SetProperParticle);
 			ParticleHook1.SetFlags(USE_LR_TO_RETURN);

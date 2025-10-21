@@ -1,7 +1,7 @@
 #include <cstdarg>
 #include "Helpers/QRCodeGen.hpp"
 #include "Helpers/Wrapper.hpp"
-#include "Helpers/Address.hpp"
+#include "Address/Address.hpp"
 #include "Helpers/PluginMenuData.hpp"
 #include "LibCtrpfExtras/ColorExtras.hpp"
 #include "Files.h"
@@ -68,7 +68,7 @@ namespace CTRPluginFramework {
 	int SaveActiveCheats(const std::string &str) {
 		const char* data = str.c_str();
 		
-		Directory dir(Utils::Format(PATH_CRASH, regionName.c_str()), true);
+		Directory dir(Utils::Format(PATH_CRASH, Address::regionName.c_str()), true);
 		File file;
 
 		std::string filename = "Active_Cheats";
@@ -99,7 +99,7 @@ namespace CTRPluginFramework {
 	}
 
 	int SaveCrashDump(const char *str) {
-		Directory dir(Utils::Format(PATH_CRASH, regionName.c_str()), true);
+		Directory dir(Utils::Format(PATH_CRASH, Address::regionName.c_str()), true);
 		File file;
 
 		time_t rawtime;

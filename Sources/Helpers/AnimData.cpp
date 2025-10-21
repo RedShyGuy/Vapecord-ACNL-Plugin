@@ -1,6 +1,7 @@
 #include "Helpers/AnimData.hpp"
 #include "Helpers/PlayerClass.hpp"
-#include "RegionCodes.hpp"
+#include "Address/Address.hpp"
+
 
 namespace CTRPluginFramework {
     u16 Calculate16BitFloat(float coord) {
@@ -15,13 +16,13 @@ namespace CTRPluginFramework {
     }
 
     void AnimData::AppendCoordData(u32 animInst, u32 pos, float *Coord) {
-        static Address coordoffset(0x5D4C88, 0x5D41B8, 0x5D3CD0, 0x5D3CD0, 0x5D3504, 0x5D3504, 0x5D31D8, 0x5D31D8);
+        static Address coordoffset("COORDOFFSET");
 		coordoffset.Call<void>(animInst + pos, Coord);
     }
     
 //Animation Function
 	bool AnimData::ExecuteAnimation(u8 animID) {
-		return Code::AnimFunction.Call<bool>(playerInst, animID, animInst, 0);
+		return Address("ANIMFUNCTION").Call<bool>(playerInst, animID, animInst, 0);
 	}
 
     void AnimData::FaceCutoutStandee_C1(u8 option) {

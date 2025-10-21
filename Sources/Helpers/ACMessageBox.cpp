@@ -1,5 +1,5 @@
 #include "Helpers/ACMessageBox.hpp"
-#include "Helpers/Address.hpp"
+#include "Address/Address.hpp"
 #include "Helpers/PlayerClass.hpp"
 
 namespace CTRPluginFramework {
@@ -7,7 +7,7 @@ namespace CTRPluginFramework {
 	static Clock clock;
 
     void SetMSGData(u32 mData, const std::string& str) {
-		static const Address point(0x90AACC, 0x9099A0, 0x90994C, 0x90994C, 0x903DBC, 0x902DBC, 0x902D28, 0x902D28);
+		static const Address point("POINT");
 		Process::Write32(mData, point.addr);
 		Process::Write32(mData + 4, mData + 0x18);
 		Process::Write32(mData + 8, 0x78);
@@ -36,12 +36,12 @@ namespace CTRPluginFramework {
 
     void ACMSG::Stop(void) {
 		clock.Restart();
-        static const Address point(0x951702, 0x9506F2, 0x9506FE, 0x9506FE, 0x94A6FE, 0x9496FE, 0x9496FE, 0x9496FE);
+        static const Address point("POINT");
         Process::Write8(point.addr, 1);
     }
 
     bool ACMSG::IsRunning(void) {
-        static const Address point(0x951702, 0x9506F2, 0x9506FE, 0x9506FE, 0x94A6FE, 0x9496FE, 0x9496FE, 0x9496FE);
+        static const Address point("POINT");
         return *(u8 *)point.addr == 0;
     }
 
@@ -49,12 +49,12 @@ namespace CTRPluginFramework {
 	void ACMSG::Notify(const std::string& str) {
         Stop();
 
-		static Address func1(0x5E3768, 0x5E2C98, 0x5E27A0, 0x5E27A0, 0x5E2020, 0x5E2020, 0x5E1CA8, 0x5E1CA8);
-		static Address func2(0x5E3920, 0x5E2E50, 0x5E2958, 0x5E2958, 0x5E21D8, 0x5E21D8, 0x5E1E60, 0x5E1E60);
-		static Address func3(0x5E3A64, 0x5E2F94, 0x5E2A9C, 0x5E2A9C, 0x5E231C, 0x5E231C, 0x5E1FA4, 0x5E1FA4);	
-		static Address func4(0x75BDAC, 0x75AD90, 0x75ADB4, 0x75AD8C, 0x75A54C, 0x75A524, 0x75A0F4, 0x75A0CC);	
-		static Address func5(0x81C104, 0x81B004, 0x81B10C, 0x81B0E4, 0x81A8AC, 0x81A884, 0x81A44C, 0x81A424);
-		static const Address point(0x8578A0, 0x856898, 0x85672C, 0x85672C, 0x853938, 0x852938, 0x852904, 0x852904);
+		static Address func1("FUNC1");
+		static Address func2("FUNC2");
+		static Address func3("FUNC3");	
+		static Address func4("FUNC4");	
+		static Address func5("FUNC5");
+		static const Address point("POINT");
 
 		u32 mData = PlayerClass::GetInstance()->Offset(0x5750);
 

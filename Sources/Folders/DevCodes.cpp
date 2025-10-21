@@ -3,7 +3,7 @@
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/Animation.hpp"
 #include "Helpers/Game.hpp"
-#include "Helpers/Address.hpp"
+#include "Address/Address.hpp"
 #include "Helpers/Player.hpp"
 #include "Helpers/ACMessageBox.hpp"
 #include "Helpers/CROEditing.hpp"
@@ -12,7 +12,7 @@
 #include "Helpers/GameKeyboard.hpp"
 #include "Helpers/Town.hpp"
 #include "Helpers/NPC.hpp"
-#include "RegionCodes.hpp"
+
 #include "Color.h"
 #include "Files.h"
 #include "Helpers/PluginMenuData.hpp"
@@ -68,13 +68,13 @@ namespace CTRPluginFramework {
 						if(CKB.Open(filename) == -1)
 							return;
 
-						Wrap::Dump(Utils::Format(PATH_CUSTOM, regionName.c_str()), filename, "." + filetype, &cdump, nullptr);
+						Wrap::Dump(Utils::Format(PATH_CUSTOM, Address::regionName.c_str()), filename, "." + filetype, &cdump, nullptr);
 					} break;	
 					case 1: 
-						Wrap::Restore(Utils::Format(PATH_CUSTOM, regionName.c_str()), "." + filetype, "Select which dump to restore.", nullptr, true, &cdump, nullptr); 
+						Wrap::Restore(Utils::Format(PATH_CUSTOM, Address::regionName.c_str()), "." + filetype, "Select which dump to restore.", nullptr, true, &cdump, nullptr); 
 					break;
 					case 2:
-						Wrap::Delete(Utils::Format(PATH_CUSTOM, regionName.c_str()), "." + filetype);
+						Wrap::Delete(Utils::Format(PATH_CUSTOM, Address::regionName.c_str()), "." + filetype);
 					break;			
 				}
 			} break;	
@@ -146,7 +146,7 @@ namespace CTRPluginFramework {
 				return;	
 
 			Sleep(Milliseconds(100));
-			Address func(funcaddress);
+			Address func("FUNC");
 			switch(size) {
 				case 0: result = func.Call<u32>(); break;
 				case 1: result = func.Call<u32>(p[0]); break;
@@ -216,18 +216,18 @@ namespace CTRPluginFramework {
 
 					player = Player::GetSaveData(pChoice);
 					locPlayer = { (u32 *)player, sizeof(player) };
-					Wrap::Dump(Utils::Format(PATH_PLAYER, regionName.c_str()), filename, ".player", &locPlayer, nullptr);
+					Wrap::Dump(Utils::Format(PATH_PLAYER, Address::regionName.c_str()), filename, ".player", &locPlayer, nullptr);
 				}
 			} break;
 			
 			case 1:
 				player = Player::GetSaveData();
 				locPlayer = { (u32 *)player, sizeof(player) };
-				Wrap::Restore(Utils::Format(PATH_PLAYER, regionName.c_str()), ".player", "Player Restorer\nSelect File:", nullptr, true, &locPlayer, nullptr); 
+				Wrap::Restore(Utils::Format(PATH_PLAYER, Address::regionName.c_str()), ".player", "Player Restorer\nSelect File:", nullptr, true, &locPlayer, nullptr); 
 			break;
 
 			case 2:
-				Wrap::Delete(Utils::Format(PATH_PLAYER, regionName.c_str()), ".player");
+				Wrap::Delete(Utils::Format(PATH_PLAYER, Address::regionName.c_str()), ".player");
 			break;
 		}
 	}
@@ -1487,7 +1487,7 @@ namespace CTRPluginFramework {
 	}
 	
 	u64 GetFriendCode(u8 pIndex) {
-		u32 gPoint = *(u32 *)Code::GamePointer.addr;
+		u32 gPoint = *(u32 *)Address("GAMEPOINTER").addr;
 		if(gPoint == 0)
 			return 0;
 
@@ -1928,7 +1928,7 @@ namespace CTRPluginFramework {
 
 			*(u8 *)(globalData->data + 7) = 0;
 
-			static FUNCT func(Code::AnimFunction);
+			static FUNCT func(Address("ANIMFUNCTION"));
 			func.Call<bool>(player, 0xB9, globalData, 0);
 
 			delete[] globalData;
@@ -2001,8 +2001,8 @@ namespace CTRPluginFramework {
 	}*/
 
 	void lightswitch(MenuEntry *entry) {
-		static const Address TargetAddress(0x190EA8, 0x1908F0, 0x190EC8, 0x190EC8, 0x190E18, 0x190E18, 0x190E18, 0x190E18);
-		static const Address Patch(0x1E7AD8, 0x1E751C, 0x1E7AF8, 0x1E7AF8, 0x1E7A34, 0x1E7A34, 0x1E7A00, 0x1E7A00);
+		static const Address TargetAddress("TARGETADDRESS");
+		static const Address Patch("PATCH");
 
 		if(entry->WasJustActivated()) {
 		//this disables the "non switchable light" flag to be written
@@ -2046,7 +2046,7 @@ namespace CTRPluginFramework {
 		static bool random = false;
 		Item FishID(0x22E1, 0);
 
-		static Address throwfish(0x5C2DAC);
+		static Address throwfish("THROWFISH");
 
 		if(Controller::IsKeysPressed(Key::L + Key::DPadRight)) {
 			if(playerID == 3) playerID = 0;		

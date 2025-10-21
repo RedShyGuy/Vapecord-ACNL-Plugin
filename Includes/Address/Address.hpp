@@ -14,32 +14,17 @@
 #define TID_EURWL 		0x00040000004C5700
 
 namespace CTRPluginFramework {
-	enum CurrRegion {
-		INVALID = 0,
-        USA,
-		USAWA,
-        EUR,
-		EURWA,
-        JPN,
-		JPNWA,
-		KOR,
-		KORWA,
-		EURWL //special case
-    };
-
-	extern CurrRegion c_Region;
-
-	extern std::string regionName;
-
 	class Address {
 		public:
-			Address(u32 usa, u32 usawa, u32 eur, u32 eurwa, u32 jpn, u32 jpnwa, u32 kor, u32 korwa);
-			
+            Address(const std::string& key);
+
 			Address(u32 address);
 
-			Address(void);
+            static std::string LoadRegion(void);
 
 			u32 addr;
+
+            static std::string regionName;
 
 			template <typename T, class ...Args>
 			T Call(Args ...args) {

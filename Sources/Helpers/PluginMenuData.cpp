@@ -1,6 +1,6 @@
 #include "Helpers/PluginMenuData.hpp"
 #include "Files.h"
-#include "Helpers/Address.hpp"
+#include "Address/Address.hpp"
 
 namespace CTRPluginFramework {
 	MenuFolder *DEVC;

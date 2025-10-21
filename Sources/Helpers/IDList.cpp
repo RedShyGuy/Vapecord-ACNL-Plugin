@@ -4,7 +4,8 @@
 #include "Helpers/Inventory.hpp"
 #include "Helpers/Save.hpp"
 #include "Helpers/NPC.hpp"
-#include "RegionCodes.hpp"
+#include "Address/Address.hpp"
+
 #include "Language.hpp"
 
 #define RANGE(X, START, END)	((X & 0xFFFF) >= START && (X & 0xFFFF) <= END)
@@ -299,7 +300,7 @@ namespace CTRPluginFramework {
 
 //Get Room Name
 	std::string IDList::GetRoomName(u8 ID) {
-		static Address RoomName(0x5B4BE4, 0x5B40FC, 0x5B3C2C, 0x5B3C2C, 0x5B351C, 0x5B351C, 0x5B31F0, 0x5B31F0); 
+		static Address RoomName("ROOMNAME"); 
 
 		if(ID <= 0xA5) 
 			return Color::Green << (std::string)(RoomName.Call<char *>(ID));

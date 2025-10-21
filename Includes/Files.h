@@ -7,6 +7,7 @@
 #define ITEMLIST            "E:/Vapecord/Data/item.txt"
 
 #define PATH_LANGUAGE_BIN   "E:/Vapecord/Data/language.bin"
+#define PATH_ADDRESSES_BIN  "E:/Vapecord/Data/addresses.bin"
 
 #define PATH_ISLAND	        "E:/Vapecord/%s/Island"
 #define PATH_BULLETIN	    "E:/Vapecord/%s/Bulletin"

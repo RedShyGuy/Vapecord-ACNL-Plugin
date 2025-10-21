@@ -1,5 +1,5 @@
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
+
 #include "Helpers/Game.hpp"
 #include "Helpers/Player.hpp"
 #include "Helpers/Dropper.hpp"
@@ -12,15 +12,15 @@
 namespace CTRPluginFramework {
 //Shops Always Open
 	void ShopsAlwaysOpen(MenuEntry *entry) {
-		static const Address shopretail(0x309348, 0x309430, 0x309344, 0x309344, 0x3093BC, 0x3093BC, 0x30935C, 0x30935C);
-		static const Address shopnookling(0x711B14, 0x710FC4, 0x710B1C, 0x710AF4, 0x7102C8, 0x7102A0, 0x70FE70, 0x70FE70);
-		static const Address shopgarden(0x711BCC, 0x71107C, 0x710BD4, 0x710BAC, 0x710380, 0x710358, 0x70FF28, 0x70FF28);
-		static const Address shopables(0x713EB0, 0x713360, 0x712EB8, 0x712E90, 0x712664, 0x71263C, 0x71220C, 0x71220C);
-		static const Address shopshampoodle(0x71D42C, 0x71C774, 0x71C434, 0x71C40C, 0x71BBE0, 0x71BBB8, 0x71B788, 0x71B788);
-		static const Address shopkicks(0x71184C, 0x710CFC, 0x710854, 0x71082C, 0x710000, 0x70FFD8, 0x70FBA8, 0x70FBA8);   
-		static const Address shopnooks(0x71F654, 0x71E99C, 0x71E65C, 0x71E634, 0x71DE08, 0x71DDE0, 0x71D9B0, 0x71D9B0);
-		static const Address shopkatrina(0x718098, 0x717548, 0x7170A0, 0x717078, 0x71684C, 0x716824, 0x7163F4 ,0x7163F4);
-		static const Address shopredd(0x718444, 0x7178F4, 0x71744C, 0x717424, 0x716BF8, 0x716BD0, 0x7167A0, 0x7167A0);
+		static const Address shopretail("SHOPRETAIL");
+		static const Address shopnookling("SHOPNOOKLING");
+		static const Address shopgarden("SHOPGARDEN");
+		static const Address shopables("SHOPABLES");
+		static const Address shopshampoodle("SHOPSHAMPOODLE");
+		static const Address shopkicks("SHOPKICKS");   
+		static const Address shopnooks("SHOPNOOKS");
+		static const Address shopkatrina("SHOPKATRINA");
+		static const Address shopredd("SHOPREDD");
 
 		const u32 ShopOpen[9] = { shopretail.addr, shopnookling.addr, shopgarden.addr, shopables.addr, shopshampoodle.addr, shopkicks.addr, shopnooks.addr, shopkatrina.addr, shopredd.addr };
 
@@ -37,11 +37,11 @@ namespace CTRPluginFramework {
 //Disable Save Menus
 	void nonesave(MenuEntry *entry) {
 		if(entry->WasJustActivated()) {
-			Process::Patch(Code::nosave.addr, 0xE1A00000);
+			Process::Patch(Address("NOSAVE").addr, 0xE1A00000);
 			save = true;
 		}
 		else if(!entry->IsActivated()) {
-			Process::Patch(Code::nosave.addr, 0xE8900006);
+			Process::Patch(Address("NOSAVE").addr, 0xE8900006);
 			save = false;
 		}
 	}
@@ -59,8 +59,8 @@ namespace CTRPluginFramework {
 	}
 //Can't Fall In Holes Or Pitfalls /*Credits to Nico*/
 	void noTrap(MenuEntry *entry) {
-		static const Address notraps1(0x65A668, 0x659B90, 0x6596A0, 0x6596A0, 0x659160, 0x659160, 0x658D08, 0x658D08);
-		static const Address notraps2(0x6789E4, 0x677F0C, 0x677A1C, 0x677A1C, 0x6774DC, 0x6774DC, 0x677084, 0x677084);
+		static const Address notraps1("NOTRAPS1");
+		static const Address notraps2("NOTRAPS2");
 		
 		if(entry->WasJustActivated()) {
 			Process::Patch(notraps1.addr, 0xEA000014);
@@ -435,8 +435,8 @@ namespace CTRPluginFramework {
 
 	void BuriedInspector(MenuEntry *entry) {
 		static Hook BuriedHook, PickBuriedHook;
-		static const Address BuriedAddress(0x665534, 0x664A5C, 0x66456C, 0x66456C, 0x66402C, 0x66402C, 0x663BD4, 0x663BD4);
-		static const Address PickBuriedAddress(0x59A0BC, 0x5995D4, 0x599104, 0x599104, 0x5989F4, 0x5989F4, 0x5986C8, 0x5986C8);
+		static const Address BuriedAddress("BURIEDADDRESS");
+		static const Address PickBuriedAddress("PICKBURIEDADDRESS");
 
 		if(entry->WasJustActivated()) {
 			BuriedHook.Initialize(BuriedAddress.addr, (u32)ThinkToBuriedItems);

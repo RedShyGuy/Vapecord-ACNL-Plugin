@@ -7,7 +7,7 @@
 #include "Helpers/Player.hpp"
 #include "Helpers/GameKeyboard.hpp"
 #include "Helpers/Animation.hpp"
-#include "RegionCodes.hpp"
+
 #include "Color.h"
 #include "Files.h"
 
@@ -159,9 +159,9 @@ namespace CTRPluginFramework {
 		else
 			OSD::Notify("Inventory Full!");
 
-		static Address argData(0x8499E4, 0x8489DC, 0x848870, 0x848870, 0x84886C, 0x84786C, 0x84786C, 0x84786C);
+		static Address argData("ARGDATA");
 
-		static Address restoreButton(0x81825C, 0x81715C, 0x817264, 0x81723C, 0x816A04, 0x8169DC, 0x8165A4, 0x81657C);
+		static Address restoreButton("RESTOREBUTTON");
 		restoreButton.Call<void>(invData, *(u32 *)argData.addr, *(u32 *)(argData.addr + 4));
 	}
 
@@ -169,8 +169,8 @@ namespace CTRPluginFramework {
 //Catalog To Pockets
 	void catalog(MenuEntry *entry) {
 		static Hook catalogHook;
-		static Address AllItemsBuyable(0x70E494, 0x70D944, 0x70D4B4, 0x70D48C, 0x70CC60, 0x70CC38, 0x70C808, 0x70C7E0);
-		static Address cHook(0x21B4B0, 0x21AEF4, 0x21B4D0, 0x21B4D0, 0x21B3F0, 0x21B3F0, 0x21B3BC, 0x21B3BC);
+		static Address AllItemsBuyable("ALLITEMSBUYABLE");
+		static Address cHook("CHOOK");
 
 		if(entry->WasJustActivated()) {
 			catalogHook.Initialize(cHook.addr, (u32)CatalogGetItem);
@@ -278,10 +278,10 @@ namespace CTRPluginFramework {
 
 //Item Settings	
 	void itemsettings(MenuEntry *entry) {
-		static const Address showoff(0x19BA78, 0x19B4C0, 0x19BA98, 0x19BA98, 0x19B9D8, 0x19B9D8, 0x19B9D8, 0x19B9D8);
-		static const Address infinite1(0x19C574, 0x19BFBC, 0x19C594, 0x19C594, 0x19C4D4, 0x19C4D4, 0x19C4D4, 0x19C4D4);
-		static const Address infinite2(0x19C4D0, 0x19BF18, 0x19C4F0, 0x19C4F0, 0x19C430, 0x19C430, 0x19C430, 0x19C430);
-		static const Address eat(0x19C1F0, 0x19BC38, 0x19C210, 0x19C210, 0x19C150, 0x19C150, 0x19C150, 0x19C150);
+		static const Address showoff("SHOWOFF");
+		static const Address infinite1("INFINITE1");
+		static const Address infinite2("INFINITE2");
+		static const Address eat("EAT");
 		
 		std::vector<std::string> itemsettopt = {
 			Language::getInstance()->get("VECTOR_ITEMSETTINGS_SHOWOFF"),
@@ -372,7 +372,7 @@ namespace CTRPluginFramework {
 		if(dChoice < 0)
 			return;
 
-		hook.Initialize(Code::nosave.addr + 8, (u32)Hook_MenuPatch);
+		hook.Initialize(Address("NOSAVE").addr + 8, (u32)Hook_MenuPatch);
 		hook.SetFlags(USE_LR_TO_RETURN);
 
 	//If Custom Menu is chosen
@@ -506,16 +506,16 @@ namespace CTRPluginFramework {
 						if(KB.Open(filename) == -1)
 							return;
 
-						Wrap::Dump(Utils::Format(PATH_ITEMSET, regionName.c_str()), filename, ".inv", &LocInv, &LocLock, nullptr);
+						Wrap::Dump(Utils::Format(PATH_ITEMSET, Address::regionName.c_str()), filename, ".inv", &LocInv, &LocLock, nullptr);
 					} return;
 					
 					case 1: {			
-						Wrap::Restore(Utils::Format(PATH_ITEMSET, regionName.c_str()), ".inv", Language::getInstance()->get("GET_SET_RESTORE"), GetCustomView, true, &LocInv, &LocLock, nullptr); 
+						Wrap::Restore(Utils::Format(PATH_ITEMSET, Address::regionName.c_str()), ".inv", Language::getInstance()->get("GET_SET_RESTORE"), GetCustomView, true, &LocInv, &LocLock, nullptr); 
 						Inventory::ReloadIcons();
 					} return;
 					
 					case 2: 
-						Wrap::Delete(Utils::Format(PATH_ITEMSET, regionName.c_str()), ".inv");
+						Wrap::Delete(Utils::Format(PATH_ITEMSET, Address::regionName.c_str()), ".inv");
 					return;
 				}
 			}

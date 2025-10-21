@@ -1,6 +1,7 @@
 #include "Helpers/GameKeyboard.hpp"
 #include "Helpers/Game.hpp"
-#include "RegionCodes.hpp"
+#include "Address/Address.hpp"
+
 
 #define RANGE(X, START, END)	(X >= START && X <= END)
 
@@ -9,20 +10,20 @@ namespace CTRPluginFramework {
 		if(!GameKeyboard::IsOpen())
 			return false;
 
-		if(*(u32 *)Code::ChatPoint.addr == 0)
+		if(*(u32 *)Address("CHATPOINT").addr == 0)
 			return false;
 
 		u16 buffer[str.size() + 1] = { 0 };
 		utf8_to_utf16(buffer, reinterpret_cast<const u8*>(str.data()), str.size());
 
-		static Address WriteFunc(0x5231D0, 0x522B24, 0x522218, 0x522218, 0x521B28, 0x521B28, 0x521514, 0x521514);	
+		static Address WriteFunc("WRITEFUNC");	
 
 		const u16* hex = (const u16 *)buffer;
-		u8 i = *(u8 *)(*(u32 *)(Code::ChatPoint.addr) + 0x14);
+		u8 i = *(u8 *)(*(u32 *)(Address("CHATPOINT").addr) + 0x14);
 
 		while(*hex) {
 			u16 character = (u16)*hex++;
-			WriteFunc.Call<void>(*(u32 *)Code::ChatPoint.addr, character, i, 0, 0);
+			WriteFunc.Call<void>(*(u32 *)Address("CHATPOINT").addr, character, i, 0, 0);
 			i++;
 		}
 
@@ -35,11 +36,11 @@ namespace CTRPluginFramework {
 		if(GameKeyboard::IsEmpty())
 			return false;
 
-		static Address DeleteFunc(0x523780, 0x5230D4, 0x5227C8, 0x5227C8, 0x5220D4, 0x5220D4, 0x521DCC, 0x521DCC);
+		static Address DeleteFunc("DELETEFUNC");
 
-		DeleteFunc.Call<void>(*(u32 *)Code::ChatPoint.addr, 0, 100);
+		DeleteFunc.Call<void>(*(u32 *)Address("CHATPOINT").addr, 0, 100);
 
-		*(bool *)(*(u32 *)(Code::ChatPoint.addr) + 0x20) = 0; //unselects
+		*(bool *)(*(u32 *)(Address("CHATPOINT").addr) + 0x20) = 0; //unselects
 		return true;
 	}
 
@@ -47,13 +48,13 @@ namespace CTRPluginFramework {
 		if(!GameKeyboard::IsOpen())
 			return false;
 
-		bool IsSelected = *(bool *)(*(u32 *)(Code::ChatPoint.addr) + 0x20); //95F11C
+		bool IsSelected = *(bool *)(*(u32 *)(Address("CHATPOINT").addr) + 0x20); //95F11C
 		if(!IsSelected) 
 			return false;
 
-		u32	ChatText = *(u32 *)(*(u32 *)(Code::ChatPoint.addr) + 0x10);
-		u8	CurrentPos = *(u8 *)(*(u32 *)(Code::ChatPoint.addr) + 0x14);
-		u8	SelectStart = *(u8 *)(*(u32 *)(Code::ChatPoint.addr) + 0x1C);
+		u32	ChatText = *(u32 *)(*(u32 *)(Address("CHATPOINT").addr) + 0x10);
+		u8	CurrentPos = *(u8 *)(*(u32 *)(Address("CHATPOINT").addr) + 0x14);
+		u8	SelectStart = *(u8 *)(*(u32 *)(Address("CHATPOINT").addr) + 0x1C);
 
 		if(CurrentPos < SelectStart) 
 			Process::ReadString(ChatText + (CurrentPos * 2), res, (SelectStart * 2) - (CurrentPos * 2), StringFormat::Utf16);
@@ -68,32 +69,32 @@ namespace CTRPluginFramework {
 		if(!GameKeyboard::IsOpen())
 			return false;
 
-		static Address DeleteFunc(0x523780, 0x5230D4, 0x5227C8, 0x5227C8, 0x5220D4, 0x5220D4, 0x521DCC, 0x521DCC);
+		static Address DeleteFunc("DELETEFUNC");
 
-		bool IsSelected = *(bool *)(*(u32 *)(Code::ChatPoint.addr) + 0x20);
+		bool IsSelected = *(bool *)(*(u32 *)(Address("CHATPOINT").addr) + 0x20);
 		if(!IsSelected)
 			return false;
 
-		u8	CurrentPos = *(u8 *)(*(u32 *)(Code::ChatPoint.addr) + 0x14);
-		u8	SelectStart = *(u8 *)(*(u32 *)(Code::ChatPoint.addr) + 0x1C);
+		u8	CurrentPos = *(u8 *)(*(u32 *)(Address("CHATPOINT").addr) + 0x14);
+		u8	SelectStart = *(u8 *)(*(u32 *)(Address("CHATPOINT").addr) + 0x1C);
 
 		if(CurrentPos < SelectStart) {
-			DeleteFunc.Call<void>(*(u32 *)Code::ChatPoint.addr, CurrentPos, SelectStart - CurrentPos);
+			DeleteFunc.Call<void>(*(u32 *)Address("CHATPOINT").addr, CurrentPos, SelectStart - CurrentPos);
 		}
 		if(CurrentPos > SelectStart) {
-			DeleteFunc.Call<void>(*(u32 *)Code::ChatPoint.addr, SelectStart, CurrentPos - SelectStart);
+			DeleteFunc.Call<void>(*(u32 *)Address("CHATPOINT").addr, SelectStart, CurrentPos - SelectStart);
 		}
 
-		*(bool *)(*(u32 *)(Code::ChatPoint.addr) + 0x20) = 0; //unselects
+		*(bool *)(*(u32 *)(Address("CHATPOINT").addr) + 0x20) = 0; //unselects
 		return true;
 	}
 
 //If keyboard is opened 32DE75BC
 	bool GameKeyboard::IsOpen() {
-		static Address KeyBool(0x523F48, 0x52389C, 0x522F90, 0x522F90, 0x52287C, 0x52287C, 0x52256C, 0x52256C); 
+		static Address KeyBool("KEYBOOL"); 
 		bool res = KeyBool.Call<bool>();
 		if(res) {
-			if(*(u32 *)(*(u32 *)(*(u32 *)(Code::ChatPoint.addr) + 4) + 0x50) == 0)
+			if(*(u32 *)(*(u32 *)(*(u32 *)(Address("CHATPOINT").addr) + 4) + 0x50) == 0)
 				return false;
 		}
 		return res;
@@ -103,7 +104,7 @@ namespace CTRPluginFramework {
 		if(!GameKeyboard::IsOpen())
 			return true;
 
-		return *(bool *)(*(u32 *)(*(u32 *)(Code::ChatPoint.addr) + 0x10) + 0x98 + 0x11B1) != true;
+		return *(bool *)(*(u32 *)(*(u32 *)(Address("CHATPOINT").addr) + 0x10) + 0x98 + 0x11B1) != true;
 	}
 
 	bool GameKeyboard::Copy(std::string& str, int pos, int lenght) {
@@ -113,7 +114,7 @@ namespace CTRPluginFramework {
 		if(GameKeyboard::IsEmpty())
 			return false;
 
-		u32 ChatText = *(u32 *)(*(u32 *)(Code::ChatPoint.addr) + 0x10);
+		u32 ChatText = *(u32 *)(*(u32 *)(Address("CHATPOINT").addr) + 0x10);
 
 		return Process::ReadString(ChatText + pos, str, lenght, StringFormat::Utf16);
 	}
@@ -151,7 +152,7 @@ namespace CTRPluginFramework {
 	};
 
 	void SetCustomOnlineStack(OnlineStack *stack, const std::string& str) {
-		static const Address point(0x90B38C, 0x90A260, 0x90A20C, 0x90A20C, 0x904644, 0x903644, 0x9035B0, 0x9035B0);
+		static const Address point("POINT");
 
 		stack->unknownPointer1 = &stack->unknownPointer2;
 		stack->unknownPointer2 = (u32 *)point.addr;
@@ -161,13 +162,13 @@ namespace CTRPluginFramework {
 	}
 
 	void GameKeyboard::SendMessage(const std::string& str) {
-		static Address func2(0x56DE5C, 0x56D374, 0x56CEA4, 0x56CEA4, 0x56C794, 0x56C794, 0x56C4B4, 0x56C4B4);
-		static Address func3(0x5FD774, 0x5FCCA4, 0x5FC7AC, 0x5FC7AC, 0x5FC02C, 0x5FC02C, 0x5FBCB4, 0x5FBCB4);
-		static Address func4(0x5E3920, 0x5E2E50, 0x5E2958, 0x5E2958, 0x5E21D8, 0x5E21D8, 0x5E1E60, 0x5E1E60);
-		static Address func5(0x300838, 0x300904, 0x3008C0, 0x3008C0, 0x300914, 0x300914, 0x300AF4, 0x300AF4);
-		static Address func6(0x625C04, 0x62512C, 0x624C3C, 0x624C3C, 0x6246FC, 0x6246FC, 0x6242A4, 0x6242A4);
+		static Address func2("FUNC2");
+		static Address func3("FUNC3");
+		static Address func4("FUNC4");
+		static Address func5("FUNC5");
+		static Address func6("FUNC6");
 
-		u32 msgData = *(u32 *)Code::chatpointer.addr;
+		u32 msgData = *(u32 *)Address("CHATPOINTER").addr;
 		if(msgData == 0)
 			return;
 
@@ -183,7 +184,7 @@ namespace CTRPluginFramework {
 			*(u8 *)(msgData + 0x85A) = 0;
 		}
 
-		u32 var = Code::SetupStackData.Call<u32>(Stack); //Makes temporary "Stack" ready to be written to
+		u32 var = Address("SETUPSTACKDATA").Call<u32>(Stack); //Makes temporary "Stack" ready to be written to
 		func2.Call<void>(var, pIndex); //Gets Player Name Data and writes it to temporary "Stack"
 
 		func3.Call<void>((int *)(msgData + 0x47C), var); //Finished Player Name Data in Chat Box Data (?)

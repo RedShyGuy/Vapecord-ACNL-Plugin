@@ -5,7 +5,8 @@
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/Save.hpp"
 #include "Helpers/Converters.hpp"
-#include "RegionCodes.hpp"
+#include "Address/Address.hpp"
+
 
 bool IsIndoorsBool = false;
 
@@ -16,13 +17,13 @@ loads specific player
 	void Player::Load(int pIndex) {
 		Animation::Idle();
 	//This will load the players save data
-		static Address pLoad(0x5C441C, 0x5C394C, 0x5C3464, 0x5C3464, 0x5C2D54, 0x5C2D54, 0x5C2A28, 0x5C2A28);
+		static Address pLoad("PLOAD");
 		pLoad.Call<void>(0, pIndex, 0);
 
 		//BF77B0(0x330981F4)
 		
 	//This will port the player to his home
-		static Address pReload(0x5B66FC, 0x5B5C14, 0x5B5744, 0x5B5744, 0x5B5034, 0x5B5034, 0x5B4D08, 0x5B4D08);
+		static Address pReload("PRELOAD");
 		pReload.Call<void>(GameHelper::GetRoomData(), pIndex, 1, 0);
 	}
 
@@ -40,7 +41,7 @@ reload design
 		u32 Data1 = InvData + (slot * 0x290);
 		u32 Data2 = Data1 + 0x6BC;
 		
-		static Address ReloadOffset(0x320DE0, 0x3207F4, 0x320134, 0x320134, 0x31FDE8, 0x31FDE8, 0x31FCA0, 0x31FCA0);
+		static Address ReloadOffset("RELOADOFFSET");
 		ReloadOffset.Call<void>(Data2);
 	}
 /*
@@ -68,13 +69,13 @@ Update Tan
 		u32 GetStoredData = i + 0x1B4; //0x33077570
 	//This Stores the Tan Data Correctly
 		
-		static Address GetTanDataOffset(0x713798, 0x712C48, 0x7127A0, 0x712778, 0x711F4C, 0x711F24, 0x711AF4, 0x711ACC);
+		static Address GetTanDataOffset("GETTANDATAOFFSET");
 		u8 Tan = GetTanDataOffset.Call<u8>(&player->PlayerFeatures);
 		
 		Process::Write8(GetStoredData + 0x1C0, Tan);
 		
 	//This Updates the Tan
-		static Address UpdateTanOffset(0x1D0B90, 0x1D05D4, 0x1D0BB0, 0x1D0BB0, 0x1D0AEC, 0x1D0AEC, 0x1D0AEC, 0x1D0AEC);
+		static Address UpdateTanOffset("UPDATETANOFFSET");
 		UpdateTanOffset.Call<void>(GetStoredData);
 	}
 /*
@@ -85,7 +86,7 @@ update appearance
 			return;
 
 	//This Updates the Outfit	
-		static Address update(0x68B2E4, 0x68A80C, 0x68A31C, 0x68A31C, 0x689DDC, 0x689DDC, 0x689984, 0x689984);
+		static Address update("UPDATE");
 		update.Call<void>(PlayerClass::GetInstance()->Offset());
 	}
 /*
@@ -108,7 +109,7 @@ Write Outfit
 get status of specific player
 */
 	PlayerStatus Player::GetPlayerStatus(u8 pPlayer) {
-		static Address pPOffset(0x2FF6CC, 0x2FF8B0, 0x2FF754, 0x2FF754, 0x2FF92C, 0x2FF92C, 0x2FF978, 0x2FF978);
+		static Address pPOffset("PPOFFSET");
 		return pPOffset.Call<PlayerStatus>(pPlayer);
 	}
 
@@ -116,14 +117,14 @@ get status of specific player
 Get player save offset for any player
 */
 	u32 Player::GetSpecificSave(u8 pPlayer) {
-		static Address pPOffset(0x2FBA60, 0x2FB96C, 0x2FBAE8, 0x2FBAE8, 0x2FB920, 0x2FB920, 0x2FB8F8, 0x2FB8F8);
+		static Address pPOffset("PPOFFSET");
 		return pPOffset.Call<u32>(pPlayer);
 	}
 /*
 Get Player Save Offset for loaded players
 */
 	u32 Player::GetSaveOffset(u8 pIndex) {
-		static Address pSOffset(0x2FEB2C, 0x2FE8A8, 0x2FEBB4, 0x2FEBB4, 0x2FEB60, 0x2FEB60, 0x2FEA98, 0x2FEA98);
+		static Address pSOffset("PSOFFSET");
 		return pSOffset.Call<u32>(pIndex);
 	}
 
@@ -131,10 +132,10 @@ Get Player Save Offset for loaded players
 		if(!player)
 			return false;
 
-		static Address SetUp1(0x5360A8, 0x5359FC, 0x5350F0, 0x5350F0, 0x5349DC, 0x5349DC, 0x534700, 0x534700);
-		static Address SetUp2(0x6BA680, 0x6B9B30, 0x6B96B8, 0x6B9690, 0x6B8FB0, 0x6B8F88, 0x6B8B58, 0x6B8B30);
-		static Address SetStack(0x2FCC14, 0x2FCBB0, 0x2FCC9C, 0x2FCC9C, 0x2FCBB4, 0x2FCBB4, 0x2FCBC0, 0x2FCBC0);
-		static Address ReadStack(0x769DBC, 0x768DA0, 0x768DC4, 0x768D9C, 0x76855C, 0x768534, 0x768104, 0x7680DC);
+		static Address SetUp1("SETUP1");
+		static Address SetUp2("SETUP2");
+		static Address SetStack("SETSTACK");
+		static Address ReadStack("READSTACK");
 
 		u32 val = SetUp1.Call<u32>(ID);
 		u32 uVar5 = *(u32 *)(val + 4);
@@ -228,22 +229,22 @@ Get Player Save Offset for loaded players
 If player exitst
 */
 	bool Player::Exists(u8 PlayerIndex) {
-		static Address existsFunction(0x75F84C, 0x75E830, 0x75E854, 0x75E82C, 0x75DFEC, 0x75DFC4, 0x75DB94, 0x75DB6C);
-		u8 room = existsFunction.Call<u8>(*(u32 *)Code::GamePointer.addr + 0x1C1, PlayerIndex);
+		static Address existsFunction("EXISTSFUNCTION");
+		u8 room = existsFunction.Call<u8>(*(u32 *)Address("GAMEPOINTER").addr + 0x1C1, PlayerIndex);
 		return room == 0xA5 ? 0 : 1;
 	}
 /*
 get location
 */
 	bool Player::IsIndoors() {
-		static Address getlocation(0x1E890C, 0x1E8350, 0x1E892C, 0x1E892C, 0x1E8868, 0x1E8868, 0x1E8834, 0x1E8834);
+		static Address getlocation("GETLOCATION");
 		return getlocation.Call<bool>();
 	}
 /*
 get room
 */
 	u8 Player::GetRoom(u8 PlayerIndex) {
-		static Address getroom(0x5C3DDC, 0x5C330C, 0x5C2E24, 0x5C2E24, 0x5C2714, 0x5C2714, 0x5C23E8, 0x5C23E8); 
+		static Address getroom("GETROOM"); 
 		u32 var = getroom.Call<u32>(PlayerIndex);
 		return var == 0 ? 0xFF : *(u8 *)var;
 	}

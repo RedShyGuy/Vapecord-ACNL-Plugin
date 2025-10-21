@@ -4,6 +4,7 @@
 #include <3ds.h>
 #include <CTRPluginFramework.hpp>
 #include "Helpers/GameStructs.hpp"
+#include "Address/Address.hpp"
 #include "Language.hpp"
 
 extern CTRPluginFramework::Item PickupSeederItemID;

@@ -64,7 +64,6 @@ namespace CTRPluginFramework {
 		void				Particles(u32 particleID, float *floats);
 		void				TrampleAt(u8 wX, u8 wY);
 
-		bool 				IsACNL();
 		bool				IsInRoom(u8 room);
 		u8					RoomCheck();
 		u8					NextRoomCheck();

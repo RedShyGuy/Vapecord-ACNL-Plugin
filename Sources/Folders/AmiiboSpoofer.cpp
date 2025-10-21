@@ -1,7 +1,7 @@
 #include "cheats.hpp"
 #include "Helpers/IDList.hpp"
 #include "Helpers/NPC.hpp"
-#include "Helpers/Address.hpp"
+#include "Address/Address.hpp"
 
 /*
     Amiibo Spoofer 3.0 by Slattz
@@ -68,10 +68,10 @@ namespace CTRPluginFramework {
     }
 
     void AmiiboSpoofer(MenuEntry *entry) {
-        static const Address offsetPatch(0x51C104, 0x51BA58, 0x51B14C, 0x51B14C, 0x51AA68, 0x51AA68, 0x51A3FC, 0x51A3FC);
-        static const Address offsetHook(0x51BBDC, 0x51B530, 0x51AC24, 0x51AC24, 0x51A540, 0x51A540, 0x519ED4, 0x519ED4);
-        static const Address offsetPatch_o3ds1(0x3DAA7C, 0x3DA48C, 0x3D9AC4, 0x3D9AC4, 0x3D975C, 0x3D975C, 0x3D961C, 0x3D961C);
-        static const Address offsetPatch_o3ds2(0x3DA824, 0x3DA234, 0x3D986C, 0x3D986C, 0x3D9504, 0x3D9504, 0x3D93C4, 0x3D93C4);
+        static const Address offsetPatch("OFFSETPATCH");
+        static const Address offsetHook("OFFSETHOOK");
+        static const Address offsetPatch_o3ds1("OFFSETPATCH_O3DS1");
+        static const Address offsetPatch_o3ds2("OFFSETPATCH_O3DS2");
         static u32 originalCode[3] = {0};
         static Hook nfcHook;
 

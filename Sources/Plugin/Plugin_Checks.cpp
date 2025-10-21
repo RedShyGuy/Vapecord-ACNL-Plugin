@@ -1,6 +1,7 @@
-#include "RegionCodes.hpp"
+
 #include "Helpers/Player.hpp"
 #include "Helpers/Dropper.hpp"
+#include "Address/Address.hpp"
 
 namespace CTRPluginFramework {
 	void SetHook(Hook &hook, u32 address, u32 callback, u32 flags) {
@@ -33,88 +34,88 @@ namespace CTRPluginFramework {
 	void PluginHooks(void) {
 		/*
 		static Hook suspendHook;
-		static const Address suspendAddress(0x124EB8, 0x124928, 0x124EDC, 0x124EDC, 0x124EA4, 0x124EA4, 0x124EA4, 0x124EA4);
+		static const Address suspendAddress("SUSPENDADDRESS");
 		SetHook(suspendHook, suspendAddress.addr, (u32)SuspendCallBack, USE_LR_TO_RETURN);
 		*/
 
 		/*static Hook titleHook, textHook;
-		static const Address warningTXT(0x2F319C, 0, 0, 0, 0, 0, 0, 0);
+		static const Address warningTXT("WARNINGTXT");
 		SetHook(titleHook, warningTXT.addr, (u32)SetTitle, USE_LR_TO_RETURN);
 		SetHook(textHook, warningTXT.addr + 0xA8, (u32)SetText, USE_LR_TO_RETURN);*/
 
 		static Hook SaveButtonCheck;
-		SetHook(SaveButtonCheck, Code::nosave.addr - 0x10, (u32)IsSTARTDown, USE_LR_TO_RETURN);
+		SetHook(SaveButtonCheck, Address("NOSAVE").addr - 0x10, (u32)IsSTARTDown, USE_LR_TO_RETURN);
 
 		static Hook CatalogPHook1, CatalogPHook2;
-		static const Address CatalogPOffset1(0x21C408, 0x21BE4C, 0x21C428, 0x21C428, 0x21C348, 0x21C348, 0x21C314, 0x21C314);
-		static const Address CatalogPOffset2(0x21C0AC, 0x21BAF0, 0x21C0CC, 0x21C0CC, 0x21BFEC, 0x21BFEC, 0x21BFB8, 0x21BFB8);
+		static const Address CatalogPOffset1("CATALOGPOFFSET1");
+		static const Address CatalogPOffset2("CATALOGPOFFSET2");
 		SetHook(CatalogPHook1, CatalogPOffset1.addr, (u32)CatalogPatch_Keyboard, USE_LR_TO_RETURN);
 		SetHook(CatalogPHook2, CatalogPOffset2.addr, (u32)CatalogPatch_SearchFunction, USE_LR_TO_RETURN);
 		
 		static Hook IPHook;	
-		static const Address IPOffset(0x59A258, 0x599770, 0x5992A0, 0x5992A0, 0x598B90, 0x598B90, 0x598864, 0x598864);
+		static const Address IPOffset("IPOFFSET");
 		SetHook(IPHook, IPOffset.addr, (u32)InvalidPickStop, USE_LR_TO_RETURN);
 
 		static Hook InvDropHook, InvPlantHook;
-		static const Address InvDropOffset(0x597850, 0x596D68, 0x596898, 0x596898, 0x596188, 0x596188, 0x595E5C, 0x595E5C);
-		static const Address InvPlantOffset(0x597724, 0x596C3C, 0x59676C, 0x59676C, 0x59605C, 0x59605C, 0x595D30, 0x595D30);
+		static const Address InvDropOffset("INVDROPOFFSET");
+		static const Address InvPlantOffset("INVPLANTOFFSET");
 		SetHook(InvDropHook, InvDropOffset.addr, (u32)InvalidDropStop, USE_LR_TO_RETURN);
 		SetHook(InvPlantHook, InvPlantOffset.addr, (u32)InvalidDropStop, USE_LR_TO_RETURN);
 		
 		static Hook ISHook;
-		static const Address ISOffset(0x670EA0, 0x6703C8, 0x66FED8, 0x66FED8, 0x66F998, 0x66F998, 0x66F540, 0x66F540);
+		static const Address ISOffset("ISOFFSET");
 		SetHook(ISHook, ISOffset.addr, (u32)InvalidSpriteStop, USE_LR_TO_RETURN);
 
 		static Hook InvalidGiveItemHook;
-		static const Address InvalidGiveItemAddress(0x2339CC, 0x233410, 0x2339EC, 0x2339EC, 0x23390C, 0x23390C, 0x2338D8, 0x2338D8);
+		static const Address InvalidGiveItemAddress("INVALIDGIVEITEMADDRESS");
 		SetHook(InvalidGiveItemHook, InvalidGiveItemAddress.addr, (u32)InvalidGiveItem, USE_LR_TO_RETURN);
 		
 		static Hook IHHook;
-		static const Address IHOffset(0x5980F4, 0x59760C, 0x59713C, 0x59713C, 0x596A2C, 0x596A2C, 0x596700, 0x596700);
+		static const Address IHOffset("IHOFFSET");
 		SetHook(IHHook, IHOffset.addr, (u32)InvalidHoleStop, USE_LR_TO_RETURN);
 		
 		static Hook IIHook;
-		static const Address IIOffset(0x72511C, 0x724464, 0x724124, 0x7240FC, 0x7238B8, 0x723890, 0x723460, 0x723460);
+		static const Address IIOffset("IIOFFSET");
 		SetHook(IIHook, IIOffset.addr, (u32)InvalidItemStop, USE_LR_TO_RETURN);
 		
 		static Hook CFHook;
-		static const Address CFOffset(0x323514, 0x322F28, 0x322868, 0x322868, 0x32251C, 0x32251C, 0x3223D4, 0x3223D4);
+		static const Address CFOffset("CFOFFSET");
 		SetHook(CFHook, CFOffset.addr, (u32)ConvertFlower, USE_LR_TO_RETURN);
 
 		static Hook NameHook;
-		static const Address NameWrite(0x19C498, 0x19BEE0, 0x19C4B8, 0x19C4B8, 0x19C3F8, 0x19C3F8, 0x19C3F8, 0x19C3F8);
+		static const Address NameWrite("NAMEWRITE");
 		SetHook(NameHook, NameWrite.addr, (u32)NameFunc, USE_LR_TO_RETURN);
 
 		static Hook ReplaceHook;
-		static const Address init(0x165528, 0x164F70, 0x165548, 0x165548, 0x165510, 0x165510, 0x165510, 0x165510);
+		static const Address init("INIT");
 		SetHook(ReplaceHook, init.addr, (u32)IsItemReplaceable, USE_LR_TO_RETURN);
 
 		static Hook DropHook1, DropHook2, DropHook3, DropHook4;
-		static const Address Drop1(0x19B66C, 0x19B0B4, 0x19B68C, 0x19B68C, 0x19B5DC, 0x19B5DC, 0x19B5DC, 0x19B5DC);
-		static const Address Drop2(0x19C044, 0x19BA8C, 0x19C064, 0x19C064, 0x19BFA4, 0x19BFA4, 0x19BFA4, 0x19BFA4);
-		static const Address Drop3(0x19CFF0, 0x19CA38, 0x19D010, 0x19D010, 0x19CF50, 0x19CF50, 0x19CF50, 0x19CF50);
-		static const Address Drop4(0x2AEA64, 0x2AE498, 0x2AEA60, 0x2AEA60, 0x2AE960, 0x2AE960, 0x2AE938, 0x2AE938);
+		static const Address Drop1("DROP1");
+		static const Address Drop2("DROP2");
+		static const Address Drop3("DROP3");
+		static const Address Drop4("DROP4");
 		SetHook(DropHook1, Drop1.addr, (u32)IsItemDroppable, USE_LR_TO_RETURN);
 		SetHook(DropHook2, Drop2.addr, (u32)IsItemDroppable, USE_LR_TO_RETURN);
 		SetHook(DropHook3, Drop3.addr, (u32)IsItemDroppable, USE_LR_TO_RETURN);
 		SetHook(DropHook4, Drop4.addr, (u32)IsItemDroppable, USE_LR_TO_RETURN);
 
 		static Hook PlantHook1, PlantHook2, PlantHook3, PlantHook4;
-		static const Address Plant1(0x19B688, 0x19B0D0, 0x19B6A8, 0x19B6A8, 0x19B5F8, 0x19B5F8, 0x19B5F8, 0x19B5F8);
-		static const Address Plant2(0x19B97C, 0x19B3C4, 0x19B99C, 0x19B99C, 0x19B8EC, 0x19B8EC, 0x19B8EC, 0x19B8EC);
-		static const Address Plant3(0x2AEAC4, 0x2AE4F8, 0x2AEAC0, 0x2AEAC0, 0x2AE9C0, 0x2AE9C0, 0x2AE998, 0x2AE998);
-		static const Address Plant4(0x2AFD24, 0x2AF758, 0x2AFD20, 0x2AFD20, 0x2AFC20, 0x2AFC20, 0x2AFBF8, 0x2AFBF8);
+		static const Address Plant1("PLANT1");
+		static const Address Plant2("PLANT2");
+		static const Address Plant3("PLANT3");
+		static const Address Plant4("PLANT4");
 		SetHook(PlantHook1, Plant1.addr, (u32)IsItemPlantable, USE_LR_TO_RETURN);
 		SetHook(PlantHook2, Plant2.addr, (u32)IsItemPlantable, USE_LR_TO_RETURN);
 		SetHook(PlantHook3, Plant3.addr, (u32)IsItemPlantable, USE_LR_TO_RETURN);
 		SetHook(PlantHook4, Plant4.addr, (u32)IsItemPlantable, USE_LR_TO_RETURN);
 
 		static Hook OnTitleScreenHook;
-		static const Address titleScreenWarp(0x109D52, 0x109D56, 0x109D56, 0x109D56, 0x109D56, 0x109D56, 0x109D56, 0x109D56);
+		static const Address titleScreenWarp("TITLESCREENWARP");
 		SetHook(OnTitleScreenHook, titleScreenWarp.addr, (u32)OnTitleScreen, USE_LR_TO_RETURN);
 
 		static Hook OnProDesignHook;
-		static const Address setItemIcon(0x2B9110, 0x2B8B44, 0x2B910C, 0x2B910C, 0x2B9004, 0x2B9004, 0x2B8FE4, 0x2B8FE4);
+		static const Address setItemIcon("SETITEMICON");
 		SetHook(OnProDesignHook, setItemIcon.addr, (u32)SetProDesignStyle, USE_LR_TO_RETURN);
 
 		/*static Hook hook;

@@ -1,7 +1,7 @@
 #include <cmath>
 #include "cheats.hpp"
 #include "Helpers/NPC.hpp"
-#include "Helpers/Address.hpp"
+#include "Address/Address.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/Dropper.hpp"
@@ -103,12 +103,12 @@ namespace CTRPluginFramework {
 	}
 
 	void NPCAnimation(MenuEntry *entry) {
-        static Address func1(0x6E7D54, 0x6E7204, 0x6E6D74, 0x6E6D4C, 0x6E6520, 0x6E64F8, 0x6E60C8, 0x6E60A0);
-        static Address func2(0x6EB384, 0x6EA834, 0x6EA3A4, 0x6EA37C, 0x6E9B50, 0x6E9B28, 0x6E96F8, 0x6E96D0);
-        static Address func3(0x6EC4E0, 0x6EB990, 0x6EB500, 0x6EB4D8, 0x6EACAC, 0x6EAC84, 0x6EA854, 0x6EA82C);
-        static Address func4(0x6EE778, 0x6EDC28, 0x6ED798, 0x6ED770, 0x6ECF44, 0x6ECF1C, 0x6ECAEC, 0x6ECAC4);
-        static Address data1(0xAE6864, 0xAE5658, 0xAE5864, 0xAE5864, 0xADF864, 0xADE864, 0xADE864, 0xADE864);
-        static Address data2(0x8816C4, 0x8806BC, 0x880550, 0x880550, 0x87A970, 0x879970, 0x879920, 0x879920);
+        static Address func1("FUNC1");
+        static Address func2("FUNC2");
+        static Address func3("FUNC3");
+        static Address func4("FUNC4");
+        static Address data1("DATA1");
+        static Address data2("DATA2");
 
 		if(CurrAddress == 0)
 			return;
@@ -169,10 +169,10 @@ namespace CTRPluginFramework {
 	}
 
 	u16 GetRawRotationData(void) {
-        static Address addr1(0x522520, 0x521E74, 0x521568, 0x521568, 0x520E84, 0x520E84, 0x520818, 0x520818);
-        static Address addr2(0x5667A8, 0x565CC0, 0x5657F0, 0x5657F0, 0x5650E0, 0x5650E0, 0x564E00, 0x564E00);
-        static Address addr3(0x57C4F0, 0x57BA08, 0x57B538, 0x57B538, 0x57AE28, 0x57AE28, 0x57AB48, 0x57AB48);
-        static const Address point1(0x94FDE8, 0x94EDD8, 0x94EDE8, 0x94EDE8, 0x948DE8, 0x947DE8, 0x947DE8, 0x947DE8);
+        static Address addr1("ADDR1");
+        static Address addr2("ADDR2");
+        static Address addr3("ADDR3");
+        static const Address point1("POINT1");
 
 		float fVar914 = 0;
 		u16 uVar918 = 0;

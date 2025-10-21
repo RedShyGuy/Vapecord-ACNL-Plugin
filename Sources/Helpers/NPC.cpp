@@ -1,15 +1,15 @@
 #include "Helpers/NPC.hpp"
-#include "Helpers/Address.hpp"
+#include "Address/Address.hpp"
 #include "Helpers/Player.hpp"
 #include "Helpers/IDList.hpp"
-#include "RegionCodes.hpp"
+
 
 namespace CTRPluginFramework {
 /*
 Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 */
   	u32 NPC::GetData(u16 ID, int count) {
-		u32 point = *(u32 *)Code::ExGameData.addr;
+		u32 point = *(u32 *)Address("EXGAMEDATA").addr;
 		if(point == 0)
 			return 0;
 
@@ -41,19 +41,19 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 	}
 
 	ACNL_VillagerData *NPC::GetSaveData() {
-		u32 *addr = (u32 *)(Code::GardenPlus.Call<u32>() + 0x292A0);
+		u32 *addr = (u32 *)(Address("GARDENPLUS").Call<u32>() + 0x292A0);
 		return (ACNL_VillagerData *)addr;
 	}
 
 	std::string NPC::GetNName(u16 VID) {
-		static Address SetUp(0x308210, 0x3083E4, 0x308298, 0x308298, 0x30822C, 0x30822C, 0x308240, 0x308240);
-		static const Address NNPCModelData(0xA84AF0, 0xA83AF0, 0xA83AF0, 0xA83AF0, 0xA7DAF0, 0xA7CAF0, 0xA7CAF0, 0xA7CAF0);
+		static Address SetUp("SETUP");
+		static const Address NNPCModelData("NNPCMODELDATA");
 
 		u32 Stack[44];
-		u32 add = Code::SetupStackData.Call<u32>(Stack);
+		u32 add = Address("SETUPSTACKDATA").Call<u32>(Stack);
 
 		u32 npcModel = *(u32 *)(NNPCModelData.addr) + VID * 0x22;
-		SetUp.Call<void>(*(u32 *)Code::DataPointer.addr, add, (char *)"STR_NNpc_name", npcModel + 10);
+		SetUp.Call<void>(*(u32 *)Address("DATAPOINTER").addr, add, (char *)"STR_NNpc_name", npcModel + 10);
 
 		std::string NNPCName = "";
 		Process::ReadString(Stack[1], NNPCName, 0x20, StringFormat::Utf16);
@@ -61,12 +61,12 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 	}
 
 	std::string NPC::GetSPName(u8 SPVID) {
-		static Address SetUp(0x75D108, 0x75C0EC, 0x75C110, 0x75C0E8, 0x75B8A8, 0x75B880, 0x75B450, 0x75B428);
+		static Address SetUp("SETUP");
 
 		u32 Stack[44];
-		u32 add = Code::SetupStackData.Call<u32>(Stack);
+		u32 add = Address("SETUPSTACKDATA").Call<u32>(Stack);
 
-		SetUp.Call<void>(*(u32 *)Code::DataPointer.addr, add, (char *)"STR_SPNpc_name", SPVID);
+		SetUp.Call<void>(*(u32 *)Address("DATAPOINTER").addr, add, (char *)"STR_SPNpc_name", SPVID);
 
 		std::string SPNPCName = "";
 		Process::ReadString(Stack[1], SPNPCName, 0x20, StringFormat::Utf16);
@@ -74,11 +74,11 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 	}
 
 	std::string NPC::GetRace(u8 ID) {
-		static Address SetUpStack(0x3081E8, 0x3083BC, 0x308270, 0x308270, 0x308204, 0x308204, 0x308218, 0x308218);
-		static Address SetUp(0x312610, 0x312A4C, 0x3127EC, 0x3127EC, 0x3126F8, 0x3126F8, 0x312B3C, 0x312B3C);
+		static Address SetUpStack("SETUPSTACK");
+		static Address SetUp("SETUP");
 
 	//No clue why, but the USA and EUR version have some formatting string parts at the beginning of the NPC race string which we need to skip
-		static const Address Fix(0xC, 0xC, 0xC, 0xC, 0, 0, 0, 0);
+		static const Address Fix("FIX");
 
 		u32 Stack[44];
 		u32 add = SetUpStack.Call<u32>(Stack, Stack + 0x18, 0x10);
@@ -89,7 +89,7 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 		*(u8 *)(npcModel + 2);
 		*/
 
-		SetUp.Call<void>(*(u32 *)Code::DataPointer.addr, add, (char *)"STR_Race", ID);
+		SetUp.Call<void>(*(u32 *)Address("DATAPOINTER").addr, add, (char *)"STR_Race", ID);
 
 		std::string NPCRace = "";
 
@@ -148,7 +148,7 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 	}
 
  	u16 NPC::GetVID(u32 npcData) {
-		static Address func1(0x51D288, 0x51CBDC, 0x51C2D0, 0x51C2D0, 0x51BBEC, 0x51BBEC, 0x51B580, 0x51B580);
+		static Address func1("FUNC1");
 
 		return func1.Call<u16>(npcData);
 	}

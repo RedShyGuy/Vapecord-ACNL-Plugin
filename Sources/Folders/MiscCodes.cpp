@@ -2,7 +2,7 @@
 #include "NonHacker.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/IDList.hpp"
-#include "RegionCodes.hpp"
+
 #include "Helpers/Game.hpp"
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/CROEditing.hpp"
@@ -86,7 +86,7 @@ namespace CTRPluginFramework {
 			if(!IDList::AnimationValid(toolTypeAnimID))
 				toolTypeAnimID = 6;
 
-			hook.Initialize(Code::AnimFunction.addr + 0x10, (u32)PATCH_ToolAnim);
+			hook.Initialize(Address("ANIMFUNCTION").addr + 0x10, (u32)PATCH_ToolAnim);
 			hook.SetFlags(USE_LR_TO_RETURN);
 			hook.Enable();
 		}
@@ -119,13 +119,13 @@ namespace CTRPluginFramework {
 //Unbreakable Flowers	
 	void unbreakableflower(MenuEntry *entry) { 
 		if(entry->WasJustActivated())
-			Process::Patch(Code::UnbreakableFlower.addr, 0xE3A0801D);
+			Process::Patch(Address("UNBREAKABLEFLOWER").addr, 0xE3A0801D);
 		else if(!entry->IsActivated())
-			Process::Patch(Code::UnbreakableFlower.addr, 0x0A00004B);
+			Process::Patch(Address("UNBREAKABLEFLOWER").addr, 0x0A00004B);
 	}
 //Weather Mod	
 	void Weathermod(MenuEntry *entry) { 
-		static const Address weather(0x62FC30, 0x62F158, 0x62EC68, 0x62EC68, 0x62E728, 0x62E728, 0x62E2D0, 0x62E2D0);
+		static const Address weather("WEATHER");
 		
 		std::vector<std::string> weatheropt = {
 			Language::getInstance()->get("VECTOR_WEATHER_SUNNY"),
@@ -163,8 +163,8 @@ namespace CTRPluginFramework {
 	}
 //always aurora lights
 	void auroralights(MenuEntry *entry) {
-		static const Address auroraPatch1(0x62FD4C, 0x62F274, 0x62ED84, 0x62ED84, 0x62E844, 0x62E844, 0x62E3EC, 0x62E3EC);
-		static const Address auroraPatch2(0x630590, 0x62FAB8, 0x62F5C8, 0x62F5C8, 0x62F088, 0x62F088, 0x62EC30, 0x62EC30);
+		static const Address auroraPatch1("AURORAPATCH1");
+		static const Address auroraPatch2("AURORAPATCH2");
 
 		if(entry->WasJustActivated()) {
 			Process::Patch(auroraPatch2.addr, 0xE3A00001); //Makes aurora appear in every season and weather
@@ -226,7 +226,7 @@ namespace CTRPluginFramework {
 	}
 //More Than 3 Numbers On Island
 	void morenumberisland(MenuEntry *entry) {
-		static const Address numbers(0xAD7158, 0xAD6158, 0xAD6158, 0xAD6158, 0xAD0158, 0xACF158, 0xACF158, 0xACF158);
+		static const Address numbers("NUMBERS");
 		Process::Write8(numbers.addr, 2);
 		
 		if(!entry->IsActivated()) 
@@ -236,7 +236,7 @@ namespace CTRPluginFramework {
 	void fovlarge(MenuEntry *entry) {
 		static float OnOff = 1.0;
 		
-		Process::WriteFloat(Code::fov.addr, OnOff); 
+		Process::WriteFloat(Address("FOV").addr, OnOff); 
 		
 		if(GameHelper::RoomCheck() == 1 || fovbool) 
 			OnOff = 1.0; 
@@ -244,13 +244,13 @@ namespace CTRPluginFramework {
 			OnOff = 0.75; 
 		
 		if(!entry->IsActivated()) 
-			Process::WriteFloat(Code::fov.addr, 1.0);
+			Process::WriteFloat(Address("FOV").addr, 1.0);
 	}
 //Move Furniture
 	void roomSeeder(MenuEntry *entry) {
-		static const Address movefurn(0x5B531C, 0x5B4834, 0x5B4364, 0x5B4364, 0x5B3C54, 0x5B3C54, 0x5B3928, 0x5B3928);
-		static const Address lightswitch(0x5B7558, 0x5B6A70, 0x5B65A0, 0x5B65A0, 0x5B5E90, 0x5B5E90, 0x5B5B64, 0x5B5B64);
-		static const Address MoveFurnPatch(0x326B98, 0x3265AC, 0x325EEC, 0x325EEC, 0x325B78, 0x325B78, 0x325A30, 0x325A30);
+		static const Address movefurn("MOVEFURN");
+		static const Address lightswitch("LIGHTSWITCH");
+		static const Address MoveFurnPatch("MOVEFURNPATCH");
 
 		static Hook hook1, hook2, hook3;
 
@@ -276,7 +276,7 @@ namespace CTRPluginFramework {
     }
 //Can Walk When Talk /*Made by Jay*/
 	void walktalkentry(MenuEntry *entry) { 
-		static const Address walktalk(0x655390, 0x6548B8, 0x6543C8, 0x6543C8, 0x653E88, 0x653E88, 0x653A30, 0x653A30);
+		static const Address walktalk("WALKTALK");
 		if(entry->WasJustActivated()) 
 			Process::Patch(walktalk.addr, 0x1A000000); 
 		else if(!entry->IsActivated()) 
@@ -292,8 +292,8 @@ namespace CTRPluginFramework {
 			return;
 		
 		u32 KeyData = *(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x1328;
-		static const Address KeyEnter(0xAD7253, 0xAD6253, 0xAD6253, 0xAD6253, 0xAD0253, 0xACF253, 0xACF253, 0xACF253);
-		static const Address KeyAt(0xAD75C0, 0xAD65C0, 0xAD65C0, 0xAD65C0, 0xAD05C0, 0xACF5C0, 0xACF5C0, 0xACF5C0);
+		static const Address KeyEnter("KEYENTER");
+		static const Address KeyAt("KEYAT");
 	
 		Process::Write8(KeyData + 0xC, 0x41);
 		Process::Write8(KeyData + 0x12B, 0x44);
@@ -318,10 +318,10 @@ namespace CTRPluginFramework {
 			0xE076, 0xE077
         };	
 	
-		static const Address IsOpen(0xAD7050, 0xAD6050, 0xAD6050, 0xAD6050, 0xAD0050, 0xACF050, 0xACF050, 0xACF050);		
+		static const Address IsOpen("ISOPEN");		
         if(*(u16 *)IsOpen.addr == 0x0103) {
 			u32 offset = 0;
-			static const Address customKey(0xAD7630, 0xAD6630, 0xAD6630, 0xAD6630, 0xAD0630, 0xACF630, 0xACF630, 0xACF630);	
+			static const Address customKey("CUSTOMKEY");	
             offset = *(u32 *)customKey.addr;
             if(offset != 0) {	
                 Process::Read32(offset + 0x224, offset);
@@ -339,7 +339,7 @@ namespace CTRPluginFramework {
 			
 //Beans Particle Changer	
 	void BeansParticleChanger(MenuEntry *entry) {
-		static const Address beans(0x673E0C, 0x673334, 0x672E44, 0x672E44, 0x672904, 0x672904, 0x6724AC, 0x6724AC);
+		static const Address beans("BEANS");
         static u16 input = 0; 
 		
         if(entry->Hotkeys[0].IsDown()) {
@@ -353,10 +353,10 @@ namespace CTRPluginFramework {
 
 //Always Daytime /*Made by Jay*/
 	void Daytime(MenuEntry *entry) {
-		static const Address day1(0x4B10A4, 0x4B0A1C, 0x4B00EC, 0x4B00EC, 0x4AFD84, 0x4AFD84, 0x4AFC44, 0x4AFC44);
-		static const Address day2(0x1E6D58, 0x1E679C, 0x1E6D78, 0x1E6D78, 0x1E6CB4, 0x1E6CB4, 0x1E6C80, 0x1E6C80);
-		static const Address day3(0x4B10AC, 0x4B0A24, 0x4B00F4, 0x4B00F4, 0x4AFD8C, 0x4AFD8C, 0x4AFC4C, 0x4AFC4C);
-		static const Address day4(0x4B10C8, 0x4B0A40, 0x4B0110, 0x4B0110, 0x4AFDA8, 0x4AFDA8, 0x4AFC68, 0x4AFC68);
+		static const Address day1("DAY1");
+		static const Address day2("DAY2");
+		static const Address day3("DAY3");
+		static const Address day4("DAY4");
 		
 		static const u32 DayTime[3] = { day1.addr, day3.addr, day4.addr };
 		
@@ -387,7 +387,7 @@ namespace CTRPluginFramework {
 	}
 //Fast Text Speed
 	void fasttalk(MenuEntry *entry) { 
-		static const Address fastt(0x5FC6AC, 0x5FBBDC, 0x5FB6E4, 0x5FB6E4, 0x5FAF64, 0x5FAF64, 0x5FABEC, 0x5FABEC);
+		static const Address fastt("FASTT");
 		if(entry->WasJustActivated()) {
 			Process::Patch(fastt.addr, 0xEA000000);
 			Process::Patch(fastt.addr + 8, 0xE3500001);
@@ -399,7 +399,7 @@ namespace CTRPluginFramework {
 	}
 //Fast Game Speed	
 	void speedentry(MenuEntry *entry) {
-		static const Address speed(0x54DDB4, 0x54D2CC, 0x54CDFC, 0x54CDFC, 0x54C6E8, 0x54C6E8, 0x54C40C, 0x54C40C);
+		static const Address speed("SPEED");
 		Process::Patch(speed.addr, GameHelper::GameSaving() ? 0xE59400A0 : 0xE3E004FF);
 		
 		if(!entry->IsActivated())
@@ -407,8 +407,8 @@ namespace CTRPluginFramework {
 	}
 //Fast Isabelle (Fast Text + Game Speed when in the Isabelle greeting room)
 	void fastisabelle(MenuEntry *entry) {
-		static const Address speed(0x54DDB4, 0x54D2CC, 0x54CDFC, 0x54CDFC, 0x54C6E8, 0x54C6E8, 0x54C40C, 0x54C40C);
-		static const Address fastt(0x5FC6AC, 0x5FBBDC, 0x5FB6E4, 0x5FB6E4, 0x5FAF64, 0x5FAF64, 0x5FABEC, 0x5FABEC);
+		static const Address speed("SPEED");
+		static const Address fastt("FASTT");
 
 		u8 roomID = GameHelper::RoomCheck();
 		if (roomID == 0x63 && entry->IsActivated()) { // Isabelle

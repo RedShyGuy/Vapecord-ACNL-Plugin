@@ -1,11 +1,11 @@
 #include "NonHacker.hpp"
-#include "RegionCodes.hpp"
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/Animation.hpp"
 #include "Helpers/Dropper.hpp"
 #include "Helpers/IDList.hpp"
 #include "Helpers/Game.hpp"
 #include "Helpers/Inventory.hpp"
+#include "Address/Address.hpp"
 
 namespace CTRPluginFramework {
 
@@ -51,7 +51,7 @@ namespace CTRPluginFramework {
 		if(_pID == GameHelper::GetOnlinePlayerIndex()) _pID = 0;
 		else if(_pID == 0) _pID = GameHelper::GetOnlinePlayerIndex();
 		
-	    u32 PTR = *(u32 *)Code::chatpointer.addr; //0x94FD84
+	    u32 PTR = *(u32 *)Address("CHATPOINTER").addr; //0x94FD84
 		PTR += 0x464; //33078FA0
 		PTR += (0x530 * _pID);
 		return PTR;

@@ -1,11 +1,12 @@
 #include "Helpers/Game.hpp"
 #include "Config.hpp"
 #include "Files.h"
-#include "RegionCodes.hpp"
 #include "Helpers/Inventory.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/PluginMenuData.hpp"
 #include "NonHacker.hpp"
+#include "Address/Address.hpp"
+#include "Address/AddressReader.hpp"
 
 namespace CTRPluginFramework {
 	static const std::string Note = "Creator: Lukas \n\n"
@@ -24,64 +25,6 @@ namespace CTRPluginFramework {
 	void GetMessage_p2(void);
 	void GetMessage_p3(void);
 	void GetMessage_p4(void);
-
-/*
-Gets region name to append to plugin title | also sets current region
-*/
-	std::string GetRegionName(void) {
-		switch(Process::GetTitleID()) {
-			case TID_USA: 
-				c_Region = CurrRegion::USA; 
-				regionName = "USA";
-			break;
-			case TID_USAWA: 
-				c_Region = CurrRegion::USAWA;
-				regionName = "USAWA";
-			break;
-			case TID_EUR: 
-				c_Region = CurrRegion::EUR;
-				regionName = "EUR";
-			break;
-			case TID_EURWA: 
-				c_Region = CurrRegion::EURWA;
-				regionName = "EURWA";
-			break;
-			case TID_JPN: 
-				c_Region = CurrRegion::JPN;
-				regionName = "JPN";
-			break;
-			case TID_JPNWA: 
-				c_Region = CurrRegion::JPNWA;
-				regionName = "JPNWA";
-			break;
-			case TID_KOR: 
-				c_Region = CurrRegion::KOR;
-				regionName = "KOR";
-			break;
-			case TID_KORWA: 
-				c_Region = CurrRegion::KORWA;
-				regionName = "KORWA";
-			break;
-			case TID_EURWL: 
-				c_Region = CurrRegion::EURWL;
-				regionName = "EURWL";
-			break;
-			default: 
-				c_Region = CurrRegion::INVALID;
-				regionName = "";
-			break;
-		}
-		return regionName;
-	}
-
-	bool CheckGameTitleID(void) {
-		if(!GameHelper::IsACNL()) {
-			Sleep(Seconds(5));
-			MessageBox("Error 999", "Game Not Supported!\nCheats will not load\nPlugin Main Features are still usable!").SetClear(ClearScreen::Top)();
-			return false;
-		}
-		return true;
-	}
 
 /*
 Will set a counter at the start of the plugin as long as the title screen didn't load to
@@ -103,13 +46,15 @@ prevent any issues with freezing of the plugin
 	void InitKeepConnection(void);
 
 	int	main(void) {
-		PluginMenu *menu = new PluginMenu(Color::White << "ACNL Vapecord Plugin " << GetRegionName(), majorV, minorV, revisV, Note);
+		std::string region = Address::LoadRegion();
+
+		PluginMenu *menu = new PluginMenu(Color::White << "ACNL Vapecord Plugin " << region, majorV, minorV, revisV, Note);
 		menu->SynchronizeWithFrame(true);
 
 		CheckForLanguageFile();
 
 	//If title isn't ACNL
-		if(!CheckGameTitleID()) {
+		if(region.empty()) {
 			menu->Run();
 			return 0;
 		}
@@ -117,7 +62,12 @@ prevent any issues with freezing of the plugin
 		SleepTime();
 
 	//Load Addresses
-		Code::Load();
+		if (!AddressReader::getInstance()->loadFromBinary(PATH_ADDRESSES_BIN, region)) {
+			MessageBox(Utils::Format("Error 600\nThe addresses.bin is missing the selected region (%s)\nGet more info and help on the Discord Server: %s", region.c_str(), DISCORDINV)).SetClear(ClearScreen::Top)();
+			Process::ReturnToHomeMenu();
+			return 0;
+		}
+
 	//RCO only if game is supported
 		RCO();
 	//keeps internet connection when menu is opened

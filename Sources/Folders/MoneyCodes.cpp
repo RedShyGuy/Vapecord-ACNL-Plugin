@@ -2,7 +2,7 @@
 #include "Helpers/Player.hpp"
 #include "Helpers/Game.hpp"
 #include "Helpers/Wrapper.hpp"
-#include "Helpers/Address.hpp"
+#include "Address/Address.hpp"
 #include "Helpers/Town.hpp"
 
 namespace CTRPluginFramework {

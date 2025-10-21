@@ -2,7 +2,8 @@
 #include "Helpers/Game.hpp"
 #include "Helpers/Player.hpp"
 #include "Helpers/IDList.hpp"
-#include "RegionCodes.hpp"
+#include "Address/Address.hpp"
+
 #include "Files.h"
 
 namespace CTRPluginFramework {
@@ -206,7 +207,7 @@ namespace CTRPluginFramework {
 			return;
 
 		for(int i = 0; i < 16; ++i)
-			Code::LoadIcon.Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + GetAddData(), i);
+			Address("LOADICON").Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + GetAddData(), i);
 	}
 
 //get current selected inventory slot

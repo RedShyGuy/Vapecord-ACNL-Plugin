@@ -1,9 +1,9 @@
 #include "Helpers/CROEditing.hpp"
-#include "Helpers/Address.hpp"
+#include "Address/Address.hpp"
 
 namespace CTRPluginFramework {  
     bool CRO::GetMemAddress(const char* croFileName, u32& buffer) {
-        static const Address CroData(0x95269C, 0x95168C, 0x951698, 0x951698, 0x94B698, 0x94A698, 0x94A698, 0x94A698);
+        static const Address CroData("CRODATA");
         u32 data = *(u32 *)CroData.addr;
 
         u32 iVar1 = *(u32 *)(data + 0x14);

@@ -1,5 +1,5 @@
 #include "cheats.hpp"
-#include "Helpers/Address.hpp"
+#include "Address/Address.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Color.h"
 #include "Helpers/IDList.hpp"
@@ -8,7 +8,7 @@
 namespace CTRPluginFramework {
 //Infinite Fruit Tree
 	void fruitStays(MenuEntry *entry) {
-		static const Address fruitstay(0x5972CC, 0x5967E4, 0x596314, 0x596314, 0x595C04, 0x595C04, 0x5958D8, 0x5958D8);
+		static const Address fruitstay("FRUITSTAY");
 
 		if(entry->WasJustActivated()) 
 			Process::Patch(fruitstay.addr, 0xEA000000);
@@ -17,10 +17,10 @@ namespace CTRPluginFramework {
 	}
 //Axe Tree Shake	
 	void shakechop(MenuEntry *entry) {
-		static const Address shake1(0x5971D4, 0x5966EC, 0x59621C, 0x59621C, 0x595B0C, 0x595B0C, 0x5957E0, 0x5957E0);
-		static const Address shake2(0x5971DC, 0x5966F4, 0x596224, 0x596224, 0x595B14, 0x595B14, 0x5957E8, 0x5957E8);
-		static const Address shake3(0x5971E4, 0x5966FC, 0x59622C, 0x59622C, 0x595B1C, 0x595B1C, 0x5957F0, 0x5957F0);
-		static const Address shake4(0x5971EC, 0x596704, 0x596234, 0x596234, 0x595B24, 0x595B24, 0x5957F8, 0x5957F8);
+		static const Address shake1("SHAKE1");
+		static const Address shake2("SHAKE2");
+		static const Address shake3("SHAKE3");
+		static const Address shake4("SHAKE4");
 			
 		if(entry->WasJustActivated()) {
 			Process::Patch(shake1.addr, 0xE1A00000);
@@ -37,7 +37,7 @@ namespace CTRPluginFramework {
     }
 //Fruit Tree Item Modifier	
 	void fruititemmod(MenuEntry *entry) {
-		static const Address fruitmod(0x2FE6A0, 0x2FE510, 0x2FE5E8, 0x2FE5E8, 0x2FE5AC, 0x2FE5AC, 0x2FE5D0, 0x2FE5D0);
+		static const Address fruitmod("FRUITMOD");
 		
 		static Item val = {0x2018, 0};
 		if(entry->WasJustActivated()) {
@@ -59,7 +59,7 @@ namespace CTRPluginFramework {
 	}
 //Instant Tree Chop	
 	void instantchop(MenuEntry *entry) { 
-		static const Address instchop(0x59945C, 0x598974, 0x5984A4, 0x5984A4, 0x597D94, 0x597D94, 0x597A68, 0x597A68);
+		static const Address instchop("INSTCHOP");
 		if(entry->WasJustActivated()) 
 			Process::Patch(instchop.addr, 0xE1A00000); 
 		else if(!entry->IsActivated()) 

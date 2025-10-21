@@ -1,7 +1,7 @@
 #include "cheats.hpp"
 #include "Helpers/Player.hpp"
 #include "Helpers/Game.hpp"
-#include "RegionCodes.hpp"
+
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/Animation.hpp"
@@ -21,16 +21,16 @@ u32 c_mouthID = 0;
 namespace CTRPluginFramework {
 //Size Codes
 	void sizecodes(MenuEntry *entry) {
-		static const Address player(0x1ACE00, 0x001AC848, 0x001ACE20, 0x001ACE20, 0x1ACD5C, 0x1ACD5C, 0x1ACD5C, 0x1ACD5C);
-		static const Address bug(0x1F557C, 0x1F4FC4, 0x1F559C, 0x1F559C, 0x1F54D8, 0x1F54D8, 0x1F54D8, 0x1F54D8);
-		static const Address npc(0x2042BC, 0x203D00, 0x2042DC, 0x2042DC, 0x2041FC, 0x2041FC, 0x2041C8, 0x2041C8);
-		static const Address effect(0x550A80, 0x54FF98, 0x550C0C, 0x550C0C, 0x54F3B4, 0x54F3B4, 0x54F0D8, 0x54F0D8);
-		static const Address shadow(0x28F3A4, 0x28EDE8, 0x28F3C4, 0x28F3C4, 0x28F2E4, 0x28F2E4, 0x28F2B0, 0x28F2B0);
-		static const Address town(0x52E9D0, 0x52E324, 0x52DA18, 0x52DA18, 0x52D304, 0x52D304, 0x52D028, 0x52D028);
-		static const Address horplayer(0x5680F8, 0x567610, 0x567140, 0x567140, 0x566A30, 0x566A30, 0x566750, 0x566750);
-		static const Address vertplayer(0x567FF4, 0x56750C, 0x56703C, 0x56703C, 0x56692C, 0x56692C, 0x56664C, 0x56664C);
-		static const Address head(0x568064, 0x56757C, 0x5670AC, 0x5670AC, 0x56699C, 0x56699C, 0x5666BC, 0x5666BC);
-		static const Address corrupt(0x47E3F0, 0x47DD68, 0x47D438, 0x47D438, 0x47D0D0, 0x47D0D0, 0x47CF90, 0x47CF90);
+		static const Address player("PLAYER");
+		static const Address bug("BUG");
+		static const Address npc("NPC");
+		static const Address effect("EFFECT");
+		static const Address shadow("SHADOW");
+		static const Address town("TOWN");
+		static const Address horplayer("HORPLAYER");
+		static const Address vertplayer("VERTPLAYER");
+		static const Address head("HEAD");
+		static const Address corrupt("CORRUPT");
 		
 		static const std::vector<std::string> sizeopt = {
 			Language::getInstance()->get("VECTOR_SIZE_PLAYER"),
@@ -95,7 +95,7 @@ namespace CTRPluginFramework {
     }
 //T-Pose
 	void tposeentry(MenuEntry *entry) { 
-		static const Address tpose(0x73C290, 0x73B5D8, 0x73B298, 0x73B270, 0x73AA30, 0x73AA08, 0x73A5D8, 0x72EBD8);
+		static const Address tpose("TPOSE");
 
 		if(entry->WasJustActivated()) 
 			Process::Patch(tpose.addr, 0xE1A00000);
@@ -114,7 +114,7 @@ namespace CTRPluginFramework {
 	}
 //Take TPC Picture
 	void freezeframe(MenuEntry *entry) {
-		static const Address freeze(0x54DBE8, 0x54D100, 0x54CC30, 0x54CC30, 0x54C51C, 0x54C51C, 0x54C240, 0x54C240);
+		static const Address freeze("FREEZE");
 		if(entry->Hotkeys[0].IsPressed()) {
 			ACNL_Player *player = Player::GetSaveData();
 			if(!player) {
@@ -122,8 +122,8 @@ namespace CTRPluginFramework {
 				return;
 			}
 
-			static Address CreateTPC(0x5B3594, 0x5B2AAC, 0x5B25DC, 0x5B25DC, 0x5B1ECC, 0x5B1ECC, 0x5B1BA0, 0x5B1BA0);
-			static const Address TPCPoint(0x954F10, 0x953EF0, 0x953F08, 0x953F08, 0x94DF08, 0x94CF08, 0x94CF08, 0x94CF08);
+			static Address CreateTPC("CREATETPC");
+			static const Address TPCPoint("TPCPOINT");
 
 			CreateTPC.Call<void>(*(u32 *)TPCPoint.addr, &player->HasTPCPic);
 			GameHelper::PlaySound(0x4A7);
@@ -149,7 +149,7 @@ namespace CTRPluginFramework {
 
 //Max Turbo Presses
 	void maxturbo(MenuEntry *entry) { 
-		u32 maxT = *(u32 *)Code::max.addr - 0x31C;
+		u32 maxT = *(u32 *)Address("MAX").addr - 0x31C;
 
         Sleep(Seconds(0.0085F));
         Process::Write8(maxT, 0); //abxy
@@ -158,7 +158,7 @@ namespace CTRPluginFramework {
 
 //Multi-presses
 	void asmpresses(MenuEntry *entry) { 
-		static const Address press(0x5C5BEC, 0x5C511C, 0x5C4C34, 0x5C4C34, 0x5C4524, 0x5C4524, 0x5C41F8, 0x5C41F8);
+		static const Address press("PRESS");
 		if(entry->WasJustActivated()) 
 			Process::Patch(press.addr, 0xE1A00000); 
 		else if(!entry->IsActivated()) 
@@ -166,15 +166,15 @@ namespace CTRPluginFramework {
 	}
 //Ultimate Party Popper	
 	void partypopper(MenuEntry *entry) {
-		static const Address PartySnakeSpeed(0x67F008, 0x67E530, 0x67E040, 0x67E040, 0x67DB00, 0x67DB00, 0x67D6A8, 0x67D6A8);
-		static const Address party2(0x662D9C, 0x6622C4, 0x661DD4, 0x661DD4, 0x661894, 0x661894, 0x66143C, 0x66143C);
-		static const Address party3(0x67BBC8, 0x67B0F0, 0x67AC00, 0x67AC00, 0x67A6C0, 0x67A6C0, 0x67A268, 0x67A268);
-		static const Address PartyItemID(0x671874, 0x670D9C, 0x6708AC, 0x6708AC, 0x67036C, 0x67036C, 0x66FF14, 0x66FF14);
-		static const Address PartyEffect(0x671880, 0x670DA8, 0x6708B8, 0x6708B8, 0x670378, 0x670378, 0x66FF20, 0x66FF20);
+		static const Address PartySnakeSpeed("PARTYSNAKESPEED");
+		static const Address party2("PARTY2");
+		static const Address party3("PARTY3");
+		static const Address PartyItemID("PARTYITEMID");
+		static const Address PartyEffect("PARTYEFFECT");
 		
 		static u16 PartyEffectID = 0x20A;
 
-		Process::Write8(*(u32 *)Code::max.addr - 0x31C, 0); //Multi Presses
+		Process::Write8(*(u32 *)Address("MAX").addr - 0x31C, 0); //Multi Presses
 
 		static Hook hook1, hook2;
 		
@@ -224,9 +224,9 @@ namespace CTRPluginFramework {
 	
 	void cameramod(MenuEntry *entry) {
     //pointers & addresses
-		static const Address cameraAsm(0x764504, 0x7634E8, 0x76350C, 0x7634E4, 0x762CA4, 0x762C7C, 0x76284C, 0x762824);
-        static const Address rotationAsm(0x1A3230, 0x1A2C78, 0x1A3250, 0x1A3250, 0x1A3190, 0x1A3190, 0x1A3190, 0x1A3190);
-        static const Address camerapan(0x1A2058, 0x1A1AA0, 0x1A2078, 0x1A2078, 0x1A1FB8, 0x1A1FB8, 0x1A1FB8, 0x1A1FB8);
+		static const Address cameraAsm("CAMERAASM");
+        static const Address rotationAsm("ROTATIONASM");
+        static const Address camerapan("CAMERAPAN");
 
     //variables
         static bool isPatched = false;
@@ -373,7 +373,7 @@ namespace CTRPluginFramework {
 		if(!PlayerClass::GetInstance()->IsLoaded())
 			return false;
 
-		static Address convertData(0x27231C, 0x271D60, 0x272318, 0x272318, 0x272224, 0x272224, 0x2721F0, 0x2721F0);
+		static Address convertData("CONVERTDATA");
 		u32 ownData = convertData.Call<u32>(PlayerClass::GetInstance()->Offset(0x1B4)); //gets actual data of player
 
 		return (ownData == individualData);

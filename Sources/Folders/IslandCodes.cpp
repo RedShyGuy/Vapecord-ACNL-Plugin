@@ -1,7 +1,7 @@
 #include "cheats.hpp"
 #include "Helpers/Game.hpp"
 #include "Helpers/CROEditing.hpp"
-#include "RegionCodes.hpp"
+
 #include "Helpers/IDList.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/PlayerClass.hpp"
@@ -97,7 +97,7 @@ namespace CTRPluginFramework {
 	void Hackerisland(MenuEntry *entry)	{ 
 		std::vector<std::string> cmnOpt =  { "" };
 
-		bool IsON = *(u32 *)Code::country.addr == 0xE3A000FF;
+		bool IsON = *(u32 *)Address("COUNTRY").addr == 0xE3A000FF;
 
 		cmnOpt[0] = IsON ? (Color(pGreen) << Language::getInstance()->get("VECTOR_ENABLED")) : (Color(pRed) << Language::getInstance()->get("VECTOR_DISABLED"));
 		
@@ -107,7 +107,7 @@ namespace CTRPluginFramework {
 		if(op < 0)
 			return;
 		
-		Process::Patch(Code::country.addr, IsON ? 0xE1A00C20 : 0xE3A000FF);
+		Process::Patch(Address("COUNTRY").addr, IsON ? 0xE1A00C20 : 0xE3A000FF);
 		Hackerisland(entry);
 	}
 //InputChangeEvent For Country Spoof
@@ -131,10 +131,10 @@ namespace CTRPluginFramework {
 			default: break;	
 			case 0: 
 				if(Wrap::KB<u8>(Language::getInstance()->get("ISLAND_COUNTRY_SET_ID"), true, 2, input, 0, onCountryChange)) 
-					Process::Patch(Code::country.addr, 0xE3A00000 + input); 
+					Process::Patch(Address("COUNTRY").addr, 0xE3A00000 + input); 
 			break;	
 			case 1: 
-				Process::Patch(Code::country.addr, 0xE1A00C20); 
+				Process::Patch(Address("COUNTRY").addr, 0xE1A00C20); 
 			break;	
 		}
 	}
@@ -156,7 +156,7 @@ namespace CTRPluginFramework {
 	}
 //Island Shop
 	void IslandShop(MenuEntry *entry) {	
-		static const Address IslandShopPointer(0x954238, 0x953228, 0x953238, 0x953238, 0x94D238, 0x94C238, 0x94C238, 0x94C238);
+		static const Address IslandShopPointer("ISLANDSHOPPOINTER");
 		if(*(u32 *)IslandShopPointer.addr == 0)
 			return;
 		
@@ -169,7 +169,7 @@ namespace CTRPluginFramework {
 	
 //All Tours
 	void alltour(MenuEntry *entry) {
-		static const Address TourPatch(0x76FCC0, 0x76ECA4, 0x76ECC8, 0x76ECA0, 0x76E460, 0x76E438, 0x76E008, 0x76DFE0);
+		static const Address TourPatch("TOURPATCH");
 		if(entry->WasJustActivated()) {
 			Process::Patch(TourPatch.addr, 0xE1A00000); //unsure? (still keeping it for safety)
 			Process::Patch(TourPatch.addr + 0x54, 0xE1A00000);  //Adds tour difficulty
@@ -190,10 +190,10 @@ namespace CTRPluginFramework {
 
 //Island Acre Mod	
 	void acreMod(MenuEntry *entry) {
-		if(*(u32 *)Code::IslPointer.addr == 0)
+		if(*(u32 *)Address("ISLPOINTER").addr == 0)
 			return;
 		
-		u32 IslAcreOffset = *(u32 *)Code::IslPointer.addr + 2; //0x953708
+		u32 IslAcreOffset = *(u32 *)Address("ISLPOINTER").addr + 2; //0x953708
 		
 		for(u8 i = 0; i < 16; ++i) 
 			Process::Write8(IslAcreOffset + i * 2, isl.acres[i]);
@@ -211,10 +211,10 @@ namespace CTRPluginFramework {
 	}
 //Island Building Mod	
 	void buildingMod(MenuEntry *entry) {
-		if(*(u32 *)Code::IslPointer.addr == 0)
+		if(*(u32 *)Address("ISLPOINTER").addr == 0)
 			return;
 		
-		u32 islandBuildings = *(u32 *)Code::IslPointer.addr + 0x1022;
+		u32 islandBuildings = *(u32 *)Address("ISLPOINTER").addr + 0x1022;
 		
 		for(u8 i = 0; i < 2; ++i) {
 			Process::Write16(islandBuildings + i * 4, isl.b[i].id);
@@ -241,8 +241,8 @@ namespace CTRPluginFramework {
 
 	void FreeKappn(MenuEntry *entry) {
 		static Hook hook1, hook2;
-		static const Address kappn1(0x5DC048, 0x5DB578, 0x5DB090, 0x5DB090, 0x5DA910, 0x5DA910, 0x5DA598, 0x5DA598);
-		static const Address kappn2(0x5DAF98, 0x5DA4C8, 0x5D9FE0, 0x5D9FE0, 0x5D9814, 0x5D9814, 0x5D94E8, 0x5D94E8);
+		static const Address kappn1("KAPPN1");
+		static const Address kappn2("KAPPN2");
 
 		if(entry->WasJustActivated()) {
 			hook1.Initialize(kappn1.addr, (u32)PATCH_KappnBypass1);
@@ -342,7 +342,7 @@ namespace CTRPluginFramework {
 
 					if(KB.Open(filename) == -1)
 						return;
-					Wrap::Dump(Utils::Format(PATH_ISLAND, regionName.c_str()), filename, ".dat", &backupLoc, nullptr);
+					Wrap::Dump(Utils::Format(PATH_ISLAND, Address::regionName.c_str()), filename, ".dat", &backupLoc, nullptr);
 				} break;
 				case 1: {
 					size_t arrSize = 0x400;//number of elements in array
@@ -355,7 +355,7 @@ namespace CTRPluginFramework {
 					std::string filename = "restoredump";
 					WrapLoc restoreLoc = WrapLoc{ fileData, static_cast<int>(arrSize * sizeof(u32)) };
 					
-					if(Wrap::Restore(Utils::Format(PATH_ISLAND, regionName.c_str()), ".dat", Language::getInstance()->get("SAVE_RESTORE_SELECT"), nullptr, false, &restoreLoc, nullptr) == ExHandler::SUCCESS) {
+					if(Wrap::Restore(Utils::Format(PATH_ISLAND, Address::regionName.c_str()), ".dat", Language::getInstance()->get("SAVE_RESTORE_SELECT"), nullptr, false, &restoreLoc, nullptr) == ExHandler::SUCCESS) {
 						for(size_t i = 0; i < arrSize; i++) {
 							IslandItems.push_back({ static_cast<u16>(fileData[i] & 0xFFFF), static_cast<u16>(fileData[i] >> 16) });
 						}
@@ -363,7 +363,7 @@ namespace CTRPluginFramework {
 					}
 				} break;
 				case 2: {
-					Wrap::Delete(Utils::Format(PATH_ISLAND, regionName.c_str()), ".dat");
+					Wrap::Delete(Utils::Format(PATH_ISLAND, Address::regionName.c_str()), ".dat");
 				} break;
 			}
 		}

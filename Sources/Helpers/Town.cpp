@@ -1,15 +1,14 @@
 #include "Helpers/Town.hpp"
 #include "Helpers/Player.hpp"
-#include "Helpers/Address.hpp"
+#include "Address/Address.hpp"
 #include "Helpers/NPC.hpp"
 #include "Helpers/Game.hpp"
 #include "Helpers/Converters.hpp"
 #include "Helpers/Save.hpp"
-#include "RegionCodes.hpp"
 
 namespace CTRPluginFramework {
 	ACNL_TownData *Town::GetSaveData(void) {
-		u32 *addr = (u32 *)(Code::GardenPlus.Call<u32>() + 0x53424);
+		u32 *addr = (u32 *)(Address("GARDENPLUS").Call<u32>() + 0x53424);
 		return (ACNL_TownData *)addr;
 	}
 

@@ -1,10 +1,10 @@
 #include "cheats.hpp"
-#include "Helpers/Address.hpp"
+#include "Address/Address.hpp"
 
 namespace CTRPluginFramework {
 //Fish Byte Always
 	void FishAlwaysBiteRightAway(MenuEntry *entry) {
-		static const Address fishbite(0x1EA844, 0x1EA288, 0x1EA864, 0x1EA864, 0x1EA7A0, 0x1EA7A0, 0x1EA76C, 0x1EA76C);
+		static const Address fishbite("FISHBITE");
 		if(entry->WasJustActivated()) 
 			Process::Patch(fishbite.addr, 0xE3A0005A);
 		else if(!entry->IsActivated()) 
@@ -12,7 +12,7 @@ namespace CTRPluginFramework {
 	}
 //Fish Can't Be Scared
 	void FishCantBeScared(MenuEntry *entry) {
-		static const Address fishscare(0x1EAB14, 0x1EA558, 0x1EAB34, 0x1EAB34, 0x1EAA70, 0x1EAA70, 0x1EAA3C, 0x1EAA3C);
+		static const Address fishscare("FISHSCARE");
 		if(entry->WasJustActivated()) 
 			Process::Patch(fishscare.addr, 0xE3500001);
 		else if(!entry->IsActivated()) 

@@ -1,5 +1,5 @@
 #include "cheats.hpp"
-#include "Helpers/Address.hpp"
+#include "Address/Address.hpp"
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/Game.hpp"
 #include "Helpers/Animation.hpp"
@@ -15,7 +15,7 @@ u32 WalkParticleID = 0;
 namespace CTRPluginFramework {
 //Players can't push you
 	void noPush(MenuEntry *entry) { 
-		static const Address push(0x652288, 0x6517B0, 0x6512C0, 0x6512C0, 0x650D80, 0x650D80, 0x650928, 0x650928);
+		static const Address push("PUSH");
 
 		if(entry->WasJustActivated()) 
 			Process::Patch(push.addr, 0xEA00002D);
@@ -73,14 +73,14 @@ namespace CTRPluginFramework {
     }
 //Walk Over Things
 	void walkOver(MenuEntry *entry) {		
-		static const Address walkover1(0x6503FC, 0x64F924, 0x64F434, 0x64F434, 0x64EEF4, 0x64EEF4, 0x64EA9C, 0x64EA9C);
-		static const Address walkover2(0x650414, 0x64F93C, 0x64F44C, 0x64F44C, 0x64EF0C, 0x64EF0C, 0x64EAB4, 0x64EAB4);
-		static const Address walkover3(0x650578, 0x64FAA0, 0x64F5B0, 0x64F5B0, 0x64F070, 0x64F070, 0x64EC18, 0x64EC18);
-		static const Address walkover4(0x6505F0, 0x64FB18, 0x64F628, 0x64F628, 0x64F0E8, 0x64F0E8, 0x64EC90, 0x64EC90);
-		static const Address walkover5(0x6506A4, 0x64FBCC, 0x64F6DC, 0x64F6DC, 0x64F19C, 0x64F19C, 0x64ED44, 0x64ED44);
-		static const Address walkover6(0x6506BC, 0x64FBE4, 0x64F6F4, 0x64F6F4, 0x64F1B4, 0x64F1B4, 0x64ED5C, 0x64ED5C);
-		static const Address walkover7(0x6506C0, 0x64FBE8, 0x64F6F8, 0x64F6F8, 0x64F1B8, 0x64F1B8, 0x64ED60, 0x64ED60);
-		static const Address walkover8(0x6506EC, 0x64FC14, 0x64F724, 0x64F724, 0x64F1E4, 0x64F1E4, 0x64ED8C, 0x64ED8C);
+		static const Address walkover1("WALKOVER1");
+		static const Address walkover2("WALKOVER2");
+		static const Address walkover3("WALKOVER3");
+		static const Address walkover4("WALKOVER4");
+		static const Address walkover5("WALKOVER5");
+		static const Address walkover6("WALKOVER6");
+		static const Address walkover7("WALKOVER7");
+		static const Address walkover8("WALKOVER8");
 		
 		const u32 WalkOver[8] = { walkover1.addr, walkover2.addr, walkover3.addr, walkover4.addr, walkover5.addr, walkover6.addr, walkover7.addr, walkover8.addr };
 		
@@ -104,12 +104,12 @@ namespace CTRPluginFramework {
     }
 //Movement Changer
 	void MovementChanger(MenuEntry *entry) {	
-		static const Address Disable25Anim(0x67F748, 0x67EC70, 0x67E780, 0x67E780, 0x67E240, 0x67E240, 0x67DDE8, 0x67DDE8); //Disable going out of water animation
-		static const Address AlwaysWalk(0x64E824, 0x64DD4C, 0x64D85C, 0x64D85C, 0x64D31C, 0x64D31C, 0x64CEC0, 0x64CEC0); //Makes you walk all the time
-		static const Address AlwaysSwim(0x64E82C, 0x64DD54, 0x64D864, 0x64D864, 0x64D324, 0x64D324, 0x64CECC, 0x64CECC); //Makes you swim all the time
-		static const Address DisableYChange(0x56BE7C, 0x56B394, 0x56AEC4, 0x56AEC4, 0x56A7B4, 0x56A7B4, 0x56A4D4, 0x56A4D4); //Makes Y-Coord not go down when swimming	
-		static const Address move4(0x65352C, 0x652A54, 0x652564, 0x652564, 0x652024, 0x652024, 0x651BCC, 0x651BCC);
-		static const Address move5(0x763ABC, 0x762AA0, 0x762AC4, 0x762A9C, 0x76225C, 0x762234, 0x761E04, 0x761E04);
+		static const Address Disable25Anim("DISABLE25ANIM"); //Disable going out of water animation
+		static const Address AlwaysWalk("ALWAYSWALK"); //Makes you walk all the time
+		static const Address AlwaysSwim("ALWAYSSWIM"); //Makes you swim all the time
+		static const Address DisableYChange("DISABLEYCHANGE"); //Makes Y-Coord not go down when swimming	
+		static const Address move4("MOVE4");
+		static const Address move5("MOVE5");
 		
 		static const u32 MoveChanger[6] = { Disable25Anim.addr, AlwaysWalk.addr, AlwaysSwim.addr, DisableYChange.addr, move4.addr, move5.addr };
 		
@@ -138,7 +138,7 @@ namespace CTRPluginFramework {
     }
 //Walk Particle	
 	void Walkparticle(MenuEntry *entry) {
-		static const Address WalkParticlePatch(0x652694, 0x651BBC, 0x6516CC, 0x6516CC, 0x65118C, 0x65118C, 0x650D34, 0x650D34);
+		static const Address WalkParticlePatch("WALKPARTICLEPATCH");
 		static Hook hook;
 
 		if(entry->WasJustActivated()) {
@@ -191,9 +191,9 @@ namespace CTRPluginFramework {
 	}
 //Player Visibility Changer	
 	void onlineplayermod(MenuEntry *entry) {
-		static const Address visi1(0x655E44, 0x65536C, 0x654E7C, 0x654E7C, 0x65493C, 0x65493C, 0x6544E4, 0x6544E4);
-		static const Address visi2(0x67743C, 0x676964, 0x676474, 0x676474, 0x675F34, 0x675F34, 0x675ADC, 0x675ADC);
-		static const Address visi3(0x68DC3C, 0x68D164, 0x68CC74, 0x68CC74, 0x68C734, 0x68C734, 0x68C2DC, 0x68C2DC);
+		static const Address visi1("VISI1");
+		static const Address visi2("VISI2");
+		static const Address visi3("VISI3");
 		
 		static const u32 VisiMod[3] = { visi1.addr, visi2.addr, visi3.addr };
 		
@@ -244,14 +244,14 @@ namespace CTRPluginFramework {
 	float walkSpeed = 1;
 //Player Speed Changer	
 	void speedMod(MenuEntry *entry) {
-		static const Address sp1(0x887880, 0x886878, 0x88670C, 0x88670C, 0x880B2C, 0x87FB2C, 0x87FADC, 0x87FADC);
-		static const Address sp2(0x887888, 0x886880, 0x886714, 0x886714, 0x880B34, 0x87FB34, 0x87FB34, 0x87FB34);
-		static const Address sp3(0x887958, 0x886950, 0x8867E4, 0x8867E4, 0x880C04, 0x87FC04, 0x87FC04, 0x87FC04);
-		static const Address sp4(0x5D4C80, 0x5D41B0, 0x5D3CC8, 0x5D3CC8, 0x5D34FC, 0x5D34FC, 0x5D31D0, 0x5D31D0);
-		static const Address sp5(0x8879B8, 0x8869B0, 0x886844, 0x886844, 0x880C64, 0x87FC64, 0x87FC64, 0x87FC64);
-		static const Address sp6(0x887C68, 0x886C60, 0x886AF4, 0x886AF4, 0x880F14, 0x87FF14, 0x87FF14, 0x87FF14);
-		static const Address sp7(0x94EF34, 0x94DF24, 0x94DF34, 0x94DF34, 0x947F34, 0x946F34, 0x946F34, 0x946F34);
-		static const Address sp8(0x8878A4, 0x88689C, 0x886730, 0x886730, 0x880B50, 0x87FB50, 0x87FB50, 0x87FB50);
+		static const Address sp1("SP1");
+		static const Address sp2("SP2");
+		static const Address sp3("SP3");
+		static const Address sp4("SP4");
+		static const Address sp5("SP5");
+		static const Address sp6("SP6");
+		static const Address sp7("SP7");
+		static const Address sp8("SP8");
 		
 		if(!entry->IsActivated()) 
 			walkSpeed = 1;
@@ -310,8 +310,8 @@ namespace CTRPluginFramework {
 
 //Shovel Knockback
 	void shovelknockback(MenuEntry *entry) {
-		static Address rockHitting(0x66E9F0, 0x66DF18, 0x66DA28, 0x66DA28, 0x66D4E8, 0x66D4E8, 0x66D090, 0x66D090);
-		static Address itemHitting(0x67211C, 0x671644, 0x671154, 0x671154, 0x670C14, 0x670C14, 0x6707BC, 0x6707BC);
+		static Address rockHitting("ROCKHITTING");
+		static Address itemHitting("ITEMHITTING");
 
 		if(entry->WasJustActivated()) {
 			Process::Patch(rockHitting.addr, 0xEB000000);

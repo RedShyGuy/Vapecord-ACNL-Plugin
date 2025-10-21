@@ -2,7 +2,6 @@
 #include "Files.h"
 #include "Helpers/PluginMenuData.hpp"
 #include "Helpers/Game.hpp"
-#include "RegionCodes.hpp"
 #include "Color.h"
 
 namespace CTRPluginFramework {

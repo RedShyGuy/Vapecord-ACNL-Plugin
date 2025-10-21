@@ -1,11 +1,11 @@
 #include "Helpers/ACSystem.hpp"
-#include "Helpers/Address.hpp"
+#include "Address/Address.hpp"
 #include "Helpers/Game.hpp"
 #include "Helpers/Player.hpp"
 
 namespace CTRPluginFramework {
     bool ACSystem::IsKeyDown(GameKey::GameKey key) {
-		static Address ControllerInputCheck(0x304A14, 0x304C1C, 0x304AA4, 0x304AA4, 0x304A44, 0x304A44, 0x3049F4, 0x3049F4);
+		static Address ControllerInputCheck("CONTROLLERINPUTCHECK");
 		return ControllerInputCheck.Call<bool>(key);
 	}
 
@@ -71,14 +71,14 @@ Light Switch cheats I made for fun
 	}
 
 	u32 LightSwitch::GetData() {
-		static const Address data(0x951030, 0x950020, 0x95002C, 0x95002C, 0x94A02C, 0x94902C, 0x94902C, 0x94902C);
+		static const Address data("DATA");
 		return *(u32 *)data.addr;
 	}
 
 	void LightSwitch::SetData(bool ON) {
-		static Address data1(0x569118, 0x568630, 0x568160, 0x568160, 0x567A50, 0x567A50, 0x567770, 0x567770);
-		static Address data2(0x5696F8, 0x568C10, 0x568740, 0x568740, 0x568030, 0x568030, 0x567D50, 0x567D50);
-		static Address data3(0x56946C, 0x568984, 0x5684B4, 0x5684B4, 0x567DA4, 0x567DA4, 0x567AC4, 0x567AC4);
+		static Address data1("DATA1");
+		static Address data2("DATA2");
+		static Address data3("DATA3");
 
 		u32 switchData = GetData();
 		if(switchData == 0)
@@ -94,7 +94,7 @@ Light Switch cheats I made for fun
 	}
 
 	void LightSwitch::ON(u8 roomID) {
-		static Address lightON(0x1E6844, 0x1E6288, 0x1E6864, 0x1E6864, 0x1E67A0, 0x1E67A0, 0x1E676C, 0x1E676C);
+		static Address lightON("LIGHTON");
 		lightON.Call<void>(0, roomID);
 		SetData(true);
 
@@ -103,7 +103,7 @@ Light Switch cheats I made for fun
 	}
 
 	void LightSwitch::OFF(u8 roomID) {
-		static Address lightOFF(0x1E7514, 0x1E6F58, 0x1E7534, 0x1E7534, 0x1E7470, 0x1E7470, 0x1E743C, 0x1E743C);
+		static Address lightOFF("LIGHTOFF");
 		lightOFF.Call<void>(0, roomID);
 		SetData(false);
 
@@ -112,12 +112,12 @@ Light Switch cheats I made for fun
 	}
 
 	bool LightSwitch::IsON(u8 roomID) {
-		static Address lightIsON(0x1E7AC0, 0x1E7504, 0x1E7AE0, 0x1E7AE0, 0x1E7A1C, 0x1E7A1C, 0x1E79E8, 0x1E79E8);
+		static Address lightIsON("LIGHTISON");
 		return lightIsON.Call<bool>(roomID);
 	}
 
 	bool LightSwitch::IsBasement(u8 roomID) {
-		static Address lightBasement(0x1E8400, 0x1E7E44, 0x1E8420, 0x1E8420, 0x1E835C, 0x1E835C, 0x1E8328, 0x1E8328);
+		static Address lightBasement("LIGHTBASEMENT");
 		return lightBasement.Call<bool>(roomID);
 	}
 

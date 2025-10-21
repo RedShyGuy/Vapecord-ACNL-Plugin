@@ -3,7 +3,7 @@
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/Inventory.hpp"
 #include "Helpers/Player.hpp"
-#include "Helpers/Address.hpp"
+#include "Address/Address.hpp"
 #include "Helpers/Animation.hpp"
 #include "Helpers/AnimData.hpp"
 #include "Helpers/Dropper.hpp"
@@ -215,12 +215,12 @@ namespace CTRPluginFramework {
 			} break;
 
 			case 2: {
-				if(!File::Exists(Utils::Format(PATH_COLOR, regionName.c_str()))) 
-					File::Create(Utils::Format(PATH_COLOR, regionName.c_str()));
+				if(!File::Exists(Utils::Format(PATH_COLOR, Address::regionName.c_str()))) 
+					File::Create(Utils::Format(PATH_COLOR, Address::regionName.c_str()));
 
 				App_Colors NewColor = App_Colors{ rval1, rval2 };
 
-				File f_color(Utils::Format(PATH_COLOR, regionName.c_str()), File::WRITE);
+				File f_color(Utils::Format(PATH_COLOR, Address::regionName.c_str()), File::WRITE);
 				f_color.Write(&NewColor, 8);	
 				f_color.Flush();
                 f_color.Close();
@@ -233,10 +233,10 @@ namespace CTRPluginFramework {
 	void App_ColorMod(MenuEntry *entry) {
 		static Hook hook;
 		if(entry->WasJustActivated()) {
-			if(File::Exists(Utils::Format(PATH_COLOR, regionName.c_str()))) {
+			if(File::Exists(Utils::Format(PATH_COLOR, Address::regionName.c_str()))) {
 				App_Colors OldColor;
 
-				File f_color(Utils::Format(PATH_COLOR, regionName.c_str()), File::READ);
+				File f_color(Utils::Format(PATH_COLOR, Address::regionName.c_str()), File::READ);
 				f_color.Read(&OldColor, 8);
 				f_color.Flush();
                 f_color.Close();
@@ -246,7 +246,7 @@ namespace CTRPluginFramework {
 				OSD::Notify("Loaded colors from file!", Color::Orange);
 			}
 
-			static const Address address(0x4A33C8, 0x4A2D40, 0x4A2410, 0x4A2410, 0x4A20A8, 0x4A20A8, 0x4A1F68, 0x4A1F68);
+			static const Address address("ADDRESS");
 			hook.Initialize(address.addr, (u32)BGRHook);
 		  	hook.SetFlags(USE_LR_TO_RETURN);
 			hook.Enable();
@@ -267,7 +267,7 @@ namespace CTRPluginFramework {
 	
 //Wear Helmet And Accessory /*Credits to Levi*/
 	void hatz(MenuEntry *entry) { 
-		static const Address hatwear(0x68C630, 0x68BB58, 0x68B668, 0x68B668, 0x68B128, 0x68B128, 0x68ACD0, 0x68ACD0);
+		static const Address hatwear("HATWEAR");
 		if(entry->WasJustActivated()) 
 			Process::Patch(hatwear.addr, 0xE1A00000); 
 		else if(!entry->IsActivated()) 
@@ -339,7 +339,7 @@ namespace CTRPluginFramework {
 //Show Players On The Map
 	void map(MenuEntry *entry) {
 		PluginMenu *menu = PluginMenu::GetRunningInstance();
-		static const Address writePatch(0x2215B0, 0x220FF4, 0x2215D0, 0x2215D0, 0x2214F0, 0x2214F0, 0x2214BC, 0x2214BC);
+		static const Address writePatch("WRITEPATCH");
 		static Hook hook;
 
 		if(entry->WasJustActivated()) {
@@ -375,7 +375,7 @@ namespace CTRPluginFramework {
 	}
 
 	void NeverBedHead(MenuEntry *entry) {
-		static const Address antiBedHead(0x20C798, 0x20C1DC, 0x20C7B8, 0x20C7B8, 0x20C6D8, 0x20C6D8, 0x20C6A4, 0x20C6A4);
+		static const Address antiBedHead("ANTIBEDHEAD");
 		if(entry->WasJustActivated()) 
 			Process::Patch(antiBedHead.addr, 0xE1A00000);
 		else if(!entry->IsActivated()) 

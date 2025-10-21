@@ -4,10 +4,10 @@
 #include "Helpers/IDList.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/Game.hpp"
-#include "Helpers/Address.hpp"
+#include "Address/Address.hpp"
 #include "Helpers/GameStructs.hpp"
 #include "Helpers/Converters.hpp"
-#include "RegionCodes.hpp"
+
 #include "Color.h"
 #include "Files.h"
 
@@ -233,15 +233,15 @@ namespace CTRPluginFramework {
 				if(KB.Open(filename) == -1)
 					return;
 
-				Wrap::Dump(Utils::Format(PATH_PLAYER, regionName.c_str()), filename, ".player", &locPlayer, nullptr);
+				Wrap::Dump(Utils::Format(PATH_PLAYER, Address::regionName.c_str()), filename, ".player", &locPlayer, nullptr);
 			} break;
 			case 1: {
-				Wrap::Restore(Utils::Format(PATH_PLAYER, regionName.c_str()), ".player", Language::getInstance()->get("RANDOM_PLAYER_RESTORE"), nullptr, true, &locPlayer, nullptr); 
+				Wrap::Restore(Utils::Format(PATH_PLAYER, Address::regionName.c_str()), ".player", Language::getInstance()->get("RANDOM_PLAYER_RESTORE"), nullptr, true, &locPlayer, nullptr); 
 				Player::UpdateTan();
 				Player::UpdateStyle();
 			} break;	
 			case 2: 
-				Wrap::Delete(Utils::Format(PATH_PLAYER, regionName.c_str()), ".player");
+				Wrap::Delete(Utils::Format(PATH_PLAYER, Address::regionName.c_str()), ".player");
 			break;
 		}
 	}
@@ -308,18 +308,18 @@ namespace CTRPluginFramework {
 						return;
 
 					locTPC = { (u32 *)player->TPCPic, sizeof(player->TPCPic) };
-					Wrap::Dump(Utils::Format(PATH_TPC, regionName.c_str()), filename, ".jpg", &locTPC, nullptr);
+					Wrap::Dump(Utils::Format(PATH_TPC, Address::regionName.c_str()), filename, ".jpg", &locTPC, nullptr);
 				}
 			} break;
 			
 			case 1: 
 				player = Player::GetSaveData();
 				locTPC = { (u32 *)player->TPCPic, sizeof(player->TPCPic) };
-				Wrap::Restore(Utils::Format(PATH_TPC, regionName.c_str()), ".jpg", Language::getInstance()->get("TPC_DUMPER_RESTORE"), nullptr, true, &locTPC, nullptr);
+				Wrap::Restore(Utils::Format(PATH_TPC, Address::regionName.c_str()), ".jpg", Language::getInstance()->get("TPC_DUMPER_RESTORE"), nullptr, true, &locTPC, nullptr);
 			break;
 			
 			case 2: 
-				Wrap::Delete(Utils::Format(PATH_TPC, regionName.c_str()), ".jpg");
+				Wrap::Delete(Utils::Format(PATH_TPC, Address::regionName.c_str()), ".jpg");
 			break;
 		}
 	}
@@ -365,7 +365,7 @@ namespace CTRPluginFramework {
 					return;
 
 				locPattern = { (u32 *)&player->Patterns[player->PatternOrder[dSlot]], sizeof(ACNL_Pattern) };
-				Wrap::Dump(Utils::Format(PATH_DESIGN, regionName.c_str()), filename, ".acnl", &locPattern, nullptr);
+				Wrap::Dump(Utils::Format(PATH_DESIGN, Address::regionName.c_str()), filename, ".acnl", &locPattern, nullptr);
 			} break;
 			
 			case 1: {
@@ -376,12 +376,12 @@ namespace CTRPluginFramework {
 					return;
 
 				locPattern = { (u32 *)&player->Patterns[player->PatternOrder[dSlot]], sizeof(ACNL_Pattern) };
-				Wrap::Restore(Utils::Format(PATH_DESIGN, regionName.c_str()), ".acnl", Language::getInstance()->get("DESIGN_DUMP_RESTORE"), nullptr, true, &locPattern, nullptr);
+				Wrap::Restore(Utils::Format(PATH_DESIGN, Address::regionName.c_str()), ".acnl", Language::getInstance()->get("DESIGN_DUMP_RESTORE"), nullptr, true, &locPattern, nullptr);
 				Player::ReloadDesign(player->PatternOrder[dSlot]);
 			} break;
 			
 			case 2: 
-				Wrap::Delete(Utils::Format(PATH_DESIGN, regionName.c_str()), ".acnl");
+				Wrap::Delete(Utils::Format(PATH_DESIGN, Address::regionName.c_str()), ".acnl");
 			break;
 		}
 	}
@@ -400,7 +400,7 @@ namespace CTRPluginFramework {
 			Language::getInstance()->get("VECTOR_EMOTIONLIST_CLEAR_LIST"),
 		};
 
-		static Address emoticons(0x8902A4, 0x88F29C, 0x88F130, 0x88F130, 0x889550, 0x888550, 0x888500, 0x888500);
+		static Address emoticons("EMOTICONS");
 		Emoticons *gameEmotes = new Emoticons();
 		gameEmotes = (Emoticons *)emoticons.addr;
 		if(!gameEmotes)
@@ -553,13 +553,13 @@ namespace CTRPluginFramework {
 			default: break;
 			case 0: { 
 				for(u16 i = Pairs.first; i < Pairs.second; ++i) {
-					int field = Code::CalcBitField.Call<int>(&i);
+					int field = Address("CALCBITFIELD").Call<int>(&i);
 					player->AddedSongs[(field >> 5)] |= (1 << (field & 0x1F));
 				}
 			} break;
 			case 1:
 				for(u16 i = Pairs.first; i < Pairs.second; ++i) {
-					int field = Code::CalcBitField.Call<int>(&i);
+					int field = Address("CALCBITFIELD").Call<int>(&i);
 					player->AddedSongs[(field >> 5)] &= ~(1 << (field & 0x1F));
 				}
 			break;

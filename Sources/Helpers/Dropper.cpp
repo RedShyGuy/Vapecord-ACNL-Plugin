@@ -2,11 +2,12 @@
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/ItemSequence.hpp"
 #include "Helpers/Game.hpp"
-#include "RegionCodes.hpp"
+
 #include "Helpers/IDList.hpp"
 #include "Helpers/AnimData.hpp"
 #include "Helpers/Animation.hpp"
 #include "Helpers/Player.hpp"
+#include "Address/Address.hpp"
 
 namespace CTRPluginFramework {
 	const s_DropType DropTypes[8] = {
@@ -50,7 +51,7 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 */
 	void Dropper::RestorePattern(void) {
 		for(int i = 0; i < 77; ++i)
-			Process::Write32(Code::DropPattern.addr + (i * 4), ReValues[i]);
+			Process::Write32(Address("DROPPATTERN").addr + (i * 4), ReValues[i]);
 	}
 
 	int Dropper::Search_Replace(int ItemsPerRun, std::vector<Item> ItemToSearch, Item ItemToPlace, u8 AnimID, bool ItemSequenceUsage, const std::string& msg, bool DisplayMSG) {
@@ -113,10 +114,10 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 
 //Item Locks Switch
 	void Dropper::DropItemLock(bool p_switch) {
-		static const Address BypassItemLock1(0x5A11C8, 0x5A06E0, 0x5A0210, 0x5A0210, 0x59FB00, 0x59FB00, 0x59F7D4, 0x59F7D4);
-		static const Address BypassItemLock2(0x5A11CC, 0x5A06E4, 0x5A0214, 0x5A0214, 0x59FB04, 0x59FB04, 0x59F7D8, 0x59F7D8);
-		static const Address BypassItemLock3(0x5A13C8, 0x5A08E0, 0x5A0410, 0x5A0410, 0x59FD00, 0x59FD00, 0x59F9D4, 0x59F9D4);
-		static const Address BypassItemLock4(0x5A13CC, 0x5A08E4, 0x5A0414, 0x5A0414, 0x59FD04, 0x59FD04, 0x59F9D8, 0x59F9D8);
+		static const Address BypassItemLock1("BYPASSITEMLOCK1");
+		static const Address BypassItemLock2("BYPASSITEMLOCK2");
+		static const Address BypassItemLock3("BYPASSITEMLOCK3");
+		static const Address BypassItemLock4("BYPASSITEMLOCK4");
 		
 		if(p_switch) {
 			Process::Patch(BypassItemLock1.addr, 0xE3E00000);
@@ -134,11 +135,11 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 
 //Place Item	
 	u32 Dropper::PlaceItem(u8 ID, Item *ItemToReplace, Item *ItemToPlace, Item *ItemToShow, u8 worldx, u8 worldy, bool u0, bool u1, bool u2, bool u3, bool u4) {
-		return Code::PlaceItemOffset.Call<u32>(ID, ItemToReplace, ItemToPlace, ItemToShow, worldx, worldy, u0, u1, u2, u3, u4);
+		return Address("PLACEITEMOFFSET").Call<u32>(ID, ItemToReplace, ItemToPlace, ItemToShow, worldx, worldy, u0, u1, u2, u3, u4);
 	}
 //Drop Check
 	bool Dropper::DropCheck(u32 *wX, u32 *wY, u32 *u0, bool disallowConcrete, bool u1) {
-		static Address dropcheck(0x5990AC, 0x5985C4, 0x5980F4, 0x5980F4, 0x5979E4, 0x5979E4, 0x5976B8, 0x5976B8);
+		static Address dropcheck("DROPCHECK");
 		return dropcheck.Call<bool>((u32)wX, (u32)wY, (u32)u0, disallowConcrete, u1);
 	}
 //Drop Item Wrapper	
@@ -218,7 +219,7 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 			Process::Write8(player + 0x8CC, ID);
 
 		//animation patch
-			static const Address animpatch(0x682434, 0x68195C, 0x68146C, 0x68146C, 0x680F2C, 0x680F2C, 0x680AD4, 0x680AD4);
+			static const Address animpatch("ANIMPATCH");
 
 		//display pattern, smash rock, bury
 			if(waitAnim == 0x5D || waitAnim == 0x6B || waitAnim == 0x5A)

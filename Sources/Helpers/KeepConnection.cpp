@@ -1,6 +1,7 @@
 #include <CTRPluginFramework.hpp>
-#include "RegionCodes.hpp"
+
 #include "Helpers/Game.hpp"
+#include "Address/Address.hpp"
 
 /*
 Thanks to PabloMK7 for the huge help with the thread loading!
@@ -50,7 +51,7 @@ namespace CTRPluginFramework {
 	}
 
     u32 getThread1Func(s8 threadPos, int param_1, u32 param_2, u32 param_3, u32 param_4) {
-        static Address origFunc(0x55D728, 0x55CC40, 0x55C770, 0x55C770, 0x55C060, 0x55C060, 0x55BD80, 0x55BD80);
+        static Address origFunc("ORIGFUNC");
 
         u32 obj_threadID = 0;
 		u32* threadTls = nullptr;
@@ -66,7 +67,7 @@ namespace CTRPluginFramework {
     }
 
     u32 getThread2Func(s8 threadPos, int param_1, u32 param_2, u32 param_3, u32 param_4) {
-        static Address origFunc(0x53C04C, 0x53B9A0, 0x53B094, 0x53B094, 0x53A980, 0x53A980, 0x53A6A4, 0x53A6A4);
+        static Address origFunc("ORIGFUNC");
 
 		u32 obj_threadID = 0;
 		u32* threadTls = nullptr;
@@ -102,8 +103,8 @@ namespace CTRPluginFramework {
 	}
 
 	void PatchThreadBegin(u32 threadfunc, u32 threadargs, u32 startFunc, u32 u0) {
-		static Address point(0x953CA0, 0x952C90, 0x952C9C, 0x952C9C, 0x94CC9C, 0x94BC9C, 0x94BC9C, 0x94BC9C);
-		static Address calc(0x2C, 0x30, 0x2C, 0x30, 0x30, 0x30, 0x2C, 0x30);
+		static Address point("POINT");
+		static Address calc("CALC");
 
 		static u32 threadAddress = *(u32 *)(*(u32 *)(point.addr) + 0xA8 + 0x80) - calc.addr;
 
@@ -133,27 +134,27 @@ namespace CTRPluginFramework {
 		if(GameHelper::GetOnlinePlayerCount() <= 1 || PluginMenu::GetRunningInstance() == nullptr)
 			return;
 
-		static Address sendData1(0x617D20, 0x617248, 0x616D58, 0x616D58, 0x616818, 0x616818, 0x6163C0, 0x6163C0);
-		static Address sendData2(0x60758C, 0x606AB4, 0x6065C4, 0x6065C4, 0x605FA4, 0x605FA4, 0x605C2C, 0x605C2C);
-		static Address sendData3(0x618024, 0x61754C, 0x61705C, 0x61705C, 0x616B1C, 0x616B1C, 0x6166C4, 0x6166C4);
+		static Address sendData1("SENDDATA1");
+		static Address sendData2("SENDDATA2");
+		static Address sendData3("SENDDATA3");
 
-		static Address getData1(0x5204DC, 0x51FE30, 0x51F524, 0x51F524, 0x51EE40, 0x51EE40, 0x51E7D4, 0x51E7D4);
-		static Address getData2(0x520C98, 0x5205EC, 0x51FCE0, 0x51FCE0, 0x51F5FC, 0x51F5FC, 0x51EF90, 0x51EF90);
+		static Address getData1("GETDATA1");
+		static Address getData2("GETDATA2");
 
-		sendData1.Call<void>(*(u32 *)Code::GamePointer.addr);
+		sendData1.Call<void>(*(u32 *)Address("GAMEPOINTER").addr);
 
-		if(*(u8 *)(Code::ExGameData.addr-4) == 0) {
+		if(*(u8 *)(Address("EXGAMEDATA").addr-4) == 0) {
 			u32 uVar3 = getData1.Call<u32>();
 			int iVar2 = getData2.Call<int>(uVar3, 2);
 			if(iVar2 == 0) 
 				sendData2.Call<void>();
 
-			sendData3.Call<void>(*(u32 *)Code::GamePointer.addr);
+			sendData3.Call<void>(*(u32 *)Address("GAMEPOINTER").addr);
 		}
 	}
 
     void InitKeepConnection(void) {
-        static Address threadBeginAddress(0x12F3A8, 0x12E308, 0x12F3CC, 0x12F3CC, 0x12F394, 0x12F394, 0x12F394, 0x12F394);
+        static Address threadBeginAddress("THREADBEGINADDRESS");
 
         static Hook onlineThreadHook;
 		onlineThreadHook.Initialize(threadBeginAddress.addr, (u32)PatchThreadBegin);
