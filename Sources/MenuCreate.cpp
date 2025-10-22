@@ -420,6 +420,7 @@ namespace CTRPluginFramework {
 	////////////////////
 	/*Dev Codes Folder*/
 	////////////////////
+	#if DEVMODE
 		DEVC = new MenuFolder(Color(0xFF1A69FF) << "Dev Codes");
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Custom Dump", nullptr, customdump, "Lets you dump/restore custom dumps.")),
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Call Function", FunctionsCaller, FunctionsCallerSettings, "Lets you call functions")),
@@ -444,5 +445,6 @@ namespace CTRPluginFramework {
 		DEVC->Append(new MenuEntry("EXPRESSION_MOD", FacialExpressionMod, SetFacialExpression, "EXPRESSION_MOD_NOTE")),
 		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Custom Save Settings", CustomSaveScreen, "")),
 		menu->Append(DEVC);
+	#endif
 	}
 }

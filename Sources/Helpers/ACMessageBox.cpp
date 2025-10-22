@@ -7,7 +7,7 @@ namespace CTRPluginFramework {
 	static Clock clock;
 
     void SetMSGData(u32 mData, const std::string& str) {
-		static const Address point("POINT");
+		static const Address point("ACMESSAGEBOX_1_POINT");
 		Process::Write32(mData, point.addr);
 		Process::Write32(mData + 4, mData + 0x18);
 		Process::Write32(mData + 8, 0x78);
@@ -36,12 +36,12 @@ namespace CTRPluginFramework {
 
     void ACMSG::Stop(void) {
 		clock.Restart();
-        static const Address point("POINT");
+        static const Address point("ACMESSAGEBOX_2_POINT");
         Process::Write8(point.addr, 1);
     }
 
     bool ACMSG::IsRunning(void) {
-        static const Address point("POINT");
+        static const Address point("ACMESSAGEBOX_2_POINT");
         return *(u8 *)point.addr == 0;
     }
 
@@ -49,12 +49,12 @@ namespace CTRPluginFramework {
 	void ACMSG::Notify(const std::string& str) {
         Stop();
 
-		static Address func1("FUNC1");
-		static Address func2("FUNC2");
-		static Address func3("FUNC3");	
-		static Address func4("FUNC4");	
-		static Address func5("FUNC5");
-		static const Address point("POINT");
+		static Address func1("ACMESSAGEBOX_FUNC1");
+		static Address func2("ACMESSAGEBOX_FUNC2");
+		static Address func3("ACMESSAGEBOX_FUNC3");	
+		static Address func4("ACMESSAGEBOX_FUNC4");	
+		static Address func5("ACMESSAGEBOX_FUNC5");
+		static const Address point("ACMESSAGEBOX_3_POINT");
 
 		u32 mData = PlayerClass::GetInstance()->Offset(0x5750);
 

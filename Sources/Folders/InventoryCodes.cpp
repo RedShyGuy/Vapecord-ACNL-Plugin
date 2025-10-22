@@ -7,6 +7,7 @@
 #include "Helpers/Player.hpp"
 #include "Helpers/GameKeyboard.hpp"
 #include "Helpers/Animation.hpp"
+#include "Helpers/ItemReader.hpp"
 
 #include "Color.h"
 #include "Files.h"
@@ -17,39 +18,43 @@ namespace CTRPluginFramework {
 	void ItemListCallBack(Keyboard& keyboard, KeyboardEvent& event) {
 		std::string& input = keyboard.GetInput();
 
-		std::string lowcaseInput(input);
-		for(char& c : lowcaseInput)
-			c = std::tolower(c);
-
 		if(event.type == KeyboardEvent::CharacterRemoved) {
 			keyboard.SetError(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_ERR1"));
 			return;
 		}
 
-		if(lowcaseInput.size() < 3) {
+		if(input.size() < 3) {
 			keyboard.SetError(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_ERR2"));
 			return;
 		}
 
-		ItemVec match;
-		int res = ItemSearch(lowcaseInput, match);
+		std::vector<ItemReader::Entry> itemEntries = ItemReader::getInstance()->searchAllByName(input);
 
-		if(res == 0) {
+		if(itemEntries.empty()) {
 			keyboard.SetError(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_ERR3"));
 			return;
 		}
 
-		if(res > MAXCOUNT) {
-			keyboard.SetError(Utils::Format(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_ERR4").c_str(), res));
+		int size = itemEntries.size();
+		if(size > MAXCOUNT) {
+			keyboard.SetError(Utils::Format(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_ERR4").c_str(), size));
 			return;
 		}
 
-		Keyboard KB(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_KB"), match.Name);
-		int kres = KB.Open();
-		if(kres < 0) {
+		std::vector<std::string> names;
+		names.reserve(itemEntries.size());
+		for (const auto& e : itemEntries) {
+			names.push_back(e.name);
+		}
+
+		Keyboard KB(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_KB"), names);
+		int result = KB.Open();
+		if(result < 0) {
 			input.clear();
 			return;
 		}
+
+		ItemReader::Entry match = itemEntries[result];
 		
 		input.clear();
 		u8 slot = 0;
@@ -59,14 +64,14 @@ namespace CTRPluginFramework {
 			return;
 		}
 			
-		if(!IDList::ItemValid(Item(match.ID[kres]), false)) {
+		if(!IDList::ItemValid(match.item, false)) {
 			keyboard.Close();
 			OSD::Notify("Invalid Item!",  Color::Red);
 			return;
 		}	
 
-		Inventory::WriteSlot(slot, match.ID[kres]);
-		OSD::Notify(Utils::Format("Set Item %04X to slot %d", match.ID[kres], slot));
+		Inventory::WriteSlot(slot, match.item);
+		OSD::Notify(Utils::Format("Set Item %04X to slot %d", match.item.ID, slot));
 	}
 
 //Text to Item
@@ -121,7 +126,7 @@ namespace CTRPluginFramework {
 				return;
 			}
 
-			if(!ItemFileExists) {
+			if(!ItemReader::getInstance()->isLoaded()) {
 				OSD::Notify("Error: item.txt missing!", Color::Red);
 				return;
 			}
@@ -150,11 +155,8 @@ namespace CTRPluginFramework {
 		Item CurrentItem = *(Item *)(invData + 0x3B9C - 0x28);
 
 		if(GameHelper::SetItem(&CurrentItem)) {
-			std::string itemName = "";
-			if(IDList::GetSeedName(CurrentItem, itemName))
-				OSD::Notify(Utils::Format("Spawned Item: %s (%04X)", itemName.c_str(), CurrentItem.ID));
-			else
-				OSD::Notify(Utils::Format("Spawned Item: %04X", CurrentItem.ID));
+			std::string itemName = ItemReader::getInstance()->get(CurrentItem);
+			OSD::Notify(Utils::Format("Spawned Item: %s (%04X)", itemName.c_str(), CurrentItem.ID));
 		}
 		else
 			OSD::Notify("Inventory Full!");
@@ -257,11 +259,8 @@ namespace CTRPluginFramework {
 		
 		Inventory::WriteSlot(slot, itemID);
 
-		std::string itemName = "";
-		if(IDList::GetSeedName(itemID, itemName))
-			OSD::Notify(Utils::Format("Spawned Item: %s (%08X)", itemName.c_str(), itemID));
-		else
-			OSD::Notify(Utils::Format("Spawned Item: %08X", itemID));
+		std::string itemName = ItemReader::getInstance()->get(itemID);
+		OSD::Notify(Utils::Format("Spawned Item: %s (%08X)", itemName.c_str(), itemID));
 	}
 //Clear Inventory
 	void ClearInventory(MenuEntry *entry) {
@@ -453,8 +452,7 @@ namespace CTRPluginFramework {
 			if(i >= OnlyItem.size())
 				return;
 
-			std::string str = "";
-			IDList::GetSeedName(OnlyItem[i], str);
+			std::string str = ItemReader::getInstance()->get(OnlyItem[i]);
 			Sets[i] = str;
 
 			input += Color(0x40FF40FF) << Utils::Format("%08X | ", OnlyItem[i]) << Color(0xFFFDD0FF) << Sets[i] << "\n";

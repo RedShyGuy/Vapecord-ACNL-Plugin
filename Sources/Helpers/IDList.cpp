@@ -5,7 +5,7 @@
 #include "Helpers/Save.hpp"
 #include "Helpers/NPC.hpp"
 #include "Address/Address.hpp"
-
+#include "Helpers/ItemReader.hpp"
 #include "Language.hpp"
 
 #define RANGE(X, START, END)	((X & 0xFFFF) >= START && (X & 0xFFFF) <= END)
@@ -42,7 +42,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 
-		keyboard.GetMessage() = ItemIDSearch(ID);
+		keyboard.GetMessage() = ItemReader::getInstance()->get(ID);
 	}
 
 	bool IDList::IsHalfAcre(u8 acreID) {
@@ -222,16 +222,6 @@ namespace CTRPluginFramework {
 		}
 
 		return Language::getInstance()->get("INVALID");
-	}
-	
-	bool IDList::GetSeedName(Item itemID, std::string& str) {
-		for(int i = 0; i < ItemFileLenght; i++) {
-			if(ItemList->ID[i] == itemID) {
-				str = ItemList->Name[i];
-				return true;
-			}
-		}
-		return false;
 	}
 
 	/*std::string IDList::GetItemName(u16 ItemID) {

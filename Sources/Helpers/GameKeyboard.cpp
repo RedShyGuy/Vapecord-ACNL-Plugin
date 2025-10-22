@@ -152,7 +152,7 @@ namespace CTRPluginFramework {
 	};
 
 	void SetCustomOnlineStack(OnlineStack *stack, const std::string& str) {
-		static const Address point("POINT");
+		static const Address point("GAMEKEYBOARD_POINT");
 
 		stack->unknownPointer1 = &stack->unknownPointer2;
 		stack->unknownPointer2 = (u32 *)point.addr;
@@ -162,10 +162,10 @@ namespace CTRPluginFramework {
 	}
 
 	void GameKeyboard::SendMessage(const std::string& str) {
-		static Address func2("FUNC2");
-		static Address func3("FUNC3");
-		static Address func4("FUNC4");
-		static Address func5("FUNC5");
+		static Address func2("GAMEKEYBOARD_FUNC2");
+		static Address func3("GAMEKEYBOARD_FUNC3");
+		static Address func4("GAMEKEYBOARD_FUNC4");
+		static Address func5("GAMEKEYBOARD_FUNC5");
 		static Address func6("FUNC6");
 
 		u32 msgData = *(u32 *)Address("CHATPOINTER").addr;

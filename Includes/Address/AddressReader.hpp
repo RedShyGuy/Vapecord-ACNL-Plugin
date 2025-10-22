@@ -13,6 +13,12 @@ namespace CTRPluginFramework {
             u32 address;
         };
 
+        struct RegionHeader {
+            std::string name;
+            u32 offset;
+            u32 size;
+        };
+
         static AddressReader* getInstance();
 
         bool loadFromBinary(const std::string& filePath, const std::string& regionName);
@@ -22,8 +28,6 @@ namespace CTRPluginFramework {
 
         bool loaded = false;
         std::vector<Entry> entries;
-
-        static std::string ReadString(File& f);
     };
 }
 #endif

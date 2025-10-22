@@ -6,26 +6,12 @@
 #include "Helpers/Game.hpp"
 #include "Helpers/Inventory.hpp"
 #include "Address/Address.hpp"
+#include "Helpers/ItemReader.hpp"
+#include "LibCtrpfExtras/UtilsExtras.hpp"
 
 namespace CTRPluginFramework {
 
 	bool NonHacker::Accessible[5] = { true, true, true, true, true };
-
-	static inline std::string& Ltrim(std::string& str) {
-		auto it = std::find_if(str.begin(), str.end(), [](char ch) { return (!std::isspace(ch)); });
-		str.erase(str.begin(), it);
-		return str;
-	}
-
-	static inline std::string& Rtrim(std::string& str) {
-		auto it = std::find_if(str.rbegin(), str.rend(), [](char ch) { return (!std::isspace(ch)); });
-		str.erase(it.base(), str.end());
-		return str;
-	}
-
-	std::string& g_Trim(std::string& str) {
-		return (Ltrim(Rtrim(str)));
-	}
 
 	NonHacker::NonHacker(u8 playerID) {
 		pID = playerID;
@@ -78,11 +64,6 @@ namespace CTRPluginFramework {
 		u8 Short;
 		Process::Read8(GetPlayerMessageData() + 0x3F0, Short);
 		return (Short != 0);
-	}
-
-	void ConvertToLowcase(std::string& str) {
-		for(char& c : str)
-			c = std::tolower(c);
 	}
 
 	void NonHacker::Animation() {
@@ -178,10 +159,10 @@ namespace CTRPluginFramework {
 
 	//command
 		std::string Command = PlayerText.substr(0, 2);
-		ConvertToLowcase(Command);
+		UtilsExtras::ConvertToLowcase(Command);
 	//special case command (flag)
 		std::string SPCommand = PlayerText.substr(6, 2);
-		ConvertToLowcase(SPCommand);
+		UtilsExtras::ConvertToLowcase(SPCommand);
 	//ID's
 		std::string ID_8Bit = PlayerText.substr(2, 2);
 		std::string ID_12Bit = PlayerText.substr(2, 3);
@@ -237,28 +218,15 @@ namespace CTRPluginFramework {
 		}
 
 		else if(Command == "n:") {
-			if(!ItemFileExists) 
+			if(!ItemReader::getInstance()->isLoaded()) 
 				return false;
 
-			ConvertToLowcase(ItemName);
-
-			g_Trim(ItemName);
-
-			ItemVec match;
-			int res = ItemSearch(ItemName, match);
-			if(res == 0) //no item found
+			UtilsExtras::Trim(ItemName);
+			Item* match = ItemReader::getInstance()->searchByName(ItemName);
+			if (!match) 
 				return false;
 
-			int pos = 0;
-		//if exact name was found
-			for(int i = 0; i < res; ++i) {
-				if(match.Name[i] == ItemName) {
-					pos = i;
-					break;
-				}
-			}
-
-			nHack->itemID = match.ID[pos]; //sets item
+			nHack->itemID = match->ID; //sets item
 			if(!IDList::ItemValid(nHack->itemID)) //should always be true if orig file is used
 				return false;
 

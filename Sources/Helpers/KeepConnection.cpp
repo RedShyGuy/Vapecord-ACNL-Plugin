@@ -51,7 +51,7 @@ namespace CTRPluginFramework {
 	}
 
     u32 getThread1Func(s8 threadPos, int param_1, u32 param_2, u32 param_3, u32 param_4) {
-        static Address origFunc("ORIGFUNC");
+        static Address origFunc("KEEPCONNECTION_2_ORIGFUNC");
 
         u32 obj_threadID = 0;
 		u32* threadTls = nullptr;
@@ -67,7 +67,7 @@ namespace CTRPluginFramework {
     }
 
     u32 getThread2Func(s8 threadPos, int param_1, u32 param_2, u32 param_3, u32 param_4) {
-        static Address origFunc("ORIGFUNC");
+        static Address origFunc("KEEPCONNECTION_1_ORIGFUNC");
 
 		u32 obj_threadID = 0;
 		u32* threadTls = nullptr;
@@ -103,7 +103,7 @@ namespace CTRPluginFramework {
 	}
 
 	void PatchThreadBegin(u32 threadfunc, u32 threadargs, u32 startFunc, u32 u0) {
-		static Address point("POINT");
+		static Address point("KEEPCONNECTION_POINT");
 		static Address calc("CALC");
 
 		static u32 threadAddress = *(u32 *)(*(u32 *)(point.addr) + 0xA8 + 0x80) - calc.addr;

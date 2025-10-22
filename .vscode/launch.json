@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "3DS Remote Debug via gdbstub",
+      "type": "cortex-debug",
+      "request": "attach",
+      "servertype": "external",
+      "cwd": "${workspaceFolder}",
+      "executable": "C:/ACNL_USA_Orig.elf",
+      "gdbPath": "C:/devkitPro/devkitARM/bin/arm-none-eabi-gdb.exe",
+      "gdbTarget": "tcp:192.168.178.39:4000",
+      "runToEntryPoint": "main",
+    }
+  ]
+}

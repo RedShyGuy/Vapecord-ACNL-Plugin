@@ -103,12 +103,12 @@ namespace CTRPluginFramework {
 	}
 
 	void NPCAnimation(MenuEntry *entry) {
-        static Address func1("FUNC1");
-        static Address func2("FUNC2");
-        static Address func3("FUNC3");
-        static Address func4("FUNC4");
-        static Address data1("DATA1");
-        static Address data2("DATA2");
+        static Address func1("NPCCODES_FUNC1");
+        static Address func2("NPCCODES_FUNC2");
+        static Address func3("NPCCODES_FUNC3");
+        static Address func4("NPCCODES_FUNC4");
+        static Address data1("NPCCODES_DATA1");
+        static Address data2("NPCCODES_DATA2");
 
 		if(CurrAddress == 0)
 			return;

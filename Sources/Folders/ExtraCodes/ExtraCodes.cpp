@@ -38,11 +38,11 @@ namespace CTRPluginFramework {
 	void nonesave(MenuEntry *entry) {
 		if(entry->WasJustActivated()) {
 			Process::Patch(Address("NOSAVE").addr, 0xE1A00000);
-			save = true;
+			saveMenuDisabled = true;
 		}
 		else if(!entry->IsActivated()) {
 			Process::Patch(Address("NOSAVE").addr, 0xE8900006);
-			save = false;
+			saveMenuDisabled = false;
 		}
 	}
 

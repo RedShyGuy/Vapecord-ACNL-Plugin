@@ -6,52 +6,57 @@
 
 namespace CTRPluginFramework {	
     void SetupLanguage(bool SetInMenu) {
-		f_Language language = f_Language::NoLang;
+		std::string language = "";
 		ReadLanguage(language);
 
-		if(language >= f_Language::MaxLang) {//If byte is no language reset
-			language = f_Language::NoLang;
+		if (!File::Exists(PATH_LANGUAGE_BIN)) {
+			MessageBox(Utils::Format("Error 577\nThe language.bin is missing. The Plugin can not work without it!\nGet more info and help on the Discord Server: %s\nGame will be closed now!", DISCORDINV)).SetClear(ClearScreen::Top)();
+			Process::ReturnToHomeMenu();
+			return;
 		}
 
-		static const std::vector<std::pair<std::string, std::string>> languages = {
-			{"jp", "Japanese"},
-			{"en", "English"},
-			{"fr", "French"},
-			{"de", "German"},
-			{"it", "Italian"},
-			{"es", "Spanish"},
-			{"kr", "Korean"}
-		};
+		auto languages = Language::getInstance()->listAvailableLanguages(PATH_LANGUAGE_BIN);
+		if (languages.empty()) {
+			MessageBox(Utils::Format("Error 578\nThe language.bin is empty or corrupted!\nGet more info and help on the Discord Server: %s\nGame will be closed now!", DISCORDINV)).SetClear(ClearScreen::Top)();
+			Process::ReturnToHomeMenu();
+			return;
+		}
 
-        if(language == f_Language::NoLang || SetInMenu) { //if byte has no mode or re-choose in menu let user choose one
-            if (!File::Exists(PATH_LANGUAGE_BIN)) {
-				MessageBox(Utils::Format("Error 577\nThe language.bin is missing. The Plugin can not work without it!\nGet more info and help on the Discord Server: %s\nGame will be closed now!", DISCORDINV)).SetClear(ClearScreen::Top)();
-				Process::ReturnToHomeMenu();
-			}
-			
+		bool languageExists = std::find(languages.begin(), languages.end(), language) != languages.end();
+
+        if(!languageExists || SetInMenu) {
 			std::vector<std::string> values;
 			for (const auto& pair : languages) {
-				values.push_back(pair.second);
+				values.push_back(pair.fullName);
 			}
 
             Keyboard keyboard("Which language do you want to use?", values);
-			keyboard.CanAbort(false);
+			keyboard.CanAbort(SetInMenu);
 
 			int sel = keyboard.Open();
-			if (sel >= 0 && sel < (int)languages.size()) {
-            	language = static_cast<f_Language>(sel + 1);
+			if (sel < 0) {
+				return;
 			}
 
-			WriteLanguage(language); //write language mode
+			if (sel < (int)languages.size()) {
+            	language = languages[sel].shortName;
+			}
+
+			if (!WriteLanguage(language)) { //write language mode to file
+				MessageBox(Utils::Format("Error 608\nCouldn't save chosen language.\nGet more info and help on the Discord Server: %s", DISCORDINV)).SetClear(ClearScreen::Top)();
+			} 
+			languageExists = true;
         }
 
- 		int index = (int)language - 1;
-		if (index < 0 || index >= (int)languages.size() ||
-        	!Language::getInstance()->loadFromBinary(PATH_LANGUAGE_BIN, languages[index].first.c_str())) {
-			MessageBox(Utils::Format("Error 404\nThe language.bin is missing the selected language\nGet more info and help on the Discord Server: %s", DISCORDINV)).SetClear(ClearScreen::Top)();
+		if (!languageExists || !Language::getInstance()->loadFromBinary(PATH_LANGUAGE_BIN, language.c_str())) {
+			MessageBox(Utils::Format("Error 605\nCouldn't load the language.\nGet more info and help on the Discord Server: %s", DISCORDINV)).SetClear(ClearScreen::Top)();
 
-			WriteLanguage(f_Language::NoLang); 
-			SetupLanguage(true); //redo language choosing
+			DeleteLanguage();
+			SetupLanguage(false); //redo language choosing
+		}
+
+		if (SetInMenu) {
+			MessageBox("Successfully set new language, please restart the game to see changes.").SetClear(ClearScreen::Top)();
 		}
     }
 }

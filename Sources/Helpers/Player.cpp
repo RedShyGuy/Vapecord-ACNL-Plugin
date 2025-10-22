@@ -109,7 +109,7 @@ Write Outfit
 get status of specific player
 */
 	PlayerStatus Player::GetPlayerStatus(u8 pPlayer) {
-		static Address pPOffset("PPOFFSET");
+		static Address pPOffset("PLAYER_2_PPOFFSET");
 		return pPOffset.Call<PlayerStatus>(pPlayer);
 	}
 
@@ -117,7 +117,7 @@ get status of specific player
 Get player save offset for any player
 */
 	u32 Player::GetSpecificSave(u8 pPlayer) {
-		static Address pPOffset("PPOFFSET");
+		static Address pPOffset("PLAYER_1_PPOFFSET");
 		return pPOffset.Call<u32>(pPlayer);
 	}
 /*

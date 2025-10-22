@@ -8,7 +8,6 @@
 #include "Helpers/Town.hpp"
 #include "Address/Address.hpp"
 
-
 namespace CTRPluginFramework {
 	Keyboard optKb("");
 
@@ -103,12 +102,12 @@ namespace CTRPluginFramework {
 	}*/
 //get GameType
 	u8 GameHelper::GetGameType() {
-		static Address gtype("GTYPE");
+		static Address gtype("GAME_2_GTYPE");
 		return gtype.Call<u8>();
 	}
 //Change GameType
 	void GameHelper::ChangeGameType(u8 GameType) {
-		static Address gtype("GTYPE");
+		static Address gtype("GAME_1_GTYPE");
 		gtype.Call<void>(GameType);
 	}
 //call menu

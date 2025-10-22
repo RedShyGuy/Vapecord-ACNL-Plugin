@@ -14,9 +14,7 @@ namespace CTRPluginFramework {
 
 	extern bool turbo;
 	extern bool fovbool;
-	extern bool save;
-
-	extern const std::string g_Empty;
+	extern bool saveMenuDisabled;
 	
 	extern const Color pColor[];
 

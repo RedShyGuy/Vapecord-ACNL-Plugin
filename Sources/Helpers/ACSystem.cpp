@@ -76,8 +76,8 @@ Light Switch cheats I made for fun
 	}
 
 	void LightSwitch::SetData(bool ON) {
-		static Address data1("DATA1");
-		static Address data2("DATA2");
+		static Address data1("ACSYSTEM_DATA1");
+		static Address data2("ACSYSTEM_DATA2");
 		static Address data3("DATA3");
 
 		u32 switchData = GetData();

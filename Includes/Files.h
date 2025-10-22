@@ -8,6 +8,7 @@
 
 #define PATH_LANGUAGE_BIN   "E:/Vapecord/Data/language.bin"
 #define PATH_ADDRESSES_BIN  "E:/Vapecord/Data/addresses.bin"
+#define PATH_ITEM_BIN       "E:/Vapecord/Data/item.bin"
 
 #define PATH_ISLAND	        "E:/Vapecord/%s/Island"
 #define PATH_BULLETIN	    "E:/Vapecord/%s/Bulletin"

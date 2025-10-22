@@ -266,7 +266,7 @@ namespace CTRPluginFramework {
 
 				fovbool = true;
 				
-				if(!save) //If No Save is OFF switch it ON
+				if(!saveMenuDisabled) //If No Save is OFF switch it ON
 					Process::Patch(Address("NOSAVE").addr, 0xE1A00000);
 				
 				OSD::Run(editorID);	
@@ -288,7 +288,7 @@ namespace CTRPluginFramework {
 
 				fovbool = false;
 				
-				if(!save) //If No Save is OFF switch it back OFF
+				if(!saveMenuDisabled) //If No Save is OFF switch it back OFF
 					Process::Patch(Address("NOSAVE").addr, 0xE8900006);
 				
 				OSD::Stop(editorID);
@@ -389,7 +389,7 @@ namespace CTRPluginFramework {
 			OSD::Stop(editorID);
 			Process::Patch(Address("UNLOCKCAMERA").addr, 0xE2805C01);
 				
-			if(!save) //If No Save is OFF switch it back OFF
+			if(!saveMenuDisabled) //If No Save is OFF switch it back OFF
 				Process::Patch(Address("NOSAVE").addr, 0xE8900006);
 		}
 	}

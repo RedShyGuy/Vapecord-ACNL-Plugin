@@ -3,80 +3,9 @@
 #include "Helpers/Player.hpp"
 #include "Helpers/IDList.hpp"
 #include "Address/Address.hpp"
-
 #include "Files.h"
 
 namespace CTRPluginFramework {
-	ItemVec* ItemList = new ItemVec();
-	int ItemFileLenght = 0;
-	bool ItemFileExists = true;
-
-//reserver data into pointer so search doesnt take so long
-	void ReserveItemData(ItemVec* out) {
-		if(out == nullptr) 
-			return;
-
-		File file(ITEMLIST, File::READ);
-		if(!file.IsOpen()) {
-			ItemFileExists = false;
-			return;
-		}
-
-		std::string line;
-		LineReader reader(file);
-
-		ItemFileLenght = 0; //reset file lenght if called again
-		u32 lineNumber = 0;
-		int count = 0;
-
-	//Read all lines in file
-		for(; reader(line); lineNumber++) {
-		//If line is empty, skip it
-			if(line.empty())
-				continue;
-
-			std::string lowcaseInput(line);
-			for(char& c : lowcaseInput)
-				c = std::tolower(c);
-
-			std::string Name = lowcaseInput.substr(5, 30); //lets make max 30 for now
-			std::string SID = lowcaseInput.substr(0, 4); 
-			Item ID = (Item)StringToHex<u16>(SID, 0xFFFF);
-			out->Name.push_back(Name);
-			out->ID.push_back(ID);
-			ItemFileLenght++; //adds to file lenght to know how many items are in it
-		}
-	}
-
-	int ItemSearch(const std::string& match, ItemVec& out) {
-		int count = 0;
-	//Read our file until the last line
-		for(int i = 0; i < ItemFileLenght; ++i) {
-			auto namePos = ItemList->Name[i].find(match);
-			if(namePos != std::string::npos) {
-				out.Name.push_back(ItemList->Name[i]);
-				out.ID.push_back(ItemList->ID[i]);
-				count++;
-			}
-		}
-
-		return count;
-	}
-
-	std::string ItemIDSearch(Item ItemID) {
-		if(!ItemFileExists)
-			return "";
-
-	//Read our file until the last line
-		for(int i = 0; i < ItemFileLenght; ++i) {
-			if(ItemList->ID[i] == ItemID) {
-				return ItemList->Name[i];
-			}
-		}
-
-		return "???";
-	}
-
 	u32 Inventory::GetCurrentItemData(int i) {
 		if(GameHelper::BaseInvPointer() == 0)
 			return -1;

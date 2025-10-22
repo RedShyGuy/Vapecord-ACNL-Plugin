@@ -106,12 +106,10 @@ namespace CTRPluginFramework {
 		bool 						AnimationValid(u8 animID);
 		bool 						SnakeValid(u16 snakeID);
 		bool 						EmotionValid(u8 emotionID);
-		bool						GetSeedName(Item itemID, std::string& str);
 		std::string  				SetCountryName(u8 country);
 		std::string 				GetBuildingName(u8 ID);
 		std::string 				GetRoomName(u8 ID);
 		bool		 				ValidID(u16 ID, u16 StardID, u16 EndID);
-		std::string					GetItemName(Item ItemID);
 	}
 }
 #endif

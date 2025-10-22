@@ -7,6 +7,8 @@
 #include "NonHacker.hpp"
 #include "Address/Address.hpp"
 #include "Address/AddressReader.hpp"
+#include "cheats.hpp"
+#include "Helpers/ItemReader.hpp"
 
 namespace CTRPluginFramework {
 	static const std::string Note = "Creator: Lukas \n\n"
@@ -17,14 +19,8 @@ namespace CTRPluginFramework {
 	extern int UI_Pos;
 	bool OSD_SplashScreen(const Screen &Splash);
 	void IndoorsSeedItemCheck(void);
-	void OnNewFrameCallback(Time ttime);
 	void InitMenu(PluginMenu *menu);
-	void GetPlayerInfoData(void);
 	void RCO(void);
-	void GetMessage_p1(void);
-	void GetMessage_p2(void);
-	void GetMessage_p3(void);
-	void GetMessage_p4(void);
 
 /*
 Will set a counter at the start of the plugin as long as the title screen didn't load to
@@ -59,14 +55,14 @@ prevent any issues with freezing of the plugin
 			return 0;
 		}
 
-		SleepTime();
-
 	//Load Addresses
 		if (!AddressReader::getInstance()->loadFromBinary(PATH_ADDRESSES_BIN, region)) {
 			MessageBox(Utils::Format("Error 600\nThe addresses.bin is missing the selected region (%s)\nGet more info and help on the Discord Server: %s", region.c_str(), DISCORDINV)).SetClear(ClearScreen::Top)();
 			Process::ReturnToHomeMenu();
 			return 0;
 		}
+
+		SleepTime();
 
 	//RCO only if game is supported
 		RCO();
@@ -77,17 +73,17 @@ prevent any issues with freezing of the plugin
 	//Load MenuFolders and Entrys (located in MenuCreate.cpp)
 		InitMenu(menu);
 
-		ReserveItemData(ItemList);
+		ItemReader::getInstance()->loadFromBinary(PATH_ITEM_BIN);
 
 	//Load Callbacks
 		menu->Callback(IndoorsSeedItemCheck);
 
-		menu->Callback(NonHacker_Player00);
-		menu->Callback(NonHacker_Player01);
-		menu->Callback(NonHacker_Player02);
-		menu->Callback(NonHacker_Player03);
+		//menu->Callback(NonHacker_Player00);
+		//menu->Callback(NonHacker_Player01);
+		//menu->Callback(NonHacker_Player02);
+		//menu->Callback(NonHacker_Player03);
 
-		menu->OnNewFrame = OnNewFrameCallback;
+		menu->OnNewFrame = SendPlayerData;
 
 		Process::exceptionCallback = CustomExceptionHandler;
 

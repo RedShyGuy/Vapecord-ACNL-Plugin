@@ -6,6 +6,8 @@
 #include "Helpers/IDList.hpp"
 #include "Helpers/Game.hpp"
 #include "Helpers/Wrapper.hpp"
+#include "Helpers/ItemReader.hpp"
+#include "Files.h"
 
 
 extern "C" bool __IsPlayerHouse() {
@@ -155,15 +157,13 @@ namespace CTRPluginFramework {
 			if(Inventory::ReadSlot(slot, itemslotid)) {
 				itemslotid.Flags = 0;
 				if(GameHelper::IsOutdoorItem(itemslotid) || itemslotid.ID == 0x3729) {
-					std::string name = "";
-					if(IDList::GetSeedName(itemslotid, name)) {
-						u32 InvPointer = *(u32 *)(GameHelper::BaseInvPointer() + 0xC);
-						Process::Write32(InvPointer + 0xCFC, 0x000E000E);
-						Process::Write32(InvPointer + 0xD00, 0x00040000);
-						Process::Write32(InvPointer + 0xD04, 0xCD030100);
-
-						Process::WriteString(InvPointer + 0xD08, IDList::ItemValid(itemslotid, false) ? name : "Invalid Item", StringFormat::Utf16);
-					}					
+					std::string name = ItemReader::getInstance()->get(itemslotid);
+					u32 InvPointer = *(u32 *)(GameHelper::BaseInvPointer() + 0xC);
+					Process::Write32(InvPointer + 0xCFC, 0x000E000E);
+					Process::Write32(InvPointer + 0xD00, 0x00040000);
+					Process::Write32(InvPointer + 0xD04, 0xCD030100);
+ 
+					Process::WriteString(InvPointer + 0xD08, IDList::ItemValid(itemslotid, false) ? name : "Invalid Item", StringFormat::Utf16);				
 				}
 			}
 		}
@@ -243,9 +243,8 @@ namespace CTRPluginFramework {
 	void SuspendCallBack(u32 param) {
 	/*If Game suspenses*/
 		if(!WasSuspended) {
-			
-			delete ItemList; //delete ItemList to clear a lot of memory to prevent memory issues if game is suspended
-			ItemList = nullptr;
+		// delete ItemList to clear a lot of memory to prevent memory issues if game is suspended
+			ItemReader::getInstance()->clearEntries();
 
 			WasSuspended = true;
 			goto reset;
@@ -253,8 +252,7 @@ namespace CTRPluginFramework {
 
 		OSD::Notify("Initializing Memory", Color::Purple);
 	/*If Game unsuspenses*/
-		ItemList = new ItemVec();
-		ReserveItemData(ItemList); //redo ItemList when game is unsuspended
+		ItemReader::getInstance()->loadFromBinary(PATH_ITEM_BIN); // reread ItemList when game is unsuspended
 		
 		WasSuspended = false;
 

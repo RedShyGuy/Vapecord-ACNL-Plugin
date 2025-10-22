@@ -950,7 +950,7 @@
       "KOR": "0x6707BC",
       "KORWA": "0x6707BC"
     },
-    "FUNC1": {
+    "NPC_FUNC1": {
       "USA": "0x51D288",
       "USAWA": "0x51CBDC",
       "EUR": "0x51C2D0",
@@ -960,7 +960,27 @@
       "KOR": "0x51B580",
       "KORWA": "0x51B580"
     },
-    "FUNC2": {
+    "NPCCODES_FUNC1": {
+      "USA": "0x6E7D54",
+      "USAWA": "0x6E7204",
+      "EUR": "0x6E6D74",
+      "EURWA": "0x6E6D4C",
+      "JPN": "0x6E6520",
+      "JPNWA": "0x6E64F8",
+      "KOR": "0x6E60C8",
+      "KORWA": "0x6E60A0"
+    },
+    "ACMESSAGEBOX_FUNC1": {
+      "USA": "0x5E3768",
+      "USAWA": "0x5E2C98",
+      "EUR": "0x5E27A0",
+      "EURWA": "0x5E27A0",
+      "JPN": "0x5E2020",
+      "JPNWA": "0x5E2020",
+      "KOR": "0x5E1CA8",
+      "KORWA": "0x5E1CA8"
+    },
+    "GAMEKEYBOARD_FUNC2": {
       "USA": "0x56DE5C",
       "USAWA": "0x56D374",
       "EUR": "0x56CEA4",
@@ -970,17 +990,17 @@
       "KOR": "0x56C4B4",
       "KORWA": "0x56C4B4"
     },
-    "FUNC3": {
-      "USA": "0x5FD774",
-      "USAWA": "0x5FCCA4",
-      "EUR": "0x5FC7AC",
-      "EURWA": "0x5FC7AC",
-      "JPN": "0x5FC02C",
-      "JPNWA": "0x5FC02C",
-      "KOR": "0x5FBCB4",
-      "KORWA": "0x5FBCB4"
+    "NPCCODES_FUNC2": {
+      "USA": "0x6EB384",
+      "USAWA": "0x6EA834",
+      "EUR": "0x6EA3A4",
+      "EURWA": "0x6EA37C",
+      "JPN": "0x6E9B50",
+      "JPNWA": "0x6E9B28",
+      "KOR": "0x6E96F8",
+      "KORWA": "0x6E96D0"
     },
-    "FUNC4": {
+    "ACMESSAGEBOX_FUNC2": {
       "USA": "0x5E3920",
       "USAWA": "0x5E2E50",
       "EUR": "0x5E2958",
@@ -990,7 +1010,67 @@
       "KOR": "0x5E1E60",
       "KORWA": "0x5E1E60"
     },
-    "DATA1": {
+    "GAMEKEYBOARD_FUNC3": {
+      "USA": "0x5FD774",
+      "USAWA": "0x5FCCA4",
+      "EUR": "0x5FC7AC",
+      "EURWA": "0x5FC7AC",
+      "JPN": "0x5FC02C",
+      "JPNWA": "0x5FC02C",
+      "KOR": "0x5FBCB4",
+      "KORWA": "0x5FBCB4"
+    },
+    "NPCCODES_FUNC3": {
+      "USA": "0x6EC4E0",
+      "USAWA": "0x6EB990",
+      "EUR": "0x6EB500",
+      "EURWA": "0x6EB4D8",
+      "JPN": "0x6EACAC",
+      "JPNWA": "0x6EAC84",
+      "KOR": "0x6EA854",
+      "KORWA": "0x6EA82C"
+    },
+    "ACMESSAGEBOX_FUNC3": {
+      "USA": "0x5E3A64",
+      "USAWA": "0x5E2F94",
+      "EUR": "0x5E2A9C",
+      "EURWA": "0x5E2A9C",
+      "JPN": "0x5E231C",
+      "JPNWA": "0x5E231C",
+      "KOR": "0x5E1FA4",
+      "KORWA": "0x5E1FA4"
+    },
+    "GAMEKEYBOARD_FUNC4": {
+      "USA": "0x5E3920",
+      "USAWA": "0x5E2E50",
+      "EUR": "0x5E2958",
+      "EURWA": "0x5E2958",
+      "JPN": "0x5E21D8",
+      "JPNWA": "0x5E21D8",
+      "KOR": "0x5E1E60",
+      "KORWA": "0x5E1E60"
+    },
+    "NPCCODES_FUNC4": {
+      "USA": "0x6EE778",
+      "USAWA": "0x6EDC28",
+      "EUR": "0x6ED798",
+      "EURWA": "0x6ED770",
+      "JPN": "0x6ECF44",
+      "JPNWA": "0x6ECF1C",
+      "KOR": "0x6ECAEC",
+      "KORWA": "0x6ECAC4"
+    },
+    "ACMESSAGEBOX_FUNC4": {
+      "USA": "0x75BDAC",
+      "USAWA": "0x75AD90",
+      "EUR": "0x75ADB4",
+      "EURWA": "0x75AD8C",
+      "JPN": "0x75A54C",
+      "JPNWA": "0x75A524",
+      "KOR": "0x75A0F4",
+      "KORWA": "0x75A0CC"
+    },
+    "ACSYSTEM_DATA1": {
       "USA": "0x569118",
       "USAWA": "0x568630",
       "EUR": "0x568160",
@@ -1000,7 +1080,17 @@
       "KOR": "0x567770",
       "KORWA": "0x567770"
     },
-    "DATA2": {
+    "NPCCODES_DATA1": {
+      "USA": "0xAE6864",
+      "USAWA": "0xAE5658",
+      "EUR": "0xAE5864",
+      "EURWA": "0xAE5864",
+      "JPN": "0xADF864",
+      "JPNWA": "0xADE864",
+      "KOR": "0xADE864",
+      "KORWA": "0xADE864"
+    },
+    "ACSYSTEM_DATA2": {
       "USA": "0x5696F8",
       "USAWA": "0x568C10",
       "EUR": "0x568740",
@@ -1009,6 +1099,16 @@
       "JPNWA": "0x568030",
       "KOR": "0x567D50",
       "KORWA": "0x567D50"
+    },
+    "NPCCODES_DATA2": {
+      "USA": "0x8816C4",
+      "USAWA": "0x8806BC",
+      "EUR": "0x880550",
+      "EURWA": "0x880550",
+      "JPN": "0x87A970",
+      "JPNWA": "0x879970",
+      "KOR": "0x879920",
+      "KORWA": "0x879920"
     },
     "ADDR1": {
       "USA": "0x522520",
@@ -1540,7 +1640,7 @@
       "KOR": "0x597A68",
       "KORWA": "0x597A68"
     },
-    "POINT": {
+    "KEEPCONNECTION_POINT": {
       "USA": "0x953CA0",
       "USAWA": "0x952C90",
       "EUR": "0x952C9C",
@@ -1550,7 +1650,47 @@
       "KOR": "0x94BC9C",
       "KORWA": "0x94BC9C"
     },
-    "FUNC5": {
+    "GAMEKEYBOARD_POINT": {
+      "USA": "0x90B38C",
+      "USAWA": "0x90A260",
+      "EUR": "0x90A20C",
+      "EURWA": "0x90A20C",
+      "JPN": "0x904644",
+      "JPNWA": "0x903644",
+      "KOR": "0x9035B0",
+      "KORWA": "0x9035B0"
+    },
+    "ACMESSAGEBOX_1_POINT": {
+      "USA": "0x90AACC",
+      "USAWA": "0x9099A0",
+      "EUR": "0x90994C",
+      "EURWA": "0x90994C",
+      "JPN": "0x903DBC",
+      "JPNWA": "0x902DBC",
+      "KOR": "0x902D28",
+      "KORWA": "0x902D28"
+    },
+    "ACMESSAGEBOX_2_POINT": {
+      "USA": "0x951702",
+      "USAWA": "0x9506F2",
+      "EUR": "0x9506FE",
+      "EURWA": "0x9506FE",
+      "JPN": "0x94A6FE",
+      "JPNWA": "0x9496FE",
+      "KOR": "0x9496FE",
+      "KORWA": "0x9496FE"
+    },
+    "ACMESSAGEBOX_3_POINT": {
+      "USA": "0x8578A0",
+      "USAWA": "0x856898",
+      "EUR": "0x85672C",
+      "EURWA": "0x85672C",
+      "JPN": "0x853938",
+      "JPNWA": "0x852938",
+      "KOR": "0x852904",
+      "KORWA": "0x852904"
+    },
+    "GAMEKEYBOARD_FUNC5": {
       "USA": "0x300838",
       "USAWA": "0x300904",
       "EUR": "0x3008C0",
@@ -1559,6 +1699,16 @@
       "JPNWA": "0x300914",
       "KOR": "0x300AF4",
       "KORWA": "0x300AF4"
+    },
+    "ACMESSAGEBOX_FUNC5": {
+      "USA": "0x81C104",
+      "USAWA": "0x81B004",
+      "EUR": "0x81B10C",
+      "EURWA": "0x81B0E4",
+      "JPN": "0x81A8AC",
+      "JPNWA": "0x81A884",
+      "KOR": "0x81A44C",
+      "KORWA": "0x81A424"
     },
     "CONTROLLERINPUTCHECK": {
       "USA": "0x304A14",
@@ -2060,7 +2210,7 @@
       "KOR": "0x97B048",
       "KORWA": "0x97B048"
     },
-    "GTYPE": {
+    "GAME_1_GTYPE": {
       "USA": "0x625B88",
       "USAWA": "0x6250B0",
       "EUR": "0x624BC0",
@@ -2069,6 +2219,16 @@
       "JPNWA": "0x624680",
       "KOR": "0x624228",
       "KORWA": "0x624228"
+    },
+    "GAME_2_GTYPE": {
+      "USA": "0x305ED8",
+      "USAWA": "0x305F2C",
+      "EUR": "0x305ED8",
+      "EURWA": "0x305ED8",
+      "JPN": "0x305F54",
+      "JPNWA": "0x305F54",
+      "KOR": "0x305F24",
+      "KORWA": "0x305F24"
     },
     "SETUPMENU": {
       "USA": "0x5C5398",
@@ -2440,7 +2600,7 @@
       "KOR": "0x5B31F0",
       "KORWA": "0x5B31F0"
     },
-    "ORIGFUNC": {
+    "KEEPCONNECTION_1_ORIGFUNC": {
       "USA": "0x53C04C",
       "USAWA": "0x53B9A0",
       "EUR": "0x53B094",
@@ -2449,6 +2609,16 @@
       "JPNWA": "0x53A980",
       "KOR": "0x53A6A4",
       "KORWA": "0x53A6A4"
+    },
+    "KEEPCONNECTION_2_ORIGFUNC": {
+      "USA": "0x55D728",
+      "USAWA": "0x55CC40",
+      "EUR": "0x55C770",
+      "EURWA": "0x55C770",
+      "JPN": "0x55C060",
+      "JPNWA": "0x55C060",
+      "KOR": "0x55BD80",
+      "KORWA": "0x55BD80"
     },
     "CALC": {
       "USA": "0x2C",
@@ -2520,7 +2690,7 @@
       "KOR": "0x12F394",
       "KORWA": "0x12F394"
     },
-    "SETUP": {
+    "NPC_1_SETUP": {
       "USA": "0x312610",
       "USAWA": "0x312A4C",
       "EUR": "0x3127EC",
@@ -2529,6 +2699,26 @@
       "JPNWA": "0x3126F8",
       "KOR": "0x312B3C",
       "KORWA": "0x312B3C"
+    },
+    "NPC_2_SETUP": {
+      "USA": "0x75D108",
+      "USAWA": "0x75C0EC",
+      "EUR": "0x75C110",
+      "EURWA": "0x75C0E8",
+      "JPN": "0x75B8A8",
+      "JPNWA": "0x75B880",
+      "KOR": "0x75B450",
+      "KORWA": "0x75B428"
+    },
+    "NPC_3_SETUP": {
+      "USA": "0x308210",
+      "USAWA": "0x3083E4",
+      "EUR": "0x308298",
+      "EURWA": "0x308298",
+      "JPN": "0x30822C",
+      "JPNWA": "0x30822C",
+      "KOR": "0x308240",
+      "KORWA": "0x308240"
     },
     "NNPCMODELDATA": {
       "USA": "0xA84AF0",
@@ -2610,7 +2800,7 @@
       "KOR": "0x689984",
       "KORWA": "0x689984"
     },
-    "PPOFFSET": {
+    "PLAYER_1_PPOFFSET": {
       "USA": "0x2FBA60",
       "USAWA": "0x2FB96C",
       "EUR": "0x2FBAE8",
@@ -2619,6 +2809,16 @@
       "JPNWA": "0x2FB920",
       "KOR": "0x2FB8F8",
       "KORWA": "0x2FB8F8"
+    },
+    "PLAYER_2_PPOFFSET": {
+      "USA": "0x2FF6CC",
+      "USAWA": "0x2FF8B0",
+      "EUR": "0x2FF754",
+      "EURWA": "0x2FF754",
+      "JPN": "0x2FF92C",
+      "JPNWA": "0x2FF92C",
+      "KOR": "0x2FF978",
+      "KORWA": "0x2FF978"
     },
     "PSOFFSET": {
       "USA": "0x2FEB2C",

@@ -46,7 +46,7 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 	}
 
 	std::string NPC::GetNName(u16 VID) {
-		static Address SetUp("SETUP");
+		static Address SetUp("NPC_3_SETUP");
 		static const Address NNPCModelData("NNPCMODELDATA");
 
 		u32 Stack[44];
@@ -61,7 +61,7 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 	}
 
 	std::string NPC::GetSPName(u8 SPVID) {
-		static Address SetUp("SETUP");
+		static Address SetUp("NPC_2_SETUP");
 
 		u32 Stack[44];
 		u32 add = Address("SETUPSTACKDATA").Call<u32>(Stack);
@@ -75,7 +75,7 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 
 	std::string NPC::GetRace(u8 ID) {
 		static Address SetUpStack("SETUPSTACK");
-		static Address SetUp("SETUP");
+		static Address SetUp("NPC_1_SETUP");
 
 	//No clue why, but the USA and EUR version have some formatting string parts at the beginning of the NPC race string which we need to skip
 		static const Address Fix("FIX");
@@ -148,7 +148,7 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 	}
 
  	u16 NPC::GetVID(u32 npcData) {
-		static Address func1("FUNC1");
+		static Address func1("NPC_FUNC1");
 
 		return func1.Call<u16>(npcData);
 	}
