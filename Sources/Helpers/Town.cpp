@@ -8,7 +8,7 @@
 
 namespace CTRPluginFramework {
 	ACNL_TownData *Town::GetSaveData(void) {
-		u32 *addr = (u32 *)(Address("GARDENPLUS").Call<u32>() + 0x53424);
+		u32 *addr = (u32 *)(Address(0x2FB344).Call<u32>() + 0x53424);
 		return (ACNL_TownData *)addr;
 	}
 

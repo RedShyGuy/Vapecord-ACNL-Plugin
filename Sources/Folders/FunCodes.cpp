@@ -21,16 +21,16 @@ u32 c_mouthID = 0;
 namespace CTRPluginFramework {
 //Size Codes
 	void sizecodes(MenuEntry *entry) {
-		static const Address player("PLAYER");
-		static const Address bug("BUG");
-		static const Address npc("NPC");
-		static const Address effect("EFFECT");
-		static const Address shadow("SHADOW");
-		static const Address town("TOWN");
-		static const Address horplayer("HORPLAYER");
-		static const Address vertplayer("VERTPLAYER");
-		static const Address head("HEAD");
-		static const Address corrupt("CORRUPT");
+		static const Address player(0x1ACE00);
+		static const Address bug(0x1F557C);
+		static const Address npc(0x2042BC);
+		static const Address effect(0x550A80);
+		static const Address shadow(0x28F3A4);
+		static const Address town(0x52E9D0);
+		static const Address horplayer(0x5680F8);
+		static const Address vertplayer(0x567FF4);
+		static const Address head(0x568064);
+		static const Address corrupt(0x47E3F0);
 		
 		static const std::vector<std::string> sizeopt = {
 			Language::getInstance()->get("VECTOR_SIZE_PLAYER"),
@@ -95,7 +95,7 @@ namespace CTRPluginFramework {
     }
 //T-Pose
 	void tposeentry(MenuEntry *entry) { 
-		static const Address tpose("TPOSE");
+		static const Address tpose(0x73C290);
 
 		if(entry->WasJustActivated()) 
 			Process::Patch(tpose.addr, 0xE1A00000);
@@ -114,7 +114,7 @@ namespace CTRPluginFramework {
 	}
 //Take TPC Picture
 	void freezeframe(MenuEntry *entry) {
-		static const Address freeze("FREEZE");
+		static const Address freeze(0x54DBE8);
 		if(entry->Hotkeys[0].IsPressed()) {
 			ACNL_Player *player = Player::GetSaveData();
 			if(!player) {
@@ -122,8 +122,8 @@ namespace CTRPluginFramework {
 				return;
 			}
 
-			static Address CreateTPC("CREATETPC");
-			static const Address TPCPoint("TPCPOINT");
+			static Address CreateTPC(0x5B3594);
+			static const Address TPCPoint(0x954F10);
 
 			CreateTPC.Call<void>(*(u32 *)TPCPoint.addr, &player->HasTPCPic);
 			GameHelper::PlaySound(0x4A7);
@@ -149,7 +149,7 @@ namespace CTRPluginFramework {
 
 //Max Turbo Presses
 	void maxturbo(MenuEntry *entry) { 
-		u32 maxT = *(u32 *)Address("MAX").addr - 0x31C;
+		u32 maxT = *(u32 *)Address(0x95D3FC).addr - 0x31C;
 
         Sleep(Seconds(0.0085F));
         Process::Write8(maxT, 0); //abxy
@@ -158,7 +158,7 @@ namespace CTRPluginFramework {
 
 //Multi-presses
 	void asmpresses(MenuEntry *entry) { 
-		static const Address press("PRESS");
+		static const Address press(0x5C5BEC);
 		if(entry->WasJustActivated()) 
 			Process::Patch(press.addr, 0xE1A00000); 
 		else if(!entry->IsActivated()) 
@@ -166,15 +166,15 @@ namespace CTRPluginFramework {
 	}
 //Ultimate Party Popper	
 	void partypopper(MenuEntry *entry) {
-		static const Address PartySnakeSpeed("PARTYSNAKESPEED");
-		static const Address party2("PARTY2");
-		static const Address party3("PARTY3");
-		static const Address PartyItemID("PARTYITEMID");
-		static const Address PartyEffect("PARTYEFFECT");
+		static const Address PartySnakeSpeed(0x67F008);
+		static const Address party2(0x662D9C);
+		static const Address party3(0x67BBC8);
+		static const Address PartyItemID(0x671874);
+		static const Address PartyEffect(0x671880);
 		
 		static u16 PartyEffectID = 0x20A;
 
-		Process::Write8(*(u32 *)Address("MAX").addr - 0x31C, 0); //Multi Presses
+		Process::Write8(*(u32 *)Address(0x95D3FC).addr - 0x31C, 0); //Multi Presses
 
 		static Hook hook1, hook2;
 		
@@ -224,9 +224,9 @@ namespace CTRPluginFramework {
 	
 	void cameramod(MenuEntry *entry) {
     //pointers & addresses
-		static const Address cameraAsm("CAMERAASM");
-        static const Address rotationAsm("ROTATIONASM");
-        static const Address camerapan("CAMERAPAN");
+		static const Address cameraAsm(0x764504);
+        static const Address rotationAsm(0x1A3230);
+        static const Address camerapan(0x1A2058);
 
     //variables
         static bool isPatched = false;
@@ -373,7 +373,7 @@ namespace CTRPluginFramework {
 		if(!PlayerClass::GetInstance()->IsLoaded())
 			return false;
 
-		static Address convertData("CONVERTDATA");
+		static Address convertData(0x27231C);
 		u32 ownData = convertData.Call<u32>(PlayerClass::GetInstance()->Offset(0x1B4)); //gets actual data of player
 
 		return (ownData == individualData);

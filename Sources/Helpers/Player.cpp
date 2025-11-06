@@ -17,13 +17,13 @@ loads specific player
 	void Player::Load(int pIndex) {
 		Animation::Idle();
 	//This will load the players save data
-		static Address pLoad("PLOAD");
+		static Address pLoad(0x5C441C);
 		pLoad.Call<void>(0, pIndex, 0);
 
 		//BF77B0(0x330981F4)
 		
 	//This will port the player to his home
-		static Address pReload("PRELOAD");
+		static Address pReload(0x5B66FC);
 		pReload.Call<void>(GameHelper::GetRoomData(), pIndex, 1, 0);
 	}
 
@@ -41,7 +41,7 @@ reload design
 		u32 Data1 = InvData + (slot * 0x290);
 		u32 Data2 = Data1 + 0x6BC;
 		
-		static Address ReloadOffset("RELOADOFFSET");
+		static Address ReloadOffset(0x320DE0);
 		ReloadOffset.Call<void>(Data2);
 	}
 /*
@@ -69,13 +69,13 @@ Update Tan
 		u32 GetStoredData = i + 0x1B4; //0x33077570
 	//This Stores the Tan Data Correctly
 		
-		static Address GetTanDataOffset("GETTANDATAOFFSET");
+		static Address GetTanDataOffset(0x713798);
 		u8 Tan = GetTanDataOffset.Call<u8>(&player->PlayerFeatures);
 		
 		Process::Write8(GetStoredData + 0x1C0, Tan);
 		
 	//This Updates the Tan
-		static Address UpdateTanOffset("UPDATETANOFFSET");
+		static Address UpdateTanOffset(0x1D0B90);
 		UpdateTanOffset.Call<void>(GetStoredData);
 	}
 /*
@@ -86,7 +86,7 @@ update appearance
 			return;
 
 	//This Updates the Outfit	
-		static Address update("UPDATE");
+		static Address update(0x68B2E4);
 		update.Call<void>(PlayerClass::GetInstance()->Offset());
 	}
 /*
@@ -109,7 +109,7 @@ Write Outfit
 get status of specific player
 */
 	PlayerStatus Player::GetPlayerStatus(u8 pPlayer) {
-		static Address pPOffset("PLAYER_2_PPOFFSET");
+		static Address pPOffset(0x2FF6CC);
 		return pPOffset.Call<PlayerStatus>(pPlayer);
 	}
 
@@ -117,14 +117,14 @@ get status of specific player
 Get player save offset for any player
 */
 	u32 Player::GetSpecificSave(u8 pPlayer) {
-		static Address pPOffset("PLAYER_1_PPOFFSET");
+		static Address pPOffset(0x2FBA60);
 		return pPOffset.Call<u32>(pPlayer);
 	}
 /*
 Get Player Save Offset for loaded players
 */
 	u32 Player::GetSaveOffset(u8 pIndex) {
-		static Address pSOffset("PSOFFSET");
+		static Address pSOffset(0x2FEB2C);
 		return pSOffset.Call<u32>(pIndex);
 	}
 
@@ -132,10 +132,10 @@ Get Player Save Offset for loaded players
 		if(!player)
 			return false;
 
-		static Address SetUp1("SETUP1");
-		static Address SetUp2("SETUP2");
-		static Address SetStack("SETSTACK");
-		static Address ReadStack("READSTACK");
+		static Address SetUp1(0x5360A8);
+		static Address SetUp2(0x6BA680);
+		static Address SetStack(0x2FCC14);
+		static Address ReadStack(0x769DBC);
 
 		u32 val = SetUp1.Call<u32>(ID);
 		u32 uVar5 = *(u32 *)(val + 4);
@@ -229,22 +229,22 @@ Get Player Save Offset for loaded players
 If player exitst
 */
 	bool Player::Exists(u8 PlayerIndex) {
-		static Address existsFunction("EXISTSFUNCTION");
-		u8 room = existsFunction.Call<u8>(*(u32 *)Address("GAMEPOINTER").addr + 0x1C1, PlayerIndex);
+		static Address existsFunction(0x75F84C);
+		u8 room = existsFunction.Call<u8>(*(u32 *)Address(0x954648).addr + 0x1C1, PlayerIndex);
 		return room == 0xA5 ? 0 : 1;
 	}
 /*
 get location
 */
 	bool Player::IsIndoors() {
-		static Address getlocation("GETLOCATION");
+		static Address getlocation(0x1E890C);
 		return getlocation.Call<bool>();
 	}
 /*
 get room
 */
 	u8 Player::GetRoom(u8 PlayerIndex) {
-		static Address getroom("GETROOM"); 
+		static Address getroom(0x5C3DDC); 
 		u32 var = getroom.Call<u32>(PlayerIndex);
 		return var == 0 ? 0xFF : *(u8 *)var;
 	}

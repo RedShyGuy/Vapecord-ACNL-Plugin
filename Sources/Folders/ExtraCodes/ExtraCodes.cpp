@@ -12,15 +12,15 @@
 namespace CTRPluginFramework {
 //Shops Always Open
 	void ShopsAlwaysOpen(MenuEntry *entry) {
-		static const Address shopretail("SHOPRETAIL");
-		static const Address shopnookling("SHOPNOOKLING");
-		static const Address shopgarden("SHOPGARDEN");
-		static const Address shopables("SHOPABLES");
-		static const Address shopshampoodle("SHOPSHAMPOODLE");
-		static const Address shopkicks("SHOPKICKS");   
-		static const Address shopnooks("SHOPNOOKS");
-		static const Address shopkatrina("SHOPKATRINA");
-		static const Address shopredd("SHOPREDD");
+		static const Address shopretail(0x309348);
+		static const Address shopnookling(0x711B14);
+		static const Address shopgarden(0x711BCC);
+		static const Address shopables(0x713EB0);
+		static const Address shopshampoodle(0x71D42C);
+		static const Address shopkicks(0x71184C);   
+		static const Address shopnooks(0x71F654);
+		static const Address shopkatrina(0x718098);
+		static const Address shopredd(0x718444);
 
 		const u32 ShopOpen[9] = { shopretail.addr, shopnookling.addr, shopgarden.addr, shopables.addr, shopshampoodle.addr, shopkicks.addr, shopnooks.addr, shopkatrina.addr, shopredd.addr };
 
@@ -37,11 +37,11 @@ namespace CTRPluginFramework {
 //Disable Save Menus
 	void nonesave(MenuEntry *entry) {
 		if(entry->WasJustActivated()) {
-			Process::Patch(Address("NOSAVE").addr, 0xE1A00000);
+			Process::Patch(Address(0x1A0980).addr, 0xE1A00000);
 			saveMenuDisabled = true;
 		}
 		else if(!entry->IsActivated()) {
-			Process::Patch(Address("NOSAVE").addr, 0xE8900006);
+			Process::Patch(Address(0x1A0980).addr, 0xE8900006);
 			saveMenuDisabled = false;
 		}
 	}
@@ -59,8 +59,8 @@ namespace CTRPluginFramework {
 	}
 //Can't Fall In Holes Or Pitfalls /*Credits to Nico*/
 	void noTrap(MenuEntry *entry) {
-		static const Address notraps1("NOTRAPS1");
-		static const Address notraps2("NOTRAPS2");
+		static const Address notraps1(0x65A668);
+		static const Address notraps2(0x6789E4);
 		
 		if(entry->WasJustActivated()) {
 			Process::Patch(notraps1.addr, 0xEA000014);
@@ -435,8 +435,8 @@ namespace CTRPluginFramework {
 
 	void BuriedInspector(MenuEntry *entry) {
 		static Hook BuriedHook, PickBuriedHook;
-		static const Address BuriedAddress("BURIEDADDRESS");
-		static const Address PickBuriedAddress("PICKBURIEDADDRESS");
+		static const Address BuriedAddress(0x665534);
+		static const Address PickBuriedAddress(0x59A0BC);
 
 		if(entry->WasJustActivated()) {
 			BuriedHook.Initialize(BuriedAddress.addr, (u32)ThinkToBuriedItems);

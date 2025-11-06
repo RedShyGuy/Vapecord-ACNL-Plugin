@@ -68,10 +68,10 @@ namespace CTRPluginFramework {
     }
 
     void AmiiboSpoofer(MenuEntry *entry) {
-        static const Address offsetPatch("OFFSETPATCH");
-        static const Address offsetHook("OFFSETHOOK");
-        static const Address offsetPatch_o3ds1("OFFSETPATCH_O3DS1");
-        static const Address offsetPatch_o3ds2("OFFSETPATCH_O3DS2");
+        static const Address offsetPatch(0x51C104);
+        static const Address offsetHook(0x51BBDC);
+        static const Address offsetPatch_o3ds1(0x3DAA7C);
+        static const Address offsetPatch_o3ds2(0x3DA824);
         static u32 originalCode[3] = {0};
         static Hook nfcHook;
 

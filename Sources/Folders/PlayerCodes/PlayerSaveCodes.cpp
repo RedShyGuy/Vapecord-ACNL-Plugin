@@ -400,7 +400,7 @@ namespace CTRPluginFramework {
 			Language::getInstance()->get("VECTOR_EMOTIONLIST_CLEAR_LIST"),
 		};
 
-		static Address emoticons("EMOTICONS");
+		static Address emoticons(0x8902A4);
 		Emoticons *gameEmotes = new Emoticons();
 		gameEmotes = (Emoticons *)emoticons.addr;
 		if(!gameEmotes)
@@ -553,13 +553,13 @@ namespace CTRPluginFramework {
 			default: break;
 			case 0: { 
 				for(u16 i = Pairs.first; i < Pairs.second; ++i) {
-					int field = Address("CALCBITFIELD").Call<int>(&i);
+					int field = Address(0x2FF76C).Call<int>(&i);
 					player->AddedSongs[(field >> 5)] |= (1 << (field & 0x1F));
 				}
 			} break;
 			case 1:
 				for(u16 i = Pairs.first; i < Pairs.second; ++i) {
-					int field = Address("CALCBITFIELD").Call<int>(&i);
+					int field = Address(0x2FF76C).Call<int>(&i);
 					player->AddedSongs[(field >> 5)] &= ~(1 << (field & 0x1F));
 				}
 			break;

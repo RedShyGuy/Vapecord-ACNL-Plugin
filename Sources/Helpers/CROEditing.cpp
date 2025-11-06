@@ -3,7 +3,7 @@
 
 namespace CTRPluginFramework {  
     bool CRO::GetMemAddress(const char* croFileName, u32& buffer) {
-        static const Address CroData("CRODATA");
+        static const Address CroData(0x95269C);
         u32 data = *(u32 *)CroData.addr;
 
         u32 iVar1 = *(u32 *)(data + 0x14);

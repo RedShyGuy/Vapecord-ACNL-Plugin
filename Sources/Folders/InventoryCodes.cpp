@@ -161,9 +161,9 @@ namespace CTRPluginFramework {
 		else
 			OSD::Notify("Inventory Full!");
 
-		static Address argData("ARGDATA");
+		static Address argData(0x8499E4);
 
-		static Address restoreButton("RESTOREBUTTON");
+		static Address restoreButton(0x81825C);
 		restoreButton.Call<void>(invData, *(u32 *)argData.addr, *(u32 *)(argData.addr + 4));
 	}
 
@@ -171,8 +171,8 @@ namespace CTRPluginFramework {
 //Catalog To Pockets
 	void catalog(MenuEntry *entry) {
 		static Hook catalogHook;
-		static Address AllItemsBuyable("ALLITEMSBUYABLE");
-		static Address cHook("CHOOK");
+		static Address AllItemsBuyable(0x70E494);
+		static Address cHook(0x21B4B0);
 
 		if(entry->WasJustActivated()) {
 			catalogHook.Initialize(cHook.addr, (u32)CatalogGetItem);
@@ -277,10 +277,10 @@ namespace CTRPluginFramework {
 
 //Item Settings	
 	void itemsettings(MenuEntry *entry) {
-		static const Address showoff("SHOWOFF");
-		static const Address infinite1("INFINITE1");
-		static const Address infinite2("INFINITE2");
-		static const Address eat("EAT");
+		static const Address showoff(0x19BA78);
+		static const Address infinite1(0x19C574);
+		static const Address infinite2(0x19C4D0);
+		static const Address eat(0x19C1F0);
 		
 		std::vector<std::string> itemsettopt = {
 			Language::getInstance()->get("VECTOR_ITEMSETTINGS_SHOWOFF"),
@@ -371,7 +371,7 @@ namespace CTRPluginFramework {
 		if(dChoice < 0)
 			return;
 
-		hook.Initialize(Address("NOSAVE").addr + 8, (u32)Hook_MenuPatch);
+		hook.Initialize(Address(0x1A0980).addr + 8, (u32)Hook_MenuPatch);
 		hook.SetFlags(USE_LR_TO_RETURN);
 
 	//If Custom Menu is chosen

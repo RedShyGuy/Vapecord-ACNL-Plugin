@@ -12,7 +12,7 @@ namespace CTRPluginFramework {
 
 	namespace Inventory {
 		u32 		GetCurrentItemData(int i = 0);
-		bool 		GetNextItem(Item itemID, u8 &slot);
+		bool 		GetNextItem(Item itemID, u8 &slot, bool ignoreFlag = false);
 		bool 		GetNextClosetItem(Item itemID, u8 &slot);
 		bool 		GetSelectedSlot(u8& slot);
 		bool 		GetHoveredSlot(u8& slot);

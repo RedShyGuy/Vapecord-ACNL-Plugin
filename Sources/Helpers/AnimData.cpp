@@ -16,13 +16,13 @@ namespace CTRPluginFramework {
     }
 
     void AnimData::AppendCoordData(u32 animInst, u32 pos, float *Coord) {
-        static Address coordoffset("COORDOFFSET");
+        static Address coordoffset(0x5D4C88);
 		coordoffset.Call<void>(animInst + pos, Coord);
     }
     
 //Animation Function
 	bool AnimData::ExecuteAnimation(u8 animID) {
-		return Address("ANIMFUNCTION").Call<bool>(playerInst, animID, animInst, 0);
+		return Address(0x64DB90).Call<bool>(playerInst, animID, animInst, 0);
 	}
 
     void AnimData::FaceCutoutStandee_C1(u8 option) {

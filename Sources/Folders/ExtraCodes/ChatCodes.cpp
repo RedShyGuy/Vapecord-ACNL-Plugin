@@ -7,7 +7,7 @@
 namespace CTRPluginFramework {
 //Chat Bubbles Don't Disappear /*Credits to Levi*/
 	void bubblesDisappear(MenuEntry *entry) { 
-		static const Address bubble("BUBBLE");
+		static const Address bubble(0x2145F8);
 		if(entry->WasJustActivated()) 
 			Process::Patch(bubble.addr, 0xE1A00000);
 		else if(!entry->IsActivated()) 
@@ -97,9 +97,9 @@ namespace CTRPluginFramework {
 
 //Force Send Chat
 	void Forcesendchat(MenuEntry *entry) {
-		static Address callchat("CALLCHAT");
+		static Address callchat(0x52440C);
 		if(entry->WasJustActivated())
-			Process::Patch(Address("DISABLECHATREMOVAL").addr, 0xEA000000);
+			Process::Patch(Address(0x1939EC).addr, 0xEA000000);
 
 		if(entry->Hotkeys[0].IsDown()) {
 			if(!GameKeyboard::IsOpen())
@@ -109,7 +109,7 @@ namespace CTRPluginFramework {
 		}
 
 		if(!entry->IsActivated())
-			Process::Patch(Address("DISABLECHATREMOVAL").addr, 0xE5900000);
+			Process::Patch(Address(0x1939EC).addr, 0xE5900000);
 	}
 
 //ShowChatMessage
@@ -227,7 +227,7 @@ namespace CTRPluginFramework {
 	// チャットに便利なボタンを追加します。
 	// Add a convenient button to chat.
 	void ChatButton(MenuEntry *entry) {
-		static Address callchat("CALLCHAT");
+		static Address callchat(0x52440C);
 
 		PluginMenu *menu = PluginMenu::GetRunningInstance();
 		if(entry->WasJustActivated()) {

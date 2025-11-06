@@ -18,9 +18,9 @@ Custom Buttons
 		ACNL_Player *player = Player::GetSaveData();
 		player->InventoryItemLocks[slot] = 1;
 	//Loads Item Icon | present icon
-		Address("LOADICON").Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x1EC0, slot);
+		Address(0x26DC00).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x1EC0, slot);
 
-		Address("RESTOREITEMWINDOW").Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		Address(0x19B380).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}
 
 	void CustomButton::DuplicateItem(u32 ItemData) {
@@ -31,7 +31,7 @@ Custom Buttons
 		
 		Inventory::WriteSlot((slot == 0xF) ? 0 : (slot + 1), itemslotid);
 		
-		Address("RESTOREITEMWINDOW").Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		Address(0x19B380).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}
 	
 	void CustomButton::PutItemToStorage(u32 ItemData) {
@@ -48,12 +48,12 @@ Custom Buttons
 			player->Dressers[closetslot] = (Item)itemslotid;
 		}
 
-		Address("RESTOREITEMWINDOW").Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		Address(0x19B380).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}
 	
 	void CustomButton::PayDebt(u32 ItemData) {	
-		static Address GetMoneyFunc("GETMONEYFUNC");
-		static Address CallSound("CALLSOUND");
+		static Address GetMoneyFunc(0x3055C8);
+		static Address CallSound(0x58DDF8);
 
 		Item itemslotid = {0x7FFE, 0};
 		u8 slot = 0;
@@ -101,7 +101,7 @@ Custom Buttons
 			}
 		}
 
-		Address("RESTOREITEMWINDOW").Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		Address(0x19B380).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}
 	
 	void CustomButton::RandomOutfit(u32 ItemData) {
@@ -112,7 +112,7 @@ Custom Buttons
 							   (Item)Utils::Random(0x2777, 0x279E), 
 							   (Item)Utils::Random(0x279F, 0x27E5));
 		
-		Address("RESTOREOUTFITWINDOW").Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		Address(0x19D2A0).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}
 
 	/*void claim(void) {
@@ -218,10 +218,10 @@ Custom Buttons
 			"Item Button 1", "Item Button 2", "Outfit Button 1",
 		};
 
-		static const Address pointer_FUNC("POINTER_FUNC");
+		static const Address pointer_FUNC(0x9509FC);
 		ItemFuncData* FuncPointer = (ItemFuncData *)pointer_FUNC.addr;
 
-		static const Address SYSNameFunc("SYSNAMEFUNC");
+		static const Address SYSNameFunc(0x5D5860);
 		static Hook NameHook;
 		NameHook.Initialize(SYSNameFunc.addr, (u32)SetNameCall);
 		NameHook.SetFlags(USE_LR_TO_RETURN);
@@ -243,7 +243,7 @@ Custom Buttons
 			if(op < 0)
 				return;
 
-			static const Address AlwaysMedicine("ALWAYSMEDICINE");
+			static const Address AlwaysMedicine(0x19BC04);
 
 			if(op == 4) {
 				Process::Patch(AlwaysMedicine.addr, 0x1A000020); //Unpatch
@@ -267,8 +267,8 @@ Custom Buttons
 			if(op < 0)
 				return;
 			
-			static const Address AlwaysRelease("ALWAYSRELEASE");
-			static const Address NeverToss("NEVERTOSS"); 
+			static const Address AlwaysRelease(0x19BD60);
+			static const Address NeverToss(0x19BD80); 
 
 			if(op == 4) {
 				Process::Patch(AlwaysRelease.addr, 0x0A000013);
@@ -295,8 +295,8 @@ Custom Buttons
 			if(op < 0)
 				return;
 			
-			static const Address WetSuitButton("WETSUITBUTTON");
-			static const Address SocksButton("SOCKSBUTTON");
+			static const Address WetSuitButton(0x19DBA4);
+			static const Address SocksButton(0x19DC78);
 
 			if(op == 1) {
 				Process::Patch(WetSuitButton.addr, 0x1A000009);
@@ -338,11 +338,11 @@ Custom Buttons
 
 		GameHelper::PlaySound(0x407);
 
-		Address("RESTOREITEMWINDOW").Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		Address(0x19B380).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
 	}
 
 	void InitCustomPresentOpeningFunction() {
-		static const Address pointer_FUNC("POINTER_FUNC");
+		static const Address pointer_FUNC(0x9509FC);
 		ItemFuncData* FuncPointer = (ItemFuncData *)pointer_FUNC.addr;
 		FuncPointer[19].FunctionPointer = (u32)CustomPresentOpening;
 	}

@@ -1,5 +1,4 @@
 #include "Config.hpp"
-#include "Helpers/PluginMenuData.hpp"
 #include "Color.h"
 #include "Files.h"
 #include "Language.hpp"

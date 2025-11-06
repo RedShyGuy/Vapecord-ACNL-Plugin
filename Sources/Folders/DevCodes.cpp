@@ -15,7 +15,6 @@
 
 #include "Color.h"
 #include "Files.h"
-#include "Helpers/PluginMenuData.hpp"
 
 namespace CTRPluginFramework {
 //Integer For Custom Dumper
@@ -146,7 +145,7 @@ namespace CTRPluginFramework {
 				return;	
 
 			Sleep(Milliseconds(100));
-			Address func("FUNC");
+			Address func(funcaddress);
 			switch(size) {
 				case 0: result = func.Call<u32>(); break;
 				case 1: result = func.Call<u32>(p[0]); break;
@@ -1487,7 +1486,7 @@ namespace CTRPluginFramework {
 	}
 	
 	u64 GetFriendCode(u8 pIndex) {
-		u32 gPoint = *(u32 *)Address("GAMEPOINTER").addr;
+		u32 gPoint = *(u32 *)Address(0x954648).addr;
 		if(gPoint == 0)
 			return 0;
 
@@ -1872,10 +1871,10 @@ namespace CTRPluginFramework {
 	32239378 = ModuleKotobuki.cro
 	*/
 
-	int sound = 0x113;
+	
 //Item Island Code
 	void islanditems(MenuEntry *entry) {
-		if (Controller::IsKeysPressed(Key::L)) {
+		/*if (Controller::IsKeysPressed(Key::L)) {
 			GameHelper::PlaySound(sound);
 			OSD::Notify(Utils::Format("%08X", sound));
 			sound++;
@@ -1899,7 +1898,7 @@ namespace CTRPluginFramework {
 					OSD::Notify(Utils::Format("Locked %s | Address: %08X", str.c_str(), buffer));
 				}
 			}
-		}
+		}*/
 		/*else if(Controller::IsKeysPressed(Key::R + Key::DPadRight)) {
 			int res = FUNCTION(0x30F5FC).Call<int>(0xAF88F8, "Test %d", 25);
 			char* buff = (char *)(0xAF88F8 + 0xC);
@@ -1928,7 +1927,7 @@ namespace CTRPluginFramework {
 
 			*(u8 *)(globalData->data + 7) = 0;
 
-			static FUNCT func(Address("ANIMFUNCTION"));
+			static FUNCT func(Address(0x64DB90););
 			func.Call<bool>(player, 0xB9, globalData, 0);
 
 			delete[] globalData;
@@ -2001,8 +2000,8 @@ namespace CTRPluginFramework {
 	}*/
 
 	void lightswitch(MenuEntry *entry) {
-		static const Address TargetAddress("TARGETADDRESS");
-		static const Address Patch("PATCH");
+		static const Address TargetAddress(0x190EA8);
+		static const Address Patch(0x1E7AD8);
 
 		if(entry->WasJustActivated()) {
 		//this disables the "non switchable light" flag to be written
@@ -2046,7 +2045,7 @@ namespace CTRPluginFramework {
 		static bool random = false;
 		Item FishID(0x22E1, 0);
 
-		static Address throwfish("THROWFISH");
+		static Address throwfish(0x5C2DAC);
 
 		if(Controller::IsKeysPressed(Key::L + Key::DPadRight)) {
 			if(playerID == 3) playerID = 0;		

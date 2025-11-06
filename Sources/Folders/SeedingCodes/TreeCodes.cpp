@@ -8,7 +8,7 @@
 namespace CTRPluginFramework {
 //Infinite Fruit Tree
 	void fruitStays(MenuEntry *entry) {
-		static const Address fruitstay("FRUITSTAY");
+		static const Address fruitstay(0x5972CC);
 
 		if(entry->WasJustActivated()) 
 			Process::Patch(fruitstay.addr, 0xEA000000);
@@ -17,10 +17,10 @@ namespace CTRPluginFramework {
 	}
 //Axe Tree Shake	
 	void shakechop(MenuEntry *entry) {
-		static const Address shake1("SHAKE1");
-		static const Address shake2("SHAKE2");
-		static const Address shake3("SHAKE3");
-		static const Address shake4("SHAKE4");
+		static const Address shake1(0x5971D4);
+		static const Address shake2(0x5971DC);
+		static const Address shake3(0x5971E4);
+		static const Address shake4(0x5971EC);
 			
 		if(entry->WasJustActivated()) {
 			Process::Patch(shake1.addr, 0xE1A00000);
@@ -37,7 +37,7 @@ namespace CTRPluginFramework {
     }
 //Fruit Tree Item Modifier	
 	void fruititemmod(MenuEntry *entry) {
-		static const Address fruitmod("FRUITMOD");
+		static const Address fruitmod(0x2FE6A0);
 		
 		static Item val = {0x2018, 0};
 		if(entry->WasJustActivated()) {
@@ -59,7 +59,7 @@ namespace CTRPluginFramework {
 	}
 //Instant Tree Chop	
 	void instantchop(MenuEntry *entry) { 
-		static const Address instchop("INSTCHOP");
+		static const Address instchop(0x59945C);
 		if(entry->WasJustActivated()) 
 			Process::Patch(instchop.addr, 0xE1A00000); 
 		else if(!entry->IsActivated()) 

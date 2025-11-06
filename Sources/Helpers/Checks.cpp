@@ -8,7 +8,7 @@
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/ItemReader.hpp"
 #include "Files.h"
-
+#include "Helpers/Checks.hpp"
 
 extern "C" bool __IsPlayerHouse() {
 	u8 pID = (u8)CTRPluginFramework::Player::GetPlayerStatus(4);
@@ -46,8 +46,8 @@ namespace CTRPluginFramework {
 	void OnTitleScreen(u8 roomId, bool u0, bool u1, bool u2) {
 		if (roomId == 0x5E) {
 			static Hook ParticleHook1, ParticleHook2;
-			static const Address partc1("PARTC1");
-			static const Address partc2("PARTC2");
+			static const Address partc1(0x5506D4);
+			static const Address partc2(0x5509CC);
 
 			ParticleHook1.Initialize(partc1.addr, (u32)SetProperParticle);
 			ParticleHook1.SetFlags(USE_LR_TO_RETURN);
@@ -56,8 +56,6 @@ namespace CTRPluginFramework {
 			ParticleHook2.Initialize(partc2.addr, (u32)SetProperParticle);
 			ParticleHook2.SetFlags(USE_LR_TO_RETURN);
 			ParticleHook2.Enable();
-
-			OSD::Notify("Test");
 		}
 
 		const HookContext &curr = HookContext::GetCurrent();
@@ -356,6 +354,182 @@ namespace CTRPluginFramework {
 		const HookContext &curr = HookContext::GetCurrent();
 		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
 		return func.Call<const char*>(ItemID, data, data2);
-	}
+	}                                                                                                                                                                                                                             
 
+	//2001 - 2012 = Fruits | Get stacked into Fruit Basket (Not Flags, nor Item IDs)
+
+	//2018 - 2029 = Fruit Baskets | Have flags indicating amount (8 is max, if more gets "0-Basket")
+	 
+	//223F - 2282 = letter paper | Have flags indicating amount (3 is max, works more but game only allows 3)
+
+	//2283 - 228C = turnips | Have their own ID's for the amount (Not Flags)
+	/**
+	 * Currently only for fruits
+	 * Works, only missing is that if the inventory is full,
+	 * with non full baskets, it will still tell you that the inventory is full,
+	 * 
+	 * This method needs to be hooked onto 0x724e68 at 0x59A1F8
+	 * That method returns the first free slot in the inventory, if there is not a free slot it returns -1
+	 * Though the next issue is that this method does not contain the item, so there is no way of telling how many fruits 
+	 * the player wants to pick up to calculate if it would fit into the baskets in the inventory.
+	 * 
+	 * The item is located at Register 5 when calling, could get it via moving register 5 to 1 for example
+	 * 
+	 * There still needs to be one more patch, as even if the inventory full message gets ignored via the patch, 
+	 * the picked up fruits still dont get put into the inventory, there is likely one more place where it leads to the 
+	 * put into inventory method
+	*/
+	/*Hook to 0x323424*/
+	bool FruitStacking(u32 InvAddress, int slot, Item *item, u32 ItemLock, u32 ItemToReplace) {
+		// Hook fallback helper (original call)
+		auto call_original = [&](void) -> u32 {
+			const HookContext &curr = HookContext::GetCurrent();
+			static Address funcAddr(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+			return funcAddr.Call<u32>(InvAddress, slot, item, ItemLock, ItemToReplace);
+		};
+
+		const u16 fruitMin = 0x2001;
+		const u16 fruitMax = 0x2012;
+		const u16 basketOffset = 0x17;
+		const u16 emptyID = 0x7FFE;
+		const int INVENTORY_SIZE = 16;
+		const int MAX_FRUITS_PER_BASKET = 9;
+
+		if (!item) return call_original();
+
+		bool isFruit = IDList::ValidID(item->ID, fruitMin, fruitMax);
+		bool isBasket = IDList::ValidID(item->ID, fruitMin + basketOffset, fruitMax + basketOffset);
+
+		if (!isFruit && !isBasket) return call_original();
+
+		u16 basketID = isFruit ? (item->ID + basketOffset) : item->ID;
+		int fruitsToAdd = 0;
+		if (isFruit) {
+			fruitsToAdd = 1;
+		} else {
+			int existingFlag = (int)item->Flags;
+			int contained = existingFlag + 1; // mapping flag -> fruit count
+			if (contained < 1) contained = 1;
+			if (contained > MAX_FRUITS_PER_BASKET) contained = MAX_FRUITS_PER_BASKET;
+			fruitsToAdd = contained;
+		}
+
+		// --- 1) Read whole inventory snapshot ---
+		Item snapshot[INVENTORY_SIZE];
+		for (int i = 0; i < INVENTORY_SIZE; ++i) {
+			Inventory::ReadSlot(i, snapshot[i]); // read current state
+		}
+
+		// make a working copy we will modify (simulate)
+		Item working[INVENTORY_SIZE];
+		for (int i = 0; i < INVENTORY_SIZE; ++i) working[i] = snapshot[i];
+
+		// Helper-lambda: get number of fruits in a basket item
+		auto basketFruits = [&](const Item &it)->int {
+			int f = (int)it.Flags + 1;
+			if (f < 1) f = 1;
+			if (f > MAX_FRUITS_PER_BASKET) f = MAX_FRUITS_PER_BASKET;
+			return f;
+		};
+
+		// Helper-lambda: set basket flags from fruit count
+		auto setBasketFromFruits = [&](Item &it, int fruits) {
+			if (fruits < 1) fruits = 1;
+			if (fruits > MAX_FRUITS_PER_BASKET) fruits = MAX_FRUITS_PER_BASKET;
+			it.ID = basketID;
+			it.Flags = (u8)(fruits - 1); // flag = fruits - 1
+		};
+
+		int remaining = fruitsToAdd;
+
+		// --- 2) Pass: fill existing baskets (left-to-right slot order) ---
+		for (int i = 0; i < INVENTORY_SIZE && remaining > 0; ++i) {
+			if (working[i].ID == basketID) {
+				int cur = basketFruits(working[i]);
+				if (cur < MAX_FRUITS_PER_BASKET) {
+					int canAdd = MAX_FRUITS_PER_BASKET - cur;
+					int toAdd = (remaining <= canAdd) ? remaining : canAdd;
+					cur += toAdd;
+					setBasketFromFruits(working[i], cur);
+					remaining -= toAdd;
+				}
+			}
+		}
+
+		// --- 3) Pass: convert loose fruits in inventory into baskets and fill them ---
+		if (remaining > 0) {
+			u16 fruitID = basketID - basketOffset; // corresponding fruit id
+			for (int i = 0; i < INVENTORY_SIZE && remaining > 0; ++i) {
+				if (working[i].ID == fruitID) {
+					// If we have at least 1 remaining, converting a loose fruit into a basket consumes 1 fruit.
+					// That yields an initial basket with 2 fruits. This is valid even if remaining == 1,
+					// because we can pair that single remaining fruit with the loose fruit that was in inventory.
+					// Do the conversion:
+					setBasketFromFruits(working[i], 2); // now holds 2 fruits
+					remaining -= 1; // we used one of the fruitsToAdd to pair with this loose fruit
+
+					// Now try to fill the newly converted basket with any additional remaining
+					int now = basketFruits(working[i]); // should be 2
+					if (now < MAX_FRUITS_PER_BASKET && remaining > 0) {
+						int canAdd = MAX_FRUITS_PER_BASKET - now;
+						int toAdd = (remaining <= canAdd) ? remaining : canAdd;
+						now += toAdd;
+						setBasketFromFruits(working[i], now);
+						remaining -= toAdd;
+					}
+				}
+			}
+		}
+
+		// --- 4) Compute how many new slots we'd need for the rest ---
+		// Important: if remaining > 0, we will place as many full baskets (size 9) as possible,
+		// and the last chunk may be 1..8 fruits. If last chunk == 1 it must be placed as a loose fruit (not a 0-flag basket).
+		int neededSlots = 0;
+		if (remaining > 0) {
+			int temp = remaining;
+			while (temp > 0) {
+				int chunk = (temp >= MAX_FRUITS_PER_BASKET) ? MAX_FRUITS_PER_BASKET : temp;
+				temp -= chunk;
+				neededSlots++;
+			}
+		}
+
+		// Count free slots in working snapshot (after conversions above)
+		int freeSlots = 0;
+		for (int i = 0; i < INVENTORY_SIZE; ++i) {
+			if (working[i].ID == emptyID) freeSlots++;
+		}
+
+		// If not enough space for required new slots -> abort (no changes)
+		if (neededSlots > freeSlots) {
+			return 0;
+		}
+
+		// --- 5) If enough free slots, allocate new baskets or loose fruit in first free slots (left-to-right) ---
+		int remainingToPlace = remaining;
+		for (int i = 0; i < INVENTORY_SIZE && remainingToPlace > 0; ++i) {
+			if (working[i].ID == emptyID) {
+				int put = (remainingToPlace >= MAX_FRUITS_PER_BASKET) ? MAX_FRUITS_PER_BASKET : remainingToPlace;
+				// IMPORTANT FIX: if put == 1, do NOT create a basket with flag 0.
+				// Instead, write a loose fruit item (fruitID) with Flags = 0.
+				if (put == 1) {
+					working[i].ID = (basketID - basketOffset); // fruit ID
+					working[i].Flags = 0;
+				} else {
+					setBasketFromFruits(working[i], put);
+				}
+				remainingToPlace -= put;
+			}
+		}
+		remaining = remainingToPlace; // should be 0 now
+
+		// --- 6) Commit: write only slots that changed compared to snapshot ---
+		for (int i = 0; i < INVENTORY_SIZE; ++i) {
+			if (snapshot[i].ID != working[i].ID || snapshot[i].Flags != working[i].Flags) {
+				Inventory::WriteSlot(i, working[i]);
+			}
+		}
+
+		return 1;
+	}
 }

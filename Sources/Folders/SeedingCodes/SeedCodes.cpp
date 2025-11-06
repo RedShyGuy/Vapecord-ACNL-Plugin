@@ -23,21 +23,21 @@ CTRPluginFramework::Item PickupSeederItemID = {0x7FFE, 0};
 namespace CTRPluginFramework {
 //Pickup Seeder
 	void pickseeder(MenuEntry *entry) {
-		static const Address HoleSpeedPatch("HOLESPEEDPATCH");
-		static const Address AlwaysPickup("ALWAYSPICKUP");
-		static const Address PickupDropID("PICKUPDROPID");
+		static const Address HoleSpeedPatch(0x65256C);
+		static const Address AlwaysPickup(0x59A0C4);
+		static const Address PickupDropID(0x598D9C);
 
-		static const Address PickupAnimID("PICKUPANIMID");
+		static const Address PickupAnimID(0x65D410);
 
-		static const Address PickupInvFull("PICKUPINVFULL");
-		static const Address pickmode3("PICKMODE3");
-		static const Address pickmode4("PICKMODE4");
-		static const Address pickmode5("PICKMODE5");
+		static const Address PickupInvFull(0x599FA8);
+		static const Address pickmode3(0x599FD0);
+		static const Address pickmode4(0x59A1C0);
+		static const Address pickmode5(0x59A24C);
 
-		static const Address pickmode6("PICKMODE6");
-		static const Address pickmode7("PICKMODE7");
-		static const Address pickmode8("PICKMODE8");
-		static const Address pickmode9("PICKMODE9");
+		static const Address pickmode6(0x661894);
+		static const Address pickmode7(0x661898);
+		static const Address pickmode8(0x66189C);
+		static const Address pickmode9(0x6618C0);
 
 		const u32 PickMode[10] = { PickupDropID.addr, PickupInvFull.addr, pickmode3.addr, pickmode4.addr, pickmode5.addr, pickmode6.addr, pickmode7.addr, pickmode8.addr, pickmode9.addr };
 		
@@ -50,9 +50,9 @@ namespace CTRPluginFramework {
 			{ 0xE3A00007, 0x0A000008, 0xE1A00004, 0xE3A04001, 0xE1A00004, 0xE5840000, 0xE5C48004, 0xE5CA9013, 0xE3A0103C },
 		};
 
-		static const Address PickupAuto1("PICKUPAUTO1");
-		static const Address PickupAuto2("PICKUPAUTO2");
-		static const Address PickupAuto3("PICKUPAUTO3");
+		static const Address PickupAuto1(0x67CCB8);
+		static const Address PickupAuto2(0x59A0D0);
+		static const Address PickupAuto3(0x59A1BC);
 
 		static const u32 AutoPick[3] = { PickupAuto1.addr, PickupAuto2.addr, PickupAuto3.addr };
 
@@ -61,7 +61,7 @@ namespace CTRPluginFramework {
             { 0x0A000039, 0x1A000041, 0x0A000006 }
         };
 
-		static const Address snakeFunc("SNAKEFUNC");
+		static const Address snakeFunc(0x68E5F4);
 		static Hook speedHook, pickItemHook, closeholeItemHook;
 
 		if(entry->WasJustActivated()) {
@@ -71,8 +71,8 @@ namespace CTRPluginFramework {
 			Process::Patch(PickupAnimID.addr, 0xE3A01006);
 
 			speedHook.Initialize(snakeFunc.addr + 0x20, (u32)PATCH_SnakeSpeed);
-			pickItemHook.Initialize((Address("PICKUPITEM").addr - 0x3C), (u32)PATCH_PickupSeed);
-			closeholeItemHook.Initialize((Address("CLOSEHOLEITEM").addr - 0x40), (u32)PATCH_PickupSeed);
+			pickItemHook.Initialize((Address(0x59A268).addr - 0x3C), (u32)PATCH_PickupSeed);
+			closeholeItemHook.Initialize((Address(0x598DBC).addr - 0x40), (u32)PATCH_PickupSeed);
 
 			pickItemHook.SetFlags(USE_LR_TO_RETURN);
 			closeholeItemHook.SetFlags(USE_LR_TO_RETURN);
@@ -188,15 +188,15 @@ namespace CTRPluginFramework {
 		if(entry->Hotkeys[0].IsPressed()) {	
 			set = !set;
 			OSD::Notify("Delete Items " << (set ? Color::Green << "ON" : Color::Red << "OFF"));
-			Process::Patch(Address("UNBREAKABLEFLOWER").addr, set ? 0xEA000014 : 0x0A00004B);
+			Process::Patch(Address(0x597F64).addr, set ? 0xEA000014 : 0x0A00004B);
 		}	
 
 		if(!entry->IsActivated()) 
-            Process::Patch(Address("UNBREAKABLEFLOWER").addr, 0x0A00004B);
+            Process::Patch(Address(0x597F64).addr, 0x0A00004B);
     }
 //Firework Seeder
 	void fireworkentry(MenuEntry *entry) {
-		static const Address firework("FIREWORK");
+		static const Address firework(0x597870);
 		
 		const std::vector<std::string> fireOpt = {
 			Language::getInstance()->get("VECTOR_FIREWORK_CHANGE_ID"),
@@ -267,11 +267,11 @@ namespace CTRPluginFramework {
 				fovbool = true;
 				
 				if(!saveMenuDisabled) //If No Save is OFF switch it ON
-					Process::Patch(Address("NOSAVE").addr, 0xE1A00000);
+					Process::Patch(Address(0x1A0980).addr, 0xE1A00000);
 				
 				OSD::Run(editorID);	
 				
-				Process::Patch(Address("UNLOCKCAMERA").addr, 0xE8BD81F0);
+				Process::Patch(Address(0x1A51C8).addr, 0xE8BD81F0);
 				OSD::Notify("Map Editor " << Color::Green << "ON");
 				MapEditorActive = true;
 
@@ -289,11 +289,11 @@ namespace CTRPluginFramework {
 				fovbool = false;
 				
 				if(!saveMenuDisabled) //If No Save is OFF switch it back OFF
-					Process::Patch(Address("NOSAVE").addr, 0xE8900006);
+					Process::Patch(Address(0x1A0980).addr, 0xE8900006);
 				
 				OSD::Stop(editorID);
 				
-				Process::Patch(Address("UNLOCKCAMERA").addr, 0xE2805C01);
+				Process::Patch(Address(0x1A51C8).addr, 0xE2805C01);
 				OSD::Notify("Map Editor " << Color::Red << "OFF");
 				MapEditorActive = false;		
 			}
@@ -387,10 +387,10 @@ namespace CTRPluginFramework {
 		if(!entry->IsActivated()) { 
 			fovbool = false;
 			OSD::Stop(editorID);
-			Process::Patch(Address("UNLOCKCAMERA").addr, 0xE2805C01);
+			Process::Patch(Address(0x1A51C8).addr, 0xE2805C01);
 				
 			if(!saveMenuDisabled) //If No Save is OFF switch it back OFF
-				Process::Patch(Address("NOSAVE").addr, 0xE8900006);
+				Process::Patch(Address(0x1A0980).addr, 0xE8900006);
 		}
 	}
 
@@ -403,8 +403,8 @@ namespace CTRPluginFramework {
 		static Hook hook1, hook2;
 
 		if(entry->WasJustActivated()) {
-			hook1.Initialize(Address("PLACEITEMOFFSET").addr + 0x58, (u32)PATCH_EverythingSeed);
-			hook2.Initialize(Address("PLACEITEMOFFSET").addr + 0x64, (u32)PATCH_EverythingSeed);
+			hook1.Initialize(Address(0x59FC7C).addr + 0x58, (u32)PATCH_EverythingSeed);
+			hook2.Initialize(Address(0x59FC7C).addr + 0x64, (u32)PATCH_EverythingSeed);
 		}
 		
 		if(entry->Hotkeys[0].IsDown() && !active) {

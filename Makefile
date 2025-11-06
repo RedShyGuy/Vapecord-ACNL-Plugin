@@ -23,6 +23,7 @@ SOURCES 	:= 	Sources \
 				Sources/Folders/SeedingCodes \
 				Sources/Folders/ExtraCodes \
 				Sources/Folders/PlayerCodes \
+				Sources/Folders/DefaultCodes \
 				Sources/Helpers \
 				Sources/LibCtrpfExtras \
 				Sources/Plugin \

@@ -16,7 +16,16 @@
 namespace CTRPluginFramework {
 	class Address {
 		public:
-            Address(const std::string& key);
+			enum Region {
+				USA = 0,
+				USAWA,
+				EUR,
+				EURWA,
+				JPN,
+				JPNWA,
+				KOR,
+				KORWA,
+			};
 
 			Address(u32 address);
 
@@ -25,6 +34,7 @@ namespace CTRPluginFramework {
 			u32 addr;
 
             static std::string regionName;
+			static Region regionId;
 
 			template <typename T, class ...Args>
 			T Call(Args ...args) {

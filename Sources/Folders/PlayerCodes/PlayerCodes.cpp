@@ -246,7 +246,7 @@ namespace CTRPluginFramework {
 				OSD::Notify("Loaded colors from file!", Color::Orange);
 			}
 
-			static const Address address("ADDRESS");
+			static const Address address(0x4A33C8);
 			hook.Initialize(address.addr, (u32)BGRHook);
 		  	hook.SetFlags(USE_LR_TO_RETURN);
 			hook.Enable();
@@ -267,7 +267,7 @@ namespace CTRPluginFramework {
 	
 //Wear Helmet And Accessory /*Credits to Levi*/
 	void hatz(MenuEntry *entry) { 
-		static const Address hatwear("HATWEAR");
+		static const Address hatwear(0x68C630);
 		if(entry->WasJustActivated()) 
 			Process::Patch(hatwear.addr, 0xE1A00000); 
 		else if(!entry->IsActivated()) 
@@ -339,7 +339,7 @@ namespace CTRPluginFramework {
 //Show Players On The Map
 	void map(MenuEntry *entry) {
 		PluginMenu *menu = PluginMenu::GetRunningInstance();
-		static const Address writePatch("WRITEPATCH");
+		static const Address writePatch(0x2215B0);
 		static Hook hook;
 
 		if(entry->WasJustActivated()) {
@@ -375,7 +375,7 @@ namespace CTRPluginFramework {
 	}
 
 	void NeverBedHead(MenuEntry *entry) {
-		static const Address antiBedHead("ANTIBEDHEAD");
+		static const Address antiBedHead(0x20C798);
 		if(entry->WasJustActivated()) 
 			Process::Patch(antiBedHead.addr, 0xE1A00000);
 		else if(!entry->IsActivated()) 

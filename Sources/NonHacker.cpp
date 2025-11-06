@@ -37,7 +37,7 @@ namespace CTRPluginFramework {
 		if(_pID == GameHelper::GetOnlinePlayerIndex()) _pID = 0;
 		else if(_pID == 0) _pID = GameHelper::GetOnlinePlayerIndex();
 		
-	    u32 PTR = *(u32 *)Address("CHATPOINTER").addr; //0x94FD84
+	    u32 PTR = *(u32 *)Address(0x94FD84).addr; //0x94FD84
 		PTR += 0x464; //33078FA0
 		PTR += (0x530 * _pID);
 		return PTR;

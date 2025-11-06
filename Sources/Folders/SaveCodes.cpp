@@ -42,7 +42,7 @@ namespace CTRPluginFramework {
 			Language::getInstance()->get("FILE_DELETE"),  
 		};
 
-		WrapLoc lock = { (u32 *)Address("GARDENPLUS").Call<u32>(), 0x89B00 };
+		WrapLoc lock = { (u32 *)Address(0x2FB344).Call<u32>(), 0x89B00 };
 		
 		Keyboard KB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), options);
 
@@ -59,7 +59,7 @@ namespace CTRPluginFramework {
 			} break;
 			case 1: {
 				if(Wrap::Restore(Utils::Format(PATH_SAVE, Address::regionName.c_str()), ".dat", Language::getInstance()->get("SAVE_RESTORE_SELECT"), nullptr, true, &lock, nullptr) == ExHandler::SUCCESS) {
-					static Address fixfurno("FIXFURNO");	
+					static Address fixfurno(0x6A6EE0);	
 					u32 orig[1] = { 0 };
 
 					Process::Patch(fixfurno.addr + 0x41C, 0xE1A00000, orig);
@@ -317,8 +317,8 @@ namespace CTRPluginFramework {
        	if(res < 0)
 			return;
 		
-		static Address SetNPCFunc("SETNPCFUNC");
-		static Address DeleteNPCFunc("DELETENPCFUNC");
+		static Address SetNPCFunc(0x3081A8);
+		static Address DeleteNPCFunc(0x30836C);
 
 		if(res == 0) {
 			Keyboard keyboard("a");
@@ -934,7 +934,7 @@ namespace CTRPluginFramework {
 
 			for(int j = 0; j < 6; ++j) {
 				for(u16 i = Pairs[j].first; i < Pairs[j].second; ++i) {
-					int field = Address("CALCBITFIELD").Call<int>(&i);
+					int field = Address(0x2FF76C).Call<int>(&i);
 					town->MuseumDonations[Addage[j] + field] = player + 1;
 
 					town->MuseumDonationDates[Addage[j] + field] = GameHelper::GetCurrentDate();
@@ -945,7 +945,7 @@ namespace CTRPluginFramework {
 		else if(state == 1) {
 			for(int j = 0; j < 6; ++j) {
 				for(u16 i = Pairs[j].first; i < Pairs[j].second; ++i) {
-					int field = Address("CALCBITFIELD").Call<int>(&i);
+					int field = Address(0x2FF76C).Call<int>(&i);
 					town->MuseumDonations[Addage[j] + field] = 0;
 
 					town->MuseumDonationDates[Addage[j] + field] = { 0, 0, 0 };

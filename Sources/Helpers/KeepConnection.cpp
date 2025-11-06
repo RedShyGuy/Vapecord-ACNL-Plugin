@@ -51,7 +51,7 @@ namespace CTRPluginFramework {
 	}
 
     u32 getThread1Func(s8 threadPos, int param_1, u32 param_2, u32 param_3, u32 param_4) {
-        static Address origFunc("KEEPCONNECTION_2_ORIGFUNC");
+        static Address origFunc(0x55D728);
 
         u32 obj_threadID = 0;
 		u32* threadTls = nullptr;
@@ -67,7 +67,7 @@ namespace CTRPluginFramework {
     }
 
     u32 getThread2Func(s8 threadPos, int param_1, u32 param_2, u32 param_3, u32 param_4) {
-        static Address origFunc("KEEPCONNECTION_1_ORIGFUNC");
+        static Address origFunc(0x53C04C);
 
 		u32 obj_threadID = 0;
 		u32* threadTls = nullptr;
@@ -103,8 +103,8 @@ namespace CTRPluginFramework {
 	}
 
 	void PatchThreadBegin(u32 threadfunc, u32 threadargs, u32 startFunc, u32 u0) {
-		static Address point("KEEPCONNECTION_POINT");
-		static Address calc("CALC");
+		static Address point(0x953CA0);
+		static Address calc(0x2C);
 
 		static u32 threadAddress = *(u32 *)(*(u32 *)(point.addr) + 0xA8 + 0x80) - calc.addr;
 
@@ -134,27 +134,27 @@ namespace CTRPluginFramework {
 		if(GameHelper::GetOnlinePlayerCount() <= 1 || PluginMenu::GetRunningInstance() == nullptr)
 			return;
 
-		static Address sendData1("SENDDATA1");
-		static Address sendData2("SENDDATA2");
-		static Address sendData3("SENDDATA3");
+		static Address sendData1(0x617D20);
+		static Address sendData2(0x60758C);
+		static Address sendData3(0x618024);
 
-		static Address getData1("GETDATA1");
-		static Address getData2("GETDATA2");
+		static Address getData1(0x5204DC);
+		static Address getData2(0x520C98);
 
-		sendData1.Call<void>(*(u32 *)Address("GAMEPOINTER").addr);
+		sendData1.Call<void>(*(u32 *)Address(0x954648).addr);
 
-		if(*(u8 *)(Address("EXGAMEDATA").addr-4) == 0) {
+		if(*(u8 *)(Address(0x95D3F4).addr-4) == 0) {
 			u32 uVar3 = getData1.Call<u32>();
 			int iVar2 = getData2.Call<int>(uVar3, 2);
 			if(iVar2 == 0) 
 				sendData2.Call<void>();
 
-			sendData3.Call<void>(*(u32 *)Address("GAMEPOINTER").addr);
+			sendData3.Call<void>(*(u32 *)Address(0x954648).addr);
 		}
 	}
 
     void InitKeepConnection(void) {
-        static Address threadBeginAddress("THREADBEGINADDRESS");
+        static Address threadBeginAddress(0x12F3A8);
 
         static Hook onlineThreadHook;
 		onlineThreadHook.Initialize(threadBeginAddress.addr, (u32)PatchThreadBegin);

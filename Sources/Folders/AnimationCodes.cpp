@@ -21,15 +21,15 @@ namespace CTRPluginFramework {
 	bool speedmode = false;
 
 	void PSelector_Set(u8 pIndex) {
-		Process::Patch(Address("A_GETONLINEPLAYERINDEX").addr, 0xE3A00000 + pIndex);
-		Process::Patch(Address("A_GETONLINEPLAYERINDEX").addr + 4, 0xE12FFF1E);
+		Process::Patch(Address(0x305EF0).addr, 0xE3A00000 + pIndex);
+		Process::Patch(Address(0x305EF0).addr + 4, 0xE12FFF1E);
 	}
 	void PSelector_OFF(void) {
-		Process::Patch(Address("A_GETONLINEPLAYERINDEX").addr, 0xE59F0004);
-		Process::Patch(Address("A_GETONLINEPLAYERINDEX").addr + 4, 0xE5900000);
+		Process::Patch(Address(0x305EF0).addr, 0xE59F0004);
+		Process::Patch(Address(0x305EF0).addr + 4, 0xE5900000);
 	}
 	bool PSelector_ON(void) {
-		return (*(u32 *)Address("A_GETONLINEPLAYERINDEX").addr != 0xE59F0004);
+		return (*(u32 *)Address(0x305EF0).addr != 0xE59F0004);
 	}
 
 //check to make player selector better
@@ -78,7 +78,7 @@ namespace CTRPluginFramework {
 		
 		else if(entry->Hotkeys[1].IsPressed()) {
 			if(PSelector_ON()) {
-				OSD::Notify(Utils::Format("Controlling Player: %02X Disabled!", *(u8 *)(Address("PLAYSELECTOR").addr + 0x10)));
+				OSD::Notify(Utils::Format("Controlling Player: %02X Disabled!", *(u8 *)(Address(0x75F010).addr + 0x10)));
 				PSelector_OFF();
 				return;
 			}
@@ -104,7 +104,7 @@ namespace CTRPluginFramework {
 	void anticheat(MenuEntry *entry) { 
 		static Hook AntiHook;
 		if(entry->WasJustActivated()) {	
-			static const Address AntiAddress("ANTIADDRESS");
+			static const Address AntiAddress(0x6786D4);
 			AntiHook.Initialize(AntiAddress.addr, (u32)AntiAnimCheck);
 			AntiHook.SetFlags(USE_LR_TO_RETURN);
 			AntiHook.Enable();
@@ -268,7 +268,7 @@ namespace CTRPluginFramework {
 	}
 //Emotion Loop
 	void inf_expression(MenuEntry *entry) {
-		static const Address infex("INFEX");
+		static const Address infex(0x65E9B0);
         if(entry->Hotkeys[0].IsDown()) 
 			Process::Patch(infex.addr, 0xE3A010FF);
 		if(!entry->Hotkeys[0].IsDown()) 
@@ -281,9 +281,9 @@ namespace CTRPluginFramework {
 	}
 //Slow Motion Animations
 	void slmoanms(MenuEntry *entry) {
-		static const Address slo1("SLO1");
-		static const Address slo2("SLO2");
-		static const Address slo3("SLO3");
+		static const Address slo1(0x654578);
+		static const Address slo2(0x652C10);
+		static const Address slo3(0x887880);
 		const u32 SlowAnim[2] = { slo2.addr, slo3.addr };
 		
 		static const float SlowAnimPatch[2][2] = {
@@ -357,8 +357,8 @@ namespace CTRPluginFramework {
 			if(!PlayerClass::GetInstance()->IsLoaded())
 				return;
 
-			Process::Patch(Address("ANIMCONDITIONPATCH").addr, 0xE1A00000); 
-			Process::Patch(Address("INDEXCHANGE").addr, 0xE3A01000 + DATAIndexRandom);
+			Process::Patch(Address(0x677504).addr, 0xE1A00000); 
+			Process::Patch(Address(0x628B54).addr, 0xE3A01000 + DATAIndexRandom);
 			
 			for(u8 i = 0; i < 4; ++i) {
 				u32 playerInstance = PlayerClass::GetInstance()->Offset();
@@ -374,8 +374,8 @@ namespace CTRPluginFramework {
 			}
         } 
 		if(!entry->Hotkeys[2].IsDown()) {
-            Process::Patch(Address("ANIMCONDITIONPATCH").addr, 0x1A000017);
-			Process::Patch(Address("INDEXCHANGE").addr, 0xE5D11268);
+            Process::Patch(Address(0x677504).addr, 0x1A000017);
+			Process::Patch(Address(0x628B54).addr, 0xE5D11268);
 		}
 	}
 }

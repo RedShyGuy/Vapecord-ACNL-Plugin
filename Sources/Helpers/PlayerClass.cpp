@@ -20,7 +20,7 @@ namespace CTRPluginFramework {
 			m_Instance = new PlayerClass;
 
 		m_PlayerIndex = pIndex;
-		m_PlayerOffset = Address("PLAYERINSTANCE").Call<u32>(pIndex, 1);
+		m_PlayerOffset = Address(0x5C3EA0).Call<u32>(pIndex, 1);
 
 		return m_Instance;
 	}
@@ -71,7 +71,7 @@ namespace CTRPluginFramework {
 
 	bool PlayerClass::GetWorldCoords(u32 *wX, u32 *wY) {
 		if(m_PlayerOffset != 0) {
-			static Address WorldCoords("WORLDCOORDS");
+			static Address WorldCoords(0x5C13AC);
 			return WorldCoords.Call<bool>(wX, wY, m_PlayerIndex, 1);
 		}
 		return 0;
@@ -113,7 +113,7 @@ namespace CTRPluginFramework {
 	}
 
 	void PlayerClass::CalculateMapCoordinates(u32& x, u32& y) {
-		bool IsInfoOpen = *(bool *)(*(u32 *)(Address("MAPBOOL").addr + 0x1C) + 0x5D8);
+		bool IsInfoOpen = *(bool *)(*(u32 *)(Address(0x950C30).addr + 0x1C) + 0x5D8);
 		float* coords = GetCoordinates();
 
 	//Town Map | Can open info menu
@@ -174,7 +174,7 @@ namespace CTRPluginFramework {
 		static UIntRect MainStreet(4, 43, 312, 159);
 		static UIntRect Tour(65, 34, 190, 170);
 
-		bool IsInfoOpen = *(bool *)(*(u32 *)(Address("MAPBOOL").addr + 0x1C) + 0x5D8);
+		bool IsInfoOpen = *(bool *)(*(u32 *)(Address(0x950C30).addr + 0x1C) + 0x5D8);
 		FloatVector fPos(touchPos);
 
 		float x = 0, y = 0;

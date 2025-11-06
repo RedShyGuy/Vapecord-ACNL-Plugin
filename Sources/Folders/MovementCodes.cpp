@@ -15,7 +15,7 @@ u32 WalkParticleID = 0;
 namespace CTRPluginFramework {
 //Players can't push you
 	void noPush(MenuEntry *entry) { 
-		static const Address push("PUSH");
+		static const Address push(0x652288);
 
 		if(entry->WasJustActivated()) 
 			Process::Patch(push.addr, 0xEA00002D);
@@ -73,14 +73,14 @@ namespace CTRPluginFramework {
     }
 //Walk Over Things
 	void walkOver(MenuEntry *entry) {		
-		static const Address walkover1("WALKOVER1");
-		static const Address walkover2("WALKOVER2");
-		static const Address walkover3("WALKOVER3");
-		static const Address walkover4("WALKOVER4");
-		static const Address walkover5("WALKOVER5");
-		static const Address walkover6("WALKOVER6");
-		static const Address walkover7("WALKOVER7");
-		static const Address walkover8("WALKOVER8");
+		static const Address walkover1(0x6503FC);
+		static const Address walkover2(0x650414);
+		static const Address walkover3(0x650578);
+		static const Address walkover4(0x6505F0);
+		static const Address walkover5(0x6506A4);
+		static const Address walkover6(0x6506BC);
+		static const Address walkover7(0x6506C0);
+		static const Address walkover8(0x6506EC);
 		
 		const u32 WalkOver[8] = { walkover1.addr, walkover2.addr, walkover3.addr, walkover4.addr, walkover5.addr, walkover6.addr, walkover7.addr, walkover8.addr };
 		
@@ -104,12 +104,12 @@ namespace CTRPluginFramework {
     }
 //Movement Changer
 	void MovementChanger(MenuEntry *entry) {	
-		static const Address Disable25Anim("DISABLE25ANIM"); //Disable going out of water animation
-		static const Address AlwaysWalk("ALWAYSWALK"); //Makes you walk all the time
-		static const Address AlwaysSwim("ALWAYSSWIM"); //Makes you swim all the time
-		static const Address DisableYChange("DISABLEYCHANGE"); //Makes Y-Coord not go down when swimming	
-		static const Address move4("MOVE4");
-		static const Address move5("MOVE5");
+		static const Address Disable25Anim(0x67F748); //Disable going out of water animation
+		static const Address AlwaysWalk(0x64E824); //Makes you walk all the time
+		static const Address AlwaysSwim(0x64E82C); //Makes you swim all the time
+		static const Address DisableYChange(0x56BE7C); //Makes Y-Coord not go down when swimming	
+		static const Address move4(0x65352C);
+		static const Address move5(0x763ABC);
 		
 		static const u32 MoveChanger[6] = { Disable25Anim.addr, AlwaysWalk.addr, AlwaysSwim.addr, DisableYChange.addr, move4.addr, move5.addr };
 		
@@ -138,7 +138,7 @@ namespace CTRPluginFramework {
     }
 //Walk Particle	
 	void Walkparticle(MenuEntry *entry) {
-		static const Address WalkParticlePatch("WALKPARTICLEPATCH");
+		static const Address WalkParticlePatch(0x652694);
 		static Hook hook;
 
 		if(entry->WasJustActivated()) {
@@ -191,9 +191,9 @@ namespace CTRPluginFramework {
 	}
 //Player Visibility Changer	
 	void onlineplayermod(MenuEntry *entry) {
-		static const Address visi1("VISI1");
-		static const Address visi2("VISI2");
-		static const Address visi3("VISI3");
+		static const Address visi1(0x655E44);
+		static const Address visi2(0x67743C);
+		static const Address visi3(0x68DC3C);
 		
 		static const u32 VisiMod[3] = { visi1.addr, visi2.addr, visi3.addr };
 		
@@ -244,14 +244,14 @@ namespace CTRPluginFramework {
 	float walkSpeed = 1;
 //Player Speed Changer	
 	void speedMod(MenuEntry *entry) {
-		static const Address sp1("SP1");
-		static const Address sp2("SP2");
-		static const Address sp3("SP3");
-		static const Address sp4("SP4");
-		static const Address sp5("SP5");
-		static const Address sp6("SP6");
-		static const Address sp7("SP7");
-		static const Address sp8("SP8");
+		static const Address sp1(0x887880);
+		static const Address sp2(0x887888);
+		static const Address sp3(0x887958);
+		static const Address sp4(0x5D4C80);
+		static const Address sp5(0x8879B8);
+		static const Address sp6(0x887C68);
+		static const Address sp7(0x94EF34);
+		static const Address sp8(0x8878A4);
 		
 		if(!entry->IsActivated()) 
 			walkSpeed = 1;
@@ -310,8 +310,8 @@ namespace CTRPluginFramework {
 
 //Shovel Knockback
 	void shovelknockback(MenuEntry *entry) {
-		static Address rockHitting("ROCKHITTING");
-		static Address itemHitting("ITEMHITTING");
+		static Address rockHitting(0x66E9F0);
+		static Address itemHitting(0x67211C);
 
 		if(entry->WasJustActivated()) {
 			Process::Patch(rockHitting.addr, 0xEB000000);

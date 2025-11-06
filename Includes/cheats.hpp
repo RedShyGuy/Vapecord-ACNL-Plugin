@@ -234,6 +234,24 @@ namespace CTRPluginFramework {
 	void NPCCoordinates(MenuEntry *entry);
 	void NPCTeleportToYou(MenuEntry *entry);
 	void NPCRotate(MenuEntry *entry);
+
+//Default Codes
+	void DisableOpenSaveMenuWithStartButton(MenuEntry *entry);
+    void DisableCatalogSearchFunction(MenuEntry *entry);
+    void FixInvalidPickupCrash(MenuEntry *entry);
+    void FixInvalidDropPlantCrash(MenuEntry *entry);
+    void FixInvalidSpriteCrash(MenuEntry *entry);
+    void FixInvalidGiveItemCrash(MenuEntry *entry);
+    void FixInvalidHoleCrash(MenuEntry *entry);
+    void FixInvalidItemCrash(MenuEntry *entry);
+    void ConvertFlowerFromSeedItemToNormalItem(MenuEntry *entry);
+    void SetSeedItemNames(MenuEntry *entry);
+    void SetItemReplacementRules(MenuEntry *entry);
+    void SetDropRules(MenuEntry *entry);
+    void SetPlantRules(MenuEntry *entry);
+    void FixParticlesInPuzzleLeague(MenuEntry *entry);
+    void SetCustomSpritesForSeedItemsAndProDesigns(MenuEntry *entry);
+	void FruitStackingCheck(MenuEntry *entry);
 	
 //Helper functions
   //Located in cheats.cpp

@@ -7,7 +7,7 @@ namespace CTRPluginFramework {
 
 	Save::Save() {
 		if(s_SaveAddress == 0) {
-			static CTRPluginFramework::Address d_garden("D_GARDEN"); 
+			static CTRPluginFramework::Address d_garden(0x2FB344); 
 			s_SaveAddress = d_garden.Call<u32>();
 		}
 

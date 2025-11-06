@@ -290,7 +290,7 @@ namespace CTRPluginFramework {
 
 //Get Room Name
 	std::string IDList::GetRoomName(u8 ID) {
-		static Address RoomName("ROOMNAME"); 
+		static Address RoomName(0x5B4BE4); 
 
 		if(ID <= 0xA5) 
 			return Color::Green << (std::string)(RoomName.Call<char *>(ID));

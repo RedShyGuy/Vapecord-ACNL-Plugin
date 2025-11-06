@@ -5,7 +5,7 @@
 
 namespace CTRPluginFramework {
     bool ACSystem::IsKeyDown(GameKey::GameKey key) {
-		static Address ControllerInputCheck("CONTROLLERINPUTCHECK");
+		static Address ControllerInputCheck(0x304A14);
 		return ControllerInputCheck.Call<bool>(key);
 	}
 
@@ -71,14 +71,14 @@ Light Switch cheats I made for fun
 	}
 
 	u32 LightSwitch::GetData() {
-		static const Address data("DATA");
+		static const Address data(0x951030);
 		return *(u32 *)data.addr;
 	}
 
 	void LightSwitch::SetData(bool ON) {
-		static Address data1("ACSYSTEM_DATA1");
-		static Address data2("ACSYSTEM_DATA2");
-		static Address data3("DATA3");
+		static Address data1(0x569118);
+		static Address data2(0x5696F8);
+		static Address data3(0x56946C);
 
 		u32 switchData = GetData();
 		if(switchData == 0)
@@ -94,7 +94,7 @@ Light Switch cheats I made for fun
 	}
 
 	void LightSwitch::ON(u8 roomID) {
-		static Address lightON("LIGHTON");
+		static Address lightON(0x1E6844);
 		lightON.Call<void>(0, roomID);
 		SetData(true);
 
@@ -103,7 +103,7 @@ Light Switch cheats I made for fun
 	}
 
 	void LightSwitch::OFF(u8 roomID) {
-		static Address lightOFF("LIGHTOFF");
+		static Address lightOFF(0x1E7514);
 		lightOFF.Call<void>(0, roomID);
 		SetData(false);
 
@@ -112,12 +112,12 @@ Light Switch cheats I made for fun
 	}
 
 	bool LightSwitch::IsON(u8 roomID) {
-		static Address lightIsON("LIGHTISON");
+		static Address lightIsON(0x1E7AC0);
 		return lightIsON.Call<bool>(roomID);
 	}
 
 	bool LightSwitch::IsBasement(u8 roomID) {
-		static Address lightBasement("LIGHTBASEMENT");
+		static Address lightBasement(0x1E8400);
 		return lightBasement.Call<bool>(roomID);
 	}
 

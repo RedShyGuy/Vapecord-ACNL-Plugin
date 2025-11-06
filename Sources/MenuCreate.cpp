@@ -1,8 +1,8 @@
 #include "cheats.hpp"
-#include "Helpers/PluginMenuData.hpp"
 #include "LibCtrpfExtras/MenuEntryExtras.hpp"
 #include "LibCtrpfExtras/MenuFolderExtras.hpp"
 #include "LibCtrpfExtras/HotkeyExtras.hpp"
+#include "LibCtrpfExtras/ColorExtras.hpp"
 
 namespace CTRPluginFramework {
     static MenuEntryExtras *EntryWithHotkey(MenuEntryExtras *entry, const std::vector<HotkeyExtras> &hotkeys) {
@@ -417,11 +417,36 @@ namespace CTRPluginFramework {
 		MISC->Append(new MenuEntryExtras("FAST_ISABELLE", fastisabelle, "FAST_ISABELLE_NOTE")),
 		menu->Append(MISC);
 
+	////////////////////////
+	/*Default Codes Folder*/
+	////////////////////////
+	MenuFolder *DEFAULTC = new MenuFolder("Default Codes");
+	DEFAULTC->Append(new MenuEntry("Disable Open Save Menu With Start Button", DisableOpenSaveMenuWithStartButton, "")),
+	DEFAULTC->Append(new MenuEntry("Disable Catalog Search Function", DisableCatalogSearchFunction, "")),
+	DEFAULTC->Append(new MenuEntry("Fix Invalid Pickup Crash", FixInvalidPickupCrash, "")),
+	DEFAULTC->Append(new MenuEntry("Fix Invalid Drop/Plant Crash", FixInvalidDropPlantCrash, "")),
+	DEFAULTC->Append(new MenuEntry("Fix Invalid Sprite Crash", FixInvalidSpriteCrash, "")),
+	DEFAULTC->Append(new MenuEntry("Fix Invalid Give Item Crash", FixInvalidGiveItemCrash, "")),
+	DEFAULTC->Append(new MenuEntry("Fix Invalid Hole Crash", FixInvalidHoleCrash, "")),
+	DEFAULTC->Append(new MenuEntry("Fix Invalid Item Crash", FixInvalidItemCrash, "")),
+	DEFAULTC->Append(new MenuEntry("Convert Flower From Seed Item To Normal Item", ConvertFlowerFromSeedItemToNormalItem, "")),
+	DEFAULTC->Append(new MenuEntry("Set Seed Item Names", SetSeedItemNames, "")),
+	DEFAULTC->Append(new MenuEntry("Set Item Replacement Rules", SetItemReplacementRules, "")),
+	DEFAULTC->Append(new MenuEntry("Set Drop Rules", SetDropRules, "")),
+	DEFAULTC->Append(new MenuEntry("Set Plant Rules", SetPlantRules, "")),
+	DEFAULTC->Append(new MenuEntry("Fix Particles In Puzzle League", FixParticlesInPuzzleLeague, "")),
+	DEFAULTC->Append(new MenuEntry("Set Custom Sprites For Seed Items And Pro Designs", SetCustomSpritesForSeedItemsAndProDesigns, "")),
+	menu->Append(DEFAULTC);
+
+	for (MenuEntry *entry : DEFAULTC->GetEntryList()) {
+		entry->Enable();
+	}
+
 	////////////////////
 	/*Dev Codes Folder*/
 	////////////////////
 	#if DEVMODE
-		DEVC = new MenuFolder(Color(0xFF1A69FF) << "Dev Codes");
+		MenuFolder *DEVC = new MenuFolder(Color(0xFF1A69FF) << "Dev Codes");
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Custom Dump", nullptr, customdump, "Lets you dump/restore custom dumps.")),
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Call Function", FunctionsCaller, FunctionsCallerSettings, "Lets you call functions")),
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "MSG Box", msgboxtest, "")),

@@ -103,12 +103,12 @@ namespace CTRPluginFramework {
 	}
 
 	void NPCAnimation(MenuEntry *entry) {
-        static Address func1("NPCCODES_FUNC1");
-        static Address func2("NPCCODES_FUNC2");
-        static Address func3("NPCCODES_FUNC3");
-        static Address func4("NPCCODES_FUNC4");
-        static Address data1("NPCCODES_DATA1");
-        static Address data2("NPCCODES_DATA2");
+        static Address func1(0x6E7D54);
+        static Address func2(0x6EB384);
+        static Address func3(0x6EC4E0);
+        static Address func4(0x6EE778);
+        static Address data1(0xAE6864);
+        static Address data2(0x8816C4);
 
 		if(CurrAddress == 0)
 			return;
@@ -169,10 +169,10 @@ namespace CTRPluginFramework {
 	}
 
 	u16 GetRawRotationData(void) {
-        static Address addr1("ADDR1");
-        static Address addr2("ADDR2");
-        static Address addr3("ADDR3");
-        static const Address point1("POINT1");
+        static Address addr1(0x522520);
+        static Address addr2(0x5667A8);
+        static Address addr3(0x57C4F0);
+        static const Address point1(0x94FDE8);
 
 		float fVar914 = 0;
 		u16 uVar918 = 0;

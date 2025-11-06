@@ -3,7 +3,7 @@
 
 #include <CTRPluginFramework.hpp>
 
-#pragma pack(1)
+#pragma pack(push, 1)
 
 namespace CTRPluginFramework {
 
@@ -1843,4 +1843,6 @@ namespace CTRPluginFramework {
         u8 padding;
     };*/
 }
+
+#pragma pack(pop)
 #endif

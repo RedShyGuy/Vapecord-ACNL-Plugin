@@ -2,7 +2,6 @@
 #include "Helpers/QRCodeGen.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Address/Address.hpp"
-#include "Helpers/PluginMenuData.hpp"
 #include "LibCtrpfExtras/ColorExtras.hpp"
 #include "Files.h"
 #include "Config.hpp"

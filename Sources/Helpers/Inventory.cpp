@@ -92,20 +92,28 @@ namespace CTRPluginFramework {
 		return true;
 	}
 //Get asked item
-	bool Inventory::GetNextItem(Item itemID, u8 &slot) {
+	bool Inventory::GetNextItem(Item itemID, u8 &slot, bool ignoreFlag) {
 		ACNL_Player *player = Player::GetSaveData();
 		if(!player) 
 			return false;
 		
 		slot = 0;
 		while(true) {
-			if(itemID == player->Inventory[slot]) //If item found return  
-				return true;
-			
+			if (ignoreFlag) {
+				if (itemID.ID == player->Inventory[slot].ID) {
+					return true; // Item found
+				}
+			} else {
+				if (itemID == player->Inventory[slot]) {
+					return true; // Item found
+				}
+			}
+
 			slot++; //goto next slot
 			
-			if(15 < slot) //If item not found return
-				return false;		
+			if (15 < slot) {//If item not found return
+				return false;	
+			}	
 		}
 	}
 //Get asked closet item	
@@ -136,7 +144,7 @@ namespace CTRPluginFramework {
 			return;
 
 		for(int i = 0; i < 16; ++i)
-			Address("LOADICON").Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + GetAddData(), i);
+			Address(0x26DC00).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + GetAddData(), i);
 	}
 
 //get current selected inventory slot

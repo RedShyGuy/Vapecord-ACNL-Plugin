@@ -51,7 +51,7 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 */
 	void Dropper::RestorePattern(void) {
 		for(int i = 0; i < 77; ++i)
-			Process::Write32(Address("DROPPATTERN").addr + (i * 4), ReValues[i]);
+			Process::Write32(Address(0x85FE58).addr + (i * 4), ReValues[i]);
 	}
 
 	int Dropper::Search_Replace(int ItemsPerRun, std::vector<Item> ItemToSearch, Item ItemToPlace, u8 AnimID, bool ItemSequenceUsage, const std::string& msg, bool DisplayMSG) {
@@ -114,10 +114,10 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 
 //Item Locks Switch
 	void Dropper::DropItemLock(bool p_switch) {
-		static const Address BypassItemLock1("BYPASSITEMLOCK1");
-		static const Address BypassItemLock2("BYPASSITEMLOCK2");
-		static const Address BypassItemLock3("BYPASSITEMLOCK3");
-		static const Address BypassItemLock4("BYPASSITEMLOCK4");
+		static const Address BypassItemLock1(0x5A11C8);
+		static const Address BypassItemLock2(0x5A11CC);
+		static const Address BypassItemLock3(0x5A13C8);
+		static const Address BypassItemLock4(0x5A13CC);
 		
 		if(p_switch) {
 			Process::Patch(BypassItemLock1.addr, 0xE3E00000);
@@ -135,11 +135,11 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 
 //Place Item	
 	u32 Dropper::PlaceItem(u8 ID, Item *ItemToReplace, Item *ItemToPlace, Item *ItemToShow, u8 worldx, u8 worldy, bool u0, bool u1, bool u2, bool u3, bool u4) {
-		return Address("PLACEITEMOFFSET").Call<u32>(ID, ItemToReplace, ItemToPlace, ItemToShow, worldx, worldy, u0, u1, u2, u3, u4);
+		return Address(0x59FC7C).Call<u32>(ID, ItemToReplace, ItemToPlace, ItemToShow, worldx, worldy, u0, u1, u2, u3, u4);
 	}
 //Drop Check
 	bool Dropper::DropCheck(u32 *wX, u32 *wY, u32 *u0, bool disallowConcrete, bool u1) {
-		static Address dropcheck("DROPCHECK");
+		static Address dropcheck(0x5990AC);
 		return dropcheck.Call<bool>((u32)wX, (u32)wY, (u32)u0, disallowConcrete, u1);
 	}
 //Drop Item Wrapper	
@@ -219,7 +219,7 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 			Process::Write8(player + 0x8CC, ID);
 
 		//animation patch
-			static const Address animpatch("ANIMPATCH");
+			static const Address animpatch(0x682434);
 
 		//display pattern, smash rock, bury
 			if(waitAnim == 0x5D || waitAnim == 0x6B || waitAnim == 0x5A)

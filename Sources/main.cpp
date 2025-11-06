@@ -3,12 +3,11 @@
 #include "Files.h"
 #include "Helpers/Inventory.hpp"
 #include "Helpers/Wrapper.hpp"
-#include "Helpers/PluginMenuData.hpp"
 #include "NonHacker.hpp"
 #include "Address/Address.hpp"
-#include "Address/AddressReader.hpp"
 #include "cheats.hpp"
 #include "Helpers/ItemReader.hpp"
+#include "Helpers/ItemSequence.hpp"
 
 namespace CTRPluginFramework {
 	static const std::string Note = "Creator: Lukas \n\n"
@@ -20,7 +19,6 @@ namespace CTRPluginFramework {
 	bool OSD_SplashScreen(const Screen &Splash);
 	void IndoorsSeedItemCheck(void);
 	void InitMenu(PluginMenu *menu);
-	void RCO(void);
 
 /*
 Will set a counter at the start of the plugin as long as the title screen didn't load to
@@ -55,17 +53,9 @@ prevent any issues with freezing of the plugin
 			return 0;
 		}
 
-	//Load Addresses
-		if (!AddressReader::getInstance()->loadFromBinary(PATH_ADDRESSES_BIN, region)) {
-			MessageBox(Utils::Format("Error 600\nThe addresses.bin is missing the selected region (%s)\nGet more info and help on the Discord Server: %s", region.c_str(), DISCORDINV)).SetClear(ClearScreen::Top)();
-			Process::ReturnToHomeMenu();
-			return 0;
-		}
-
 		SleepTime();
 
-	//RCO only if game is supported
-		RCO();
+		ItemSequence::Init();
 	//keeps internet connection when menu is opened
 		InitKeepConnection();
 
@@ -73,18 +63,15 @@ prevent any issues with freezing of the plugin
 	//Load MenuFolders and Entrys (located in MenuCreate.cpp)
 		InitMenu(menu);
 
-		ItemReader::getInstance()->loadFromBinary(PATH_ITEM_BIN);
+		if (!ItemReader::getInstance()->loadFromBinary(PATH_ITEM_BIN)) {
+			MessageBox(Utils::Format("Error 660\nThe item.bin is missing\nGet more info and help on the Discord Server: %s", DISCORDINV)).SetClear(ClearScreen::Top)();
+			Process::ReturnToHomeMenu();
+			return 0;
+		}
 
 	//Load Callbacks
 		menu->Callback(IndoorsSeedItemCheck);
-
-		//menu->Callback(NonHacker_Player00);
-		//menu->Callback(NonHacker_Player01);
-		//menu->Callback(NonHacker_Player02);
-		//menu->Callback(NonHacker_Player03);
-
 		menu->OnNewFrame = SendPlayerData;
-
 		Process::exceptionCallback = CustomExceptionHandler;
 
 	//Run Menu Loop
