@@ -42,6 +42,9 @@ CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++17
 ASFLAGS		:=	$(ARCH)
 LDFLAGS		:= -T $(TOPDIR)/3gx.ld $(ARCH) -Os -Wl,--gc-sections,--strip-discarded,--strip-debug
 
+LDFLAGS += -L/$(CURDIR)/libctrpf/Library/lib
+CXXFLAGS += -I/$(CURDIR)/libctrpf/Library/include
+
 LIBS		:= -lctrpf -lctru
 LIBDIRS		:= 	$(CTRPFLIB) $(CTRULIB) $(PORTLIBS)
 

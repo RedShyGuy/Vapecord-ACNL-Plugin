@@ -37,7 +37,7 @@ namespace CTRPluginFramework
 	//vapecord infobar
     void GetLocalFriendCode(u64 *friendcode)
     {
-        frdInit(false);
+        frdInit();
 
         FriendKey key;
 		FRD_GetMyFriendKey(&key);
