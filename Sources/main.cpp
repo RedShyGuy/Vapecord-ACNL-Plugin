@@ -16,7 +16,7 @@
 
 namespace CTRPluginFramework {
 	static const std::string Note = "Creator: Lukas#4444 (RedShyGuy) \n\n"
-									"Code Credits: Nico, Jay, Levi, Slattz, Kominost, Elominator, Jon &\nDaniElectra (Pretendo), and more \n\n"
+									"Code Credits: Nico, Jay, Levi, Slattz, Kominost, Elominator, Jon & DaniElectra (Pretendo), and more\n\n"
 									"Translators: みるえもん & みなと(Japanese), im a book(spanish), Fedecrash02(italian), Youssef, Arisa, & Lenoch(french), bkfirmen & Toby(german), Soopoolleaf(korean) \n\n"
 									"" << Utils::Format("Discord: %s", DISCORDINV);
 
