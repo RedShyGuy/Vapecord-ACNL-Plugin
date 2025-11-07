@@ -7,13 +7,16 @@
 #include "Helpers/QuickMenu.hpp"
 #include "Helpers/PluginMenuData.hpp"
 #include "NonHacker.hpp"
+#include "Helpers/Pretendo.hpp"
+#include "PatternManager.hpp"
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
 namespace CTRPluginFramework {
 	static const std::string Note = "Creator: Lukas#4444 (RedShyGuy) \n\n"
-									"Code Credits: Nico, Jay, Levi, Slattz, Kominost, Elominator and more \n\n"
+									"Code Credits: Nico, Jay, Levi, Slattz, Kominost, Elominator, Jon & DaniElectra (Pretendo), and more\n\n"
 									"Translators: みるえもん & みなと(Japanese), im a book(spanish), Fedecrash02(italian), Youssef, Arisa, & Lenoch(french), bkfirmen & Toby(german), Soopoolleaf(korean) \n\n"
 									"" << Utils::Format("Discord: %s", DISCORDINV);
 
@@ -243,6 +246,14 @@ prevent any issues with freezing of the plugin
 		menu->OnNewFrame = OnNewFrameCallback;
 
 		Process::exceptionCallback = CustomExceptionHandler;
+
+    // Patch Pretendo + RCE fix
+        PatternManager pm;
+        initPretendoPatches(pm);
+
+        pm.Perform();
+
+        enablePretendoPatches();
 
 	//Run Menu Loop
 		menu->Run();
