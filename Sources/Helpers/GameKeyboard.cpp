@@ -171,7 +171,7 @@ namespace CTRPluginFramework {
 		if(msgData == 0)
 			return;
 
-		u8 pIndex = GameHelper::GetOnlinePlayerIndex();
+		u8 pIndex = Game::GetOnlinePlayerIndex();
 
 		u32 Stack[12];
 		OnlineStack *onlineStack = new OnlineStack();

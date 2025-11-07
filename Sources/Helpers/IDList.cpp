@@ -109,7 +109,7 @@ namespace CTRPluginFramework {
 		return false;
 	}
 //If animation is valid
-	bool IDList::AnimationValid(u8 animID) {
+	bool IDList::AnimationValid(u8 animID, u8 playerIndex) {
 		if(animID > 0 && animID < 0xEB) {
 			if(IsIndoorsBool) {
 				switch(animID) {
@@ -128,7 +128,7 @@ namespace CTRPluginFramework {
 				}
 			}
 			
-			if(!GameHelper::IsInRoom(0)) {
+			if(!Player::IsInRoom(0, playerIndex)) {
 			//stuff for kappns boat
 				switch(animID) {
 					case 0xBB:

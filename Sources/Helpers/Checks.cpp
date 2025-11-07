@@ -12,7 +12,7 @@
 
 extern "C" bool __IsPlayerHouse() {
 	u8 pID = (u8)CTRPluginFramework::Player::GetPlayerStatus(4);
-	u8 stageID = CTRPluginFramework::GameHelper::RoomCheck();
+	u8 stageID = CTRPluginFramework::Player::GetRoom(4);
 
 	static const u8 r_Array[24] = { 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26 };
 
@@ -29,40 +29,7 @@ extern "C" bool __IsPlayerHouse() {
 	return 0;
 }
 
-extern "C" bool __IsPuzzleLeagueRoom() {
-	u8 stageID = CTRPluginFramework::GameHelper::RoomCheck();
-	return stageID == 0x9E;
-}
-
-extern "C" void SetProperParticle(void);
-
 namespace CTRPluginFramework {
-	/*
-		This was needed as the particle hook needs to check the room too early, rooms are not initialized yet
-		That is why we wait until the title screen appears to check the room for the particle fix
-
-		The particle fix is only needed in the puzzle league game, so it won't be an issue to patch it later
-	*/
-	void OnTitleScreen(u8 roomId, bool u0, bool u1, bool u2) {
-		if (roomId == 0x5E) {
-			static Hook ParticleHook1, ParticleHook2;
-			static const Address partc1(0x5506D4);
-			static const Address partc2(0x5509CC);
-
-			ParticleHook1.Initialize(partc1.addr, (u32)SetProperParticle);
-			ParticleHook1.SetFlags(USE_LR_TO_RETURN);
-			ParticleHook1.Enable();
-
-			ParticleHook2.Initialize(partc2.addr, (u32)SetProperParticle);
-			ParticleHook2.SetFlags(USE_LR_TO_RETURN);
-			ParticleHook2.Enable();
-		}
-
-		const HookContext &curr = HookContext::GetCurrent();
-		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
-		func.Call<void>(roomId, u0, u1, u2);
-	}
-
 //Hook invalid pickup
 	u32 InvalidPickStop(u8 ID, Item *ItemToReplace, Item *ItemToPlace, Item *ItemToShow, u8 worldx, u8 worldy) {	
 		if(IDList::ItemValid(*ItemToReplace, true)) {
@@ -127,7 +94,7 @@ namespace CTRPluginFramework {
 	
 	bool ConvertFlower/*And Mushroomized Furniture*/(Item *item) {
 		if(IDList::ValidID(item->ID, 0x9F, 0xCB)) 
-			GameHelper::ToIndoorFlowers(*item);
+			Game::ToIndoorFlowers(*item);
 
 		else if(IDList::ValidID(item->ID, 0x2120, 0x212A))
 			item->ID += 0x959;
@@ -154,9 +121,9 @@ namespace CTRPluginFramework {
 		if(Inventory::GetSelectedSlot(slot)) {
 			if(Inventory::ReadSlot(slot, itemslotid)) {
 				itemslotid.Flags = 0;
-				if(GameHelper::IsOutdoorItem(itemslotid) || itemslotid.ID == 0x3729) {
+				if(Game::IsOutdoorItem(itemslotid) || itemslotid.ID == 0x3729) {
 					std::string name = ItemReader::getInstance()->get(itemslotid);
-					u32 InvPointer = *(u32 *)(GameHelper::BaseInvPointer() + 0xC);
+					u32 InvPointer = *(u32 *)(Game::BaseInvPointer() + 0xC);
 					Process::Write32(InvPointer + 0xCFC, 0x000E000E);
 					Process::Write32(InvPointer + 0xD00, 0x00040000);
 					Process::Write32(InvPointer + 0xD04, 0xCD030100);
@@ -200,7 +167,7 @@ namespace CTRPluginFramework {
 	}
 
 	int CatalogPatch_Keyboard(u32 u0, u32 u1, u32 u2) {
-		if(!GameHelper::IsInRoom(0x38) && !GameHelper::IsInRoom(0x39) && !GameHelper::IsInRoom(0x3A) && !GameHelper::IsInRoom(0x3B) && !GameHelper::IsInRoom(0x3C)) {
+		if(!Game::IsGameInRoom(0x38) && !Game::IsGameInRoom(0x39) && !Game::IsGameInRoom(0x3A) && !Game::IsGameInRoom(0x3B) && !Game::IsGameInRoom(0x3C)) {
 			OSD::Notify("Search function is currently not supported!", Color::Red);
 			return 0;
 		}
@@ -211,7 +178,7 @@ namespace CTRPluginFramework {
 	} 
 //basically "forces" a B press directly for the search function to break
 	bool CatalogPatch_SearchFunction(void) {
-		if(!GameHelper::IsInRoom(0x38) && !GameHelper::IsInRoom(0x39) && !GameHelper::IsInRoom(0x3A) && !GameHelper::IsInRoom(0x3B) && !GameHelper::IsInRoom(0x3C)) 
+		if(!Game::IsGameInRoom(0x38) && !Game::IsGameInRoom(0x39) && !Game::IsGameInRoom(0x3A) && !Game::IsGameInRoom(0x3B) && !Game::IsGameInRoom(0x3C)) 
 			return 1;
 		
 		return ACSystem::IsKeyDown(GameKey::B);

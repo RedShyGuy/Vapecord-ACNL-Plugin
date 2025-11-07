@@ -17,12 +17,12 @@ namespace CTRPluginFramework {
 //Animation Wrapper	
 	bool Animation::ExecuteAnimationWrapper(u8 pIndex, u8 animID, Item animItem, u8 emotion, u16 snake, u16 sound, bool u0, u8 wX, u8 wY, bool directSend, u8 appearance[]) {	
 	//Gets actual PlayerIndex
-		u8 AIndex = GameHelper::GetActualPlayerIndex();
+		u8 AIndex = Game::GetActualPlayerIndex();
 		
 	//If PlayerIndex is not the same as yours
 		bool forced = (pIndex != AIndex) && (AIndex <= 3);
 	//This gets used if the player you want to force is not the player you selected
-		bool needOverwrite = (GameHelper::GetOnlinePlayerIndex() != pIndex);
+		bool needOverwrite = (Game::GetOnlinePlayerIndex() != pIndex);
 		
 	//Gets Player Instance
 		u32 playerInstance = PlayerClass::GetInstance(pIndex)->Offset();

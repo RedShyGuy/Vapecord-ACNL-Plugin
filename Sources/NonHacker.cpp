@@ -34,8 +34,8 @@ namespace CTRPluginFramework {
 	u32 NonHacker::GetPlayerMessageData() {
 		u8 _pID = pID;
 		//swap your index with player 0 in order to get the correct pointer
-		if(_pID == GameHelper::GetOnlinePlayerIndex()) _pID = 0;
-		else if(_pID == 0) _pID = GameHelper::GetOnlinePlayerIndex();
+		if(_pID == Game::GetOnlinePlayerIndex()) _pID = 0;
+		else if(_pID == 0) _pID = Game::GetOnlinePlayerIndex();
 		
 	    u32 PTR = *(u32 *)Address(0x94FD84).addr; //0x94FD84
 		PTR += 0x464; //33078FA0
@@ -176,7 +176,7 @@ namespace CTRPluginFramework {
 
 		if(Command == "a:") {
 			nHack->animID = StringToHex<u8>(ID_8Bit, 6); //sets animation
-			if(IDList::AnimationValid(nHack->animID)) {
+			if(IDList::AnimationValid(nHack->animID, nHack->GetPlayerIndex())) {
 				nHack->Animation();
 			}
 			else return false;

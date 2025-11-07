@@ -37,9 +37,9 @@ namespace CTRPluginFramework {
 		if(!PSelector_ON())
 			return;
 		
-		u8 pIndex = GameHelper::GetOnlinePlayerIndex();
+		u8 pIndex = Game::GetOnlinePlayerIndex();
 	//If player is not loaded or loading screen started, switch off the code
-		if(!PlayerClass::GetInstance()->IsLoaded() || !PlayerClass::GetInstance(pIndex)->IsLoaded() || GameHelper::LoadRoomBool()) 
+		if(!PlayerClass::GetInstance()->IsLoaded() || !PlayerClass::GetInstance(pIndex)->IsLoaded() || Game::LoadRoomBool()) 
 			PSelector_OFF();
 	} 
 	
@@ -120,7 +120,7 @@ namespace CTRPluginFramework {
 	void AnimChange(Keyboard& keyboard, KeyboardEvent& event) {
 		std::string& input = keyboard.GetInput();	
 		u8 ID = StringToHex<u8>(input, 0xFF);
-		if(!IDList::AnimationValid((ID & 0xFF))) {
+		if(!IDList::AnimationValid((ID & 0xFF), Game::GetOnlinePlayerIndex())) {
 			keyboard.SetError(Color::Red << Language::getInstance()->get("INVALID_ID"));
 			return;
 		}
@@ -226,32 +226,32 @@ namespace CTRPluginFramework {
 		}
 		
 		if(entry->Hotkeys[3].IsPressed()) 
-			PlayerClass::GetInstance(GameHelper::GetOnlinePlayerIndex())->GetWorldCoords(&wX, &wY);
+			PlayerClass::GetInstance(Game::GetOnlinePlayerIndex())->GetWorldCoords(&wX, &wY);
 		
 		if(speedmode ? entry->Hotkeys[3].IsDown() :entry->Hotkeys[3].IsPressed()) {//Key::A + B		
 			switch(setmode) {
 				case 0: return;
 				case 1: //Animation
-					Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), IDList::AnimationValid(a_AnimID) ? a_AnimID : 6, IDList::ItemValid(a_ItemID) ? a_ItemID : Item{0x2001, 0}, a_EmoteID, a_SnakeID, a_SoundID, 0, wX + offsetX, wY + offsetY, 0, a_AppearanceID);
+					Animation::ExecuteAnimationWrapper(Game::GetOnlinePlayerIndex(), IDList::AnimationValid(a_AnimID, Game::GetOnlinePlayerIndex()) ? a_AnimID : 6, IDList::ItemValid(a_ItemID) ? a_ItemID : Item{0x2001, 0}, a_EmoteID, a_SnakeID, a_SoundID, 0, wX + offsetX, wY + offsetY, 0, a_AppearanceID);
 				break;
 				case 2: //Tool
-					Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0x38, IDList::ItemValid(a_ItemID) ? a_ItemID : Item{0x2001, 0}, 0, 0, 0, 0, wX + offsetX, wY + offsetY, 0, a_AppearanceID);
+					Animation::ExecuteAnimationWrapper(Game::GetOnlinePlayerIndex(), 0x38, IDList::ItemValid(a_ItemID) ? a_ItemID : Item{0x2001, 0}, 0, 0, 0, 0, wX + offsetX, wY + offsetY, 0, a_AppearanceID);
 				break;
 				case 3: //Snake
-					Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0xC5, {0, 0}, 0, IDList::SnakeValid(a_SnakeID) ? a_SnakeID : 1, 0, 0, wX + offsetX, wY + offsetY, 0, 0);
+					Animation::ExecuteAnimationWrapper(Game::GetOnlinePlayerIndex(), 0xC5, {0, 0}, 0, IDList::SnakeValid(a_SnakeID) ? a_SnakeID : 1, 0, 0, wX + offsetX, wY + offsetY, 0, 0);
 				break;
 				case 4: //Emote
-					Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0xAF, {0, 0}, IDList::EmotionValid(a_EmoteID) ? a_EmoteID : 1, 0, 0, 0, wX + offsetX, wY + offsetY, 0, 0);
+					Animation::ExecuteAnimationWrapper(Game::GetOnlinePlayerIndex(), 0xAF, {0, 0}, IDList::EmotionValid(a_EmoteID) ? a_EmoteID : 1, 0, 0, 0, wX + offsetX, wY + offsetY, 0, 0);
 				break;
 				case 5: //Sound
-					Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0xC4, {0, 0}, 0, 0, IDList::MusicValid(a_SoundID) ? a_SoundID : 0x660, 0, wX + offsetX, wY + offsetY, 0, 0);
+					Animation::ExecuteAnimationWrapper(Game::GetOnlinePlayerIndex(), 0xC4, {0, 0}, 0, 0, IDList::MusicValid(a_SoundID) ? a_SoundID : 0x660, 0, wX + offsetX, wY + offsetY, 0, 0);
 					Sleep(Milliseconds(100));
-					Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0x06, {0, 0}, 0, 0, 0, 0, 0, 0, 0, 0);
+					Animation::ExecuteAnimationWrapper(Game::GetOnlinePlayerIndex(), 0x06, {0, 0}, 0, 0, 0, 0, 0, 0, 0, 0);
 				break;
 				case 6: //Appearance
-					Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0xB9, {0x2001, 0}, 0, 0, 0, 0, wX + offsetX, wY + offsetY, 0, a_AppearanceID);
+					Animation::ExecuteAnimationWrapper(Game::GetOnlinePlayerIndex(), 0xB9, {0x2001, 0}, 0, 0, 0, 0, wX + offsetX, wY + offsetY, 0, a_AppearanceID);
 					Sleep(Seconds(2));
-					Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0x06, {0, 0}, 0, 0, 0, 0, 0, 0, 0, 0);
+					Animation::ExecuteAnimationWrapper(Game::GetOnlinePlayerIndex(), 0x06, {0, 0}, 0, 0, 0, 0, 0, 0, 0, 0);
 				break;
 			}
 			
@@ -323,7 +323,7 @@ namespace CTRPluginFramework {
 				switch(setmode) {
 					case 0: return;
 					case 1: //Animation
-						Animation::ExecuteAnimationWrapper(i, IDList::AnimationValid(a_AnimID) ? a_AnimID : 0x06, IDList::ItemValid(a_ItemID) ? a_ItemID : Item{0x2001, 0}, a_EmoteID, a_SnakeID, a_SoundID, 0, wX, wY, 1, a_AppearanceID);
+						Animation::ExecuteAnimationWrapper(i, IDList::AnimationValid(a_AnimID, i) ? a_AnimID : 0x06, IDList::ItemValid(a_ItemID) ? a_ItemID : Item{0x2001, 0}, a_EmoteID, a_SnakeID, a_SoundID, 0, wX, wY, 1, a_AppearanceID);
 					break;
 					case 2: //Tool
 						Animation::ExecuteAnimationWrapper(i, 0x38, IDList::ItemValid(a_ItemID) ? a_ItemID : Item{0x2001, 0}, 0, 0, 0, 0, wX, wY, 1, a_AppearanceID);
@@ -367,7 +367,7 @@ namespace CTRPluginFramework {
 				data.Init(animInstance, playerInstance, i);
 				data.MoonJump_C4();
 				
-				if(GameHelper::GetOnlinePlayerIndex() == GameHelper::GetActualPlayerIndex()) 
+				if(Game::GetOnlinePlayerIndex() == Game::GetActualPlayerIndex()) 
 					data.ExecuteAnimation(0xC4);
 				else 
 					Animation::SendAnimPacket(i, animInstance, 0xC4, Player::GetRoom(i), i);

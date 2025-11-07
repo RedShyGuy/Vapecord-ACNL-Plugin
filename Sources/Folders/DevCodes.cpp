@@ -12,6 +12,7 @@
 #include "Helpers/GameKeyboard.hpp"
 #include "Helpers/Town.hpp"
 #include "Helpers/NPC.hpp"
+#include "Helpers/Save.hpp"
 
 #include "Color.h"
 #include "Files.h"
@@ -133,7 +134,7 @@ namespace CTRPluginFramework {
 						break;
 
 						case 0x33333333:
-							p[i] = GameHelper::GetCurrentMap();
+							p[i] = Game::GetCurrentMap();
 						break;
 					}
 				}	
@@ -2062,7 +2063,7 @@ namespace CTRPluginFramework {
 		if(Controller::IsKeysDown(Key::R)) {
 			if(random) {
 				FishID.ID = Utils::Random(0x22E1, 0x234A);
-				if(GameHelper::GetItemCategorie(FishID) != Item_Categories::Fish) 
+				if(Game::GetItemCategorie(FishID) != Item_Categories::Fish) 
 					return;
 			}
 

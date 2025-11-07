@@ -98,8 +98,8 @@ Light Switch cheats I made for fun
 		lightON.Call<void>(0, roomID);
 		SetData(true);
 
-		if(GameHelper::IsInRoom(roomID))
-			GameHelper::PlaySound(0x4F3 + IsBasement());
+		if(Game::IsGameInRoom(roomID))
+			Game::PlaySound(0x4F3 + IsBasement());
 	}
 
 	void LightSwitch::OFF(u8 roomID) {
@@ -107,8 +107,8 @@ Light Switch cheats I made for fun
 		lightOFF.Call<void>(0, roomID);
 		SetData(false);
 
-		if(GameHelper::IsInRoom(roomID))
-			GameHelper::PlaySound(0x4F5);
+		if(Game::IsGameInRoom(roomID))
+			Game::PlaySound(0x4F5);
 	}
 
 	bool LightSwitch::IsON(u8 roomID) {

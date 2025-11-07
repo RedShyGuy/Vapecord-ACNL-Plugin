@@ -24,20 +24,20 @@ loads specific player
 		
 	//This will port the player to his home
 		static Address pReload(0x5B66FC);
-		pReload.Call<void>(GameHelper::GetRoomData(), pIndex, 1, 0);
+		pReload.Call<void>(Game::GetRoomData(), pIndex, 1, 0);
 	}
 
 /*
 reload design
 */
 	void Player::ReloadDesign(int slot) {
-		if(GameHelper::BaseInvPointer() == 0) 
+		if(Game::BaseInvPointer() == 0) 
 			return;
 		
 		if(Inventory::GetCurrent() != 1)
 			return;
 		
-		u32 InvData = *(u32 *)(GameHelper::BaseInvPointer() + 0xC);
+		u32 InvData = *(u32 *)(Game::BaseInvPointer() + 0xC);
 		u32 Data1 = InvData + (slot * 0x290);
 		u32 Data2 = Data1 + 0x6BC;
 		
@@ -247,6 +247,10 @@ get room
 		static Address getroom(0x5C3DDC); 
 		u32 var = getroom.Call<u32>(PlayerIndex);
 		return var == 0 ? 0xFF : *(u8 *)var;
+	}
+
+	bool Player::IsInRoom(u8 room, u8 playerIndex) {
+		return Player::GetRoom(playerIndex) == room;
 	}
 
 	ACNL_Player *Player::GetSaveData(u8 PlayerIndex) {

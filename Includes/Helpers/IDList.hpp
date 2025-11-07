@@ -103,7 +103,7 @@ namespace CTRPluginFramework {
 		bool						ToolsValid(Item toolsID);
 		bool 						ItemValid(Item itemID, bool IsDropped = true);
 		bool 						MusicValid(u16 musicID);
-		bool 						AnimationValid(u8 animID);
+		bool 						AnimationValid(u8 animID, u8 playerIndex = 4);
 		bool 						SnakeValid(u16 snakeID);
 		bool 						EmotionValid(u8 emotionID);
 		std::string  				SetCountryName(u8 country);

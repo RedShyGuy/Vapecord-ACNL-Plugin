@@ -237,7 +237,7 @@ namespace CTRPluginFramework {
 			for(s8 j = -size; j <= size; ++j) {
 				particleCoords[0] = (selectedX + j) * 0x20 + 0x10;
 				particleCoords[2] = (selectedY + i) * 0x20 + 0x10;
-				GameHelper::Particles(0x20C, particleCoords);
+				Game::Particles(0x20C, particleCoords);
 				//0x20C = Orange Light
 				//0x214 = Blue Light
 			}
@@ -365,7 +365,7 @@ namespace CTRPluginFramework {
 			}
 			
 			if(turbo ? entry->Hotkeys[9].IsDown() : entry->Hotkeys[9].IsPressed()) {//Key::A
-				Item *pItem = GameHelper::GetItemAtWorldCoords(selectedX, selectedY);
+				Item *pItem = Game::GetItemAtWorldCoords(selectedX, selectedY);
 				
 				if(!pItem) 
 					return;
@@ -375,7 +375,7 @@ namespace CTRPluginFramework {
 						if(!removal) 
 							Dropper::PlaceItemWrapper(DropType, ItemIDToReplace, &dropitem, &dropitem, (selectedX + j), (selectedY + i), 0, 0, 0, 0, 0, waitAnim, 0xA5);
 						else 
-							GameHelper::TrampleAt((selectedX + j), (selectedY + i)); 
+							Game::TrampleAt((selectedX + j), (selectedY + i)); 
 					}
 				}
 			}

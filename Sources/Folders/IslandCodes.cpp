@@ -160,7 +160,7 @@ namespace CTRPluginFramework {
 		if(*(u32 *)IslandShopPointer.addr == 0)
 			return;
 		
-		if(GameHelper::NextRoomCheck() == 0xA5 && GameHelper::RoomCheck() == 0x65) {
+		if(Game::NextRoomCheck() == 0xA5 && Game::IsGameInRoom(0x65)) {
 			for(int i = 0; i < 4; ++i) {
 				Process::Write32(*(u32 *)IslandShopPointer.addr + 0x10 + (i * 4), IDList::ItemValid(ShopItem[i], false) ? *(u32 *)&ShopItem[i] : 0x2018);
 			}
@@ -279,9 +279,9 @@ namespace CTRPluginFramework {
 		bool res = true;
 		while(res) {
 			while(res) {
-				if(GameHelper::GetItemAtWorldCoords(x, y)) {
+				if(Game::GetItemAtWorldCoords(x, y)) {
 					nextItem++;
-					if(*GameHelper::GetItemAtWorldCoords(x, y) != fileData[nextItem])
+					if(*Game::GetItemAtWorldCoords(x, y) != fileData[nextItem])
 						if(Dropper::PlaceItemWrapper(1, ReplaceEverything, &fileData[nextItem], &fileData[nextItem], x, y, 0, 0, 0, 0, 0, 0x3D, 0xA5, false)) {
 							count++;
 							if(count % 300 == 0)
@@ -297,7 +297,7 @@ namespace CTRPluginFramework {
 			
 			y = 0x10;
 			x++;
-			if(!GameHelper::GetItemAtWorldCoords(x, y))
+			if(!Game::GetItemAtWorldCoords(x, y))
 				res = false;
 		}
 		
@@ -317,7 +317,7 @@ namespace CTRPluginFramework {
 				MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 				return;
 			}
-			if(!GameHelper::IsInRoom(0x68)) {
+			if(!Game::IsGameInRoom(0x68)) {
 				MessageBox(Language::getInstance()->get("ISLAND_SAVER_NO")).SetClear(ClearScreen::Top)();
 				return;
 			}
@@ -331,7 +331,7 @@ namespace CTRPluginFramework {
 			
 					for (u32 x = 0x10; x <= 0x2F; x++)
 						for (u32 y = 0x10; y <= 0x2F; y++) {
-							Item* atCoords = GameHelper::GetItemAtWorldCoords(x, y);
+							Item* atCoords = Game::GetItemAtWorldCoords(x, y);
 							dumpVec.push_back((atCoords->Flags * 0x10000) ^ atCoords->ID);
 						}
 						

@@ -77,7 +77,7 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 		bool res = true;
 		while(res) {
 			while(res) {
-				if(GameHelper::GetItemAtWorldCoords(x, y)) {
+				if(Game::GetItemAtWorldCoords(x, y)) {
 					for(int i = 0; i < ItemToSearch.size(); i++) {
 						if(Dropper::PlaceItemWrapper(1, ItemToSearch[i], &ItemToPlace, &ItemToPlace, x, y, 0, 0, 0, 0, 0, AnimID, 0xA5, ItemSequenceUsage)) {
 							count++;
@@ -95,7 +95,7 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 			
 			y = 0x10;
 			x++;
-			if(!GameHelper::GetItemAtWorldCoords(x, y)) 
+			if(!Game::GetItemAtWorldCoords(x, y)) 
 				res = false;
 		}		
 		
@@ -169,17 +169,17 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 		Item *actualItemToShow = (ItemSequence::Enabled() && itemsequenceallowed) ? actualItemToPlace : ItemToShow;
 
 	//gets current player index -> player you selected
-		u8 currentIndex = GameHelper::GetOnlinePlayerIndex();
+		u8 currentIndex = Game::GetOnlinePlayerIndex();
 		
 	//checks if the drop is forced on someone else
-		bool forced = (currentIndex != GameHelper::GetActualPlayerIndex()) && (GameHelper::GetActualPlayerIndex() <= 3);
+		bool forced = (currentIndex != Game::GetActualPlayerIndex()) && (Game::GetActualPlayerIndex() <= 3);
 		
 	//not too sure when it is not 0xFFFFFFFF but if it is return
-		if(GameHelper::GetLockedSpotIndex(worldx, worldy, roomID) != 0xFFFFFFFF) 
+		if(Game::GetLockedSpotIndex(worldx, worldy, roomID) != 0xFFFFFFFF) 
 			return 0;
 		
 	//checks if item at coords is not 0 -> if place is valid to drop
-		Item *pItemAtCoords = GameHelper::GetItemAtWorldCoords(worldx, worldy);
+		Item *pItemAtCoords = Game::GetItemAtWorldCoords(worldx, worldy);
 		if(!pItemAtCoords) 
 			return 0;
 
@@ -272,11 +272,11 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 			}
 			
 		//if selected index is the same as your player
-			if(currentIndex == GameHelper::GetActualPlayerIndex()) 
+			if(currentIndex == Game::GetActualPlayerIndex()) 
 				data.ExecuteAnimation(autoWaitAnim);
 		//if not aka another player
 			else 
-				Animation::SendAnimPacket(GameHelper::GetActualPlayerIndex(), animInstance, autoWaitAnim, roomID == 0xA5 ? Player::GetRoom(currentIndex) : roomID, currentIndex);	
+				Animation::SendAnimPacket(Game::GetActualPlayerIndex(), animInstance, autoWaitAnim, roomID == 0xA5 ? Player::GetRoom(currentIndex) : roomID, currentIndex);	
 			
 		//sleep if noWait is turned off
 			if(!noWait) {

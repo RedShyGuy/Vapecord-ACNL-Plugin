@@ -64,7 +64,7 @@ namespace CTRPluginFramework {
 			Process::Patch(dever4.addr, 0xEA000010); //on other players
 		}
 		else if(!entry->IsActivated()) {
-			u32 instruction = Wrap::CalculateBranchInstruction(dever1.addr, 0x767028);
+			u32 instruction = Wrap::CalculateBranchInstruction(dever1.addr, dever5.addr);
 			Process::Patch(dever1.addr, 0xEB000000 + instruction);
 			Process::Patch(dever2.addr, 0x1A000005);
 			Process::Patch(dever3.addr, 0x0A000005);

@@ -131,7 +131,7 @@ namespace CTRPluginFramework {
 	}
 
     void SendPlayerData/*0x1B6C28*/(Time time) { //needs to be set into OnNewFrame callback
-		if(GameHelper::GetOnlinePlayerCount() <= 1 || PluginMenu::GetRunningInstance() == nullptr)
+		if(Game::GetOnlinePlayerCount() <= 1 || PluginMenu::GetRunningInstance() == nullptr)
 			return;
 
 		static Address sendData1(0x617D20);

@@ -102,7 +102,7 @@ namespace CTRPluginFramework {
 		bool IsON;
 		
 		for(int i = 0; i < 4; ++i) { 
-			IsON = GameHelper::GetGameType() == i;
+			IsON = Game::GetGameType() == i;
 			gametype[i] = (IsON ? Color(pGreen) : Color(pRed)) << gametype[i];
 		}
 		
@@ -112,7 +112,7 @@ namespace CTRPluginFramework {
         if(gametchoice < 0)	
 			return;
 	
-		GameHelper::ChangeGameType(gametchoice);
+		Game::ChangeGameType(gametchoice);
 		mgtype(entry);
     }
 //Unbreakable Flowers	
@@ -192,7 +192,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 
-		GameHelper::ReloadRoom();
+		Game::ReloadRoom();
 	}
 
 	std::vector<std::string> cogNotes;
@@ -237,7 +237,7 @@ namespace CTRPluginFramework {
 		
 		Process::WriteFloat(Address(0x47E48C).addr, OnOff); 
 		
-		if(GameHelper::RoomCheck() == 1 || fovbool) 
+		if(Game::GetRoom() == 1 || fovbool) 
 			OnOff = 1.0; 
 		else 
 			OnOff = 0.75; 
@@ -290,7 +290,7 @@ namespace CTRPluginFramework {
 		if(Inventory::GetCurrent() == 4) 
 			return;
 		
-		u32 KeyData = *(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x1328;
+		u32 KeyData = *(u32 *)(Game::BaseInvPointer() + 0xC) + 0x1328;
 		static const Address KeyEnter(0xAD7253);
 		static const Address KeyAt(0xAD75C0);
 	
@@ -399,7 +399,7 @@ namespace CTRPluginFramework {
 //Fast Game Speed	
 	void speedentry(MenuEntry *entry) {
 		static const Address speed(0x54DDB4);
-		Process::Patch(speed.addr, GameHelper::GameSaving() ? 0xE59400A0 : 0xE3E004FF);
+		Process::Patch(speed.addr, Game::GameSaving() ? 0xE59400A0 : 0xE3E004FF);
 		
 		if(!entry->IsActivated())
 			Process::Patch(speed.addr, 0xE59400A0);
@@ -409,9 +409,9 @@ namespace CTRPluginFramework {
 		static const Address speed(0x54DDB4);
 		static const Address fastt(0x5FC6AC);
 
-		u8 roomID = GameHelper::RoomCheck();
+		u8 roomID = Game::GetRoom();
 		if (roomID == 0x63 && entry->IsActivated()) { // Isabelle
-			Process::Patch(speed.addr, GameHelper::GameSaving() ? 0xE59400A0 : 0xE3E004FF);
+			Process::Patch(speed.addr, Game::GameSaving() ? 0xE59400A0 : 0xE3E004FF);
 			
 			Process::Patch(fastt.addr, 0xEA000000);
 			Process::Patch(fastt.addr + 8, 0xE3500001);

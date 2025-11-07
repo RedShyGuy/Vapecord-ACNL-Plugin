@@ -18,9 +18,9 @@ Custom Buttons
 		ACNL_Player *player = Player::GetSaveData();
 		player->InventoryItemLocks[slot] = 1;
 	//Loads Item Icon | present icon
-		Address(0x26DC00).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x1EC0, slot);
+		Address(0x26DC00).Call<void>(*(u32 *)(Game::BaseInvPointer() + 0xC) + 0x1EC0, slot);
 
-		Address(0x19B380).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		Address(0x19B380).Call<void>(*(u32 *)(Game::BaseInvPointer() + 0xC));
 	}
 
 	void CustomButton::DuplicateItem(u32 ItemData) {
@@ -31,7 +31,7 @@ Custom Buttons
 		
 		Inventory::WriteSlot((slot == 0xF) ? 0 : (slot + 1), itemslotid);
 		
-		Address(0x19B380).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		Address(0x19B380).Call<void>(*(u32 *)(Game::BaseInvPointer() + 0xC));
 	}
 	
 	void CustomButton::PutItemToStorage(u32 ItemData) {
@@ -48,7 +48,7 @@ Custom Buttons
 			player->Dressers[closetslot] = (Item)itemslotid;
 		}
 
-		Address(0x19B380).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		Address(0x19B380).Call<void>(*(u32 *)(Game::BaseInvPointer() + 0xC));
 	}
 	
 	void CustomButton::PayDebt(u32 ItemData) {	
@@ -66,28 +66,28 @@ Custom Buttons
 			if(IDList::ValidID(itemslotid.ID, 0x20AC, 0x2117)) { 
 				int money = GetMoneyFunc.Call<int>(&player->Inventory[slot]);
 					
-				int debt = GameHelper::DecryptValue(&player->DebtAmount);
+				int debt = Game::DecryptValue(&player->DebtAmount);
 			//if you try to store more money than you need to, the rest will be set to your bank acc
 				if(money >= debt) {
 					int diff = std::abs(money - debt);
 					
-					int bank = GameHelper::DecryptValue(&player->BankAmount);
+					int bank = Game::DecryptValue(&player->BankAmount);
 				//if money that goes to the bank will not fill it it up completely	
 					if((bank + diff) <= 999999999) {
-						GameHelper::EncryptValue(&player->BankAmount, bank + diff);
+						Game::EncryptValue(&player->BankAmount, bank + diff);
 					}
 				//If bank is not full but still can hold bells fill it up
 					else {
 						if(bank != 999999999) {
 							diff = 999999999 - diff;
-							GameHelper::EncryptValue(&player->BankAmount, diff);
+							Game::EncryptValue(&player->BankAmount, diff);
 						}
 					}
 					
 					money = debt; //make money the exact debt
 				}
 
-				GameHelper::EncryptValue(&player->DebtAmount, debt - money);
+				Game::EncryptValue(&player->DebtAmount, debt - money);
 
 				while(itemslotid.ID > 0x20AC) {
 					CallSound.Call<void>(0x1000491);
@@ -95,13 +95,13 @@ Custom Buttons
 					Inventory::WriteSlot(slot, itemslotid);		
 				}
 
-				GameHelper::PlaySound(0x492);
+				Game::PlaySound(0x492);
 
 				Inventory::WriteSlot(slot, {0x7FFE, 0});
 			}
 		}
 
-		Address(0x19B380).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		Address(0x19B380).Call<void>(*(u32 *)(Game::BaseInvPointer() + 0xC));
 	}
 	
 	void CustomButton::RandomOutfit(u32 ItemData) {
@@ -112,7 +112,7 @@ Custom Buttons
 							   (Item)Utils::Random(0x2777, 0x279E), 
 							   (Item)Utils::Random(0x279F, 0x27E5));
 		
-		Address(0x19D2A0).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		Address(0x19D2A0).Call<void>(*(u32 *)(Game::BaseInvPointer() + 0xC));
 	}
 
 	/*void claim(void) {
@@ -336,9 +336,9 @@ Custom Buttons
 		Inventory::ReadSlot(slot, itemslotid);
 		Inventory::WriteSlot(slot, itemslotid, 0);
 
-		GameHelper::PlaySound(0x407);
+		Game::PlaySound(0x407);
 
-		Address(0x19B380).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC));
+		Address(0x19B380).Call<void>(*(u32 *)(Game::BaseInvPointer() + 0xC));
 	}
 
 	void InitCustomPresentOpeningFunction() {

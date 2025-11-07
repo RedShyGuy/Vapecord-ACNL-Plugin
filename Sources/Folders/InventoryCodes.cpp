@@ -112,7 +112,7 @@ namespace CTRPluginFramework {
 
 			u32 x, y;
 			if(PlayerClass::GetInstance()->GetWorldCoords(&x, &y)) {
-				Item *item = GameHelper::GetItemAtWorldCoords(x, y);
+				Item *item = Game::GetItemAtWorldCoords(x, y);
 				if(item) {
 					Inventory::WriteSlot(0, *item);
 					OSD::Notify(Utils::Format("Item ID: %08X", *(u32 *)item));
@@ -154,7 +154,7 @@ namespace CTRPluginFramework {
 	void CatalogGetItem(u32 invData) {
 		Item CurrentItem = *(Item *)(invData + 0x3B9C - 0x28);
 
-		if(GameHelper::SetItem(&CurrentItem)) {
+		if(Game::SetItem(&CurrentItem)) {
 			std::string itemName = ItemReader::getInstance()->get(CurrentItem);
 			OSD::Notify(Utils::Format("Spawned Item: %s (%04X)", itemName.c_str(), CurrentItem.ID));
 		}
@@ -191,8 +191,8 @@ namespace CTRPluginFramework {
 			}
 			
 		//if no menu is opened 
-			if(GameHelper::BaseInvPointer() == 0) {	
-				GameHelper::Catalog();
+			if(Game::BaseInvPointer() == 0) {	
+				Game::Catalog();
 				return;
 			}	
 		}
@@ -338,7 +338,7 @@ namespace CTRPluginFramework {
 	}
 
 	void Hook_MenuPatch(void) {
-		GameHelper::OpenMenu(CurrentMenu);
+		Game::OpenMenu(CurrentMenu);
 		PluginMenu *menu = PluginMenu::GetRunningInstance();
 		*menu += Callback_MenuPatch;
 	}

@@ -95,20 +95,20 @@ namespace CTRPluginFramework {
 		switch(KB.Open()) {
 			default: break;
 			case 0: {
-				if(GameHelper::CreateLockedSpot(0x12, x, y, GameHelper::RoomCheck(), true) == 0xFFFFFFFF) 
+				if(Game::CreateLockedSpot(0x12, x, y, Game::GetRoom(), true) == 0xFFFFFFFF) 
 					OSD::Notify("Error: Too many locked spots are already existing!");			
 				else 
 					OSD::Notify("Locked Spot");
 			} break;
 
 			case 1: {
-				GameHelper::ClearLockedSpot(x, y, GameHelper::RoomCheck(), 4);
+				Game::ClearLockedSpot(x, y, Game::GetRoom(), 4);
 				OSD::Notify("Unlocked Spot");
 			} break;
 
 			case 2: {
 				x = 0, y = 0;
-				while(GameHelper::CreateLockedSpot(0x12, 0x10 + x, 0x10 + y, GameHelper::RoomCheck(), true) != 0xFFFFFFFF) {
+				while(Game::CreateLockedSpot(0x12, 0x10 + x, 0x10 + y, Game::GetRoom(), true) != 0xFFFFFFFF) {
 					x++;
 					if(x % 6 == 2) { 
 						y++; 
@@ -126,9 +126,9 @@ namespace CTRPluginFramework {
 
 				while(res) {
 					while(res) {
-						if(GameHelper::GetItemAtWorldCoords(x, y)) {
-							if(GameHelper::GetLockedSpotIndex(x, y, GameHelper::RoomCheck()) != 0xFFFFFFFF) {
-								GameHelper::ClearLockedSpot(x, y, GameHelper::RoomCheck(), 4);
+						if(Game::GetItemAtWorldCoords(x, y)) {
+							if(Game::GetLockedSpotIndex(x, y, Game::GetRoom()) != 0xFFFFFFFF) {
+								Game::ClearLockedSpot(x, y, Game::GetRoom(), 4);
 								Sleep(Milliseconds(40));
 							}
 						}
@@ -140,7 +140,7 @@ namespace CTRPluginFramework {
 					res = true;
 					y = 0x10;
 					x++;
-					if(!GameHelper::GetItemAtWorldCoords(x, y)) 
+					if(!Game::GetItemAtWorldCoords(x, y)) 
 						res = false;
 				}
 				OSD::Notify("Unlocked Map");
@@ -194,7 +194,7 @@ namespace CTRPluginFramework {
 		}
 
 		if((MessageBox(Language::getInstance()->get("REMOVE_ITEM_WARNING"), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
-			GameHelper::RemoveItems(true, 0, 0, 0xFF, 0xFF, true, true);
+			Game::RemoveItems(true, 0, 0, 0xFF, 0xFF, true, true);
 		}
 	}
 
@@ -206,8 +206,8 @@ namespace CTRPluginFramework {
 			
 			while(res) {
 				while(res) {
-					if(GameHelper::GetItemAtWorldCoords(x, y)) 
-						GameHelper::WaterFlower(x, y);
+					if(Game::GetItemAtWorldCoords(x, y)) 
+						Game::WaterFlower(x, y);
 					else 
 						res = false;
 
@@ -217,7 +217,7 @@ namespace CTRPluginFramework {
 				res = true;
 				y = 0x10;
 				x++;
-				if(!GameHelper::GetItemAtWorldCoords(x, y)) 
+				if(!Game::GetItemAtWorldCoords(x, y)) 
 					res = false;
 			}
 			OSD::Notify("Success!");
@@ -270,7 +270,7 @@ namespace CTRPluginFramework {
 /*Calculations copied from the ACNL Web Save Editor, credits goes to the creator*/
 	u32 GetTileOffset(int x, int y) {
 		const int Add = 64 * ((y / 8) * 8 * 2 + (x / 8)) + _GrassTile[(y % 8) * 8 + (x % 8)];
-		const u32 GrassStart = *(u32 *)(GameHelper::GetCurrentMap() + 0x28);
+		const u32 GrassStart = *(u32 *)(Game::GetCurrentMap() + 0x28);
 		return (GrassStart + Add);
 	}
 	
@@ -280,12 +280,12 @@ namespace CTRPluginFramework {
 			Language::getInstance()->get("GRASS_EDITOR_CLEAR")
 		};
 		
-		if(!GameHelper::IsInRoom(0)) {
+		if(!Game::IsGameInRoom(0)) {
 			MessageBox(Color::Red << Language::getInstance()->get("ONLY_TOWN_ERROR")).SetClear(ClearScreen::Top)();
 			return;
 		}
 		
-		const u32 GrassStart = *(u32 *)(GameHelper::GetCurrentMap() + 0x28);
+		const u32 GrassStart = *(u32 *)(Game::GetCurrentMap() + 0x28);
 		Keyboard KB(Language::getInstance()->get("GRASS_EDITOR_KB1") << "\n" << Color(0x228B22FF) << 
 					Language::getInstance()->get("GRASS_EDITOR_KB2")  << "\n" << Color(0xCD853FFF) << 
 					Language::getInstance()->get("GRASS_EDITOR_KB3"), GrassKB);
@@ -293,11 +293,11 @@ namespace CTRPluginFramework {
 		switch(KB.Open()) {
 			case 0:
 				std::memset((void *)GrassStart, -1, 0x2800);
-				GameHelper::ReloadRoom();
+				Game::ReloadRoom();
 			break;
 			case 1:
 				std::memset((void *)GrassStart, 0, 0x2800);
-				GameHelper::ReloadRoom();
+				Game::ReloadRoom();
 			break;
 			default: break;
 		}
@@ -309,7 +309,7 @@ namespace CTRPluginFramework {
 		static u8 type = 0;
 
 		if(entry->Hotkeys[0].IsPressed()) {
-			if(!GameHelper::IsInRoom(0)) {
+			if(!Game::IsGameInRoom(0)) {
 				OSD::Notify("Error: Only Works In Town!", Color::Red);
 				return;
 			}
@@ -322,7 +322,7 @@ namespace CTRPluginFramework {
 		}
 		
 		else if(entry->Hotkeys[1].IsPressed()) 
-			GameHelper::ReloadRoom();
+			Game::ReloadRoom();
 		
 		else if(entry->Hotkeys[2].IsPressed()) {
 			switch(opt) {
@@ -393,7 +393,7 @@ namespace CTRPluginFramework {
 				return;
 		}
 		
-		GameHelper::SetCurrentTime(ch, timedat[0], timedat[1], timedat[2], timedat[3], timedat[4]);
+		Game::SetCurrentTime(ch, timedat[0], timedat[1], timedat[2], timedat[3], timedat[4]);
 	}
 	
 	void TimeTravel(MenuEntry *entry) {
@@ -403,13 +403,13 @@ namespace CTRPluginFramework {
 		if(entry->Hotkeys[0].IsDown() || entry->Hotkeys[0].IsPressed()) {
 			PressedTicks++;
 			if((PressedTicks < 50 ? (PressedTicks % 8) == 1 : (PressedTicks % 3) == 1) || PressedTicks > 100) 
-				GameHelper::SetCurrentTime(true, minute, 0, 0, 0, 0);
+				Game::SetCurrentTime(true, minute, 0, 0, 0, 0);
 		}
 		
 		else if(entry->Hotkeys[1].IsDown() || entry->Hotkeys[1].IsPressed()) {
 			PressedTicks++;
 			if((PressedTicks < 50 ? (PressedTicks % 8) == 1 : (PressedTicks % 3) == 1) || PressedTicks > 100) 
-				GameHelper::SetCurrentTime(false, minute, 0, 0, 0, 0);
+				Game::SetCurrentTime(false, minute, 0, 0, 0, 0);
 		}
 	//somehow doesnt work always?
 		else if(Controller::IsKeysReleased(entry->Hotkeys[0].GetKeys()) || Controller::IsKeysReleased(entry->Hotkeys[1].GetKeys())) 
@@ -426,7 +426,7 @@ namespace CTRPluginFramework {
 	}
 
 	Item* PickBuriedItems(u32 pInstance, u8 wX, u8 wY) {
-		Item* item = GameHelper::GetItemAtWorldCoords(wX, wY);
+		Item* item = Game::GetItemAtWorldCoords(wX, wY);
 		if((item->Flags >> 12) == 8)
 			item->Flags &= 0x0FFF;
 

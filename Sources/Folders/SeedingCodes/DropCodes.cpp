@@ -238,7 +238,7 @@ namespace CTRPluginFramework {
 		if(entry->Hotkeys[3].IsPressed()) 
 			ItemSequence::OpenIS();
 
-		if(GameHelper::GetActualPlayerIndex() == 0) 
+		if(Game::GetActualPlayerIndex() == 0) 
 			Process::Patch(Address(0x30B83C).addr, 0x13A00001);
 		else 
 			Process::Patch(Address(0x30B83C).addr, 0x13A00000);
@@ -263,7 +263,7 @@ namespace CTRPluginFramework {
 		
 		if(turbo ? entry->Hotkeys[1].IsDown() : entry->Hotkeys[1].IsPressed()) {//Key::L + Key::DPadDown
 			u32 wX, wY, u0;
-			if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !GameHelper::GameSaving()) 
+			if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !Game::GameSaving()) 
 				Dropper::PlaceItemWrapper(DropType, ItemIDToReplace, &dropitem, &dropitem, wX, wY, 0, 0, 0, 0, 0, waitAnim, 0xA5);
 		}
 	}
@@ -283,7 +283,7 @@ namespace CTRPluginFramework {
 		}
 		
 		if(enabled) {
-			if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !GameHelper::GameSaving()) 
+			if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !Game::GameSaving()) 
 				Dropper::PlaceItemWrapper(DropType, ItemIDToReplace, &dropitem, &dropitem, wX, wY, 0, 0, 0, 0, 0, waitAnim, 0xA5);
 		}
 	}
@@ -292,10 +292,10 @@ namespace CTRPluginFramework {
 		if(entry->Hotkeys[0].IsPressed()) 
 			Wrap::KB<u32>(Language::getInstance()->get("ENTER_ID"), true, 8, *(u32 *)&dropitem, *(u32 *)&dropitem, ItemChange);
 		
-		if((turbo ? Touch::IsDown() : Controller::IsKeyPressed(Key::Touchpad)) && GameHelper::MapBoolCheck() == 1) {
+		if((turbo ? Touch::IsDown() : Controller::IsKeyPressed(Key::Touchpad)) && Game::MapBoolCheck() == 1) {
 			UIntVector pos = Touch::GetPosition();
 			u32 worldx, worldy; 
-			switch(GameHelper::RoomCheck()) {
+			switch(Game::GetRoom()) {
 				default: return;
 				case 0:
 					if(pos.x >= 68 && pos.y >= 50 && pos.x <= 245 && pos.y <= 192) {
@@ -334,18 +334,18 @@ namespace CTRPluginFramework {
 		if(Inventory::GetSelectedSlot(slot)) {
 			Inventory::ReadSlot(slot, dropitemid);
 			if(IDList::ValidID(*(u16 *)&dropitemid, 0x295B, 0x292F)) 
-				GameHelper::ToOutdoorFlowers(dropitemid);
+				Game::ToOutdoorFlowers(dropitemid);
 
 		//Auto Drop
 			u32 wX, wY, u0;
 			if(enabled) {
-				if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !GameHelper::GameSaving()) 
+				if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !Game::GameSaving()) 
 					Dropper::PlaceItemWrapper(DropType, ItemIDToReplace, &dropitemid, &dropitemid, wX, wY, 0, 0, 0, 0, 0, waitAnim, 0xA5);
 			}
 			
 		//Single Drop
 			if(turbo ? entry->Hotkeys[1].IsDown() : entry->Hotkeys[1].IsPressed()) {
-				if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !GameHelper::GameSaving()) 
+				if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !Game::GameSaving()) 
 					Dropper::PlaceItemWrapper(DropType, ItemIDToReplace, &dropitemid, &dropitemid, wX, wY, 0, 0, 0, 0, 0, waitAnim, 0xA5);
 			}
 		}	

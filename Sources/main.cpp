@@ -1,37 +1,36 @@
-#include "Helpers/Game.hpp"
 #include "Config.hpp"
 #include "Files.h"
-#include "Helpers/Inventory.hpp"
 #include "Helpers/Wrapper.hpp"
-#include "NonHacker.hpp"
 #include "Address/Address.hpp"
-#include "cheats.hpp"
 #include "Helpers/ItemReader.hpp"
 #include "Helpers/ItemSequence.hpp"
+#include "Helpers/Game.hpp"
+#include "cheats.hpp"
 
 namespace CTRPluginFramework {
-	static const std::string Note = "Creator: Lukas \n\n"
-									"Code Credits: Nico, Jay, Levi, Slattz, Kominost, Elominator and more \n\n"
-									"Translators: みるえもん & みなと(Japanese), im a book(spanish), Fedecrash02(italian), Youssef, Arisa, & Lenoch(french), bkfirmen & Toby(german), Soopoolleaf(korean) \n\n"
-									"" << Utils::Format("Discord: %s", DISCORDINV);
+	static const std::string NOTE =
+        std::string(
+			R"(Creator: Kwadukathole (Lukas)
+
+			Code Credits: Nico, Jay, Levi, Slattz, Kominost, Elominator and more
+
+			Translators: みるえもん & みなと(Japanese), im a book(spanish), Fedecrash02(italian), Youssef, Arisa, & Lenoch(french), bkfirmen & Toby(german), Soopoolleaf(korean)
+		)") + Utils::Format("Discord: %s", DISCORDINV);
 
 	extern int UI_Pos;
 	bool OSD_SplashScreen(const Screen &Splash);
 	void IndoorsSeedItemCheck(void);
 	void InitMenu(PluginMenu *menu);
 
-/*
-Will set a counter at the start of the plugin as long as the title screen didn't load to
-prevent any issues with freezing of the plugin
-*/
 	void SleepTime(void) {
 		OSD::Run(OSD_SplashScreen);
 
-		while(GameHelper::LoadRoomBool()) {
-			if(UI_Pos >= 7) UI_Pos = 0;
-			else UI_Pos++;
+		constexpr int tick_ms  = 150;
+		constexpr int ui_cycle = 8;
 
-			Sleep(Milliseconds(150));
+		while(!Game::IsGameInRoom(0x63)) {
+			UI_Pos = (UI_Pos + 1) % ui_cycle;
+			Sleep(Milliseconds(tick_ms));
 		}
 
 		OSD::Stop(OSD_SplashScreen);
@@ -42,7 +41,7 @@ prevent any issues with freezing of the plugin
 	int	main(void) {
 		std::string region = Address::LoadRegion();
 
-		PluginMenu *menu = new PluginMenu(Color::White << "ACNL Vapecord Plugin " << region, majorV, minorV, revisV, Note);
+		PluginMenu *menu = new PluginMenu(Color::White << "ACNL Vapecord Plugin " << region, majorV, minorV, revisV, NOTE);
 		menu->SynchronizeWithFrame(true);
 
 		CheckForLanguageFile();

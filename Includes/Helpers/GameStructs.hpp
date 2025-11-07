@@ -1806,7 +1806,9 @@ namespace CTRPluginFramework {
         PersonalID UnknownPID2[3];
         u8 Unknown78[0x96];
         Item UnkItems10[3];
+
         u8 Unknown79[0x184]; //0x6FD32 //start of unknown
+
         u8 IslandGrassType; //[0-2]; 0: Triangle | 1: Circle | 2: Square;
         u8 Padding7;
         u16 IslandAcres[4*4]; //0x6FEB8; 16 acres in total; 4 colunms, 4 rows. Game reads Acre IDs as u16;
@@ -1824,13 +1826,25 @@ namespace CTRPluginFramework {
 
         //0x7A778 player secret storage
 
-        //u8 unknown[0xA00];
+        u8 unknown[0xF600];
     };
 
-    /*struct Garden_Plus {
-        //SecureValueHeader SecureValue;
-        //ACNL_SaveHeader Header;
-        u8 Header[0xA0];
+    struct SecureValueHeader {
+        u64 SecureValue; //0x0 //Unused in ACNL WA
+        u32 SaveInitalised; //Has to be exactly 1
+        u8 HeaderPadding[0x74]; //Always 0
+    };
+
+    struct ACNL_SaveHeader {
+        u32 HeaderChecksum; //0x80 Checksum of the next 0x1C of header data
+        u16 SaveVerifier1; //Always 0x009E; 0x00F8 pre-WA
+        u8 SaveVerifier2; //Has to be exactly 0x2; 0x2 pre-WA
+        u8 HeaderPadding[0x19]; //Always 0
+    };
+
+    struct Garden_Plus {
+        SecureValueHeader SecureValue;
+        ACNL_SaveHeader Header;
         ACNL_Player Player1;
         ACNL_Player Player2;
         ACNL_Player Player3;
@@ -1841,7 +1855,7 @@ namespace CTRPluginFramework {
         ACNL_UnknownData UnkData; //WA exclusive
         ACNL_TownData TownData;
         u8 padding;
-    };*/
+    };
 }
 
 #pragma pack(pop)

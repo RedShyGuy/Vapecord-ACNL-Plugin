@@ -17,7 +17,7 @@ namespace CTRPluginFramework {
 		ACNL_BuildingData 	*GetSaveData();
 	}
 
-	namespace GameHelper {
+	namespace Game {
 		ACNL_Date 			GetCurrentDate(void);
 		void				PlaySound(u16 soundID);
 	//save files
@@ -64,8 +64,8 @@ namespace CTRPluginFramework {
 		void				Particles(u32 particleID, float *floats);
 		void				TrampleAt(u8 wX, u8 wY);
 
-		bool				IsInRoom(u8 room);
-		u8					RoomCheck();
+		bool				IsGameInRoom(u8 room);
+		u8					GetRoom();
 		u8					NextRoomCheck();
 		bool				MapBoolCheck();
 		bool				LoadRoomBool();

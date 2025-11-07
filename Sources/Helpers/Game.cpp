@@ -11,7 +11,7 @@
 namespace CTRPluginFramework {
 	Keyboard optKb("");
 
-	ACNL_Date GameHelper::GetCurrentDate(void) {
+	ACNL_Date Game::GetCurrentDate(void) {
 		static Address getDateData(0x2FB394);
 		static Address convertToDate(0x30F6DC);
 
@@ -26,22 +26,22 @@ namespace CTRPluginFramework {
 		return (ACNL_BuildingData *)addr;
 	}
 
-	Item_Categories GameHelper::GetItemCategorie(Item itemID) {
+	Item_Categories Game::GetItemCategorie(Item itemID) {
 		static Address getCategorie(0x2FCBC4);
 		return getCategorie.Call<Item_Categories>(&itemID);
 	}
 
-	void GameHelper::PlaySound(u16 soundID) {
+	void Game::PlaySound(u16 soundID) {
 		static Address soundfunc(0x58DE9C);
 		soundfunc.Call<void>(0x1000000 + soundID);
 	}
 
-	void GameHelper::ResetValueDisplay(void) {
+	void Game::ResetValueDisplay(void) {
 		static const Address reset(0x951722); 
 		Process::Write8(reset.addr, 0);
 	}
 
-	bool GameHelper::SetValueDisplay(u8 type) {
+	bool Game::SetValueDisplay(u8 type) {
 		static Address disp(0x2912B8); 
 		return disp.Call<bool>(type);
 	}
@@ -52,7 +52,7 @@ namespace CTRPluginFramework {
 		return gState.Call<u8>(wX, wY);
 	}
 //Water flower
-	bool GameHelper::WaterFlower(u8 wX, u8 wY) {
+	bool Game::WaterFlower(u8 wX, u8 wY) {
 		if(!PlayerClass::GetInstance()->IsLoaded())
 			return 0;
 		
@@ -61,20 +61,20 @@ namespace CTRPluginFramework {
 		return 1;
 	}
 //reload room
-	void GameHelper::ReloadRoom(float *coords) {
+	void Game::ReloadRoom(float *coords) {
 		static const Address u0Data(0x976C0E);
 
 		static Address ReloadFunc(0x5B6660); 
-		ReloadFunc.Call<void>(GetRoomData(), RoomCheck(), coords, (u32 *)u0Data.addr, 6, 0, 0, 1, 1);
+		ReloadFunc.Call<void>(GetRoomData(), GetRoom(), coords, (u32 *)u0Data.addr, 6, 0, 0, 1, 1);
 	}
 	
 //Get Room Reload Data
-	u32 GameHelper::GetRoomData() {
+	u32 Game::GetRoomData() {
 		static Address RoomDat(0x308154); 
 		return RoomDat.Call<u32>();
 	}
 //check if save screen is active 
-	bool GameHelper::GameSaving() {
+	bool Game::GameSaving() {
 		static Address saving(0x126568); 
 		return saving.Call<bool>();
 	}
@@ -99,17 +99,17 @@ namespace CTRPluginFramework {
 		return *(u32 *)d_mail.addr;
 	}*/
 //get GameType
-	u8 GameHelper::GetGameType() {
+	u8 Game::GetGameType() {
 		static Address gtype(0x305ED8);
 		return gtype.Call<u8>();
 	}
 //Change GameType
-	void GameHelper::ChangeGameType(u8 GameType) {
+	void Game::ChangeGameType(u8 GameType) {
 		static Address gtype(0x625B88);
 		gtype.Call<void>(GameType);
 	}
 //call menu
-	void GameHelper::OpenMenu(u8 menuID, bool NoMenCall) {
+	void Game::OpenMenu(u8 menuID, bool NoMenCall) {
 		static Address SetupMenu(0x5C5398);
 		SetupMenu.Call<void>(1);
 
@@ -121,7 +121,7 @@ namespace CTRPluginFramework {
 	}
 
 //move building
-	void GameHelper::MoveBuilding() {
+	void Game::MoveBuilding() {
 		ACNL_BuildingData *building = Building::GetSaveData();
 		if(!building) {
 			OSD::Notify("Unknown Error: Building Save Data not loaded!", Color::Red);
@@ -133,12 +133,12 @@ namespace CTRPluginFramework {
 			return;
 		}
 		
-		if(!GameHelper::IsInRoom(0)) {
+		if(!Game::IsGameInRoom(0)) {
 			OSD::Notify("Error: Only Works In Town!", Color::Red);
 			return;
 		}
 		
-		if(GameHelper::GetOnlinePlayerCount() != 0) {
+		if(Game::GetOnlinePlayerCount() != 0) {
 			OSD::Notify("Error: Only Works In Your Own Town!", Color::Red);
 			return;
 		}
@@ -167,10 +167,10 @@ namespace CTRPluginFramework {
 		building->Buildings.Building[index.at(val)].YCoord = y & 0xFF;
 
 		Sleep(Milliseconds(20));
-		GameHelper::ReloadRoom();
+		Game::ReloadRoom();
 	}
 //remove building
-	void GameHelper::RemoveBuilding() {
+	void Game::RemoveBuilding() {
 		ACNL_BuildingData *building = Building::GetSaveData();
 		if(!building) {
 			OSD::Notify("Unknown Error: Building Save Data not loaded!", Color::Red);
@@ -182,12 +182,12 @@ namespace CTRPluginFramework {
 			return;
 		}
 		
-		if(!GameHelper::IsInRoom(0)) {
+		if(!Game::IsGameInRoom(0)) {
 			OSD::Notify("Error: Only Works In Town!", Color::Red);
 			return;
 		}
 		
-		if(GameHelper::GetOnlinePlayerCount() != 0) {
+		if(Game::GetOnlinePlayerCount() != 0) {
 			OSD::Notify("Error: Only Works In Your Own Town!", Color::Red);
 			return;
 		}
@@ -221,7 +221,7 @@ namespace CTRPluginFramework {
 		building->NormalPWPsAmount--;
 
 		Sleep(Milliseconds(20));
-		GameHelper::ReloadRoom();
+		Game::ReloadRoom();
 	}
 //check for free building place
 	bool BuildingSpotFree() {
@@ -242,13 +242,13 @@ namespace CTRPluginFramework {
 	}
 
 //place building
-	void GameHelper::PlaceBuilding(u8 buildingID) {
+	void Game::PlaceBuilding(u8 buildingID) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
 			OSD::Notify("Error: Player Needs To Be Loaded!", Color::Red);
 			return;
 		}
 		
-		if(!GameHelper::IsInRoom(0)) {
+		if(!Game::IsGameInRoom(0)) {
 			OSD::Notify("Error: Only Works In Town!", Color::Red);
 			return;
 		}
@@ -258,7 +258,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 		
-		if(GameHelper::GetOnlinePlayerCount() != 0) {
+		if(Game::GetOnlinePlayerCount() != 0) {
 			OSD::Notify("Error: Only Works In Your Own Town!", Color::Red);
 			return;
 		}
@@ -270,22 +270,22 @@ namespace CTRPluginFramework {
 	
 		u32 x, y;	
 		PlayerClass::GetInstance()->GetWorldCoords(&x, &y);
-		GameHelper::PlaceBuildingUpdateCollisions(x, y, buildingID);
+		Game::PlaceBuildingUpdateCollisions(x, y, buildingID);
 
 		Sleep(Milliseconds(20));
 
 		float *coords = PlayerClass::GetInstance()->GetCoordinates();
 		coords[2] += 20;
 
-		GameHelper::ReloadRoom(coords);
+		Game::ReloadRoom(coords);
 	}
 //is in room
-	bool GameHelper::IsInRoom(u8 room) {
-		return GameHelper::RoomCheck() == room;
-	} 
+	bool Game::IsGameInRoom(u8 room) {
+		return Game::GetRoom() == room;
+	}
 	
 //set current time
-	void GameHelper::SetCurrentTime(bool forward, int Minutes, int Hours, int Days, int Months, int Years) {
+	void Game::SetCurrentTime(bool forward, int Minutes, int Hours, int Days, int Months, int Years) {
 		u64 SMinute = (Minutes * 60000000000);
 		u64 SHour = (Hours * 60 * 60000000000);
 		u64 SDay = (Days * 24 * 60 * 60000000000);
@@ -305,18 +305,18 @@ namespace CTRPluginFramework {
 	}
 	
 //decrypt it
-	int GameHelper::DecryptValue(u64 *position) {
+	int Game::DecryptValue(u64 *position) {
 		static Address moneyget(0x3037DC);
 		return moneyget.Call<int>(position);
 	}
 //encrypt it
-	void GameHelper::EncryptValue(u64 *position, int moneyamount) {
+	void Game::EncryptValue(u64 *position, int moneyamount) {
 		static Address moneyset(0x3036A4); 
 		moneyset.Call<void>(position, moneyamount);
 	}
 
 //set badges	
-	void GameHelper::SetBadges(u8 badge, u8 type, bool WithStats) {
+	void Game::SetBadges(u8 badge, u8 type, bool WithStats) {
 		ACNL_Player *player = Player::GetSaveData();
 		if(!player) 
 			return;
@@ -340,83 +340,82 @@ namespace CTRPluginFramework {
 			};
 
 			u64 enc;
-			GameHelper::EncryptValue(&enc, Values[type][badge]);
+			Game::EncryptValue(&enc, Values[type][badge]);
 			player->Badges.BadgeValues[badge] = type == 0 ? 0 : enc;
 		}
 	}
 //get country name
-	std::string GameHelper::GetCountryName() {
+	std::string Game::GetCountryName() {
 		static Address countryfunc(0x350AE8);
 		u8 country = countryfunc.Call<u8>();
 		return IDList::SetCountryName(country);
 	}
 //if item is outdoor only
-	bool GameHelper::IsOutdoorItem(Item item) {
+	bool Game::IsOutdoorItem(Item item) {
 		return (item.ID <= 0xFD && item.ID >= 0);
 	}
 //converts flower to outdoor flower
-	void GameHelper::ToOutdoorFlowers(Item& input) {
+	void Game::ToOutdoorFlowers(Item& input) {
 		input.ID = (input.ID - 0x2890);
 	}
 //converts flower to indoor flower
-	void GameHelper::ToIndoorFlowers(Item& input) {
+	void Game::ToIndoorFlowers(Item& input) {
 		input.ID = (input.ID + 0x2890);
 	}
 
 //catalog function
-	void GameHelper::Catalog(bool directcall) {
+	void Game::Catalog(bool directcall) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) 
 			return;
 
 		if(!directcall) {
 			Animation::Idle();
-			GameHelper::OpenMenu(0, true);
+			Game::OpenMenu(0, true);
 		}
 		
 		static Address cfunction(0x6D33D8); 
 		cfunction.Call<void>(0);
 	}
 //get base inventory pointer
-	u32 GameHelper::BaseInvPointer() {
+	u32 Game::BaseInvPointer() {
 		static const Address InvMenu(0x98D500);
 		return *(u32 *)InvMenu.addr; 
 	}
 //room function
-	u32 GameHelper::RoomFunction(u8 room, bool u0, bool u1, bool u2) {
+	u32 Game::RoomFunction(u8 room, bool u0, bool u1, bool u2) {
 		if(!PlayerClass::GetInstance()->IsLoaded())
 			return -1;
 
-		if(GameHelper::GetOnlinePlayerCount() != 0) 
+		if(Game::GetOnlinePlayerCount() != 0) 
 			return -2;
 
 		static Address roomfunc(0x304A60);	
 		return roomfunc.Call<u32>(room, u0, u1, u2);
 	}
-//get room ID
-	u8 GameHelper::RoomCheck() {
-		static Address GetRoom(0x5C3DDC);
+	u8 Game::GetRoom() {
+		static Address GetRoom(0x2F7384);
 		return GetRoom.Call<u8>();
 	}
 //get next loaded room ID
-	u8 GameHelper::NextRoomCheck() {
+	u8 Game::NextRoomCheck() {
 		static Address GetNextRoom(0x5B4C08);
 		return GetNextRoom.Call<u8>();
 	}
 //If loading screen is active
-	bool GameHelper::LoadRoomBool() {
+	bool Game::LoadRoomBool() {
 		static const Address LoadCheck(0x94F451);
 		return *(bool *)LoadCheck.addr;
 	}
 //get map boolen pointer
-	bool GameHelper::MapBoolCheck() {
+	bool Game::MapBoolCheck() {
 		return *(bool *)Address(0x950C30).addr;
 	}
 //Get online index
-	u8 GameHelper::GetOnlinePlayerIndex() {
+	u8 Game::GetOnlinePlayerIndex() {
 		return Address(0x305EF0).Call<u8>();
 	}
 //Get actual index
-	u8 GameHelper::GetActualPlayerIndex() {
+	u8 Game::GetActualPlayerIndex() {
 		u8 index = *(u8 *)((*(u32 *)Address(0x954648).addr) + 0x13268);
 		if(index >= 4) 
 			return 0;
@@ -424,27 +423,27 @@ namespace CTRPluginFramework {
 		return index;
 	}
 //Get player count
-	u8 GameHelper::GetOnlinePlayerCount() {
+	u8 Game::GetOnlinePlayerCount() {
 		static Address getplayer2(0x75EFF8);
 		return getplayer2.Call<u8>(*(u32 *)Address(0x954648).addr);
 	}
 //Get item at world coords
-	Item *GameHelper::GetItemAtWorldCoords(u32 x, u32 y) {
+	Item *Game::GetItemAtWorldCoords(u32 x, u32 y) {
 		static Address WorlditemCoords(0x2FEF9C);
 		return WorlditemCoords.Call<Item *>(GetCurrentMap(), x, y, 0);
 	}
 //Get current map
-	u32 GameHelper::GetCurrentMap(void) {
+	u32 Game::GetCurrentMap(void) {
 		static Address Currentmap(0x6A690C);
 		return Currentmap.Call<u32>();
 	}
 //Building Update Collision	
-	void GameHelper::PlaceBuildingUpdateCollisions(u32 x, u32 y, u16 buildingID) {
+	void Game::PlaceBuildingUpdateCollisions(u32 x, u32 y, u16 buildingID) {
 		static Address PlaceBuilding(0x2425D8);
 		PlaceBuilding.Call<void>(x, y, buildingID);
 	}
 //Remove items with trample
-	bool GameHelper::RemoveItems(bool trample, u8 wX, u8 wY, u8 width, u8 length, bool allowAbort, bool removeEverything, bool counting) {
+	bool Game::RemoveItems(bool trample, u8 wX, u8 wY, u8 width, u8 length, bool allowAbort, bool removeEverything, bool counting) {
 		bool res = false;
 		u8 x = wX, y = wY;
 		u32 count = 0;
@@ -476,14 +475,14 @@ namespace CTRPluginFramework {
 		
 		while(res && (x - wX < width || removeEverything)) {
 			while(res && (y - wY < length || removeEverything)) {
-				if(GameHelper::GetItemAtWorldCoords(x, y)) {
-					if(GameHelper::GetItemAtWorldCoords(x, y)->ID != 0x7FFE) {
+				if(Game::GetItemAtWorldCoords(x, y)) {
+					if(Game::GetItemAtWorldCoords(x, y)->ID != 0x7FFE) {
 						count++;
 						if(count % 300 == 0) 
 							Sleep(Milliseconds(50));
 
 						if(trample) 
-							GameHelper::TrampleAt(x, y);
+							Game::TrampleAt(x, y);
 						else 
 							Dropper::PlaceItemWrapper(6, ReplaceEverything, &Empty, &Empty, x, y, 0, 0, 0, 0, 0, 0x3C, 0xA5);
 
@@ -507,7 +506,7 @@ namespace CTRPluginFramework {
 				y = wY;
 
 			x++;
-			if(!GameHelper::GetItemAtWorldCoords(x, y)) 
+			if(!Game::GetItemAtWorldCoords(x, y)) 
 				res = false;
 		}
 	end:
@@ -523,7 +522,7 @@ namespace CTRPluginFramework {
 		return true;
 	}
 //Spawn Particles
-	void GameHelper::Particles(u32 particleID, float *floats) {
+	void Game::Particles(u32 particleID, float *floats) {
 		static Address particleclass(0x207B90);
 		static const Address u0(0x976C0E);
 		static const Address u1(0xAE6870);
@@ -540,12 +539,12 @@ namespace CTRPluginFramework {
 		particleclass.Call<void>(particleID, floats, u0.addr, u1.addr);
 	}
 //Clear a locked spot	
-	void GameHelper::ClearLockedSpot(u8 wX, u8 wY, u8 roomID, u32 param_4) {
+	void Game::ClearLockedSpot(u8 wX, u8 wY, u8 roomID, u32 param_4) {
 		static Address clearLocked(0x5A1278);
 		clearLocked.Call<void>(wX, wY, roomID, param_4);
 	}
 //Create a locked spot
-	u32 GameHelper::CreateLockedSpot(u8 DropID, u8 wX, u8 wY, u8 roomID, bool sendPkt) {
+	u32 Game::CreateLockedSpot(u8 DropID, u8 wX, u8 wY, u8 roomID, bool sendPkt) {
 		static Address createLocked(0x5A13C4);
 		static const Address lockspot1(0x5A13C8);
 		u32 lockspot2 = lockspot1.addr + 4;
@@ -562,20 +561,20 @@ namespace CTRPluginFramework {
 		return index;
 	}
 //Get index for locked spot
-	u32 GameHelper::GetLockedSpotIndex(u8 wX, u8 wY, u8 roomID) {
+	u32 Game::GetLockedSpotIndex(u8 wX, u8 wY, u8 roomID) {
 		static Address getlocked(0x5A11BC);
 		return getlocked.Call<u32>(wX, wY, roomID);
 	}
 //Trample at specific position	
-	void GameHelper::TrampleAt(u8 wX, u8 wY) {		
-		Item *pItem = GameHelper::GetItemAtWorldCoords(wX, wY);
+	void Game::TrampleAt(u8 wX, u8 wY) {		
+		Item *pItem = Game::GetItemAtWorldCoords(wX, wY);
 		Item Empty = {0x7FFE, 0};
 		
 		if(!pItem) 
 			return;
 		
-		u8 room = Player::GetRoom(GameHelper::GetActualPlayerIndex()); 
-		if(GameHelper::GetOnlinePlayerCount() != 0) {	
+		u8 room = Player::GetRoom(Game::GetActualPlayerIndex()); 
+		if(Game::GetOnlinePlayerCount() != 0) {	
 			TramplePkt data { *pItem, room, wX, wY, 0 };
 			
 			static Address trample(0x625488);
@@ -590,7 +589,7 @@ namespace CTRPluginFramework {
 	}
 
 //sets first empty slot
-	bool GameHelper::SetItem(Item *item) {		
+	bool Game::SetItem(Item *item) {		
 		if(Player::GetSaveOffset(4) == 0) 
 			return 0;
 		

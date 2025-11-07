@@ -150,7 +150,7 @@ namespace CTRPluginFramework {
 					case 5: player->Shoes.ID = item; break;
 				}
 
-				Player::WriteOutfit(GameHelper::GetOnlinePlayerIndex(), player->Hat, player->Accessory, player->TopWear, player->BottomWear, player->Socks, player->Shoes);
+				Player::WriteOutfit(Game::GetOnlinePlayerIndex(), player->Hat, player->Accessory, player->TopWear, player->BottomWear, player->Socks, player->Shoes);
 			}
 		}
 
@@ -180,7 +180,7 @@ namespace CTRPluginFramework {
 		switch(randkb.Open()) {
 			default: break;			
 			case 0: 
-				Player::WriteOutfit(GameHelper::GetOnlinePlayerIndex(), (Item)Utils::Random(0x280B, 0x28F3), 
+				Player::WriteOutfit(Game::GetOnlinePlayerIndex(), (Item)Utils::Random(0x280B, 0x28F3), 
 																		(Item)Utils::Random(0x28F5, 0x295B), 
 																		(Item)Utils::Random(0x2493, 0x26F5), 
 																		(Item)Utils::Random(0x26F8, 0x2776), 

@@ -126,7 +126,7 @@ namespace CTRPluginFramework {
 			static const Address TPCPoint(0x954F10);
 
 			CreateTPC.Call<void>(*(u32 *)TPCPoint.addr, &player->HasTPCPic);
-			GameHelper::PlaySound(0x4A7);
+			Game::PlaySound(0x4A7);
 
 			player->PlayerFlags.HasTPCPicture = true;
 		}
@@ -262,7 +262,7 @@ namespace CTRPluginFramework {
         if(Camera::GetInstance() != 0) {
         //check if you're outside
             if(!IsIndoorsBool) {
-                if(GameHelper::RoomCheck() == 1) {
+                if(Game::IsGameInRoom(1)) {
                     Process::Patch(rotationAsm.addr, 0xE18020B4);
                     Process::Patch(rotationAsm.addr + 0xC, 0xE18020B4);
                 }
@@ -478,19 +478,19 @@ namespace CTRPluginFramework {
 					return;
 
 			//If Item is 0 return | 0 means no item-offset
-				if(!GameHelper::GetItemAtWorldCoords(x, y))
+				if(!Game::GetItemAtWorldCoords(x, y))
 					return;
-				Item item = *GameHelper::GetItemAtWorldCoords(x, y);
+				Item item = *Game::GetItemAtWorldCoords(x, y);
 
 			//If ID is not wilted flower return
 				if(!IDList::ValidID(item.ID, 0xCE, 0xF7))
 					return;
 
 			//Removes Wilted Flower	
-				GameHelper::RemoveItems(true, x, y, 1, 1, false, false, false);
+				Game::RemoveItems(true, x, y, 1, 1, false, false, false);
 			//Some neat particles for a nice effect | do it 20 times to spam it	
 				for(int i = 0; i <= 20; ++i) 
-					GameHelper::Particles(0x10B, PlayerClass::GetInstance()->GetCoordinates(x, y));	
+					Game::Particles(0x10B, PlayerClass::GetInstance()->GetCoordinates(x, y));	
 
 				//GameHelper::PlaySound(0);
 
@@ -518,19 +518,19 @@ namespace CTRPluginFramework {
 				if(!PlayerClass::GetInstance()->GetWorldCoords(&x, &y))
 					return;
 			//If Item is 0 return | 0 means no item-offset
-				if(!GameHelper::GetItemAtWorldCoords(x, y)) 
+				if(!Game::GetItemAtWorldCoords(x, y)) 
 					return;
-				Item item = *GameHelper::GetItemAtWorldCoords(x, y);
+				Item item = *Game::GetItemAtWorldCoords(x, y);
 
 			//If no growing tree found return	
 				if(!(std::find(std::begin(Growing_Trees), std::end(Growing_Trees), item.ID) != std::end(Growing_Trees)))
 					return;
 				
 			//Removes growing tree
-				GameHelper::RemoveItems(true, x, y, 1, 1, false, false, false);		
+				Game::RemoveItems(true, x, y, 1, 1, false, false, false);		
 			//Some neat particles for a nice effect | do it 20 times to spam it	
 				for(int i = 0; i <= 20; ++i) 
-					GameHelper::Particles(0x19A, PlayerClass::GetInstance()->GetCoordinates(x, y));				
+					Game::Particles(0x19A, PlayerClass::GetInstance()->GetCoordinates(x, y));				
 			//Places Grown Tree
 				item.ID += 1; //Jumps to next growth level
 				Dropper::PlaceItemWrapper(0xC, ReplaceEverything, &item, &item, x, y, 0, 0, 0, 0, 0, 0x5C, 0xA5, false);

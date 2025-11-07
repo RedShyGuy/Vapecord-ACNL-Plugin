@@ -17,7 +17,7 @@ namespace CTRPluginFramework {
 		
 		u32 money = 0;
 		if(Wrap::KB<u32>(Language::getInstance()->get("ENTER_AMOUNT"), false, 5, money, 0))
-			GameHelper::EncryptValue(&player->PocketMoney, money);
+			Game::EncryptValue(&player->PocketMoney, money);
 	}
 //Bank Mod
 	void bank(MenuEntry *entry) {
@@ -30,7 +30,7 @@ namespace CTRPluginFramework {
 		
 		u32 money = 0;
 		if(Wrap::KB<u32>(Language::getInstance()->get("ENTER_AMOUNT"), false, 9, money, 0))
-			GameHelper::EncryptValue(&player->BankAmount, money);
+			Game::EncryptValue(&player->BankAmount, money);
 	}
 //Meow Coupon Mod
 	void coupon(MenuEntry *entry) {
@@ -43,7 +43,7 @@ namespace CTRPluginFramework {
 		
 		u32 coupon = 0;
 		if(Wrap::KB<u32>(Language::getInstance()->get("ENTER_AMOUNT"), false, 4, coupon, 0))
-			GameHelper::EncryptValue(&player->MeowCoupons, coupon);
+			Game::EncryptValue(&player->MeowCoupons, coupon);
 	}
 //Badges Mod
 	void badges(MenuEntry *entry) {
@@ -70,7 +70,7 @@ namespace CTRPluginFramework {
 		bool WithStats = MessageBox("Do you want to set the appropiate badge stats?\n(This will edit all badge related game stats)", DialogType::DialogYesNo).SetClear(ClearScreen::Top)();
 
 		for(int i = 0; i < 24; ++i) 
-			GameHelper::SetBadges(i, std::abs(index - 3), WithStats);
+			Game::SetBadges(i, std::abs(index - 3), WithStats);
 	}
 //Medals Mod  32DC51B8 31F2C6BC
 	void medals(MenuEntry *entry) {
@@ -83,7 +83,7 @@ namespace CTRPluginFramework {
 		
 		u32 medal = 0;
 		if(Wrap::KB<u32>(Language::getInstance()->get("ENTER_AMOUNT"), false, 4, medal, 0)) {
-			GameHelper::EncryptValue(&player->MedalAmount, medal);
+			Game::EncryptValue(&player->MedalAmount, medal);
 		}	
 	}	
 //turnip Mod	
@@ -98,8 +98,8 @@ namespace CTRPluginFramework {
 		u32 turnip = 0;
 		if(Wrap::KB<u32>(Language::getInstance()->get("ENTER_AMOUNT"), false, 5, turnip, 0)) {
 			for(int i = 0; i < 6; ++i) {
-				GameHelper::EncryptValue(&town->TurnipPrices[i], turnip); //AM
-				GameHelper::EncryptValue(&town->TurnipPrices[i + 6], turnip); //PM
+				Game::EncryptValue(&town->TurnipPrices[i], turnip); //AM
+				Game::EncryptValue(&town->TurnipPrices[i + 6], turnip); //PM
 			}
 		}
 	}

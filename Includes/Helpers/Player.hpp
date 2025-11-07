@@ -22,6 +22,7 @@ namespace CTRPluginFramework {
 		float*		    GetCollisionSize(u8 PlayerIndex = 4);
 		bool			IsIndoors();
 		u8				GetRoom(u8 PlayerIndex);
+		bool			IsInRoom(u8 room, u8 playerIndex = 4);
 
 		ACNL_Player		*GetSaveData(u8 PlayerIndex = 4);
 		bool 			SaveExists(ACNL_Player *player);

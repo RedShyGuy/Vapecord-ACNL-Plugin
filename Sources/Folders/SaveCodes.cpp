@@ -359,8 +359,8 @@ namespace CTRPluginFramework {
 			SetNPCFunc.Call<void>(&NPC::GetSaveData()->townID1, VID, null, &Town::GetSaveData()->TownData1); 
 			OSD::Notify(Utils::Format("Set %s!", amiibo.Name.c_str()), Color::Green);
 
-			if(GameHelper::IsInRoom(0))
-				GameHelper::ReloadRoom();
+			if(Game::IsGameInRoom(0))
+				Game::ReloadRoom();
 		}
 
 		else if(res == 1) {
@@ -372,8 +372,8 @@ namespace CTRPluginFramework {
 			DeleteNPCFunc.Call<void>(&NPC::GetSaveData()->townID1);
 			OSD::Notify("Camping Villager Removed!", Color::Red);
 
-			if(GameHelper::IsInRoom(0))
-				GameHelper::ReloadRoom();
+			if(Game::IsGameInRoom(0))
+				Game::ReloadRoom();
 		}
 	}
 
@@ -445,7 +445,7 @@ namespace CTRPluginFramework {
 
 				town->NooklingState = nook;
 				town->NooklingStateUnknown = nook;
-				GameHelper::EncryptValue(&town->NooklingBellsSpent, NooklingBellsSpent[nook]);
+				Game::EncryptValue(&town->NooklingBellsSpent, NooklingBellsSpent[nook]);
 				town->LeifUnlockStatus = (nook == 1 ? 2 : nook);
 			} break;
 		//Fortune Teller
@@ -490,7 +490,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 		
-		if(GameHelper::GetOnlinePlayerCount() != 0) {		
+		if(Game::GetOnlinePlayerCount() != 0) {		
 			MessageBox(Language::getInstance()->get("ONLY_TOWN_ERROR")).SetClear(ClearScreen::Top)();
 			return;
 		}
@@ -738,14 +738,14 @@ namespace CTRPluginFramework {
 			case 0:
 				u8 id;
 				if(Wrap::KB<u8>(Language::getInstance()->get("ENTER_ID"), 1, 2, id, 0, onBuildingChange)) {
-					GameHelper::PlaceBuilding(id);
+					Game::PlaceBuilding(id);
 				}
 				break;
 			case 1:
-				GameHelper::MoveBuilding();
+				Game::MoveBuilding();
 				break;
 			case 2:
-				GameHelper::RemoveBuilding();
+				Game::RemoveBuilding();
 				break;
 			default: break;
 		}
@@ -937,7 +937,7 @@ namespace CTRPluginFramework {
 					int field = Address(0x2FF76C).Call<int>(&i);
 					town->MuseumDonations[Addage[j] + field] = player + 1;
 
-					town->MuseumDonationDates[Addage[j] + field] = GameHelper::GetCurrentDate();
+					town->MuseumDonationDates[Addage[j] + field] = Game::GetCurrentDate();
 				}
 			}
 		}
@@ -1007,7 +1007,7 @@ namespace CTRPluginFramework {
     }
 
 	void GetAcreID(void) {
-		if(!(GameHelper::MapBoolCheck() && GameHelper::IsInRoom(0) && Player::GetSaveOffset(4) != 0)) 
+		if(!(Game::MapBoolCheck() && Game::IsGameInRoom(0) && Player::GetSaveOffset(4) != 0)) 
 			return;
 
 		ACNL_TownData *town = Town::GetSaveData();
@@ -1168,7 +1168,7 @@ namespace CTRPluginFramework {
 			*menu += GetAcreID;
 		}
 
-		bool IsOkay = (GameHelper::MapBoolCheck() && GameHelper::IsInRoom(0) && Player::GetSaveData());
+		bool IsOkay = (Game::MapBoolCheck() && Game::IsGameInRoom(0) && Player::GetSaveData());
 		static bool WasActivated = false;
 		int res = 0;
 

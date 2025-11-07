@@ -7,7 +7,7 @@
 
 namespace CTRPluginFramework {
 	u32 Inventory::GetCurrentItemData(int i) {
-		if(GameHelper::BaseInvPointer() == 0)
+		if(Game::BaseInvPointer() == 0)
 			return -1;
 		
 		if(!Opened())
@@ -16,22 +16,22 @@ namespace CTRPluginFramework {
 		if(GetCurrent() != 0)
 			return -1;
 			
-		u32 Items = *(u32 *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0xEC); //0x20 32DCEC10
+		u32 Items = *(u32 *)(*(u32 *)(Game::BaseInvPointer() + 0xC) + 0xEC); //0x20 32DCEC10
 		
 		return (Items + (0xAC * i));
 	}
 
 //Get current inventory ID
 	u8 Inventory::GetCurrent() {
-		if(GameHelper::BaseInvPointer() == 0) 
+		if(Game::BaseInvPointer() == 0) 
 			return 0xFF;
 		
-		return *(u8 *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x24);
+		return *(u8 *)(*(u32 *)(Game::BaseInvPointer() + 0xC) + 0x24);
 	}
 
 //get correct inv addition data
 	u16 Inventory::GetAddData() {
-		if(GameHelper::BaseInvPointer() == 0) 
+		if(Game::BaseInvPointer() == 0) 
 			return -1;
 		
 		switch(GetCurrent()) {
@@ -60,10 +60,10 @@ namespace CTRPluginFramework {
 	}
 //if inv is opened
 	bool Inventory::Opened() {
-		if(GameHelper::BaseInvPointer() == 0) 
+		if(Game::BaseInvPointer() == 0) 
 			return 0;
 		
-		return *(u8 *)(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + (0x8419 + GetAddData())) == 1;
+		return *(u8 *)(*(u32 *)(Game::BaseInvPointer() + 0xC) + (0x8419 + GetAddData())) == 1;
 	}
 //Write Inventory Slot
 	bool Inventory::WriteSlot(int slot, Item item, u8 lock) {
@@ -136,7 +136,7 @@ namespace CTRPluginFramework {
 
 	void Inventory::ReloadIcons() {
 	//if inv is not loaded return
-		if(GameHelper::BaseInvPointer() == 0) 
+		if(Game::BaseInvPointer() == 0) 
 			return;
 		
 	//If inv is not opened return
@@ -144,7 +144,7 @@ namespace CTRPluginFramework {
 			return;
 
 		for(int i = 0; i < 16; ++i)
-			Address(0x26DC00).Call<void>(*(u32 *)(GameHelper::BaseInvPointer() + 0xC) + GetAddData(), i);
+			Address(0x26DC00).Call<void>(*(u32 *)(Game::BaseInvPointer() + 0xC) + GetAddData(), i);
 	}
 
 //get current selected inventory slot
@@ -152,7 +152,7 @@ namespace CTRPluginFramework {
 		if(!Opened()) 
 			return false;
 		
-		u32 offs = *(u32 *)(GameHelper::BaseInvPointer() + 0xC);
+		u32 offs = *(u32 *)(Game::BaseInvPointer() + 0xC);
 		offs += 0xCC;
 		slot = *(u8 *)offs;
 
@@ -167,7 +167,7 @@ namespace CTRPluginFramework {
 		if(!Opened()) 
 			return false;
 		
-		u32 offs = *(u32 *)(GameHelper::BaseInvPointer() + 0xC);
+		u32 offs = *(u32 *)(Game::BaseInvPointer() + 0xC);
 		offs += 0xD4;
 		slot = *(u8 *)offs;
 

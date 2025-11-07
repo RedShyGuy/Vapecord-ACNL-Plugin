@@ -21,7 +21,7 @@ namespace CTRPluginFramework {
 	static std::vector<std::string> strings2 = { "", "", "", "" };
 	
 	void GetPlayerInfoData(void) {	
-		u8 pIndex = GameHelper::GetOnlinePlayerIndex();
+		u8 pIndex = Game::GetOnlinePlayerIndex();
 		if(!PlayerClass::GetInstance(pIndex)->IsLoaded() || !Player::GetSaveData(pIndex))
 			return;
 	
@@ -35,7 +35,7 @@ namespace CTRPluginFramework {
 			PlayerClass::GetInstance(pIndex)->GetWorldCoords(&selectedX, &selectedY);
 		
 	//gets item standing on
-		Item *pItem = GameHelper::GetItemAtWorldCoords(selectedX, selectedY);	
+		Item *pItem = Game::GetItemAtWorldCoords(selectedX, selectedY);	
 		if(!pItem)
 			return;
 		
@@ -43,8 +43,8 @@ namespace CTRPluginFramework {
 		strings1[1] = (Utils::Format("World Coordinates: %02X|%02X", (u8)(selectedX & 0xFF), (u8)(selectedY & 0xFF)));
 		strings1[2] = ("Velocity: " << std::to_string(*PlayerClass::GetInstance(pIndex)->GetVelocity()).erase(4));
 		strings1[3] = (Utils::Format("Animation: %02X / %03X", *PlayerClass::GetInstance(pIndex)->GetAnimation(), *PlayerClass::GetInstance(pIndex)->GetSnake()));
-		strings1[4] = ("Standing on: " << (pItem->ID != 0 ? Utils::Format("%08X", *(u32 *)pItem) : "N/A") << (GameHelper::GetLockedSpotIndex(selectedX, selectedY) != 0xFFFFFFFF ? "(Locked)" : ""));
-		strings1[5] = (Utils::Format("Room: %02X", GameHelper::RoomCheck()));
+		strings1[4] = ("Standing on: " << (pItem->ID != 0 ? Utils::Format("%08X", *(u32 *)pItem) : "N/A") << (Game::GetLockedSpotIndex(selectedX, selectedY) != 0xFFFFFFFF ? "(Locked)" : ""));
+		strings1[5] = (Utils::Format("Room: %02X", Player::GetRoom(pIndex)));
 
 	//gets inv item
 		u8 slot = 0;
@@ -60,7 +60,7 @@ namespace CTRPluginFramework {
 	}
 //debug OSD
 	bool debugOSD(const Screen &screen) {
-		u8 pIndex = GameHelper::GetOnlinePlayerIndex();
+		u8 pIndex = Game::GetOnlinePlayerIndex();
 		if(!PlayerClass::GetInstance(pIndex)->IsLoaded()) 
 			return 0;
 			
@@ -278,8 +278,8 @@ namespace CTRPluginFramework {
 	void Faint(MenuEntry *entry) { 
         if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
 			u32 x, y;
-			if(PlayerClass::GetInstance(GameHelper::GetOnlinePlayerIndex())->GetWorldCoords(&x, &y))
-				Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0x9D, { 0, 0 }, 0, 0, 0, 0, x, y, 0, 0);
+			if(PlayerClass::GetInstance(Game::GetOnlinePlayerIndex())->GetWorldCoords(&x, &y))
+				Animation::ExecuteAnimationWrapper(Game::GetOnlinePlayerIndex(), 0x9D, { 0, 0 }, 0, 0, 0, 0, x, y, 0, 0);
 		}
     }
 
@@ -306,7 +306,7 @@ namespace CTRPluginFramework {
 
 //OSD For Show Players On The Map	
 	bool players(const Screen &screen) { 
-		if(screen.IsTop || !GameHelper::MapBoolCheck())
+		if(screen.IsTop || !Game::MapBoolCheck())
 			return 0;
 
 		u32 XPos, YPos;
@@ -348,7 +348,7 @@ namespace CTRPluginFramework {
 			hook.Enable();
 
 			u32 pInstance = PlayerClass::GetInstance()->Offset();
-			if(pInstance != 0 && GameHelper::MapBoolCheck()) {
+			if(pInstance != 0 && Game::MapBoolCheck()) {
 				u32 aInstance = Animation::GetAnimationInstance(pInstance, 0, 0, 0);
 
 				AnimData data;
