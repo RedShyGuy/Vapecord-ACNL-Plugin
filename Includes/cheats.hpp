@@ -252,6 +252,8 @@ namespace CTRPluginFramework {
     void FixParticlesInPuzzleLeague(MenuEntry *entry);
     void SetCustomSpritesForSeedItemsAndProDesigns(MenuEntry *entry);
 	void FruitStackingCheck(MenuEntry *entry);
+
+	void SetLanguageEntry(MenuEntry *entry);
 	
 //Helper functions
   //Located in cheats.cpp

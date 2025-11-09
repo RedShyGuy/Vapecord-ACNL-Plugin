@@ -10,6 +10,27 @@ namespace CTRPluginFramework {
         return instance;
     }
 
+    namespace {
+        static void Unescape(std::string &s) {
+            std::string out;
+            out.reserve(s.size());
+            for (size_t i = 0; i < s.size(); ++i) {
+                if (s[i] == '\\' && i + 1 < s.size()) {
+                    char c = s[i + 1];
+                    switch (c) {
+                        case 'n': out += '\n'; ++i; continue;
+                        case 'r': out += '\r'; ++i; continue;
+                        case 't': out += '\t'; ++i; continue;
+                        case '\\': out += '\\'; ++i; continue;
+                        default: break;
+                    }
+                }
+                out += s[i];
+            }
+            s.swap(out);
+        }
+    }
+
     std::vector<Language::LangHeader> Language::listAvailableLanguages(const std::string &filePath) {
         std::vector<LangHeader> langs;
         File f;
@@ -143,6 +164,8 @@ namespace CTRPluginFramework {
                 break;
             std::string val(reinterpret_cast<const char*>(ptr), valLen);
             ptr += valLen;
+
+            Unescape(val);
 
             translations.push_back({key, val});
         }

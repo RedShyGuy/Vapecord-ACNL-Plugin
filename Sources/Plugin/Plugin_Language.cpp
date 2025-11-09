@@ -4,6 +4,10 @@
 #include "Language.hpp"
 
 namespace CTRPluginFramework {	
+	void SetLanguageEntry(MenuEntry *entry) {
+		SetupLanguage(true);
+	}
+
     void SetupLanguage(bool SetInMenu) {
 		std::string language = "";
 		ReadLanguage(language);

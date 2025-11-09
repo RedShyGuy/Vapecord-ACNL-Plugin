@@ -29,6 +29,8 @@ namespace CTRPluginFramework {
 
 			Address(u32 address);
 
+			static bool IsRegion(Region region);
+
             static std::string LoadRegion(void);
 
 			u32 addr;

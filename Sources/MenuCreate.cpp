@@ -471,5 +471,7 @@ namespace CTRPluginFramework {
 		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Custom Save Settings", CustomSaveScreen, "")),
 		menu->Append(DEVC);
 	#endif
+
+		menu->Append(new MenuEntry("Set Plugin Language", nullptr, SetLanguageEntry, "Sets the plugin language."));
 	}
 }

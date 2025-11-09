@@ -39,7 +39,7 @@ namespace CTRPluginFramework {
 		
 		u8 pIndex = Game::GetOnlinePlayerIndex();
 	//If player is not loaded or loading screen started, switch off the code
-		if(!PlayerClass::GetInstance()->IsLoaded() || !PlayerClass::GetInstance(pIndex)->IsLoaded() || Game::LoadRoomBool()) 
+		if(!PlayerClass::GetInstance()->IsLoaded() || !PlayerClass::GetInstance(pIndex)->IsLoaded() || Game::IsRoomLoading()) 
 			PSelector_OFF();
 	} 
 	

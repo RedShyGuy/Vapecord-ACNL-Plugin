@@ -20,7 +20,7 @@ namespace CTRPluginFramework {
 
 	bool OSD_SplashScreen(const Screen &Splash) {
 		if(Splash.IsTop) 
-			Splash.DrawSysfont("Select Player To Start Plugin " << GetLoad(), 7, 10, Color(255, 0, 247));
+			Splash.DrawSysfont("Waiting for game to load " << GetLoad(), 7, 10, Color(255, 0, 247));
 			
 		return true;
 	}

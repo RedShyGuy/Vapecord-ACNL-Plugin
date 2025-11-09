@@ -401,8 +401,7 @@ namespace CTRPluginFramework {
 		static Address GetNextRoom(0x5B4C08);
 		return GetNextRoom.Call<u8>();
 	}
-//If loading screen is active
-	bool Game::LoadRoomBool() {
+	bool Game::IsRoomLoading() {
 		static const Address LoadCheck(0x94F451);
 		return *(bool *)LoadCheck.addr;
 	}

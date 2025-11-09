@@ -60,4 +60,8 @@ namespace CTRPluginFramework {
 			}
 		}
 	};
+
+	bool Address::IsRegion(Region region) {
+		return regionId == region;
+	}
 }

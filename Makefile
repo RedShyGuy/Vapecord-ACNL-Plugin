@@ -26,8 +26,7 @@ SOURCES 	:= 	Sources \
 				Sources/Folders/DefaultCodes \
 				Sources/Helpers \
 				Sources/LibCtrpfExtras \
-				Sources/Plugin \
-				Sources/Address
+				Sources/Plugin
 
 PSF 		:= 	$(notdir $(TOPDIR)).plgInfo
 
