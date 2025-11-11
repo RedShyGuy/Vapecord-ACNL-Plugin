@@ -4,10 +4,8 @@
 #define PATH_PRESET		    "E:/Vapecord/Data/PreSet"
 #define PATH_ACRE		    "E:/Vapecord/Data/Acre/acre%X.bin"
 #define PATH_PICON		    "E:/Vapecord/Data/PlayerIcon/Player%d.bin"
-#define ITEMLIST            "E:/Vapecord/Data/item.txt"
 
 #define PATH_LANGUAGE_BIN   "E:/Vapecord/Data/language.bin"
-#define PATH_ITEM_BIN       "E:/Vapecord/Data/item.bin"
 
 #define PATH_ISLAND	        "E:/Vapecord/%s/Island"
 #define PATH_BULLETIN	    "E:/Vapecord/%s/Bulletin"

@@ -3,6 +3,7 @@
 #include "types.h"
 
 static const u32 ADDRESSES[][8] = {
+    { 0x2FEA78, 0, 0, 0, 0, 0, 0, 0 }, //GET_ITEM_NAME
     { 0x767028, 0, 0, 0, 0, 0, 0, 0 }, //DEVER5
     { 0x951722, 0, 0, 0, 0, 0, 0, 0 }, //RESET
     { 0x2912B8, 0, 0, 0, 0, 0, 0, 0 }, //DISP

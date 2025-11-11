@@ -6,7 +6,6 @@
 #include "Helpers/IDList.hpp"
 #include "Helpers/Game.hpp"
 #include "Helpers/Wrapper.hpp"
-#include "Helpers/ItemReader.hpp"
 #include "Files.h"
 #include "Helpers/Checks.hpp"
 
@@ -122,7 +121,7 @@ namespace CTRPluginFramework {
 			if(Inventory::ReadSlot(slot, itemslotid)) {
 				itemslotid.Flags = 0;
 				if(Game::IsOutdoorItem(itemslotid) || itemslotid.ID == 0x3729) {
-					std::string name = ItemReader::getInstance()->get(itemslotid);
+					std::string name = IDList::GetItemName(itemslotid);
 					u32 InvPointer = *(u32 *)(Game::BaseInvPointer() + 0xC);
 					Process::Write32(InvPointer + 0xCFC, 0x000E000E);
 					Process::Write32(InvPointer + 0xD00, 0x00040000);
@@ -203,29 +202,6 @@ namespace CTRPluginFramework {
         static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
         func.Call<void>(dataParam, stack);
     }
-
-	static bool WasSuspended = false;
-	void SuspendCallBack(u32 param) {
-	/*If Game suspenses*/
-		if(!WasSuspended) {
-		// delete ItemList to clear a lot of memory to prevent memory issues if game is suspended
-			ItemReader::getInstance()->clearEntries();
-
-			WasSuspended = true;
-			goto reset;
-		}
-
-		OSD::Notify("Initializing Memory", Color::Purple);
-	/*If Game unsuspenses*/
-		ItemReader::getInstance()->loadFromBinary(PATH_ITEM_BIN); // reread ItemList when game is unsuspended
-		
-		WasSuspended = false;
-
-	reset:
-		const HookContext &curr = HookContext::GetCurrent();
-		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
-		func.Call<void>(param);
-	}
 
 	const char* SetProDesignStyle(Item *ItemID, u32 data, u32 data2) {
 		switch(ItemID->ID) {

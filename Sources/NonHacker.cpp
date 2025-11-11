@@ -6,7 +6,6 @@
 #include "Helpers/Game.hpp"
 #include "Helpers/Inventory.hpp"
 #include "Address/Address.hpp"
-#include "Helpers/ItemReader.hpp"
 #include "LibCtrpfExtras/UtilsExtras.hpp"
 
 namespace CTRPluginFramework {
@@ -218,11 +217,8 @@ namespace CTRPluginFramework {
 		}
 
 		else if(Command == "n:") {
-			if(!ItemReader::getInstance()->isLoaded()) 
-				return false;
-
 			UtilsExtras::Trim(ItemName);
-			Item* match = ItemReader::getInstance()->searchByName(ItemName);
+			Item* match = nullptr; //ItemReader::getInstance()->searchByName(ItemName); //TODO
 			if (!match) 
 				return false;
 

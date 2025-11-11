@@ -2,7 +2,6 @@
 #include "Files.h"
 #include "Helpers/Wrapper.hpp"
 #include "Address/Address.hpp"
-#include "Helpers/ItemReader.hpp"
 #include "Helpers/ItemSequence.hpp"
 #include "Helpers/Game.hpp"
 #include "cheats.hpp"
@@ -114,12 +113,6 @@ namespace CTRPluginFramework {
 		SetupLanguage(false);
 	//Load MenuFolders and Entrys (located in MenuCreate.cpp)
 		InitMenu(menu);
-
-		if (!ItemReader::getInstance()->loadFromBinary(PATH_ITEM_BIN)) {
-			MessageBox(Utils::Format("Error 660\nThe item.bin is missing\nGet more info and help on the Discord Server: %s", DISCORDINV)).SetClear(ClearScreen::Top)();
-			Process::ReturnToHomeMenu();
-			return 0;
-		}
 
 	//Load Callbacks
 		menu->Callback(IndoorsSeedItemCheck);

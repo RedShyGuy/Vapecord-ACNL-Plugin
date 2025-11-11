@@ -22,7 +22,6 @@ namespace CTRPluginFramework {
     bool IsSTARTDown(u32 data, u32 key);
     void SetTitle(u32 dataParam, u32 *stack);
     void SetText(u32 dataParam, u32 *stack);
-    void SuspendCallBack(u32 param);
     const char* SetProDesignStyle(Item *ItemID, u32 data, u32 data2);
     bool FruitStacking(u32 InvAddress, int slot, Item *item, u32 ItemLock, u32 ItemToReplace);
 }

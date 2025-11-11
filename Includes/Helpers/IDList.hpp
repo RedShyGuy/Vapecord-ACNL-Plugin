@@ -5,9 +5,14 @@
 #include "Helpers/GameStructs.hpp"
 
 namespace CTRPluginFramework {
-	struct ID_Data {
+	struct ID_U8Data {
 		const char* Name; //name of ID
 		u8 ID; //ID
+	};
+
+	struct ID_U16Data {
+		const char* Name; //name of ID
+		u16 ID; //ID
 	};
 	
 	struct Range {
@@ -90,12 +95,14 @@ namespace CTRPluginFramework {
 	void ValidKeyboardCheck(Keyboard& keyboard, KeyboardEvent& event);
 	void ItemChange(Keyboard& keyboard, KeyboardEvent& event);
 	void TextItemChange(Keyboard& keyboard, KeyboardEvent& event);
-	extern const ID_Data Buildings[205];
-	extern const ID_Data Countrys[134];
+	extern const ID_U16Data Items[296];
+	extern const ID_U8Data Buildings[205];
+	extern const ID_U8Data Countrys[134];
 	extern const SPAmiiboInfo amiiboSPVillagers[55];
     extern const AmiiboInfo amiiboVillagers[399];
 
 	namespace IDList {
+		bool 						hasItemNoName(Item item);
 		bool						IsHalfAcre(u8 acreID);
 		bool 						RoomValid(u8 roomID);
 		bool 						MenuValid(u8 MenuID);
@@ -110,7 +117,11 @@ namespace CTRPluginFramework {
 		std::string 				GetBuildingName(u8 ID);
 		std::string 				GetRoomName(u8 ID);
 		bool		 				ValidID(u16 ID, u16 StardID, u16 EndID);
+		std::string 				GetItemName(Item item);
 	}
+
+	bool SearchItemByKeywordFUNC(u32 param_1/*0x307A6B70*/);
+	bool SearchItemByKeyword(std::string& Keyword);
 }
 #endif
 

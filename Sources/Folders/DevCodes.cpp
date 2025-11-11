@@ -13,6 +13,7 @@
 #include "Helpers/Town.hpp"
 #include "Helpers/NPC.hpp"
 #include "Helpers/Save.hpp"
+#include "Helpers/IDList.hpp"
 
 #include "Color.h"
 #include "Files.h"
@@ -1875,14 +1876,9 @@ namespace CTRPluginFramework {
 	
 //Item Island Code
 	void islanditems(MenuEntry *entry) {
-		/*if (Controller::IsKeysPressed(Key::L)) {
-			GameHelper::PlaySound(sound);
-			OSD::Notify(Utils::Format("%08X", sound));
-			sound++;
-		}
-
 		static std::string str = "";
 		static u32 buffer = 0;
+		static Hook hook;
  
 		if(Controller::IsKeysPressed(Key::R + Key::DPadUp)) {
 			if(Wrap::KB<std::string>("Enter Cro Name:", false, 15, str, str)) {
@@ -1899,7 +1895,28 @@ namespace CTRPluginFramework {
 					OSD::Notify(Utils::Format("Locked %s | Address: %08X", str.c_str(), buffer));
 				}
 			}
-		}*/
+		}
+		else if(Controller::IsKeysPressed(Key::R + Key::DPadLeft)) {
+			hook.Initialize(0xBE6A6C, (u32)SearchItemByKeywordFUNC);
+			hook.SetFlags(USE_LR_TO_RETURN);
+			hook.SetReturnAddress(0xBE6A6C + 0x2A4);
+			hook.Enable();
+			OSD::Notify("Hook Enabled!");
+		}
+		else if (Controller::IsKeysPressed(Key::R + Key::DPadRight)) {
+			hook.Disable();
+			OSD::Notify("Hook Disabled!");
+		}
+
+		else if (Controller::IsKeysPressed(Key::L + Key::DPadRight)) {
+			std::string keyword = "";
+			SearchItemByKeyword(keyword);
+			OSD::Notify("Look at 0xA00000 for results!");
+		}
+
+		/*
+
+		*/
 		/*else if(Controller::IsKeysPressed(Key::R + Key::DPadRight)) {
 			int res = FUNCTION(0x30F5FC).Call<int>(0xAF88F8, "Test %d", 25);
 			char* buff = (char *)(0xAF88F8 + 0xC);

@@ -7,7 +7,6 @@
 #include "Helpers/Player.hpp"
 #include "Helpers/GameKeyboard.hpp"
 #include "Helpers/Animation.hpp"
-#include "Helpers/ItemReader.hpp"
 
 #include "Color.h"
 #include "Files.h"
@@ -15,6 +14,11 @@
 #define MAXCOUNT 25
 
 namespace CTRPluginFramework {
+	struct Entry {
+		std::string name;
+		Item item;
+	};
+
 	void ItemListCallBack(Keyboard& keyboard, KeyboardEvent& event) {
 		std::string& input = keyboard.GetInput();
 
@@ -28,7 +32,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 
-		std::vector<ItemReader::Entry> itemEntries = ItemReader::getInstance()->searchAllByName(input);
+		std::vector<Entry> itemEntries = std::vector<Entry>();//ItemReader::getInstance()->searchAllByName(input); TODO
 
 		if(itemEntries.empty()) {
 			keyboard.SetError(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_ERR3"));
@@ -54,7 +58,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 
-		ItemReader::Entry match = itemEntries[result];
+		Entry match = itemEntries[result];
 		
 		input.clear();
 		u8 slot = 0;
@@ -126,10 +130,6 @@ namespace CTRPluginFramework {
 				return;
 			}
 
-			if(!ItemReader::getInstance()->isLoaded()) {
-				OSD::Notify("Error: item.txt missing!", Color::Red);
-				return;
-			}
 			std::string input = "";
 			Keyboard KB(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_KB2"));
 			KB.OnKeyboardEvent(ItemListCallBack);
@@ -155,7 +155,7 @@ namespace CTRPluginFramework {
 		Item CurrentItem = *(Item *)(invData + 0x3B9C - 0x28);
 
 		if(Game::SetItem(&CurrentItem)) {
-			std::string itemName = ItemReader::getInstance()->get(CurrentItem);
+			std::string itemName = IDList::GetItemName(CurrentItem);
 			OSD::Notify(Utils::Format("Spawned Item: %s (%04X)", itemName.c_str(), CurrentItem.ID));
 		}
 		else
@@ -259,7 +259,7 @@ namespace CTRPluginFramework {
 		
 		Inventory::WriteSlot(slot, itemID);
 
-		std::string itemName = ItemReader::getInstance()->get(itemID);
+		std::string itemName = IDList::GetItemName(itemID);
 		OSD::Notify(Utils::Format("Spawned Item: %s (%08X)", itemName.c_str(), itemID));
 	}
 //Clear Inventory
@@ -452,7 +452,7 @@ namespace CTRPluginFramework {
 			if(i >= OnlyItem.size())
 				return;
 
-			std::string str = ItemReader::getInstance()->get(OnlyItem[i]);
+			std::string str = IDList::GetItemName(OnlyItem[i]);
 			Sets[i] = str;
 
 			input += Color(0x40FF40FF) << Utils::Format("%08X | ", OnlyItem[i]) << Color(0xFFFDD0FF) << Sets[i] << "\n";
