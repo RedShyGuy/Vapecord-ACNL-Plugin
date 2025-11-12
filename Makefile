@@ -17,7 +17,8 @@ BUILD		:= 	Build
 INCLUDES	:= 	Includes \
 				Includes/Helpers \
 				Includes/LibCtrpfExtras \
-				Includes/Address
+				Includes/Address \
+				Includes/Helpers/ItemSearch
 SOURCES 	:= 	Sources \
                 Sources/Folders \
 				Sources/Folders/SeedingCodes \
@@ -26,7 +27,8 @@ SOURCES 	:= 	Sources \
 				Sources/Folders/DefaultCodes \
 				Sources/Helpers \
 				Sources/LibCtrpfExtras \
-				Sources/Plugin
+				Sources/Plugin \
+				Sources/Helpers/ItemSearch
 
 PSF 		:= 	$(notdir $(TOPDIR)).plgInfo
 
