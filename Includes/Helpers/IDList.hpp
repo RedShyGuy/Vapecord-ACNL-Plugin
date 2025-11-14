@@ -119,9 +119,6 @@ namespace CTRPluginFramework {
 		bool		 				ValidID(u16 ID, u16 StardID, u16 EndID);
 		std::string 				GetItemName(Item item);
 	}
-
-	bool SearchItemByKeywordFUNC(u32 param_1/*0x307A6B70*/);
-	bool SearchItemByKeyword(std::string& Keyword);
 }
 #endif
 

@@ -14,6 +14,7 @@
 #include "Helpers/NPC.hpp"
 #include "Helpers/Save.hpp"
 #include "Helpers/IDList.hpp"
+#include "Helpers/ItemSearcher/ItemSearcher.hpp"
 
 #include "Color.h"
 #include "Files.h"
@@ -1897,11 +1898,15 @@ namespace CTRPluginFramework {
 			}
 		}
 		else if(Controller::IsKeysPressed(Key::R + Key::DPadLeft)) {
-			hook.Initialize(0xBE6A6C, (u32)SearchItemByKeywordFUNC);
-			hook.SetFlags(USE_LR_TO_RETURN);
-			hook.SetReturnAddress(0xBE6A6C + 0x2A4);
-			hook.Enable();
-			OSD::Notify("Hook Enabled!");
+			if(CRO::GetMemAddress("Shop", buffer)) {
+				if(CRO::WritePermToggle(buffer, true)) {
+					hook.Initialize(0xBE6A6C, (u32)SearchItemByKeywordFUNC);
+					hook.SetFlags(USE_LR_TO_RETURN);
+					hook.SetReturnAddress(0xBE6A6C + 0x2A4);
+					hook.Enable();
+					OSD::Notify("Hook Enabled!");
+				}
+			}
 		}
 		else if (Controller::IsKeysPressed(Key::R + Key::DPadRight)) {
 			hook.Disable();

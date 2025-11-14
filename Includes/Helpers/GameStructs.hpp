@@ -175,6 +175,7 @@ namespace CTRPluginFramework {
         Good_LuckCharm, //(0x22DF)
         IkadaTrophy, //(0x372A)
         Unknown2, //(0x22E0)
+        Invalid //Game internally actually has this for many checks
     };
 
     /*All Credits go to https://github.com/Slattz/ACNL_Research/blob/master/010%20Templates/garden_plus.dat.bt*/
@@ -193,6 +194,10 @@ namespace CTRPluginFramework {
 
         bool operator>(const Item&item) const {
             return (ID + Flags) > (item.ID + item.Flags);
+        }
+
+        operator u32() const {
+            return (Flags << 16) | (ID & 0xFFFF);
         }
 
         Item() {
