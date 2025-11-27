@@ -16,8 +16,9 @@ namespace CTRPluginFramework {
 
 			fmt++;
 
-			if(*fmt == '\0') 
+			if(*fmt == '\0') {
 				break;
+			}
 
 			if(*fmt == 'c') {
 				void* p = va_arg(list, void *);

@@ -29,8 +29,7 @@ FUNCTION    BGRHook
     BX          LR                  @return
 
 FUNCTION    MoveFurn
-    LDR         R0, =IsIndoorsBool  @data which holds check for if indoors
-    LDRSB       R0, [R0]   
+    BL          __IsIndoors  @data which holds check for if indoors 
     BX          LR
 
 FUNCTION    PATCH_MoveFurnButton

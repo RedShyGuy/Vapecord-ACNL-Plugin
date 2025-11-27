@@ -2,7 +2,7 @@
 #include "Address/Address.hpp"
 #include "Helpers/Player.hpp"
 #include "Helpers/IDList.hpp"
-
+#include "RuntimeContext.hpp"
 
 namespace CTRPluginFramework {
 /*
@@ -10,8 +10,9 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 */
   	u32 NPC::GetData(u16 ID, int count) {
 		u32 point = *(u32 *)Address(0x95D3F4).addr;
-		if(point == 0)
+		if(point == 0) {
 			return 0;
+		}
 
 		u32 res = 0;
 		u16 val = 0;
@@ -22,16 +23,19 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 			data = *(u32 *)(res + 4);
 			if(*(u8 *)(*(u32 *)(res + 8) + 0xF) == 0) {
 				val = *(u16 *)(*(u32 *)(res + 8) + 4);
-				if((val < 0x400) || (0x1FF < (val & 0x3FF))) 
+				if((val < 0x400) || (0x1FF < (val & 0x3FF))) {
 					val = val & 0x3FF;
-				else 
+				}
+				else {
 					val = (val & 0x3FF) + 0x200;
+				}
 
 				if((*(u8 *)(val + point + 0x1102C) & 2) == 0) {
 					if(*(u16 *)(res + 0xC) == ID) {
 						cvar++;
-						if(count == cvar || count == -1)
+						if(count == cvar || count == -1) {
 							return *(u32 *)(res + 8);
+						}
 					}
 				}
 			}
@@ -104,13 +108,20 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 			info.clear();
 
 			for(const SPAmiiboInfo& amiibo : amiiboSPVillagers) {
-				if(!NonCaravanAllowed && amiibo.VID == 0xFFFF) //Non Caravan get skipped
+				if(!NonCaravanAllowed && amiibo.VID == 0xFFFF) {//Non Caravan get skipped
 					continue;
+				}
 
 				std::string Name = "";
-				if(amiibo.SPVID == 0xFE) Name = "Villager";
-				else if(amiibo.SPVID == 0xFF) Name = "Timmy&Tommy";
-				else Name = GetSPName(amiibo.SPVID);
+				if(amiibo.SPVID == 0xFE) {
+					Name = "Villager";
+				}
+				else if(amiibo.SPVID == 0xFF) {
+					Name = "Timmy&Tommy";
+				}
+				else {
+					Name = GetSPName(amiibo.SPVID);
+				}
 
 				info.push_back(PACKED_AmiiboInfo{Name, amiibo.ID0, amiibo.ID1, amiibo.VID});
 				vec.push_back(Name);
@@ -124,8 +135,9 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 			info.clear();
 
 			for(const AmiiboInfo& amiibo : amiiboVillagers) {
-				if(!HoldenFillyAllowed && amiibo.ID0 == 0) //Holden and Filly get skipped
+				if(!HoldenFillyAllowed && amiibo.ID0 == 0) {//Holden and Filly get skipped
 					continue;
+				}
 
 				if(amiibo.Species == specieID) {
 					std::string Name = GetNName(amiibo.VID);
@@ -162,8 +174,9 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 
 	u8 NPC::IsPlayer(u32 npcData) {
 		for(int i = 0; i < 8; ++i) {
-    		if(*(u32 *)(npcData + 0x9AC) == Player::GetSpecificSave(i))
+    		if(*(u32 *)(npcData + 0x9AC) == Player::GetSpecificSave(i)) {
 				return i;
+			}
 		}
 		return -1;
 	}
@@ -204,7 +217,7 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 		u16 VID = 0;
 	//NNPC
 		for(int i = 0; i < 0xA; ++i) {
-			data = GetData(0x191 + !IsIndoorsBool, i);
+			data = GetData(0x191 + !RuntimeContext::getInstance()->isIndoors(), i);
 			if(data != 0) {
 				VID = GetVID(data);
 				vec.push_back(NPCdata{ GetNName(VID), data });

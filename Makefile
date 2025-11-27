@@ -16,9 +16,9 @@ TARGET		:= 	$(notdir $(CURDIR))
 BUILD		:= 	Build
 INCLUDES	:= 	Includes \
 				Includes/Helpers \
-				Includes/Helpers/ItemSearcher \
 				Includes/LibCtrpfExtras \
 				Includes/Address \
+				Includes/Item \
 				
 SOURCES 	:= 	Sources \
                 Sources/Folders \
@@ -27,9 +27,9 @@ SOURCES 	:= 	Sources \
 				Sources/Folders/PlayerCodes \
 				Sources/Folders/DefaultCodes \
 				Sources/Helpers \
-				Sources/Helpers/ItemSearcher \
 				Sources/LibCtrpfExtras \
 				Sources/Plugin \
+				Sources/Item \
 
 PSF 		:= 	$(notdir $(TOPDIR)).plgInfo
 

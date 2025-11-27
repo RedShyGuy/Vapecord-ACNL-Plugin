@@ -10,8 +10,9 @@ namespace CTRPluginFramework {
 		File file; 
 		Directory dir(path, true);     
 			
-		if(filename.find(filetype) == std::string::npos) 
-			filename += filetype;    
+		if(filename.find(filetype) == std::string::npos) {
+			filename += filetype;
+		}
 			
 	//Couldnt open file		
 		if(dir.OpenFile(file, filename, File::RWC) != 0) {
@@ -51,16 +52,19 @@ namespace CTRPluginFramework {
 
 		Directory::Open(restoreDIR, path);
 
-		if(restoreDIR.ListDirectories(f_Dir) == Directory::OPResult::NOT_OPEN)
+		if(restoreDIR.ListDirectories(f_Dir) == Directory::OPResult::NOT_OPEN) {
 			return ExHandler::ERROR_UN;
+		}
 
-		if(restoreDIR.ListFiles(f_File, filetype) == Directory::OPResult::NOT_OPEN)
+		if(restoreDIR.ListFiles(f_File, filetype) == Directory::OPResult::NOT_OPEN) {
 			return ExHandler::ERROR_UN;
+		}
 
 	//error if no directory and files found
 		if(f_Dir.empty() && f_File.empty()) {
-			if(HasMSGBox)
+			if(HasMSGBox) {
 				MessageBox(Language::getInstance()->get("RESTORE_NOFILES")).SetClear(ClearScreen::Top)();
+			}
 
 			return ExHandler::ERROR_LI; //error listing files
 		}
@@ -86,17 +90,20 @@ namespace CTRPluginFramework {
 		kb.OnKeyboardEvent(cb);
 
 		int uchoice = kb.Open();	
-		if(uchoice < 0) 
+		if(uchoice < 0) {
 			return ExHandler::ERROR_UN;
+		}
 
 	//if directory show all files in it
 		if(isDir[uchoice]) {
 		//Can't open directory
-			if(Directory::Open(restoreDIR, Utils::Format("%s/%s", path.c_str(), f_All[uchoice].c_str())) != Directory::OPResult::SUCCESS) 
+			if(Directory::Open(restoreDIR, Utils::Format("%s/%s", path.c_str(), f_All[uchoice].c_str())) != Directory::OPResult::SUCCESS) {
 				return ExHandler::ERROR_UN;
+			}
 
-			if(restoreDIR.ListFiles(f_File, filetype) == Directory::OPResult::NOT_OPEN) 
+			if(restoreDIR.ListFiles(f_File, filetype) == Directory::OPResult::NOT_OPEN) {
 				return ExHandler::ERROR_UN;
+			}
 
 			realPath = Utils::Format("%s/%s", path.c_str(), f_All[uchoice].c_str());
 
@@ -111,13 +118,15 @@ namespace CTRPluginFramework {
 
 			kb.Populate(f_All);
 			uchoice = kb.Open();	
-			if(uchoice < 0) 
+			if(uchoice < 0) {
 				goto redo;
+			}
 		}
 
 		if(restoreDIR.OpenFile(file, f_All[uchoice] + filetype, File::RWC) != Directory::OPResult::SUCCESS) {
-			if(HasMSGBox)
+			if(HasMSGBox) {
 				MessageBox(Language::getInstance()->get("RESTORE_ERROR2")).SetClear(ClearScreen::Top)();
+			}
 
 			return ExHandler::ERROR_OP; //error opening file
 		}
@@ -127,8 +136,9 @@ namespace CTRPluginFramework {
 
 		while(rest != nullptr) {
 			if(file.Inject(*(u32 *)&rest->Address, rest->Lenght) != 0) {
-				if(HasMSGBox)
+				if(HasMSGBox) {
 					MessageBox(Language::getInstance()->get("RESTORE_ERROR1")).SetClear(ClearScreen::Top)();
+				}
 
 				return ExHandler::ERROR_DRD; //error injecting file
 			}
@@ -137,8 +147,9 @@ namespace CTRPluginFramework {
 		}
 		va_end(restore);
 
-		if(HasMSGBox)
+		if(HasMSGBox) {
 			MessageBox(Language::getInstance()->get("RESTORE_RESTORE")).SetClear(ClearScreen::Top)();
+		}
 
 		return ExHandler::SUCCESS; //success
 	}
@@ -148,8 +159,9 @@ namespace CTRPluginFramework {
 		File file;
 		Directory dir(path);
 
-		if(dir.ListFiles(f_list, filetype) == Directory::OPResult::NOT_OPEN)
+		if(dir.ListFiles(f_list, filetype) == Directory::OPResult::NOT_OPEN) {
 			return ExHandler::ERROR_UN; //couldnt open directory
+		}
 
 		if(f_list.empty()) {
             MessageBox(Language::getInstance()->get("FILE_RES2")).SetClear(ClearScreen::Top)();
@@ -160,8 +172,9 @@ namespace CTRPluginFramework {
 		kb.Populate(f_list);
 
 		int uchoice = kb.Open();	
-		if(uchoice == -1) 
+		if(uchoice == -1) {
 			return ExHandler::ERROR_UN;
+		}
 
 		if(dir.OpenFile(file, f_list[uchoice], File::RWC) != 0) {
 			MessageBox(Language::getInstance()->get("RESTORE_ERROR2")).SetClear(ClearScreen::Top)();
@@ -172,6 +185,7 @@ namespace CTRPluginFramework {
 			File::Open(file, (path << std::string("/") << f_list.at(uchoice)), File::Mode::WRITE);
 			file.Flush();
 			file.Close();
+
 			if(File::Remove(path << std::string("/") << f_list.at(uchoice)) != 0) {
 				MessageBox(Language::getInstance()->get("FILE_RES3")).SetClear(ClearScreen::Top)();
 				return ExHandler::ERROR_DRD; //error deleting file
@@ -187,8 +201,9 @@ namespace CTRPluginFramework {
 	u32 Wrap::CalculateBranchInstruction(u32 PC, u32 target) {
 		u32 instruction = ((target - PC) >> 2) - 2;
 
-		if(PC > target)
+		if(PC > target) {
 			instruction -= 0x3F000000;
+		}
 
 		return instruction;
 	}

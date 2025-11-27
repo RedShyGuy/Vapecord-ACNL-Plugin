@@ -33,8 +33,12 @@ namespace CTRPluginFramework {
 	u32 NonHacker::GetPlayerMessageData() {
 		u8 _pID = pID;
 		//swap your index with player 0 in order to get the correct pointer
-		if(_pID == Game::GetOnlinePlayerIndex()) _pID = 0;
-		else if(_pID == 0) _pID = Game::GetOnlinePlayerIndex();
+		if(_pID == Game::GetOnlinePlayerIndex()) {
+			_pID = 0;
+		}
+		else if(_pID == 0) {
+			_pID = Game::GetOnlinePlayerIndex();
+		}
 		
 	    u32 PTR = *(u32 *)Address(0x94FD84).addr; //0x94FD84
 		PTR += 0x464; //33078FA0
@@ -66,13 +70,15 @@ namespace CTRPluginFramework {
 	}
 
 	void NonHacker::Animation() {
-		if(!Accessible[0])
+		if(!Accessible[0]) {
 			return;
+		}
 
 		u32 x, y;
 		if(PlayerClass::GetInstance(pID)->GetWorldCoords(&x, &y)) {
-			if(!IfForceAllowed && PlayerClass::GetInstance()->Offset() == PlayerClass::GetInstance(pID)->Offset())
+			if(!IfForceAllowed && PlayerClass::GetInstance()->Offset() == PlayerClass::GetInstance(pID)->Offset()) {
 				return;
+			}
 		
 			Animation::ExecuteAnimationWrapper(pID, animID, {0, 0}, 0, 0, 0, 0, x, y, true);
 			Sleep(Seconds(2));
@@ -83,13 +89,15 @@ namespace CTRPluginFramework {
 	}
 
 	void NonHacker::Emotion() {
-		if(!Accessible[1])
+		if(!Accessible[1]) {
 			return;
+		}
 
 		u32 x, y;
 		if(PlayerClass::GetInstance(pID)->GetWorldCoords(&x, &y)) {
-			if(!IfForceAllowed && PlayerClass::GetInstance()->Offset() == PlayerClass::GetInstance(pID)->Offset())
+			if(!IfForceAllowed && PlayerClass::GetInstance()->Offset() == PlayerClass::GetInstance(pID)->Offset()) {
 				return;
+			}
 			
 			Animation::ExecuteAnimationWrapper(pID, 0xAF, {0, 0}, emotionID, 0, 0, 0, x, y, true);
 			Sleep(Seconds(2));
@@ -100,13 +108,15 @@ namespace CTRPluginFramework {
 	}
 
 	void NonHacker::Snake() {
-		if(!Accessible[2])
+		if(!Accessible[2]) {
 			return;
+		}
 
 		u32 x, y;
 		if(PlayerClass::GetInstance(pID)->GetWorldCoords(&x, &y)) {
-			if(!IfForceAllowed && PlayerClass::GetInstance()->Offset() == PlayerClass::GetInstance(pID)->Offset())
+			if(!IfForceAllowed && PlayerClass::GetInstance()->Offset() == PlayerClass::GetInstance(pID)->Offset()) {
 				return;
+			}
 			
 			Animation::ExecuteAnimationWrapper(pID, 0xC5, {0, 0}, 0, snakeID, 0, 0, x, y, true);
 			Sleep(Seconds(2));
@@ -117,13 +127,15 @@ namespace CTRPluginFramework {
 	}
 
 	void NonHacker::Music() {
-		if(!Accessible[3])
+		if(!Accessible[3]) {
 			return;
+		}
 
 		u32 x, y;
 		if(PlayerClass::GetInstance(pID)->GetWorldCoords(&x, &y)) {
-			if(!IfForceAllowed && PlayerClass::GetInstance()->Offset() == PlayerClass::GetInstance(pID)->Offset())
+			if(!IfForceAllowed && PlayerClass::GetInstance()->Offset() == PlayerClass::GetInstance(pID)->Offset()) {
 				return;
+			}
 			
 			Animation::ExecuteAnimationWrapper(pID, 0xC4, {0, 0}, 0, 0, musicID, 0, x, y, true);
 			Sleep(Milliseconds(100));
@@ -134,8 +146,9 @@ namespace CTRPluginFramework {
 	}
 
 	void NonHacker::Item() {
-		if(!Accessible[4])
+		if(!Accessible[4]) {
 			return;
+		}
 
 		u32 x, y;
 		if(PlayerClass::GetInstance(pID)->GetWorldCoords(&x, &y)) {	
@@ -146,13 +159,15 @@ namespace CTRPluginFramework {
 	}
 
 	bool NonHackerCommands(NonHacker *nHack) {
-		if(!nHack->IsPlayerMessageOnScreen()) 
+		if(!nHack->IsPlayerMessageOnScreen()) {
 			return false;
+		}
 
 		std::string PlayerText = nHack->GetPlayerMessage();
 
-		if(PlayerText.empty())
+		if(PlayerText.empty()) {
 			return false;
+		}
 
 		PlayerText.resize(25, ' ');
 
@@ -207,29 +222,35 @@ namespace CTRPluginFramework {
 
 		else if(Command == "i:") {
 			nHack->itemID.ID = StringToHex<u16>(ID_16Bit, 0x2001); //sets item
-			if(IDList::ItemValid(nHack->itemID)) {
-				if(SPCommand == "f:") 
+			if(nHack->itemID.isValid()) {
+				if(SPCommand == "f:") {
 					nHack->itemID.Flags = StringToHex<u16>(SPID_16Bit, 0); //sets flag
+				}
 
 				nHack->Item();
 			}
-			else return false;
+			else {
+				return false;
+			}
 		}
 
 		else if(Command == "n:") {
 			UtilsExtras::Trim(ItemName);
-			Item* match = nullptr; //ItemReader::getInstance()->searchByName(ItemName); //TODO
-			if (!match) 
+			ItemNamePack match;
+			if (!Item::searchByKeyword(ItemName, match)) {
 				return false;
+			}
 
-			nHack->itemID = match->ID; //sets item
-			if(!IDList::ItemValid(nHack->itemID)) //should always be true if orig file is used
+			nHack->itemID = Item(match.ID); //sets item
+			if(!nHack->itemID.isValid()) {//should always be true if orig file is used
 				return false;
+			}
 
 			nHack->Item();
 		}
-		else 
+		else {
 			return false;
+		}
 
 		nHack->ClearPlayerMessage();
 		return true;

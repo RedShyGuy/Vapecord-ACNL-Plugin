@@ -8,6 +8,7 @@
 #include "Helpers/Wrapper.hpp"
 #include "Files.h"
 #include "Helpers/Checks.hpp"
+#include "RuntimeContext.hpp"
 
 extern "C" bool __IsPlayerHouse() {
 	u8 pID = (u8)CTRPluginFramework::Player::GetPlayerStatus(4);
@@ -19,8 +20,9 @@ extern "C" bool __IsPlayerHouse() {
 
 	if(pID < 4) {
 		while(i < 6) {
-			if(r_Array[i + pID * 6] == stageID) 
+			if(r_Array[i + pID * 6] == stageID) {
 				return 1;
+			}
 
 			i++;
 		}
@@ -31,7 +33,7 @@ extern "C" bool __IsPlayerHouse() {
 namespace CTRPluginFramework {
 //Hook invalid pickup
 	u32 InvalidPickStop(u8 ID, Item *ItemToReplace, Item *ItemToPlace, Item *ItemToShow, u8 worldx, u8 worldy) {	
-		if(IDList::ItemValid(*ItemToReplace, true)) {
+		if(ItemToReplace->isValid()) {
 			if((ID == 0xA) || (ID == 0x12) || (ID == 0x13)) {
 				if(ItemToPlace->ID == 0x7FFE) {
 					*ItemToPlace = {0x7FFE, 0x8000};
@@ -58,7 +60,7 @@ namespace CTRPluginFramework {
 	}
 //Hook invalid drop
 	u32 InvalidDropStop(u8 ID, Item *ItemToReplace, Item *ItemToPlace, Item *ItemToShow) {
-		if(IDList::ItemValid(*ItemToPlace)) {
+		if(ItemToPlace->isValid()) {
 			const HookContext &curr = HookContext::GetCurrent();
 			static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
 			return func.Call<u32>(ID, ItemToReplace, ItemToPlace, ItemToShow);
@@ -68,7 +70,7 @@ namespace CTRPluginFramework {
 	}
 //Hook to initialize
 	void InvalidSpriteStop(u32 pData, Item *SpriteItem) {
-		if(IDList::ItemValid(*SpriteItem)) {
+		if(SpriteItem->isValid()) {
 			const HookContext &curr = HookContext::GetCurrent();
 			static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
 			func.Call<void>(pData, SpriteItem);
@@ -76,31 +78,36 @@ namespace CTRPluginFramework {
 	}
 //Hook for hole check
 	bool InvalidHoleStop(Item* item, Item Hole) {
-		if(IsIndoorsBool) 
+		if(RuntimeContext::getInstance()->isIndoors()) {
 			return true;
+		}
 		
 		return(Item{u16(item->ID & 0x7FFF), item->Flags} == Hole);
 	}
 //Hook for invalid item check
 	bool InvalidItemStop(Item* item) {
-		if(!IDList::ItemValid(*item, false)) {
+		if(!item->isValid(false)) {
 			//Mannequin will not be removed
-			if(!IDList::ValidID(item->ID, 0x30CC, 0x30D1))
+			if(!IDList::ValidID(item->ID, 0x30CC, 0x30D1)) {
 				return false;
+			}
 		}
 		return true;
 	}
 	
 	bool ConvertFlower/*And Mushroomized Furniture*/(Item *item) {
-		if(IDList::ValidID(item->ID, 0x9F, 0xCB)) 
+		if(IDList::ValidID(item->ID, 0x9F, 0xCB)) {
 			Game::ToIndoorFlowers(*item);
-
-		else if(IDList::ValidID(item->ID, 0x2120, 0x212A))
+		}
+		else if(IDList::ValidID(item->ID, 0x2120, 0x212A)) {
 			item->ID += 0x959;
-		else if(item->ID == 0x211E)
+		}
+		else if(item->ID == 0x211E) {
 			item->ID += 0x23B;
-		else if(item->ID == 0x211F)
+		}
+		else if(item->ID == 0x211F) {
 			item->ID += 0x2D9;
+		}
 
 		return true;
 	}
@@ -108,8 +115,9 @@ namespace CTRPluginFramework {
 //Hook to check if item is replacable
 	bool IsItemReplaceable(Item *item) {
 		//If item is replace all		 		|| if item is ID to replace || if item is 7FFE					   and ID to replace is 7FFE
-		if(ItemIDToReplace == ReplaceEverything || *item == ItemIDToReplace || (((item->ID & 0x7FFE) == 0x7FFE) && ItemIDToReplace.ID == 0x7FFE)) 
+		if(ItemIDToReplace == ReplaceEverything || *item == ItemIDToReplace || (((item->ID & 0x7FFE) == 0x7FFE) && ItemIDToReplace.ID == 0x7FFE)) {
 			return true;
+		}
 			
 		return false;
 	}
@@ -117,17 +125,18 @@ namespace CTRPluginFramework {
 	void NameFunc(u32 r0, u32 r1, u32 r2) {		
 		Item itemslotid = {0x7FFE, 0};
 		u8 slot = 0;
+
 		if(Inventory::GetSelectedSlot(slot)) {
 			if(Inventory::ReadSlot(slot, itemslotid)) {
 				itemslotid.Flags = 0;
 				if(Game::IsOutdoorItem(itemslotid) || itemslotid.ID == 0x3729) {
-					std::string name = IDList::GetItemName(itemslotid);
+					std::string name = itemslotid.GetName();
 					u32 InvPointer = *(u32 *)(Game::BaseInvPointer() + 0xC);
 					Process::Write32(InvPointer + 0xCFC, 0x000E000E);
 					Process::Write32(InvPointer + 0xD00, 0x00040000);
 					Process::Write32(InvPointer + 0xD04, 0xCD030100);
  
-					Process::WriteString(InvPointer + 0xD08, IDList::ItemValid(itemslotid, false) ? name : "Invalid Item", StringFormat::Utf16);				
+					Process::WriteString(InvPointer + 0xD08, itemslotid.isValid(false) ? name : "Invalid Item", StringFormat::Utf16);				
 				}
 			}
 		}
@@ -139,14 +148,18 @@ namespace CTRPluginFramework {
 	}
 
 	bool IsItemDroppable(u32 ItemData, Item *ItemID, int SecondaryItemFlag) {
-		if(IDList::ValidID(ItemID->ID, 0x98, 0x9E)) 
+		if(IDList::ValidID(ItemID->ID, 0x98, 0x9E)) {
 			return true;
-		else if(ItemID->ID == 0xFD)
+		}
+		else if(ItemID->ID == 0xFD) {
 			return true;
-		else if(IDList::ValidID(ItemID->ID, 0x228E, 0x234B)) 
+		}
+		else if(IDList::ValidID(ItemID->ID, 0x228E, 0x234B)) {
 			return true;
-		else if(IDList::ValidID(ItemID->ID, 0x340C, 0x34CD)) 
+		}
+		else if(IDList::ValidID(ItemID->ID, 0x340C, 0x34CD)) {
 			return true;
+		}
 
 		const HookContext &curr = HookContext::GetCurrent();
         static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
@@ -155,10 +168,12 @@ namespace CTRPluginFramework {
 
 	bool IsItemPlantable(u32 ItemData, Item *ItemID) {
 	//seed items which should be plantable
-		if(IDList::ValidID(ItemID->ID, 0, 0x97)) 
+		if(IDList::ValidID(ItemID->ID, 0, 0x97)) {
 			return true;
-		else if(IDList::ValidID(ItemID->ID, 0x9F, 0xFC)) 
+		}
+		else if(IDList::ValidID(ItemID->ID, 0x9F, 0xFC)) {
 			return true;
+		}
 
 		const HookContext &curr = HookContext::GetCurrent();
         static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
@@ -177,8 +192,9 @@ namespace CTRPluginFramework {
 	} 
 //basically "forces" a B press directly for the search function to break
 	bool CatalogPatch_SearchFunction(void) {
-		if(!Game::IsGameInRoom(0x38) && !Game::IsGameInRoom(0x39) && !Game::IsGameInRoom(0x3A) && !Game::IsGameInRoom(0x3B) && !Game::IsGameInRoom(0x3C)) 
+		if(!Game::IsGameInRoom(0x38) && !Game::IsGameInRoom(0x39) && !Game::IsGameInRoom(0x3A) && !Game::IsGameInRoom(0x3B) && !Game::IsGameInRoom(0x3C)) {
 			return 1;
+		}
 		
 		return ACSystem::IsKeyDown(GameKey::B);
 	}
@@ -338,22 +354,31 @@ namespace CTRPluginFramework {
 		const int INVENTORY_SIZE = 16;
 		const int MAX_FRUITS_PER_BASKET = 9;
 
-		if (!item) return call_original();
+		if (!item) {
+			return call_original();
+		}
 
 		bool isFruit = IDList::ValidID(item->ID, fruitMin, fruitMax);
 		bool isBasket = IDList::ValidID(item->ID, fruitMin + basketOffset, fruitMax + basketOffset);
 
-		if (!isFruit && !isBasket) return call_original();
+		if (!isFruit && !isBasket) {
+			return call_original();
+		}
 
 		u16 basketID = isFruit ? (item->ID + basketOffset) : item->ID;
 		int fruitsToAdd = 0;
 		if (isFruit) {
 			fruitsToAdd = 1;
-		} else {
+		} 
+		else {
 			int existingFlag = (int)item->Flags;
 			int contained = existingFlag + 1; // mapping flag -> fruit count
-			if (contained < 1) contained = 1;
-			if (contained > MAX_FRUITS_PER_BASKET) contained = MAX_FRUITS_PER_BASKET;
+			if (contained < 1) {
+				contained = 1;
+			}
+			if (contained > MAX_FRUITS_PER_BASKET) {
+				contained = MAX_FRUITS_PER_BASKET;
+			}
 			fruitsToAdd = contained;
 		}
 
@@ -365,20 +390,30 @@ namespace CTRPluginFramework {
 
 		// make a working copy we will modify (simulate)
 		Item working[INVENTORY_SIZE];
-		for (int i = 0; i < INVENTORY_SIZE; ++i) working[i] = snapshot[i];
+		for (int i = 0; i < INVENTORY_SIZE; ++i) {
+			working[i] = snapshot[i];
+		}
 
 		// Helper-lambda: get number of fruits in a basket item
 		auto basketFruits = [&](const Item &it)->int {
 			int f = (int)it.Flags + 1;
-			if (f < 1) f = 1;
-			if (f > MAX_FRUITS_PER_BASKET) f = MAX_FRUITS_PER_BASKET;
+			if (f < 1) {
+				f = 1;
+			}
+			if (f > MAX_FRUITS_PER_BASKET) {
+				f = MAX_FRUITS_PER_BASKET;
+			}
 			return f;
 		};
 
 		// Helper-lambda: set basket flags from fruit count
 		auto setBasketFromFruits = [&](Item &it, int fruits) {
-			if (fruits < 1) fruits = 1;
-			if (fruits > MAX_FRUITS_PER_BASKET) fruits = MAX_FRUITS_PER_BASKET;
+			if (fruits < 1) {
+				fruits = 1;
+			}
+			if (fruits > MAX_FRUITS_PER_BASKET) {
+				fruits = MAX_FRUITS_PER_BASKET;
+			}
 			it.ID = basketID;
 			it.Flags = (u8)(fruits - 1); // flag = fruits - 1
 		};
@@ -440,7 +475,9 @@ namespace CTRPluginFramework {
 		// Count free slots in working snapshot (after conversions above)
 		int freeSlots = 0;
 		for (int i = 0; i < INVENTORY_SIZE; ++i) {
-			if (working[i].ID == emptyID) freeSlots++;
+			if (working[i].ID == emptyID) {
+				freeSlots++;
+			}
 		}
 
 		// If not enough space for required new slots -> abort (no changes)
@@ -458,7 +495,8 @@ namespace CTRPluginFramework {
 				if (put == 1) {
 					working[i].ID = (basketID - basketOffset); // fruit ID
 					working[i].Flags = 0;
-				} else {
+				} 
+				else {
 					setBasketFromFruits(working[i], put);
 				}
 				remainingToPlace -= put;

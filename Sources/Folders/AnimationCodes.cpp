@@ -20,27 +20,34 @@ namespace CTRPluginFramework {
 //Speed
 	bool speedmode = false;
 
+	static Address playerSelect(0x305EF0);
+	static Address playerSelect2 = playerSelect.MoveOffset(4);
+
 	void PSelector_Set(u8 pIndex) {
-		Process::Patch(Address(0x305EF0).addr, 0xE3A00000 + pIndex);
-		Process::Patch(Address(0x305EF0).addr + 4, 0xE12FFF1E);
+		playerSelect.Patch(0xE3A00000 + pIndex);
+		playerSelect2.Patch(0xE12FFF1E);
 	}
+	
 	void PSelector_OFF(void) {
-		Process::Patch(Address(0x305EF0).addr, 0xE59F0004);
-		Process::Patch(Address(0x305EF0).addr + 4, 0xE5900000);
+		playerSelect.Unpatch();
+		playerSelect2.Unpatch();
 	}
+
 	bool PSelector_ON(void) {
-		return (*(u32 *)Address(0x305EF0).addr != 0xE59F0004);
+		return (*(u32 *)playerSelect.addr != playerSelect.origVal);
 	}
 
 //check to make player selector better
 	void PlayerSelectCheck(void) {
-		if(!PSelector_ON())
+		if(!PSelector_ON()) {
 			return;
+		}
 		
 		u8 pIndex = Game::GetOnlinePlayerIndex();
 	//If player is not loaded or loading screen started, switch off the code
-		if(!PlayerClass::GetInstance()->IsLoaded() || !PlayerClass::GetInstance(pIndex)->IsLoaded() || Game::IsRoomLoading()) 
+		if(!PlayerClass::GetInstance()->IsLoaded() || !PlayerClass::GetInstance(pIndex)->IsLoaded() || Game::IsRoomLoading()) {
 			PSelector_OFF();
+		}
 	} 
 	
 //Player Selector
@@ -59,8 +66,9 @@ namespace CTRPluginFramework {
 		
 		if(entry->Hotkeys[0].IsPressed()) {
 			for(int i = 0; i <= 3; ++i) {
-				if(PlayerClass::GetInstance(i)->IsLoaded()) 
+				if(PlayerClass::GetInstance(i)->IsLoaded()) {
 					pV[i] = pColor[i] << "Player: " << std::to_string(i);
+				}
 			}
 			
 			Keyboard pKB(Language::getInstance()->get("KEY_SELECT_PLAYER"), pV);
@@ -71,8 +79,9 @@ namespace CTRPluginFramework {
 					PSelector_Set(pChoice);
 					OSD::Notify(Utils::Format("Controlling Player: %02X Enabled!", pChoice));
 				}
-				else
+				else {
 					OSD::Notify("Error: Player doesn't exist!", Color::Red);
+				}
 			}
 		}
 		
@@ -84,7 +93,7 @@ namespace CTRPluginFramework {
 			}
 			OSD::Notify("Error: No Player Is Selected!", Color::Red);
 		}
-		
+
 		if(!entry->IsActivated()) {
 			PSelector_OFF();
 			PluginMenu *menu = PluginMenu::GetRunningInstance();
@@ -94,8 +103,9 @@ namespace CTRPluginFramework {
 
 	u32 AntiAnimCheck(u32 pID) {
 		u32 pInstance = PlayerClass::GetInstance(pID)->Offset();
-		if(pInstance == PlayerClass::GetInstance()->Offset()) 
+		if(pInstance == PlayerClass::GetInstance()->Offset()) {
 			return 0;
+		}
 
 		return pInstance; 
 	}
@@ -125,6 +135,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 	}
+
 	void SnakeChange(Keyboard& keyboard, KeyboardEvent& event) {
 		std::string& input = keyboard.GetInput();	
 		u16 ID = StringToHex<u16>(input, 0xFFFF);
@@ -133,6 +144,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 	}
+
 	void EmotionChange(Keyboard& keyboard, KeyboardEvent& event) {
 		std::string& input = keyboard.GetInput();	
 		u8 ID = StringToHex<u8>(input, 0xFF);
@@ -141,6 +153,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 	}
+
 	void MusicChange(Keyboard& keyboard, KeyboardEvent& event) {
 		std::string& input = keyboard.GetInput();	
 		u16 ID = StringToHex<u16>(input, 0xFFFF);
@@ -225,17 +238,18 @@ namespace CTRPluginFramework {
 			OSD::Notify("Speed Mode " << (speedmode ? Color::Green << "ON" : Color::Red << "OFF"));			
 		}
 		
-		if(entry->Hotkeys[3].IsPressed()) 
+		if(entry->Hotkeys[3].IsPressed()) {
 			PlayerClass::GetInstance(Game::GetOnlinePlayerIndex())->GetWorldCoords(&wX, &wY);
-		
+		}
+			
 		if(speedmode ? entry->Hotkeys[3].IsDown() :entry->Hotkeys[3].IsPressed()) {//Key::A + B		
 			switch(setmode) {
 				case 0: return;
 				case 1: //Animation
-					Animation::ExecuteAnimationWrapper(Game::GetOnlinePlayerIndex(), IDList::AnimationValid(a_AnimID, Game::GetOnlinePlayerIndex()) ? a_AnimID : 6, IDList::ItemValid(a_ItemID) ? a_ItemID : Item{0x2001, 0}, a_EmoteID, a_SnakeID, a_SoundID, 0, wX + offsetX, wY + offsetY, 0, a_AppearanceID);
+					Animation::ExecuteAnimationWrapper(Game::GetOnlinePlayerIndex(), IDList::AnimationValid(a_AnimID, Game::GetOnlinePlayerIndex()) ? a_AnimID : 6, a_ItemID.isValid() ? a_ItemID : Item{0x2001, 0}, a_EmoteID, a_SnakeID, a_SoundID, 0, wX + offsetX, wY + offsetY, 0, a_AppearanceID);
 				break;
 				case 2: //Tool
-					Animation::ExecuteAnimationWrapper(Game::GetOnlinePlayerIndex(), 0x38, IDList::ItemValid(a_ItemID) ? a_ItemID : Item{0x2001, 0}, 0, 0, 0, 0, wX + offsetX, wY + offsetY, 0, a_AppearanceID);
+					Animation::ExecuteAnimationWrapper(Game::GetOnlinePlayerIndex(), 0x38, a_ItemID.isValid() ? a_ItemID : Item{0x2001, 0}, 0, 0, 0, 0, wX + offsetX, wY + offsetY, 0, a_AppearanceID);
 				break;
 				case 3: //Snake
 					Animation::ExecuteAnimationWrapper(Game::GetOnlinePlayerIndex(), 0xC5, {0, 0}, 0, IDList::SnakeValid(a_SnakeID) ? a_SnakeID : 1, 0, 0, wX + offsetX, wY + offsetY, 0, 0);
@@ -255,10 +269,18 @@ namespace CTRPluginFramework {
 				break;
 			}
 			
-			if(Controller::IsKeyDown(Key::CPadRight)) offsetX++;
-			if(Controller::IsKeyDown(Key::CPadLeft)) offsetX--;
-			if(Controller::IsKeyDown(Key::CPadDown)) offsetY++;
-			if(Controller::IsKeyDown(Key::CPadUp)) offsetY--;
+			if(Controller::IsKeyDown(Key::CPadRight)) {
+				offsetX++;
+			}
+			if(Controller::IsKeyDown(Key::CPadLeft)) {
+				offsetX--;
+			}
+			if(Controller::IsKeyDown(Key::CPadDown)) {
+				offsetY++;
+			}
+			if(Controller::IsKeyDown(Key::CPadUp)) {
+				offsetY--;
+			}
 		}
 		
 		else {
@@ -268,65 +290,74 @@ namespace CTRPluginFramework {
 	}
 //Emotion Loop
 	void inf_expression(MenuEntry *entry) {
-		static const Address infex(0x65E9B0);
-        if(entry->Hotkeys[0].IsDown()) 
-			Process::Patch(infex.addr, 0xE3A010FF);
-		if(!entry->Hotkeys[0].IsDown()) 
-			Process::Patch(infex.addr, 0xE1D010B0);
+		static Address infex(0x65E9B0);
+
+        if(entry->Hotkeys[0].IsDown()) {
+			infex.Patch(0xE3A010FF);
+		}
+		if(!entry->Hotkeys[0].IsDown()) {
+			infex.Unpatch();
+		}
 	}
 //Idle Animation 
 	void idle(MenuEntry *entry) {
-		if(entry->Hotkeys[0].IsDown()) 
+		if(entry->Hotkeys[0].IsDown()) {
 			Animation::Idle();
+		}
 	}
 //Slow Motion Animations
 	void slmoanms(MenuEntry *entry) {
-		static const Address slo1(0x654578);
-		static const Address slo2(0x652C10);
-		static const Address slo3(0x887880);
-		const u32 SlowAnim[2] = { slo2.addr, slo3.addr };
-		
-		static const float SlowAnimPatch[2][2] = {
-            { 8.0, 6.0 },
-            { 1.0, 1.0 }
-        };
+		static Address slo1(0x654578);
+		static Address slo2(0x652C10);
+		static Address slo3(0x887880);
 		
 		if(entry->Hotkeys[0].IsPressed()) {//Key::L + Key::DPadLeft
-			bool index = *(u32 *)slo1.addr == 0x0A000004 ? false : true;
+			bool isOrig = *(u32 *)slo1.addr == slo1.origVal;
 
 			Animation::Idle();
-			OSD::Notify("Slow Animations " << (index ? Color::Red << "OFF" : Color::Green << "ON"));
 			
-			for(int i = 0; i < 2; ++i)
-                Process::WriteFloat(SlowAnim[i], SlowAnimPatch[index][i]);
+			if (isOrig) {
+				slo1.Patch(0xE3A00001);
+				slo1.WriteFloat(8.0);
+				slo1.WriteFloat(6.0);
 
-			Process::Patch(slo1.addr, index ? 0x0A000004 : 0xE3A00001);
+				OSD::Notify("Slow Animations " << Color::Green << "ON");
+			} else {
+				slo1.Unpatch();
+				slo2.Unpatch();
+				slo3.Unpatch();
+
+				OSD::Notify("Slow Animations " << Color::Red << "OFF");
+			}
 		}
 
 		if(!entry->IsActivated()) {
-			for(int i = 0; i < 2; ++i)
-                Process::WriteFloat(SlowAnim[i], SlowAnimPatch[1][i]);
-
-			Process::Patch(slo1.addr, 0x0A000004);
+			slo1.Unpatch();
+			slo2.Unpatch();
+			slo3.Unpatch();
         }
 	}
 //Set Animation On Everyone
 	void doonall(MenuEntry *entry) {
+		static Address doonall1(0x677504);
+		static Address doonall2(0x628B54);
+
 		u8 DATAIndexRandom = Utils::Random(0, 3);
 		static u32 wX, wY;
 		
-		if(entry->Hotkeys[0].IsPressed()) 
+		if(entry->Hotkeys[0].IsPressed()) {
 			PlayerClass::GetInstance()->GetWorldCoords(&wX, &wY);
+		}
 		
 		if(speedmode ? entry->Hotkeys[0].IsDown() : entry->Hotkeys[0].IsPressed()) {		
 			for(u8 i = 0; i < 4; i++) {
 				switch(setmode) {
 					case 0: return;
 					case 1: //Animation
-						Animation::ExecuteAnimationWrapper(i, IDList::AnimationValid(a_AnimID, i) ? a_AnimID : 0x06, IDList::ItemValid(a_ItemID) ? a_ItemID : Item{0x2001, 0}, a_EmoteID, a_SnakeID, a_SoundID, 0, wX, wY, 1, a_AppearanceID);
+						Animation::ExecuteAnimationWrapper(i, IDList::AnimationValid(a_AnimID, i) ? a_AnimID : 0x06, a_ItemID.isValid() ? a_ItemID : Item{0x2001, 0}, a_EmoteID, a_SnakeID, a_SoundID, 0, wX, wY, 1, a_AppearanceID);
 					break;
 					case 2: //Tool
-						Animation::ExecuteAnimationWrapper(i, 0x38, IDList::ItemValid(a_ItemID) ? a_ItemID : Item{0x2001, 0}, 0, 0, 0, 0, wX, wY, 1, a_AppearanceID);
+						Animation::ExecuteAnimationWrapper(i, 0x38, a_ItemID.isValid() ? a_ItemID : Item{0x2001, 0}, 0, 0, 0, 0, wX, wY, 1, a_AppearanceID);
 					break;
 					case 3: //Snake
 						Animation::ExecuteAnimationWrapper(i, 0xC5, {0, 0}, 0, IDList::SnakeValid(a_SnakeID) ? a_SnakeID : 0x001, 0, 0, wX, wY, 1, 0);
@@ -349,16 +380,18 @@ namespace CTRPluginFramework {
 		}
 		
 		if(speedmode ? entry->Hotkeys[1].IsDown() : entry->Hotkeys[1].IsPressed()) {
-			for(u8 i = 0; i < 4; ++i) 
+			for(u8 i = 0; i < 4; ++i) {
 				Animation::ExecuteAnimationWrapper(i, 6, {0, 0}, 0, 0, 0, 0, 0, 0, 1, 0);
+			}
 		}
 		
 		if(entry->Hotkeys[2].IsDown()) {
-			if(!PlayerClass::GetInstance()->IsLoaded())
+			if(!PlayerClass::GetInstance()->IsLoaded()) {
 				return;
-
-			Process::Patch(Address(0x677504).addr, 0xE1A00000); 
-			Process::Patch(Address(0x628B54).addr, 0xE3A01000 + DATAIndexRandom);
+			}
+				
+			doonall1.Patch(0xE1A00000);
+			doonall2.Patch(0xE3A01000 + DATAIndexRandom);
 			
 			for(u8 i = 0; i < 4; ++i) {
 				u32 playerInstance = PlayerClass::GetInstance()->Offset();
@@ -367,15 +400,17 @@ namespace CTRPluginFramework {
 				data.Init(animInstance, playerInstance, i);
 				data.MoonJump_C4();
 				
-				if(Game::GetOnlinePlayerIndex() == Game::GetActualPlayerIndex()) 
+				if(Game::GetOnlinePlayerIndex() == Game::GetActualPlayerIndex()) {
 					data.ExecuteAnimation(0xC4);
-				else 
+				}
+				else {
 					Animation::SendAnimPacket(i, animInstance, 0xC4, Player::GetRoom(i), i);
+				}
 			}
         } 
 		if(!entry->Hotkeys[2].IsDown()) {
-            Process::Patch(Address(0x677504).addr, 0x1A000017);
-			Process::Patch(Address(0x628B54).addr, 0xE5D11268);
+            doonall1.Unpatch();
+			doonall2.Unpatch();
 		}
 	}
 }

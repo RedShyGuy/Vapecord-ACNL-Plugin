@@ -8,6 +8,7 @@
 #include "Helpers/Animation.hpp"
 #include "Helpers/Player.hpp"
 #include "Address/Address.hpp"
+#include "RuntimeContext.hpp"
 
 namespace CTRPluginFramework {
 	const s_DropType DropTypes[8] = {
@@ -50,16 +51,19 @@ namespace CTRPluginFramework {
 Restores Drop Pattern if drop radius changer has been used to prevent any crashes
 */
 	void Dropper::RestorePattern(void) {
-		for(int i = 0; i < 77; ++i)
+		for(int i = 0; i < 77; ++i) {
 			Process::Write32(Address(0x85FE58).addr + (i * 4), ReValues[i]);
+		}
 	}
 
 	int Dropper::Search_Replace(int ItemsPerRun, std::vector<Item> ItemToSearch, Item ItemToPlace, u8 AnimID, bool ItemSequenceUsage, const std::string& msg, bool DisplayMSG) {
-		if(!PlayerClass::GetInstance()->IsLoaded()) 
+		if(!PlayerClass::GetInstance()->IsLoaded()) {
 			return -1; //Player not loaded
+		}
 
-		if(IsIndoorsBool)
+		if(RuntimeContext::getInstance()->isIndoors()) {
 			return -2; //Only works outdoors
+		}
 
 		bool ItemSequenceWasON = false;
 
@@ -68,8 +72,9 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 			ItemSequence::Switch(false);
 		}
 
-		if(!bypassing) 
+		if(!bypassing) {
 			Dropper::DropItemLock(true);
+		}
 
 		u32 count = 0;
 		u32 x = 0x10, y = 0x10;
@@ -81,13 +86,15 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 					for(int i = 0; i < ItemToSearch.size(); i++) {
 						if(Dropper::PlaceItemWrapper(1, ItemToSearch[i], &ItemToPlace, &ItemToPlace, x, y, 0, 0, 0, 0, 0, AnimID, 0xA5, ItemSequenceUsage)) {
 							count++;
-							if(count % ItemsPerRun == 0) 
+							if(count % ItemsPerRun == 0) {
 								Sleep(Milliseconds(500));
+							}
 						}
 					}
 				}
-				else 
+				else {
 					res = false;
+				}
 
 				y++;
 			}
@@ -95,19 +102,23 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 			
 			y = 0x10;
 			x++;
-			if(!Game::GetItemAtWorldCoords(x, y)) 
+			if(!Game::GetItemAtWorldCoords(x, y)) {
 				res = false;
+			}
 		}		
 		
-		if(DisplayMSG)
+		if(DisplayMSG) {
 			OSD::Notify(Utils::Format("%d %s", count, msg.c_str()));
+		}
 
 	//OFF
-		if(!bypassing) 
-			Dropper::DropItemLock(false);	
+		if(!bypassing) {
+			Dropper::DropItemLock(false);
+		}	
 
-		if(ItemSequenceWasON)
+		if(ItemSequenceWasON) {
 			ItemSequence::Switch(true);
+		}
 
 		return 0;
 	}
@@ -147,7 +158,7 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 		if(!PlayerClass::GetInstance()->IsLoaded()) 
 			return 0;
 
-		if(!IDList::ItemValid(*ItemToPlace)) {
+		if(!ItemToPlace->isValid()) {
 			OSD::Notify(Utils::Format("Invalid Item: %08X", *(u32 *)ItemToPlace));
 			return 0;
 		}
@@ -156,7 +167,7 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 		u8 autoWaitAnim = waitAnim;
 		
 		if(ID == 0xB || ID == 0x13) {
-			if(IsIndoorsBool) {
+			if(RuntimeContext::getInstance()->isIndoors()) {
 				ID = 0xA;
 				autoWaitAnim = 0x53;
 			}
@@ -175,13 +186,15 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 		bool forced = (currentIndex != Game::GetActualPlayerIndex()) && (Game::GetActualPlayerIndex() <= 3);
 		
 	//not too sure when it is not 0xFFFFFFFF but if it is return
-		if(Game::GetLockedSpotIndex(worldx, worldy, roomID) != 0xFFFFFFFF) 
+		if(Game::GetLockedSpotIndex(worldx, worldy, roomID) != 0xFFFFFFFF) {
 			return 0;
+		}
 		
 	//checks if item at coords is not 0 -> if place is valid to drop
 		Item *pItemAtCoords = Game::GetItemAtWorldCoords(worldx, worldy);
-		if(!pItemAtCoords) 
+		if(!pItemAtCoords) {
 			return 0;
+		}
 
 		Item empty = {0x7FFE, 0};
 
@@ -191,10 +204,11 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 		Item *actualItemToReplace = ItemToReplace == ReplaceEverything ? actualItemAtCoords : &ItemToReplace;
 
 	//if item to replace is not item at coords return -> means there wont be an item to replace
-		if(*actualItemToReplace != *actualItemAtCoords) 
+		if(*actualItemToReplace != *actualItemAtCoords) {
 			return 0;
+		}
 
-		Item crashPreventItem = IsIndoorsBool ? Item{0x2001, 0} : Item{0x7FFE, 0x8000};
+		Item crashPreventItem = RuntimeContext::getInstance()->isIndoors() ? Item{0x2001, 0} : Item{0x7FFE, 0x8000};
 
 		Item *ItemReplace = (actualItemToReplace->ID == 0x7FFE) ? &crashPreventItem : actualItemToReplace;
 		Item *ItemPlace = (actualItemToPlace->ID == 0x7FFE) ? &crashPreventItem : actualItemToPlace;
@@ -222,8 +236,9 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 			static const Address animpatch(0x682434);
 
 		//display pattern, smash rock, bury
-			if(waitAnim == 0x5D || waitAnim == 0x6B || waitAnim == 0x5A)
+			if(waitAnim == 0x5D || waitAnim == 0x6B || waitAnim == 0x5A) {
 				noWait = true;
+			}
 			
 		//if pick or pluck
 			if(waitAnim == 0x3D || waitAnim == 0x40) {
@@ -241,8 +256,9 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 						break;
 					}
 				}
-				else 
+				else {
 					autoWaitAnim = 0x3C;
+				}
 				
 				noWaitPick:
 			//write coords and item and ID to animation
@@ -256,8 +272,9 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 				data.AppendAnimData<u16>(animInstance, 0x10, actualItemToReplace->ID == 0x7FFE ? 0x2001 : actualItemToReplace->ID);
 				
 			//If forced an noWait is false
-				if(forced && !noWait) 
+				if(forced && !noWait) {
 					autoWaitAnim = 0x4C;
+				}
 				
 			//if bury animation
 				if((ID == 0x13 || autoWaitAnim == 0x4A) && !noWait && !forced) {
@@ -267,16 +284,19 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 					Sleep(Milliseconds(5));
 				}
 			//if forced with noWait true
-				else if(forced) 
+				else if(forced) {
 					autoWaitAnim = 0x4F;
+				}
 			}
 			
 		//if selected index is the same as your player
-			if(currentIndex == Game::GetActualPlayerIndex()) 
+			if(currentIndex == Game::GetActualPlayerIndex()) {
 				data.ExecuteAnimation(autoWaitAnim);
+			}
 		//if not aka another player
-			else 
+			else {
 				Animation::SendAnimPacket(Game::GetActualPlayerIndex(), animInstance, autoWaitAnim, roomID == 0xA5 ? Player::GetRoom(currentIndex) : roomID, currentIndex);	
+			}
 			
 		//sleep if noWait is turned off
 			if(!noWait) {

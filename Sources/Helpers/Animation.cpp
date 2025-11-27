@@ -14,6 +14,7 @@ namespace CTRPluginFramework {
 		static Address getaniminst(0x6576F8);
 		return getaniminst.Call<u32>(playerInstance, someVal1, someVal2, encVal);
 	} 
+
 //Animation Wrapper	
 	bool Animation::ExecuteAnimationWrapper(u8 pIndex, u8 animID, Item animItem, u8 emotion, u16 snake, u16 sound, bool u0, u8 wX, u8 wY, bool directSend, u8 appearance[]) {	
 	//Gets actual PlayerIndex
@@ -28,15 +29,17 @@ namespace CTRPluginFramework {
 		u32 playerInstance = PlayerClass::GetInstance(pIndex)->Offset();
 		
 	//If selected player is not loaded return false
-		if(!PlayerClass::GetInstance(pIndex)->IsLoaded()) 
+		if(!PlayerClass::GetInstance(pIndex)->IsLoaded()) {
 			return 0;
+		}
 		
 	//Gets Animation Instance to append anim data
 		u32 animInstance = Animation::GetAnimationInstance(playerInstance, 0, 0, 0);
 		
 	//If animation instance returns 0, probably means animation can't be executed
-		if(animInstance == 0) 
+		if(animInstance == 0) {
 			return 0;
+		}
 
 		AnimData data;
 		data.Init(animInstance, playerInstance, pIndex);
@@ -303,10 +306,12 @@ namespace CTRPluginFramework {
 		}
 	//If it's a direct send
 		else {
-			if(forced) 
+			if(forced) {
 				Animation::SendAnimPacket(AIndex, animInstance, animID, Player::GetRoom(pIndex), pIndex); //Uses Animation Pack if forced
-			else		
+			}
+			else {
 				data.ExecuteAnimation(animID); //Executes Animation on yourself
+			}
 		}
 		
 		//After it's over undo the patch with the Knock Animation
@@ -336,8 +341,9 @@ namespace CTRPluginFramework {
 //Idle Animation
 	void Animation::Idle(u8 pID) {
 		u32 x, y;
-		if(!PlayerClass::GetInstance(pID)->GetWorldCoords(&x, &y))
+		if(!PlayerClass::GetInstance(pID)->GetWorldCoords(&x, &y)) {
 			return;
+		}
 		
 		Animation::ExecuteAnimationWrapper(pID, 6, {0, 0}, 0, 0, 0, 0, x, y, 0);
 	}

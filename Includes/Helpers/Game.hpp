@@ -50,7 +50,6 @@ namespace CTRPluginFramework {
 		u32					CreateLockedSpot(u8 DropID, u8 wX, u8 wY, u8 roomID, bool sendPkt = 1);
 		u32					GetLockedSpotIndex(u8 wX, u8 wY, u8 roomID = 0xA5);
 	//Other Stuff	
-		std::string 		GetCountryName();
 		bool 				IsOutdoorItem(Item item);
 		void				ReloadRoom(float *coords = PlayerClass::GetInstance()->GetCoordinates());
 		void				Catalog(bool directcall = false);

@@ -6,6 +6,7 @@
 #include "Helpers/NPC.hpp"
 #include "Address/Address.hpp"
 #include "Language.hpp"
+#include "RuntimeContext.hpp"
 
 #define RANGE(X, START, END)	((X & 0xFFFF) >= START && (X & 0xFFFF) <= END)
 #define IS(X, ADDR)				((X & 0xFFFF) == ADDR)
@@ -25,7 +26,7 @@ namespace CTRPluginFramework {
 	void ItemChange(Keyboard& keyboard, KeyboardEvent& event) {
 		std::string& input = keyboard.GetInput();	
 		Item ID = (Item)StringToHex<u32>(input, 0xFFFF);
-		if(!IDList::ItemValid(ID)) {
+		if(!ID.isValid()) {
 			keyboard.SetError(Color::Red << "Invalid ID!");
 			return;
 		}
@@ -35,18 +36,19 @@ namespace CTRPluginFramework {
 		std::string& input = keyboard.GetInput();
 		Item ID = (Item)StringToHex<u32>(input, 0xFFFF);
 
-		if(!IDList::ItemValid(ID, false)) {
+		if(!ID.isValid(false)) {
 			keyboard.GetMessage() = "";
 			keyboard.SetError(Color::Red << Language::getInstance()->get("INVALID_ID"));
 			return;
 		}
 
-		keyboard.GetMessage() = IDList::GetItemName(ID);
+		keyboard.GetMessage() = ID.GetName();
 	}
 
 	bool IDList::IsHalfAcre(u8 acreID) {
-		if(RANGE(acreID, 0x9E, 0xA3) || IS(acreID, 0xA8))
+		if(RANGE(acreID, 0x9E, 0xA3) || IS(acreID, 0xA8)) {
 			return true;
+		}
 
 		return false;
 	}
@@ -55,11 +57,13 @@ namespace CTRPluginFramework {
 		//if villager not exists room warp not work
 		//if no exhibtion house those crash: 0x92 - 0x97
 
-		if(!IDList::ValidID(roomID, 0, 0xA4))
+		if(!IDList::ValidID(roomID, 0, 0xA4)) {
 			return false;
+		}
 
-		if(IDList::ValidID(roomID, 0x27, 0x29) || IDList::ValidID(roomID, 0x5D, 0x60) || IDList::ValidID(roomID, 0x98, 0x9C) || IDList::ValidID(roomID, 0x69, 0x8D))
+		if(IDList::ValidID(roomID, 0x27, 0x29) || IDList::ValidID(roomID, 0x5D, 0x60) || IDList::ValidID(roomID, 0x98, 0x9C) || IDList::ValidID(roomID, 0x69, 0x8D)) {
 			return false;
+		}
 		
 		switch(roomID) {
 			case 0x62: 
@@ -73,15 +77,17 @@ namespace CTRPluginFramework {
 //If menu is valid
 	bool IDList::MenuValid(u8 MenuID) {
 		if(RANGE(MenuID, 5, 7) || RANGE(MenuID, 0x2E, 0x43) || RANGE(MenuID, 0x47, 0x48) || RANGE(MenuID, 0x5F, 0x60) || MenuID == 0x65 || 
-			RANGE(MenuID, 0x6A, 0x6C) || RANGE(MenuID, 0x70, 0x71) || RANGE(MenuID, 0x79, 0x7A) || MenuID == 0x87 || MenuID == 0x89)
+			RANGE(MenuID, 0x6A, 0x6C) || RANGE(MenuID, 0x70, 0x71) || RANGE(MenuID, 0x79, 0x7A) || MenuID == 0x87 || MenuID == 0x89) {
 			return 1;
-
+		}
+			
 		return 0;
 	}
 //if building is valid
 	bool IDList::BuildingValid(u8 buildingID) {
-		if(buildingID > 0x4B && buildingID < 0x69 || buildingID > 0x6A && buildingID < 0x81 || buildingID > 0x8F && buildingID < 0xFC) 
+		if(buildingID > 0x4B && buildingID < 0x69 || buildingID > 0x6A && buildingID < 0x81 || buildingID > 0x8F && buildingID < 0xFC) {
 			return true;
+		}
 		
 		return false;
 	}
@@ -110,7 +116,7 @@ namespace CTRPluginFramework {
 //If animation is valid
 	bool IDList::AnimationValid(u8 animID, u8 playerIndex) {
 		if(animID > 0 && animID < 0xEB) {
-			if(IsIndoorsBool) {
+			if(RuntimeContext::getInstance()->isIndoors()) {
 				switch(animID) {
 				//those would be fixed but they crash others indoors :/
 					case 0x5F:
@@ -145,8 +151,9 @@ namespace CTRPluginFramework {
 //If music is valid
 	bool IDList::MusicValid(u16 musicID) {
 		if(musicID < 0xFFF) {
-			if(musicID > 0xDB && musicID < 0x10B) 
+			if(musicID > 0xDB && musicID < 0x10B) {
 				return false;
+			}
 			
 			return true;
 		}
@@ -154,52 +161,18 @@ namespace CTRPluginFramework {
 		return false;
 	}
 
-	bool FlagValid(u16 flagID, bool IsDropped) {
-	//If player is indoors and drops item
-		if(IsIndoorsBool && IsDropped) {
-			if(flagID >= 0x8000)
-				return false;
-		}
-		return true;
-	}
-//If item is valid
-	bool IDList::ItemValid(Item itemID, bool IsDropped) {
-		u16 item = itemID.ID;
-		u16 flag = itemID.Flags;
-
-		if(!FlagValid(flag, IsDropped))
-			return false;
-
-		if((item & 0xFFFF) >> 12 == 4 || (item & 0xFFFF) >> 12 == 5) //if present
-			item = item - 0x2000; //convert present to standard Item ID to know if it is valid
-
-	//If player is outdoors or doesnt drop item
-		if(!IsIndoorsBool || !IsDropped) {
-			if(IS(item, 0x7FFE) || RANGE(item, 0, 0xFD)) 
-				return true;
-		}
-
-		if(RANGE(item, 0x2001, 0x2060) || RANGE(item, 0x2089, 0x2185) || RANGE(item, 0x21E4, 0x22DF) || RANGE(item, 0x22E1, 0x30CB) || RANGE(item, 0x30D2, 0x3108) || RANGE(item, 0x3130, 0x33B4) || RANGE(item, 0x33BC, 0x34CD) || RANGE(item, 0x3726, 0x372A))
-			return true;
-		
-		return false;
-	}
-
-//If tool is valid
-	bool IDList::ToolsValid(Item toolsID) {
-		return (toolsID.ID == 0x2001 || (toolsID.ID == 0x3729) || (toolsID.ID > 0x334B && toolsID.ID < 0x33A3));
-	}
-
 //Get Building Name
 	std::string IDList::GetBuildingName(u8 ID) {
 		if(ID >= 8 && ID <= 0x11) {
 			ACNL_VillagerData *villager = NPC::GetSaveData();
-			if(!villager)
+			if(!villager) {
 				return Utils::Format("NPC %d", ID - 8);
+			}
 
 			u16 VID = villager->Villager[ID - 8].Mini1.VillagerID;
-			if(VID == 0xFFFF)
+			if(VID == 0xFFFF) {
 				return "NPC -Empty-";
+			}
 
 			return "NPC " + NPC::GetNName(VID);
 		}
@@ -212,121 +185,7 @@ namespace CTRPluginFramework {
 
 		return Language::getInstance()->get("INVALID");
 	}
-//get country name
-	std::string IDList::SetCountryName(u8 country) {
-		for(const ID_U8Data& countrys : Countrys) {
-			if(countrys.ID == country) {
-				return std::string(countrys.Name);
-			}
-		}
 
-		return Language::getInstance()->get("INVALID");
-	}
-
-	std::string IDList::GetItemName(Item item) {
-		if (IDList::hasItemNoName(item)) {
-			for (const ID_U16Data& Items : Items) {
-				if (Items.ID == item.ID) {
-					return std::string(Items.Name);
-				}
-			}
-		}
-
-		static Address SetUpStack(0x3081E8);
-		static Address SetUpItem(0x769DBC);
-		static Address SetUp(0x312610);
-
-		u32 Stack[44];
-		u32 add = SetUpStack.Call<u32>(Stack, Stack + 0x18, 0x21);
-
-		u16 itemID = SetUpItem.Call<u16>(&item);
-
-		SetUp.Call<void>(*(u32 *)Address(0x95EEDC).addr, add, (char *)"STR_Item_name", itemID);
-
-		std::string ItemName = "";
-		Process::ReadString(Stack[1] + 0xC, ItemName, 0x30, StringFormat::Utf16);
-
-		if (ItemName.empty()) {
-			return "???";
-		}
-		else {
-			ItemName += 2; //Skips formatting chars
-			ItemName.pop_back(); //Removes formatting char
-			return ItemName;
-		}
-	} 
-
-	bool IDList::hasItemNoName(Item item) {
-		if (item.ID >= 0 && item.ID <= 0x00FD)
-			return true;
-
-		if (item.ID == 0x2037)
-			return true;
-
-		if (item.ID >= 0x2493 && item.ID <= 0x2494)
-			return true;
-
-		if (item.ID >= 0x30A3 && item.ID <= 0x30A7)
-			return true;
-
-		if (item.ID == 0x324D)
-			return true;
-
-		if (item.ID == 0x3263)
-			return true;
-
-		if (item.ID >= 0x33A7 && item.ID <= 0x33B4)
-			return true;
-
-		if (item.ID >= 0x340C && item.ID <= 0x3419)
-			return true;
-
-		if (item.ID == 0x341E)
-			return true;
-
-		if (item.ID >= 0x3727 && item.ID <= 0x3729)
-			return true;
-
-		return false;
-	}
-
-	//Item* searchByName(const std::string& name) const;
-    //std::vector<ItemReader::Entry> searchAllByName(const std::string& name) const;
-
-	/*
-	Item* ItemReader::searchByName(const std::string& name) const {
-        std::vector<ItemReader::Entry> items = searchAllByName(name);
-        if (items.empty()) {
-            return nullptr;
-        }
-
-        // look for exact match among the results
-        int pos = 0;
-        for(Entry item : items) {
-            if(item.name == name) {
-                return new Item(item.item);
-            }
-        }
-
-        // get first found item if no exact match
-        return new Item(items[0].item);
-    }
-
-    std::vector<ItemReader::Entry> ItemReader::searchAllByName(const std::string& name) const {
-        std::vector<Entry> items;
-
-        std::string nameCopy = name;
-        UtilsExtras::ConvertToLowcase(nameCopy);
-
-		for(Entry entry : entries) {
-            std::string entryName = entry.name;
-			if(entryName.find(nameCopy) != std::string::npos) {
-                items.push_back(entry);
-			}
-		}
-
-		return items;
-    }*/
 	//struct MsgBox {
 	//	/*0x98D56C*/s8 answerCount = 0; //seems to tell how many answers (0 = 1, 1 = 2)
 	//	/*0x98D56D*/s8 openingSound = 0; //seems to choose msg box opening sound
@@ -379,8 +238,9 @@ namespace CTRPluginFramework {
 	std::string IDList::GetRoomName(u8 ID) {
 		static Address RoomName(0x5B4BE4); 
 
-		if(ID <= 0xA5) 
+		if(ID <= 0xA5) {
 			return Color::Green << (std::string)(RoomName.Call<char *>(ID));
+		}
 		
 		return Color::Red << Language::getInstance()->get("INVALID");
 	}

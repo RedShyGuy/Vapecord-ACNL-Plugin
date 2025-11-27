@@ -34,9 +34,15 @@ namespace CTRPluginFramework {
             static std::string LoadRegion(void);
 
 			u32 addr;
+			u32 origVal;
 
             static std::string regionName;
 			static Region regionId;
+
+			Address MoveOffset(u32 offset);
+			bool WriteFloat(float newValue);
+			bool Patch(u32 newValue);
+			bool Unpatch(void);
 
 			template <typename T, class ...Args>
 			T Call(Args ...args) {

@@ -4,8 +4,6 @@
 #include <CTRPluginFramework.hpp>
 #include "Helpers/GameStructs.hpp"
 
-extern bool IsIndoorsBool;
-
 namespace CTRPluginFramework {
 	namespace Player {
 		void 			Load(int pIndex);

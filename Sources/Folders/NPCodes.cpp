@@ -5,18 +5,21 @@
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/Dropper.hpp"
+#include "RuntimeContext.hpp"
 
 namespace CTRPluginFramework {
     static u32 CurrAddress = 0;
 
 	bool ShowCoords(const Screen &screen) {
-		if(CurrAddress == 0)
+		if(CurrAddress == 0) {
 			return 0;
+		}
 
 		float *coord = (float *)(CurrAddress + 0x14);
 		u16 rotation = *(u16 *)(CurrAddress + 0x2E);
-		if(coord == nullptr)
+		if(coord == nullptr) {
 			return 0;
+		}
 
 		if(screen.IsTop) {
 			screen.Draw(Utils::Format("X | %f", coord[0]), 0, 0);
@@ -26,6 +29,7 @@ namespace CTRPluginFramework {
 			screen.Draw(Utils::Format("A | %08X", CurrAddress), 0, 40);
 			return 1;
 		}
+
 		return 0;
 	}
 
@@ -41,8 +45,9 @@ namespace CTRPluginFramework {
 	}
 
 	void NPCFunction(MenuEntry *entry) {
-		if(!entry->Hotkeys[0].IsPressed()) //Key::L + Key::A
+		if(!entry->Hotkeys[0].IsPressed()) {//Key::L + Key::A
 			return;
+		}
 
 		static const std::vector<std::string> option = {
 			"Normal NPC", "Special NPC", "Player NPC"
@@ -59,31 +64,35 @@ namespace CTRPluginFramework {
 
 	redo:
 		int res = KB.Open();
-		if(res < 0)
+		if(res < 0) {
 			return;
+		}
 
 		if(npc[res].empty()) {
 			MessageBox(Utils::Format("No %s is currently loaded!", option[res].c_str())).SetClear(ClearScreen::Both)();
 			goto redo;
 		}
 
-		for(NPCdata& str : npc[res]) 
+		for(NPCdata& str : npc[res]) {
 			vec.push_back(str.name);
+		}
 
 		KB.GetMessage() = "Select Loaded NPC:";
 		KB.Populate(vec);
 
 		int res2 = KB.Open();
-		if(res2 < 0)
+		if(res2 < 0) {
 			return;
+		}
 
 		CurrAddress = npc[res][res2].data;
 
 		OSD::Notify(Utils::Format("%s selected!", npc[res][res2].name.c_str()));
 
-        return; //debug purpose
+	#if DEVMODE
 		PluginMenu *menu = PluginMenu::GetRunningInstance();
 		*menu += checkloadstate;
+	#endif
 	}
 
 	static int mode = 0;
@@ -95,11 +104,13 @@ namespace CTRPluginFramework {
 		Keyboard KB("Select Option", vec);
 
 		int op = KB.Open();
-		if(op < 0)
+		if(op < 0) {
 			return;
+		}
 
-		if(Wrap::KB<u16>(Utils::Format("Set %s ID:", vec[op].c_str()), true, 4, npcID, npcID))
+		if(Wrap::KB<u16>(Utils::Format("Set %s ID:", vec[op].c_str()), true, 4, npcID, npcID)) {
 			mode = op;
+		}
 	}
 
 	void NPCAnimation(MenuEntry *entry) {
@@ -110,10 +121,11 @@ namespace CTRPluginFramework {
         static Address data1(0xAE6864);
         static Address data2(0x8816C4);
 
-		if(CurrAddress == 0)
+		if(CurrAddress == 0) {
 			return;
+		}
 
-		if(turbo ? entry->Hotkeys[0].IsDown() : entry->Hotkeys[0].IsPressed()) { //L + B
+		if(RuntimeContext::getInstance()->isTurbo() ? entry->Hotkeys[0].IsDown() : entry->Hotkeys[0].IsPressed()) { //L + B
 			u32 null[]{ 0 };
 			switch(mode) {
 				case 0:
@@ -133,30 +145,37 @@ namespace CTRPluginFramework {
 	}
 
 	void NPCCoordinates(MenuEntry *entry) {
-		if(CurrAddress == 0)
+		if(CurrAddress == 0) {
 			return;
+		}
 
 		if(entry->Hotkeys[0].IsDown()) { //L
 			float *pCoords = (float *)(CurrAddress + 0x14);
 			if(pCoords != nullptr && !MapEditorActive) { //if not in tile selection mo
-				if(entry->Hotkeys[1].IsDown()) //DPadRight
+				if(entry->Hotkeys[1].IsDown()) {//DPadRight
 					pCoords[0] += 5.0;
-				if(entry->Hotkeys[2].IsDown()) //DPadLeft
+				}
+				if(entry->Hotkeys[2].IsDown()) {//DPadLeft
 					pCoords[0] -= 5.0;
-				if(entry->Hotkeys[3].IsDown()) //DPadDown
+				}
+				if(entry->Hotkeys[3].IsDown()) {//DPadDown
 					pCoords[2] += 5.0;
-				if(entry->Hotkeys[4].IsDown()) //DPadUp
+				}
+				if(entry->Hotkeys[4].IsDown()) {//DPadUp
 					pCoords[2] -= 5.0;
+				}
 			}
 		}
 	}
 
 	void NPCTeleportToYou(MenuEntry *entry) {
-		if(CurrAddress == 0)
+		if(CurrAddress == 0) {
 			return;
+		}
 
-		if(!entry->Hotkeys[0].IsPressed()) //L + Y
+		if(!entry->Hotkeys[0].IsPressed()) {//L + Y
 			return;
+		}
 
 		float *pCoords = (float *)(CurrAddress + 0x14);
 		float *coords = PlayerClass::GetInstance()->GetCoordinates();
@@ -204,8 +223,9 @@ namespace CTRPluginFramework {
 	}
 
 	void NPCRotate(MenuEntry *entry) {
-		if(CurrAddress == 0)
+		if(CurrAddress == 0) {
 			return;
+		}
 
 		if(entry->Hotkeys[0].IsDown() && Controller::IsKeyDown(Key::CPad)) { //L
 			*(u16 *)(CurrAddress + 0x2E) = GetRawRotationData();

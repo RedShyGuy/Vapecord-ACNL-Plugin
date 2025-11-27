@@ -7,42 +7,50 @@
 #include "Helpers/Inventory.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/IDList.hpp"
+#include "RuntimeContext.hpp"
 #include "Color.h"
 
 namespace CTRPluginFramework {
 //Shops Always Open
 	void ShopsAlwaysOpen(MenuEntry *entry) {
-		static const Address shopretail(0x309348);
-		static const Address shopnookling(0x711B14);
-		static const Address shopgarden(0x711BCC);
-		static const Address shopables(0x713EB0);
-		static const Address shopshampoodle(0x71D42C);
-		static const Address shopkicks(0x71184C);   
-		static const Address shopnooks(0x71F654);
-		static const Address shopkatrina(0x718098);
-		static const Address shopredd(0x718444);
+		static Address shopretail(0x309348);
+		static Address shopnookling(0x711B14);
+		static Address shopgarden(0x711BCC);
+		static Address shopables(0x713EB0);
+		static Address shopshampoodle(0x71D42C);
+		static Address shopkicks(0x71184C);   
+		static Address shopnooks(0x71F654);
+		static Address shopkatrina(0x718098);
+		static Address shopredd(0x718444);
 
-		const u32 ShopOpen[9] = { shopretail.addr, shopnookling.addr, shopgarden.addr, shopables.addr, shopshampoodle.addr, shopkicks.addr, shopnooks.addr, shopkatrina.addr, shopredd.addr };
+		static Address ShopOpen[9] = { 
+			shopretail, shopnookling, shopgarden, shopables, 
+			shopshampoodle, shopkicks, shopnooks, shopkatrina, shopredd 
+		};
 
 		if(entry->WasJustActivated()) {
-			for(int i = 0; i < 9; ++i)
-				Process::Patch(ShopOpen[i], 0xE3A00001);
+			for(int i = 0; i < 9; ++i) {
+				ShopOpen[i].Patch(0xE3A00001);
+			}
 		}
 		else if(!entry->IsActivated()) {
-			for(int i = 0; i < 9; ++i)
-				Process::Patch(ShopOpen[i], 0xE3A00000);
+			for(int i = 0; i < 9; ++i) {
+				ShopOpen[i].Unpatch();
+			}
 		}
     }
 
 //Disable Save Menus
 	void nonesave(MenuEntry *entry) {
+		static Address noSave(0x1A0980);
+
 		if(entry->WasJustActivated()) {
-			Process::Patch(Address(0x1A0980).addr, 0xE1A00000);
-			saveMenuDisabled = true;
+			noSave.Patch(0xE1A00000);
+			RuntimeContext::getInstance()->setSaveMenuDisabled(true);
 		}
 		else if(!entry->IsActivated()) {
-			Process::Patch(Address(0x1A0980).addr, 0xE8900006);
-			saveMenuDisabled = false;
+			noSave.Unpatch();
+			RuntimeContext::getInstance()->setSaveMenuDisabled(false);
 		}
 	}
 
@@ -59,16 +67,16 @@ namespace CTRPluginFramework {
 	}
 //Can't Fall In Holes Or Pitfalls /*Credits to Nico*/
 	void noTrap(MenuEntry *entry) {
-		static const Address notraps1(0x65A668);
-		static const Address notraps2(0x6789E4);
+		static Address notraps1(0x65A668);
+		static Address notraps2(0x6789E4);
 		
 		if(entry->WasJustActivated()) {
-			Process::Patch(notraps1.addr, 0xEA000014);
-			Process::Patch(notraps2.addr, 0xEA00002D);
+			notraps1.Patch(0xEA000014);
+			notraps2.Patch(0xEA00002D);
 		}
 		else if(!entry->IsActivated()) {
-			Process::Patch(notraps1.addr, 0x1A000014);
-			Process::Patch(notraps2.addr, 0x1A00002D);
+			notraps1.Unpatch();
+			notraps2.Unpatch();
 		}
 	}
 
@@ -88,17 +96,20 @@ namespace CTRPluginFramework {
 		u32 x = 0, y = 0;
 		PlayerClass::GetInstance()->GetWorldCoords(&x, &y);
 
-		if(bypassing) 
+		if(bypassing) {
 			Dropper::DropItemLock(false);
+		}
 
 		Keyboard KB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), spotVEC);
 		switch(KB.Open()) {
 			default: break;
 			case 0: {
-				if(Game::CreateLockedSpot(0x12, x, y, Game::GetRoom(), true) == 0xFFFFFFFF) 
-					OSD::Notify("Error: Too many locked spots are already existing!");			
-				else 
+				if(Game::CreateLockedSpot(0x12, x, y, Game::GetRoom(), true) == 0xFFFFFFFF) {
+					OSD::Notify("Error: Too many locked spots are already existing!");		
+				}	
+				else {
 					OSD::Notify("Locked Spot");
+				}
 			} break;
 
 			case 1: {
@@ -132,24 +143,27 @@ namespace CTRPluginFramework {
 								Sleep(Milliseconds(40));
 							}
 						}
-						else 
+						else {
 							res = false;
+						}
 
 						y++;
 					}
 					res = true;
 					y = 0x10;
 					x++;
-					if(!Game::GetItemAtWorldCoords(x, y)) 
+					if(!Game::GetItemAtWorldCoords(x, y)) {
 						res = false;
+					}
 				}
 				OSD::Notify("Unlocked Map");
 			} break;
 		}
 
 		Sleep(Milliseconds(5));
-		if(bypassing) 
+		if(bypassing) {
 			Dropper::DropItemLock(true);
+		}
 	}
 
 //search and replace
@@ -164,13 +178,15 @@ namespace CTRPluginFramework {
 		Item ItemToSearch = {0x7FFE, 0};
 		Item ItemToReplace = {0x7FFE, 0};
 		
-		if(!Wrap::KB<u32>(Language::getInstance()->get("QUICK_MENU_SEARCH_REPLACE_SEARCH"), true, 8, *(u32 *)&ItemToSearch, 0x7FFE)) 
+		if(!Wrap::KB<u32>(Language::getInstance()->get("QUICK_MENU_SEARCH_REPLACE_SEARCH"), true, 8, *(u32 *)&ItemToSearch, 0x7FFE)) {
 			return;
+		}
 		
-		if(!Wrap::KB<u32>(Language::getInstance()->get("QUICK_MENU_SEARCH_REPLACE_REPLACE"), true, 8, *(u32 *)&ItemToReplace, *(u32 *)&ItemToReplace)) 
+		if(!Wrap::KB<u32>(Language::getInstance()->get("QUICK_MENU_SEARCH_REPLACE_REPLACE"), true, 8, *(u32 *)&ItemToReplace, *(u32 *)&ItemToReplace)) {
 			return;
+		}
 		
-		if(!IDList::ItemValid(ItemToReplace)) {
+		if(!ItemToReplace.isValid()) {
 			OSD::Notify("Item Is Invalid!", Color::Red);
 			return;
 		}
@@ -206,10 +222,12 @@ namespace CTRPluginFramework {
 			
 			while(res) {
 				while(res) {
-					if(Game::GetItemAtWorldCoords(x, y)) 
+					if(Game::GetItemAtWorldCoords(x, y)) {
 						Game::WaterFlower(x, y);
-					else 
+					}
+					else {
 						res = false;
+					}
 
 					y++;
 				}
@@ -217,8 +235,10 @@ namespace CTRPluginFramework {
 				res = true;
 				y = 0x10;
 				x++;
-				if(!Game::GetItemAtWorldCoords(x, y)) 
+
+				if(!Game::GetItemAtWorldCoords(x, y)) {
 					res = false;
+				}
 			}
 			OSD::Notify("Success!");
 		}
@@ -243,16 +263,19 @@ namespace CTRPluginFramework {
 		
 		else if(entry->Hotkeys[1].IsPressed()) {
 			int res = Dropper::Search_Replace(size, { {0x7C, 0}, {0x7D, 0}, {0x7E, 0}, {0x7F, 0}, {0xCC, 0}, {0xF8, 0} }, {0x7FFE, 0}, 0x3D, false, "Weed Removed!", true);
-			if(res == -1)
+			if(res == -1) {
 				OSD::Notify("Your player needs to be loaded!", Color::Red);
-			else if(res == -2) 
+			}
+			else if(res == -2) {
 				OSD::Notify("Only works outdoors!", Color::Red);
+			}
 		}
 	}
 //Edit Every Pattern
 	void editpattern(MenuEntry *entry) {
-		for(int i = 0; i < 10; ++i) 
+		for(int i = 0; i < 10; ++i) {
 			Player::StealDesign(i);
+		}
 
 		entry->Disable();
 	}
@@ -321,8 +344,9 @@ namespace CTRPluginFramework {
 			}
 		}
 		
-		else if(entry->Hotkeys[1].IsPressed()) 
+		else if(entry->Hotkeys[1].IsPressed()) {
 			Game::ReloadRoom();
+		}
 		
 		else if(entry->Hotkeys[2].IsPressed()) {
 			switch(opt) {
@@ -378,8 +402,9 @@ namespace CTRPluginFramework {
 		u8 timedat[5] = { 0, 0, 0, 0, 0 };
 		Keyboard KB("", TTKB);
 		int ch = KB.Open();
-		if(ch < 0)
+		if(ch < 0) {
 			return;
+		}
 		
 		for(int i = 0; i < 5; ++i) {			
 			Keyboard KBS(Utils::Format(Language::getInstance()->get("TIME_KB1").c_str(), TimeMode[i].c_str()));
@@ -389,8 +414,9 @@ namespace CTRPluginFramework {
 			KBS.SetCompareCallback(CheckTimeInput);
 
 			int cho = KBS.Open(timedat[i]);
-			if(cho < 0)
+			if(cho < 0) {
 				return;
+			}
 		}
 		
 		Game::SetCurrentTime(ch, timedat[0], timedat[1], timedat[2], timedat[3], timedat[4]);
@@ -402,23 +428,27 @@ namespace CTRPluginFramework {
 		
 		if(entry->Hotkeys[0].IsDown() || entry->Hotkeys[0].IsPressed()) {
 			PressedTicks++;
-			if((PressedTicks < 50 ? (PressedTicks % 8) == 1 : (PressedTicks % 3) == 1) || PressedTicks > 100) 
+			if((PressedTicks < 50 ? (PressedTicks % 8) == 1 : (PressedTicks % 3) == 1) || PressedTicks > 100) {
 				Game::SetCurrentTime(true, minute, 0, 0, 0, 0);
+			}
 		}
 		
 		else if(entry->Hotkeys[1].IsDown() || entry->Hotkeys[1].IsPressed()) {
 			PressedTicks++;
-			if((PressedTicks < 50 ? (PressedTicks % 8) == 1 : (PressedTicks % 3) == 1) || PressedTicks > 100) 
+			if((PressedTicks < 50 ? (PressedTicks % 8) == 1 : (PressedTicks % 3) == 1) || PressedTicks > 100) {
 				Game::SetCurrentTime(false, minute, 0, 0, 0, 0);
+			}
 		}
 	//somehow doesnt work always?
-		else if(Controller::IsKeysReleased(entry->Hotkeys[0].GetKeys()) || Controller::IsKeysReleased(entry->Hotkeys[1].GetKeys())) 
+		else if(Controller::IsKeysReleased(entry->Hotkeys[0].GetKeys()) || Controller::IsKeysReleased(entry->Hotkeys[1].GetKeys())) {
 			PressedTicks = 0;
+		}
 	}
 
 	bool ThinkToBuriedItems(Item *item) {
-		if(((*item).Flags >> 12) == 8) 
-			(*item).Flags &= 0x0FFF;
+		if((item->Flags >> 12) == 8) {
+			item->Flags &= 0x0FFF;
+		}
 
 		const HookContext &curr = HookContext::GetCurrent();
 		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
@@ -427,8 +457,9 @@ namespace CTRPluginFramework {
 
 	Item* PickBuriedItems(u32 pInstance, u8 wX, u8 wY) {
 		Item* item = Game::GetItemAtWorldCoords(wX, wY);
-		if((item->Flags >> 12) == 8)
+		if((item->Flags >> 12) == 8) {
 			item->Flags &= 0x0FFF;
+		}
 
 		return item;
 	}

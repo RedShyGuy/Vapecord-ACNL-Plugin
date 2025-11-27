@@ -7,19 +7,23 @@
 namespace CTRPluginFramework {
 //Chat Bubbles Don't Disappear /*Credits to Levi*/
 	void bubblesDisappear(MenuEntry *entry) { 
-		static const Address bubble(0x2145F8);
-		if(entry->WasJustActivated()) 
-			Process::Patch(bubble.addr, 0xE1A00000);
-		else if(!entry->IsActivated()) 
-			Process::Patch(bubble.addr, 0x0A000006);
+		static Address bubble(0x2145F8);
+
+		if(entry->WasJustActivated()) {
+			bubble.Patch(0xE1A00000);
+		}
+		else if(!entry->IsActivated()) {
+			bubble.Unpatch();
+		}
 	}
 
 	static std::string Holder = "";
 //65 char is max (0x82)
 	void ChatCopyPaste(MenuEntry *entry) {
 		if(entry->WasJustActivated()) {
-			if(!File::Exists(Utils::Format(PATH_CBOARD, Address::regionName.c_str()))) 
+			if(!File::Exists(Utils::Format(PATH_CBOARD, Address::regionName.c_str()))) {
 				File::Create(Utils::Format(PATH_CBOARD, Address::regionName.c_str()));
+			}
 
 			Holder.clear();
 			File f_board(Utils::Format(PATH_CBOARD, Address::regionName.c_str()), File::READ);
@@ -43,8 +47,9 @@ namespace CTRPluginFramework {
 			f_board.Flush();
 			f_board.Close();
 
-			if(GameKeyboard::Write(Holder))
+			if(GameKeyboard::Write(Holder)) {
 				OSD::Notify("Pasted: " << Holder, Color(0x0091FFFF));
+			}
 		}
 
 		else if(entry->Hotkeys[1].IsPressed()) {
@@ -90,26 +95,32 @@ namespace CTRPluginFramework {
 		}
 
 		else if(entry->Hotkeys[3].IsPressed()) {
-			if(GameKeyboard::DeleteSelected())
+			if(GameKeyboard::DeleteSelected()) {
 				OSD::Notify("Deleted Selected", Color::Red);
+			}
 		}
 	}
 
 //Force Send Chat
 	void Forcesendchat(MenuEntry *entry) {
 		static Address callchat(0x52440C);
-		if(entry->WasJustActivated())
-			Process::Patch(Address(0x1939EC).addr, 0xEA000000);
+		static Address patch(0x1939EC);
+
+		if(entry->WasJustActivated()) {
+			patch.Patch(0xEA000000);
+		}
 
 		if(entry->Hotkeys[0].IsDown()) {
-			if(!GameKeyboard::IsOpen())
+			if(!GameKeyboard::IsOpen()) {
 				return;
+			}
 
 			callchat.Call<void>(1, 2);
 		}
 
-		if(!entry->IsActivated())
-			Process::Patch(Address(0x1939EC).addr, 0xE5900000);
+		if(!entry->IsActivated()) {
+			patch.Unpatch();
+		}
 	}
 
 //ShowChatMessage

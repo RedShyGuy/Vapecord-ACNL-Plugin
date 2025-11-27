@@ -9,6 +9,7 @@
 #include "Helpers/IDList.hpp"
 #include "Color.h"
 #include "Helpers/GameStructs.hpp"
+#include "RuntimeContext.hpp"
 
 extern "C" void PATCH_PartyPop(void);
 extern "C" void CHECK_Individual(void);
@@ -21,16 +22,16 @@ u32 c_mouthID = 0;
 namespace CTRPluginFramework {
 //Size Codes
 	void sizecodes(MenuEntry *entry) {
-		static const Address player(0x1ACE00);
-		static const Address bug(0x1F557C);
-		static const Address npc(0x2042BC);
-		static const Address effect(0x550A80);
-		static const Address shadow(0x28F3A4);
-		static const Address town(0x52E9D0);
-		static const Address horplayer(0x5680F8);
-		static const Address vertplayer(0x567FF4);
-		static const Address head(0x568064);
-		static const Address corrupt(0x47E3F0);
+		static Address player(0x1ACE00);
+		static Address bug(0x1F557C);
+		static Address npc(0x2042BC);
+		static Address effect(0x550A80);
+		static Address shadow(0x28F3A4);
+		static Address town(0x52E9D0);
+		static Address horplayer(0x5680F8);
+		static Address vertplayer(0x567FF4);
+		static Address head(0x568064);
+		static Address corrupt(0x47E3F0);
 		
 		static const std::vector<std::string> sizeopt = {
 			Language::getInstance()->get("VECTOR_SIZE_PLAYER"),
@@ -53,7 +54,10 @@ namespace CTRPluginFramework {
 			"Custom"
 		};
 		
-		static const u32 sizer[10] = { player.addr, bug.addr, npc.addr, effect.addr, shadow.addr, town.addr, horplayer.addr, vertplayer.addr, head.addr, corrupt.addr };
+		static Address sizeAddresses[10] = { 
+			player, bug, npc, effect, shadow, 
+			town, horplayer, vertplayer, head, corrupt 
+		};
 		
 		static constexpr float sizes[3] = { 2.0, 1.0, 0.5 };
 
@@ -64,44 +68,51 @@ namespace CTRPluginFramework {
 		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), sizeopt);
 
 		int op = optKb.Open();
-		if(op < 0)
+		if(op < 0) {
 			return;
+		}
 			
-		if(op <= 9) {
+		else if(op <= 9) {
 			for(int i = 0; i < 3; ++i) {
-				IsON = *(float *)sizer[op] == sizes[i];
+				IsON = *(float *)sizeAddresses[op].addr == sizes[i];
 				sizesopt[i] = IsON ? (Color(pGreen) << sizesopt[i]) : (Color(pRed) << sizesopt[i]);	
 			}
 			
 			optKb.Populate(sizesopt);
 			int op2 = optKb.Open();
-			if(op2 < 0)
+			if(op2 < 0) {
 				return;
-
-			if(op2 == 3) {
-				if(optKb.Open(size, size) >= 0)
-					Process::WriteFloat(sizer[op], size);
 			}
-			else
-				Process::WriteFloat(sizer[op], sizes[op2]);
+			else if(op2 == 3) {
+				if(optKb.Open(size, size) >= 0) {
+					sizeAddresses[op].WriteFloat(size);
+				}
+			}
+			else {
+				sizeAddresses[op].WriteFloat(sizes[op2]);
+			}
 
 			sizecodes(entry);
 			return;
 		}
-		
-		if(op == 10) 
-			for(int i = 0; i < 10; i++) 
-				Process::WriteFloat(sizer[i], sizes[1]);
+		else if(op == 10) {
+			for(int i = 0; i < 10; i++) {
+				sizeAddresses[i].Unpatch();
+			}
+		}
     }
 //T-Pose
 	void tposeentry(MenuEntry *entry) { 
-		static const Address tpose(0x73C290);
+		static Address tpose(0x73C290);
 
-		if(entry->WasJustActivated()) 
-			Process::Patch(tpose.addr, 0xE1A00000);
-		else if(!entry->IsActivated())
-			Process::Patch(tpose.addr, 0x0A000011);
+		if(entry->WasJustActivated()) {
+			tpose.Patch(0xE1A00000);
+		}
+		else if(!entry->IsActivated()) {
+			tpose.Unpatch();
+		}
 	}
+
 //OSD For Take TPC Picture
 	bool tpcoverlay(const Screen &screen) {
 		if(screen.IsTop) {
@@ -112,9 +123,11 @@ namespace CTRPluginFramework {
 		}
 		return 1;
 	}
+
 //Take TPC Picture
 	void freezeframe(MenuEntry *entry) {
-		static const Address freeze(0x54DBE8);
+		static Address freeze(0x54DBE8);
+
 		if(entry->Hotkeys[0].IsPressed()) {
 			ACNL_Player *player = Player::GetSaveData();
 			if(!player) {
@@ -132,19 +145,21 @@ namespace CTRPluginFramework {
 		}
 	
 		if(entry->Hotkeys[1].IsDown()) {
-			if(entry->Hotkeys[1].IsPressed())
-				Process::Patch(freeze.addr, 0xE3A000FF);
+			if(entry->Hotkeys[1].IsPressed()) {
+				freeze.Patch(0xE3A000FF);
+			}
 
 			OSD::Run(tpcoverlay);
 		}
 		
 		if(!entry->Hotkeys[1].IsDown()) {
 			OSD::Stop(tpcoverlay);
-			Process::Patch(freeze.addr, 0xE0800001);
+			freeze.Unpatch();
 		}
 
-		if(!entry->IsActivated())
-			Process::Patch(freeze.addr, 0xE0800001);
+		if(!entry->IsActivated()) {
+			freeze.Unpatch();
+		}
     }
 
 //Max Turbo Presses
@@ -158,32 +173,28 @@ namespace CTRPluginFramework {
 
 //Multi-presses
 	void asmpresses(MenuEntry *entry) { 
-		static const Address press(0x5C5BEC);
-		if(entry->WasJustActivated()) 
-			Process::Patch(press.addr, 0xE1A00000); 
-		else if(!entry->IsActivated()) 
-			Process::Patch(press.addr, 0x0A000028); 
+		static Address press(0x5C5BEC);
+
+		if(entry->WasJustActivated()) {
+			press.Patch(0xE1A00000);
+		}
+		else if(!entry->IsActivated()) {
+			press.Unpatch();
+		}
 	}
 //Ultimate Party Popper	
 	void partypopper(MenuEntry *entry) {
-		static const Address PartySnakeSpeed(0x67F008);
-		static const Address party2(0x662D9C);
-		static const Address party3(0x67BBC8);
-		static const Address PartyItemID(0x671874);
-		static const Address PartyEffect(0x671880);
+		static Address PartySnakeSpeed(0x67F008);
+		static Address party2(0x662D9C);
+		static Address party3(0x67BBC8);
+		static Address PartyItemID(0x671874);
+		static Address PartyEffect(0x671880);
 		
 		static u16 PartyEffectID = 0x20A;
 
 		Process::Write8(*(u32 *)Address(0x95D3FC).addr - 0x31C, 0); //Multi Presses
 
 		static Hook hook1, hook2;
-		
-		static const u32 PartyPop[3] = { PartySnakeSpeed.addr, party2.addr, party3.addr };
-		
-		static const float PartyPopPatch[2][3] = {
-            { 8.0, 2.0, 2.0 },
-            { 1.0, 1.0, 1.0 }
-        };
 
 		if(entry->WasJustActivated()) {
 			hook1.Initialize(PartyItemID.addr - 0x1E0, (u32)PATCH_PartyPop);
@@ -194,28 +205,31 @@ namespace CTRPluginFramework {
 		}
 
 		ACNL_Player *player = Player::GetSaveData();
-		if(!player)
+		if(!player) {
 			return;
+		}
 
-		if(entry->Hotkeys[0].IsPressed()) 
+		if(entry->Hotkeys[0].IsPressed()) {
 			Wrap::KB<u16>(Language::getInstance()->get("ULTIMATE_PARTY_POPPER_ENTER_EFFECT"), true, 3, PartyEffectID, PartyEffectID);
+		}
 
 		if(player->HeldItem.ID == 0x336A) {
 			player->HeldItem.ID = 0x336A;
-			Process::Patch(PartyEffect.addr, PartyEffectID);
+			PartyEffect.Patch(PartyEffectID);
 
-			for(int i = 0; i < 3; ++i)
-            	Process::WriteFloat(PartyPop[i], PartyPopPatch[0][i]);
+			PartySnakeSpeed.WriteFloat(8.0);
+			party2.WriteFloat(2.0);
+			party3.WriteFloat(2.0);
 
 			hook1.Enable();
 			hook2.Enable();
 		}
    
 		if(!entry->IsActivated() || player->HeldItem.ID != 0x336A) {
-			for(int i = 0; i < 3; ++i)
-               Process::WriteFloat(PartyPop[i], PartyPopPatch[1][i]);	
-			
-			Process::Patch(PartyEffect.addr, 0x20A);
+			PartyEffect.Unpatch();
+			PartySnakeSpeed.Unpatch();
+			party2.Unpatch();
+			party3.Unpatch();
 
 			hook1.Disable();
 			hook2.Disable();
@@ -224,9 +238,10 @@ namespace CTRPluginFramework {
 	
 	void cameramod(MenuEntry *entry) {
     //pointers & addresses
-		static const Address cameraAsm(0x764504);
-        static const Address rotationAsm(0x1A3230);
-        static const Address camerapan(0x1A2058);
+		static Address cameraAsm(0x764504);
+        static Address rotationAsm(0x1A3230);
+		static Address rotationAsm2 = rotationAsm.MoveOffset(0xC);
+        static Address camerapan(0x1A2058);
 
     //variables
         static bool isPatched = false;
@@ -242,49 +257,43 @@ namespace CTRPluginFramework {
 
 		float *coord = Camera::GetCoordinates();
 
-		if(entry->WasJustActivated()) 
-			Process::Patch(camerapan.addr, 0xE3A00000); //disables camera panning
-
-		if(!entry->IsActivated()) {
-			if(coord != nullptr)
-				coord = PlayerClass::GetInstance()->GetCoordinates();
-
-			Animation::ExecuteAnimationWrapper(4, 6, {0, 0}, 0, 0, 0, 0, 0, 0, 0); //idles player
-			Process::Patch(cameraAsm.addr, 0x2A000020);
-			Process::Patch(rotationAsm.addr, 0xE18020B4);
-            Process::Write32(rotationAsm.addr + 0xC, 0xE18020B4);
-			Process::Patch(camerapan.addr, 0xE3A00009);
-			*(u16 *)(Camera::GetInstance() + 0x12C) = OrigVal[0];
-			*(u16 *)(Camera::GetInstance() + 0x12E) = OrigVal[1];
-			return;
+		if(entry->WasJustActivated()) {
+			camerapan.Patch(0xE3A00000); //disables camera panning
 		}
 	
         if(Camera::GetInstance() != 0) {
         //check if you're outside
-            if(!IsIndoorsBool) {
+            if(!RuntimeContext::getInstance()->isIndoors()) {
                 if(Game::IsGameInRoom(1)) {
-                    Process::Patch(rotationAsm.addr, 0xE18020B4);
-                    Process::Patch(rotationAsm.addr + 0xC, 0xE18020B4);
+					rotationAsm.Unpatch();
+					rotationAsm2.Unpatch();
                 }
                 else {
-                    Process::Patch(rotationAsm.addr, 0xE1A00000);
-                    Process::Patch(rotationAsm.addr + 0xC, 0xE1A00000);
+					rotationAsm.Patch(0xE1A00000);
+					rotationAsm2.Patch(0xE1A00000);
                 }
             }
             else {
-                Process::Patch(rotationAsm.addr, 0xE18020B4);
-                Process::Patch(rotationAsm.addr + 0xC, 0xE18020B4);
+				rotationAsm.Unpatch();
+				rotationAsm2.Unpatch();
             }
 			
             if(Controller::IsKeyDown(Key::R)) {
-                if(Controller::IsKeyDown(Key::CPadUp))
-                    *(u16 *)(Camera::GetInstance() + 0x12C) += difference;
-                if(Controller::IsKeyDown(Key::CPadDown))
-                   *(u16 *)(Camera::GetInstance() + 0x12C) -= difference;
-                if(Controller::IsKeyDown(Key::CPadLeft))
-                    *(u16 *)(Camera::GetInstance() + 0x12E) += difference;
-                if(Controller::IsKeyDown(Key::CPadRight))
-                    *(u16 *)(Camera::GetInstance() + 0x12E) -= difference;
+                if(Controller::IsKeyDown(Key::CPadUp)) {
+					*(u16 *)(Camera::GetInstance() + 0x12C) += difference;
+				}
+                    
+                if(Controller::IsKeyDown(Key::CPadDown)) {
+					*(u16 *)(Camera::GetInstance() + 0x12C) -= difference;
+				}
+                   
+                if(Controller::IsKeyDown(Key::CPadLeft)) {
+					*(u16 *)(Camera::GetInstance() + 0x12E) += difference;
+				}
+                    
+                if(Controller::IsKeyDown(Key::CPadRight)) {
+					*(u16 *)(Camera::GetInstance() + 0x12E) -= difference;
+				}
             }
 		//Stop/follow camera from moving
             if(Controller::IsKeysPressed(Key::R + Key::X)) {
@@ -311,11 +320,13 @@ namespace CTRPluginFramework {
 			}
 
 			if(Controller::IsKeyDown(Key::B)) {
-				if(!PlayerClass::GetInstance()->IsLoaded())
+				if(!PlayerClass::GetInstance()->IsLoaded()) {
 					return;
+				}
 					
-				if(coord == nullptr)
+				if(coord == nullptr) {
 					return;
+				}
 
 				if(Controller::IsKeyDown(Key::DPadUp)) {
 					coord[2] -= speed;
@@ -352,7 +363,7 @@ namespace CTRPluginFramework {
             if(!isPatched) {
             //disable camera following
 				OSD::Notify("Camera following: " << Color::Red << "OFF"); 
-                Process::Patch(cameraAsm.addr, 0xEA000020);
+				cameraAsm.Patch(0xEA000020);
                 isPatched = true;
             }
             return;
@@ -360,18 +371,34 @@ namespace CTRPluginFramework {
             if(isPatched) {
 			//reenable camera followig
 				OSD::Notify("Camera following: " << Color::Green << "ON"); 
-                Process::Patch(cameraAsm.addr, 0x2A000020);
+				cameraAsm.Unpatch();
                 isPatched = false;
             }
         }
+
+		if(!entry->IsActivated()) {
+			if(coord != nullptr) {
+				coord = PlayerClass::GetInstance()->GetCoordinates();
+			}
+
+			Animation::ExecuteAnimationWrapper(4, 6, {0, 0}, 0, 0, 0, 0, 0, 0, 0); //idles player
+			cameraAsm.Unpatch();
+			rotationAsm.Unpatch();
+            rotationAsm2.Unpatch();
+			camerapan.Unpatch();
+			*(u16 *)(Camera::GetInstance() + 0x12C) = OrigVal[0];
+			*(u16 *)(Camera::GetInstance() + 0x12E) = OrigVal[1];
+			return;
+		}
     }
 
 	extern "C" void SetEyeExpression(void);
 	extern "C" void SetMouthExpression(void);
 
 	extern "C" bool isIndividual(u32 individualData) {
-		if(!PlayerClass::GetInstance()->IsLoaded())
+		if(!PlayerClass::GetInstance()->IsLoaded()) {
 			return false;
+		}
 
 		static Address convertData(0x27231C);
 		u32 ownData = convertData.Call<u32>(PlayerClass::GetInstance()->Offset(0x1B4)); //gets actual data of player
@@ -386,8 +413,9 @@ namespace CTRPluginFramework {
 		
 		Keyboard KB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), options);
 		int res = KB.Open();
-		if(res < 0)
+		if(res < 0) {
 			return;
+		}
 
 		KB.GetMessage() = Language::getInstance()->get("ENTER_ID");
 		KB.IsHexadecimal(true);
@@ -396,12 +424,16 @@ namespace CTRPluginFramework {
 
 	void FacialExpressionMod(MenuEntry *entry) {
 		static Hook eyeHook, mouthHook;
+
+		static Address eyeMod(0x31DDE4);
+		static Address mouthMod(0x31DF40);
+
 		if(entry->WasJustActivated()) {
-			eyeHook.Initialize(0x31DDE4, (u32)SetEyeExpression);
+			eyeHook.Initialize(eyeMod.addr, (u32)SetEyeExpression);
 			eyeHook.SetFlags(USE_LR_TO_RETURN);
 			eyeHook.Enable();
 
-			mouthHook.Initialize(0x31DF40, (u32)SetMouthExpression);
+			mouthHook.Initialize(mouthMod.addr, (u32)SetMouthExpression);
 			mouthHook.SetFlags(USE_LR_TO_RETURN);
 			mouthHook.Enable();
 		}
@@ -446,20 +478,24 @@ namespace CTRPluginFramework {
 //wand abilitys
 	void wandability(MenuEntry *entry) {
 	//If A is not pressed return
-		if(!Controller::IsKeyPressed(Key::A)) 
-			return;	
+		if(!Controller::IsKeyPressed(Key::A)) {
+			return;
+		}
 
 	//If player is not loaded return
-		if(!PlayerClass::GetInstance()->IsLoaded())
+		if(!PlayerClass::GetInstance()->IsLoaded()) {
 			return;
+		}
 
 	//If player is not idling or running return
-		if(*PlayerClass::GetInstance()->GetAnimation() != 6 && *PlayerClass::GetInstance()->GetAnimation() != 0xD)
+		if(*PlayerClass::GetInstance()->GetAnimation() != 6 && *PlayerClass::GetInstance()->GetAnimation() != 0xD) {
 			return;
+		}
 
 		ACNL_Player *player = Player::GetSaveData();
-		if(!player)
+		if(!player) {
 			return;
+		}
 		
 		switch(player->HeldItem.ID) {
 			default: break;
@@ -469,22 +505,27 @@ namespace CTRPluginFramework {
 			} break;
 		/*If Green Wand | Restores wilted flowers instantly*/
 			case 0x3399: {
-				if(!bypassing) 
+				if(!bypassing) {
 					Dropper::DropItemLock(true);
+				}
 
 				u32 x, y;
 			//If no World Coords found | Either Player not loaded or other error
-				if(!PlayerClass::GetInstance()->GetWorldCoords(&x, &y))
+				if(!PlayerClass::GetInstance()->GetWorldCoords(&x, &y)) {
 					return;
+				}
 
 			//If Item is 0 return | 0 means no item-offset
-				if(!Game::GetItemAtWorldCoords(x, y))
+				if(!Game::GetItemAtWorldCoords(x, y)) {
 					return;
+				}
+
 				Item item = *Game::GetItemAtWorldCoords(x, y);
 
 			//If ID is not wilted flower return
-				if(!IDList::ValidID(item.ID, 0xCE, 0xF7))
+				if(!IDList::ValidID(item.ID, 0xCE, 0xF7)) {
 					return;
+				}
 
 			//Removes Wilted Flower	
 				Game::RemoveItems(true, x, y, 1, 1, false, false, false);
@@ -498,8 +539,9 @@ namespace CTRPluginFramework {
 				item.ID -= 0x2F; //Jumps to fixed flower 
 				Dropper::PlaceItemWrapper(0xC, ReplaceEverything, &item, &item, x, y, 0, 0, 0, 0, 0, 0x5C, 0xA5, false);
 
-				if(!bypassing) 
+				if(!bypassing) {
 					Dropper::DropItemLock(false);
+				}
 			} break;
 		/*If Pink Wand*/
 			case 0x339A: {
@@ -511,32 +553,43 @@ namespace CTRPluginFramework {
 			} break;
 		/*If Flower Fairy Wand*/
 			case 0x339C: {
-				if(!bypassing) 
+				if(!bypassing) {
 					Dropper::DropItemLock(true);
+				}
+					
 				u32 x, y;
 			//If no World Coords found | Either Player not loaded or other error
-				if(!PlayerClass::GetInstance()->GetWorldCoords(&x, &y))
+				if(!PlayerClass::GetInstance()->GetWorldCoords(&x, &y)) {
 					return;
+				}
+
 			//If Item is 0 return | 0 means no item-offset
-				if(!Game::GetItemAtWorldCoords(x, y)) 
+				if(!Game::GetItemAtWorldCoords(x, y)) {
 					return;
+				}
+
 				Item item = *Game::GetItemAtWorldCoords(x, y);
 
 			//If no growing tree found return	
-				if(!(std::find(std::begin(Growing_Trees), std::end(Growing_Trees), item.ID) != std::end(Growing_Trees)))
+				if(!(std::find(std::begin(Growing_Trees), std::end(Growing_Trees), item.ID) != std::end(Growing_Trees))) {
 					return;
+				}
 				
 			//Removes growing tree
-				Game::RemoveItems(true, x, y, 1, 1, false, false, false);		
+				Game::RemoveItems(true, x, y, 1, 1, false, false, false);	
+
 			//Some neat particles for a nice effect | do it 20 times to spam it	
-				for(int i = 0; i <= 20; ++i) 
-					Game::Particles(0x19A, PlayerClass::GetInstance()->GetCoordinates(x, y));				
+				for(int i = 0; i <= 20; ++i) {
+					Game::Particles(0x19A, PlayerClass::GetInstance()->GetCoordinates(x, y));	
+				}
+								
 			//Places Grown Tree
 				item.ID += 1; //Jumps to next growth level
 				Dropper::PlaceItemWrapper(0xC, ReplaceEverything, &item, &item, x, y, 0, 0, 0, 0, 0, 0x5C, 0xA5, false);
 
-				if(!bypassing) 
+				if(!bypassing) {
 					Dropper::DropItemLock(false);
+				}
 			} break;
 		/*If Kiki and Lala Wand | Stores outfits for you and lets you select them*/
 			case 0x339D: {

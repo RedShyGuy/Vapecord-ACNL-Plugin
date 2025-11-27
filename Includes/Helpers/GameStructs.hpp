@@ -2,6 +2,7 @@
 #define GAMESTRUCTS_HPP
 
 #include <CTRPluginFramework.hpp>
+#include "Item/Item.hpp"
 
 #pragma pack(push, 1)
 
@@ -19,7 +20,7 @@ namespace CTRPluginFramework {
         Empty = 8
     };
 
-    enum Item_Categories {
+    enum Item_Categories : u32 {
         MiiHead = 0, //(0x2000)
         NPCBuildingItems, //(0x2061 -> 0x2074)
         Bells, //(0x20AC -> 0x2117)
@@ -179,42 +180,6 @@ namespace CTRPluginFramework {
     };
 
     /*All Credits go to https://github.com/Slattz/ACNL_Research/blob/master/010%20Templates/garden_plus.dat.bt*/
-
-    struct Item {
-        u16 ID;
-        u16 Flags;
-
-        bool operator==(const Item& item) const {
-            return ID == item.ID && Flags == item.Flags;
-        }
-
-        bool operator!=(const Item& item) const {
-            return ID != item.ID || Flags != item.Flags;
-        }
-
-        bool operator>(const Item&item) const {
-            return (ID + Flags) > (item.ID + item.Flags);
-        }
-
-        operator u32() const {
-            return (Flags << 16) | (ID & 0xFFFF);
-        }
-
-        Item() {
-            ID = 0;
-            Flags = 0;
-        }
-
-        Item(const u32 &val) {
-            ID = val;
-            Flags = val >> 16;
-        }
-
-        Item(u16 v_ID, u16 v_Flags) {
-            ID = v_ID;
-            Flags = v_Flags;
-        }
-    };
 
     struct Emoticons {
         u8 emoticons[40];

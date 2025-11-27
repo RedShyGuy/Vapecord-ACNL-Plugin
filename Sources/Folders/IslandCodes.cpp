@@ -58,8 +58,9 @@ namespace CTRPluginFramework {
 		Keyboard KB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), cmnOpt);
 
 		int op = KB.Open();
-		if(op < 0)
+		if(op < 0) {
 			return;
+		}
 
 		else if(op == 0) {
 			player->PlayerFlags.UnlockedKappn = !IsON1;
@@ -93,51 +94,7 @@ namespace CTRPluginFramework {
 			CRO::Write<u32>("Kotobuki", 0x17F4, 0xE1500005);
 		}
 	}
-//Hacker Island Spoof	
-	void Hackerisland(MenuEntry *entry)	{ 
-		std::vector<std::string> cmnOpt =  { "" };
 
-		bool IsON = *(u32 *)Address(0x350B18).addr == 0xE3A000FF;
-
-		cmnOpt[0] = IsON ? (Color(pGreen) << Language::getInstance()->get("VECTOR_ENABLED")) : (Color(pRed) << Language::getInstance()->get("VECTOR_DISABLED"));
-		
-		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), cmnOpt);
-
-		int op = optKb.Open();
-		if(op < 0)
-			return;
-		
-		Process::Patch(Address(0x350B18).addr, IsON ? 0xE1A00C20 : 0xE3A000FF);
-		Hackerisland(entry);
-	}
-//InputChangeEvent For Country Spoof
-	void onCountryChange(Keyboard &k, KeyboardEvent &e) {
-		if(e.type == KeyboardEvent::CharacterRemoved || e.type == KeyboardEvent::CharacterAdded) {
-			std::string s = k.GetInput();
-			k.GetMessage() = "ID:\n\n" << IDList::SetCountryName(!s.empty() ? std::stoi(s, nullptr, 16) : 0);
-		}
-	}
-//Country Spoof	
-	void Countryspoof(MenuEntry *entry) {
-		static const std::vector<std::string> countOpt = {
-			Language::getInstance()->get("VECTOR_COUNTY_CHANGE"), 
-			Language::getInstance()->get("VECTOR_DISABLE")
-		};
-		
-		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), countOpt);
-        static u8 input = 0;
-		
-		switch(optKb.Open()) {
-			default: break;	
-			case 0: 
-				if(Wrap::KB<u8>(Language::getInstance()->get("ISLAND_COUNTRY_SET_ID"), true, 2, input, 0, onCountryChange)) 
-					Process::Patch(Address(0x350B18).addr, 0xE3A00000 + input); 
-			break;	
-			case 1: 
-				Process::Patch(Address(0x350B18).addr, 0xE1A00C20); 
-			break;	
-		}
-	}
 //Defined u32 items for Island Shop Slot Mod
 	Item ShopItem[4] = { {0x2018, 0}, {0x2018, 0}, {0x2018, 0}, {0x2018, 0} };
 //Keyboard for Island Shop Slot Mod
@@ -150,19 +107,21 @@ namespace CTRPluginFramework {
 			SetItem.GetMessage() = Utils::Format(Language::getInstance()->get("ISLAND_SHOP_MOD_ENTER_ID").c_str(), i + 1);
 
 			int res = SetItem.Open(*(u32 *)&ShopItem[i]);
-			if(res < 0)
+			if(res < 0) {
 				break;
+			}
 		}
 	}
 //Island Shop
 	void IslandShop(MenuEntry *entry) {	
 		static const Address IslandShopPointer(0x954238);
-		if(*(u32 *)IslandShopPointer.addr == 0)
+		if(*(u32 *)IslandShopPointer.addr == 0) {
 			return;
+		}
 		
 		if(Game::NextRoomCheck() == 0xA5 && Game::IsGameInRoom(0x65)) {
 			for(int i = 0; i < 4; ++i) {
-				Process::Write32(*(u32 *)IslandShopPointer.addr + 0x10 + (i * 4), IDList::ItemValid(ShopItem[i], false) ? *(u32 *)&ShopItem[i] : 0x2018);
+				Process::Write32(*(u32 *)IslandShopPointer.addr + 0x10 + (i * 4), ShopItem[i].isValid(false) ? *(u32 *)&ShopItem[i] : 0x2018);
 			}
 		}
 	}
@@ -190,19 +149,22 @@ namespace CTRPluginFramework {
 
 //Island Acre Mod	
 	void acreMod(MenuEntry *entry) {
-		if(*(u32 *)Address(0x953708).addr == 0)
+		if(*(u32 *)Address(0x953708).addr == 0) {
 			return;
+		}
 		
 		u32 IslAcreOffset = *(u32 *)Address(0x953708).addr + 2; //0x953708
 		
-		for(u8 i = 0; i < 16; ++i) 
+		for(u8 i = 0; i < 16; ++i) {
 			Process::Write8(IslAcreOffset + i * 2, isl.acres[i]);
+		}
 	}
 //Island Acre Mod Keyboard
 	void menuAcreMod(MenuEntry *entry) {
 		Keyboard kb(Language::getInstance()->get("ENTER_ID"));
 		kb.SetMaxLength(2);
 		kb.IsHexadecimal(true);
+
 		for(u8 i = 0; i < 16; ++i) {
 			kb.GetMessage() = Utils::Format(Language::getInstance()->get("ISLAND_ACRE_ENTER_ID").c_str(), i + 1);
 
@@ -211,8 +173,9 @@ namespace CTRPluginFramework {
 	}
 //Island Building Mod	
 	void buildingMod(MenuEntry *entry) {
-		if(*(u32 *)Address(0x953708).addr == 0)
+		if(*(u32 *)Address(0x953708).addr == 0) {
 			return;
+		}
 		
 		u32 islandBuildings = *(u32 *)Address(0x953708).addr + 0x1022;
 		
@@ -227,6 +190,7 @@ namespace CTRPluginFramework {
 		Keyboard kb(Language::getInstance()->get("ENTER_ID"));
 		kb.SetMaxLength(2);
 		kb.IsHexadecimal(true);
+
 		for(u8 i = 0; i < 2; ++i) {
 			kb.GetMessage() = Language::getInstance()->get("ISLAND_BUILDING_ENTER_ID") << Utils::Format(" %d", i + 1);
 			kb.Open(isl.b[i].id, isl.b[i].id);
@@ -254,6 +218,7 @@ namespace CTRPluginFramework {
 			hook1.Enable();	
 			hook2.Enable();	
 		}
+
 		else if(!entry->IsActivated()) {
 			hook1.Disable();	
 			hook2.Disable();	
@@ -261,7 +226,6 @@ namespace CTRPluginFramework {
 	}
 
 	void RestoreIsland(std::vector<Item> &fileData) {
-
 		bool ItemSequenceWasON = false;
 
 		if(ItemSequence::Enabled()) {
@@ -269,8 +233,9 @@ namespace CTRPluginFramework {
 			ItemSequence::Switch(false);
 		}
 
-		if(!bypassing) 
+		if(!bypassing) {
 			Dropper::DropItemLock(true);
+		}
 
 		u32 count = 0;
 		u32 x = 0x10, y = 0x10;
@@ -281,34 +246,40 @@ namespace CTRPluginFramework {
 			while(res) {
 				if(Game::GetItemAtWorldCoords(x, y)) {
 					nextItem++;
-					if(*Game::GetItemAtWorldCoords(x, y) != fileData[nextItem])
+					if(*Game::GetItemAtWorldCoords(x, y) != fileData[nextItem]) {
 						if(Dropper::PlaceItemWrapper(1, ReplaceEverything, &fileData[nextItem], &fileData[nextItem], x, y, 0, 0, 0, 0, 0, 0x3D, 0xA5, false)) {
 							count++;
-							if(count % 300 == 0)
+							if(count % 300 == 0) {
 								Sleep(Milliseconds(500));
+							}
 						}
+					}
 				}
-				else
+				else {
 					res = false;
-
+				}
+				
 				y++;
 			}
 			res = true;
 			
 			y = 0x10;
 			x++;
-			if(!Game::GetItemAtWorldCoords(x, y))
+			if(!Game::GetItemAtWorldCoords(x, y)) {
 				res = false;
+			}
 		}
 		
 		OSD::Notify(Utils::Format("%d %s", count, "items placed!"));
 
 	//OFF
-		if(!bypassing) 
+		if(!bypassing) {
 			Dropper::DropItemLock(false);
+		}
 
-		if(ItemSequenceWasON)
+		if(ItemSequenceWasON) {
 			ItemSequence::Switch(true);
+		}
 	}
 
 	void IslandSaver(MenuEntry *entry) {
@@ -340,10 +311,13 @@ namespace CTRPluginFramework {
 					std::string filename = "";
 					Keyboard KB(Language::getInstance()->get("ISLAND_SAVER_NAME_BACKUP"));
 
-					if(KB.Open(filename) == -1)
+					if(KB.Open(filename) == -1) {
 						return;
+					}
+
 					Wrap::Dump(Utils::Format(PATH_ISLAND, Address::regionName.c_str()), filename, ".dat", &backupLoc, nullptr);
 				} break;
+
 				case 1: {
 					size_t arrSize = 0x400;//number of elements in array
 					u32 fileData[arrSize];
@@ -352,6 +326,7 @@ namespace CTRPluginFramework {
 						OSD::Notify("Failed to accolate memory");
 						return;
 					}
+					
 					std::string filename = "restoredump";
 					WrapLoc restoreLoc = WrapLoc{ fileData, static_cast<int>(arrSize * sizeof(u32)) };
 					

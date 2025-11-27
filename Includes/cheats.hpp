@@ -11,10 +11,6 @@ extern CTRPluginFramework::Item PickupSeederItemID;
 
 namespace CTRPluginFramework {
 	extern const std::string fullV;
-
-	extern bool turbo;
-	extern bool fovbool;
-	extern bool saveMenuDisabled;
 	
 	extern const Color pColor[];
 
@@ -26,7 +22,6 @@ namespace CTRPluginFramework {
 	void ChangeNativeFruit(MenuEntry *entry);
 	void PWPUnlock(MenuEntry *entry);
 	void BuildingMod(MenuEntry *entry);
-	void unlockqrmachine(MenuEntry *entry);
 	void GrassChanger(MenuEntry *entry);
 	void HouseChanger(MenuEntry *entry);
 	void caravanchange(MenuEntry *entry);
@@ -52,6 +47,7 @@ namespace CTRPluginFramework {
 	void shovelknockback(MenuEntry *entry);
 	
 //Inventory Codes Folder
+	void itemsearch(MenuEntry *entry);
 	void t2i(MenuEntry *entry);
 	void duplication(MenuEntry *entry);
 	void catalog(MenuEntry *entry);
@@ -76,6 +72,7 @@ namespace CTRPluginFramework {
 	void playermod(MenuEntry *entry);
 	void randomoutfit(MenuEntry *entry);
 	void playerbackup(MenuEntry *entry);
+	void unlockqrmachine(MenuEntry *entry);
 	
 	void neckentry(MenuEntry *entry);
 	void debug(MenuEntry *entry);
@@ -126,8 +123,6 @@ namespace CTRPluginFramework {
 	void UnlockIsland(MenuEntry *entry);
 	void bonusOre(MenuEntry *entry);
 	void instantFruit(MenuEntry *entry);
-	void Hackerisland(MenuEntry *entry);
-	void Countryspoof(MenuEntry *entry);
 	void IslandShop(MenuEntry *entry);
 	void IslandSettings(MenuEntry *entry);
 	void alltour(MenuEntry *entry);
@@ -236,6 +231,17 @@ namespace CTRPluginFramework {
 	void NPCRotate(MenuEntry *entry);
 
 //Default Codes
+	void OnlineDropLagRemover(MenuEntry *entry);
+    void ChangeRockbreakParticle(MenuEntry *entry);
+    void DropItemsEverywhere(MenuEntry *entry);
+    void IdleAfterTreeShakeOrCut(MenuEntry *entry);
+    void DontMoveNPCBackToOriginalPosition(MenuEntry *entry);
+	void ReplaceDropFunctions(MenuEntry *entry);
+	void PreventParticleCrash(MenuEntry *entry);
+	void BypassGameChecks(MenuEntry *entry);
+	void DisableNonSeedItemCheck(MenuEntry *entry);
+	void PatchDropFunction(MenuEntry *entry);
+
 	void DisableOpenSaveMenuWithStartButton(MenuEntry *entry);
     void DisableCatalogSearchFunction(MenuEntry *entry);
     void FixInvalidPickupCrash(MenuEntry *entry);

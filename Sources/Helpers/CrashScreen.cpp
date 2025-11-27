@@ -32,16 +32,18 @@ namespace CTRPluginFramework {
 		std::string str = "Active Cheats:\n\n";
 
 		PluginMenu *menu = PluginMenu::GetRunningInstance();
-		if(menu == nullptr) //if menu somehow isn't loaded
+		if(menu == nullptr) {//if menu somehow isn't loaded
 			return "NULL";
+		}
 
 		std::vector<MenuFolder *> Folders = menu->GetFolderList();
 		std::vector<MenuEntry *> Entrys = menu->GetEntryList();
 		std::vector<MenuFolder *> SubFolders;
 
 		for(MenuEntry *entry : Entrys) {
-			if(entry->IsActivated())
+			if(entry->IsActivated()) {
 				str += ColorExtras::RemoveColor(entry->Name()) + "\n";
+			}
 		}
 
 		for(MenuFolder *folder : Folders) {
@@ -49,15 +51,17 @@ namespace CTRPluginFramework {
 			for(MenuFolder *subfolder : SubFolders) {
 				Entrys = subfolder->GetEntryList();
 				for(MenuEntry *entry : Entrys) {
-					if(entry->IsActivated())
+					if(entry->IsActivated()) {
 						str += (ColorExtras::RemoveColor(folder->Name()) + " -> " + ColorExtras::RemoveColor(subfolder->Name()) + " -> " + ColorExtras::RemoveColor(entry->Name())) + "\n";
+					}
 				}	
 			}
 
 			Entrys = folder->GetEntryList();
 			for(MenuEntry *entry : Entrys) {
-				if(entry->IsActivated())
+				if(entry->IsActivated()) {
 					str += (ColorExtras::RemoveColor(folder->Name()) + " -> " + ColorExtras::RemoveColor(entry->Name())) + "\n";
+				}
 			}
 		}
 
@@ -73,8 +77,9 @@ namespace CTRPluginFramework {
 		std::string filename = "Active_Cheats";
 		filename += ".txt";
 		
-		if(dir.OpenFile(file, filename, File::RWC | File::TRUNCATE) != 0) 
+		if(dir.OpenFile(file, filename, File::RWC | File::TRUNCATE) != 0) {
 			return -1;
+		}
 
 		file.Write(data, strlen(data));
 
@@ -113,8 +118,9 @@ namespace CTRPluginFramework {
 		filename += timestamp;
 		filename += ".txt";
 
-		if(dir.OpenFile(file, filename, File::RWC) != 0) 
+		if(dir.OpenFile(file, filename, File::RWC) != 0) {
 			return -1;
+		}
 
 		file.Write(str, strlen(str));
 
@@ -135,8 +141,9 @@ namespace CTRPluginFramework {
 
 		str += (Utils::Format("Title ID: %016llX", Process::GetTitleID())) + "\n\n";
 
-		for(int i = 0; i < 13; ++i) 
+		for(int i = 0; i < 13; ++i) {
 			str += (Utils::Format("R%02d:   %08X", i, regs->r[i])) + "\n";
+		}
 
 		str += "\n" + (Utils::Format("SP:    %08X", regs->sp)) + "\n";
 		str += (Utils::Format("LR:    %08X", regs->lr)) + "\n";
@@ -203,19 +210,35 @@ namespace CTRPluginFramework {
 		TopScreen.Draw("with a description of", 15, 75);
 		TopScreen.Draw("what happened!", 15, 85);
 	
-		if(WasSaved == 0) TopScreen.Draw("A | Save Crash Dump", 15, 125, Color::DimGrey);
-		else if(WasSaved == 1) TopScreen.Draw("Crash dump saved!", 15, 125, Color::DarkGrey);
-		else TopScreen.Draw("Error!", 15, 125, Color::Red);
+		if(WasSaved == 0) {
+			TopScreen.Draw("A | Save Crash Dump", 15, 125, Color::DimGrey);
+		}
+		else if(WasSaved == 1) {
+			TopScreen.Draw("Crash dump saved!", 15, 125, Color::DarkGrey);
+		}
+		else {
+			TopScreen.Draw("Error!", 15, 125, Color::Red);
+		}
 
 		TopScreen.Draw("B | Return To Home", 15, 135, Color::DimGrey);
 
-		if(QRSaved == 0) TopScreen.Draw("X | Save QR-Code", 15, 145, Color::DimGrey);
-		else if(QRSaved == 1) TopScreen.Draw("QR-Code saved!", 15, 145, Color::DarkGrey); 
-		else TopScreen.Draw("Not supported!", 15, 145, Color::Red); 
+		if(QRSaved == 0) {
+			TopScreen.Draw("X | Save QR-Code", 15, 145, Color::DimGrey);
+		}
+		else if(QRSaved == 1) {
+			TopScreen.Draw("QR-Code saved!", 15, 145, Color::DarkGrey); 
+		}
+		else {
+			TopScreen.Draw("Not supported!", 15, 145, Color::Red); 
+		}
 		//else TopScreen.Draw("Error!", 15, 145, Color::Red); 
 
-		if(!ShowInfo) TopScreen.Draw("Y | Show Crash Info", 15, 155, Color::DimGrey);
-		else TopScreen.Draw("Showing crash info!", 15, 155, Color::DarkGrey);
+		if(!ShowInfo) {
+			TopScreen.Draw("Y | Show Crash Info", 15, 155, Color::DimGrey);
+		}
+		else {
+			TopScreen.Draw("Showing crash info!", 15, 155, Color::DarkGrey);
+		}
 
 		TopScreen.Draw("Discord Link:", 15, 195);
 		TopScreen.Draw(DISCORDINV, 15, 205, Color::Purple);
@@ -234,11 +257,13 @@ namespace CTRPluginFramework {
 			BottomScreen.Draw(vec[3], 15, 55); //Title ID
 			
 		//Registers 0 - 6
-			for(int i = 4; i < 18; i += 2)
+			for(int i = 4; i < 18; i += 2) {
 				BottomScreen.Draw(vec[i], 15, 75 + (10 * ((i / 2) - 2)));
+			}
 		//Registers 7 - 12
-			for(int i = 5; i < 16; i += 2)
+			for(int i = 5; i < 16; i += 2) {
 				BottomScreen.Draw(vec[i], 135, 75 + (10 * ((i / 2) - 2)));
+			}
 
 			BottomScreen.Draw(vec[18], 15, 75 + (10 * 6) + 10); //LR
 			BottomScreen.Draw(vec[20], 15, 75 + (10 * 6) + 20); //CPSR
@@ -252,17 +277,21 @@ namespace CTRPluginFramework {
 		OSD::SwapBuffers();
 
 		Controller::Update();
-		if(Controller::IsKeyPressed(Key::B))
+		if(Controller::IsKeyPressed(Key::B)) {
 			return Process::ExceptionCallbackState::EXCB_RETURN_HOME;
+		}
 
-		if(Controller::IsKeyPressed(Key::A) && !WasSaved) 
+		if(Controller::IsKeyPressed(Key::A) && !WasSaved) {
 			WasSaved = SaveCrashDump(data);
+		}
 
-		if(Controller::IsKeyPressed(Key::Y) && !ShowInfo)
+		if(Controller::IsKeyPressed(Key::Y) && !ShowInfo) {
 			ShowInfo = true;
+		}
 
-		if(Controller::IsKeyPressed(Key::X) && !QRSaved) 
+		if(Controller::IsKeyPressed(Key::X) && !QRSaved) {
 			QRSaved = QRCodeSave();
+		}
 
 		return Process::ExceptionCallbackState::EXCB_LOOP;
 	}

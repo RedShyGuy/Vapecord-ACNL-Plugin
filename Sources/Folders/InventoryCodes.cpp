@@ -14,68 +14,60 @@
 #define MAXCOUNT 25
 
 namespace CTRPluginFramework {
-	struct Entry {
-		std::string name;
-		Item item;
-	};
+	void itemsearch(MenuEntry *entry) {
+		Item val;
+		ACNL_Player *player = Player::GetSaveData();
 
-	void ItemListCallBack(Keyboard& keyboard, KeyboardEvent& event) {
-		std::string& input = keyboard.GetInput();
-
-		if(event.type == KeyboardEvent::CharacterRemoved) {
-			keyboard.SetError(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_ERR1"));
+		if(!player) {
+			MessageBox("Error: Player needs to be loaded!", Color::Red).SetClear(ClearScreen::Top)();
 			return;
 		}
 
-		if(input.size() < 3) {
-			keyboard.SetError(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_ERR2"));
+		std::string input = "";
+		Keyboard KB(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_KB2"));
+		if (KB.Open(input) < 0) {
 			return;
 		}
 
-		std::vector<Entry> itemEntries = std::vector<Entry>();//ItemReader::getInstance()->searchAllByName(input); TODO
+		std::vector<ItemNamePack> itemEntries = std::vector<ItemNamePack>();
 
-		if(itemEntries.empty()) {
-			keyboard.SetError(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_ERR3"));
-			return;
-		}
-
-		int size = itemEntries.size();
-		if(size > MAXCOUNT) {
-			keyboard.SetError(Utils::Format(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_ERR4").c_str(), size));
+		if(!Item::searchAllByKeyword(input, itemEntries)) {
+			MessageBox(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_ERR3"), Color::Red).SetClear(ClearScreen::Top)();
 			return;
 		}
 
 		std::vector<std::string> names;
-		names.reserve(itemEntries.size());
 		for (const auto& e : itemEntries) {
 			names.push_back(e.name);
 		}
 
-		Keyboard KB(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_KB"), names);
-		int result = KB.Open();
-		if(result < 0) {
-			input.clear();
+		int size = itemEntries.size();
+		if(size > MAXCOUNT) {
+			MessageBox(Utils::Format(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_ERR4").c_str(), size), Color::Red).SetClear(ClearScreen::Top)();
 			return;
 		}
 
-		Entry match = itemEntries[result];
-		
-		input.clear();
-		u8 slot = 0;
-		if(!Inventory::GetNextItem({0x7FFE, 0}, slot)) {
-			keyboard.Close();
-			OSD::Notify("Inventory Full!",  Color::Red);
+		Keyboard selectKB(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_KB"), names);
+		int result = selectKB.Open();
+		if(result < 0) {
 			return;
 		}
-			
-		if(!IDList::ItemValid(match.item, false)) {
-			keyboard.Close();
-			OSD::Notify("Invalid Item!",  Color::Red);
+		
+		Item item(itemEntries[result].ID);
+		
+		u8 slot = 0;
+		if(!Inventory::GetNextItem({0x7FFE, 0}, slot)) {
+			MessageBox("Inventory Full!",  Color::Red).SetClear(ClearScreen::Top)();
+			return;
+		}
+		
+		if(!item.isValid(false)) {
+			MessageBox("Invalid Item!",  Color::Red).SetClear(ClearScreen::Top)();
 			return;
 		}	
 
-		Inventory::WriteSlot(slot, match.item);
-		OSD::Notify(Utils::Format("Set Item %04X to slot %d", match.item.ID, slot));
+		Inventory::WriteSlot(slot, item);
+		MessageBox(Utils::Format("Set Item %04X to slot %d", item.ID, slot)).SetClear(ClearScreen::Top)();
 	}
 
 //Text to Item
@@ -90,8 +82,9 @@ namespace CTRPluginFramework {
 			}
 
 			Inventory::ReadSlot(0, val);
-			if(Wrap::KB<u32>(Language::getInstance()->get("ENTER_ID"), true, 8, *(u32 *)&val, *(u32 *)&val, TextItemChange)) 		
+			if(Wrap::KB<u32>(Language::getInstance()->get("ENTER_ID"), true, 8, *(u32 *)&val, *(u32 *)&val, TextItemChange)) {
 				Inventory::WriteSlot(0, val);
+			}
 		}
 		
 		else if(entry->Hotkeys[1].IsPressed()) {
@@ -123,31 +116,23 @@ namespace CTRPluginFramework {
 				}
 			}
 		}
-
-		else if(entry->Hotkeys[3].IsPressed()) {
-			if(!player) {
-				OSD::Notify("Error: Player needs to be loaded!", Color::Red);
-				return;
-			}
-
-			std::string input = "";
-			Keyboard KB(Language::getInstance()->get("TEXT_2_ITEM_SEARCH_KB2"));
-			KB.OnKeyboardEvent(ItemListCallBack);
-			KB.Open(input);
-		}
 	}
+
 //Duplicate Items
 	void duplication(MenuEntry *entry) {
 		ACNL_Player *player = Player::GetSaveData();
-		if(!player) 
+		if(!player) {
 			return;
+		}
 
 		if(entry->Hotkeys[0].IsPressed()) {
 			Inventory::WriteSlot(1, player->Inventory[0], player->InventoryItemLocks[0]);
 		}
+
 		else if(entry->Hotkeys[1].IsPressed()) {
-			for(int i = 0; i <= 0xF; ++i) 
+			for(int i = 0; i <= 0xF; ++i) {
 				Inventory::WriteSlot(i, player->Inventory[0], player->InventoryItemLocks[0]);
+			}
 		}
 	}
 
@@ -155,11 +140,12 @@ namespace CTRPluginFramework {
 		Item CurrentItem = *(Item *)(invData + 0x3B9C - 0x28);
 
 		if(Game::SetItem(&CurrentItem)) {
-			std::string itemName = IDList::GetItemName(CurrentItem);
+			std::string itemName = CurrentItem.GetName();
 			OSD::Notify(Utils::Format("Spawned Item: %s (%04X)", itemName.c_str(), CurrentItem.ID));
 		}
-		else
+		else {
 			OSD::Notify("Inventory Full!");
+		}
 
 		static Address argData(0x8499E4);
 
@@ -172,6 +158,7 @@ namespace CTRPluginFramework {
 	void catalog(MenuEntry *entry) {
 		static Hook catalogHook;
 		static Address AllItemsBuyable(0x70E494);
+		static Address AllItemsBuyable1 = AllItemsBuyable.MoveOffset(4);
 		static Address cHook(0x21B4B0);
 
 		if(entry->WasJustActivated()) {
@@ -180,8 +167,8 @@ namespace CTRPluginFramework {
 
 			catalogHook.Enable();
 
-			Process::Patch(AllItemsBuyable.addr, 0xE3A00000);
-			Process::Patch(AllItemsBuyable.addr + 4, 0xEA00000B);
+			AllItemsBuyable.Patch(0xE3A00000);
+			AllItemsBuyable1.Patch(0xEA00000B);
 		}
 
 		if(entry->Hotkeys[0].IsPressed()) {
@@ -197,8 +184,9 @@ namespace CTRPluginFramework {
 			}	
 		}
 		
-		if(Inventory::GetCurrent() == 0x7C && !isCatalogOpen) 
+		if(Inventory::GetCurrent() == 0x7C && !isCatalogOpen) {
 			isCatalogOpen = true;
+		}
 		
 		if(Inventory::GetCurrent() != 0x7C && isCatalogOpen) {
 			Animation::Idle();
@@ -207,16 +195,17 @@ namespace CTRPluginFramework {
 		
 		if(!entry->IsActivated()) {
 			catalogHook.Disable();
-			Process::Patch(AllItemsBuyable.addr, 0x03A00001);
-			Process::Patch(AllItemsBuyable.addr + 4, 0x0A00000B);
+			AllItemsBuyable.Unpatch();
+			AllItemsBuyable1.Unpatch();
 
 			isCatalogOpen = false;
 		}
 	}
 //Chat Text2Item
 	void chatt2i(MenuEntry *entry) {
-		if(!entry->Hotkeys[0].IsPressed())
+		if(!entry->Hotkeys[0].IsPressed()) {
 			return;
+		}
 		
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
 			OSD::Notify("Player needs to be loaded!", Color::Red);
@@ -252,14 +241,14 @@ namespace CTRPluginFramework {
 			return;
 		}
 			
-		if(!IDList::ItemValid(itemID, false)) {
+		if(!itemID.isValid(false)) {
 			OSD::Notify("Invalid Item!", Color::Red);
 			return;
 		}
 		
 		Inventory::WriteSlot(slot, itemID);
 
-		std::string itemName = IDList::GetItemName(itemID);
+		std::string itemName = itemID.GetName();
 		OSD::Notify(Utils::Format("Spawned Item: %s (%08X)", itemName.c_str(), itemID));
 	}
 //Clear Inventory
@@ -270,17 +259,18 @@ namespace CTRPluginFramework {
 		}
 
 		if((MessageBox(Language::getInstance()->get("REMOVE_INV_WARNING"), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
-			for(int i = 0; i <= 0xF; ++i)
+			for(int i = 0; i <= 0xF; ++i) {
 				Inventory::WriteSlot(i, Item{ 0x7FFE, 0 });
+			}
 		}
 	}
 
 //Item Settings	
 	void itemsettings(MenuEntry *entry) {
-		static const Address showoff(0x19BA78);
-		static const Address infinite1(0x19C574);
-		static const Address infinite2(0x19C4D0);
-		static const Address eat(0x19C1F0);
+		static Address showoff(0x19BA78);
+		static Address infinite1(0x19C574);
+		static Address infinite2(0x19C4D0);
+		static Address eat(0x19C1F0);
 		
 		std::vector<std::string> itemsettopt = {
 			Language::getInstance()->get("VECTOR_ITEMSETTINGS_SHOWOFF"),
@@ -288,46 +278,67 @@ namespace CTRPluginFramework {
 			Language::getInstance()->get("VECTOR_ITEMSETTINGS_EAT"),
 		};
 		
-		static const u32 settings[3] = {
-			showoff.addr, infinite1.addr, eat.addr
-		};
-		
-		static constexpr u32 settingsvalue[2][3] = {
-			{ 0xE1A00000, 0xE2805A00, 0xE1A00000 },
-			{ 0x1A000012, 0xE2805A06, 0x0A000009 },
+		static Address settings[3] = {
+			showoff, infinite1, eat
 		};
 
 		bool IsON;
 		
 		for(int i = 0; i < 3; ++i) { 
-			IsON = *(u32 *)settings[i] == settingsvalue[0][i];
+			IsON = *(u32 *)settings[i].addr != settings[i].origVal;
 			itemsettopt[i] = IsON ? (Color(pGreen) << itemsettopt[i]) : (Color(pRed) << itemsettopt[i]);
 		}
 		
 		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), itemsettopt);
 
 		int op = optKb.Open();
-		if(op < 0)
+		if(op < 0) {
 			return;
-			
-		if(op == 1) {
-			Process::Patch(infinite1.addr, *(u32 *)infinite1.addr == 0xE2805A06 ? 0xE2805A00 : 0xE2805A06);
-			Process::Patch(infinite2.addr, *(u32 *)infinite2.addr == 0xE2805A06 ? 0xE2805A00 : 0xE2805A06);
+		}
+		else if(op == 0) {
+			if (*(u32 *)showoff.addr == showoff.origVal) {
+				showoff.Patch(0xE1A00000);
+			}
+			else {
+				showoff.Unpatch();
+			}
 			itemsettings(entry);
 			return;
 		}
-			
-		Process::Patch(settings[op], *(u32 *)settings[op] == settingsvalue[0][op] ? settingsvalue[1][op] : settingsvalue[0][op]);
-		itemsettings(entry);
+		else if(op == 1) {
+			if (*(u32 *)infinite1.addr == infinite1.origVal) {
+				infinite1.Patch(0xE2805A00);
+				infinite2.Patch(0xE2805A00);
+			}
+			else {
+				infinite1.Unpatch();
+				infinite2.Unpatch();
+			}
+			itemsettings(entry);
+			return;
+		}
+		else if(op == 2) {
+			if (*(u32 *)eat.addr == eat.origVal) {
+				eat.Patch(0xE1A00000);
+			}
+			else {
+				eat.Unpatch();
+			}
+			itemsettings(entry);
+			return;
+		}
 	}
 
 	static bool IsMenuPatchOpen = false;
 	static u8 CurrentMenu = 0xFF;
-	const u8 Menus[8] = { 0x2E, 0x37, 0x38, 0x3D, 0x79, 0x89, 0x00, 0xFF };
+	const u8 Menus[8] = { 
+		0x2E, 0x37, 0x38, 0x3D, 0x79, 0x89, 0x00, 0xFF 
+	};
 
 	void Callback_MenuPatch(void) {
-		if(Inventory::GetCurrent() == CurrentMenu && !IsMenuPatchOpen) 
+		if(Inventory::GetCurrent() == CurrentMenu && !IsMenuPatchOpen) {
 			IsMenuPatchOpen = true;
+		}
 		
 		if(Inventory::GetCurrent() != CurrentMenu && IsMenuPatchOpen) {
 			Animation::Idle();
@@ -368,8 +379,9 @@ namespace CTRPluginFramework {
 		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), menuopt);
 
 		int dChoice = optKb.Open();
-		if(dChoice < 0)
+		if(dChoice < 0) {
 			return;
+		}
 
 		hook.Initialize(Address(0x1A0980).addr + 8, (u32)Hook_MenuPatch);
 		hook.SetFlags(USE_LR_TO_RETURN);
@@ -377,8 +389,9 @@ namespace CTRPluginFramework {
 	//If Custom Menu is chosen
 		if(dChoice == 6) {
 			if(Wrap::KB<u8>(Language::getInstance()->get("SAVE_MENU_CHANGER_ENTER_ID"), true, 2, CurrentMenu, 0)) {
-				if(IDList::MenuValid(CurrentMenu))
+				if(IDList::MenuValid(CurrentMenu)) {
 					hook.Enable();
+				}
 				else {
 					hook.Disable();
 					MessageBox(Language::getInstance()->get("INVALID_ID")).SetClear(ClearScreen::Top)();
@@ -392,13 +405,15 @@ namespace CTRPluginFramework {
 			hook.Disable();
 			return;
 		}
+
 		hook.Enable();
 		MenuChanger(entry);
 	}
 
 	void GetCustomView(Keyboard& keyboard, KeyboardEvent& event) {
-		if(event.type != KeyboardEvent::SelectionChanged)
-            return;
+		if(event.type != KeyboardEvent::SelectionChanged) {
+			return;
+		}
 
 		int index = event.selectedIndex;
 
@@ -406,14 +421,17 @@ namespace CTRPluginFramework {
 		std::vector<bool> isDir;
 		File file;
 
-		if(Wrap::restoreDIR.ListDirectories(f_Dir) == Directory::OPResult::NOT_OPEN)
+		if(Wrap::restoreDIR.ListDirectories(f_Dir) == Directory::OPResult::NOT_OPEN) {
 			return;
+		}
 
-		if(Wrap::restoreDIR.ListFiles(f_file, ".inv") == Directory::OPResult::NOT_OPEN) 
+		if(Wrap::restoreDIR.ListFiles(f_file, ".inv") == Directory::OPResult::NOT_OPEN)  {
 			return;
+		}
 
-		if(f_Dir.empty() && f_file.empty())
+		if(f_Dir.empty() && f_file.empty()) {
 			return;
+		}
 
 		for(const std::string& str : f_Dir) {
 			f_all.push_back(str);
@@ -425,18 +443,21 @@ namespace CTRPluginFramework {
 			isDir.push_back(false);
 		}
 
-		if(index == -1)
+		if(index == -1) {
 			return;
+		}
 
 		std::string& input = keyboard.GetMessage();
 		input.clear();
 
 	//if directory return
-		if(isDir[index])
+		if(isDir[index]) {
 			return;
+		}
 
-		if(Wrap::restoreDIR.OpenFile(file, f_all[index], File::READ) != 0) 
+		if(Wrap::restoreDIR.OpenFile(file, f_all[index], File::READ) != 0) {
 			return; //error opening file
+		}
 
 		std::string Sets[16];
 		Item SetItem[16];
@@ -444,16 +465,17 @@ namespace CTRPluginFramework {
 		file.Read(&SetItem, sizeof(SetItem));
 
 		for(int i = 0; i < 16; ++i) {
-			if(SetItem[i].ID != 0x7FFE)
+			if(SetItem[i].ID != 0x7FFE) {
 				OnlyItem.push_back(SetItem[i]);
+			}
 		}
 
 		for(int i = 0; i < 11; ++i) {
-			if(i >= OnlyItem.size())
+			if(i >= OnlyItem.size()) {
 				return;
+			}
 
-			std::string str = IDList::GetItemName(OnlyItem[i]);
-			Sets[i] = str;
+			Sets[i] = OnlyItem[i].GetName();
 
 			input += Color(0x40FF40FF) << Utils::Format("%08X | ", OnlyItem[i]) << Color(0xFFFDD0FF) << Sets[i] << "\n";
 		}
@@ -501,8 +523,9 @@ namespace CTRPluginFramework {
 					case 0: {
 						std::string filename = "";
 						Keyboard KB(Language::getInstance()->get("GET_SET_DUMP"));
-						if(KB.Open(filename) == -1)
+						if(KB.Open(filename) == -1) {
 							return;
+						}
 
 						Wrap::Dump(Utils::Format(PATH_ITEMSET, Address::regionName.c_str()), filename, ".inv", &LocInv, &LocLock, nullptr);
 					} return;

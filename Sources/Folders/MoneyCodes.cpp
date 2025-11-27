@@ -16,8 +16,9 @@ namespace CTRPluginFramework {
 		}
 		
 		u32 money = 0;
-		if(Wrap::KB<u32>(Language::getInstance()->get("ENTER_AMOUNT"), false, 5, money, 0))
+		if(Wrap::KB<u32>(Language::getInstance()->get("ENTER_AMOUNT"), false, 5, money, 0)) {
 			Game::EncryptValue(&player->PocketMoney, money);
+		}
 	}
 //Bank Mod
 	void bank(MenuEntry *entry) {
@@ -29,8 +30,9 @@ namespace CTRPluginFramework {
 		}
 		
 		u32 money = 0;
-		if(Wrap::KB<u32>(Language::getInstance()->get("ENTER_AMOUNT"), false, 9, money, 0))
+		if(Wrap::KB<u32>(Language::getInstance()->get("ENTER_AMOUNT"), false, 9, money, 0)) {
 			Game::EncryptValue(&player->BankAmount, money);
+		}
 	}
 //Meow Coupon Mod
 	void coupon(MenuEntry *entry) {
@@ -42,8 +44,9 @@ namespace CTRPluginFramework {
 		}
 		
 		u32 coupon = 0;
-		if(Wrap::KB<u32>(Language::getInstance()->get("ENTER_AMOUNT"), false, 4, coupon, 0))
+		if(Wrap::KB<u32>(Language::getInstance()->get("ENTER_AMOUNT"), false, 4, coupon, 0)) {
 			Game::EncryptValue(&player->MeowCoupons, coupon);
+		}
 	}
 //Badges Mod
 	void badges(MenuEntry *entry) {
@@ -64,13 +67,15 @@ namespace CTRPluginFramework {
 		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), badgesopt);
 
 		int index = optKb.Open();
-		if(index < 0)
+		if(index < 0) {
 			return;
+		}
 
 		bool WithStats = MessageBox("Do you want to set the appropiate badge stats?\n(This will edit all badge related game stats)", DialogType::DialogYesNo).SetClear(ClearScreen::Top)();
 
-		for(int i = 0; i < 24; ++i) 
+		for(int i = 0; i < 24; ++i) {
 			Game::SetBadges(i, std::abs(index - 3), WithStats);
+		}
 	}
 //Medals Mod  32DC51B8 31F2C6BC
 	void medals(MenuEntry *entry) {

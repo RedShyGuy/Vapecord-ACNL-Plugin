@@ -7,8 +7,9 @@
 namespace CTRPluginFramework {
     static MenuEntryExtras *EntryWithHotkey(MenuEntryExtras *entry, const std::vector<HotkeyExtras> &hotkeys) {
         if(entry != nullptr) {
-            for(const HotkeyExtras &hotkey : hotkeys)
-                entry->Hotkeys += hotkey;
+            for(const HotkeyExtras &hotkey : hotkeys) {
+				entry->Hotkeys += hotkey;
+			}
         }
         return entry;
     }	
@@ -37,7 +38,6 @@ namespace CTRPluginFramework {
 		SAVEC->Append(new MenuEntryExtras("CAMPING_SET", nullptr, SetCampingVillager, "CAMPING_SET_NOTE")),
 		SAVEC->Append(new MenuEntryExtras("SHOP_UPGRADE", nullptr, shopunlocks, "SHOP_UPGRADE_NOTE")),
 	//SAVEC->Append(new MenuEntryExtras("HOUSE_EDITOR_NAME", nullptr, HouseChanger, "HOUSE_EDITOR_NOTE")),
-		SAVEC->Append(new MenuEntryExtras("QR_MACHINE_NAME", nullptr, unlockqrmachine, "QR_MACHINE_NOTE")),
 		SAVEC->Append(new MenuEntryExtras("BUILDING_MOD_NAME", nullptr, BuildingMod, "BUILDING_MOD_NOTE")),
 		SAVEC->Append(new MenuEntryExtras("FILL_MUSEUM_NAME", nullptr, CompleteMuseum, "FILL_MUSEUM_NOTE")),
 		SAVEC->Append(new MenuEntryExtras("MAYOR_PERMIT_NAME", Permit100, "MAYOR_PERMIT_NOTE")),
@@ -88,11 +88,10 @@ namespace CTRPluginFramework {
 	/*Inventory Codes Folder*/
 	//////////////////////////
 		MenuFolderExtras *INVC = new MenuFolderExtras("INVENTORY_CODES", FolderType::Inventory);
-		INVC->Append(EntryWithHotkey(new MenuEntryExtras("TEXT_2_ITEM", t2i, "TEXT_2_ITEM_NOTE"), { 
+		INVC->Append(EntryWithHotkey(new MenuEntryExtras("TEXT_2_ITEM", t2i, itemsearch, "TEXT_2_ITEM_NOTE"), { 
 			HotkeyExtras(Key::X | Key::DPadRight, "TEXT_2_ITEM_KEY1"), 
 			HotkeyExtras(Key::X |Key::DPadUp, "TEXT_2_ITEM_KEY2"), 
 			HotkeyExtras(Key::X | Key::DPadDown, "TEXT_2_ITEM_KEY3"),
-			HotkeyExtras(Key::X | Key::DPadLeft, "TEXT_2_ITEM_KEY4"),
 		})),
 		INVC->Append(EntryWithHotkey(new MenuEntryExtras("DUPE_ITEMS", duplication, "DUPE_ITEMS_NOTE"), { 
 			HotkeyExtras(Key::R, "DUPE_ITEMS_KEY1"), 
@@ -133,6 +132,7 @@ namespace CTRPluginFramework {
 		PSAVEC->Append(new MenuEntryExtras("DEBUG_MENU", nullptr, debug1, "DEBUG_MENU_NOTE")),
 		PSAVEC->Append(new MenuEntryExtras("SONG_LIST_NAME", nullptr, FillSongs, "SONG_LIST_NOTE")),
 		PSAVEC->Append(new MenuEntryExtras("FILL_CATALOG_NAME", nullptr, FillCatalog, "FILL_CATALOG_NOTE")),
+		PSAVEC->Append(new MenuEntryExtras("QR_MACHINE_NAME", nullptr, unlockqrmachine, "QR_MACHINE_NOTE")),
 		PLAYC->Append(PSAVEC);
 		PLAYC->Append(new MenuEntryExtras("PLAYER_INFO", debug, "PLAYER_INFO_NOTE")),
 	//PLAYC->Append(new MenuEntryExtras("PLAYER_LOADER", nullptr, pLoaderEntry, "PLAYER_LOADER_NOTE")),
@@ -277,8 +277,6 @@ namespace CTRPluginFramework {
 		ISLC->Append(new MenuEntryExtras("UNLOCK_ISLAND", nullptr, UnlockIsland, "UNLOCK_ISLAND_NOTE")),
 		ISLC->Append(new MenuEntryExtras("FILL_INV_ORE", bonusOre, "FILL_INV_ORE_NOTE")),
 		ISLC->Append(new MenuEntryExtras("FILL_INV_FRUIT", instantFruit, "FILL_INV_FRUIT_NOTE")),
-		ISLC->Append(new MenuEntryExtras("HACKER_ISLAND", nullptr, Hackerisland, "HACKER_ISLAND_NOTE")),
-		ISLC->Append(new MenuEntryExtras("ISLAND_COUNTRY", nullptr, Countryspoof, "ISLAND_COUNTRY_NOTE")),
 		ISLC->Append(new MenuEntryExtras("FREE_KAPPN", FreeKappn, "FREE_KAPPN_NOTE")),
 		ISLC->Append(new MenuEntryExtras("ISLAND_SHOP_MOD", IslandShop, IslandSettings, "ISLAND_SHOP_MOD_NOTE")),
 		ISLC->Append(new MenuEntryExtras("ALL_TOURS", alltour, "ALL_TOURS_NOTE")),
@@ -421,6 +419,18 @@ namespace CTRPluginFramework {
 	/*Default Codes Folder*/
 	////////////////////////
 	MenuFolder *DEFAULTC = new MenuFolder("Default Codes");
+
+	DEFAULTC->Append(new MenuEntry("Online Drop Lag Remover", OnlineDropLagRemover, "")),
+	DEFAULTC->Append(new MenuEntry("Change Rockbreak Particle", ChangeRockbreakParticle, "")),
+	DEFAULTC->Append(new MenuEntry("Drop Items Everywhere", DropItemsEverywhere, "")),
+	DEFAULTC->Append(new MenuEntry("Idle After Tree Shake/Cut", IdleAfterTreeShakeOrCut, "")),
+	DEFAULTC->Append(new MenuEntry("Don't Move NPC Back To Original Position", DontMoveNPCBackToOriginalPosition, "")),
+	DEFAULTC->Append(new MenuEntry("Replace Drop Functions", ReplaceDropFunctions, "")),
+	DEFAULTC->Append(new MenuEntry("Prevent Particle Crash", PreventParticleCrash, "")),
+	DEFAULTC->Append(new MenuEntry("Bypass Game Checks", BypassGameChecks, "")),
+	DEFAULTC->Append(new MenuEntry("Disable Non Seed Item Check", DisableNonSeedItemCheck, "")),
+	DEFAULTC->Append(new MenuEntry("Patch Drop Function", PatchDropFunction, "")),
+
 	DEFAULTC->Append(new MenuEntry("Disable Open Save Menu With Start Button", DisableOpenSaveMenuWithStartButton, "")),
 	DEFAULTC->Append(new MenuEntry("Disable Catalog Search Function", DisableCatalogSearchFunction, "")),
 	DEFAULTC->Append(new MenuEntry("Fix Invalid Pickup Crash", FixInvalidPickupCrash, "")),

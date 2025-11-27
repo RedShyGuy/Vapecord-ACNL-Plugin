@@ -43,8 +43,9 @@ namespace CTRPluginFramework {
 				u32 perm = ON ? MemPerm(MEMPERM_READ | MEMPERM_EXECUTE | MEMPERM_WRITE) : MemPerm(MEMPERM_READ | MEMPERM_EXECUTE);
 				res = svcControlProcessMemory(processHandle, mInfo.base_addr, 0, mInfo.size, MemOp(MEMOP_PROT), perm);		
 
-				if(R_SUCCEEDED(res)) 
-					out = true;
+				if(R_SUCCEEDED(res)) {
+                    out = true;
+                }
 			}
 			svcCloseHandle(processHandle);
 		}

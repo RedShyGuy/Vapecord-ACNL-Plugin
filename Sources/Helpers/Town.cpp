@@ -14,8 +14,9 @@ namespace CTRPluginFramework {
 
 	void Town::EditName(const std::string& name) {
 		ACNL_Player *player = Player::GetSaveData();
-		if(!player)
+		if(!player) {
 			return;
+		}
 
 		u32 GardenPlus = Save::GetInstance()->Address();
 

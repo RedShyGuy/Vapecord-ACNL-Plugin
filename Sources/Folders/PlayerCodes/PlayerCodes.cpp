@@ -22,22 +22,26 @@ namespace CTRPluginFramework {
 	
 	void GetPlayerInfoData(void) {	
 		u8 pIndex = Game::GetOnlinePlayerIndex();
-		if(!PlayerClass::GetInstance(pIndex)->IsLoaded() || !Player::GetSaveData(pIndex))
+		if(!PlayerClass::GetInstance(pIndex)->IsLoaded() || !Player::GetSaveData(pIndex)) {
 			return;
-	
+		}
+			
 	//gets coordinates
 		float *pCoords = PlayerClass::GetInstance(pIndex)->GetCoordinates();
-		if(!pCoords)
+		if(!pCoords) {
 			return;
+		}
 		
 	//Gets world coords	
-		if(!MapEditorActive)
+		if(!MapEditorActive) {
 			PlayerClass::GetInstance(pIndex)->GetWorldCoords(&selectedX, &selectedY);
+		}
 		
 	//gets item standing on
 		Item *pItem = Game::GetItemAtWorldCoords(selectedX, selectedY);	
-		if(!pItem)
+		if(!pItem) {
 			return;
+		}
 		
 		strings1[0] = ("Coordinates: " << std::to_string(pCoords[0]).erase(4) << "|" << std::to_string(pCoords[2]).erase(4));
 		strings1[1] = (Utils::Format("World Coordinates: %02X|%02X", (u8)(selectedX & 0xFF), (u8)(selectedY & 0xFF)));
@@ -48,10 +52,12 @@ namespace CTRPluginFramework {
 
 	//gets inv item
 		u8 slot = 0;
-		if(Inventory::GetSelectedSlot(slot)) 
+		if(Inventory::GetSelectedSlot(slot)) {
 			Inventory::ReadSlot(slot, itemslotid);
-		else 
+		}
+		else {
 			itemslotid = ReplaceEverything;
+		}
 		
 		strings2[0] = (Utils::Format("Pickup: %08X", PickupSeederItemID));
 		strings2[1] = (Utils::Format("Drop: %08X", dropitem));
@@ -61,11 +67,13 @@ namespace CTRPluginFramework {
 //debug OSD
 	bool debugOSD(const Screen &screen) {
 		u8 pIndex = Game::GetOnlinePlayerIndex();
-		if(!PlayerClass::GetInstance(pIndex)->IsLoaded()) 
+		if(!PlayerClass::GetInstance(pIndex)->IsLoaded()) {
 			return 0;
+		}
 			
-		if(!screen.IsTop)
+		if(!screen.IsTop) {
 			return 0;
+		}
 		
 		static constexpr u8 YPositions1[7] = { 10, 20, 30, 40, 50, 60 };
 		static constexpr u8 YPositions2[4] = { 0, 10, 20, 30 };
@@ -197,8 +205,9 @@ namespace CTRPluginFramework {
 				kb.IsHexadecimal(true);
 
 				int res = kb.Open(rval1);
-				if(res < 0)
+				if(res < 0) {
 					return;
+				}
 
 				RGB_To_BGR(rval1);
 			} break;
@@ -208,8 +217,9 @@ namespace CTRPluginFramework {
 				kb.IsHexadecimal(true);
 
 				int res = kb.Open(rval2);
-				if(res < 0)
+				if(res < 0) {
 					return;
+				}
 
 				RGB_To_BGR(rval2);
 			} break;
@@ -261,25 +271,30 @@ namespace CTRPluginFramework {
 			rval2 = RainbowBGR();
 		}
 
-		if(!entry->IsActivated()) 
-            hook.Disable();
+		if(!entry->IsActivated()) {
+			hook.Disable();
+		}
 	}
 	
 //Wear Helmet And Accessory /*Credits to Levi*/
 	void hatz(MenuEntry *entry) { 
-		static const Address hatwear(0x68C630);
-		if(entry->WasJustActivated()) 
-			Process::Patch(hatwear.addr, 0xE1A00000); 
-		else if(!entry->IsActivated()) 
-			Process::Patch(hatwear.addr, 0x3AFFFFD6); 
+		static Address hatwear(0x68C630);
+
+		if(entry->WasJustActivated()) {
+			hatwear.Patch(0xE1A00000);
+		}
+		else if(!entry->IsActivated()) {
+			hatwear.Unpatch();
+		}
 	}
 
 //Faint	
 	void Faint(MenuEntry *entry) { 
         if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
 			u32 x, y;
-			if(PlayerClass::GetInstance(Game::GetOnlinePlayerIndex())->GetWorldCoords(&x, &y))
+			if(PlayerClass::GetInstance(Game::GetOnlinePlayerIndex())->GetWorldCoords(&x, &y)) {
 				Animation::ExecuteAnimationWrapper(Game::GetOnlinePlayerIndex(), 0x9D, { 0, 0 }, 0, 0, 0, 0, x, y, 0, 0);
+			}
 		}
     }
 
@@ -290,8 +305,9 @@ namespace CTRPluginFramework {
 			if(PlayerClass::GetInstance(i)->IsLoaded() && playerIcon[i] == nullptr) {
 				std::string filestr = Utils::Format(PATH_PICON, i);
 				File file(filestr, File::READ);
-				if(!file.IsOpen())
+				if(!file.IsOpen()) {
 					return;
+				}
 
 				playerIcon[i] = new c_RGBA[file.GetSize() / sizeof(c_RGBA)];
 				file.Read(playerIcon[i], file.GetSize());
@@ -306,8 +322,9 @@ namespace CTRPluginFramework {
 
 //OSD For Show Players On The Map	
 	bool players(const Screen &screen) { 
-		if(screen.IsTop || !Game::MapBoolCheck())
+		if(screen.IsTop || !Game::MapBoolCheck()) {
 			return 0;
+		}
 
 		u32 XPos, YPos;
 
@@ -321,15 +338,17 @@ namespace CTRPluginFramework {
 					for(int X = XPos; X < XResult; ++X) {
 						for(int Y = YPos; Y < YResult; ++Y) {
 							Color cPix = Color(playerIcon[i][Pixels].R, playerIcon[i][Pixels].G, playerIcon[i][Pixels].B, playerIcon[i][Pixels].A);
-							if(cPix != Color(0, 0, 0, 0) && playerIcon[i][Pixels].A == 0xFF)
+							if(cPix != Color(0, 0, 0, 0) && playerIcon[i][Pixels].A == 0xFF) {
 								screen.DrawPixel(X, Y, cPix);
+							}
 
 							Pixels++;
 						}
 					}
 				}
-				else 
+				else {
 					screen.DrawRect(XPos - 1, YPos + 1, 6, 6, pColor[i]);
+				}
 			}
 		}
 
@@ -375,10 +394,13 @@ namespace CTRPluginFramework {
 	}
 
 	void NeverBedHead(MenuEntry *entry) {
-		static const Address antiBedHead(0x20C798);
-		if(entry->WasJustActivated()) 
-			Process::Patch(antiBedHead.addr, 0xE1A00000);
-		else if(!entry->IsActivated()) 
-			Process::Patch(antiBedHead.addr, 0xE5C41004);    
+		static Address antiBedHead(0x20C798);
+
+		if(entry->WasJustActivated()) {
+			antiBedHead.Patch(0xE1A00000);
+		}
+		else if(!entry->IsActivated()) {
+			antiBedHead.Unpatch();
+		}
 	}
 }

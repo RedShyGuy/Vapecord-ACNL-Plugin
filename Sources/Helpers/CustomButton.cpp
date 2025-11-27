@@ -188,12 +188,15 @@ Custom Buttons
 		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
 		u32 res = func.Call<u32>(DataPointer, stack, SYS_2D_UI, sysID);
 
-		if(sysID == 0x2A && itemsetting1 != -1)
+		if(sysID == 0x2A && itemsetting1 != -1) {
 			Process::WriteString(stack[1], citemsettings[itemsetting1], 0x20, StringFormat::Utf16);
-		else if(sysID == 0x0C && itemsetting2 != -1) 
+		}
+		else if(sysID == 0x0C && itemsetting2 != -1) {
 			Process::WriteString(stack[1], citemsettings[itemsetting2], 0x20, StringFormat::Utf16);
-		else if(sysID == 0x26 && itemsetting3 != -1)
+		}
+		else if(sysID == 0x26 && itemsetting3 != -1) {
 			Process::WriteString(stack[1], coutfitsettings[itemsetting3], 0x20, StringFormat::Utf16);
+		}
 
 		return res;
 	}
@@ -233,15 +236,17 @@ Custom Buttons
 		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"));
 		optKb.Populate(cbuttons);
 		int op = optKb.Open();
-		if(op < 0)
+		if(op < 0) {
 			return;
+		}
 
 	//1st Custom button | replaces medicine button
 		if(op == 0) {
 			optKb.Populate(citemsettings);
 			op = optKb.Open();
-			if(op < 0)
+			if(op < 0) {
 				return;
+			}
 
 			static const Address AlwaysMedicine(0x19BC04);
 
@@ -264,8 +269,9 @@ Custom Buttons
 		else if(op == 1) {
 			optKb.Populate(citemsettings);
 			op = optKb.Open();
-			if(op < 0)
+			if(op < 0) {
 				return;
+			}
 			
 			static const Address AlwaysRelease(0x19BD60);
 			static const Address NeverToss(0x19BD80); 
@@ -292,8 +298,9 @@ Custom Buttons
 		else if(op == 2) {
 			optKb.Populate(coutfitsettings);
 			op = optKb.Open();
-			if(op < 0)
+			if(op < 0) {
 				return;
+			}
 			
 			static const Address WetSuitButton(0x19DBA4);
 			static const Address SocksButton(0x19DC78);

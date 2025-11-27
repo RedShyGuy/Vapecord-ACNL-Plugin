@@ -11,15 +11,17 @@ namespace CTRPluginFramework {
 			s_SaveAddress = d_garden.Call<u32>();
 		}
 
-		if(s_Instance != nullptr)
-            delete s_Instance;
+		if(s_Instance != nullptr) {
+			delete s_Instance;
+		}
 
         s_Instance = this;
 	}
 
 	Save *Save::GetInstance() {
-		if(s_Instance == nullptr)
-            s_Instance = new Save();
+		if(s_Instance == nullptr) {
+			s_Instance = new Save();
+		}
 
         return s_Instance;
 	}

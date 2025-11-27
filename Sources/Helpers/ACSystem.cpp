@@ -66,8 +66,9 @@ Light Switch cheats I made for fun
 		*(u32 *)(param_1 + 8) = param_2;
 		*(u32 *)(param_1 + 0xC) = param_2;
 
-		if(*(u32 *)(param_1 + 0x18) != 0) 
+		if(*(u32 *)(param_1 + 0x18) != 0) {
 			*(u32 *)(*(u32 *)(param_1 + 0x18) + 0x10) = param_2;
+		}
 	}
 
 	u32 LightSwitch::GetData() {
@@ -81,8 +82,9 @@ Light Switch cheats I made for fun
 		static Address data3(0x56946C);
 
 		u32 switchData = GetData();
-		if(switchData == 0)
+		if(switchData == 0) {
 			return;
+		}
 
 		data1.Call<void>(switchData + 0x38, switchData + 0x3F4, *(u32 *)(switchData + 0x488), 0);
 
@@ -98,8 +100,9 @@ Light Switch cheats I made for fun
 		lightON.Call<void>(0, roomID);
 		SetData(true);
 
-		if(Game::IsGameInRoom(roomID))
+		if(Game::IsGameInRoom(roomID)) {
 			Game::PlaySound(0x4F3 + IsBasement());
+		}
 	}
 
 	void LightSwitch::OFF(u8 roomID) {
@@ -107,8 +110,9 @@ Light Switch cheats I made for fun
 		lightOFF.Call<void>(0, roomID);
 		SetData(false);
 
-		if(Game::IsGameInRoom(roomID))
+		if(Game::IsGameInRoom(roomID)) {
 			Game::PlaySound(0x4F5);
+		}
 	}
 
 	bool LightSwitch::IsON(u8 roomID) {
@@ -168,8 +172,9 @@ MEOW Coupon Cheats
 
 		u8 currInit = GetCurrentInitiatives(InitiativeSaveOffset, InitPos, weekDay);
 
-		if(!((currInit != 0) && (currInit < 0x66))) //0 is invalid Initiative | 0x65 is highest Initiative 
+		if(!((currInit != 0) && (currInit < 0x66))) {//0 is invalid Initiative | 0x65 is highest Initiative 
 			return;
+		}
 
 		if(InitiativeFinished(InitiativeSaveOffset, currInit) && !finish) {
 			*(u16 *)GetInitiativeOffset(InitiativeSaveOffset, currInit) = 0; //Clear completion of Initiative

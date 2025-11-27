@@ -68,19 +68,19 @@ namespace CTRPluginFramework {
     }
 
     void AmiiboSpoofer(MenuEntry *entry) {
-        static const Address offsetPatch(0x51C104);
-        static const Address offsetHook(0x51BBDC);
-        static const Address offsetPatch_o3ds1(0x3DAA7C);
-        static const Address offsetPatch_o3ds2(0x3DA824);
-        static u32 originalCode[3] = {0};
+        static Address offsetHook(0x51BBDC);
+
+        static Address offsetPatch(0x51C104);
+        static Address offsetPatch_o3ds1(0x3DAA7C);
+        static Address offsetPatch_o3ds2(0x3DA824);
         static Hook nfcHook;
 
 		if(entry->WasJustActivated()) {
-			Process::Patch(offsetPatch.addr, 0xE3A00003, (void*)&originalCode[0]); //Force tell nfc game code that there's an amiibo ready (NFC_TagState_InRange)
+            offsetPatch.Patch(0xE3A00003); //Force tell nfc game code that there's an amiibo ready (NFC_TagState_InRange)
 
             if(!System::IsNew3DS()) {
-                Process::Patch(offsetPatch_o3ds1.addr, 0xE3A00002, (void*)&originalCode[1]); //Tells the o3ds the nfc reader is init'd
-                Process::Patch(offsetPatch_o3ds2.addr, 0xE3A00000, (void*)&originalCode[2]); //Forces the game to think nfc sysmodule has started scanning
+                offsetPatch_o3ds1.Patch(0xE3A00002); //Tells the o3ds the nfc reader is init'd
+                offsetPatch_o3ds2.Patch(0xE3A00000); //Forces the game to think nfc sysmodule has started scanning
             }
 
             nfcHook.Initialize(offsetHook.addr, (u32)AmiiboHook);
@@ -90,11 +90,11 @@ namespace CTRPluginFramework {
 		}
 		
 		else if(!entry->IsActivated()) {
-			Process::Patch(offsetPatch.addr, originalCode[0]);
+			offsetPatch.Unpatch();
 
             if(!System::IsNew3DS()) {
-                Process::Patch(offsetPatch_o3ds1.addr, originalCode[1]);
-                Process::Patch(offsetPatch_o3ds2.addr, originalCode[2]);
+                offsetPatch_o3ds1.Unpatch();
+                offsetPatch_o3ds2.Unpatch();
             }
 
             nfcHook.Disable();

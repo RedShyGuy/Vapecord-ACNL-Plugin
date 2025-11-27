@@ -5,8 +5,9 @@ namespace CTRPluginFramework {
     Language* Language::instance = nullptr;
 
     Language* Language::getInstance() {
-        if (!instance)
+        if (!instance) {
             instance = new Language();
+        }
         return instance;
     }
 
@@ -135,8 +136,9 @@ namespace CTRPluginFramework {
         const u8* ptr = buffer.data();
         const u8* end = ptr + buffer.size();
 
-        if (ptr + sizeof(u32) > end)
+        if (ptr + sizeof(u32) > end) {
             return false;
+        }
 
         u32 entryCount = *reinterpret_cast<const u32*>(ptr);
         ptr += sizeof(u32);
@@ -145,23 +147,31 @@ namespace CTRPluginFramework {
         translations.reserve(entryCount);
 
         for (u32 j = 0; j < entryCount && ptr < end; ++j) {
-            if (ptr + sizeof(u16) > end)
+            if (ptr + sizeof(u16) > end) {
                 break;
+            }
+
             u16 keyLen = *reinterpret_cast<const u16*>(ptr);
             ptr += sizeof(u16);
 
-            if (ptr + keyLen > end)
+            if (ptr + keyLen > end) {
                 break;
+            }
+
             std::string key(reinterpret_cast<const char*>(ptr), keyLen);
             ptr += keyLen;
 
-            if (ptr + sizeof(u16) > end)
+            if (ptr + sizeof(u16) > end) {
                 break;
+            }
+
             u16 valLen = *reinterpret_cast<const u16*>(ptr);
             ptr += sizeof(u16);
 
-            if (ptr + valLen > end)
+            if (ptr + valLen > end) {
                 break;
+            }
+
             std::string val(reinterpret_cast<const char*>(ptr), valLen);
             ptr += valLen;
 
@@ -175,12 +185,14 @@ namespace CTRPluginFramework {
     }
 
     std::string Language::get(const std::string &key) const {
-        if (!loaded)
+        if (!loaded) {
             return "[not loaded]";
+        }
 
         for (auto &pair : translations) {
-            if (pair.key == key)
+            if (pair.key == key) {
                 return pair.value;
+            } 
         }
 
         return "[" + key + "]";

@@ -50,12 +50,14 @@ namespace CTRPluginFramework {
 	Address::Address(u32 address) {
 		if (regionId == Region::USA) {
 			addr = address;
+			Process::Read32(addr, origVal);
 			return;
 		}
 
 		for (const auto& row : ADDRESSES) {
 			if (row[0] == address) {
 				addr = row[regionId];
+				Process::Read32(addr, origVal);
 				return;
 			}
 		}
@@ -63,5 +65,25 @@ namespace CTRPluginFramework {
 
 	bool Address::IsRegion(Region region) {
 		return regionId == region;
+	}
+
+	Address Address::MoveOffset(u32 offset) {
+		Address copy = *this;
+
+		copy.addr += offset;
+		Process::Read32(copy.addr, copy.origVal);
+		return copy;
+	}
+
+	bool Address::Patch(u32 newValue) {
+		return Process::Patch(addr, newValue);
+	};
+
+	bool Address::WriteFloat(float newValue) {
+		return Process::WriteFloat(addr, newValue);
+	}
+
+	bool Address::Unpatch(void) {
+		return Process::Patch(addr, origVal);
 	}
 }

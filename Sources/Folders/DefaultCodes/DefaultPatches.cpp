@@ -5,126 +5,170 @@
 
 namespace CTRPluginFramework {
     void OnlineDropLagRemover(MenuEntry *entry) {
-        static const Address host1(0x5A1454);
-		static const Address host2(0x5A12F4);
-		static const Address host3(0x59FF5C);
-		static const Address host4(0x59FD98);
-		static const Address host5(0x5983F4);
-		static const Address host6(0x5984DC);
-		static const Address host7(0x59F8A0);
-		static const Address host8(0x5A09B0);
-		static const Address host9(0x5A0DF4);
+        static Address host1(0x5A1454);
+		static Address host2(0x5A12F4);
+		static Address host3(0x59FF5C);
+		static Address host4(0x59FD98);
+		static Address host5(0x5983F4);
+		static Address host6(0x5984DC);
+		static Address host7(0x59F8A0);
+		static Address host8(0x5A09B0);
+		static Address host9(0x5A0DF4);
 
 		if(entry->WasJustActivated()) {
-			Process::Patch(host1.addr, 0xE1A00000); //create locked spot pkt send
-			Process::Patch(host2.addr, 0xE1A00000); //clear locked spot pkt send
-			Process::Patch(host3.addr, 0xEA000010); //pkt is from host
-			Process::Patch(host4.addr, 0xEA000003); //bypass check in 0x59FC7C
-			Process::Patch(host5.addr, 0xE1A00000); //unnecessary?
-			Process::Patch(host6.addr, 0xE1A00000); //unnecessary?
-			Process::Patch(host7.addr, 0xE1A00000);
-			Process::Patch(host8.addr, 0xEA000022); //item tree drop
-			Process::Patch(host9.addr, 0xEA00002D); //fruit tree drop
+			host1.Patch(0xE1A00000); //create locked spot pkt send
+			host2.Patch(0xE1A00000); //clear locked spot pkt send
+			host3.Patch(0xEA000010); //pkt is from host
+			host4.Patch(0xEA000003); //bypass check in 0x59FC7C
+			host5.Patch(0xE1A00000); //unnecessary?
+			host6.Patch(0xE1A00000); //unnecessary?
+			host7.Patch(0xE1A00000);
+			host8.Patch(0xEA000022); //item tree drop
+			host9.Patch(0xEA00002D); //fruit tree drop
 		}
 		else if(!entry->IsActivated()) {
-			Process::Patch(host1.addr, 0x0A00002C);
-			Process::Patch(host2.addr, 0x0A00002C);
-			Process::Patch(host3.addr, 0x0A000010);
-			Process::Patch(host4.addr, 0x0A000003);
-			Process::Patch(host5.addr, 0x0A00001D);
-			Process::Patch(host6.addr, 0x0A000025);
-			Process::Patch(host7.addr, 0x0A00003B);
-			Process::Patch(host8.addr, 0x0A000022);
-			Process::Patch(host9.addr, 0x0A00002D);
+			host1.Unpatch();
+			host2.Unpatch();
+			host3.Unpatch();
+			host4.Unpatch();
+			host5.Unpatch();
+			host6.Unpatch();
+			host7.Unpatch();
+			host8.Unpatch();
+			host9.Unpatch();
 		}
     }
 
     void ChangeRockbreakParticle(MenuEntry *entry) {
-        static const Address prockc(0x5A2D20);
+        static Address prockc(0x5A2D20);
 
 		if(entry->WasJustActivated()) {
-			Process::Patch(prockc.addr, 0xF3);
+			prockc.Patch(0xF3);
 		}
 		else if(!entry->IsActivated()) {
-			Process::Patch(prockc.addr, 0x1F6);
+			prockc.Unpatch();
 		}
     }
 
     void DropItemsEverywhere(MenuEntry *entry) {
-        static const Address dever1(0x1655EC);
-		static const Address dever2(0x1655F8);
-		static const Address dever3(0x1654EC);
-		static const Address dever4(0x165580);
-		static const Address dever5(0x767028);
+        static Address dever1(0x1655EC);
+		static Address dever2(0x1655F8);
+		static Address dever3(0x1654EC);
+		static Address dever4(0x165580);
 
 		if(entry->WasJustActivated()) {
-			Process::Patch(dever1.addr, 0xE3A00001);
-			Process::Patch(dever2.addr, 0xEA000006);
-			Process::Patch(dever3.addr, 0xEA000005);
-			Process::Patch(dever4.addr, 0xEA000010); //on other players
+			dever1.Patch(0xE3A00001);
+			dever2.Patch(0xEA000006);
+			dever3.Patch(0xEA000005);
+			dever4.Patch(0xEA000010); //on other players
 		}
 		else if(!entry->IsActivated()) {
-			u32 instruction = Wrap::CalculateBranchInstruction(dever1.addr, dever5.addr);
-			Process::Patch(dever1.addr, 0xEB000000 + instruction);
-			Process::Patch(dever2.addr, 0x1A000005);
-			Process::Patch(dever3.addr, 0x0A000005);
-			Process::Patch(dever4.addr, 0x0A000010);
+			dever1.Unpatch();
+			dever2.Unpatch();
+			dever3.Unpatch();
+			dever4.Unpatch();
 		}
     }
 
     void IdleAfterTreeShakeOrCut(MenuEntry *entry) {
-        static const Address idts1(0x660600);
-		static const Address idts2(0x662328);
+        static Address idts1(0x660600);
+		static Address idts2(0x662328);
 
-		Process::Patch(idts1.addr, 0xE3A01006);
-		Process::Patch(idts2.addr, 0xE3A01006);
+		if(entry->WasJustActivated()) {
+			idts1.Patch(0xE3A01006);
+			idts2.Patch(0xE3A01006);
+		}
+		else if(!entry->IsActivated()) {
+			idts1.Unpatch();
+			idts2.Unpatch();
+		}
     }
 
     void DontMoveNPCBackToOriginalPosition(MenuEntry *entry) {
-        static const Address patchNPCMovingBack(0x57B9C0);
+        static Address patchNPCMovingBack(0x57B9C0);
 
-		Process::Patch(patchNPCMovingBack.addr, 0xE1A00000);
+		if(entry->WasJustActivated()) {
+			patchNPCMovingBack.Patch(0xE1A00000);
+		}
+		else if(!entry->IsActivated()) {
+			patchNPCMovingBack.Unpatch();
+		}
     }
 
 	void ReplaceDropFunctions(MenuEntry *entry) {
-		static const Address dadd(0x5A0F54); //0x5A0F54
-		static const Address dval(0x5A1120); //0x5A1120
+		static Address dadd(0x5A0F54); //0x5A0F54
+		static Address dval(0x5A1120); //0x5A1120
 
-		for(int i = 0; i <= 0x21; ++i) 
-			Process::Patch(dadd.addr + i * 4, dval.addr);
+		static u32 origVal[0x22];
+
+		if(entry->WasJustActivated()) {
+			for(int i = 0; i <= 0x21; ++i) {
+				Process::Patch(dadd.addr + i * 4, dval.addr, &origVal[i]);
+			}
+		}
+		else if(!entry->IsActivated()) {
+			for(int i = 0; i <= 0x21; ++i) {
+				Process::Patch(dadd.addr + i * 4, origVal[i]);
+			}
+		}
 	}
 
 	void PreventParticleCrash(MenuEntry *entry) {
-		static const Address partc1(0x5506D4);
-		static const Address partc2(0x5509CC);
-		static const Address partc3(0x721418);
+		//static Address partc1(0x5506D4);
+		//static Address partc2(0x5509CC);
+		static Address partc3(0x721418);
 
-		//Process::Patch(partc1.addr, 0xE3A0C000);
-		//Process::Patch(partc2.addr, 0xE3A0C000);
-		Process::Patch(partc3.addr, 0xE3A0C000);
+		if(entry->WasJustActivated()) {
+			//partc1.Patch(0xE3A0C000);
+			//partc2.Patch(0xE3A0C000);
+			partc3.Patch(0xE3A0C000);
+		}
+		else if(!entry->IsActivated()) {
+			//partc1.Unpatch();
+			//partc2.Unpatch();
+			partc3.Unpatch();
+		}
 	}
 
 	void BypassGameChecks(MenuEntry *entry) {
-		static const Address byp1(0x1D43A4);
-		static const Address byp2(0x1D43C0);
-		static const Address byp3(0x1D43D0);
-		static const Address byp4(0x759024);
+		static Address byp1(0x1D43A4);
+		static Address byp2(0x1D43C0);
+		static Address byp3(0x1D43D0);
+		static Address byp4(0x759024);
 
-		Process::Patch(byp1.addr, 0xE3A00001);
-		Process::Patch(byp2.addr, 0xE3A00001);
-		Process::Patch(byp3.addr, 0xE3A00001);
-		Process::Patch(byp4.addr, 0xE1A00005);
+		if(entry->WasJustActivated()) {
+			byp1.Patch(0xE3A00001);
+			byp2.Patch(0xE3A00001);
+			byp3.Patch(0xE3A00001);
+			byp4.Patch(0xE1A00005);
+		}
+		else if(!entry->IsActivated()) {
+			byp1.Unpatch();
+			byp2.Unpatch();
+			byp3.Unpatch();
+			byp4.Unpatch();
+		}
 	}
 
 	void DisableNonSeedItemCheck(MenuEntry *entry) {
-		static const Address NonSeed(0x76A894);
+		static Address NonSeed(0x76A894);
 
-		Process::Patch(NonSeed.addr, 0xE3A00001);
+		if(entry->WasJustActivated()) {
+			NonSeed.Patch(0xE3A00001);
+		}
+		else if(!entry->IsActivated()) {
+			NonSeed.Unpatch();
+		}
 	}
 
 	void PatchDropFunction(MenuEntry *entry) {
-		static const Address dropm(0x59FCA4);
+		static Address dropm(0x59FCA4);
 
-		Process::Patch(dropm.addr, 0xEA000004);
+		if(entry->WasJustActivated()) {
+			dropm.Patch(0xEA000004);
+		}
+		else if(!entry->IsActivated()) {
+			dropm.Unpatch();
+		}
 	}
 }

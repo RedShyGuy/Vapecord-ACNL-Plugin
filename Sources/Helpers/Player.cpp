@@ -7,9 +7,6 @@
 #include "Helpers/Converters.hpp"
 #include "Address/Address.hpp"
 
-
-bool IsIndoorsBool = false;
-
 namespace CTRPluginFramework {
 /*
 loads specific player
@@ -31,11 +28,13 @@ loads specific player
 reload design
 */
 	void Player::ReloadDesign(int slot) {
-		if(Game::BaseInvPointer() == 0) 
+		if(Game::BaseInvPointer() == 0) {
 			return;
+		}
 		
-		if(Inventory::GetCurrent() != 1)
+		if(Inventory::GetCurrent() != 1) {
 			return;
+		}
 		
 		u32 InvData = *(u32 *)(Game::BaseInvPointer() + 0xC);
 		u32 Data1 = InvData + (slot * 0x290);
@@ -49,8 +48,9 @@ writes design data
 */
 	void Player::StealDesign(u8 slot) {
 		ACNL_Player *player = Player::GetSaveData();
-		if(!player)
+		if(!player) {
 			return;
+		}
 
 		player->Patterns[slot].CreatorData = player->PlayerInfo;
 	}
@@ -58,12 +58,14 @@ writes design data
 Update Tan
 */
 	void Player::UpdateTan() {
-		if(!PlayerClass::GetInstance()->IsLoaded())
+		if(!PlayerClass::GetInstance()->IsLoaded()) {
 			return;
+		}
 
 		ACNL_Player *player = Player::GetSaveData();
-		if(!player)
+		if(!player) {
 			return;
+		}
 		
 		u32 i = PlayerClass::GetInstance()->Offset();
 		u32 GetStoredData = i + 0x1B4; //0x33077570
@@ -82,8 +84,9 @@ Update Tan
 update appearance
 */
 	void Player::UpdateStyle() {
-		if(!PlayerClass::GetInstance()->IsLoaded())
+		if(!PlayerClass::GetInstance()->IsLoaded()) {
 			return;
+		}
 
 	//This Updates the Outfit	
 		static Address update(0x68B2E4);
@@ -94,15 +97,28 @@ Write Outfit
 */
 	void Player::WriteOutfit(u8 PlayerIndex, Item HeadWear, Item Glasses, Item Shirt, Item Pants, Item Socks, Item Shoes) {
 		u32 x, y;
-		if(!PlayerClass::GetInstance(PlayerIndex)->GetWorldCoords(&x, &y))
+		if(!PlayerClass::GetInstance(PlayerIndex)->GetWorldCoords(&x, &y)) {
 			return;
+		}
 		
-		if(HeadWear.ID != 0xFFFF) Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, HeadWear, 0, 0, 0, 0, x, y, 0);
-		if(Glasses.ID != 0xFFFF) Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Glasses, 1, 0, 0, 0, x, y, 0);
-		if(Shirt.ID != 0xFFFF) Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Shirt, 2, 0, 0, 0, x, y, 0);
-		if(Pants.ID != 0xFFFF) Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Pants, 4, 0, 0, 0, x, y, 0);
-		if(Socks.ID != 0xFFFF) Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Socks, 5, 0, 0, 0, x, y, 0);
-		if(Shoes.ID != 0xFFFF) Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Shoes, 6, 0, 0, 0, x, y, 0);
+		if(HeadWear.ID != 0xFFFF) {
+			Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, HeadWear, 0, 0, 0, 0, x, y, 0);
+		}
+		if(Glasses.ID != 0xFFFF) {
+			Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Glasses, 1, 0, 0, 0, x, y, 0);
+		}
+		if(Shirt.ID != 0xFFFF) {
+			Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Shirt, 2, 0, 0, 0, x, y, 0);
+		}
+		if(Pants.ID != 0xFFFF) {
+			Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Pants, 4, 0, 0, 0, x, y, 0);
+		}
+		if(Socks.ID != 0xFFFF) {
+			Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Socks, 5, 0, 0, 0, x, y, 0);
+		}
+		if(Shoes.ID != 0xFFFF) {
+			Animation::ExecuteAnimationWrapper(PlayerIndex, 0x36, Shoes, 6, 0, 0, 0, x, y, 0);
+		}
 	}
 //If player is loaded (uses to 8) 27B0E0(pP)
 /*
@@ -129,8 +145,9 @@ Get Player Save Offset for loaded players
 	}
 
 	bool Player::SetUnlockableBitField(ACNL_Player *player, u8 ID, bool state) {
-		if(!player)
+		if(!player) {
 			return false;
+		}
 
 		static Address SetUp1(0x5360A8);
 		static Address SetUp2(0x6BA680);
@@ -151,10 +168,12 @@ Get Player Save Offset for loaded players
 
 					if(uVar4 > -1) {
 						if((uVar4 >> 5) < 0xBA) {
-							if(state)
+							if(state) {
 								player->UnlockedItems[(uVar4 >> 5)] |= (1 << (uVar4 & 0x1F));
-							else
+							}
+							else {
 								player->UnlockedItems[(uVar4 >> 5)] &= ~(1 << (uVar4 & 0x1F));
+							}
 						}
 					}
 
@@ -264,8 +283,9 @@ get room
 
 	void Player::EditGender(u8 pIndex, u8 pGender) {
 		ACNL_Player *player = Player::GetSaveData(pIndex);
-		if(!player)
+		if(!player) {
 			return;
+		}
 
 		u32 GardenPlus = Save::GetInstance()->Address();
 
@@ -282,8 +302,9 @@ get room
 
 	void Player::EditName(u8 pIndex, const std::string& name) {
 		ACNL_Player *player = Player::GetSaveData(pIndex);
-		if(!player)
+		if(!player) {
 			return;
+		}
 
 		u32 GardenPlus = Save::GetInstance()->Address();
 

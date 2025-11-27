@@ -14,7 +14,6 @@
 #include "Helpers/NPC.hpp"
 #include "Helpers/Save.hpp"
 #include "Helpers/IDList.hpp"
-#include "Helpers/ItemSearcher/ItemSearcher.hpp"
 
 #include "Color.h"
 #include "Files.h"
@@ -1873,50 +1872,16 @@ namespace CTRPluginFramework {
 
 	32239378 = ModuleKotobuki.cro
 	*/
-
 	
 //Item Island Code
 	void islanditems(MenuEntry *entry) {
-		static std::string str = "";
-		static u32 buffer = 0;
-		static Hook hook;
- 
-		if(Controller::IsKeysPressed(Key::R + Key::DPadUp)) {
-			if(Wrap::KB<std::string>("Enter Cro Name:", false, 15, str, str)) {
-				if(CRO::GetMemAddress(str.c_str(), buffer)) {
-					if(CRO::WritePermToggle(buffer, true)) {
-						OSD::Notify(Utils::Format("Unlocked %s | Address: %08X", str.c_str(), buffer));
-					}
-				}
-			}
-		}
-		else if(Controller::IsKeysPressed(Key::R + Key::DPadDown)) {
-			if(CRO::GetMemAddress(str.c_str(), buffer)) {
-				if(CRO::WritePermToggle(buffer, false)) {
-					OSD::Notify(Utils::Format("Locked %s | Address: %08X", str.c_str(), buffer));
-				}
-			}
-		}
-		else if(Controller::IsKeysPressed(Key::R + Key::DPadLeft)) {
-			if(CRO::GetMemAddress("Shop", buffer)) {
-				if(CRO::WritePermToggle(buffer, true)) {
-					hook.Initialize(0xBE6A6C, (u32)SearchItemByKeywordFUNC);
-					hook.SetFlags(USE_LR_TO_RETURN);
-					hook.SetReturnAddress(0xBE6A6C + 0x2A4);
-					hook.Enable();
-					OSD::Notify("Hook Enabled!");
-				}
-			}
-		}
-		else if (Controller::IsKeysPressed(Key::R + Key::DPadRight)) {
-			hook.Disable();
-			OSD::Notify("Hook Disabled!");
-		}
+		if (Controller::IsKeysPressed(Key::ZL + Key::DPadRight)) {
+			std::vector<ItemNamePack> results;
 
-		else if (Controller::IsKeysPressed(Key::L + Key::DPadRight)) {
-			std::string keyword = "";
-			SearchItemByKeyword(keyword);
-			OSD::Notify("Look at 0xA00000 for results!");
+			std::string keyword = "cap";
+			Item::searchAllByKeyword(keyword, results);
+			
+			OSD::Notify(Utils::Format("Found %d items with keyword: %s (1st Item: 0x%04X)", results.size(), keyword.c_str(), results.at(0)), Color::Cyan);
 		}
 
 		/*

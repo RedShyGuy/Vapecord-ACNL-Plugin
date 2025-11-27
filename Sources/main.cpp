@@ -9,12 +9,13 @@
 namespace CTRPluginFramework {
 	static const std::string NOTE =
         std::string(
-			R"(Creator: Kwadukathole (Lukas)
+R"(Creator: Kwadukathole (Lukas)
 
-			Code Credits: Nico, Jay, Levi, Slattz, Kominost, Elominator and more
+Code Credits: Nico, Jay, Levi, Slattz, Kominost, Elominator and more
 
-			Translators: みるえもん & みなと(Japanese), im a book(spanish), Fedecrash02(italian), Youssef, Arisa, & Lenoch(french), bkfirmen & Toby(german), Soopoolleaf(korean)
-		)") + Utils::Format("Discord: %s", DISCORDINV);
+Translators: みるえもん & みなと(Japanese), im a book(spanish), Fedecrash02(italian), Youssef, Arisa, & Lenoch(french), bkfirmen & Toby(german), Soopoolleaf(korean)
+
+)") + Utils::Format("Discord: %s", DISCORDINV);
 
 	static const std::string GameVersion = "1.5";
 	static const std::string GameVersionUSAWA = "1.1"; //seems to be an exception
@@ -35,12 +36,14 @@ namespace CTRPluginFramework {
 
 		static const std::vector<u16> Pattern = { 0x0056, 0x0065, 0x0072, 0x002E, 0x0020 };
 		u16* found = (u16 *)Utils::Search<u16>(0x00800000, 0x00200000, Pattern);
-		if(found == nullptr)
+		if(found == nullptr) {
 			return STRING_NOT_FOUND;
+		}
 
 		versionSTR = Utils::Format("%c.%c", (char)found[5], (char)found[7]);
-		if(versionSTR != gameVersion)
+		if(versionSTR != gameVersion) {
 			return WRONG_VERSION;
+		}
 
 		return CORRECT_VERSION;
 	}

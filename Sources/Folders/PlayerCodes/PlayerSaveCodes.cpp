@@ -7,6 +7,7 @@
 #include "Address/Address.hpp"
 #include "Helpers/GameStructs.hpp"
 #include "Helpers/Converters.hpp"
+#include "Helpers/Town.hpp"
 
 #include "Color.h"
 #include "Files.h"
@@ -23,8 +24,9 @@ namespace CTRPluginFramework {
 		std::string input = "";
 		keyboard.SetMaxLength(8);
 
-		if(keyboard.Open(input) < 0) 
+		if(keyboard.Open(input) < 0) {
 			return;
+		}
 
 		Player::EditName(4, input);
 	}
@@ -90,8 +92,9 @@ namespace CTRPluginFramework {
 		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), playeropt);
 		
 		int choice = optKb.Open();
-		if(choice < 0)
+		if(choice < 0) {
 			return;
+		}
 			
 	//Standard Face Appearance Change
 		if(choice < 4) {
@@ -110,8 +113,9 @@ namespace CTRPluginFramework {
 			optKb.Populate(genderopt);
 
 			int gender = optKb.Open();
-			if(gender < 0)
+			if(gender < 0) {
 				return;
+			}
 
 			Player::EditGender(4, gender);
 		}
@@ -126,8 +130,9 @@ namespace CTRPluginFramework {
 				case 2: player->PlayerFeatures.Tan = 0; goto tanupdate;
 				case 3: {
 					u8 val = 0;
-					if(Wrap::KB<u8>(Language::getInstance()->get("PLAYER_APPEARANCE_TAN_LEVEL") << "0x00 -> 0x0F", false, 2, val, 0)) 
+					if(Wrap::KB<u8>(Language::getInstance()->get("PLAYER_APPEARANCE_TAN_LEVEL") << "0x00 -> 0x0F", false, 2, val, 0)) {
 						player->PlayerFeatures.Tan = val;
+					}
 				} goto tanupdate;
 			}
 		}
@@ -136,8 +141,9 @@ namespace CTRPluginFramework {
 			optKb.Populate(outfitplayeropt);
 
 			int res = optKb.Open();
-			if(res < 0)
+			if(res < 0) {
 				return;
+			}
 
 			KeyRange::Set({ ValidID2[res][0], ValidID2[res][1] });
 			if(Wrap::KB<u16>(Language::getInstance()->get("ENTER_ID") << Utils::Format("%04X -> %04X", ValidID2[res][0], ValidID2[res][1]), true, 4, item, item, ValidKeyboardCheck)) {
@@ -230,8 +236,9 @@ namespace CTRPluginFramework {
 				std::string filename = "";
 				Keyboard KB(Language::getInstance()->get("RANDOM_PLAYER_DUMP"));
 
-				if(KB.Open(filename) == -1)
+				if(KB.Open(filename) == -1) {
 					return;
+				}
 
 				Wrap::Dump(Utils::Format(PATH_PLAYER, Address::regionName.c_str()), filename, ".player", &locPlayer, nullptr);
 			} break;
@@ -296,16 +303,18 @@ namespace CTRPluginFramework {
 				Keyboard PKB(Language::getInstance()->get("KEY_SELECT_PLAYER"), g_player);
 
 				int index = PKB.Open();
-				if(index < 0)
+				if(index < 0) {
 					return;
+				}
 
 				player = Player::GetSaveData(index);
 				if(player) {
 					std::string filename = "";
 					Keyboard KB(Language::getInstance()->get("TPC_DUMPER_NAME"));
 
-					if(KB.Open(filename) < 0)
+					if(KB.Open(filename) < 0) {
 						return;
+					}
 
 					locTPC = { (u32 *)player->TPCPic, sizeof(player->TPCPic) };
 					Wrap::Dump(Utils::Format(PATH_TPC, Address::regionName.c_str()), filename, ".jpg", &locTPC, nullptr);
@@ -334,8 +343,9 @@ namespace CTRPluginFramework {
 		
 		std::vector<std::string> designslots;
 		
-		for(int i = 1; i <= 10; ++i)
+		for(int i = 1; i <= 10; ++i) {
 			designslots.push_back(Utils::Format(Language::getInstance()->get("VECTOR_DESIGN").c_str(), i));
+		}
 		
 		static const std::vector<std::string> designselect = {
 			Language::getInstance()->get("VECTOR_DESIGNDUMP_DUMP"), 
@@ -355,14 +365,16 @@ namespace CTRPluginFramework {
 				Keyboard DKB(Language::getInstance()->get("KEYBOARD_DESIGNDUMP"), designslots);
 				
 				dSlot = DKB.Open();
-				if(dSlot < 0)
+				if(dSlot < 0) {
 					return;
+				}
 
 				std::string filename = "";
 				Keyboard KB(Language::getInstance()->get("DESIGN_DUMP_NAME"));
 
-				if(KB.Open(filename) < 0)
+				if(KB.Open(filename) < 0) {
 					return;
+				}
 
 				locPattern = { (u32 *)&player->Patterns[player->PatternOrder[dSlot]], sizeof(ACNL_Pattern) };
 				Wrap::Dump(Utils::Format(PATH_DESIGN, Address::regionName.c_str()), filename, ".acnl", &locPattern, nullptr);
@@ -372,8 +384,9 @@ namespace CTRPluginFramework {
 				Keyboard DKB(Language::getInstance()->get("KEYBOARD_DESIGNDUMP"), designslots);
 				
 				dSlot = DKB.Open();
-				if(dSlot < 0)
+				if(dSlot < 0) {
 					return;
+				}
 
 				locPattern = { (u32 *)&player->Patterns[player->PatternOrder[dSlot]], sizeof(ACNL_Pattern) };
 				Wrap::Restore(Utils::Format(PATH_DESIGN, Address::regionName.c_str()), ".acnl", Language::getInstance()->get("DESIGN_DUMP_RESTORE"), nullptr, true, &locPattern, nullptr);
@@ -403,8 +416,9 @@ namespace CTRPluginFramework {
 		static Address emoticons(0x8902A4);
 		Emoticons *gameEmotes = new Emoticons();
 		gameEmotes = (Emoticons *)emoticons.addr;
-		if(!gameEmotes)
+		if(!gameEmotes) {
 			return;
+		}
 		
 		Keyboard KB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), emoteopt);
 	
@@ -418,8 +432,9 @@ namespace CTRPluginFramework {
 				Keyboard KB(Language::getInstance()->get("EMOTION_LIST_TYPE_ID"));
 				KB.IsHexadecimal(true);
 				
-				if(KB.Open(emotion) < 0)
+				if(KB.Open(emotion) < 0) {
 					return;
+				}
 				
 				std::memset((void *)player->Emotes.emoticons, emotion, 0x28);
 			} break;
@@ -453,27 +468,31 @@ namespace CTRPluginFramework {
 		switch(KB.Open()) {
 			default: break;
 			case 0:
-				for(int i = 0; i < 3; ++i) 
+				for(int i = 0; i < 3; ++i) {
 					Player::SetUnlockableBitField(player, EncyclopediaID[i], true);
+				}
 
 				for(int i = 0; i < 72; ++i) {
 					player->EncyclopediaSizes.Insects[i] = Utils::Random(1, 0x3FFF);
 					player->EncyclopediaSizes.Fish[i] = Utils::Random(1, 0x3FFF);
 
-					if(i < 30)
+					if(i < 30) {
 						player->EncyclopediaSizes.SeaCreatures[i] = Utils::Random(1, 0x3FFF);
+					}
 				}
 			break;
 			case 1: 
-				for(int i = 0; i < 3; ++i) 
+				for(int i = 0; i < 3; ++i) {
 					Player::SetUnlockableBitField(player, EncyclopediaID[i], false);
+				}
 
 				for(int i = 0; i < 72; ++i) {
 					player->EncyclopediaSizes.Insects[i] = 0;
 					player->EncyclopediaSizes.Fish[i] = 0;
 
-					if(i < 30)
+					if(i < 30) {
 						player->EncyclopediaSizes.SeaCreatures[i] = 0;
+					}
 				}
 			break;
 		} 
@@ -523,8 +542,9 @@ namespace CTRPluginFramework {
 		Keyboard KB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), cmnOpt);
 
 		int op = KB.Open();
-		if(op < 0)
+		if(op < 0) {
 			return;
+		}
 
 		player->PlayerFlags.CanUseCensusMenu = !IsON;
 
@@ -596,13 +616,46 @@ namespace CTRPluginFramework {
 		switch(optKb.Open()) {
 			default: break;
 			case 0: 
-				for(int i = 0; i < 15; ++i)
+				for(int i = 0; i < 15; ++i) {
 					Player::SetUnlockableBitField(player, CatalogID[i], true);
+				}
 			break;
 			case 1: 
-				for(int i = 0; i < 15; ++i)
+				for(int i = 0; i < 15; ++i) {
 					Player::SetUnlockableBitField(player, CatalogID[i], false);
+				}
 			break;
 		}
     }
+
+//Unlock QR Machine | half player specific save code	
+	void unlockqrmachine(MenuEntry *entry) {	
+		ACNL_Player *player = Player::GetSaveData();
+		ACNL_TownData *town = Town::GetSaveData();
+
+		if(!player || !town) {
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			return;
+		}
+		
+		std::vector<std::string> cmnOpt =  {
+			Language::getInstance()->get("VECTOR_ENABLE"),
+			Language::getInstance()->get("VECTOR_DISABLE")
+		};
+
+		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), cmnOpt);
+
+		int op = optKb.Open();
+		if(op < 0) {
+			return;
+		}
+
+		bool enable = op == 0;
+
+		town->TownFlags.QRMachineUnlocked = enable;
+
+		player->PlayerFlags.BefriendSable1 = enable;
+		player->PlayerFlags.BefriendSable2 = enable;
+		player->PlayerFlags.BefriendSable3 = enable;
+	}
 }

@@ -16,8 +16,9 @@ namespace CTRPluginFramework {
     void keepConnectionInCTRPF(bool runOnline) {
 		static bool isRunOnline = false;
 
-		if(isRunOnline == runOnline) 
+		if(isRunOnline == runOnline) {
 			return;
+		}
 
 		isRunOnline = runOnline;
 		static u32 tlsBackup[ONLINETHREADSAMOUNT];
@@ -27,13 +28,15 @@ namespace CTRPluginFramework {
 			u32 onlineThreadID = std::get<0>(onlineThreadsInfo[i]);
 			u32* onlineThreadTls = std::get<1>(onlineThreadsInfo[i]);
 
-			if(onlineThreadID == 0xFFFFFFFF) 
+			if(onlineThreadID == 0xFFFFFFFF) {
 				continue;
+			}
 
 			Handle onlineThreadHandle;
 			Result res = svcOpenThread(&onlineThreadHandle, CUR_PROCESS_HANDLE, onlineThreadID);
-			if(R_FAILED(res)) 
+			if(R_FAILED(res)) {
 				return;
+			}
 			
 			if(runOnline) {
 				tlsBackup[i] = *onlineThreadTls;
@@ -56,10 +59,12 @@ namespace CTRPluginFramework {
         u32 obj_threadID = 0;
 		u32* threadTls = nullptr;
 		Result res = svcGetThreadId(&obj_threadID, CUR_THREAD_HANDLE);
-		if(R_FAILED(res)) 
+		if(R_FAILED(res)) {
 			obj_threadID = 0xFFFFFFFF;
-		else 
+		}
+		else {
 			threadTls = (u32*)getThreadLocalStorage();
+		}
 
 		onlineThreadsInfo[threadPos] = std::tuple<u32, u32*>(obj_threadID, threadTls);
 		
@@ -72,11 +77,13 @@ namespace CTRPluginFramework {
 		u32 obj_threadID = 0;
 		u32* threadTls = nullptr;
 		Result res = svcGetThreadId(&obj_threadID, CUR_THREAD_HANDLE);
-		if(R_FAILED(res)) 
+		if(R_FAILED(res)) {
 			obj_threadID = 0xFFFFFFFF;
-		else 
+		}
+		else {
 			threadTls = (u32*)getThreadLocalStorage();
-
+		}
+			
 		onlineThreadsInfo[threadPos] = std::tuple<u32, u32*>(obj_threadID, threadTls);
 		
 		return origFunc.Call<u32>(param_1, param_2, param_3, param_4);
@@ -116,23 +123,29 @@ namespace CTRPluginFramework {
 			threadAddress
 		};
 
-		if(threadargs-0x18 == onlineThreadArgs[0])
+		if(threadargs-0x18 == onlineThreadArgs[0]) {
 			threadfunc = (u32)GetThreadInfo1;
-		else if(threadargs-0x18 == onlineThreadArgs[1])
+		}
+		else if(threadargs-0x18 == onlineThreadArgs[1]) {
 			threadfunc = (u32)GetThreadInfo2;
-		else if(threadargs-0x18 == onlineThreadArgs[2])
+		}
+		else if(threadargs-0x18 == onlineThreadArgs[2]) {
 			threadfunc = (u32)GetThreadInfo3;
-		else if(threadargs-0x18 == onlineThreadArgs[3])
+		}
+		else if(threadargs-0x18 == onlineThreadArgs[3]) {
 			threadfunc = (u32)GetThreadInfo4;
-		else if(threadargs-0x18 == onlineThreadArgs[4]) 
+		}
+		else if(threadargs-0x18 == onlineThreadArgs[4]) {
 			threadfunc = (u32)GetThreadInfo5;
+		}
 
 		Address(startFunc).Call<void>(threadfunc, threadargs);
 	}
 
     void SendPlayerData/*0x1B6C28*/(Time time) { //needs to be set into OnNewFrame callback
-		if(Game::GetOnlinePlayerCount() <= 1 || PluginMenu::GetRunningInstance() == nullptr)
+		if(Game::GetOnlinePlayerCount() <= 1 || PluginMenu::GetRunningInstance() == nullptr) {
 			return;
+		}
 
 		static Address sendData1(0x617D20);
 		static Address sendData2(0x60758C);
@@ -146,8 +159,9 @@ namespace CTRPluginFramework {
 		if(*(u8 *)(Address(0x95D3F4).addr-4) == 0) {
 			u32 uVar3 = getData1.Call<u32>();
 			int iVar2 = getData2.Call<int>(uVar3, 2);
-			if(iVar2 == 0) 
+			if(iVar2 == 0) {
 				sendData2.Call<void>();
+			}
 
 			sendData3.Call<void>(*(u32 *)Address(0x954648).addr);
 		}

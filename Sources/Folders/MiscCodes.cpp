@@ -10,12 +10,18 @@
 #include "Helpers/Dropper.hpp"
 #include "Helpers/Inventory.hpp"
 #include "Helpers/GameKeyboard.hpp"
+#include "RuntimeContext.hpp"
 #include "NonHacker.hpp"
 #include "Color.h"
+#include "RuntimeContext.hpp"
 
 extern "C" void MoveFurn(void);
 extern "C" void PATCH_MoveFurnButton(void);
 extern "C" void PATCH_ToolAnim(void);
+
+extern "C" bool __IsIndoors(void) {
+	return CTRPluginFramework::RuntimeContext::getInstance()->isIndoors();
+}
 
 u8 toolTypeAnimID = 6;
 
@@ -82,8 +88,9 @@ namespace CTRPluginFramework {
 				return;
 			}
 
-			if(!IDList::AnimationValid(toolTypeAnimID))
+			if(!IDList::AnimationValid(toolTypeAnimID)) {
 				toolTypeAnimID = 6;
+			}
 
 			hook.Initialize(Address(0x64DB90).addr + 0x10, (u32)PATCH_ToolAnim);
 			hook.SetFlags(USE_LR_TO_RETURN);
@@ -109,22 +116,27 @@ namespace CTRPluginFramework {
         Keyboard keyboard(Language::getInstance()->get("GAME_TYPE_CHOOSE"), gametype);
 
         int gametchoice = keyboard.Open();
-        if(gametchoice < 0)	
+        if(gametchoice < 0)	{
 			return;
+		}
 	
 		Game::ChangeGameType(gametchoice);
 		mgtype(entry);
     }
 //Unbreakable Flowers	
 	void unbreakableflower(MenuEntry *entry) { 
-		if(entry->WasJustActivated())
-			Process::Patch(Address(0x597F64).addr, 0xE3A0801D);
-		else if(!entry->IsActivated())
-			Process::Patch(Address(0x597F64).addr, 0x0A00004B);
+		static Address unbreakableFlowerPatch(0x597F64);
+
+		if(entry->WasJustActivated()) {
+			unbreakableFlowerPatch.Patch(0xE3A0801D);
+		}
+		else if(!entry->IsActivated()) {
+			unbreakableFlowerPatch.Unpatch();
+		}
 	}
-//Weather Mod	
+//Weather Mod
 	void Weathermod(MenuEntry *entry) { 
-		static const Address weather(0x62FC30);
+		static Address weather(0x62FC30);
 		
 		std::vector<std::string> weatheropt = {
 			Language::getInstance()->get("VECTOR_WEATHER_SUNNY"),
@@ -149,29 +161,32 @@ namespace CTRPluginFramework {
 		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), weatheropt);
 
 		int op = optKb.Open();
-		if(op < 0)
-			return;
-			
-		if(op == 5) {
-			Process::Patch(weather.addr, 0xE1A00004);
+		if(op < 0) {
 			return;
 		}
-			
-		Process::Patch(weather.addr, Weathers[op]);
+		
+		if(op == 5) {
+			weather.Unpatch();
+			return;
+		}
+		
+		weather.Patch(Weathers[op]);
 		Weathermod(entry);
 	}
 //always aurora lights
 	void auroralights(MenuEntry *entry) {
-		static const Address auroraPatch1(0x62FD4C);
-		static const Address auroraPatch2(0x630590);
+		static Address auroraPatch1(0x62FD4C);
+		static Address auroraPatch2(0x630590);
+		static Address auroraPatch3 = auroraPatch1.MoveOffset(0xA4);
 
 		if(entry->WasJustActivated()) {
-			Process::Patch(auroraPatch2.addr, 0xE3A00001); //Makes aurora appear in every season and weather
-			Process::Patch(auroraPatch1.addr, 0xEA000023); //Makes aurora appear no matter the date or time
-			Process::WriteFloat(auroraPatch1.addr + 0xA4, 1.0); //Brightness of aurora lights
+			auroraPatch1.Patch(0xEA000023); //Makes aurora appear no matter the date or time
+			auroraPatch2.Patch(0xE3A00001); //Makes aurora appear in every season and weather
+			auroraPatch3.WriteFloat(1.0); //Brightness of aurora lights
 
-			if(PlayerClass::GetInstance()->IsLoaded())
+			if(PlayerClass::GetInstance()->IsLoaded()) {
 				OSD::Notify("Reload the room to see changes!", Color(0xC430BAFF));
+			}
 		}
 
 		CRO::Write<u32>("Outdoor", 0x1DB44, 0xE1A00000);
@@ -179,9 +194,9 @@ namespace CTRPluginFramework {
 		if(!entry->IsActivated()) {
 			CRO::Write<u32>("Outdoor", 0x1DB44, 0x1A000002);
 
-			Process::Patch(auroraPatch2.addr, 0xE3A00000);
-			Process::Patch(auroraPatch1.addr, 0x0A000023);
-			Process::WriteFloat(auroraPatch1.addr + 0xA4, 0.0);
+			auroraPatch1.Unpatch();
+			auroraPatch2.Unpatch();
+			auroraPatch3.Unpatch();
 		}
 	}
 
@@ -195,55 +210,34 @@ namespace CTRPluginFramework {
 		Game::ReloadRoom();
 	}
 
-	std::vector<std::string> cogNotes;
-	static bool IsOnStartMenu = false;
-	void QuickMenuOptions(void);
-
-	void CogCheatCallback(Keyboard& keyboard, KeyboardEvent& event) {
-        std::string& input = keyboard.GetMessage();
-		static std::string cheatDesc = "";
-		input = (IsOnStartMenu ? ToggleDrawMode(Render::UNDERLINE | Render::BOLD) + "\uE052 | Quick Menu Options...\n\n" + ToggleDrawMode(Render::UNDERLINE | Render::BOLD) : "") + cheatDesc;
-
-		if(event.type == KeyboardEvent::KeyPressed && IsOnStartMenu) {
-			if(event.affectedKey == Key::L) {
-				QuickMenuOptions();
-				keyboard.Close();
-			}
-		}
-
-        if(event.type != KeyboardEvent::SelectionChanged)
-            return;
-
-		if(event.selectedIndex < 0 || event.selectedIndex >= cogNotes.size() || cogNotes.empty()) {
-			cheatDesc.clear();
-			return;
-		}
-
-		cheatDesc.clear();
-		cheatDesc += ToggleDrawMode(Render::UNDERLINE) + "Cheat Description:\n" + ToggleDrawMode(Render::UNDERLINE);
-		cheatDesc += cogNotes[event.selectedIndex];
-	}
 //More Than 3 Numbers On Island
 	void morenumberisland(MenuEntry *entry) {
 		static const Address numbers(0xAD7158);
 		Process::Write8(numbers.addr, 2);
 		
-		if(!entry->IsActivated()) 
+		if(!entry->IsActivated()) {
 			Process::Write8(numbers.addr, 0);
+		}
 	}
+
 //Large FOV	
 	void fovlarge(MenuEntry *entry) {
+		static Address fovlargeMod(0x47E48C);
+
 		static float OnOff = 1.0;
 		
-		Process::WriteFloat(Address(0x47E48C).addr, OnOff); 
+		fovlargeMod.WriteFloat(OnOff);
 		
-		if(Game::GetRoom() == 1 || fovbool) 
+		if(Game::GetRoom() == 1 || RuntimeContext::getInstance()->isFov()) {
 			OnOff = 1.0; 
-		else 
+		}
+		else {
 			OnOff = 0.75; 
+		}
 		
-		if(!entry->IsActivated()) 
-			Process::WriteFloat(Address(0x47E48C).addr, 1.0);
+		if(!entry->IsActivated()) {
+			fovlargeMod.Unpatch();
+		}
 	}
 //Move Furniture
 	void roomSeeder(MenuEntry *entry) {
@@ -275,20 +269,25 @@ namespace CTRPluginFramework {
     }
 //Can Walk When Talk /*Made by Jay*/
 	void walktalkentry(MenuEntry *entry) { 
-		static const Address walktalk(0x655390);
-		if(entry->WasJustActivated()) 
-			Process::Patch(walktalk.addr, 0x1A000000); 
-		else if(!entry->IsActivated()) 
-			Process::Patch(walktalk.addr, 0x0A000000); 
+		static Address walktalk(0x655390);
+
+		if(entry->WasJustActivated()) {
+			walktalk.Patch(0x1A000000);
+		}
+		else if(!entry->IsActivated()) {
+			walktalk.Unpatch();
+		}
 	}
 
 //Keyboard Extender
 	void key_limit(MenuEntry* entry) {
-		if(!GameKeyboard::IsOpen())
+		if(!GameKeyboard::IsOpen()) {
 			return;
+		}
 		
-		if(Inventory::GetCurrent() == 4) 
+		if(Inventory::GetCurrent() == 4) {
 			return;
+		}
 		
 		u32 KeyData = *(u32 *)(Game::BaseInvPointer() + 0xC) + 0x1328;
 		static const Address KeyEnter(0xAD7253);
@@ -317,110 +316,123 @@ namespace CTRPluginFramework {
 			0xE076, 0xE077
         };	
 	
-		static const Address IsOpen(0xAD7050);		
+		static const Address IsOpen(0xAD7050);
+
         if(*(u16 *)IsOpen.addr == 0x0103) {
 			u32 offset = 0;
 			static const Address customKey(0xAD7630);	
             offset = *(u32 *)customKey.addr;
-            if(offset != 0) {	
+            if(offset != 0) {
                 Process::Read32(offset + 0x224, offset);
 
 				u16 value = 0;
 			//US/EU French, US/EU English, US/EU Spanish, EU Italian, EU German
-				if(Process::Read16(offset + 0x26, value) && value == 0x2E) 
+				if(Process::Read16(offset + 0x26, value) && value == 0x2E) {
 					Process::CopyMemory((void *)(offset + 0x26), (void *)patch, 0x6E * 2); 
+				}
 			//Japanese Keyboard
-				else if(Process::Read16(offset + 0x1DC, value) && value == 0x3001) 
+				else if(Process::Read16(offset + 0x1DC, value) && value == 0x3001) {
 					Process::CopyMemory((void *)(offset + 0x1DC), (void *)patch, 0x6E * 2); 
+				}
 			}
 		}
     }
 			
 //Beans Particle Changer	
 	void BeansParticleChanger(MenuEntry *entry) {
-		static const Address beans(0x673E0C);
+		static Address beans(0x673E0C);
         static u16 input = 0; 
 		
         if(entry->Hotkeys[0].IsDown()) {
-			if(Wrap::KB<u16>(Language::getInstance()->get("BEANS_PARTICLE_ENTER_ID"), true, 3, input, 0)) 
-				Process::Patch(beans.addr, input);
+			if(Wrap::KB<u16>(Language::getInstance()->get("BEANS_PARTICLE_ENTER_ID"), true, 3, input, 0)) {
+				beans.Patch(input);
+			}
 		}
 		
-		if(!entry->IsActivated()) 
-			Process::Patch(beans.addr, 0x205);
+		if(!entry->IsActivated()) {
+			beans.Unpatch();
+		}
 	}
 
 //Always Daytime /*Made by Jay*/
 	void Daytime(MenuEntry *entry) {
-		static const Address day1(0x4B10A4);
-		static const Address day2(0x1E6D58);
-		static const Address day3(0x4B10AC);
-		static const Address day4(0x4B10C8);
-		
-		static const u32 DayTime[3] = { day1.addr, day3.addr, day4.addr };
-		
-		static constexpr u32 DayTimePatch[2][3] = {
-            { 0xE3A01788, 0xE3A00000, 0xE8871015 },
-			{ 0xE1A01521, 0xE3A06000, 0xE8871004 }
-		};
+		static Address day1(0x4B10A4);
+		static Address day2(0x1E6D58);
+		static Address day3(0x4B10AC);
+		static Address day4(0x4B10C8);
 		
 		if(entry->WasJustActivated()) {
-			for(int i = 0; i < 3; ++i)
-                Process::Patch(DayTime[i], DayTimePatch[0][i]);
-
-			Process::WriteFloat(day2.addr, 1.25);
+			day1.Patch(0xE3A01788);
+			day2.WriteFloat(1.25);
+			day3.Patch(0xE3A00000);
+			day4.Patch(0xE8871015);
 		}
-		else if(!entry->IsActivated()) {
-			for(int i = 0; i < 3; ++i)
-                Process::Patch(DayTime[i], DayTimePatch[1][i]);
-
-			Process::WriteFloat(day2.addr, 1.0);
+		
+		if(!entry->IsActivated()) {
+			day1.Unpatch();
+			day2.Unpatch();
+			day3.Unpatch();
+			day4.Unpatch();
 		}
 	}
 //Fast Mode	
 	void fast(MenuEntry *entry) {
 		if(entry->Hotkeys[0].IsPressed()) { //Key::R + Key::DPadDown
-			turbo = !turbo;
-			OSD::Notify("Fast mode " << (turbo ? Color::Green << "ON" : Color::Red << "OFF"));
+			RuntimeContext::getInstance()->setTurbo(!RuntimeContext::getInstance()->isTurbo());
+			OSD::Notify("Fast mode " << (RuntimeContext::getInstance()->isTurbo() ? Color::Green << "ON" : Color::Red << "OFF"));
 		}
 	}
 //Fast Text Speed
 	void fasttalk(MenuEntry *entry) { 
-		static const Address fastt(0x5FC6AC);
+		static Address fastt(0x5FC6AC);
+		static Address fastt2 = fastt.MoveOffset(8);
+
 		if(entry->WasJustActivated()) {
-			Process::Patch(fastt.addr, 0xEA000000);
-			Process::Patch(fastt.addr + 8, 0xE3500001);
+			fastt.Patch(0xEA000000);
+			fastt2.Patch(0xE3500001);
 		}
-		else if(!entry->IsActivated()) {
-			Process::Patch(fastt.addr, 0xE1A00004);
-			Process::Patch(fastt.addr + 8, 0xE3500000);
+		if(!entry->IsActivated()) {
+			fastt.Unpatch();
+			fastt2.Unpatch();
 		}	
 	}
 //Fast Game Speed	
 	void speedentry(MenuEntry *entry) {
-		static const Address speed(0x54DDB4);
-		Process::Patch(speed.addr, Game::GameSaving() ? 0xE59400A0 : 0xE3E004FF);
+		static Address speed(0x54DDB4);
+
+		if (Game::GameSaving()) {
+			speed.Unpatch();
+		}
+		else {
+			speed.Patch(0xE3E004FF);
+		}
 		
-		if(!entry->IsActivated())
-			Process::Patch(speed.addr, 0xE59400A0);
+		if(!entry->IsActivated()) {
+			speed.Unpatch();
+		}
 	}
 //Fast Isabelle (Fast Text + Game Speed when in the Isabelle greeting room)
 	void fastisabelle(MenuEntry *entry) {
-		static const Address speed(0x54DDB4);
-		static const Address fastt(0x5FC6AC);
+		static Address speed(0x54DDB4);
+		static Address fastt(0x5FC6AC);
+		static Address fastt2 = fastt.MoveOffset(8);
 
 		u8 roomID = Game::GetRoom();
 		if (roomID == 0x63 && entry->IsActivated()) { // Isabelle
-			Process::Patch(speed.addr, Game::GameSaving() ? 0xE59400A0 : 0xE3E004FF);
-			
-			Process::Patch(fastt.addr, 0xEA000000);
-			Process::Patch(fastt.addr + 8, 0xE3500001);
+			if (Game::GameSaving()) {
+				speed.Unpatch();
+			}
+			else {
+				speed.Patch(0xE3E004FF);
+			}
+
+			fastt.Patch(0xEA000000);
+			fastt2.Patch(0xE3500001);
 		}
 		else {
-			Process::Patch(speed.addr, 0xE59400A0);
-
-			Process::Patch(fastt.addr, 0xE1A00004);
-			Process::Patch(fastt.addr + 8, 0xE3500000);
+			speed.Unpatch();
+			fastt.Unpatch();
+			fastt2.Unpatch();
 		}
 	}
 }

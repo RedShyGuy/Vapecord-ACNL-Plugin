@@ -2,6 +2,7 @@
 #include <csvc.h>
 #include "Helpers/Dropper.hpp"
 #include "Helpers/Player.hpp"
+#include "RuntimeContext.hpp"
 
 namespace CTRPluginFramework {
 //This patch the NFC disabling the touchscreen when scanning an amiibo, which prevents ctrpf to be used
@@ -61,10 +62,11 @@ namespace CTRPluginFramework {
 
 //check for indoor items	
 	void IndoorsSeedItemCheck(void) {
-		IsIndoorsBool = Player::IsIndoors();
+        RuntimeContext::getInstance()->setIndoors(Player::IsIndoors());
 
-		if(!DropPatternON || !IsIndoorsBool) 
-			return;
+		if(!DropPatternON || !RuntimeContext::getInstance()->isIndoors()) {
+            return;
+        }
 		
 		Dropper::RestorePattern();
 		DropPatternON = false;

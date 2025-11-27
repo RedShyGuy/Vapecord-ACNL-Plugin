@@ -15,13 +15,16 @@ u32 WalkParticleID = 0;
 namespace CTRPluginFramework {
 //Players can't push you
 	void noPush(MenuEntry *entry) { 
-		static const Address push(0x652288);
+		static Address push(0x652288);
 
-		if(entry->WasJustActivated()) 
-			Process::Patch(push.addr, 0xEA00002D);
-		else if(!entry->IsActivated())
-			Process::Patch(push.addr, 0x2A00002D);
+		if(entry->WasJustActivated()) {
+			push.Patch(0xEA00002D);
+		}
+		else if(!entry->IsActivated()) {
+			push.Unpatch();
+		}
 	}
+
 //Definition for Coordinate Mod Speed
 	float cspeed = 5.0;
 //Coordinate Mod Speed Changer Keyboard
@@ -32,108 +35,138 @@ namespace CTRPluginFramework {
 		kb.SetMaxLength(2);
 		kb.Open(cspeed);
 	}
+
 //Coordinate Modifier
 	void coordinate(MenuEntry *entry) {
 		if(entry->Hotkeys[0].IsDown()) {//A
 			float *pCoords = PlayerClass::GetInstance()->GetCoordinates();
 			if(pCoords != nullptr && !MapEditorActive) { // if not in tile selection mode & valid player obj
-				if(entry->Hotkeys[1].IsDown()) 
+				if(entry->Hotkeys[1].IsDown()) {
 					pCoords[0] += cspeed; //DPadRight
-				if(entry->Hotkeys[2].IsDown()) 
+				}
+				if(entry->Hotkeys[2].IsDown()) {
 					pCoords[0] -= cspeed; //DPadLeft
-				if(entry->Hotkeys[3].IsDown()) 
+				}
+				if(entry->Hotkeys[3].IsDown()) {
 					pCoords[2] += cspeed; //DPadDown
-				if(entry->Hotkeys[4].IsDown()) 
+				}
+				if(entry->Hotkeys[4].IsDown()) {
 					pCoords[2] -= cspeed; //DPadUp
+				}		
 			}
 		}
 	}
+
 //Moonjump
 	void moonjump(MenuEntry *entry) {
 		u32 i = PlayerClass::GetInstance()->Offset(0x8C6);
-		if(entry->Hotkeys[0].IsDown()) 
+		if(entry->Hotkeys[0].IsDown()) {
 			Process::Write32(i, 0x7FFFFF); 
-		else if(entry->Hotkeys[1].IsDown()) 
+		}
+		else if(entry->Hotkeys[1].IsDown()) {
 			Process::Write32(i, 0x19D5D);
+		}
 	}
 	
 //Touch Warp
 	void tch_warp(MenuEntry *entry) {
 		float *pCoords = PlayerClass::GetInstance()->GetCoordinates();
-		if(pCoords == nullptr)
+		if(pCoords == nullptr) {
 			return;
+		}
 		
-		if(!Game::MapBoolCheck()) 
+		if(!Game::MapBoolCheck()) {
 			return;
+		}
 
-		if(!Touch::IsDown())
+		if(!Touch::IsDown()) {
 			return;
+		}
 
 		PlayerClass::CalculateCoordinates(Touch::GetPosition(), pCoords);
     }
+
 //Walk Over Things
 	void walkOver(MenuEntry *entry) {		
-		static const Address walkover1(0x6503FC);
-		static const Address walkover2(0x650414);
-		static const Address walkover3(0x650578);
-		static const Address walkover4(0x6505F0);
-		static const Address walkover5(0x6506A4);
-		static const Address walkover6(0x6506BC);
-		static const Address walkover7(0x6506C0);
-		static const Address walkover8(0x6506EC);
+		static Address walkover1(0x6503FC);
+		static Address walkover2(0x650414);
+		static Address walkover3(0x650578);
+		static Address walkover4(0x6505F0);
+		static Address walkover5(0x6506A4);
+		static Address walkover6(0x6506BC);
+		static Address walkover7(0x6506C0);
+		static Address walkover8(0x6506EC);
 		
-		const u32 WalkOver[8] = { walkover1.addr, walkover2.addr, walkover3.addr, walkover4.addr, walkover5.addr, walkover6.addr, walkover7.addr, walkover8.addr };
+		static Address WalkOver[8] = { 
+			walkover1, walkover2, walkover3, walkover4, 
+			walkover5, walkover6, walkover7, walkover8 
+		};
 		
-		static const u32 WalkOverPatch[2][8] = {
-            { 0xEA000094, 0xEA000052, 0xEA000001, 0xEA000014, 0xE1A00000, 0xE1A00000, 0xEA000026, 0xEA000065 },
-            { 0x0A000094, 0x0A000052, 0x0A000001, 0xDA000014, 0xED841A05, 0xED840A07, 0x0A000026, 0x0A000065 }
+		static const u32 WalkOverPatch[8] = {
+            0xEA000094, 0xEA000052, 0xEA000001, 0xEA000014, 
+			0xE1A00000, 0xE1A00000, 0xEA000026, 0xEA000065
         };
 		
 		if(entry->Hotkeys[0].IsPressed()) {
-			bool index = *(u32 *)walkover1.addr == 0x0A000094 ? 0 : 1;
+			bool isOFF = *(u32 *)walkover1.addr == walkover1.origVal;
 
-            OSD::Notify("Walk Over Things " << (index ? (Color::Red << "OFF") : (Color::Green << "ON")));
-
-			for(int i = 0; i < 8; ++i)
-                Process::Patch(WalkOver[i], WalkOverPatch[index][i]);
+			if (isOFF) {
+				for(int i = 0; i < 8; ++i) {
+					WalkOver[i].Patch(WalkOverPatch[i]);
+				}
+				OSD::Notify("Walk Over Things " << Color::Green << "ON");
+			}
+			else {
+				for(int i = 0; i < 8; ++i) {
+					WalkOver[i].Unpatch();
+				}
+				OSD::Notify("Walk Over Things " << Color::Red << "OFF");
+			}
         }
+
 	    if(!entry->IsActivated()) {
-			for(int i = 0; i < 8; ++i)
-                Process::Patch(WalkOver[i], WalkOverPatch[1][i]);
+			for(int i = 0; i < 8; ++i) {
+				WalkOver[i].Unpatch();
+			}
 		}
     }
 //Movement Changer
 	void MovementChanger(MenuEntry *entry) {	
-		static const Address Disable25Anim(0x67F748); //Disable going out of water animation
-		static const Address AlwaysWalk(0x64E824); //Makes you walk all the time
-		static const Address AlwaysSwim(0x64E82C); //Makes you swim all the time
-		static const Address DisableYChange(0x56BE7C); //Makes Y-Coord not go down when swimming	
-		static const Address move4(0x65352C);
-		static const Address move5(0x763ABC);
+		static Address Disable25Anim(0x67F748); //Disable going out of water animation
+		static Address AlwaysWalk(0x64E824); //Makes you walk all the time
+		static Address AlwaysSwim(0x64E82C); //Makes you swim all the time
+		static Address DisableYChange(0x56BE7C); //Makes Y-Coord not go down when swimming	
+		static Address move4(0x65352C);
+		static Address move5(0x763ABC);
 		
-		static const u32 MoveChanger[6] = { Disable25Anim.addr, AlwaysWalk.addr, AlwaysSwim.addr, DisableYChange.addr, move4.addr, move5.addr };
+		static Address MoveChanger[6] = { 
+			Disable25Anim, AlwaysWalk, AlwaysSwim, DisableYChange, move4, move5 
+		};
 		
 		static const u32 MoveChangerPatch[3][6] = {
-            { 0xEA000067, 0x03A00001, 0xE3A00001, 0xE12FFF1E, 0xEA00000D, 0xE3A00000 }, //Swimming
-            { 0x1A000067, 0x03A00000, 0xE3A00000, 0xED902A00, 0xE1A00004, 0xE3A00001 }, //Walking
-			{ 0x1A000067, 0x03A00001, 0xE3A00000, 0xED902A00, 0xE1A00004, 0xE3A00001 } //OFF
+			{ 0x1A000067, 0x03A00000, 0xE3A00000, 0xED902A00, 0xE1A00004, 0xE3A00001 }, //Walking
+            { 0xEA000067, 0x03A00001, 0xE3A00001, 0xE12FFF1E, 0xEA00000D, 0xE3A00000 } //Swimming
         };
 		
-		bool index = *(u32 *)Disable25Anim.addr == 0x1A000067 ? 0 : 1;
+		bool isWalking = *(u32 *)Disable25Anim.addr == Disable25Anim.origVal;
 	
 		if(entry->Hotkeys[0].IsPressed()) {
-			if(index) 
-                OSD::Notify("Movement Mode: Walking", Color::Green);	
-		    else 
-                OSD::Notify("Movement Mode: Swimming", Color::Blue);
-				
-			for(int i = 0; i < 6; ++i)
-                Process::Patch(MoveChanger[i], MoveChangerPatch[index][i]);
+			if(isWalking) {
+				OSD::Notify("Movement Mode: Swimming", Color::Blue);
+			}
+		    else {
+				OSD::Notify("Movement Mode: Walking", Color::Green);
+			}
+			
+			for(int i = 0; i < 6; ++i) {
+				MoveChanger[i].Patch(MoveChangerPatch[isWalking][i]);
+			}
         }
 		
 		if(!entry->IsActivated()) {
-			for(int i = 0; i < 6; ++i)
-                Process::Patch(MoveChanger[i], MoveChangerPatch[2][i]);
+			for(int i = 0; i < 6; ++i) {
+				MoveChanger[i].Unpatch();
+			}
 		}
     }
 //Walk Particle	
@@ -152,8 +185,9 @@ namespace CTRPluginFramework {
 			}
 		}
 			
-		if(!entry->IsActivated()) 
+		if(!entry->IsActivated()) {
 			hook.Disable();
+		}
     }  
 //Player Teleporter	
 	void stalk(MenuEntry *entry) {
@@ -191,11 +225,13 @@ namespace CTRPluginFramework {
 	}
 //Player Visibility Changer	
 	void onlineplayermod(MenuEntry *entry) {
-		static const Address visi1(0x655E44);
-		static const Address visi2(0x67743C);
-		static const Address visi3(0x68DC3C);
+		static Address visi1(0x655E44);
+		static Address visi2(0x67743C);
+		static Address visi3(0x68DC3C);
 		
-		static const u32 VisiMod[3] = { visi1.addr, visi2.addr, visi3.addr };
+		static Address VisiMod[3] = { 
+			visi1, visi2, visi3 
+		};
 		
 		static const u32 VisiModPatch[3][3] = { 
             { 0xE3A01017, 0xE3A07006, 0xE1A00000 },
@@ -221,13 +257,15 @@ namespace CTRPluginFramework {
 				break;
 			}
 
-			for(int i = 0; i < 3; ++i)
-                Process::Patch(VisiMod[i], VisiModPatch[mode][i]);
+			for(int i = 0; i < 3; ++i) {
+				VisiMod[i].Patch(VisiModPatch[mode][i]);
+			}
         }
 
 		if(!entry->IsActivated()) {
-			for(int i = 0; i < 3; ++i)
-                Process::Patch(VisiMod[i], VisiModPatch[2][i]);
+			for(int i = 0; i < 3; ++i) {
+				VisiMod[i].Unpatch();
+			}
 		}
     }
 
@@ -253,8 +291,9 @@ namespace CTRPluginFramework {
 		static const Address sp7(0x94EF34);
 		static const Address sp8(0x8878A4);
 		
-		if(!entry->IsActivated()) 
+		if(!entry->IsActivated()) {
 			walkSpeed = 1;
+		}
 		
 		Process::WriteFloat(sp1.addr, walkSpeed);
 		Process::WriteFloat(sp2.addr, walkSpeed);
@@ -273,7 +312,8 @@ namespace CTRPluginFramework {
 		kb.SetMaxLength(7);
 		kb.OnKeyboardEvent(SpeedCheck);
 		kb.Open(walkSpeed);
-	}	
+	}
+
 //InputChangeEvent for Room Warper	
 	void onRoomChange(Keyboard &k, KeyboardEvent &e) {
 		std::string& input = k.GetInput();	
@@ -285,6 +325,7 @@ namespace CTRPluginFramework {
 		
 		k.GetMessage() = Language::getInstance()->get("ROOM_WARPING_ENTER_ID") << "\n\n" << IDList::GetRoomName(!input.empty() ? ID : 0);
 	}
+
 //Room Warper
 	void roomWarp(MenuEntry *entry) {	
 		if(entry->Hotkeys[0].IsPressed()) {
@@ -296,14 +337,18 @@ namespace CTRPluginFramework {
 			u8 val;
 			if(Wrap::KB<u8>(Language::getInstance()->get("ROOM_WARPING_ENTER_ID"), true, 2, val, 0, onRoomChange)) {		
 				s8 res = Game::RoomFunction(val, 1, 1, 0);	
-				if(res == 1)
+				if(res == 1) {
 					OSD::Notify(Utils::Format("Warping to room %02X", val));
-				else if(res == -1)
+				}
+				else if(res == -1) {
 					OSD::Notify("Player needs to be loaded to warp!", Color::Red);
-				else if(res == -2)
+				}
+				else if(res == -2) {
 					OSD::Notify("Only works while playing offline!", Color::Red);
-				else
+				}
+				else {
 					OSD::Notify("An error has occured while trying to warp!", Color::Red);
+				}
 			}
 		}
 	}
@@ -314,13 +359,13 @@ namespace CTRPluginFramework {
 		static Address itemHitting(0x67211C);
 
 		if(entry->WasJustActivated()) {
-			Process::Patch(rockHitting.addr, 0xEB000000);
-			Process::Patch(itemHitting.addr, 0xEB000000);
+			rockHitting.Patch(0xEB000000);
+			itemHitting.Patch(0xEB000000);
 		}
 		
 		else if(!entry->IsActivated()) {
-			Process::Patch(rockHitting.addr, 0xE1A00004);
-			Process::Patch(itemHitting.addr, 0xE1A00004);
+			rockHitting.Unpatch();
+			itemHitting.Unpatch();
 		}
 	}
 }
