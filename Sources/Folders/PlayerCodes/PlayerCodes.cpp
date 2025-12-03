@@ -81,7 +81,7 @@ namespace CTRPluginFramework {
 		int i = 0, j = 0;
 		
 	//gets player
-		screen.Draw(Utils::Format("Player %02X", pIndex), 0, 0, pColor[pIndex]);
+		screen.Draw(Utils::Format("Player %02X", pIndex), 0, 0, Player::GetColor(pIndex));
 		
 		while(i < 6) {
 			for(auto GetString = strings1.begin(); GetString != strings1.end(); ++GetString) {
@@ -140,7 +140,7 @@ namespace CTRPluginFramework {
 			if(*(u16 *)(pO + 0x55A6) != 0) {
 				std::string pS = "";
 				Process::ReadString((pO + 0x55A8), pS, 0x10, StringFormat::Utf16);
-				pV[i] = pColor[i] << pS;
+				pV[i] = Player::GetColor(i) << pS;
 			}
 		}
 		
@@ -347,7 +347,7 @@ namespace CTRPluginFramework {
 					}
 				}
 				else {
-					screen.DrawRect(XPos - 1, YPos + 1, 6, 6, pColor[i]);
+					screen.DrawRect(XPos - 1, YPos + 1, 6, 6, Player::GetColor(i));
 				}
 			}
 		}

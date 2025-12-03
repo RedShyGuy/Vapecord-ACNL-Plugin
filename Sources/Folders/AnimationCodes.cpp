@@ -67,7 +67,7 @@ namespace CTRPluginFramework {
 		if(entry->Hotkeys[0].IsPressed()) {
 			for(int i = 0; i <= 3; ++i) {
 				if(PlayerClass::GetInstance(i)->IsLoaded()) {
-					pV[i] = pColor[i] << "Player: " << std::to_string(i);
+					pV[i] = Player::GetColor(i) << "Player: " << std::to_string(i);
 				}
 			}
 			

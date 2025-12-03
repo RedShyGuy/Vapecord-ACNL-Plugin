@@ -1,5 +1,5 @@
-#ifndef CHAT_HPP
-#define CHAT_HPP
+#ifndef GAMEKEYBOARD_HPP
+#define GAMEKEYBOARD_HPP
 
 #include <CTRPluginFramework.hpp>
 #include "Helpers/GameStructs.hpp"

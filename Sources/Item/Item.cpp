@@ -8,8 +8,9 @@
 
 namespace CTRPluginFramework {
 	bool Item::isValid(bool IsDropped) {
-		if(!isFlagValid(IsDropped))
+		if(!isFlagValid(IsDropped)) {
 			return false;
+		}
 
         u16 tempID = ID;
 		if((tempID & 0xFFFF) >> 12 == 4 || (tempID & 0xFFFF) >> 12 == 5) {//if present
@@ -91,13 +92,34 @@ namespace CTRPluginFramework {
 	}
 
     bool Item::searchByKeyword(const std::string& keyword, ItemNamePack& foundItem) {
+		ItemNamePack partialMatch;
+		bool hasPartial = false;
+
         for (u16 id = 0; id < 0x372B; ++id) {
             Item item(id);
-            if (item.GetName().find(keyword) != std::string::npos) {
-                foundItem = ItemNamePack{item.GetName(), id};
-                return true;
-            }
-        }
+			const std::string& name = item.GetName();
+
+			size_t pos = name.find(keyword);
+
+			if (pos != std::string::npos) {
+				if (!hasPartial) {
+					partialMatch = {name.c_str(), id};
+					hasPartial = true;
+				}
+			}
+
+			// exact match
+			if (name == keyword) {
+				foundItem = {name.c_str(), id};
+				return true;
+			}
+		}
+
+		if (hasPartial) {
+			foundItem = partialMatch;
+			return true;
+		}
+
         return false;
     }
 
@@ -105,7 +127,7 @@ namespace CTRPluginFramework {
         for (u16 id = 0; id <= 0x372B; ++id) {
             Item item(id);
             if (item.GetName().find(keyword) != std::string::npos) {
-                foundItems.push_back(ItemNamePack{item.GetName(), id});
+                foundItems.push_back(ItemNamePack{item.GetName().c_str(), id});
             }
         }
         return !foundItems.empty();

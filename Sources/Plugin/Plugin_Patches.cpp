@@ -3,6 +3,7 @@
 #include "Helpers/Dropper.hpp"
 #include "Helpers/Player.hpp"
 #include "RuntimeContext.hpp"
+#include "cheats.hpp"
 
 namespace CTRPluginFramework {
 //This patch the NFC disabling the touchscreen when scanning an amiibo, which prevents ctrpf to be used
@@ -59,6 +60,13 @@ namespace CTRPluginFramework {
 
 		settings.CachedDrawMode = true;
 	}
+
+    void OnExitProcess(void) {
+        ToggleTouchscreenForceOn();
+
+        DisableAllChecks();
+		DisableAllPatches();
+    }
 
 //check for indoor items	
 	void IndoorsSeedItemCheck(void) {

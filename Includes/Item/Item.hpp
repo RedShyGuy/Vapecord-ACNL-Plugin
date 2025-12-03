@@ -56,7 +56,7 @@ namespace CTRPluginFramework {
     };
 
     struct ItemNamePack {
-		std::string name;
+		const char* name;
 		u16 ID;
 	};
 

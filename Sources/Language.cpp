@@ -144,7 +144,6 @@ namespace CTRPluginFramework {
         ptr += sizeof(u32);
 
         translations.clear();
-        translations.reserve(entryCount);
 
         for (u32 j = 0; j < entryCount && ptr < end; ++j) {
             if (ptr + sizeof(u16) > end) {
@@ -177,22 +176,21 @@ namespace CTRPluginFramework {
 
             Unescape(val);
 
-            translations.push_back({key, val});
+            translations[key] = val;
         }
 
         loaded = true;
         return true;
     }
 
-    std::string Language::get(const std::string &key) const {
+    std::string Language::get(const std::string &key) {
         if (!loaded) {
             return "[not loaded]";
         }
 
-        for (auto &pair : translations) {
-            if (pair.key == key) {
-                return pair.value;
-            } 
+        TextMapIter it = translations.find(key);
+        if (it != translations.end()) {
+            return it->second;
         }
 
         return "[" + key + "]";

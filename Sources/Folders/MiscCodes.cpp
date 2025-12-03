@@ -1,8 +1,6 @@
 #include "cheats.hpp"
-#include "NonHacker.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/IDList.hpp"
-
 #include "Helpers/Game.hpp"
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/CROEditing.hpp"
@@ -11,9 +9,7 @@
 #include "Helpers/Inventory.hpp"
 #include "Helpers/GameKeyboard.hpp"
 #include "RuntimeContext.hpp"
-#include "NonHacker.hpp"
 #include "Color.h"
-#include "RuntimeContext.hpp"
 
 extern "C" void MoveFurn(void);
 extern "C" void PATCH_MoveFurnButton(void);
@@ -31,54 +27,6 @@ extern "C" bool __IsAnimID(u8 toolAnimID) {
 }
 
 namespace CTRPluginFramework {
-	static bool AllOFF = false;
-//disable commands
-	void disablecommands(MenuEntry *entry) {
-		std::vector<std::string> noncommands = {
-			Language::getInstance()->get("VECTOR_ANIM_COMM"),
-			Language::getInstance()->get("VECTOR_EMOT_COMM"),
-			Language::getInstance()->get("VECTOR_SNAK_COMM"),
-			Language::getInstance()->get("VECTOR_MUSI_COMM"),
-			Language::getInstance()->get("VECTOR_ITEM_COMM"),
-			Language::getInstance()->get("VECTOR_ALL_COMM")
-		};
-
-		for(int i = 0; i < 5; ++i) 
-			noncommands[i] = (NonHacker::Accessible[i] ? Color(pGreen) : Color(pRed)) << noncommands[i];
-
-		noncommands[5] = (AllOFF ? Color(pGreen) : Color(pRed)) << noncommands[5];
-
-		Keyboard keyboard(Language::getInstance()->get("COMM_CHOOSE"), noncommands);
-
-        int choice = keyboard.Open();
-        if(choice < 0)
-			return;
-
-		if(choice == 5) {
-			PluginMenu *menu = PluginMenu::GetRunningInstance();
-			if(AllOFF) {
-				*menu += NonHacker_Player00;
-				*menu += NonHacker_Player01;
-				*menu += NonHacker_Player02;
-				*menu += NonHacker_Player03;
-				AllOFF = false;
-			}
-			else {
-				*menu -= NonHacker_Player00;
-				*menu -= NonHacker_Player01;
-				*menu -= NonHacker_Player02;
-				*menu -= NonHacker_Player03;
-				AllOFF = true;
-			}
-			goto update;
-		}
-
-		NonHacker::Accessible[choice] = !NonHacker::Accessible[choice];
-
-		update:
-		disablecommands(entry);
-	}
-
 //Change Tool Animation
 	void tooltype(MenuEntry *entry) {
 		static Hook hook;
@@ -173,6 +121,39 @@ namespace CTRPluginFramework {
 		weather.Patch(Weathers[op]);
 		Weathermod(entry);
 	}
+
+	void ShowPlayingMusic(u32 musicData, u32 r1) {
+		/*
+		KK Songs are differently handled
+		This does not work sometimes, example fortune shop, the switching back to the Fortune Shop Melody doesnt get recognized
+		Also after new player build house, then spoke to isabelle, then left the town hall, then after the success melody, the town melody doesnt get recognized
+		Shrunks perfomance doesn't get recognized
+		Switching from nook store to closign soon doesnt get recognized
+		Sapling Ceremony doesnt come up
+		On this day, you became major didnt come up
+		Campsite camper, wrong id
+		*/
+
+		u32 musicID = *(u32 *)(musicData + 8);
+		OSD::Notify(Utils::Format("Now Playing: %08X", musicID), Color(0x00FF00FF));
+
+		const HookContext &curr = HookContext::GetCurrent();
+        static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+        func.Call<void>(musicData, r1);
+	}
+
+	void radioPlayer(MenuEntry *entry) {
+		static Hook hook;
+		if(entry->WasJustActivated()) {
+			hook.Initialize(Address(0x58C414).addr, (u32)ShowPlayingMusic);
+			hook.SetFlags(USE_LR_TO_RETURN);
+			hook.Enable();
+		}
+		else if(!entry->IsActivated()) {
+			hook.Disable();
+		}
+	}
+
 //always aurora lights
 	void auroralights(MenuEntry *entry) {
 		static Address auroraPatch1(0x62FD4C);

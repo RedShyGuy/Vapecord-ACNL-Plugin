@@ -6,6 +6,8 @@
 
 namespace CTRPluginFramework {
 	namespace Player {
+		Color 			GetColor(u8 pIndex);
+
 		void 			Load(int pIndex);
 		void			ReloadDesign(int slot);
 		void			StealDesign(u8 slot);

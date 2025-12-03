@@ -11,8 +11,6 @@ extern CTRPluginFramework::Item PickupSeederItemID;
 
 namespace CTRPluginFramework {
 	extern const std::string fullV;
-	
-	extern const Color pColor[];
 
 //Save Codes Folder
 	void townnamechanger(MenuEntry* entry);
@@ -152,8 +150,8 @@ namespace CTRPluginFramework {
 	//Chat Codes
 	void bubblesDisappear(MenuEntry *entry);
 	void Forcesendchat(MenuEntry *entry);
+	void chatCommands(MenuEntry *entry);
 	void ChatCopyPaste(MenuEntry *entry);
-	void ShowChatMessage(MenuEntry *entry);
 	void ChatButton(MenuEntry *entry);
 
 	void AmiiboSpoofer(MenuEntry *entry);
@@ -176,11 +174,11 @@ namespace CTRPluginFramework {
 	void BuriedInspector(MenuEntry *entry);
 	
 //Misc Codes
-	void disablecommands(MenuEntry *entry);
 	void tooltype(MenuEntry *entry);
 	void mgtype(MenuEntry *entry);
 	void unbreakableflower(MenuEntry *entry);
 	void Weathermod(MenuEntry *entry);
+	void radioPlayer(MenuEntry *entry);
 	void auroralights(MenuEntry *entry);
 	void ReloadRoomCheat(MenuEntry *entry);
 	void morenumberisland(MenuEntry *entry);
@@ -231,16 +229,21 @@ namespace CTRPluginFramework {
 	void NPCRotate(MenuEntry *entry);
 
 //Default Codes
-	void OnlineDropLagRemover(MenuEntry *entry);
-    void ChangeRockbreakParticle(MenuEntry *entry);
-    void DropItemsEverywhere(MenuEntry *entry);
-    void IdleAfterTreeShakeOrCut(MenuEntry *entry);
-    void DontMoveNPCBackToOriginalPosition(MenuEntry *entry);
-	void ReplaceDropFunctions(MenuEntry *entry);
-	void PreventParticleCrash(MenuEntry *entry);
-	void BypassGameChecks(MenuEntry *entry);
-	void DisableNonSeedItemCheck(MenuEntry *entry);
-	void PatchDropFunction(MenuEntry *entry);
+	void EnableAllChecks(void);
+	void EnableAllPatches(void);
+	void DisableAllChecks(void);
+	void DisableAllPatches(void);
+
+	void OnlineDropLagRemoverEntry(MenuEntry *entry);
+    void ChangeRockbreakParticleEntry(MenuEntry *entry);
+    void DropItemsEverywhereEntry(MenuEntry *entry);
+    void IdleAfterTreeShakeOrCutEntry(MenuEntry *entry);
+    void DontMoveNPCBackToOriginalPositionEntry(MenuEntry *entry);
+	void ReplaceDropFunctionsEntry(MenuEntry *entry);
+	void PreventParticleCrashEntry(MenuEntry *entry);
+	void BypassGameChecksEntry(MenuEntry *entry);
+	void DisableNonSeedItemCheckEntry(MenuEntry *entry);
+	void PatchDropFunctionEntry(MenuEntry *entry);
 
 	void DisableOpenSaveMenuWithStartButton(MenuEntry *entry);
     void DisableCatalogSearchFunction(MenuEntry *entry);

@@ -595,7 +595,7 @@ namespace CTRPluginFramework {
 				if(Player::SaveExists(player)) {
 					std::string str = "";
 					Convert::U16_TO_STR(player->PlayerInfo.PlayerData.PlayerName, str);
-					pV[i] = pColor[i] << str;
+					pV[i] = Player::GetColor(i) << str;
 				}
 			}
 		}
@@ -915,7 +915,7 @@ namespace CTRPluginFramework {
 				if(Player::SaveExists(player)) {
 					std::string str = "";
 					Convert::U16_TO_STR(player->PlayerInfo.PlayerData.PlayerName, str);
-					pV[i] = pColor[i] << str;
+					pV[i] = Player::GetColor(i) << str;
 				}
 			}
 		}

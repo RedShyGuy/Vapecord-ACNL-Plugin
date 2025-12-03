@@ -109,6 +109,9 @@ Translators: みるえもん & みなと(Japanese), im a book(spanish), Fedecras
 
 		SleepTime();
 
+		EnableAllChecks();
+		EnableAllPatches();
+
 		ItemSequence::Init();
 	//keeps internet connection when menu is opened
 		InitKeepConnection();

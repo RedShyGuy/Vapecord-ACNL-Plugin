@@ -3,16 +3,16 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include <CTRPluginFramework.hpp>
 
 namespace CTRPluginFramework {
     class Language {
-    private:
-        struct Entry {
-            std::string key;
-            std::string value;
-        };
+        using TextMap = std::map<std::string, std::string>;
+        using TextMapIter = TextMap::iterator;
+		using TextMapConstIter = TextMap::const_iterator;
 
+    private:
         struct LangHeader {
             std::string shortName;
             std::string fullName;
@@ -24,7 +24,7 @@ namespace CTRPluginFramework {
             }
         };
 
-        std::vector<Entry> translations;
+        TextMap translations;
         std::string currentLang;
         std::string filePath;
         bool loaded = false;
@@ -34,7 +34,7 @@ namespace CTRPluginFramework {
         static Language* getInstance();
         static std::vector<LangHeader> listAvailableLanguages(const std::string &filePath);
         bool loadFromBinary(const std::string& filePath, const std::string& lang);
-        std::string get(const std::string& key) const;
+        std::string get(const std::string& key);
         const std::string& getCurrentLang() const { return currentLang; }
     };
 }

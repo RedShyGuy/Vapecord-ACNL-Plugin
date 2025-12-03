@@ -109,7 +109,9 @@ namespace CTRPluginFramework {
 			item->ID += 0x2D9;
 		}
 
-		return true;
+		const HookContext &curr = HookContext::GetCurrent();
+		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+		return func.Call<bool>(item);
 	}
 
 //Hook to check if item is replacable

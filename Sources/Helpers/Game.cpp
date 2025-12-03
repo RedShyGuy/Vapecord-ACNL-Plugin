@@ -52,6 +52,7 @@ namespace CTRPluginFramework {
 		static Address gState(0x6C92FC); 
 		return gState.Call<u8>(wX, wY);
 	}
+
 //Water flower
 	bool Game::WaterFlower(u8 wX, u8 wY) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
@@ -62,6 +63,7 @@ namespace CTRPluginFramework {
 		WFlower.Call<void>(PlayerClass::GetInstance()->Offset(), wX, wY);
 		return 1;
 	}
+
 //reload room
 	void Game::ReloadRoom(float *coords) {
 		static const Address u0Data(0x976C0E);
@@ -75,6 +77,7 @@ namespace CTRPluginFramework {
 		static Address RoomDat(0x308154); 
 		return RoomDat.Call<u32>();
 	}
+
 //check if save screen is active 
 	bool Game::GameSaving() {
 		static Address saving(0x126568); 
@@ -105,11 +108,13 @@ namespace CTRPluginFramework {
 		static Address gtype(0x305ED8);
 		return gtype.Call<u8>();
 	}
+
 //Change GameType
 	void Game::ChangeGameType(u8 GameType) {
 		static Address gtype(0x625B88);
 		gtype.Call<void>(GameType);
 	}
+
 //call menu
 	void Game::OpenMenu(u8 menuID, bool NoMenCall) {
 		static Address SetupMenu(0x5C5398);
@@ -173,6 +178,7 @@ namespace CTRPluginFramework {
 		Sleep(Milliseconds(20));
 		Game::ReloadRoom();
 	}
+
 //remove building
 	void Game::RemoveBuilding() {
 		ACNL_BuildingData *building = Building::GetSaveData();
@@ -288,6 +294,7 @@ namespace CTRPluginFramework {
 
 		Game::ReloadRoom(coords);
 	}
+
 //is in room
 	bool Game::IsGameInRoom(u8 room) {
 		return Game::GetRoom() == room;
@@ -319,6 +326,7 @@ namespace CTRPluginFramework {
 		static Address moneyget(0x3037DC);
 		return moneyget.Call<int>(position);
 	}
+
 //encrypt it
 	void Game::EncryptValue(u64 *position, int moneyamount) {
 		static Address moneyset(0x3036A4); 
@@ -385,11 +393,13 @@ namespace CTRPluginFramework {
 		static Address cfunction(0x6D33D8); 
 		cfunction.Call<void>(0);
 	}
+
 //get base inventory pointer
 	u32 Game::BaseInvPointer() {
 		static const Address InvMenu(0x98D500);
 		return *(u32 *)InvMenu.addr; 
 	}
+
 //room function
 	u32 Game::RoomFunction(u8 room, bool u0, bool u1, bool u2) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
@@ -552,6 +562,7 @@ namespace CTRPluginFramework {
 		
 		return true;
 	}
+
 //Spawn Particles
 	void Game::Particles(u32 particleID, float *floats) {
 		static Address particleclass(0x207B90);
@@ -653,17 +664,17 @@ namespace CTRPluginFramework {
 		return (float *)camcoord.addr;
 	}
 
-//add float to x	
+//add float to x
 	void Camera::AddToX(float val) {
 		*(float *)(Camera::GetInstance() + 4) += val;
 	}
 
-//add float to y	
+//add float to y
 	void Camera::AddToY(float val) {
 		*(float *)(Camera::GetInstance() + 8) += val;
 	}
 
-//add float to z	
+//add float to z
 	void Camera::AddToZ(float val) {
 		*(float *)(Camera::GetInstance() + 0xC) += val;
 	}

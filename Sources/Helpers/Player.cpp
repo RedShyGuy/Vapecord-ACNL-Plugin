@@ -6,6 +6,7 @@
 #include "Helpers/Save.hpp"
 #include "Helpers/Converters.hpp"
 #include "Address/Address.hpp"
+#include "Color.h"
 
 namespace CTRPluginFramework {
 /*
@@ -317,5 +318,18 @@ get room
 				*(PlayerID *)addr = newPlayerID;
 			}
 		}
+	}
+
+	Color Player::GetColor(u8 pIndex) {
+		static const Color pColor[4] = {
+			Color(pBlue), Color(pRed),		
+			Color(pGreen), Color(pYellow),	
+		};
+
+		if (pIndex >= 4) {
+			pIndex = Game::GetActualPlayerIndex();
+		}
+
+		return pColor[pIndex];
 	}
 }

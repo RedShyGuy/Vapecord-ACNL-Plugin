@@ -355,8 +355,8 @@ namespace CTRPluginFramework {
 		CHAC->Append(EntryWithHotkey(new MenuEntryExtras("FORCE_CHAT", Forcesendchat, "FORCE_CHAT_NOTE"), { 
 			HotkeyExtras(Key::R, "FORCE_CHAT") 
 		})),
-		CHAC->Append(new MenuEntryExtras("ShowChatMessage", ShowChatMessage, "ShowChatMessage_NOTE")),
-		CHAC->Append(new MenuEntryExtras("ChatButton", ChatButton, "ChatButton_NOTE")),
+		CHAC->Append(new MenuEntryExtras("CHAT_COMMANDS", chatCommands, "CHAT_COMMANDS_NOTE")),
+		CHAC->Append(new MenuEntryExtras("CHAT_BUTTON", ChatButton, "CHAT_BUTTON_NOTE")),
 		EXTC->Append(CHAC);
 		EXTC->Append(new MenuEntryExtras("SHOP_ALWAYS_OPEN_NAME", ShopsAlwaysOpen, "SHOP_ALWAYS_OPEN_NOTE")),
 		EXTC->Append(new MenuEntryExtras("DISABLE_SAVE", nonesave, "DISABLE_SAVE_NOTE")),
@@ -394,8 +394,8 @@ namespace CTRPluginFramework {
 		MISC->Append(new MenuEntryExtras("GAME_TYPE", nullptr, mgtype, "GAME_TYPE_NOTE")),
 		MISC->Append(new MenuEntryExtras("UNBREAK_FLOWER", unbreakableflower, "UNBREAK_FLOWER_NOTE")),
 		MISC->Append(new MenuEntryExtras("WEATHER_MOD", nullptr, Weathermod , "WEATHER_MOD_NOTE")),
+		MISC->Append(new MenuEntryExtras("RADIO_PLAYER", radioPlayer , "RADIO_PLAYER_NOTE")),
 		MISC->Append(new MenuEntryExtras("ALWAYS_AURORA_MOD", auroralights , "ALWAYS_AURORA_MOD_NOTE")),
-		MISC->Append(new MenuEntryExtras("DISABLECOMMAND", nullptr, disablecommands, "DISABLECOMMAND_NOTE")),
 		MISC->Append(new MenuEntryExtras("RELOAD_ROOM_NAME", nullptr, ReloadRoomCheat, "RELOAD_ROOM_NOTE")),
 		MISC->Append(new MenuEntryExtras("MORE_NUMBERS",  morenumberisland, "MORE_NUMBERS_NOTE")),
 		MISC->Append(new MenuEntryExtras("LARGE_FOV", fovlarge, "LARGE_FOV_NOTE")),
@@ -420,37 +420,33 @@ namespace CTRPluginFramework {
 	////////////////////////
 	MenuFolder *DEFAULTC = new MenuFolder("Default Codes");
 
-	DEFAULTC->Append(new MenuEntry("Online Drop Lag Remover", OnlineDropLagRemover, "")),
-	DEFAULTC->Append(new MenuEntry("Change Rockbreak Particle", ChangeRockbreakParticle, "")),
-	DEFAULTC->Append(new MenuEntry("Drop Items Everywhere", DropItemsEverywhere, "")),
-	DEFAULTC->Append(new MenuEntry("Idle After Tree Shake/Cut", IdleAfterTreeShakeOrCut, "")),
-	DEFAULTC->Append(new MenuEntry("Don't Move NPC Back To Original Position", DontMoveNPCBackToOriginalPosition, "")),
-	DEFAULTC->Append(new MenuEntry("Replace Drop Functions", ReplaceDropFunctions, "")),
-	DEFAULTC->Append(new MenuEntry("Prevent Particle Crash", PreventParticleCrash, "")),
-	DEFAULTC->Append(new MenuEntry("Bypass Game Checks", BypassGameChecks, "")),
-	DEFAULTC->Append(new MenuEntry("Disable Non Seed Item Check", DisableNonSeedItemCheck, "")),
-	DEFAULTC->Append(new MenuEntry("Patch Drop Function", PatchDropFunction, "")),
+	DEFAULTC->Append(new MenuEntry("Online Drop Lag Remover", nullptr, OnlineDropLagRemoverEntry, "")),
+	DEFAULTC->Append(new MenuEntry("Change Rockbreak Particle", nullptr, ChangeRockbreakParticleEntry, "")),
+	DEFAULTC->Append(new MenuEntry("Drop Items Everywhere", nullptr, DropItemsEverywhereEntry, "")),
+	DEFAULTC->Append(new MenuEntry("Idle After Tree Shake/Cut", nullptr, IdleAfterTreeShakeOrCutEntry, "")),
+	DEFAULTC->Append(new MenuEntry("Don't Move NPC Back To Original Position", nullptr, DontMoveNPCBackToOriginalPositionEntry, "")),
+	DEFAULTC->Append(new MenuEntry("Replace Drop Functions", nullptr, ReplaceDropFunctionsEntry, "")),
+	DEFAULTC->Append(new MenuEntry("Prevent Particle Crash", nullptr, PreventParticleCrashEntry, "")),
+	DEFAULTC->Append(new MenuEntry("Bypass Game Checks", nullptr, BypassGameChecksEntry, "")),
+	DEFAULTC->Append(new MenuEntry("Disable Non Seed Item Check", nullptr, DisableNonSeedItemCheckEntry, "")),
+	DEFAULTC->Append(new MenuEntry("Patch Drop Function", nullptr, PatchDropFunctionEntry, "")),
 
-	DEFAULTC->Append(new MenuEntry("Disable Open Save Menu With Start Button", DisableOpenSaveMenuWithStartButton, "")),
-	DEFAULTC->Append(new MenuEntry("Disable Catalog Search Function", DisableCatalogSearchFunction, "")),
-	DEFAULTC->Append(new MenuEntry("Fix Invalid Pickup Crash", FixInvalidPickupCrash, "")),
-	DEFAULTC->Append(new MenuEntry("Fix Invalid Drop/Plant Crash", FixInvalidDropPlantCrash, "")),
-	DEFAULTC->Append(new MenuEntry("Fix Invalid Sprite Crash", FixInvalidSpriteCrash, "")),
-	DEFAULTC->Append(new MenuEntry("Fix Invalid Give Item Crash", FixInvalidGiveItemCrash, "")),
-	DEFAULTC->Append(new MenuEntry("Fix Invalid Hole Crash", FixInvalidHoleCrash, "")),
-	DEFAULTC->Append(new MenuEntry("Fix Invalid Item Crash", FixInvalidItemCrash, "")),
-	DEFAULTC->Append(new MenuEntry("Convert Flower From Seed Item To Normal Item", ConvertFlowerFromSeedItemToNormalItem, "")),
-	DEFAULTC->Append(new MenuEntry("Set Seed Item Names", SetSeedItemNames, "")),
-	DEFAULTC->Append(new MenuEntry("Set Item Replacement Rules", SetItemReplacementRules, "")),
-	DEFAULTC->Append(new MenuEntry("Set Drop Rules", SetDropRules, "")),
-	DEFAULTC->Append(new MenuEntry("Set Plant Rules", SetPlantRules, "")),
-	DEFAULTC->Append(new MenuEntry("Fix Particles In Puzzle League", FixParticlesInPuzzleLeague, "")),
-	DEFAULTC->Append(new MenuEntry("Set Custom Sprites For Seed Items And Pro Designs", SetCustomSpritesForSeedItemsAndProDesigns, "")),
+	DEFAULTC->Append(new MenuEntry("Disable Open Save Menu With Start Button", nullptr, DisableOpenSaveMenuWithStartButton, "")),
+	DEFAULTC->Append(new MenuEntry("Disable Catalog Search Function", nullptr, DisableCatalogSearchFunction, "")),
+	DEFAULTC->Append(new MenuEntry("Fix Invalid Pickup Crash", nullptr, FixInvalidPickupCrash, "")),
+	DEFAULTC->Append(new MenuEntry("Fix Invalid Drop/Plant Crash", nullptr, FixInvalidDropPlantCrash, "")),
+	DEFAULTC->Append(new MenuEntry("Fix Invalid Sprite Crash", nullptr, FixInvalidSpriteCrash, "")),
+	DEFAULTC->Append(new MenuEntry("Fix Invalid Give Item Crash", nullptr, FixInvalidGiveItemCrash, "")),
+	DEFAULTC->Append(new MenuEntry("Fix Invalid Hole Crash", nullptr, FixInvalidHoleCrash, "")),
+	DEFAULTC->Append(new MenuEntry("Fix Invalid Item Crash", nullptr, FixInvalidItemCrash, "")),
+	DEFAULTC->Append(new MenuEntry("Convert Flower From Seed Item To Normal Item", nullptr, ConvertFlowerFromSeedItemToNormalItem, "")),
+	DEFAULTC->Append(new MenuEntry("Set Seed Item Names", nullptr, SetSeedItemNames, "")),
+	DEFAULTC->Append(new MenuEntry("Set Item Replacement Rules", nullptr, SetItemReplacementRules, "")),
+	DEFAULTC->Append(new MenuEntry("Set Drop Rules", nullptr, SetDropRules, "")),
+	DEFAULTC->Append(new MenuEntry("Set Plant Rules", nullptr, SetPlantRules, "")),
+	DEFAULTC->Append(new MenuEntry("Fix Particles In Puzzle League", nullptr, FixParticlesInPuzzleLeague, "")),
+	DEFAULTC->Append(new MenuEntry("Set Custom Sprites For Seed Items And Pro Designs", nullptr, SetCustomSpritesForSeedItemsAndProDesigns, "")),
 	menu->Append(DEFAULTC);
-
-	for (MenuEntry *entry : DEFAULTC->GetEntryList()) {
-		entry->Enable();
-	}
 
 	////////////////////
 	/*Dev Codes Folder*/
