@@ -1,5 +1,4 @@
-#ifndef ADDRESS_HPP
-#define ADDRESS_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 
@@ -50,4 +49,3 @@ namespace CTRPluginFramework {
 			};	
 	};
 }
-#endif

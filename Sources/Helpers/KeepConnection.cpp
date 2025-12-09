@@ -147,7 +147,8 @@ namespace CTRPluginFramework {
 			return;
 		}
 
-		//Address(0x1B6C28).Call<void>();
+		//0x1B6C28.Call<void>();
+		//return;
 
 		static Address sendData1(0x617D20);
 		static Address sendData2(0x60758C);

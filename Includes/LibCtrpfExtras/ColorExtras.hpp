@@ -1,5 +1,4 @@
-#ifndef COLOR_EXTRAS_HPP
-#define COLOR_EXTRAS_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include <cstdarg>
@@ -23,4 +22,3 @@ namespace CTRPluginFramework {
         static std::string Format(const char *fmt, ...);
     };
 }
-#endif

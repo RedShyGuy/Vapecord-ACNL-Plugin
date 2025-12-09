@@ -1,5 +1,4 @@
-#ifndef DROPPER_HPP
-#define DROPPER_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include "Helpers/GameStructs.hpp"
@@ -42,4 +41,3 @@ namespace CTRPluginFramework {
 		int 				Search_Replace(int ItemsPerRun, std::vector<Item> ItemToSearch, Item ItemToPlace, u8 AnimID, bool ItemSequenceUsage, const std::string& msg = "", bool DisplayMSG = false);
 	}
 }
-#endif

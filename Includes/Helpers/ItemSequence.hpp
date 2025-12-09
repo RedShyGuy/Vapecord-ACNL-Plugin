@@ -1,5 +1,4 @@
-#ifndef ITEMSEQUENCE_HPP
-#define ITEMSEQUENCE_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include "Helpers/GameStructs.hpp"
@@ -14,4 +13,3 @@ namespace CTRPluginFramework {
 		void		OpenIS();
 	}
 }
-#endif

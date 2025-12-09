@@ -1,5 +1,4 @@
-#ifndef CHAT_HPP
-#define CHAT_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include "Item/Item.hpp"
@@ -40,4 +39,3 @@ namespace CTRPluginFramework {
 			CTRPluginFramework::Item itemID = { 0x7FFE, 0 };
 	};
 }
-#endif

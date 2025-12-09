@@ -283,7 +283,7 @@ namespace CTRPluginFramework {
 		ISLC->Append(new MenuEntryExtras("ISLAND_ACRE", acreMod, menuAcreMod, "ISLAND_ACRE_NOTE")),
 		ISLC->Append(new MenuEntryExtras("ISLAND_BUILDING", buildingMod, menuBuildingMod, "ISLAND_BUILDING_NOTE")),
 		ISLC->Append(EntryWithHotkey(new MenuEntryExtras("ISLAND_SAVER", IslandSaver, "ISLAND_SAVER_NOTE"), { 
-			HotkeyExtras(Key::L | Key::Y, "Open Menu")
+			HotkeyExtras(Key::L | Key::Y, "OPEN_MENU")
 		})),
 		menu->Append(ISLC);
 

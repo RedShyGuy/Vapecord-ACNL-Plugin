@@ -1,5 +1,4 @@
-#ifndef HOTKEY_EXTRAS_HPP
-#define HOTKEY_EXTRAS_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include "Language.hpp"
@@ -21,4 +20,3 @@ namespace CTRPluginFramework {
         }
     };
 }
-#endif

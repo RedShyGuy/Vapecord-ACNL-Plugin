@@ -1,5 +1,4 @@
-#ifndef CHECKS_HPP
-#define CHECKS_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include "Helpers/GameStructs.hpp"
@@ -25,5 +24,3 @@ namespace CTRPluginFramework {
     const char* SetProDesignStyle(Item *ItemID, u32 data, u32 data2);
     bool FruitStacking(u32 InvAddress, int slot, Item *item, u32 ItemLock, u32 ItemToReplace);
 }
-
-#endif

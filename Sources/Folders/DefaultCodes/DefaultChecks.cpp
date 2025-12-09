@@ -347,7 +347,7 @@ namespace CTRPluginFramework {
 		*/
 
 		/*static Hook titleHook, textHook;
-		static const Address warningTXT(0x2F319C);
+		static const warningTXT(0x2F319C);
 		SetHook(titleHook, warningTXT.addr, (u32)SetTitle, USE_LR_TO_RETURN);
 		SetHook(textHook, warningTXT.addr + 0xA8, (u32)SetText, USE_LR_TO_RETURN);*/
 

@@ -1,5 +1,4 @@
-#ifndef ACMESSAGEBOX_HPP
-#define ACMESSAGEBOX_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 
@@ -12,4 +11,3 @@ namespace CTRPluginFramework {
         void            Notify(const std::string& str);
 	}
 }
-#endif

@@ -38,8 +38,10 @@ namespace CTRPluginFramework {
 	}
 
 	void Game::ResetValueDisplay(void) {
-		static const Address reset(0x951722); 
-		Process::Write8(reset.addr, 0);
+		static Address disp(0x2912B8); 
+		static Address reset = disp.MoveOffset(0x28);
+
+		Process::Write8(*(u32 *)(reset.addr) + 0xA, 0);
 	}
 
 	bool Game::SetValueDisplay(u8 type) {

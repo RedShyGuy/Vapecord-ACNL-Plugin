@@ -1,5 +1,4 @@
-#ifndef LANGUAGE_HPP
-#define LANGUAGE_HPP
+#pragma once
 
 #include <string>
 #include <vector>
@@ -38,4 +37,3 @@ namespace CTRPluginFramework {
         const std::string& getCurrentLang() const { return currentLang; }
     };
 }
-#endif

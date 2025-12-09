@@ -1,5 +1,4 @@
-#ifndef GAME_HPP
-#define GAME_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include "Helpers/GameStructs.hpp"
@@ -117,4 +116,3 @@ namespace CTRPluginFramework {
 		return val;
 	}
 }
-#endif

@@ -1,5 +1,4 @@
-#ifndef NPC_HPP
-#define NPC_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include "IDList.hpp"
@@ -32,4 +31,3 @@ namespace CTRPluginFramework {
       void GetLoadedPNPC(std::vector<NPCdata> &vec);
   }
 }
-#endif

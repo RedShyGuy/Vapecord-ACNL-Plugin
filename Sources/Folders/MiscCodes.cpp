@@ -135,7 +135,11 @@ namespace CTRPluginFramework {
 		*/
 
 		u32 musicID = *(u32 *)(musicData + 8);
-		OSD::Notify(Utils::Format("Now Playing: %08X", musicID), Color(0x00FF00FF));
+		if (musicID <= 0xFF) {
+			OSD::Notify(Utils::Format("Now Playing: %s", IDList::GetMusicName(musicID)), Color(0x00FF00FF));
+		} else {
+			OSD::Notify(Utils::Format("Now Playing: %08X", musicID), Color(0x00FF00FF));
+		}
 
 		const HookContext &curr = HookContext::GetCurrent();
         static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));

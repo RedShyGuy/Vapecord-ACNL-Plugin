@@ -1,5 +1,4 @@
-#ifndef RUNTIMECONTEXT_HPP
-#define RUNTIMECONTEXT_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include "RuntimeContext.hpp"
@@ -27,4 +26,3 @@ namespace CTRPluginFramework {
             void setIndoors(bool value);
     };
 }
-#endif

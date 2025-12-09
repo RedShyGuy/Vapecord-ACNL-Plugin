@@ -103,14 +103,14 @@ namespace CTRPluginFramework {
 
 			if (pos != std::string::npos) {
 				if (!hasPartial) {
-					partialMatch = {name.c_str(), id};
+					partialMatch = {name, id};
 					hasPartial = true;
 				}
 			}
 
 			// exact match
 			if (name == keyword) {
-				foundItem = {name.c_str(), id};
+				foundItem = {name, id};
 				return true;
 			}
 		}
@@ -127,7 +127,7 @@ namespace CTRPluginFramework {
         for (u16 id = 0; id <= 0x372B; ++id) {
             Item item(id);
             if (item.GetName().find(keyword) != std::string::npos) {
-                foundItems.push_back(ItemNamePack{item.GetName().c_str(), id});
+                foundItems.push_back(ItemNamePack{item.GetName(), id});
             }
         }
         return !foundItems.empty();

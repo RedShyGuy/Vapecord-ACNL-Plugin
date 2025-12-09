@@ -1,5 +1,4 @@
-#ifndef UTILS_EXTRAS_HPP
-#define UTILS_EXTRAS_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include <cstdarg>
@@ -34,4 +33,3 @@ namespace CTRPluginFramework {
         }
     };
 }
-#endif

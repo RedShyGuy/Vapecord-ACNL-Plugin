@@ -1,5 +1,4 @@
-#ifndef MENU_FOLDER_EXTRAS_HPP
-#define MENU_FOLDER_EXTRAS_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include "Language.hpp"
@@ -68,4 +67,3 @@ namespace CTRPluginFramework {
         }
     };
 }
-#endif

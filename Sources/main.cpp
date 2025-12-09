@@ -5,13 +5,17 @@
 #include "Helpers/ItemSequence.hpp"
 #include "Helpers/Game.hpp"
 #include "cheats.hpp"
+#include "Pretendo/Pretendo.hpp"
+#include "Pretendo/PatternManager.hpp"
 
 namespace CTRPluginFramework {
 	static const std::string NOTE =
         std::string(
 R"(Creator: Kwadukathole (Lukas)
 
-Code Credits: Nico, Jay, Levi, Slattz, Kominost, Elominator and more
+Cheat Credits: Nico, Jay, Levi, Slattz, Kominost, Elominator and more
+
+Code Credits: PabloMK7, Jon & DaniElectra (Pretendo) and more
 
 Translators: みるえもん & みなと(Japanese), im a book(spanish), Fedecrash02(italian), Youssef, Arisa, & Lenoch(french), bkfirmen & Toby(german), Soopoolleaf(korean)
 
@@ -91,7 +95,7 @@ Translators: みるえもん & みなと(Japanese), im a book(spanish), Fedecras
 	int	main(void) {
 		std::string region = Address::LoadRegion();
 
-		PluginMenu *menu = new PluginMenu(Color::White << "ACNL Vapecord Plugin " << region, majorV, minorV, revisV, NOTE);
+		PluginMenu *menu = new PluginMenu(Color::White << "ACNL Vapecord Plugin " << region << " Beta", majorV, minorV, revisV, NOTE);
 		menu->SynchronizeWithFrame(true);
 
 	//If title isn't ACNL
@@ -114,7 +118,7 @@ Translators: みるえもん & みなと(Japanese), im a book(spanish), Fedecras
 
 		ItemSequence::Init();
 	//keeps internet connection when menu is opened
-		InitKeepConnection();
+		//InitKeepConnection();
 
 		SetupLanguage(false);
 	//Load MenuFolders and Entrys (located in MenuCreate.cpp)
@@ -122,8 +126,16 @@ Translators: みるえもん & みなと(Japanese), im a book(spanish), Fedecras
 
 	//Load Callbacks
 		menu->Callback(IndoorsSeedItemCheck);
-		menu->OnNewFrame = SendPlayerData;
+		//menu->OnNewFrame = SendPlayerData;
 		Process::exceptionCallback = CustomExceptionHandler;
+
+	//Patch Pretendo + RCE fix
+        PatternManager pm;
+        initPretendoPatches(pm);
+
+        pm.Perform();
+
+        enablePretendoPatches();
 
 	//Run Menu Loop
 		menu->Run();

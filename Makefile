@@ -19,6 +19,7 @@ INCLUDES	:= 	Includes \
 				Includes/LibCtrpfExtras \
 				Includes/Address \
 				Includes/Item \
+				Includes/Pretendo \
 				
 SOURCES 	:= 	Sources \
                 Sources/Folders \
@@ -30,6 +31,7 @@ SOURCES 	:= 	Sources \
 				Sources/LibCtrpfExtras \
 				Sources/Plugin \
 				Sources/Item \
+				Sources/Pretendo \
 
 PSF 		:= 	$(notdir $(TOPDIR)).plgInfo
 

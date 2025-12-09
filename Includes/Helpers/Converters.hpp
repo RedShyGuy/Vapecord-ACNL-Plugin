@@ -1,5 +1,4 @@
-#ifndef CONVERTERS_HPP
-#define CONVERTERS_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include <array>
@@ -37,4 +36,3 @@ namespace CTRPluginFramework {
         }
     }
 }
-#endif

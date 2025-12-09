@@ -1,5 +1,4 @@
-#ifndef INVENTORY_HPP
-#define INVENTORY_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include "Helpers/GameStructs.hpp"
@@ -25,4 +24,3 @@ namespace CTRPluginFramework {
 		void		ReloadIcons(void);
 	}
 }
-#endif

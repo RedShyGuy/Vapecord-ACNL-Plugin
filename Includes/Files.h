@@ -1,5 +1,4 @@
-#ifndef FILES_H
-#define FILES_H
+#pragma once
 
 #define PATH_PRESET		    "E:/Vapecord/Data/PreSet"
 #define PATH_ACRE		    "E:/Vapecord/Data/Acre/acre%X.bin"
@@ -25,5 +24,3 @@
 #define V_DATA              "E:/Vapecord/Data"
 
 #define DISCORDINV		    "discord.gg/QwqdBpKWf3"
-
-#endif

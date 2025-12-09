@@ -1,5 +1,4 @@
-#ifndef GAMEKEYBOARD_HPP
-#define GAMEKEYBOARD_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include "Helpers/GameStructs.hpp"
@@ -17,4 +16,3 @@ namespace CTRPluginFramework {
 		void 				SendMessage(const std::string& str);
 	}
 }
-#endif

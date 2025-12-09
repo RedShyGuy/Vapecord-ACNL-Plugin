@@ -151,7 +151,9 @@ namespace CTRPluginFramework {
 //If music is valid
 	bool IDList::MusicValid(u16 musicID) {
 		if(musicID < 0xFFF) {
-			if(musicID > 0xDB && musicID < 0x10B) {
+			if (RANGE(musicID, 0xDC, 0xE3) || 
+					IS(musicID, 0xE7) || 
+						RANGE(musicID, 0xEB, 0xFF)) {
 				return false;
 			}
 			
@@ -159,6 +161,15 @@ namespace CTRPluginFramework {
 		}
 		
 		return false;
+	}
+
+	std::string IDList::GetMusicName(u16 musicID) {
+		for (const ID_U8Data& music : Music) {
+			if(music.ID == musicID) {
+				return std::string(music.Name);
+			}
+		}
+		return Language::getInstance()->get("INVALID");
 	}
 
 //Get Building Name

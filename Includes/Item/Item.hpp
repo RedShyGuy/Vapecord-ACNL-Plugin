@@ -1,5 +1,4 @@
-#ifndef ITEM_HPP
-#define ITEM_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 
@@ -56,7 +55,7 @@ namespace CTRPluginFramework {
     };
 
     struct ItemNamePack {
-		const char* name;
+		std::string name;
 		u16 ID;
 	};
 
@@ -64,4 +63,3 @@ namespace CTRPluginFramework {
 }
 
 #pragma pack(pop)
-#endif

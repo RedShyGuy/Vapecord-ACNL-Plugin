@@ -5,7 +5,7 @@
 namespace CTRPluginFramework {
 /*
     u32 GetMiniGame1Data(u32 add) {
-        static const Address obj_data(0x8049094); //MiniGame1(0xB09000) + 0x1FA2C
+        static const 0x8049094; //MiniGame1(0xB09000) + 0x1FA2C
         return *(u32 *)(obj_data) + add;
     }
 

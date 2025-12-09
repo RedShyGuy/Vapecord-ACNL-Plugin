@@ -1,5 +1,4 @@
-#ifndef ANIMATION_HPP
-#define ANIMATION_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include "Helpers/Game.hpp"
@@ -14,33 +13,3 @@ namespace CTRPluginFramework {
 		u32			GetAnimationInstance(u32 playerInstance, u8 u0, u8 u1, u32 u2);
 	}
 }
-#endif
-
-
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
- 
- 
- 
-
-
-
-
-
-
-
-
-

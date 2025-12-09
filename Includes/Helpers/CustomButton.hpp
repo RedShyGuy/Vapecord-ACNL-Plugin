@@ -1,5 +1,4 @@
-#ifndef CUSTOMBUTTON_HPP
-#define CUSTOMBUTTON_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 
@@ -14,4 +13,3 @@ namespace CTRPluginFramework {
         void RandomOutfit(u32 InvData);
     }
 }
-#endif

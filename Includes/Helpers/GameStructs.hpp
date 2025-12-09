@@ -1,5 +1,4 @@
-#ifndef GAMESTRUCTS_HPP
-#define GAMESTRUCTS_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include "Item/Item.hpp"
@@ -1829,4 +1828,3 @@ namespace CTRPluginFramework {
 }
 
 #pragma pack(pop)
-#endif

@@ -1,5 +1,4 @@
-#ifndef KEYSEQUENCE_HPP
-#define KEYSEQUENCE_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 
@@ -26,5 +25,3 @@ namespace CTRPluginFramework
             int         _indexInSequence;
     };
 }
-
-#endif

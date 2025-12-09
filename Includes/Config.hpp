@@ -1,3 +1,5 @@
+#pragma once
+
 #include <CTRPluginFramework.hpp>
 
 #define majorV 2

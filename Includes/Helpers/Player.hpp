@@ -1,5 +1,4 @@
-#ifndef PLAYER_HPP
-#define PLAYER_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include "Helpers/GameStructs.hpp"
@@ -33,4 +32,3 @@ namespace CTRPluginFramework {
 		void 			EditName(u8 pIndex, const std::string& name);
 	};
 }
-#endif

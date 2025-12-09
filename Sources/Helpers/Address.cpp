@@ -17,7 +17,7 @@ namespace CTRPluginFramework {
 			break;
 			case TID_EUR:
 				regionName = "EUR";
-				regionId = Region::USAWA;
+				regionId = Region::EUR;
 			break;
 			case TID_EURWA:
 			case TID_EURWL:

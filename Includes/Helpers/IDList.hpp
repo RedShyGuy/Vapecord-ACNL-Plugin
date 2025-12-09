@@ -1,5 +1,4 @@
-#ifndef IDLIST_HPP
-#define IDLIST_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include "Helpers/GameStructs.hpp"
@@ -66,6 +65,7 @@ namespace CTRPluginFramework {
 	extern const ID_U8Data Buildings[205];
 	extern const SPAmiiboInfo amiiboSPVillagers[55];
     extern const AmiiboInfo amiiboVillagers[399];
+	extern const ID_U8Data Music[256];
 
 	namespace IDList {
 		bool						IsHalfAcre(u8 acreID);
@@ -77,9 +77,8 @@ namespace CTRPluginFramework {
 		bool 						SnakeValid(u16 snakeID);
 		bool 						EmotionValid(u8 emotionID);
 		std::string 				GetBuildingName(u8 ID);
+		std::string					GetMusicName(u16 musicID);
 		std::string 				GetRoomName(u8 ID);
 		bool		 				ValidID(u16 ID, u16 StardID, u16 EndID);
 	}
 }
-#endif
-

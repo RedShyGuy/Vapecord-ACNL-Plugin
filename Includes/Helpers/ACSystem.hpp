@@ -1,5 +1,4 @@
-#ifndef ACSYSTEM_HPP
-#define ACSYSTEM_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include "Helpers/Game.hpp"
@@ -58,4 +57,3 @@ namespace CTRPluginFramework {
 		void 	ToggleInitiative(int pPos, int InitPos, int weekDay, bool finish);
 	}
 }
-#endif

@@ -1,5 +1,4 @@
-#ifndef CROEDITING_HPP
-#define CROEDITING_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 
@@ -40,4 +39,3 @@ namespace CTRPluginFramework {
         };	
     }
 }
-#endif
