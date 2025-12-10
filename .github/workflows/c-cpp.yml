@@ -22,7 +22,7 @@ jobs:
     - name: Setup libctrpf
       run: |
         mkdir -p /opt/devkitpro/libctrpf
-        tar -xjf libctrpf-0.8.0.tar.bz2
+        tar -xjf libctrpf.tar.bz2
         cp -r libctrpf/include /opt/devkitpro/libctrpf/
         cp -r libctrpf/lib /opt/devkitpro/libctrpf/
 
@@ -44,6 +44,7 @@ jobs:
         path: |
           *.elf
           *.3gx
+
 
 
 
