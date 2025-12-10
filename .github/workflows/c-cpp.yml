@@ -1,35 +1,40 @@
-name: C/C++ CI
+name: Build 3GX Plugin
 
 on:
   push:
-    # ignore paths that don't affect this workflow
-    paths-ignore:
-      - '**.md'
-      - '**.sh'
-      - '**.bat'
-    branches: [ "master" ]
+    branches: ["master"]
   pull_request:
-    branches: [ "master" ]
+    branches: ["master"]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     container: devkitpro/devkitarm
 
     steps:
     - uses: actions/checkout@v4
-    - name: make plugin
-      working-directory: ${{github.workspace}}
-      run: |
-           chmod +x 3gxtool
-           cp 3gxtool /opt/devkitpro/tools/bin/
-           make
 
-    - name: Upload Binary
+    - name: Download libctrpf
+      run: |
+        wget -O libctrpf.tar.bz2 "https://gitlab.com/-/project/35748837/uploads/8d2a3dc282f32b6a75d5f6abaeafe88f/libctrpf-0.8.0.tar.bz2"
+        tar -xvjf libctrpf.tar.bz2
+        echo "CTRPF_PATH=$PWD/libctrpf-0.8.0" >> $GITHUB_ENV
+
+    - name: Download 3gxtool
+      run: |
+        wget -O 3gxtool.exe "https://gitlab.com/-/project/35893975/uploads/f5d78f6d718860022109e787b470bbb9/3gxtool.exe"
+        chmod +x 3gxtool.exe
+        cp 3gxtool.exe /opt/devkitpro/tools/bin/3gxtool
+
+    - name: Build Plugin
+      env:
+        CTRPFLIB: ${{ env.CTRPF_PATH }}
+      run: make
+
+    - name: Upload Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: binary
+        name: Vapecord-ACNL-Plugin
         path: |
-              Vapecord-ACNL-Plugin.elf
-              Vapecord-ACNL-Plugin.3gx
+          *.elf
+          *.3gx
