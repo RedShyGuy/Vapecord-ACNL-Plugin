@@ -1,5 +1,5 @@
 #include "cheats.hpp"
-#include "RegionCodes.hpp"
+
 #include "Helpers/Game.hpp"
 #include "Helpers/Player.hpp"
 #include "Helpers/Dropper.hpp"
@@ -7,42 +7,50 @@
 #include "Helpers/Inventory.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/IDList.hpp"
+#include "RuntimeContext.hpp"
 #include "Color.h"
 
 namespace CTRPluginFramework {
 //Shops Always Open
 	void ShopsAlwaysOpen(MenuEntry *entry) {
-		static const Address shopretail(0x309348, 0x309430, 0x309344, 0x309344, 0x3093BC, 0x3093BC, 0x30935C, 0x30935C);
-		static const Address shopnookling(0x711B14, 0x710FC4, 0x710B1C, 0x710AF4, 0x7102C8, 0x7102A0, 0x70FE70, 0x70FE70);
-		static const Address shopgarden(0x711BCC, 0x71107C, 0x710BD4, 0x710BAC, 0x710380, 0x710358, 0x70FF28, 0x70FF28);
-		static const Address shopables(0x713EB0, 0x713360, 0x712EB8, 0x712E90, 0x712664, 0x71263C, 0x71220C, 0x71220C);
-		static const Address shopshampoodle(0x71D42C, 0x71C774, 0x71C434, 0x71C40C, 0x71BBE0, 0x71BBB8, 0x71B788, 0x71B788);
-		static const Address shopkicks(0x71184C, 0x710CFC, 0x710854, 0x71082C, 0x710000, 0x70FFD8, 0x70FBA8, 0x70FBA8);   
-		static const Address shopnooks(0x71F654, 0x71E99C, 0x71E65C, 0x71E634, 0x71DE08, 0x71DDE0, 0x71D9B0, 0x71D9B0);
-		static const Address shopkatrina(0x718098, 0x717548, 0x7170A0, 0x717078, 0x71684C, 0x716824, 0x7163F4 ,0x7163F4);
-		static const Address shopredd(0x718444, 0x7178F4, 0x71744C, 0x717424, 0x716BF8, 0x716BD0, 0x7167A0, 0x7167A0);
+		static Address shopretail(0x309348);
+		static Address shopnookling(0x711B14);
+		static Address shopgarden(0x711BCC);
+		static Address shopables(0x713EB0);
+		static Address shopshampoodle(0x71D42C);
+		static Address shopkicks(0x71184C);   
+		static Address shopnooks(0x71F654);
+		static Address shopkatrina(0x718098);
+		static Address shopredd(0x718444);
 
-		const u32 ShopOpen[9] = { shopretail.addr, shopnookling.addr, shopgarden.addr, shopables.addr, shopshampoodle.addr, shopkicks.addr, shopnooks.addr, shopkatrina.addr, shopredd.addr };
+		static Address ShopOpen[9] = { 
+			shopretail, shopnookling, shopgarden, shopables, 
+			shopshampoodle, shopkicks, shopnooks, shopkatrina, shopredd 
+		};
 
 		if(entry->WasJustActivated()) {
-			for(int i = 0; i < 9; ++i)
-				Process::Patch(ShopOpen[i], 0xE3A00001);
+			for(int i = 0; i < 9; ++i) {
+				ShopOpen[i].Patch(0xE3A00001);
+			}
 		}
 		else if(!entry->IsActivated()) {
-			for(int i = 0; i < 9; ++i)
-				Process::Patch(ShopOpen[i], 0xE3A00000);
+			for(int i = 0; i < 9; ++i) {
+				ShopOpen[i].Unpatch();
+			}
 		}
     }
 
 //Disable Save Menus
 	void nonesave(MenuEntry *entry) {
+		static Address noSave(0x1A0980);
+
 		if(entry->WasJustActivated()) {
-			Process::Patch(Code::nosave.addr, 0xE1A00000);
-			save = true;
+			noSave.Patch(0xE1A00000);
+			RuntimeContext::getInstance()->setSaveMenuDisabled(true);
 		}
 		else if(!entry->IsActivated()) {
-			Process::Patch(Code::nosave.addr, 0xE8900006);
-			save = false;
+			noSave.Unpatch();
+			RuntimeContext::getInstance()->setSaveMenuDisabled(false);
 		}
 	}
 
@@ -59,56 +67,59 @@ namespace CTRPluginFramework {
 	}
 //Can't Fall In Holes Or Pitfalls /*Credits to Nico*/
 	void noTrap(MenuEntry *entry) {
-		static const Address notraps1(0x65A668, 0x659B90, 0x6596A0, 0x6596A0, 0x659160, 0x659160, 0x658D08, 0x658D08);
-		static const Address notraps2(0x6789E4, 0x677F0C, 0x677A1C, 0x677A1C, 0x6774DC, 0x6774DC, 0x677084, 0x677084);
+		static Address notraps1(0x65A668);
+		static Address notraps2(0x6789E4);
 		
 		if(entry->WasJustActivated()) {
-			Process::Patch(notraps1.addr, 0xEA000014);
-			Process::Patch(notraps2.addr, 0xEA00002D);
+			notraps1.Patch(0xEA000014);
+			notraps2.Patch(0xEA00002D);
 		}
 		else if(!entry->IsActivated()) {
-			Process::Patch(notraps1.addr, 0x1A000014);
-			Process::Patch(notraps2.addr, 0x1A00002D);
+			notraps1.Unpatch();
+			notraps2.Unpatch();
 		}
 	}
 
 	void SetSpotState(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 
 		const std::vector<std::string> spotVEC = {
-			Language->Get("VECTOR_QUICK_LOCK_SPOT"), 
-			Language->Get("VECTOR_QUICK_UNLOCK_SPOT"),
-			Language->Get("VECTOR_QUICK_LOCK_MAP"),
-			Language->Get("VECTOR_QUICK_UNLOCK_MAP")
+			Language::getInstance()->get("VECTOR_QUICK_LOCK_SPOT"), 
+			Language::getInstance()->get("VECTOR_QUICK_UNLOCK_SPOT"),
+			Language::getInstance()->get("VECTOR_QUICK_LOCK_MAP"),
+			Language::getInstance()->get("VECTOR_QUICK_UNLOCK_MAP")
 		};
 
 		u32 x = 0, y = 0;
 		PlayerClass::GetInstance()->GetWorldCoords(&x, &y);
 
-		if(bypassing) 
+		if(bypassing) {
 			Dropper::DropItemLock(false);
+		}
 
-		Keyboard KB(Language->Get("KEY_CHOOSE_OPTION"), spotVEC);
+		Keyboard KB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), spotVEC);
 		switch(KB.Open()) {
 			default: break;
 			case 0: {
-				if(GameHelper::CreateLockedSpot(0x12, x, y, GameHelper::RoomCheck(), true) == 0xFFFFFFFF) 
-					OSD::Notify("Error: Too many locked spots are already existing!");			
-				else 
+				if(Game::CreateLockedSpot(0x12, x, y, Game::GetRoom(), true) == 0xFFFFFFFF) {
+					OSD::Notify("Error: Too many locked spots are already existing!");		
+				}	
+				else {
 					OSD::Notify("Locked Spot");
+				}
 			} break;
 
 			case 1: {
-				GameHelper::ClearLockedSpot(x, y, GameHelper::RoomCheck(), 4);
+				Game::ClearLockedSpot(x, y, Game::GetRoom(), 4);
 				OSD::Notify("Unlocked Spot");
 			} break;
 
 			case 2: {
 				x = 0, y = 0;
-				while(GameHelper::CreateLockedSpot(0x12, 0x10 + x, 0x10 + y, GameHelper::RoomCheck(), true) != 0xFFFFFFFF) {
+				while(Game::CreateLockedSpot(0x12, 0x10 + x, 0x10 + y, Game::GetRoom(), true) != 0xFFFFFFFF) {
 					x++;
 					if(x % 6 == 2) { 
 						y++; 
@@ -126,36 +137,39 @@ namespace CTRPluginFramework {
 
 				while(res) {
 					while(res) {
-						if(GameHelper::GetItemAtWorldCoords(x, y)) {
-							if(GameHelper::GetLockedSpotIndex(x, y, GameHelper::RoomCheck()) != 0xFFFFFFFF) {
-								GameHelper::ClearLockedSpot(x, y, GameHelper::RoomCheck(), 4);
+						if(Game::GetItemAtWorldCoords(x, y)) {
+							if(Game::GetLockedSpotIndex(x, y, Game::GetRoom()) != 0xFFFFFFFF) {
+								Game::ClearLockedSpot(x, y, Game::GetRoom(), 4);
 								Sleep(Milliseconds(40));
 							}
 						}
-						else 
+						else {
 							res = false;
+						}
 
 						y++;
 					}
 					res = true;
 					y = 0x10;
 					x++;
-					if(!GameHelper::GetItemAtWorldCoords(x, y)) 
+					if(!Game::GetItemAtWorldCoords(x, y)) {
 						res = false;
+					}
 				}
 				OSD::Notify("Unlocked Map");
 			} break;
 		}
 
 		Sleep(Milliseconds(5));
-		if(bypassing) 
+		if(bypassing) {
 			Dropper::DropItemLock(true);
+		}
 	}
 
 //search and replace
 	void SearchReplace(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 
@@ -164,13 +178,15 @@ namespace CTRPluginFramework {
 		Item ItemToSearch = {0x7FFE, 0};
 		Item ItemToReplace = {0x7FFE, 0};
 		
-		if(!Wrap::KB<u32>(Language->Get("QUICK_MENU_SEARCH_REPLACE_SEARCH"), true, 8, *(u32 *)&ItemToSearch, 0x7FFE)) 
+		if(!Wrap::KB<u32>(Language::getInstance()->get("QUICK_MENU_SEARCH_REPLACE_SEARCH"), true, 8, *(u32 *)&ItemToSearch, 0x7FFE)) {
 			return;
+		}
 		
-		if(!Wrap::KB<u32>(Language->Get("QUICK_MENU_SEARCH_REPLACE_REPLACE"), true, 8, *(u32 *)&ItemToReplace, *(u32 *)&ItemToReplace)) 
+		if(!Wrap::KB<u32>(Language::getInstance()->get("QUICK_MENU_SEARCH_REPLACE_REPLACE"), true, 8, *(u32 *)&ItemToReplace, *(u32 *)&ItemToReplace)) {
 			return;
+		}
 		
-		if(!IDList::ItemValid(ItemToReplace)) {
+		if(!ItemToReplace.isValid()) {
 			OSD::Notify("Item Is Invalid!", Color::Red);
 			return;
 		}
@@ -189,12 +205,12 @@ namespace CTRPluginFramework {
 //remove all town items
 	void RemoveItemsCheat(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
 			return;
 		}
 
-		if((MessageBox(Language->Get("REMOVE_ITEM_WARNING"), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
-			GameHelper::RemoveItems(true, 0, 0, 0xFF, 0xFF, true, true);
+		if((MessageBox(Language::getInstance()->get("REMOVE_ITEM_WARNING"), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
+			Game::RemoveItems(true, 0, 0, 0xFF, 0xFF, true, true);
 		}
 	}
 
@@ -206,10 +222,12 @@ namespace CTRPluginFramework {
 			
 			while(res) {
 				while(res) {
-					if(GameHelper::GetItemAtWorldCoords(x, y)) 
-						GameHelper::WaterFlower(x, y);
-					else 
+					if(Game::GetItemAtWorldCoords(x, y)) {
+						Game::WaterFlower(x, y);
+					}
+					else {
 						res = false;
+					}
 
 					y++;
 				}
@@ -217,8 +235,10 @@ namespace CTRPluginFramework {
 				res = true;
 				y = 0x10;
 				x++;
-				if(!GameHelper::GetItemAtWorldCoords(x, y)) 
+
+				if(!Game::GetItemAtWorldCoords(x, y)) {
 					res = false;
+				}
 			}
 			OSD::Notify("Success!");
 		}
@@ -226,13 +246,13 @@ namespace CTRPluginFramework {
 //Weed Remover
 	void weedremover(MenuEntry *entry) {	
 		const std::vector<std::string> weedopt = {
-			Language->Get("WEED_REMOVER_OFF"), 
-			Language->Get("WEED_REMOVER_ON")
+			Language::getInstance()->get("WEED_REMOVER_OFF"), 
+			Language::getInstance()->get("WEED_REMOVER_ON")
 		};
 		
 		static int size = 400;
 		if(entry->Hotkeys[0].IsPressed()) {
-			Keyboard KB(Language->Get("WEED_REMOVER_KEY"), weedopt);
+			Keyboard KB(Language::getInstance()->get("WEED_REMOVER_KEY"), weedopt);
 
 			switch(KB.Open()) {
 				case 0: size = 5000; break;
@@ -243,16 +263,19 @@ namespace CTRPluginFramework {
 		
 		else if(entry->Hotkeys[1].IsPressed()) {
 			int res = Dropper::Search_Replace(size, { {0x7C, 0}, {0x7D, 0}, {0x7E, 0}, {0x7F, 0}, {0xCC, 0}, {0xF8, 0} }, {0x7FFE, 0}, 0x3D, false, "Weed Removed!", true);
-			if(res == -1)
+			if(res == -1) {
 				OSD::Notify("Your player needs to be loaded!", Color::Red);
-			else if(res == -2) 
+			}
+			else if(res == -2) {
 				OSD::Notify("Only works outdoors!", Color::Red);
+			}
 		}
 	}
 //Edit Every Pattern
 	void editpattern(MenuEntry *entry) {
-		for(int i = 0; i < 10; ++i) 
+		for(int i = 0; i < 10; ++i) {
 			Player::StealDesign(i);
+		}
 
 		entry->Disable();
 	}
@@ -270,34 +293,34 @@ namespace CTRPluginFramework {
 /*Calculations copied from the ACNL Web Save Editor, credits goes to the creator*/
 	u32 GetTileOffset(int x, int y) {
 		const int Add = 64 * ((y / 8) * 8 * 2 + (x / 8)) + _GrassTile[(y % 8) * 8 + (x % 8)];
-		const u32 GrassStart = *(u32 *)(GameHelper::GetCurrentMap() + 0x28);
+		const u32 GrassStart = *(u32 *)(Game::GetCurrentMap() + 0x28);
 		return (GrassStart + Add);
 	}
 	
 	void grasscomplete(MenuEntry *entry) {		
 		const std::vector<std::string> GrassKB {
-			Language->Get("GRASS_EDITOR_FILL"),
-			Language->Get("GRASS_EDITOR_CLEAR")
+			Language::getInstance()->get("GRASS_EDITOR_FILL"),
+			Language::getInstance()->get("GRASS_EDITOR_CLEAR")
 		};
 		
-		if(!GameHelper::IsInRoom(0)) {
-			MessageBox(Color::Red << Language->Get("ONLY_TOWN_ERROR")).SetClear(ClearScreen::Top)();
+		if(!Game::IsGameInRoom(0)) {
+			MessageBox(Color::Red << Language::getInstance()->get("ONLY_TOWN_ERROR")).SetClear(ClearScreen::Top)();
 			return;
 		}
 		
-		const u32 GrassStart = *(u32 *)(GameHelper::GetCurrentMap() + 0x28);
-		Keyboard KB(Language->Get("GRASS_EDITOR_KB1") << "\n" << Color(0x228B22FF) << 
-					Language->Get("GRASS_EDITOR_KB2")  << "\n" << Color(0xCD853FFF) << 
-					Language->Get("GRASS_EDITOR_KB3"), GrassKB);
+		const u32 GrassStart = *(u32 *)(Game::GetCurrentMap() + 0x28);
+		Keyboard KB(Language::getInstance()->get("GRASS_EDITOR_KB1") << "\n" << Color(0x228B22FF) << 
+					Language::getInstance()->get("GRASS_EDITOR_KB2")  << "\n" << Color(0xCD853FFF) << 
+					Language::getInstance()->get("GRASS_EDITOR_KB3"), GrassKB);
 					
 		switch(KB.Open()) {
 			case 0:
 				std::memset((void *)GrassStart, -1, 0x2800);
-				GameHelper::ReloadRoom();
+				Game::ReloadRoom();
 			break;
 			case 1:
 				std::memset((void *)GrassStart, 0, 0x2800);
-				GameHelper::ReloadRoom();
+				Game::ReloadRoom();
 			break;
 			default: break;
 		}
@@ -309,7 +332,7 @@ namespace CTRPluginFramework {
 		static u8 type = 0;
 
 		if(entry->Hotkeys[0].IsPressed()) {
-			if(!GameHelper::IsInRoom(0)) {
+			if(!Game::IsGameInRoom(0)) {
 				OSD::Notify("Error: Only Works In Town!", Color::Red);
 				return;
 			}
@@ -321,8 +344,9 @@ namespace CTRPluginFramework {
 			}
 		}
 		
-		else if(entry->Hotkeys[1].IsPressed()) 
-			GameHelper::ReloadRoom();
+		else if(entry->Hotkeys[1].IsPressed()) {
+			Game::ReloadRoom();
+		}
 		
 		else if(entry->Hotkeys[2].IsPressed()) {
 			switch(opt) {
@@ -345,16 +369,16 @@ namespace CTRPluginFramework {
 	
 	bool CheckTimeInput(const void *input, std::string &error) {
 		const std::string TimeMode[5] = { 
-			Language->Get("TIME_MINUTE"),
-			Language->Get("TIME_HOUR"),
-			Language->Get("TIME_DAY"),
-			Language->Get("TIME_MONTH"),
-			Language->Get("TIME_YEAR")
+			Language::getInstance()->get("TIME_MINUTE"),
+			Language::getInstance()->get("TIME_HOUR"),
+			Language::getInstance()->get("TIME_DAY"),
+			Language::getInstance()->get("TIME_MONTH"),
+			Language::getInstance()->get("TIME_YEAR")
 		};
 
         u16 in = *static_cast<const u16 *>(input);
         if(in >= TimeMax[CurrTime]) {
-			error = Utils::Format(Language->Get("TIME_ERROR").c_str(), (TimeMax[CurrTime] - 1), TimeMode[CurrTime].c_str());
+			error = Utils::Format(Language::getInstance()->get("TIME_ERROR").c_str(), (TimeMax[CurrTime] - 1), TimeMode[CurrTime].c_str());
             return 0;
         }
 
@@ -363,37 +387,39 @@ namespace CTRPluginFramework {
 	
 	void TTKeyboard(MenuEntry *entry) {
 		const std::string TimeMode[5] = {
-			Language->Get("TIME_MINUTE"),
-			Language->Get("TIME_HOUR"),
-			Language->Get("TIME_DAY"),
-			Language->Get("TIME_MONTH"),
-			Language->Get("TIME_YEAR")
+			Language::getInstance()->get("TIME_MINUTE"),
+			Language::getInstance()->get("TIME_HOUR"),
+			Language::getInstance()->get("TIME_DAY"),
+			Language::getInstance()->get("TIME_MONTH"),
+			Language::getInstance()->get("TIME_YEAR")
 		};
 
 		std::vector<std::string> TTKB {
-			Language->Get("TIME_BACKWARDS"),
-			Language->Get("TIME_FORWARD")
+			Language::getInstance()->get("TIME_BACKWARDS"),
+			Language::getInstance()->get("TIME_FORWARD")
 		};
 		
 		u8 timedat[5] = { 0, 0, 0, 0, 0 };
 		Keyboard KB("", TTKB);
 		int ch = KB.Open();
-		if(ch < 0)
+		if(ch < 0) {
 			return;
+		}
 		
 		for(int i = 0; i < 5; ++i) {			
-			Keyboard KBS(Utils::Format(Language->Get("TIME_KB1").c_str(), TimeMode[i].c_str()));
+			Keyboard KBS(Utils::Format(Language::getInstance()->get("TIME_KB1").c_str(), TimeMode[i].c_str()));
 			KBS.IsHexadecimal(false);
 			KBS.SetMaxLength(2);
 			CurrTime = i;
 			KBS.SetCompareCallback(CheckTimeInput);
 
 			int cho = KBS.Open(timedat[i]);
-			if(cho < 0)
+			if(cho < 0) {
 				return;
+			}
 		}
 		
-		GameHelper::SetCurrentTime(ch, timedat[0], timedat[1], timedat[2], timedat[3], timedat[4]);
+		Game::SetCurrentTime(ch, timedat[0], timedat[1], timedat[2], timedat[3], timedat[4]);
 	}
 	
 	void TimeTravel(MenuEntry *entry) {
@@ -402,41 +428,46 @@ namespace CTRPluginFramework {
 		
 		if(entry->Hotkeys[0].IsDown() || entry->Hotkeys[0].IsPressed()) {
 			PressedTicks++;
-			if((PressedTicks < 50 ? (PressedTicks % 8) == 1 : (PressedTicks % 3) == 1) || PressedTicks > 100) 
-				GameHelper::SetCurrentTime(true, minute, 0, 0, 0, 0);
+			if((PressedTicks < 50 ? (PressedTicks % 8) == 1 : (PressedTicks % 3) == 1) || PressedTicks > 100) {
+				Game::SetCurrentTime(true, minute, 0, 0, 0, 0);
+			}
 		}
 		
 		else if(entry->Hotkeys[1].IsDown() || entry->Hotkeys[1].IsPressed()) {
 			PressedTicks++;
-			if((PressedTicks < 50 ? (PressedTicks % 8) == 1 : (PressedTicks % 3) == 1) || PressedTicks > 100) 
-				GameHelper::SetCurrentTime(false, minute, 0, 0, 0, 0);
+			if((PressedTicks < 50 ? (PressedTicks % 8) == 1 : (PressedTicks % 3) == 1) || PressedTicks > 100) {
+				Game::SetCurrentTime(false, minute, 0, 0, 0, 0);
+			}
 		}
 	//somehow doesnt work always?
-		else if(Controller::IsKeysReleased(entry->Hotkeys[0].GetKeys()) || Controller::IsKeysReleased(entry->Hotkeys[1].GetKeys())) 
+		else if(Controller::IsKeysReleased(entry->Hotkeys[0].GetKeys()) || Controller::IsKeysReleased(entry->Hotkeys[1].GetKeys())) {
 			PressedTicks = 0;
+		}
 	}
 
 	bool ThinkToBuriedItems(Item *item) {
-		if(((*item).Flags >> 12) == 8) 
-			(*item).Flags &= 0x0FFF;
+		if((item->Flags >> 12) == 8) {
+			item->Flags &= 0x0FFF;
+		}
 
 		const HookContext &curr = HookContext::GetCurrent();
-		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+		static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
 		return func.Call<bool>(item);
 	}
 
 	Item* PickBuriedItems(u32 pInstance, u8 wX, u8 wY) {
-		Item* item = GameHelper::GetItemAtWorldCoords(wX, wY);
-		if((item->Flags >> 12) == 8)
+		Item* item = Game::GetItemAtWorldCoords(wX, wY);
+		if((item->Flags >> 12) == 8) {
 			item->Flags &= 0x0FFF;
+		}
 
 		return item;
 	}
 
 	void BuriedInspector(MenuEntry *entry) {
 		static Hook BuriedHook, PickBuriedHook;
-		static const Address BuriedAddress(0x665534, 0x664A5C, 0x66456C, 0x66456C, 0x66402C, 0x66402C, 0x663BD4, 0x663BD4);
-		static const Address PickBuriedAddress(0x59A0BC, 0x5995D4, 0x599104, 0x599104, 0x5989F4, 0x5989F4, 0x5986C8, 0x5986C8);
+		static const Address BuriedAddress(0x665534);
+		static const Address PickBuriedAddress(0x59A0BC);
 
 		if(entry->WasJustActivated()) {
 			BuriedHook.Initialize(BuriedAddress.addr, (u32)ThinkToBuriedItems);

@@ -1,5 +1,4 @@
-#ifndef ANIMDATA_HPP
-#define ANIMDATA_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include "Helpers/GameStructs.hpp"
@@ -119,4 +118,3 @@ namespace CTRPluginFramework {
 			u8 pIndex;
 	};
 }
-#endif

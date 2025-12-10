@@ -1,5 +1,4 @@
-#ifndef SAVE_HPP
-#define SAVE_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include <type_traits>
@@ -57,4 +56,3 @@ namespace CTRPluginFramework {
 			static u32 s_SaveAddress;
 	};
 }
-#endif

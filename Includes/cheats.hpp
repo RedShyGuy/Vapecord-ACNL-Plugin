@@ -1,22 +1,15 @@
-#ifndef CHEATS_H
-#define CHEATS_H
+#pragma once
 
 #include <3ds.h>
 #include <CTRPluginFramework.hpp>
 #include "Helpers/GameStructs.hpp"
+#include "Address/Address.hpp"
+#include "Language.hpp"
 
 extern CTRPluginFramework::Item PickupSeederItemID;
 
 namespace CTRPluginFramework {
 	extern const std::string fullV;
-
-	extern bool turbo;
-	extern bool fovbool;
-	extern bool save;
-
-	extern const std::string g_Empty;
-	
-	extern const Color pColor[];
 
 //Save Codes Folder
 	void townnamechanger(MenuEntry* entry);
@@ -26,7 +19,6 @@ namespace CTRPluginFramework {
 	void ChangeNativeFruit(MenuEntry *entry);
 	void PWPUnlock(MenuEntry *entry);
 	void BuildingMod(MenuEntry *entry);
-	void unlockqrmachine(MenuEntry *entry);
 	void GrassChanger(MenuEntry *entry);
 	void HouseChanger(MenuEntry *entry);
 	void caravanchange(MenuEntry *entry);
@@ -52,6 +44,7 @@ namespace CTRPluginFramework {
 	void shovelknockback(MenuEntry *entry);
 	
 //Inventory Codes Folder
+	void itemsearch(MenuEntry *entry);
 	void t2i(MenuEntry *entry);
 	void duplication(MenuEntry *entry);
 	void catalog(MenuEntry *entry);
@@ -76,6 +69,7 @@ namespace CTRPluginFramework {
 	void playermod(MenuEntry *entry);
 	void randomoutfit(MenuEntry *entry);
 	void playerbackup(MenuEntry *entry);
+	void unlockqrmachine(MenuEntry *entry);
 	
 	void neckentry(MenuEntry *entry);
 	void debug(MenuEntry *entry);
@@ -126,8 +120,6 @@ namespace CTRPluginFramework {
 	void UnlockIsland(MenuEntry *entry);
 	void bonusOre(MenuEntry *entry);
 	void instantFruit(MenuEntry *entry);
-	void Hackerisland(MenuEntry *entry);
-	void Countryspoof(MenuEntry *entry);
 	void IslandShop(MenuEntry *entry);
 	void IslandSettings(MenuEntry *entry);
 	void alltour(MenuEntry *entry);
@@ -157,8 +149,8 @@ namespace CTRPluginFramework {
 	//Chat Codes
 	void bubblesDisappear(MenuEntry *entry);
 	void Forcesendchat(MenuEntry *entry);
+	void chatCommands(MenuEntry *entry);
 	void ChatCopyPaste(MenuEntry *entry);
-	void ShowChatMessage(MenuEntry *entry);
 	void ChatButton(MenuEntry *entry);
 
 	void AmiiboSpoofer(MenuEntry *entry);
@@ -181,14 +173,13 @@ namespace CTRPluginFramework {
 	void BuriedInspector(MenuEntry *entry);
 	
 //Misc Codes
-	void disablecommands(MenuEntry *entry);
 	void tooltype(MenuEntry *entry);
 	void mgtype(MenuEntry *entry);
 	void unbreakableflower(MenuEntry *entry);
 	void Weathermod(MenuEntry *entry);
+	void radioPlayer(MenuEntry *entry);
 	void auroralights(MenuEntry *entry);
 	void ReloadRoomCheat(MenuEntry *entry);
-	void QuickMenuEntry(MenuEntry *entry);
 	void morenumberisland(MenuEntry *entry);
 	void fovlarge(MenuEntry *entry);
 	void roomSeeder(MenuEntry *entry);
@@ -235,12 +226,44 @@ namespace CTRPluginFramework {
 	void NPCCoordinates(MenuEntry *entry);
 	void NPCTeleportToYou(MenuEntry *entry);
 	void NPCRotate(MenuEntry *entry);
+
+//Default Codes
+	void EnableAllChecks(void);
+	void EnableAllPatches(void);
+	void DisableAllChecks(void);
+	void DisableAllPatches(void);
+
+	void OnlineDropLagRemoverEntry(MenuEntry *entry);
+    void ChangeRockbreakParticleEntry(MenuEntry *entry);
+    void DropItemsEverywhereEntry(MenuEntry *entry);
+    void IdleAfterTreeShakeOrCutEntry(MenuEntry *entry);
+    void DontMoveNPCBackToOriginalPositionEntry(MenuEntry *entry);
+	void ReplaceDropFunctionsEntry(MenuEntry *entry);
+	void PreventParticleCrashEntry(MenuEntry *entry);
+	void BypassGameChecksEntry(MenuEntry *entry);
+	void DisableNonSeedItemCheckEntry(MenuEntry *entry);
+	void PatchDropFunctionEntry(MenuEntry *entry);
+
+	void DisableOpenSaveMenuWithStartButton(MenuEntry *entry);
+    void DisableCatalogSearchFunction(MenuEntry *entry);
+    void FixInvalidPickupCrash(MenuEntry *entry);
+    void FixInvalidDropPlantCrash(MenuEntry *entry);
+    void FixInvalidSpriteCrash(MenuEntry *entry);
+    void FixInvalidGiveItemCrash(MenuEntry *entry);
+    void FixInvalidHoleCrash(MenuEntry *entry);
+    void FixInvalidItemCrash(MenuEntry *entry);
+    void ConvertFlowerFromSeedItemToNormalItem(MenuEntry *entry);
+    void SetSeedItemNames(MenuEntry *entry);
+    void SetItemReplacementRules(MenuEntry *entry);
+    void SetDropRules(MenuEntry *entry);
+    void SetPlantRules(MenuEntry *entry);
+    void FixParticlesInPuzzleLeague(MenuEntry *entry);
+    void SetCustomSpritesForSeedItemsAndProDesigns(MenuEntry *entry);
+	void FruitStackingCheck(MenuEntry *entry);
+
+	void SetLanguageEntry(MenuEntry *entry);
 	
 //Helper functions
   //Located in cheats.cpp
-	void rainbow(MenuEntry *entry);
-
 	void SendPlayerData(Time time);
 }
-
-#endif

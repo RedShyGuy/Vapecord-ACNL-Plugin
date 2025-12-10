@@ -3,7 +3,7 @@
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/Inventory.hpp"
 #include "Helpers/Player.hpp"
-#include "Helpers/Address.hpp"
+#include "Address/Address.hpp"
 #include "Helpers/Animation.hpp"
 #include "Helpers/AnimData.hpp"
 #include "Helpers/Dropper.hpp"
@@ -21,37 +21,43 @@ namespace CTRPluginFramework {
 	static std::vector<std::string> strings2 = { "", "", "", "" };
 	
 	void GetPlayerInfoData(void) {	
-		u8 pIndex = GameHelper::GetOnlinePlayerIndex();
-		if(!PlayerClass::GetInstance(pIndex)->IsLoaded() || !Player::GetSaveData(pIndex))
+		u8 pIndex = Game::GetOnlinePlayerIndex();
+		if(!PlayerClass::GetInstance(pIndex)->IsLoaded() || !Player::GetSaveData(pIndex)) {
 			return;
-	
+		}
+			
 	//gets coordinates
 		float *pCoords = PlayerClass::GetInstance(pIndex)->GetCoordinates();
-		if(!pCoords)
+		if(!pCoords) {
 			return;
+		}
 		
 	//Gets world coords	
-		if(!MapEditorActive)
+		if(!MapEditorActive) {
 			PlayerClass::GetInstance(pIndex)->GetWorldCoords(&selectedX, &selectedY);
+		}
 		
 	//gets item standing on
-		Item *pItem = GameHelper::GetItemAtWorldCoords(selectedX, selectedY);	
-		if(!pItem)
+		Item *pItem = Game::GetItemAtWorldCoords(selectedX, selectedY);	
+		if(!pItem) {
 			return;
+		}
 		
 		strings1[0] = ("Coordinates: " << std::to_string(pCoords[0]).erase(4) << "|" << std::to_string(pCoords[2]).erase(4));
 		strings1[1] = (Utils::Format("World Coordinates: %02X|%02X", (u8)(selectedX & 0xFF), (u8)(selectedY & 0xFF)));
 		strings1[2] = ("Velocity: " << std::to_string(*PlayerClass::GetInstance(pIndex)->GetVelocity()).erase(4));
 		strings1[3] = (Utils::Format("Animation: %02X / %03X", *PlayerClass::GetInstance(pIndex)->GetAnimation(), *PlayerClass::GetInstance(pIndex)->GetSnake()));
-		strings1[4] = ("Standing on: " << (pItem->ID != 0 ? Utils::Format("%08X", *(u32 *)pItem) : "N/A") << (GameHelper::GetLockedSpotIndex(selectedX, selectedY) != 0xFFFFFFFF ? "(Locked)" : ""));
-		strings1[5] = (Utils::Format("Room: %02X", GameHelper::RoomCheck()));
+		strings1[4] = ("Standing on: " << (pItem->ID != 0 ? Utils::Format("%08X", *(u32 *)pItem) : "N/A") << (Game::GetLockedSpotIndex(selectedX, selectedY) != 0xFFFFFFFF ? "(Locked)" : ""));
+		strings1[5] = (Utils::Format("Room: %02X", Player::GetRoom(pIndex)));
 
 	//gets inv item
 		u8 slot = 0;
-		if(Inventory::GetSelectedSlot(slot)) 
+		if(Inventory::GetSelectedSlot(slot)) {
 			Inventory::ReadSlot(slot, itemslotid);
-		else 
+		}
+		else {
 			itemslotid = ReplaceEverything;
+		}
 		
 		strings2[0] = (Utils::Format("Pickup: %08X", PickupSeederItemID));
 		strings2[1] = (Utils::Format("Drop: %08X", dropitem));
@@ -60,12 +66,14 @@ namespace CTRPluginFramework {
 	}
 //debug OSD
 	bool debugOSD(const Screen &screen) {
-		u8 pIndex = GameHelper::GetOnlinePlayerIndex();
-		if(!PlayerClass::GetInstance(pIndex)->IsLoaded()) 
+		u8 pIndex = Game::GetOnlinePlayerIndex();
+		if(!PlayerClass::GetInstance(pIndex)->IsLoaded()) {
 			return 0;
+		}
 			
-		if(!screen.IsTop)
+		if(!screen.IsTop) {
 			return 0;
+		}
 		
 		static constexpr u8 YPositions1[7] = { 10, 20, 30, 40, 50, 60 };
 		static constexpr u8 YPositions2[4] = { 0, 10, 20, 30 };
@@ -73,7 +81,7 @@ namespace CTRPluginFramework {
 		int i = 0, j = 0;
 		
 	//gets player
-		screen.Draw(Utils::Format("Player %02X", pIndex), 0, 0, pColor[pIndex]);
+		screen.Draw(Utils::Format("Player %02X", pIndex), 0, 0, Player::GetColor(pIndex));
 		
 		while(i < 6) {
 			for(auto GetString = strings1.begin(); GetString != strings1.end(); ++GetString) {
@@ -111,7 +119,7 @@ namespace CTRPluginFramework {
 /*
 	void pLoaderEntry(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
 			return;
 		}
 
@@ -132,11 +140,11 @@ namespace CTRPluginFramework {
 			if(*(u16 *)(pO + 0x55A6) != 0) {
 				std::string pS = "";
 				Process::ReadString((pO + 0x55A8), pS, 0x10, StringFormat::Utf16);
-				pV[i] = pColor[i] << pS;
+				pV[i] = Player::GetColor(i) << pS;
 			}
 		}
 		
-		Keyboard pKB(Language->Get("KEY_SELECT_PLAYER"), pV);
+		Keyboard pKB(Language::getInstance()->get("KEY_SELECT_PLAYER"), pV);
 		
 		int pChoice = pKB.Open();
 		if((pChoice >= 0) && (pV[pChoice] != Color::Silver << "-Empty-"))
@@ -183,9 +191,9 @@ namespace CTRPluginFramework {
 
 	void SaveColor(MenuEntry *entry) {
 		std::vector<std::string> opt = {
-			Language->Get("CUSTOM_SET_HAIR"),
-			Language->Get("CUSTOM_SET_EYE"),
-			Language->Get("CUSTOM_SAVE"),
+			Language::getInstance()->get("CUSTOM_SET_HAIR"),
+			Language::getInstance()->get("CUSTOM_SET_EYE"),
+			Language::getInstance()->get("CUSTOM_SAVE"),
 		};
 
 		Keyboard KB("", opt);
@@ -193,39 +201,41 @@ namespace CTRPluginFramework {
 		switch(KB.Open()) {
 			default: break;
 			case 0: {
-				Keyboard kb(Language->Get("CUSTOM_ENTER_HAIR"));
+				Keyboard kb(Language::getInstance()->get("CUSTOM_ENTER_HAIR"));
 				kb.IsHexadecimal(true);
 
 				int res = kb.Open(rval1);
-				if(res < 0)
+				if(res < 0) {
 					return;
+				}
 
 				RGB_To_BGR(rval1);
 			} break;
 
 			case 1: {
-				Keyboard kb(Language->Get("CUSTOM_ENTER_EYE"));
+				Keyboard kb(Language::getInstance()->get("CUSTOM_ENTER_EYE"));
 				kb.IsHexadecimal(true);
 
 				int res = kb.Open(rval2);
-				if(res < 0)
+				if(res < 0) {
 					return;
+				}
 
 				RGB_To_BGR(rval2);
 			} break;
 
 			case 2: {
-				if(!File::Exists(Utils::Format(PATH_COLOR, regionName.c_str()))) 
-					File::Create(Utils::Format(PATH_COLOR, regionName.c_str()));
+				if(!File::Exists(Utils::Format(PATH_COLOR, Address::regionName.c_str()))) 
+					File::Create(Utils::Format(PATH_COLOR, Address::regionName.c_str()));
 
 				App_Colors NewColor = App_Colors{ rval1, rval2 };
 
-				File f_color(Utils::Format(PATH_COLOR, regionName.c_str()), File::WRITE);
+				File f_color(Utils::Format(PATH_COLOR, Address::regionName.c_str()), File::WRITE);
 				f_color.Write(&NewColor, 8);	
 				f_color.Flush();
                 f_color.Close();
 
-				MessageBox(Language->Get("CUSTOM_FILE_SAVED")).SetClear(ClearScreen::Top)();
+				MessageBox(Language::getInstance()->get("CUSTOM_FILE_SAVED")).SetClear(ClearScreen::Top)();
 			} break;
 		}
 	}
@@ -233,10 +243,10 @@ namespace CTRPluginFramework {
 	void App_ColorMod(MenuEntry *entry) {
 		static Hook hook;
 		if(entry->WasJustActivated()) {
-			if(File::Exists(Utils::Format(PATH_COLOR, regionName.c_str()))) {
+			if(File::Exists(Utils::Format(PATH_COLOR, Address::regionName.c_str()))) {
 				App_Colors OldColor;
 
-				File f_color(Utils::Format(PATH_COLOR, regionName.c_str()), File::READ);
+				File f_color(Utils::Format(PATH_COLOR, Address::regionName.c_str()), File::READ);
 				f_color.Read(&OldColor, 8);
 				f_color.Flush();
                 f_color.Close();
@@ -246,7 +256,7 @@ namespace CTRPluginFramework {
 				OSD::Notify("Loaded colors from file!", Color::Orange);
 			}
 
-			static const Address address(0x4A33C8, 0x4A2D40, 0x4A2410, 0x4A2410, 0x4A20A8, 0x4A20A8, 0x4A1F68, 0x4A1F68);
+			static const Address address(0x4A33C8);
 			hook.Initialize(address.addr, (u32)BGRHook);
 		  	hook.SetFlags(USE_LR_TO_RETURN);
 			hook.Enable();
@@ -261,25 +271,30 @@ namespace CTRPluginFramework {
 			rval2 = RainbowBGR();
 		}
 
-		if(!entry->IsActivated()) 
-            hook.Disable();
+		if(!entry->IsActivated()) {
+			hook.Disable();
+		}
 	}
 	
 //Wear Helmet And Accessory /*Credits to Levi*/
 	void hatz(MenuEntry *entry) { 
-		static const Address hatwear(0x68C630, 0x68BB58, 0x68B668, 0x68B668, 0x68B128, 0x68B128, 0x68ACD0, 0x68ACD0);
-		if(entry->WasJustActivated()) 
-			Process::Patch(hatwear.addr, 0xE1A00000); 
-		else if(!entry->IsActivated()) 
-			Process::Patch(hatwear.addr, 0x3AFFFFD6); 
+		static Address hatwear(0x68C630);
+
+		if(entry->WasJustActivated()) {
+			hatwear.Patch(0xE1A00000);
+		}
+		else if(!entry->IsActivated()) {
+			hatwear.Unpatch();
+		}
 	}
 
 //Faint	
 	void Faint(MenuEntry *entry) { 
         if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
 			u32 x, y;
-			if(PlayerClass::GetInstance(GameHelper::GetOnlinePlayerIndex())->GetWorldCoords(&x, &y))
-				Animation::ExecuteAnimationWrapper(GameHelper::GetOnlinePlayerIndex(), 0x9D, { 0, 0 }, 0, 0, 0, 0, x, y, 0, 0);
+			if(PlayerClass::GetInstance(Game::GetOnlinePlayerIndex())->GetWorldCoords(&x, &y)) {
+				Animation::ExecuteAnimationWrapper(Game::GetOnlinePlayerIndex(), 0x9D, { 0, 0 }, 0, 0, 0, 0, x, y, 0, 0);
+			}
 		}
     }
 
@@ -290,8 +305,9 @@ namespace CTRPluginFramework {
 			if(PlayerClass::GetInstance(i)->IsLoaded() && playerIcon[i] == nullptr) {
 				std::string filestr = Utils::Format(PATH_PICON, i);
 				File file(filestr, File::READ);
-				if(!file.IsOpen())
+				if(!file.IsOpen()) {
 					return;
+				}
 
 				playerIcon[i] = new c_RGBA[file.GetSize() / sizeof(c_RGBA)];
 				file.Read(playerIcon[i], file.GetSize());
@@ -306,8 +322,9 @@ namespace CTRPluginFramework {
 
 //OSD For Show Players On The Map	
 	bool players(const Screen &screen) { 
-		if(screen.IsTop || !GameHelper::MapBoolCheck())
+		if(screen.IsTop || !Game::MapBoolCheck()) {
 			return 0;
+		}
 
 		u32 XPos, YPos;
 
@@ -321,15 +338,17 @@ namespace CTRPluginFramework {
 					for(int X = XPos; X < XResult; ++X) {
 						for(int Y = YPos; Y < YResult; ++Y) {
 							Color cPix = Color(playerIcon[i][Pixels].R, playerIcon[i][Pixels].G, playerIcon[i][Pixels].B, playerIcon[i][Pixels].A);
-							if(cPix != Color(0, 0, 0, 0) && playerIcon[i][Pixels].A == 0xFF)
+							if(cPix != Color(0, 0, 0, 0) && playerIcon[i][Pixels].A == 0xFF) {
 								screen.DrawPixel(X, Y, cPix);
+							}
 
 							Pixels++;
 						}
 					}
 				}
-				else 
-					screen.DrawRect(XPos - 1, YPos + 1, 6, 6, pColor[i]);
+				else {
+					screen.DrawRect(XPos - 1, YPos + 1, 6, 6, Player::GetColor(i));
+				}
 			}
 		}
 
@@ -339,7 +358,7 @@ namespace CTRPluginFramework {
 //Show Players On The Map
 	void map(MenuEntry *entry) {
 		PluginMenu *menu = PluginMenu::GetRunningInstance();
-		static const Address writePatch(0x2215B0, 0x220FF4, 0x2215D0, 0x2215D0, 0x2214F0, 0x2214F0, 0x2214BC, 0x2214BC);
+		static const Address writePatch(0x2215B0);
 		static Hook hook;
 
 		if(entry->WasJustActivated()) {
@@ -348,7 +367,7 @@ namespace CTRPluginFramework {
 			hook.Enable();
 
 			u32 pInstance = PlayerClass::GetInstance()->Offset();
-			if(pInstance != 0 && GameHelper::MapBoolCheck()) {
+			if(pInstance != 0 && Game::MapBoolCheck()) {
 				u32 aInstance = Animation::GetAnimationInstance(pInstance, 0, 0, 0);
 
 				AnimData data;
@@ -375,10 +394,13 @@ namespace CTRPluginFramework {
 	}
 
 	void NeverBedHead(MenuEntry *entry) {
-		static const Address antiBedHead(0x20C798, 0x20C1DC, 0x20C7B8, 0x20C7B8, 0x20C6D8, 0x20C6D8, 0x20C6A4, 0x20C6A4);
-		if(entry->WasJustActivated()) 
-			Process::Patch(antiBedHead.addr, 0xE1A00000);
-		else if(!entry->IsActivated()) 
-			Process::Patch(antiBedHead.addr, 0xE5C41004);    
+		static Address antiBedHead(0x20C798);
+
+		if(entry->WasJustActivated()) {
+			antiBedHead.Patch(0xE1A00000);
+		}
+		else if(!entry->IsActivated()) {
+			antiBedHead.Unpatch();
+		}
 	}
 }

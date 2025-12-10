@@ -3,12 +3,12 @@
  * @brief Various system types.
  */
 #pragma once
+#ifndef TYPES_H
+#define TYPES_H
 
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
-
-#define NORETURN __attribute__((noreturn))
 /// The maximum value of a u64.
 #define U64_MAX	UINT64_MAX
 
@@ -47,15 +47,42 @@ typedef void (*voidfn)(void);
 /// Creates a bitmask from a bit number.
 #define BIT(n) (1U<<(n))
 
-/// Aligns a struct (and other types?) to m, making sure that the size of the struct is a multiple of m.
-#define ALIGN(m)   __attribute__((aligned(m)))
-/// Packs a struct (and other types?) so it won't include padding bytes.
-#define PACKED     __attribute__((packed))
+// Fix intellisense errors
+#ifdef _MSC_VER
 
-#ifndef LIBCTRU_NO_DEPRECATION
-/// Flags a function as deprecated.
-#define DEPRECATED __attribute__ ((deprecated))
+    #define ALIGN(m)
+    #define PACKED
+    #define USED
+    #define UNUSED
+    #define DEPRECATED
+    #define NAKED
+    #define NORETURN
+
 #else
-/// Flags a function as deprecated.
-#define DEPRECATED
+
+    /// Aligns a struct (and other types?) to m, making sure that the size of the struct is a multiple of m.
+    #define ALIGN(m)   __attribute__((aligned(m)))
+    /// Packs a struct (and other types?) so it won't include padding bytes.
+    #define PACKED     __attribute__((packed))
+
+    #define USED       __attribute__((used))
+    #define UNUSED     __attribute__((unused))
+
+    #ifndef LIBCTRU_NO_DEPRECATION
+        /// Flags a function as deprecated.
+        #define DEPRECATED __attribute__ ((deprecated))
+    #else
+        /// Flags a function as deprecated.
+        #define DEPRECATED
+    #endif
+    #define NAKED __attribute__((naked))
+    #define NORETURN __attribute__((noreturn))
+
+#endif
+
+#define CUR_THREAD_HANDLE       0xFFFF8000
+#define CUR_PROCESS_HANDLE      0xFFFF8001
+
+/// Structure representing CPU registers
+
 #endif

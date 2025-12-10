@@ -1,5 +1,4 @@
-#ifndef GAME_HPP
-#define GAME_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include "Helpers/GameStructs.hpp"
@@ -17,7 +16,7 @@ namespace CTRPluginFramework {
 		ACNL_BuildingData 	*GetSaveData();
 	}
 
-	namespace GameHelper {
+	namespace Game {
 		ACNL_Date 			GetCurrentDate(void);
 		void				PlaySound(u16 soundID);
 	//save files
@@ -50,7 +49,6 @@ namespace CTRPluginFramework {
 		u32					CreateLockedSpot(u8 DropID, u8 wX, u8 wY, u8 roomID, bool sendPkt = 1);
 		u32					GetLockedSpotIndex(u8 wX, u8 wY, u8 roomID = 0xA5);
 	//Other Stuff	
-		std::string 		GetCountryName();
 		bool 				IsOutdoorItem(Item item);
 		void				ReloadRoom(float *coords = PlayerClass::GetInstance()->GetCoordinates());
 		void				Catalog(bool directcall = false);
@@ -64,12 +62,11 @@ namespace CTRPluginFramework {
 		void				Particles(u32 particleID, float *floats);
 		void				TrampleAt(u8 wX, u8 wY);
 
-		bool 				IsACNL();
-		bool				IsInRoom(u8 room);
-		u8					RoomCheck();
+		bool				IsGameInRoom(u8 room);
+		u8					GetRoom();
 		u8					NextRoomCheck();
 		bool				MapBoolCheck();
-		bool				LoadRoomBool();
+		bool				IsRoomLoading();
 		bool				SetItem(Item *item);
 		void				OpenMenu(u8 menuID, bool NoMenCall = false);
 		void				ChangeGameType(u8 GameType);
@@ -119,4 +116,3 @@ namespace CTRPluginFramework {
 		return val;
 	}
 }
-#endif

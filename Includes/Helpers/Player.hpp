@@ -1,13 +1,12 @@
-#ifndef PLAYER_HPP
-#define PLAYER_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include "Helpers/GameStructs.hpp"
 
-extern bool IsIndoorsBool;
-
 namespace CTRPluginFramework {
 	namespace Player {
+		Color 			GetColor(u8 pIndex);
+
 		void 			Load(int pIndex);
 		void			ReloadDesign(int slot);
 		void			StealDesign(u8 slot);
@@ -22,6 +21,7 @@ namespace CTRPluginFramework {
 		float*		    GetCollisionSize(u8 PlayerIndex = 4);
 		bool			IsIndoors();
 		u8				GetRoom(u8 PlayerIndex);
+		bool			IsInRoom(u8 room, u8 playerIndex = 4);
 
 		ACNL_Player		*GetSaveData(u8 PlayerIndex = 4);
 		bool 			SaveExists(ACNL_Player *player);
@@ -32,4 +32,3 @@ namespace CTRPluginFramework {
 		void 			EditName(u8 pIndex, const std::string& name);
 	};
 }
-#endif

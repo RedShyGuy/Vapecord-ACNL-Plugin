@@ -1,5 +1,4 @@
-#ifndef ACSYSTEM_HPP
-#define ACSYSTEM_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include "Helpers/Game.hpp"
@@ -44,10 +43,10 @@ namespace CTRPluginFramework {
 	namespace LightSwitch {
 		u32 	GetData();
 		void 	SetData(bool ON);
-		void 	ON(u8 roomID = GameHelper::RoomCheck());
-		void 	OFF(u8 roomID = GameHelper::RoomCheck());
-		bool 	IsON(u8 roomID = GameHelper::RoomCheck());
-		bool 	IsBasement(u8 roomID = GameHelper::RoomCheck());
+		void 	ON(u8 roomID = Game::GetRoom());
+		void 	OFF(u8 roomID = Game::GetRoom());
+		bool 	IsON(u8 roomID = Game::GetRoom());
+		bool 	IsBasement(u8 roomID = Game::GetRoom());
 	}
 
 	namespace MEOW {
@@ -58,4 +57,3 @@ namespace CTRPluginFramework {
 		void 	ToggleInitiative(int pPos, int InitPos, int weekDay, bool finish);
 	}
 }
-#endif

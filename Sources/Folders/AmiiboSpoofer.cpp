@@ -1,7 +1,7 @@
 #include "cheats.hpp"
 #include "Helpers/IDList.hpp"
 #include "Helpers/NPC.hpp"
-#include "Helpers/Address.hpp"
+#include "Address/Address.hpp"
 
 /*
     Amiibo Spoofer 3.0 by Slattz
@@ -13,7 +13,7 @@ namespace CTRPluginFramework {
         u32 offset = *(u32*)arg;
         Process::Pause(); //Pause game while user selects, so the timeout doesn't occur
 
-        Keyboard keyboard(Language->Get("AMIIBO_SPOOFER_SPECIES"));
+        Keyboard keyboard(Language::getInstance()->get("AMIIBO_SPOOFER_SPECIES"));
         std::vector<std::string> keyVec;
 
         NPC::PopulateRace(keyVec);
@@ -24,7 +24,7 @@ namespace CTRPluginFramework {
 
         Process::Write32(offset + 0x10C, 0); //Game always sets this in the original function, so I'll do it too 
         if(res >= 0) { //User picked a species
-            keyboard.GetMessage() = std::string(Language->Get("AMIIBO_SPOOFER_VILLAGER"));
+            keyboard.GetMessage() = std::string(Language::getInstance()->get("AMIIBO_SPOOFER_VILLAGER"));
             keyVec.clear();
 
             std::vector<PACKED_AmiiboInfo> amiiboVec;
@@ -68,19 +68,19 @@ namespace CTRPluginFramework {
     }
 
     void AmiiboSpoofer(MenuEntry *entry) {
-        static const Address offsetPatch(0x51C104, 0x51BA58, 0x51B14C, 0x51B14C, 0x51AA68, 0x51AA68, 0x51A3FC, 0x51A3FC);
-        static const Address offsetHook(0x51BBDC, 0x51B530, 0x51AC24, 0x51AC24, 0x51A540, 0x51A540, 0x519ED4, 0x519ED4);
-        static const Address offsetPatch_o3ds1(0x3DAA7C, 0x3DA48C, 0x3D9AC4, 0x3D9AC4, 0x3D975C, 0x3D975C, 0x3D961C, 0x3D961C);
-        static const Address offsetPatch_o3ds2(0x3DA824, 0x3DA234, 0x3D986C, 0x3D986C, 0x3D9504, 0x3D9504, 0x3D93C4, 0x3D93C4);
-        static u32 originalCode[3] = {0};
+        static Address offsetHook(0x51BBDC);
+
+        static Address offsetPatch(0x51C104);
+        static Address offsetPatch_o3ds1(0x3DAA7C);
+        static Address offsetPatch_o3ds2(0x3DA824);
         static Hook nfcHook;
 
 		if(entry->WasJustActivated()) {
-			Process::Patch(offsetPatch.addr, 0xE3A00003, (void*)&originalCode[0]); //Force tell nfc game code that there's an amiibo ready (NFC_TagState_InRange)
+            offsetPatch.Patch(0xE3A00003); //Force tell nfc game code that there's an amiibo ready (NFC_TagState_InRange)
 
             if(!System::IsNew3DS()) {
-                Process::Patch(offsetPatch_o3ds1.addr, 0xE3A00002, (void*)&originalCode[1]); //Tells the o3ds the nfc reader is init'd
-                Process::Patch(offsetPatch_o3ds2.addr, 0xE3A00000, (void*)&originalCode[2]); //Forces the game to think nfc sysmodule has started scanning
+                offsetPatch_o3ds1.Patch(0xE3A00002); //Tells the o3ds the nfc reader is init'd
+                offsetPatch_o3ds2.Patch(0xE3A00000); //Forces the game to think nfc sysmodule has started scanning
             }
 
             nfcHook.Initialize(offsetHook.addr, (u32)AmiiboHook);
@@ -90,11 +90,11 @@ namespace CTRPluginFramework {
 		}
 		
 		else if(!entry->IsActivated()) {
-			Process::Patch(offsetPatch.addr, originalCode[0]);
+			offsetPatch.Unpatch();
 
             if(!System::IsNew3DS()) {
-                Process::Patch(offsetPatch_o3ds1.addr, originalCode[1]);
-                Process::Patch(offsetPatch_o3ds2.addr, originalCode[2]);
+                offsetPatch_o3ds1.Unpatch();
+                offsetPatch_o3ds2.Unpatch();
             }
 
             nfcHook.Disable();

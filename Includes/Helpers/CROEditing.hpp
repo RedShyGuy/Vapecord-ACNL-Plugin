@@ -1,5 +1,4 @@
-#ifndef CROEDITING_HPP
-#define CROEDITING_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 
@@ -24,6 +23,19 @@ namespace CTRPluginFramework {
             }
             return false;
         }
+
+        template <typename T, class ...Args>
+        T Call(const char* croFileName, u32 address, Args ...args) {
+            u32 buffer = 0;
+            if(CRO::GetMemAddress(croFileName, buffer)) {
+                return ((T(*)(Args...))(buffer + address))(args...);
+            }
+
+            if constexpr (std::is_same_v<T, void>) {
+                return; // no return for void
+            } else {
+                return T(); // default return value
+            }
+        };	
     }
 }
-#endif

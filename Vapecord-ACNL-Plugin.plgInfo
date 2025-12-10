@@ -1,0 +1,26 @@
+Author: KwaDukathole
+
+Version: # Plugin version
+    Major: 2
+    Minor: 0
+    Revision: 0
+
+Targets: # Low TitleId of games which are compatibles with this plugin (0 for all)
+
+Title: Vapecord ACNL Plugin
+
+Summary: A CTRPF Plugin, with a lot of tools
+
+Description: |
+  This plugin gives you access to a set of tools to edit your games
+
+  Features:
+    - Memory searcher
+    - Hex Editor
+    - Code creator
+    - Code import from file
+    - Action Replay engine with extra capabilities
+    - Super fast screenshot engine
+
+Compatibility: any
+MemorySize: 5MiB

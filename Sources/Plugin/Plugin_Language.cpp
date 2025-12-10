@@ -1,99 +1,65 @@
 #include "Config.hpp"
-#include "Helpers/PluginMenuData.hpp"
-#include "Helpers/QuickMenu.hpp"
 #include "Color.h"
 #include "Files.h"
+#include "Language.hpp"
 
-namespace CTRPluginFramework {
-	const std::vector<std::string> LanguageTXT {
-		PATH_JAPANESETEXT,
-		PATH_ENGLISHTEXT,
-		PATH_FRENCHTEXT,
-		PATH_GERMANTEXT,
-		PATH_ITALIANTEXT,
-		PATH_SPANISHTEXT,
-		PATH_KOREANTEXT
-	};
+namespace CTRPluginFramework {	
+	void SetLanguageEntry(MenuEntry *entry) {
+		SetupLanguage(true);
+	}
 
     void SetupLanguage(bool SetInMenu) {
-        std::vector<std::string> v_Lang = {
-			"Japanese", 
-			"English", 
-			"French",
-			"German",
-            "Italian",
-            "Spanish",
-			"Korean"
-		};
+		std::string language = "";
+		ReadLanguage(language);
 
-		u8 u_byte = f_Language::NoLang;
-		ReadConfig(CONFIG::Language, u_byte);
-
-		if(u_byte >= f_Language::MaxLang) //If byte is no language reset
-			u_byte = f_Language::NoLang;
-
-        if(u_byte == f_Language::NoLang || SetInMenu) { //if byte has no mode or re-choose in menu let user choose one
-            static const std::string s_Lang = "Which language do you want to use?\n" << Color(pRed) << 
-                                                "Red " << "means the file doesn't exist!\n" << Color(pGreen) << 
-                                                "Green " << "means the file exists!"; //todo: set language
-
-            int found = 0;
-		//If File is missing it gets red if not it gets green
-			for(int i = 0; i < LanguageTXT.size(); ++i) {
-				if(!File::Exists(LanguageTXT[i])) 
-					v_Lang[i] = Color(pRed) << v_Lang[i];
-				else {
-					v_Lang[i] = Color(pGreen) << v_Lang[i];
-					found += 1;
-				}
-			}
-		//If no file was found do not even show the menu and just output error screen | abort | will prevent user to have to force shut down 3DS		
-			if(found == 0) {
-				MessageBox(Utils::Format("Error 505\nYou do not have any language files in your plugin directory. The Plugin can not work without one!\nGet more info and help on the Discord Server: %s\nGame will be closed now!", DISCORDINV)).SetClear(ClearScreen::Top)();
-				Process::ReturnToHomeMenu();
-			}
-
-            Keyboard k_Lang(s_Lang, v_Lang);
-			k_Lang.CanAbort(false);
-            switch(k_Lang.Open()) {
-				case 0:
-					u_byte = f_Language::JapaneseLang; //Japanese MODE ON
-				break;
-				case 1:
-					u_byte = f_Language::EnglishLang; //English MODE ON
-				break;
-				case 2:
-					u_byte = f_Language::FrenchLang; //French MODE ON
-				break;			
-				case 3:
-					u_byte = f_Language::GermanLang; //German MODE ON
-                break;  
-                case 4:
-                    u_byte = f_Language::ItalianLang; //Italian MODE ON
-                break;
-                case 5:
-                    u_byte = f_Language::SpanishLang; //Spanish MODE ON
-                break;
-				case 6:
-					u_byte = f_Language::KoreanLang; //Korean MODE ON
-				break;
-            }
-
-			WriteConfig(CONFIG::Language, u_byte); //write language mode
-        }
-
-		int pos = (u_byte - 1);
-
-		if(!File::Exists(LanguageTXT[pos])) {
-			MessageBox(Utils::Format("Error 404\nYou need the correct language text file for the plugin to work\nGet more info and help on the Discord Server: %s", DISCORDINV)).SetClear(ClearScreen::Top)();
-
-			WriteConfig(CONFIG::Language, f_Language::NoLang); 
-
-			SetupLanguage(true); //redo language choosing
+		if (!File::Exists(PATH_LANGUAGE_BIN)) {
+			MessageBox(Utils::Format("Error 577\nThe language.bin is missing. The Plugin can not work without it!\nGet more info and help on the Discord Server: %s\nGame will be closed now!", DISCORDINV)).SetClear(ClearScreen::Top)();
+			Process::ReturnToHomeMenu();
+			return;
 		}
 
-		Language->Parse(LanguageTXT[pos]);
+		auto languages = Language::getInstance()->listAvailableLanguages(PATH_LANGUAGE_BIN);
+		if (languages.empty()) {
+			MessageBox(Utils::Format("Error 578\nThe language.bin is empty or corrupted!\nGet more info and help on the Discord Server: %s\nGame will be closed now!", DISCORDINV)).SetClear(ClearScreen::Top)();
+			Process::ReturnToHomeMenu();
+			return;
+		}
 
-		PluginMenu::GetRunningInstance()->Reload(QuickMenu::obj_QuickMenu);
+		bool languageExists = std::find(languages.begin(), languages.end(), language) != languages.end();
+
+        if(!languageExists || SetInMenu) {
+			std::vector<std::string> values;
+			for (const auto& pair : languages) {
+				values.push_back(pair.fullName);
+			}
+
+            Keyboard keyboard("Which language do you want to use?", values);
+			keyboard.CanAbort(SetInMenu);
+
+			int sel = keyboard.Open();
+			if (sel < 0) {
+				return;
+			}
+
+			if (sel < (int)languages.size()) {
+            	language = languages[sel].shortName;
+			}
+
+			if (!WriteLanguage(language)) { //write language mode to file
+				MessageBox(Utils::Format("Error 608\nCouldn't save chosen language.\nGet more info and help on the Discord Server: %s", DISCORDINV)).SetClear(ClearScreen::Top)();
+			} 
+			languageExists = true;
+        }
+
+		if (!languageExists || !Language::getInstance()->loadFromBinary(PATH_LANGUAGE_BIN, language.c_str())) {
+			MessageBox(Utils::Format("Error 605\nCouldn't load the language.\nGet more info and help on the Discord Server: %s", DISCORDINV)).SetClear(ClearScreen::Top)();
+
+			DeleteLanguage();
+			SetupLanguage(false); //redo language choosing
+		}
+
+		if (SetInMenu) {
+			MessageBox("Successfully set new language, please restart the game to see changes.").SetClear(ClearScreen::Top)();
+		}
     }
 }

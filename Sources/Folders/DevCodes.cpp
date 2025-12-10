@@ -3,7 +3,7 @@
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/Animation.hpp"
 #include "Helpers/Game.hpp"
-#include "Helpers/Address.hpp"
+#include "Address/Address.hpp"
 #include "Helpers/Player.hpp"
 #include "Helpers/ACMessageBox.hpp"
 #include "Helpers/CROEditing.hpp"
@@ -12,10 +12,11 @@
 #include "Helpers/GameKeyboard.hpp"
 #include "Helpers/Town.hpp"
 #include "Helpers/NPC.hpp"
-#include "RegionCodes.hpp"
+#include "Helpers/Save.hpp"
+#include "Helpers/IDList.hpp"
+
 #include "Color.h"
 #include "Files.h"
-#include "Helpers/PluginMenuData.hpp"
 
 namespace CTRPluginFramework {
 //Integer For Custom Dumper
@@ -31,7 +32,7 @@ namespace CTRPluginFramework {
 
 		Keyboard CKB("text");
 
-		Keyboard OKB(Language->Get("KEY_CHOOSE_OPTION"));
+		Keyboard OKB(Language::getInstance()->get("KEY_CHOOSE_OPTION"));
 		OKB.Populate(customdopt);
 		switch(OKB.Open()) {
 			default: break;
@@ -68,13 +69,13 @@ namespace CTRPluginFramework {
 						if(CKB.Open(filename) == -1)
 							return;
 
-						Wrap::Dump(Utils::Format(PATH_CUSTOM, regionName.c_str()), filename, "." + filetype, &cdump, nullptr);
+						Wrap::Dump(Utils::Format(PATH_CUSTOM, Address::regionName.c_str()), filename, "." + filetype, &cdump, nullptr);
 					} break;	
 					case 1: 
-						Wrap::Restore(Utils::Format(PATH_CUSTOM, regionName.c_str()), "." + filetype, "Select which dump to restore.", nullptr, true, &cdump, nullptr); 
+						Wrap::Restore(Utils::Format(PATH_CUSTOM, Address::regionName.c_str()), "." + filetype, "Select which dump to restore.", nullptr, true, &cdump, nullptr); 
 					break;
 					case 2:
-						Wrap::Delete(Utils::Format(PATH_CUSTOM, regionName.c_str()), "." + filetype);
+						Wrap::Delete(Utils::Format(PATH_CUSTOM, Address::regionName.c_str()), "." + filetype);
 					break;			
 				}
 			} break;	
@@ -87,11 +88,11 @@ namespace CTRPluginFramework {
 		std::vector<std::string> cmnOpt =  { "" };
 
 		if(Turbo_Call) 
-			cmnOpt[0] = Color(pGreen) << Language->Get("VECTOR_ENABLED");
+			cmnOpt[0] = Color(pGreen) << Language::getInstance()->get("VECTOR_ENABLED");
 		else 
-			cmnOpt[0] = Color(pRed) << Language->Get("VECTOR_DISABLED");
+			cmnOpt[0] = Color(pRed) << Language::getInstance()->get("VECTOR_DISABLED");
 
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
+		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"));
 		optKb.Populate(cmnOpt);
 		int op = optKb.Open();
 		if(op == -1)
@@ -107,7 +108,7 @@ namespace CTRPluginFramework {
 		u32 result;
 		static int size;
 
-        if(Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
+        if(Controller::IsKeysPressed(Key::R | Key::DPadRight)) {
             if(Wrap::KB<u32>("Enter address of function:", true, 8, funcaddress, funcaddress, nullptr)) {
 				Keyboard KB("Enter ID:");
 				KB.SetMaxLength(8);
@@ -134,14 +135,14 @@ namespace CTRPluginFramework {
 						break;
 
 						case 0x33333333:
-							p[i] = GameHelper::GetCurrentMap();
+							p[i] = Game::GetCurrentMap();
 						break;
 					}
 				}	
 			}
         }
 
-		if(Turbo_Call ? Controller::IsKeysDown(entry->Hotkeys[1].GetKeys()) : Controller::IsKeysPressed(entry->Hotkeys[1].GetKeys())) {
+		if(Turbo_Call ? Controller::IsKeysDown(Key::R | Key::DPadDown) : Controller::IsKeysPressed(Key::R | Key::DPadDown)) {
 			if(!Process::CheckAddress(funcaddress))
 				return;	
 
@@ -169,7 +170,7 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			MessageBox(Language->Get("SAVE_PLAYER_NO"))();
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO"))();
 			return;
 		}
 		
@@ -188,7 +189,7 @@ namespace CTRPluginFramework {
 
 		WrapLoc locPlayer;
 		
-		Keyboard optKb(Language->Get("KEY_CHOOSE_OPTION"));
+		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"));
 		optKb.Populate(select);
 		switch(optKb.Open()) {
 			default: break;
@@ -199,12 +200,12 @@ namespace CTRPluginFramework {
 						if(Player::SaveExists(player)) {
 							std::string str = "";
 							Convert::U16_TO_STR(player->PlayerInfo.PlayerData.PlayerName, str);
-							pV[i] = pColor[i] << str;
+							pV[i] = Player::GetColor(i) << str;
 						}
 					}
 				}
 		
-				Keyboard pKB(Language->Get("KEY_SELECT_PLAYER"));
+				Keyboard pKB(Language::getInstance()->get("KEY_SELECT_PLAYER"));
 				pKB.Populate(pV);
 				int pChoice = pKB.Open();
 				
@@ -216,18 +217,18 @@ namespace CTRPluginFramework {
 
 					player = Player::GetSaveData(pChoice);
 					locPlayer = { (u32 *)player, sizeof(player) };
-					Wrap::Dump(Utils::Format(PATH_PLAYER, regionName.c_str()), filename, ".player", &locPlayer, nullptr);
+					Wrap::Dump(Utils::Format(PATH_PLAYER, Address::regionName.c_str()), filename, ".player", &locPlayer, nullptr);
 				}
 			} break;
 			
 			case 1:
 				player = Player::GetSaveData();
 				locPlayer = { (u32 *)player, sizeof(player) };
-				Wrap::Restore(Utils::Format(PATH_PLAYER, regionName.c_str()), ".player", "Player Restorer\nSelect File:", nullptr, true, &locPlayer, nullptr); 
+				Wrap::Restore(Utils::Format(PATH_PLAYER, Address::regionName.c_str()), ".player", "Player Restorer\nSelect File:", nullptr, true, &locPlayer, nullptr); 
 			break;
 
 			case 2:
-				Wrap::Delete(Utils::Format(PATH_PLAYER, regionName.c_str()), ".player");
+				Wrap::Delete(Utils::Format(PATH_PLAYER, Address::regionName.c_str()), ".player");
 			break;
 		}
 	}
@@ -1487,7 +1488,7 @@ namespace CTRPluginFramework {
 	}
 	
 	u64 GetFriendCode(u8 pIndex) {
-		u32 gPoint = *(u32 *)Code::GamePointer.addr;
+		u32 gPoint = *(u32 *)Address(0x954648).addr;
 		if(gPoint == 0)
 			return 0;
 
@@ -1871,35 +1872,21 @@ namespace CTRPluginFramework {
 
 	32239378 = ModuleKotobuki.cro
 	*/
-
-	int sound = 0x113;
+	
 //Item Island Code
 	void islanditems(MenuEntry *entry) {
-		if (Controller::IsKeysPressed(Key::L)) {
-			GameHelper::PlaySound(sound);
-			OSD::Notify(Utils::Format("%08X", sound));
-			sound++;
+		if (Controller::IsKeysPressed(Key::ZL + Key::DPadRight)) {
+			std::vector<ItemNamePack> results;
+
+			std::string keyword = "cap";
+			Item::searchAllByKeyword(keyword, results);
+			
+			OSD::Notify(Utils::Format("Found %d items with keyword: %s (1st Item: 0x%04X)", results.size(), keyword.c_str(), results.at(0)), Color::Cyan);
 		}
 
-		static std::string str = "";
-		static u32 buffer = 0;
- 
-		if(Controller::IsKeysPressed(Key::R + Key::DPadUp)) {
-			if(Wrap::KB<std::string>("Enter Cro Name:", false, 15, str, str)) {
-				if(CRO::GetMemAddress(str.c_str(), buffer)) {
-					if(CRO::WritePermToggle(buffer, true)) {
-						OSD::Notify(Utils::Format("Unlocked %s | Address: %08X", str.c_str(), buffer));
-					}
-				}
-			}
-		}
-		else if(Controller::IsKeysPressed(Key::R + Key::DPadDown)) {
-			if(CRO::GetMemAddress(str.c_str(), buffer)) {
-				if(CRO::WritePermToggle(buffer, false)) {
-					OSD::Notify(Utils::Format("Locked %s | Address: %08X", str.c_str(), buffer));
-				}
-			}
-		}
+		/*
+
+		*/
 		/*else if(Controller::IsKeysPressed(Key::R + Key::DPadRight)) {
 			int res = FUNCTION(0x30F5FC).Call<int>(0xAF88F8, "Test %d", 25);
 			char* buff = (char *)(0xAF88F8 + 0xC);
@@ -1928,7 +1915,7 @@ namespace CTRPluginFramework {
 
 			*(u8 *)(globalData->data + 7) = 0;
 
-			static FUNCT func(Code::AnimFunction);
+			static FUNCT func(Address(0x64DB90););
 			func.Call<bool>(player, 0xB9, globalData, 0);
 
 			delete[] globalData;
@@ -2001,8 +1988,8 @@ namespace CTRPluginFramework {
 	}*/
 
 	void lightswitch(MenuEntry *entry) {
-		static const Address TargetAddress(0x190EA8, 0x1908F0, 0x190EC8, 0x190EC8, 0x190E18, 0x190E18, 0x190E18, 0x190E18);
-		static const Address Patch(0x1E7AD8, 0x1E751C, 0x1E7AF8, 0x1E7AF8, 0x1E7A34, 0x1E7A34, 0x1E7A00, 0x1E7A00);
+		static const Address TargetAddress(0x190EA8);
+		static const Address Patch(0x1E7AD8);
 
 		if(entry->WasJustActivated()) {
 		//this disables the "non switchable light" flag to be written
@@ -2063,7 +2050,7 @@ namespace CTRPluginFramework {
 		if(Controller::IsKeysDown(Key::R)) {
 			if(random) {
 				FishID.ID = Utils::Random(0x22E1, 0x234A);
-				if(GameHelper::GetItemCategorie(FishID) != Item_Categories::Fish) 
+				if(Game::GetItemCategorie(FishID) != Item_Categories::Fish) 
 					return;
 			}
 

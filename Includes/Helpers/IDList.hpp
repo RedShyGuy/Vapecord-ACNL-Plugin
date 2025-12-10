@@ -1,11 +1,10 @@
-#ifndef IDLIST_HPP
-#define IDLIST_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include "Helpers/GameStructs.hpp"
 
 namespace CTRPluginFramework {
-	struct ID_Data {
+	struct ID_U8Data {
 		const char* Name; //name of ID
 		u8 ID; //ID
 	};
@@ -28,42 +27,15 @@ namespace CTRPluginFramework {
 	};
 
 	enum class SpecieID : u8 {
-		Cat = 0,
-		Elephant,
-		Sheep,
-		Bear,
-		Dog,
-		Squirrel,
-		Rabbit,
-		Duck,
-		Hippo,
-		Wolf,
-		Mouse,
-		Pig,
-		Chicken,
-		Bull,
-		Cow,
-		Bird,
-		Frog,
-		Alligator,
-		Goat,
-		Tiger,
-		Anteater,
-		Koala,
-		Horse,
-		Octopus,
-		Lion,
-		Bearcub,
-		Rhinocero,
-		Gorilla,
-		Ostrich,
-		Kangaroo,
-		Eagle,
-		Penguin,
-		Monkey,
-		Hamster,
-		Deer,
-		Special
+		Cat = 0, Elephant, Sheep, Bear,
+		Dog, Squirrel, Rabbit, Duck,
+		Hippo, Wolf, Mouse, Pig,
+		Chicken, Bull, Cow, Bird,
+		Frog, Alligator, Goat, Tiger,
+		Anteater, Koala, Horse, Octopus,
+		Lion, Bearcub, Rhinocero, Gorilla,
+		Ostrich, Kangaroo, Eagle, Penguin,
+		Monkey, Hamster, Deer, Special
 	};
 
 	struct AmiiboInfo {
@@ -90,29 +62,23 @@ namespace CTRPluginFramework {
 	void ValidKeyboardCheck(Keyboard& keyboard, KeyboardEvent& event);
 	void ItemChange(Keyboard& keyboard, KeyboardEvent& event);
 	void TextItemChange(Keyboard& keyboard, KeyboardEvent& event);
-	extern const ID_Data Buildings[205];
-	extern const ID_Data Countrys[134];
+	extern const ID_U8Data Buildings[205];
 	extern const SPAmiiboInfo amiiboSPVillagers[55];
     extern const AmiiboInfo amiiboVillagers[399];
+	extern const ID_U8Data Music[256];
 
 	namespace IDList {
 		bool						IsHalfAcre(u8 acreID);
 		bool 						RoomValid(u8 roomID);
 		bool 						MenuValid(u8 MenuID);
 		bool						BuildingValid(u8 buildingID);
-		bool						ToolsValid(Item toolsID);
-		bool 						ItemValid(Item itemID, bool IsDropped = true);
 		bool 						MusicValid(u16 musicID);
-		bool 						AnimationValid(u8 animID);
+		bool 						AnimationValid(u8 animID, u8 playerIndex = 4);
 		bool 						SnakeValid(u16 snakeID);
 		bool 						EmotionValid(u8 emotionID);
-		bool						GetSeedName(Item itemID, std::string& str);
-		std::string  				SetCountryName(u8 country);
 		std::string 				GetBuildingName(u8 ID);
+		std::string					GetMusicName(u16 musicID);
 		std::string 				GetRoomName(u8 ID);
 		bool		 				ValidID(u16 ID, u16 StardID, u16 EndID);
-		std::string					GetItemName(Item ItemID);
 	}
 }
-#endif
-

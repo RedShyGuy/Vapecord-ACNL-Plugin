@@ -1,5 +1,4 @@
-#ifndef COLOR_H
-#define COLOR_H
+#pragma once
 
 #define pBlue           0x00C4FFFF
 #define pRed            0xFF1C1CFF
@@ -19,5 +18,3 @@
 #define DodgerBlue      0x1E90FFFF
 #define LimeGreen       0x32CD32FF
 #define SpringGreen     0x00FA9AFF
-
-#endif

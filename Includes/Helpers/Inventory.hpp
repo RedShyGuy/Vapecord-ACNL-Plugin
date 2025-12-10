@@ -1,5 +1,4 @@
-#ifndef INVENTORY_HPP
-#define INVENTORY_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include "Helpers/GameStructs.hpp"
@@ -8,20 +7,11 @@
 #define IsMailSlot(X)	(X >= 0x14 && X <= 0x1D)
 
 namespace CTRPluginFramework {
-	struct ItemVec {
-		std::vector<std::string> Name;
-		std::vector<Item> ID;
-	};
-	
-	extern ItemVec* ItemList;
-	extern int ItemFileLenght;
-	extern bool ItemFileExists;
-
 	using slotReader = void(*)(u32, u8);
 
 	namespace Inventory {
 		u32 		GetCurrentItemData(int i = 0);
-		bool 		GetNextItem(Item itemID, u8 &slot);
+		bool 		GetNextItem(Item itemID, u8 &slot, bool ignoreFlag = false);
 		bool 		GetNextClosetItem(Item itemID, u8 &slot);
 		bool 		GetSelectedSlot(u8& slot);
 		bool 		GetHoveredSlot(u8& slot);
@@ -33,9 +23,4 @@ namespace CTRPluginFramework {
 		bool 		ReadSlot(int slot, Item& item);
 		void		ReloadIcons(void);
 	}
-
-	void ReserveItemData(ItemVec* out);
-	int ItemSearch(const std::string& match, ItemVec& out);
-	std::string ItemIDSearch(Item ItemID);
 }
-#endif

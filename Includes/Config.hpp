@@ -1,68 +1,17 @@
+#pragma once
+
 #include <CTRPluginFramework.hpp>
 
-#define majorV 1
-#define minorV 9
-#define revisV 6
+#define majorV 2
+#define minorV 0
+#define revisV 0
 
 namespace CTRPluginFramework {
-    enum class CONFIG : s64 {
-		Color = 0,
-		FWKColor,
-		Language,
-		Info,
-		GameID,
-		GameVer,
-		DevMode,
-		Version
-	};
+	bool WriteLanguage(const std::string& langCode);
+	bool ReadLanguage(std::string &outLang);
+	void CheckForLanguageFile(void);
 
-	enum f_Language {
-        NoLang = 0, //If no language was chosen yet
-        JapaneseLang,
-        EnglishLang,
-        FrenchLang,
-		GermanLang,	
-		ItalianLang,
-		SpanishLang,
-		KoreanLang, 
-		MaxLang
-	};
-
-	enum f_Color {
-        NoMode = 0, //If No mode was chosen yet
-        ColorMode,
-        LiteMode,     
-        LuxuryMode,
-		CustomMode,
-        MaxColor
-	};
-
-	enum fwk_Color {
-        NoFWK = 0, //If No mode was chosen yet
-		FWK_Custom,
-        MaxFWK
-	};
-
-	enum f_GameVer {
-		NoneVer = 0, //Message never appeared
-		Declined, //Message appeared and "No" was selected
-		Accepted //Message appeared and "Yes" was selected
-	};
-
-	enum f_GameID {
-		NoneID = 0, 
-		WrongID, 
-		CorrectID 
-	};
-
-	void WriteConfig(CONFIG config, u8 byte);
-	void ReadConfig(CONFIG config, u8 &byte);
-	void CheckForCONFIG(void);
-
-	bool IsDevModeUsable(void);
-	void StartingMsg(void);
-	void CustomFWK(bool SetInMenu);
-	void SetupColors(bool SetInMenu);
+	void DeleteLanguage(void);
 	void SetupLanguage(bool SetInMenu);
 	void cheatsVisibility(bool SetInMenu);
 	void resetSettings(bool SetInMenu);

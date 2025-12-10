@@ -1,5 +1,4 @@
-#ifndef TOWN_HPP
-#define TOWN_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 #include <Helpers/GameStructs.hpp>
@@ -10,4 +9,3 @@ namespace CTRPluginFramework {
 		void 		   EditName(const std::string& name);
 	}
 }
-#endif

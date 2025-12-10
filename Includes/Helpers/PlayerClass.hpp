@@ -1,5 +1,4 @@
-#ifndef PLAYERCLASS_HPP
-#define PLAYERCLASS_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 
@@ -45,4 +44,3 @@ namespace CTRPluginFramework {
 		bool m_PlayerLoaded;
 	};
 }
-#endif

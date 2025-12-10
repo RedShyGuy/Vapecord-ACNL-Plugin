@@ -1,5 +1,4 @@
-#ifndef WRAPPER_HPP
-#define WRAPPER_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
 
@@ -49,4 +48,3 @@ namespace CTRPluginFramework {
 	
 	Process::ExceptionCallbackState CustomExceptionHandler(ERRF_ExceptionInfo* excep, CpuRegisters* regs);
 }
-#endif

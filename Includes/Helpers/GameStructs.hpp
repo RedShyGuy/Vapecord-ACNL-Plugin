@@ -1,9 +1,9 @@
-#ifndef GAMESTRUCTS_HPP
-#define GAMESTRUCTS_HPP
+#pragma once
 
 #include <CTRPluginFramework.hpp>
+#include "Item/Item.hpp"
 
-#pragma pack(1)
+#pragma pack(push, 1)
 
 namespace CTRPluginFramework {
 
@@ -19,7 +19,7 @@ namespace CTRPluginFramework {
         Empty = 8
     };
 
-    enum Item_Categories {
+    enum Item_Categories : u32 {
         MiiHead = 0, //(0x2000)
         NPCBuildingItems, //(0x2061 -> 0x2074)
         Bells, //(0x20AC -> 0x2117)
@@ -175,41 +175,10 @@ namespace CTRPluginFramework {
         Good_LuckCharm, //(0x22DF)
         IkadaTrophy, //(0x372A)
         Unknown2, //(0x22E0)
+        Invalid //Game internally actually has this for many checks
     };
 
     /*All Credits go to https://github.com/Slattz/ACNL_Research/blob/master/010%20Templates/garden_plus.dat.bt*/
-
-    struct Item {
-        u16 ID;
-        u16 Flags;
-
-        bool operator==(const Item& item) const {
-            return ID == item.ID && Flags == item.Flags;
-        }
-
-        bool operator!=(const Item& item) const {
-            return ID != item.ID || Flags != item.Flags;
-        }
-
-        bool operator>(const Item&item) const {
-            return (ID + Flags) > (item.ID + item.Flags);
-        }
-
-        Item() {
-            ID = 0;
-            Flags = 0;
-        }
-
-        Item(const u32 &val) {
-            ID = val;
-            Flags = val >> 16;
-        }
-
-        Item(u16 v_ID, u16 v_Flags) {
-            ID = v_ID;
-            Flags = v_Flags;
-        }
-    };
 
     struct Emoticons {
         u8 emoticons[40];
@@ -1806,7 +1775,9 @@ namespace CTRPluginFramework {
         PersonalID UnknownPID2[3];
         u8 Unknown78[0x96];
         Item UnkItems10[3];
+
         u8 Unknown79[0x184]; //0x6FD32 //start of unknown
+
         u8 IslandGrassType; //[0-2]; 0: Triangle | 1: Circle | 2: Square;
         u8 Padding7;
         u16 IslandAcres[4*4]; //0x6FEB8; 16 acres in total; 4 colunms, 4 rows. Game reads Acre IDs as u16;
@@ -1824,13 +1795,25 @@ namespace CTRPluginFramework {
 
         //0x7A778 player secret storage
 
-        //u8 unknown[0xA00];
+        u8 unknown[0xF600];
     };
 
-    /*struct Garden_Plus {
-        //SecureValueHeader SecureValue;
-        //ACNL_SaveHeader Header;
-        u8 Header[0xA0];
+    struct SecureValueHeader {
+        u64 SecureValue; //0x0 //Unused in ACNL WA
+        u32 SaveInitalised; //Has to be exactly 1
+        u8 HeaderPadding[0x74]; //Always 0
+    };
+
+    struct ACNL_SaveHeader {
+        u32 HeaderChecksum; //0x80 Checksum of the next 0x1C of header data
+        u16 SaveVerifier1; //Always 0x009E; 0x00F8 pre-WA
+        u8 SaveVerifier2; //Has to be exactly 0x2; 0x2 pre-WA
+        u8 HeaderPadding[0x19]; //Always 0
+    };
+
+    struct Garden_Plus {
+        SecureValueHeader SecureValue;
+        ACNL_SaveHeader Header;
         ACNL_Player Player1;
         ACNL_Player Player2;
         ACNL_Player Player3;
@@ -1841,6 +1824,7 @@ namespace CTRPluginFramework {
         ACNL_UnknownData UnkData; //WA exclusive
         ACNL_TownData TownData;
         u8 padding;
-    };*/
+    };
 }
-#endif
+
+#pragma pack(pop)

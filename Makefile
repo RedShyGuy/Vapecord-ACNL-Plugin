@@ -1,32 +1,45 @@
+#---------------------------------------------------------------------------------
 .SUFFIXES:
+#---------------------------------------------------------------------------------
 
 ifeq ($(strip $(DEVKITARM)),)
 $(error "Please set DEVKITARM in your environment. export DEVKITARM=<path to>devkitARM")
 endif
 
-TOPDIR 		?= 	$(CURDIR)
+export TOPDIR ?= $(CURDIR)
 include $(DEVKITARM)/3ds_rules
 
-CTRPFLIB	?=	$(CURDIR)/libctrpf/Library
+CTRPFLIB	?=	$(DEVKITPRO)/libctrpf
 
 TARGET		:= 	$(notdir $(CURDIR))
-PLGINFO 	:= 	CTRPluginFramework.plgInfo
 
 BUILD		:= 	Build
-INCLUDES	:= 	Includes
+INCLUDES	:= 	Includes \
+				Includes/Helpers \
+				Includes/LibCtrpfExtras \
+				Includes/Address \
+				Includes/Item \
+				Includes/Pretendo \
+				
 SOURCES 	:= 	Sources \
                 Sources/Folders \
 				Sources/Folders/SeedingCodes \
 				Sources/Folders/ExtraCodes \
 				Sources/Folders/PlayerCodes \
+				Sources/Folders/DefaultCodes \
 				Sources/Helpers \
-				Sources/Helpers/Personal \
-				Sources/Helpers/Other \
-				Sources/Plugin
-				
+				Sources/LibCtrpfExtras \
+				Sources/Plugin \
+				Sources/Item \
+				Sources/Pretendo \
+
+PSF 		:= 	$(notdir $(TOPDIR)).plgInfo
+
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
+DEVMODE 	?= 0
+
 ARCH		:=	-march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
 
 FALSEPOSITIVES := -Wno-array-bounds -Wno-stringop-overflow -Wno-stringop-overread
@@ -37,7 +50,7 @@ CFLAGS		:=	$(ARCH) -Os -mword-relocations \
 
 CFLAGS		+=	$(INCLUDE) -D__3DS__
 
-CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++17
+CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++17 -DDEVMODE=$(DEVMODE)
 
 ASFLAGS		:=	$(ARCH)
 LDFLAGS		:= -T $(TOPDIR)/3gx.ld $(ARCH) -Os -Wl,--gc-sections,--strip-discarded,--strip-debug
@@ -51,7 +64,6 @@ LIBDIRS		:= 	$(CTRPFLIB) $(CTRULIB) $(PORTLIBS)
 #---------------------------------------------------------------------------------
 ifneq ($(BUILD),$(notdir $(CURDIR)))
 #---------------------------------------------------------------------------------
-
 export OUTPUT	:=	$(CURDIR)/$(TARGET)
 export TOPDIR	:=	$(CURDIR)
 export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
@@ -89,17 +101,24 @@ re: clean all
 
 #---------------------------------------------------------------------------------
 
-else
+relink:
+	@rm -f *.elf *.3gx
+	@$(MAKE)
 
-DEPENDS	:=	$(OFILES:.o=.d)
+#---------------------------------------------------------------------------------
+
+else
 
 #---------------------------------------------------------------------------------
 # main targets
 #---------------------------------------------------------------------------------
+
+DEPENDS	:=	$(OFILES:.o=.d)
+
+
 $(OUTPUT).3gx : $(OUTPUT).elf
 
 $(OUTPUT).elf : $(OFILES)
-
 #---------------------------------------------------------------------------------
 # you need a rule like this for each extension you use as binary data
 #---------------------------------------------------------------------------------
@@ -109,13 +128,12 @@ $(OUTPUT).elf : $(OFILES)
 	@$(bin2o)
 
 #---------------------------------------------------------------------------------
-.PRECIOUS: %.elf
 %.3gx: %.elf
-#---------------------------------------------------------------------------------
 	@echo creating $(notdir $@)
-	@3gxtool -s -d $(word 1, $^) $(TOPDIR)/$(PLGINFO) $@
+	@3gxtool -s -d $^ $(TOPDIR)/$(PSF) $@
 
 -include $(DEPENDS)
 
-#---------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------
 endif
+#---------------------------------------------------------------------------------------
