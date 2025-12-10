@@ -57,8 +57,14 @@ jobs:
         name: Vapecord.Public
         path: package/
 
+    - name: Check For Unused Text
+      run: python3 CheckForUnusedText.py
 
+    - name: Check If Addresses Are Ported
+      run: python3 CheckIfAddressesArePorted.py
 
+    - name: Check If Text Is Translated
+      run: python3 CheckIfTextIsTranslated.py
 
 
 
