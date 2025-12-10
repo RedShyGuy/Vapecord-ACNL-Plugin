@@ -24,8 +24,8 @@ jobs:
       run: |
         mkdir -p /opt/devkitpro/libctrpf/include
         mkdir -p /opt/devkitpro/libctrpf/lib
-        cp -r libctrpf-0.8.0/include/* /opt/devkitpro/libctrpf/include/
-        cp -r libctrpf-0.8.0/lib/* /opt/devkitpro/libctrpf/lib/
+        cp -r include/* /opt/devkitpro/libctrpf/include/
+        cp -r lib/* /opt/devkitpro/libctrpf/lib/
 
     - name: Download 3gxtool
       run: |
@@ -45,6 +45,7 @@ jobs:
         path: |
           *.elf
           *.3gx
+
 
 
 
