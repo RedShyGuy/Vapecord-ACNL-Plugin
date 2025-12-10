@@ -34,8 +34,6 @@ jobs:
         cp 3gxtool.exe /opt/devkitpro/tools/bin/3gxtool
 
     - name: Build Plugin
-      env:
-        CTRPFLIB: ${{ env.CTRPF_PATH }}
       run: make
 
     - name: Upload Artifacts
@@ -45,6 +43,7 @@ jobs:
         path: |
           *.elf
           *.3gx
+
 
 
 
