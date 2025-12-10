@@ -1,6 +1,7 @@
 name: Build 3GX Plugin
 
 on:
+  workflow_dispatch:
   push:
     branches: ["master"]
   pull_request:
@@ -38,3 +39,4 @@ jobs:
         path: |
           *.elf
           *.3gx
+
