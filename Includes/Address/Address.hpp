@@ -26,7 +26,11 @@ namespace CTRPluginFramework {
 				KORWA,
 			};
 
+			Address(void);
+
 			Address(u32 address);
+
+			static Address decodeARMBranch(const u32 src, const u32 val);
 
 			static bool IsRegion(Region region);
 

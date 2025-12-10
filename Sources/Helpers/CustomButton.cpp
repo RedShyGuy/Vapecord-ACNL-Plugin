@@ -185,7 +185,7 @@ Custom Buttons
 
 	u32 SetNameCall(u32 DataPointer, u32 *stack, char *SYS_2D_UI, u8 sysID) {
 		const HookContext &curr = HookContext::GetCurrent();
-		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+		static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
 		u32 res = func.Call<u32>(DataPointer, stack, SYS_2D_UI, sysID);
 
 		if(sysID == 0x2A && itemsetting1 != -1) {

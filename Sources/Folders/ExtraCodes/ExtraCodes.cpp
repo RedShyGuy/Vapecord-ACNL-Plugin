@@ -451,7 +451,7 @@ namespace CTRPluginFramework {
 		}
 
 		const HookContext &curr = HookContext::GetCurrent();
-		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+		static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
 		return func.Call<bool>(item);
 	}
 

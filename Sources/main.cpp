@@ -22,7 +22,7 @@ Translators: みるえもん & みなと(Japanese), im a book(spanish), Fedecras
 )") + Utils::Format("Discord: %s", DISCORDINV);
 
 	static const std::string GameVersion = "1.5";
-	static const std::string GameVersionUSAWA = "1.1"; //seems to be an exception
+	static const std::string GameVersionUSAWA = "1.0"; //seems to be an exception
 	
 	extern int UI_Pos;
 	bool OSD_SplashScreen(const Screen &Splash);
@@ -61,10 +61,12 @@ Translators: みるえもん & みなと(Japanese), im a book(spanish), Fedecras
 
 		if(res == WRONG_VERSION) {
 			Sleep(Seconds(5));
-			static const std::string str = Utils::Format("Your game has the version %s\nThis plugin only supports the game version %s.", currentVersion.c_str(), realGameVersion.c_str());
-            if((MessageBox(Color(0xDC143CFF) << "Warning, wrong game version!", str, DialogType::DialogOk)).SetClear(ClearScreen::Top)()) {
-				return false;
+			static const std::string str = Utils::Format("Your game has the version %s\nThis plugin only supports the game version %s.\nDo you still want to try it out?", currentVersion.c_str(), realGameVersion.c_str());
+            if((MessageBox(Color(0xDC143CFF) << "Warning, wrong game version!", str, DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
+				return true;
 			}
+
+			return false;
 		}
 
 		else if(res == STRING_NOT_FOUND) {
@@ -95,7 +97,7 @@ Translators: みるえもん & みなと(Japanese), im a book(spanish), Fedecras
 	int	main(void) {
 		std::string region = Address::LoadRegion();
 
-		PluginMenu *menu = new PluginMenu(Color::White << "ACNL Vapecord Plugin " << region << " Beta", majorV, minorV, revisV, NOTE);
+		PluginMenu *menu = new PluginMenu(Color::White << "ACNL Vapecord Plugin " << region, majorV, minorV, revisV, NOTE);
 		menu->SynchronizeWithFrame(true);
 
 	//If title isn't ACNL

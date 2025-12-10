@@ -63,6 +63,22 @@ namespace CTRPluginFramework {
 		}
 	};
 
+	Address::Address() {
+		addr = 0;
+		origVal = 0;
+	}
+
+	Address Address::decodeARMBranch(const u32 src, const u32 val) {
+		s32 off = (val & 0xFFFFFF) << 2;
+		off = (off << 6) >> 6; //sign extend
+
+		Address address = Address();
+		address.addr = (u32)src + 8 + off;
+		Process::Read32(address.addr, address.origVal);
+		
+		return address;
+	}
+
 	bool Address::IsRegion(Region region) {
 		return regionId == region;
 	}

@@ -42,7 +42,7 @@ namespace CTRPluginFramework {
 			}
 
 			const HookContext &curr = HookContext::GetCurrent();
-			static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+			static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
 			return func.Call<u32>(ID, ItemToReplace, ItemToPlace, ItemToShow, worldx, worldy, 0, 0, 0, 0, 0);
 		}
 		return 0xFFFFFFFF;
@@ -55,14 +55,14 @@ namespace CTRPluginFramework {
 		}
 
 		const HookContext &curr = HookContext::GetCurrent();
-		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+		static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
 		func.Call<void>(var1, item, data);
 	}
 //Hook invalid drop
 	u32 InvalidDropStop(u8 ID, Item *ItemToReplace, Item *ItemToPlace, Item *ItemToShow) {
 		if(ItemToPlace->isValid()) {
 			const HookContext &curr = HookContext::GetCurrent();
-			static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+			static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
 			return func.Call<u32>(ID, ItemToReplace, ItemToPlace, ItemToShow);
 		}
 
@@ -72,7 +72,7 @@ namespace CTRPluginFramework {
 	void InvalidSpriteStop(u32 pData, Item *SpriteItem) {
 		if(SpriteItem->isValid()) {
 			const HookContext &curr = HookContext::GetCurrent();
-			static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+			static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
 			func.Call<void>(pData, SpriteItem);
 		}
 	}
@@ -110,7 +110,7 @@ namespace CTRPluginFramework {
 		}
 
 		const HookContext &curr = HookContext::GetCurrent();
-		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+		static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
 		return func.Call<bool>(item);
 	}
 
@@ -145,7 +145,7 @@ namespace CTRPluginFramework {
 		
 	//loads box
 		const HookContext &curr = HookContext::GetCurrent();
-        static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+        static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
         func.Call<void>(r0, r1, r2);
 	}
 
@@ -164,7 +164,7 @@ namespace CTRPluginFramework {
 		}
 
 		const HookContext &curr = HookContext::GetCurrent();
-        static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+        static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
         return func.Call<bool>(ItemData, ItemID, SecondaryItemFlag);
 	}
 
@@ -178,7 +178,7 @@ namespace CTRPluginFramework {
 		}
 
 		const HookContext &curr = HookContext::GetCurrent();
-        static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+        static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
         return func.Call<bool>(ItemData, ItemID);
 	}
 
@@ -189,7 +189,7 @@ namespace CTRPluginFramework {
 		}
 
 		const HookContext &curr = HookContext::GetCurrent();
-        static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+        static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
         return func.Call<int>(u0, u1, u2);
 	} 
 //basically "forces" a B press directly for the search function to break
@@ -209,7 +209,7 @@ namespace CTRPluginFramework {
         Process::WriteString(stack[1], "Did you know?", StringFormat::Utf16);
 
 		const HookContext &curr = HookContext::GetCurrent();
-        static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+        static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
         func.Call<void>(dataParam, stack);
 	}
 
@@ -217,7 +217,7 @@ namespace CTRPluginFramework {
         Process::WriteString(stack[1], "I have no clue what to write here", StringFormat::Utf16);
 
 		const HookContext &curr = HookContext::GetCurrent();
-        static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+        static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
         func.Call<void>(dataParam, stack);
     }
 
@@ -313,7 +313,7 @@ namespace CTRPluginFramework {
 		}
 
 		const HookContext &curr = HookContext::GetCurrent();
-		static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
+		static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
 		return func.Call<const char*>(ItemID, data, data2);
 	}                                                                                                                                                                                                                             
 
@@ -345,8 +345,8 @@ namespace CTRPluginFramework {
 		// Hook fallback helper (original call)
 		auto call_original = [&](void) -> u32 {
 			const HookContext &curr = HookContext::GetCurrent();
-			static Address funcAddr(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
-			return funcAddr.Call<u32>(InvAddress, slot, item, ItemLock, ItemToReplace);
+			static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
+			return func.Call<u32>(InvAddress, slot, item, ItemLock, ItemToReplace);
 		};
 
 		const u16 fruitMin = 0x2001;

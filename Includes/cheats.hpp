@@ -1,5 +1,4 @@
-#ifndef CHEATS_H
-#define CHEATS_H
+#pragma once
 
 #include <3ds.h>
 #include <CTRPluginFramework.hpp>
@@ -268,5 +267,3 @@ namespace CTRPluginFramework {
   //Located in cheats.cpp
 	void SendPlayerData(Time time);
 }
-
-#endif

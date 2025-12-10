@@ -122,7 +122,7 @@ namespace CTRPluginFramework {
 		Weathermod(entry);
 	}
 
-	void ShowPlayingMusic(u32 musicData, u32 r1) {
+	void ShowPlayingMusic(u32 musicData, u32 r1, u32 r2, u32 r3) {
 		/*
 		KK Songs are differently handled
 		This does not work sometimes, example fortune shop, the switching back to the Fortune Shop Melody doesnt get recognized
@@ -134,16 +134,16 @@ namespace CTRPluginFramework {
 		Campsite camper, wrong id
 		*/
 
-		u32 musicID = *(u32 *)(musicData + 8);
-		if (musicID <= 0xFF) {
-			OSD::Notify(Utils::Format("Now Playing: %s", IDList::GetMusicName(musicID)), Color(0x00FF00FF));
+		u16 musicID = *(u16 *)(musicData + 8);
+		if ((u8)musicID <= 0xFF) {
+			OSD::Notify(Utils::Format("Now Playing: %s", IDList::GetMusicName(musicID).c_str()), Color(0x00FF00FF));
 		} else {
-			OSD::Notify(Utils::Format("Now Playing: %08X", musicID), Color(0x00FF00FF));
+			OSD::Notify(Utils::Format("Now Playing: %04X", musicID), Color(0x00FF00FF));
 		}
 
 		const HookContext &curr = HookContext::GetCurrent();
-        static Address func(decodeARMBranch(curr.targetAddress, curr.overwrittenInstr));
-        func.Call<void>(musicData, r1);
+		static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
+        func.Call<void>(musicData, r1, r2, r3);
 	}
 
 	void radioPlayer(MenuEntry *entry) {

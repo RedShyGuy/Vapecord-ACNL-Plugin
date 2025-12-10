@@ -217,11 +217,4 @@ namespace CTRPluginFramework {
 
 		return (target & 0xFFFFFF);
 	}
-
-	u32 decodeARMBranch(const u32 src, const u32 val) {
-		s32 off = (val & 0xFFFFFF) << 2;
-		off = (off << 6) >> 6; //sign extend
-
-		return (u32)src + 8 + off;
-	}
 }
