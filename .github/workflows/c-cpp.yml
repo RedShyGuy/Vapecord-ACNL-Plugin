@@ -21,6 +21,13 @@ jobs:
         tar -xvjf libctrpf.tar.bz2
         echo "CTRPF_PATH=$PWD/libctrpf-0.8.0" >> $GITHUB_ENV
 
+    - name: Setup libctrpf
+      run: |
+        mkdir -p /opt/devkitpro/libctrpf
+        tar -xjf libctrpf-0.8.0.tar.bz2
+        cp -r libctrpf/include /opt/devkitpro/libctrpf/
+        cp -r libctrpf/lib /opt/devkitpro/libctrpf/
+
     - name: Download 3gxtool
       run: |
         wget -O 3gxtool.exe "https://gitlab.com/-/project/35893975/uploads/f5d78f6d718860022109e787b470bbb9/3gxtool.exe"
@@ -39,4 +46,5 @@ jobs:
         path: |
           *.elf
           *.3gx
+
 
