@@ -19,12 +19,12 @@ jobs:
       run: |
         wget -O libctrpf.tar.bz2 "https://gitlab.com/-/project/35748837/uploads/8d2a3dc282f32b6a75d5f6abaeafe88f/libctrpf-0.8.0.tar.bz2"
 
-    - name: Setup libctrpf
+    - name: Install libctrpf
       run: |
-        mkdir -p /opt/devkitpro/libctrpf
-        tar -xjf libctrpf.tar.bz2
-        cp -r include /opt/devkitpro/libctrpf/
-        cp -r lib /opt/devkitpro/libctrpf/
+        mkdir -p /opt/devkitpro/libctrpf/include
+        mkdir -p /opt/devkitpro/libctrpf/lib
+        cp -r include/* /opt/devkitpro/libctrpf/include/
+        cp -r lib/* /opt/devkitpro/libctrpf/lib/
 
     - name: Download 3gxtool
       run: |
@@ -44,6 +44,7 @@ jobs:
         path: |
           *.elf
           *.3gx
+
 
 
 
