@@ -45,16 +45,13 @@ jobs:
             cp Vapecord-ACNL-Plugin.3gx package/luma/plugins/$folder/Vapecord_Public.3gx
             cp -r Files/snd/* package/luma/plugins/$folder/snd/
         done
-        
-        cd package
-        zip -r ../Vapecord.Public.zip ./*
-        cd ..
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: Vapecord.Public
-        path: Vapecord.Public.zip
+        path: package/
+
 
 
 
