@@ -29,9 +29,9 @@ jobs:
 
     - name: Download 3gxtool
       run: |
-        wget -O 3gxtool.exe "https://gitlab.com/-/project/35893975/uploads/f5d78f6d718860022109e787b470bbb9/3gxtool.exe"
-        chmod +x 3gxtool.exe
-        cp 3gxtool.exe /opt/devkitpro/tools/bin/3gxtool
+        wget -O 3gxtool "https://gitlab.com/-/project/35893975/uploads/7cf27fcdc26921d9a6c5505c1e5bbcaa/3gxtool"
+        chmod +x 3gxtool
+        cp 3gxtool /opt/devkitpro/tools/bin/3gxtool
 
     - name: Build Plugin
       run: make
@@ -43,6 +43,7 @@ jobs:
         path: |
           *.elf
           *.3gx
+
 
 
 
