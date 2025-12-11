@@ -247,6 +247,7 @@ namespace CTRPluginFramework {
 			case 0x33B4: //Long Sleeve Dress
 				return "icn_385";
 
+			/*
 			case 0x22: //tree (growing 1)
 			case 0x23: //tree (growing 2)
 			case 0x24: //tree (growing 3)
@@ -283,8 +284,10 @@ namespace CTRPluginFramework {
 
 			case 0xCD: //rafflesia
 				return "icn_prsnt_04";
+			*/
 		}
 
+		/*
 		if (ItemID->ID >= 1 && ItemID->ID <= 6) { //wilted trees
 			return  "icn_prsnt2_06";
 		}
@@ -316,6 +319,7 @@ namespace CTRPluginFramework {
 		if (ItemID->ID >= 0x98 && ItemID->ID <= 0x9C) { //rocks
 			return "icn_prsnt_02";
 		}
+		*/
 
 		const HookContext &curr = HookContext::GetCurrent();
 		static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);

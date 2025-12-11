@@ -326,7 +326,8 @@ namespace CTRPluginFramework {
         }
     }
 
-    void SetCustomSpritesForSeedItemsAndProDesigns(MenuEntry *entry) {
+    /*Not SeedItems*/
+    void SetCustomSpritesForProDesigns(MenuEntry *entry) {
         int res = OptionKeyboard();
         if(res < 0) {
             return;
