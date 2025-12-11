@@ -50,14 +50,14 @@ namespace CTRPluginFramework {
 	Address::Address(u32 address) {
 		if (regionId == Region::USA) {
 			addr = address;
-			Process::Read32(addr, origVal);
+			origVal = *(u32 *)addr;
 			return;
 		}
 
 		for (const auto& row : ADDRESSES) {
 			if (row[0] == address) {
 				addr = row[regionId];
-				Process::Read32(addr, origVal);
+				origVal = *(u32 *)addr;
 				return;
 			}
 		}
@@ -74,7 +74,7 @@ namespace CTRPluginFramework {
 
 		Address address = Address();
 		address.addr = (u32)src + 8 + off;
-		Process::Read32(address.addr, address.origVal);
+		address.origVal = *(u32 *)address.addr;
 		
 		return address;
 	}
@@ -87,7 +87,7 @@ namespace CTRPluginFramework {
 		Address copy = *this;
 
 		copy.addr += offset;
-		Process::Read32(copy.addr, copy.origVal);
+		copy.origVal = *(u32 *)copy.addr;
 		return copy;
 	}
 
