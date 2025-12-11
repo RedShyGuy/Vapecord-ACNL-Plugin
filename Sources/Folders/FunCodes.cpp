@@ -263,7 +263,7 @@ namespace CTRPluginFramework {
 	
         if(Camera::GetInstance() != 0) {
         //check if you're outside
-            if(!RuntimeContext::getInstance()->isIndoors()) {
+            if(!Player::IsIndoors()) {
                 if(Game::IsGameInRoom(1)) {
 					rotationAsm.Unpatch();
 					rotationAsm2.Unpatch();

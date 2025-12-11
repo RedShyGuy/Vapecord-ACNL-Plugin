@@ -217,7 +217,7 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 		u16 VID = 0;
 	//NNPC
 		for(int i = 0; i < 0xA; ++i) {
-			data = GetData(0x191 + !RuntimeContext::getInstance()->isIndoors(), i);
+			data = GetData(0x191 + !Player::IsIndoors(), i);
 			if(data != 0) {
 				VID = GetVID(data);
 				vec.push_back(NPCdata{ GetNName(VID), data });

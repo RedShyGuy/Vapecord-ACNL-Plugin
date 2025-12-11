@@ -61,7 +61,7 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 			return -1; //Player not loaded
 		}
 
-		if(RuntimeContext::getInstance()->isIndoors()) {
+		if(Player::IsIndoors()) {
 			return -2; //Only works outdoors
 		}
 
@@ -167,7 +167,7 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 		u8 autoWaitAnim = waitAnim;
 		
 		if(ID == 0xB || ID == 0x13) {
-			if(RuntimeContext::getInstance()->isIndoors()) {
+			if(Player::IsIndoors()) {
 				ID = 0xA;
 				autoWaitAnim = 0x53;
 			}
@@ -208,7 +208,7 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 			return 0;
 		}
 
-		Item crashPreventItem = RuntimeContext::getInstance()->isIndoors() ? Item{0x2001, 0} : Item{0x7FFE, 0x8000};
+		Item crashPreventItem = Player::IsIndoors() ? Item{0x2001, 0} : Item{0x7FFE, 0x8000};
 
 		Item *ItemReplace = (actualItemToReplace->ID == 0x7FFE) ? &crashPreventItem : actualItemToReplace;
 		Item *ItemPlace = (actualItemToPlace->ID == 0x7FFE) ? &crashPreventItem : actualItemToPlace;

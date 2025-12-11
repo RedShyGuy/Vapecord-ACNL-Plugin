@@ -116,7 +116,7 @@ namespace CTRPluginFramework {
 //If animation is valid
 	bool IDList::AnimationValid(u8 animID, u8 playerIndex) {
 		if(animID > 0 && animID < 0xEB) {
-			if(RuntimeContext::getInstance()->isIndoors()) {
+			if(Player::IsIndoors()) {
 				switch(animID) {
 				//those would be fixed but they crash others indoors :/
 					case 0x5F:

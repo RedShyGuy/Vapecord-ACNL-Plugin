@@ -420,6 +420,7 @@ namespace CTRPluginFramework {
 	////////////////////////
 	MenuFolder *DEFAULTC = new MenuFolder("Default Codes");
 
+	DEFAULTC->Append(new MenuEntry("Set Seed Item Legitimacy", nullptr, SeedItemLegitimacyEntry, "")),
 	DEFAULTC->Append(new MenuEntry("Online Drop Lag Remover", nullptr, OnlineDropLagRemoverEntry, "")),
 	DEFAULTC->Append(new MenuEntry("Change Rockbreak Particle", nullptr, ChangeRockbreakParticleEntry, "")),
 	DEFAULTC->Append(new MenuEntry("Drop Items Everywhere", nullptr, DropItemsEverywhereEntry, "")),
@@ -445,7 +446,7 @@ namespace CTRPluginFramework {
 	DEFAULTC->Append(new MenuEntry("Set Drop Rules", nullptr, SetDropRules, "")),
 	DEFAULTC->Append(new MenuEntry("Set Plant Rules", nullptr, SetPlantRules, "")),
 	DEFAULTC->Append(new MenuEntry("Fix Particles In Puzzle League", nullptr, FixParticlesInPuzzleLeague, "")),
-	DEFAULTC->Append(new MenuEntry("Set Custom Sprites For Seed Items And Pro Designs", nullptr, SetCustomSpritesForSeedItemsAndProDesigns, "")),
+	DEFAULTC->Append(new MenuEntry("Set Custom Sprites For Pro Designs", nullptr, SetCustomSpritesForProDesigns, "")),
 	menu->Append(DEFAULTC);
 
 	////////////////////

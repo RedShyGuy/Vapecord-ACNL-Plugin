@@ -492,7 +492,7 @@ namespace CTRPluginFramework {
 		static const Address rem3(0x597FAC);
 		
 		if(removeEverything) {
-			if(!RuntimeContext::getInstance()->isIndoors()) {
+			if(!Player::IsIndoors()) {
 				x = 0x10;
 				y = 0x10;
 			}
@@ -540,7 +540,7 @@ namespace CTRPluginFramework {
 			res = true;
 			
 			if(removeEverything) {
-				y = !RuntimeContext::getInstance()->isIndoors() ? 0x10 : 0;
+				y = !Player::IsIndoors() ? 0x10 : 0;
 			}
 			else {
 				y = wY;

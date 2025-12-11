@@ -8,23 +8,14 @@
 #include "Helpers/Dropper.hpp"
 #include "Helpers/Inventory.hpp"
 #include "Helpers/GameKeyboard.hpp"
+#include "Helpers/Player.hpp"
 #include "RuntimeContext.hpp"
 #include "Color.h"
 
-extern "C" void MoveFurn(void);
 extern "C" void PATCH_MoveFurnButton(void);
 extern "C" void PATCH_ToolAnim(void);
 
-extern "C" bool __IsIndoors(void) {
-	return CTRPluginFramework::RuntimeContext::getInstance()->isIndoors();
-}
-
 u8 toolTypeAnimID = 6;
-
-extern "C" bool __IsAnimID(u8 toolAnimID) {
-	static const u8 toolAnimIDArr[18] = { 0xB0, 0x49, 0x55, 0x6C, 0xA0, 0x98, 0x8F, 0x91, 0xC3, 0xCE, 0xCF, 0x8D, 0x8E, 0x91, 0xB1, 0xB1, 0x70, 0x9A };
-	return std::find(std::begin(toolAnimIDArr), std::end(toolAnimIDArr), toolAnimID) != std::end(toolAnimIDArr);
-}
 
 namespace CTRPluginFramework {
 //Change Tool Animation
@@ -224,32 +215,82 @@ namespace CTRPluginFramework {
 			fovlargeMod.Unpatch();
 		}
 	}
+
+	u32 MoveFurniturePatch(void) {
+		const HookContext &curr = HookContext::GetCurrent();
+		static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
+		func.Call<u32>();
+
+		return Player::IsIndoors();
+	}
+
+	u32 LightSwitchPatch(void) {
+		return Player::IsIndoors();
+	}
+
 //Move Furniture
 	void roomSeeder(MenuEntry *entry) {
-		static const Address movefurn(0x5B531C);
-		static const Address lightswitch(0x5B7558);
-		static const Address MoveFurnPatch(0x326B98);
+		static const Address movingFurniture(0x4E1720);
+		static const Address pickingUpFurniture(0x678AC0);
+		static const Address placingFurniture1(0x76B880);
+		static const Address placingFurniture2(0x26FED8);
+		static const Address placingFurniture3(0x4E78A8);
+		static const Address lightswitchVisible(0x3279CC);
+		static const Address lightswitchFunction(0x3277E8);
+		static const Address moveFurnButton(0x326B98);
 
-		static Hook hook1, hook2, hook3;
+		static Hook movingFurnitureHook;
+		static Hook pickingUpFurnitureHook;
+		static Hook placingFurnitureHook1;
+		static Hook placingFurnitureHook2;
+		static Hook placingFurnitureHook3;
+		static Hook lightSwitchVisibleHook;
+		static Hook lightSwitchFunctionHook;
+		static Hook moveFurnButtonHook;
 
 		if(entry->WasJustActivated()) {
-			hook1.Initialize(movefurn.addr, (u32)MoveFurn);
-		  	hook1.SetFlags(USE_LR_TO_RETURN);
-			hook1.Enable();	
+			movingFurnitureHook.Initialize(movingFurniture.addr, (u32)MoveFurniturePatch);
+		  	movingFurnitureHook.SetFlags(USE_LR_TO_RETURN);
+			movingFurnitureHook.Enable();
 
-			hook2.Initialize(lightswitch.addr, (u32)MoveFurn);
-		  	hook2.SetFlags(USE_LR_TO_RETURN);
-			hook2.Enable();	
+			pickingUpFurnitureHook.Initialize(pickingUpFurniture.addr, (u32)MoveFurniturePatch);
+		  	pickingUpFurnitureHook.SetFlags(USE_LR_TO_RETURN);
+			pickingUpFurnitureHook.Enable();
 
-			hook3.Initialize(MoveFurnPatch.addr, (u32)PATCH_MoveFurnButton);
-			hook3.SetFlags(USE_LR_TO_RETURN);
-			hook3.Enable();	
+			placingFurnitureHook1.Initialize(placingFurniture1.addr, (u32)MoveFurniturePatch);
+		  	placingFurnitureHook1.SetFlags(USE_LR_TO_RETURN);
+			placingFurnitureHook1.Enable();
+
+			placingFurnitureHook2.Initialize(placingFurniture2.addr, (u32)MoveFurniturePatch);
+		  	placingFurnitureHook2.SetFlags(USE_LR_TO_RETURN);
+			placingFurnitureHook2.Enable();
+
+			placingFurnitureHook3.Initialize(placingFurniture3.addr, (u32)MoveFurniturePatch);
+		  	placingFurnitureHook3.SetFlags(USE_LR_TO_RETURN);
+			placingFurnitureHook3.Enable();
+
+			lightSwitchVisibleHook.Initialize(lightswitchVisible.addr, (u32)LightSwitchPatch);
+		  	lightSwitchVisibleHook.SetFlags(USE_LR_TO_RETURN);
+			lightSwitchVisibleHook.Enable();
+
+			lightSwitchFunctionHook.Initialize(lightswitchFunction.addr, (u32)LightSwitchPatch);
+		  	lightSwitchFunctionHook.SetFlags(USE_LR_TO_RETURN);
+			lightSwitchFunctionHook.Enable();
+
+			moveFurnButtonHook.Initialize(moveFurnButton.addr, (u32)PATCH_MoveFurnButton);
+			moveFurnButtonHook.SetFlags(USE_LR_TO_RETURN);
+			moveFurnButtonHook.Enable();
 		}
 		
 		else if(!entry->IsActivated()) {
-			hook1.Disable();
-			hook2.Disable();
-			hook3.Disable();
+			movingFurnitureHook.Disable();
+			pickingUpFurnitureHook.Disable();
+			placingFurnitureHook1.Disable();
+			placingFurnitureHook2.Disable();
+			placingFurnitureHook3.Disable();
+			lightSwitchVisibleHook.Disable();
+			lightSwitchFunctionHook.Disable();
+			moveFurnButtonHook.Disable();
 		}
     }
 //Can Walk When Talk /*Made by Jay*/

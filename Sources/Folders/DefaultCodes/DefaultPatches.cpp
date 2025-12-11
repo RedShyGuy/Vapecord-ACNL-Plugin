@@ -20,6 +20,20 @@ namespace CTRPluginFramework {
 		fn(res == 0); // 0 = enable, 1 = disable
     }
 
+	void SeedItemLegitimacy(bool enable) {
+		static Address skipSeedItemCheck(0x6BAC8C);
+		static Address allItemsLegit = skipSeedItemCheck.MoveOffset(0x14C);
+
+		if(enable) {
+			skipSeedItemCheck.Patch(0xEA000006);
+			allItemsLegit.Patch(0xE3A00001);
+		}
+		else {
+			skipSeedItemCheck.Unpatch();
+			allItemsLegit.Unpatch();
+		}
+	}
+
     void OnlineDropLagRemover(bool enable) {
         static Address host1(0x5A1454);
 		static Address host2(0x5A12F4);
@@ -189,6 +203,7 @@ namespace CTRPluginFramework {
 	}
 
 	void EnableAllPatches() {
+		SeedItemLegitimacy(true);
 		OnlineDropLagRemover(true);
 		ChangeRockbreakParticle(true);
 		DropItemsEverywhere(true);
@@ -202,6 +217,7 @@ namespace CTRPluginFramework {
 	}
 
 	void DisableAllPatches() {
+		SeedItemLegitimacy(false);
 		OnlineDropLagRemover(false);
 		ChangeRockbreakParticle(false);
 		DropItemsEverywhere(false);
@@ -212,6 +228,10 @@ namespace CTRPluginFramework {
 		BypassGameChecks(false);
 		DisableNonSeedItemCheck(false);
 		PatchDropFunction(false);
+	}
+
+	void SeedItemLegitimacyEntry(MenuEntry *entry) {
+		ToggleWithOptionKeyboard(SeedItemLegitimacy);
 	}
 
 	void OnlineDropLagRemoverEntry(MenuEntry *entry) {
