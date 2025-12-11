@@ -47,7 +47,7 @@ jobs:
         
         for folder in 0004000000198e00 0004000000198d00 00040000004C5700 0004000000199000 0004000000086500 0004000000086400 0004000000086300 0004000000086200 0004000000198f00; do
             mkdir -p package/luma/plugins/$folder/snd
-            cp Vapecord-ACNL-Plugin.3gx package/luma/plugins/$folder/Vapecord_Public.3gx
+            cp Vapecord_Public.3gx package/luma/plugins/$folder/Vapecord_Public.3gx
             cp -r Files/snd/* package/luma/plugins/$folder/snd/
         done
 
