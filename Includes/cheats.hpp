@@ -233,6 +233,7 @@ namespace CTRPluginFramework {
 	void DisableAllChecks(void);
 	void DisableAllPatches(void);
 
+	void SeedItemLegitimacyEntry(MenuEntry *entry);
 	void OnlineDropLagRemoverEntry(MenuEntry *entry);
     void ChangeRockbreakParticleEntry(MenuEntry *entry);
     void DropItemsEverywhereEntry(MenuEntry *entry);

@@ -420,6 +420,7 @@ namespace CTRPluginFramework {
 	////////////////////////
 	MenuFolder *DEFAULTC = new MenuFolder("Default Codes");
 
+	DEFAULTC->Append(new MenuEntry("Set Seed Item Legitimacy", nullptr, SeedItemLegitimacyEntry, "")),
 	DEFAULTC->Append(new MenuEntry("Online Drop Lag Remover", nullptr, OnlineDropLagRemoverEntry, "")),
 	DEFAULTC->Append(new MenuEntry("Change Rockbreak Particle", nullptr, ChangeRockbreakParticleEntry, "")),
 	DEFAULTC->Append(new MenuEntry("Drop Items Everywhere", nullptr, DropItemsEverywhereEntry, "")),
