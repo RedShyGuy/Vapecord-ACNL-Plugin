@@ -2,6 +2,7 @@
 #include "Item/Item.hpp"
 #include "Address/Address.hpp"
 #include "RuntimeContext.hpp"
+#include "Helpers/Player.hpp"
 
 #define RANGE(X, START, END)	((X & 0xFFFF) >= START && (X & 0xFFFF) <= END)
 #define IS(X, ADDR)				((X & 0xFFFF) == ADDR)
@@ -18,7 +19,7 @@ namespace CTRPluginFramework {
 		}
 
 	//If player is outdoors or doesnt drop item
-		if(!RuntimeContext::getInstance()->isIndoors() || !IsDropped) {
+		if(!Player::IsIndoors() || !IsDropped) {
 			if(IS(tempID, 0x7FFE) || RANGE(tempID, 0, 0xFD)) {
 				return true;
 			}
@@ -36,7 +37,7 @@ namespace CTRPluginFramework {
 
     bool Item::isFlagValid(bool IsDropped) {
 	//If player is indoors and drops item
-		if(RuntimeContext::getInstance()->isIndoors() && IsDropped) {
+		if(Player::IsIndoors() && IsDropped) {
 			if(Flags >= 0x8000) {
 				return false;
 			}

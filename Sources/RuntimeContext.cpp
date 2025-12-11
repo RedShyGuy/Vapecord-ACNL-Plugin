@@ -36,12 +36,4 @@ namespace CTRPluginFramework {
     void RuntimeContext::setSaveMenuDisabled(bool value) { 
         v_isSaveMenuDisabled = value; 
     }
-
-    bool RuntimeContext::isIndoors() const { 
-        return v_isIndoors; 
-    }
-
-    void RuntimeContext::setIndoors(bool value) { 
-        v_isIndoors = value; 
-    }
 }

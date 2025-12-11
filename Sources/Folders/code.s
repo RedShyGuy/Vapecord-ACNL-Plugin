@@ -29,8 +29,11 @@ FUNCTION    BGRHook
     BX          LR                  @return
 
 FUNCTION    MoveFurn
-    BL          __IsIndoors  @data which holds check for if indoors 
-    BX          LR
+    PUSH        {LR}
+
+    BL          __IsIndoors        @calls function to check if player is indoors
+   
+    POP         {PC}
 
 FUNCTION    PATCH_MoveFurnButton
     PUSH        {R1-R4, LR}

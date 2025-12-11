@@ -70,9 +70,7 @@ namespace CTRPluginFramework {
 
 //check for indoor items	
 	void IndoorsSeedItemCheck(void) {
-        RuntimeContext::getInstance()->setIndoors(Player::IsIndoors());
-
-		if(!DropPatternON || !RuntimeContext::getInstance()->isIndoors()) {
+		if(!DropPatternON || !Player::IsIndoors()) {
             return;
         }
 		

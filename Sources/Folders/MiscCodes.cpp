@@ -15,16 +15,7 @@ extern "C" void MoveFurn(void);
 extern "C" void PATCH_MoveFurnButton(void);
 extern "C" void PATCH_ToolAnim(void);
 
-extern "C" bool __IsIndoors(void) {
-	return CTRPluginFramework::RuntimeContext::getInstance()->isIndoors();
-}
-
 u8 toolTypeAnimID = 6;
-
-extern "C" bool __IsAnimID(u8 toolAnimID) {
-	static const u8 toolAnimIDArr[18] = { 0xB0, 0x49, 0x55, 0x6C, 0xA0, 0x98, 0x8F, 0x91, 0xC3, 0xCE, 0xCF, 0x8D, 0x8E, 0x91, 0xB1, 0xB1, 0x70, 0x9A };
-	return std::find(std::begin(toolAnimIDArr), std::end(toolAnimIDArr), toolAnimID) != std::end(toolAnimIDArr);
-}
 
 namespace CTRPluginFramework {
 //Change Tool Animation
@@ -235,15 +226,15 @@ namespace CTRPluginFramework {
 		if(entry->WasJustActivated()) {
 			hook1.Initialize(movefurn.addr, (u32)MoveFurn);
 		  	hook1.SetFlags(USE_LR_TO_RETURN);
-			hook1.Enable();	
+			hook1.Enable();
 
 			hook2.Initialize(lightswitch.addr, (u32)MoveFurn);
 		  	hook2.SetFlags(USE_LR_TO_RETURN);
-			hook2.Enable();	
+			hook2.Enable();
 
 			hook3.Initialize(MoveFurnPatch.addr, (u32)PATCH_MoveFurnButton);
 			hook3.SetFlags(USE_LR_TO_RETURN);
-			hook3.Enable();	
+			hook3.Enable();
 		}
 		
 		else if(!entry->IsActivated()) {

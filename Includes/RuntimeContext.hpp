@@ -9,7 +9,6 @@ namespace CTRPluginFramework {
             bool v_isTurbo = false;
             bool v_isFov = false;
             bool v_isSaveMenuDisabled = false;
-            bool v_isIndoors = false;
 
             RuntimeContext() = default;
             static RuntimeContext* instance;
@@ -22,7 +21,5 @@ namespace CTRPluginFramework {
             void setFov(bool value);
             bool isSaveMenuDisabled() const;
             void setSaveMenuDisabled(bool value);
-            bool isIndoors() const;
-            void setIndoors(bool value);
     };
 }
