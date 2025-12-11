@@ -3,7 +3,7 @@ Author: KwaDukathole
 Version: # Plugin version
     Major: 2
     Minor: 0
-    Revision: 0
+    Revision: 1
 
 Targets: # Low TitleId of games which are compatibles with this plugin (0 for all)
 
