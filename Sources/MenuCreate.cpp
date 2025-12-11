@@ -445,7 +445,7 @@ namespace CTRPluginFramework {
 	DEFAULTC->Append(new MenuEntry("Set Drop Rules", nullptr, SetDropRules, "")),
 	DEFAULTC->Append(new MenuEntry("Set Plant Rules", nullptr, SetPlantRules, "")),
 	DEFAULTC->Append(new MenuEntry("Fix Particles In Puzzle League", nullptr, FixParticlesInPuzzleLeague, "")),
-	DEFAULTC->Append(new MenuEntry("Set Custom Sprites For Seed Items And Pro Designs", nullptr, SetCustomSpritesForSeedItemsAndProDesigns, "")),
+	DEFAULTC->Append(new MenuEntry("Set Custom Sprites For Pro Designs", nullptr, SetCustomSpritesForProDesigns, "")),
 	menu->Append(DEFAULTC);
 
 	////////////////////

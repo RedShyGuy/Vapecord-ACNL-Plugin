@@ -258,7 +258,7 @@ namespace CTRPluginFramework {
     void SetDropRules(MenuEntry *entry);
     void SetPlantRules(MenuEntry *entry);
     void FixParticlesInPuzzleLeague(MenuEntry *entry);
-    void SetCustomSpritesForSeedItemsAndProDesigns(MenuEntry *entry);
+    void SetCustomSpritesForProDesigns(MenuEntry *entry);
 	void FruitStackingCheck(MenuEntry *entry);
 
 	void SetLanguageEntry(MenuEntry *entry);
