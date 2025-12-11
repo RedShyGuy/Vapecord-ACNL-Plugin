@@ -28,13 +28,6 @@ FUNCTION    BGRHook
     MOV         R8, #0              @restore R8
     BX          LR                  @return
 
-FUNCTION    MoveFurn
-    PUSH        {LR}
-
-    BL          __IsIndoors        @calls function to check if player is indoors
-   
-    POP         {PC}
-
 FUNCTION    PATCH_MoveFurnButton
     PUSH        {R1-R4, LR}
     PUSH        {R0}                @save R0 seperately

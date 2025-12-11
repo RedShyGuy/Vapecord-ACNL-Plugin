@@ -10,10 +10,6 @@
 #include "Helpers/Checks.hpp"
 #include "RuntimeContext.hpp"
 
-extern "C" bool __IsIndoors(void) {
-	return CTRPluginFramework::Player::IsIndoors();
-}
-
 extern "C" bool __IsAnimID(u8 toolAnimID) {
 	static const u8 toolAnimIDArr[18] = { 0xB0, 0x49, 0x55, 0x6C, 0xA0, 0x98, 0x8F, 0x91, 0xC3, 0xCE, 0xCF, 0x8D, 0x8E, 0x91, 0xB1, 0xB1, 0x70, 0x9A };
 	return std::find(std::begin(toolAnimIDArr), std::end(toolAnimIDArr), toolAnimID) != std::end(toolAnimIDArr);
