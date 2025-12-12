@@ -467,7 +467,7 @@ namespace CTRPluginFramework {
 		static Address fastt(0x5FC6AC);
 		static Address fastt2 = fastt.MoveOffset(8);
 
-		static bool unpatched = true;
+		static bool patched = false;
 		u8 roomID = Game::GetRoom();
 		if (roomID == 0x63 && entry->IsActivated()) { // Isabelle
 			if (Game::GameSaving()) {
@@ -479,13 +479,13 @@ namespace CTRPluginFramework {
 
 			fastt.Patch(0xEA000000);
 			fastt2.Patch(0xE3500001);
-			unpatched = false;
+			patched = true;
 		}
-		else if (!unpatched){
+		else if (patched) {
 			speed.Unpatch();
 			fastt.Unpatch();
 			fastt2.Unpatch();
-			unpatched = true;
+			patched = false;
 		}
 	}
 }
