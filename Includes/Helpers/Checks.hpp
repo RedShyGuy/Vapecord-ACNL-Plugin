@@ -4,6 +4,7 @@
 #include "Helpers/GameStructs.hpp"
 
 namespace CTRPluginFramework {
+    void CheckInvalidBadge(u32 data, u32 badge, int badgeType, u32 r3, u32 r4);
     void OnTitleScreen(u8 roomId, bool u0, bool u1, bool u2);
     void InvalidGiveItem(bool var1, Item* item, u32 data);
     u32 InvalidPickStop(u8 ID, Item *ItemToReplace, Item *ItemToPlace, Item *ItemToShow, u8 worldx, u8 worldy);

@@ -36,6 +36,17 @@ extern "C" bool __IsPlayerHouse() {
 }
 
 namespace CTRPluginFramework {
+	void CheckInvalidBadge(u32 data, u32 badge, int badgeType, u32 r3, u32 r4) {
+		if (badgeType > 3) {
+			OSD::Notify("Invalid Badge Type! Can't display badge properly.", Color::Red);
+			return;
+		}
+
+		const HookContext &curr = HookContext::GetCurrent();
+		static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
+		func.Call<void>(data, badge, badgeType, r3, r4);
+	}
+
 //Hook invalid pickup
 	u32 InvalidPickStop(u8 ID, Item *ItemToReplace, Item *ItemToPlace, Item *ItemToShow, u8 worldx, u8 worldy) {	
 		if(ItemToReplace->isValid()) {

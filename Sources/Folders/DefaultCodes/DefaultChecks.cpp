@@ -28,6 +28,7 @@ namespace CTRPluginFramework {
         return optKb.Open();
     }
 
+    static Hook CheckInvalidBadgeHook1, CheckInvalidBadgeHook2;
     static Hook SaveButtonCheck;
     static Hook CatalogPHook1, CatalogPHook2;
     static Hook IPHook;
@@ -46,6 +47,9 @@ namespace CTRPluginFramework {
     static Hook OnProDesignHook;
 
     void EnableAllChecks() {
+        SetHook(CheckInvalidBadgeHook1, Address(0x6AF954).addr, (u32)CheckInvalidBadge, USE_LR_TO_RETURN);
+        SetHook(CheckInvalidBadgeHook2, Address(0x6AECA0).addr, (u32)CheckInvalidBadge, USE_LR_TO_RETURN);
+
         SetHook(SaveButtonCheck, Address(0x1A0980).addr - 0x10, (u32)IsSTARTDown, USE_LR_TO_RETURN);
 
         SetHook(CatalogPHook1, Address(0x21C408).addr, (u32)CatalogPatch_Keyboard, USE_LR_TO_RETURN);
@@ -88,6 +92,8 @@ namespace CTRPluginFramework {
     }
 
     void DisableAllChecks() {
+        CheckInvalidBadgeHook1.Disable();
+        CheckInvalidBadgeHook2.Disable();
         SaveButtonCheck.Disable();
         CatalogPHook1.Disable();
         CatalogPHook2.Disable();
@@ -113,6 +119,22 @@ namespace CTRPluginFramework {
         ParticleHook1.Disable();
         ParticleHook2.Disable();
         OnProDesignHook.Disable();
+    }
+
+    void CheckInvalidBadgeEntry(MenuEntry *entry) {
+        int res = OptionKeyboard();
+        if(res < 0) {
+            return;
+        }
+
+        if (res == 0) {
+            CheckInvalidBadgeHook1.Enable();
+            CheckInvalidBadgeHook2.Enable();
+        }
+        else {
+            CheckInvalidBadgeHook1.Disable();
+            CheckInvalidBadgeHook2.Disable();
+        }
     }
 
     void DisableOpenSaveMenuWithStartButton(MenuEntry *entry) {
