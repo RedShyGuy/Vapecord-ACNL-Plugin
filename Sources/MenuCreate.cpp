@@ -432,6 +432,7 @@ namespace CTRPluginFramework {
 	DEFAULTC->Append(new MenuEntry("Disable Non Seed Item Check", nullptr, DisableNonSeedItemCheckEntry, "")),
 	DEFAULTC->Append(new MenuEntry("Patch Drop Function", nullptr, PatchDropFunctionEntry, "")),
 
+	DEFAULTC->Append(new MenuEntry("Fix Invalid Badge Crash", nullptr, CheckInvalidBadgeEntry, "")),
 	DEFAULTC->Append(new MenuEntry("Disable Open Save Menu With Start Button", nullptr, DisableOpenSaveMenuWithStartButton, "")),
 	DEFAULTC->Append(new MenuEntry("Disable Catalog Search Function", nullptr, DisableCatalogSearchFunction, "")),
 	DEFAULTC->Append(new MenuEntry("Fix Invalid Pickup Crash", nullptr, FixInvalidPickupCrash, "")),

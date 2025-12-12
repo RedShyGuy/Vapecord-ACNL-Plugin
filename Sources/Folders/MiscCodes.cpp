@@ -225,6 +225,30 @@ namespace CTRPluginFramework {
 	}
 
 	u32 LightSwitchPatch(void) {
+		static const u8 r_Array[14] = { 
+			0x02, //Train Station
+			0x26, //Town Hall
+			0x30, //Police Station
+			0x31, //Police Station
+			0x39, //T&T Mart
+			0x3A, //Super T&T
+			0x3B, //TIY
+			0x3F, //Able Sisters Mable & Sable
+			0x41, //Nooks Homes
+			0x43, //Gardening Store
+			0x44, //Gardening Store
+			0x48, //Shampoodle
+			0x5A, //Post Office
+			0x67, //Island (Might freeze?)
+		};
+
+		u8 stageID = CTRPluginFramework::Player::GetRoom(4);
+		for (u8 i = 0; i < 14; ++i) {
+			if(stageID == r_Array[i]) {
+				return 0; //Disable lightswitch if invalid room
+			}
+		}
+
 		return Player::IsIndoors();
 	}
 

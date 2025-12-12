@@ -28,6 +28,7 @@ namespace CTRPluginFramework {
         return optKb.Open();
     }
 
+    static Hook CheckInvalidBadgeHook1, CheckInvalidBadgeHook2;
     static Hook SaveButtonCheck;
     static Hook CatalogPHook1, CatalogPHook2;
     static Hook IPHook;
@@ -37,6 +38,7 @@ namespace CTRPluginFramework {
     static Hook IHHook;
     static Hook IIHook;
     static Hook CFHook;
+    static Hook HoveredNameHook;
     static Hook NameHook;
     static Hook ReplaceHook;
     static Hook DropHook1, DropHook2, DropHook3, DropHook4;
@@ -45,6 +47,9 @@ namespace CTRPluginFramework {
     static Hook OnProDesignHook;
 
     void EnableAllChecks() {
+        SetHook(CheckInvalidBadgeHook1, Address(0x6AF954).addr, (u32)CheckInvalidBadge, USE_LR_TO_RETURN);
+        SetHook(CheckInvalidBadgeHook2, Address(0x6AECA0).addr, (u32)CheckInvalidBadge, USE_LR_TO_RETURN);
+
         SetHook(SaveButtonCheck, Address(0x1A0980).addr - 0x10, (u32)IsSTARTDown, USE_LR_TO_RETURN);
 
         SetHook(CatalogPHook1, Address(0x21C408).addr, (u32)CatalogPatch_Keyboard, USE_LR_TO_RETURN);
@@ -65,7 +70,8 @@ namespace CTRPluginFramework {
 
         SetHook(CFHook, Address(0x323514).addr, (u32)ConvertFlower, USE_LR_TO_RETURN);
 
-        SetHook(NameHook, Address(0x19C498).addr, (u32)NameFunc, USE_LR_TO_RETURN);
+        SetHook(HoveredNameHook, Address(0x19CE64).addr, (u32)SetHoveredItemName, USE_LR_TO_RETURN);
+        SetHook(NameHook, Address(0x19C498).addr, (u32)SetItemName, USE_LR_TO_RETURN);
 
         SetHook(ReplaceHook, Address(0x165528).addr, (u32)IsItemReplaceable, USE_LR_TO_RETURN);
 
@@ -86,6 +92,8 @@ namespace CTRPluginFramework {
     }
 
     void DisableAllChecks() {
+        CheckInvalidBadgeHook1.Disable();
+        CheckInvalidBadgeHook2.Disable();
         SaveButtonCheck.Disable();
         CatalogPHook1.Disable();
         CatalogPHook2.Disable();
@@ -97,6 +105,7 @@ namespace CTRPluginFramework {
         IHHook.Disable();
         IIHook.Disable();
         CFHook.Disable();
+        HoveredNameHook.Disable();
         NameHook.Disable();
         ReplaceHook.Disable();
         DropHook1.Disable();
@@ -110,6 +119,22 @@ namespace CTRPluginFramework {
         ParticleHook1.Disable();
         ParticleHook2.Disable();
         OnProDesignHook.Disable();
+    }
+
+    void CheckInvalidBadgeEntry(MenuEntry *entry) {
+        int res = OptionKeyboard();
+        if(res < 0) {
+            return;
+        }
+
+        if (res == 0) {
+            CheckInvalidBadgeHook1.Enable();
+            CheckInvalidBadgeHook2.Enable();
+        }
+        else {
+            CheckInvalidBadgeHook1.Disable();
+            CheckInvalidBadgeHook2.Disable();
+        }
     }
 
     void DisableOpenSaveMenuWithStartButton(MenuEntry *entry) {
@@ -249,9 +274,11 @@ namespace CTRPluginFramework {
         }
 
         if (res == 0) {
+            HoveredNameHook.Enable();
             NameHook.Enable();
         }
         else {
+            HoveredNameHook.Disable();
             NameHook.Disable();
         }
     }

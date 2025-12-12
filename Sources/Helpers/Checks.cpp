@@ -36,6 +36,17 @@ extern "C" bool __IsPlayerHouse() {
 }
 
 namespace CTRPluginFramework {
+	void CheckInvalidBadge(u32 data, u32 badge, int badgeType, u32 r3, u32 r4) {
+		if (badgeType > 3) {
+			OSD::Notify("Invalid Badge Type! Can't display badge properly.", Color::Red);
+			return;
+		}
+
+		const HookContext &curr = HookContext::GetCurrent();
+		static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
+		func.Call<void>(data, badge, badgeType, r3, r4);
+	}
+
 //Hook invalid pickup
 	u32 InvalidPickStop(u8 ID, Item *ItemToReplace, Item *ItemToPlace, Item *ItemToShow, u8 worldx, u8 worldy) {	
 		if(ItemToReplace->isValid()) {
@@ -129,7 +140,30 @@ namespace CTRPluginFramework {
 		return false;
 	}
 
-	void NameFunc(u32 r0, u32 r1, u32 r2) {		
+	void SetHoveredItemName(u32 r0, u32 r1, u32 r2, u32 r3) {
+		Item itemslotid = {0x7FFE, 0};
+		u8 slot = 0;
+
+		if(Inventory::GetHoveredSlot(slot)) {
+			if(Inventory::ReadSlot(slot, itemslotid)) {
+				itemslotid.Flags = 0;
+				if(Game::IsOutdoorItem(itemslotid) || itemslotid.ID == 0x3729) {
+					std::string name = itemslotid.GetName();
+					Process::Write32(r1 + 0x18, 0x000E000E);
+					Process::Write32(r1 + 0x1C, 0x00040000);
+					Process::Write32(r1 + 0x20, 0xCD030100);
+
+					Process::WriteString(r1 + 0x24, itemslotid.isValid(false) ? name : "Invalid Item", StringFormat::Utf16);				
+				}
+			}
+		}
+
+		const HookContext &curr = HookContext::GetCurrent();
+        static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
+        func.Call<void>(r0, r1, r2, r3);
+	}
+
+	void SetItemName(u32 r0, u32 r1, u32 r2) {		
 		Item itemslotid = {0x7FFE, 0};
 		u8 slot = 0;
 

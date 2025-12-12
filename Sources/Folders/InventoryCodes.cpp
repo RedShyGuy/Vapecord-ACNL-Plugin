@@ -348,10 +348,20 @@ namespace CTRPluginFramework {
 		}
 	}
 
-	void Hook_MenuPatch(void) {
-		Game::OpenMenu(CurrentMenu);
-		PluginMenu *menu = PluginMenu::GetRunningInstance();
-		*menu += Callback_MenuPatch;
+	void Hook_MenuPatch(u32 r0, u32 r1, u32 r3) {
+		u8 roomId = Player::GetRoom(4);
+		if (roomId == 0xA1 || roomId == 0xA2 || (roomId >= 0x92 && roomId <= 0x97)) {
+			OSD::Notify("Custom Save Menu doesn't work in this room!", Color::Red);
+
+			const HookContext &curr = HookContext::GetCurrent();
+			static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
+			func.Call<void>(r0, r1, r3);
+		}
+		else {
+			Game::OpenMenu(CurrentMenu);
+			PluginMenu *menu = PluginMenu::GetRunningInstance();
+			*menu += Callback_MenuPatch;
+		}
 	}
 	
 //Menu Changer

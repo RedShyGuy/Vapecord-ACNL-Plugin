@@ -434,12 +434,14 @@ namespace CTRPluginFramework {
 
 //get map boolen pointer
 	bool Game::MapBoolCheck() {
-		return *(bool *)Address(0x950C30).addr;
+		static const Address mapBool(0x950C30);
+		return *(bool *)mapBool.addr;
 	}
 
 //Get online index
 	u8 Game::GetOnlinePlayerIndex() {
-		return Address(0x305EF0).Call<u8>();
+		static Address playerIndex(0x305EF0);
+		return playerIndex.Call<u8>();
 	}
 
 //Get actual index
