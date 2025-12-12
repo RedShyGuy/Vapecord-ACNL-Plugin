@@ -111,9 +111,14 @@ namespace CTRPluginFramework {
 
 	void PatchThreadBegin(u32 threadfunc, u32 threadargs, u32 startFunc, u32 u0) {
 		static Address point(0x953CA0);
-		static Address calc(0x2C);
 
-		static u32 threadAddress = *(u32 *)(*(u32 *)(point.addr) + 0xA8 + 0x80) - calc.addr;
+		u8 fixOffset = 0x30; //For USAWA, EURWA, JPN, JPNWA, KORWA
+		if (Address::IsRegion(Address::Region::USA) || Address::IsRegion(Address::Region::EUR)
+			|| Address::IsRegion(Address::Region::KOR)) {
+			fixOffset = 0x2C;
+		}
+
+		static u32 threadAddress = *(u32 *)(*(u32 *)(point.addr) + 0xA8 + 0x80) - fixOffset;
 
 		static u32 onlineThreadArgs[ONLINETHREADSAMOUNT] = {
 			0x82C0FF8, //Region Free

@@ -81,8 +81,12 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 		static Address SetUpStack(0x3081E8);
 		static Address SetUp(0x312610);
 
+		u8 fixOffset = 0;
 	//No clue why, but the USA and EUR version have some formatting string parts at the beginning of the NPC race string which we need to skip
-		static const Address Fix(0xC);
+		if (Address::IsRegion(Address::Region::USA) || Address::IsRegion(Address::Region::USAWA)
+	 		|| Address::IsRegion(Address::Region::EUR) || Address::IsRegion(Address::Region::EURWA))  {
+			fixOffset = 0xC;
+		}
 
 		u32 Stack[44];
 		u32 add = SetUpStack.Call<u32>(Stack, Stack + 0x18, 0x10);
@@ -97,7 +101,7 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 
 		std::string NPCRace = "";
 
-		Process::ReadString(Stack[1] + Fix.addr, NPCRace, 0x20, StringFormat::Utf16);
+		Process::ReadString(Stack[1] + fixOffset, NPCRace, 0x20, StringFormat::Utf16);
 
 		return NPCRace.empty() ? "???" : NPCRace;
 	}
