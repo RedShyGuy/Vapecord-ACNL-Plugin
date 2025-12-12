@@ -4,7 +4,7 @@
 
 #define majorV 2
 #define minorV 0
-#define revisV 1
+#define revisV 2
 
 namespace CTRPluginFramework {
 	bool WriteLanguage(const std::string& langCode);
