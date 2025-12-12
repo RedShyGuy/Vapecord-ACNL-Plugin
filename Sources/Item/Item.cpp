@@ -92,17 +92,27 @@ namespace CTRPluginFramework {
 		return (IS(ID, 0x2001) || IS(ID, 0x3729) || RANGE(ID, 0x334C, 0x33A2));
 	}
 
+	static std::string toLower(const std::string& s) {
+		std::string out = s;
+
+		std::transform(out.begin(), out.end(), out.begin(), [](unsigned char c){ 
+			return std::tolower(c); 
+		});
+		return out;
+	}
+
     bool Item::searchByKeyword(const std::string& keyword, ItemNamePack& foundItem) {
 		ItemNamePack partialMatch;
 		bool hasPartial = false;
 
+		std::string keyLower = toLower(keyword);
+
         for (u16 id = 0; id < 0x372B; ++id) {
             Item item(id);
 			const std::string& name = item.GetName();
+			std::string nameLower = toLower(name);
 
-			size_t pos = name.find(keyword);
-
-			if (pos != std::string::npos) {
+			if (nameLower.find(keyLower) != std::string::npos) {
 				if (!hasPartial) {
 					partialMatch = {name, id};
 					hasPartial = true;
@@ -110,7 +120,7 @@ namespace CTRPluginFramework {
 			}
 
 			// exact match
-			if (name == keyword) {
+			if (nameLower == keyLower) {
 				foundItem = {name, id};
 				return true;
 			}
@@ -125,11 +135,16 @@ namespace CTRPluginFramework {
     }
 
     bool Item::searchAllByKeyword(const std::string& keyword, std::vector<ItemNamePack>& foundItems) {
-        for (u16 id = 0; id <= 0x372B; ++id) {
+        std::string keyLower = toLower(keyword);
+		
+		for (u16 id = 0; id <= 0x372B; ++id) {
             Item item(id);
-            if (item.GetName().find(keyword) != std::string::npos) {
-                foundItems.push_back(ItemNamePack{item.GetName(), id});
-            }
+            std::string name = item.GetName();
+			std::string nameLower = toLower(name);
+
+			if (nameLower.find(keyLower) != std::string::npos) {
+				foundItems.push_back(ItemNamePack{name, id});
+			}
         }
         return !foundItems.empty();
     }
