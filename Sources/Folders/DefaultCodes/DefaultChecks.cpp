@@ -37,6 +37,7 @@ namespace CTRPluginFramework {
     static Hook IHHook;
     static Hook IIHook;
     static Hook CFHook;
+    static Hook HoveredNameHook;
     static Hook NameHook;
     static Hook ReplaceHook;
     static Hook DropHook1, DropHook2, DropHook3, DropHook4;
@@ -65,7 +66,8 @@ namespace CTRPluginFramework {
 
         SetHook(CFHook, Address(0x323514).addr, (u32)ConvertFlower, USE_LR_TO_RETURN);
 
-        SetHook(NameHook, Address(0x19C498).addr, (u32)NameFunc, USE_LR_TO_RETURN);
+        SetHook(HoveredNameHook, Address(0x19CE64).addr, (u32)SetHoveredItemName, USE_LR_TO_RETURN);
+        SetHook(NameHook, Address(0x19C498).addr, (u32)SetItemName, USE_LR_TO_RETURN);
 
         SetHook(ReplaceHook, Address(0x165528).addr, (u32)IsItemReplaceable, USE_LR_TO_RETURN);
 
@@ -97,6 +99,7 @@ namespace CTRPluginFramework {
         IHHook.Disable();
         IIHook.Disable();
         CFHook.Disable();
+        HoveredNameHook.Disable();
         NameHook.Disable();
         ReplaceHook.Disable();
         DropHook1.Disable();
@@ -249,9 +252,11 @@ namespace CTRPluginFramework {
         }
 
         if (res == 0) {
+            HoveredNameHook.Enable();
             NameHook.Enable();
         }
         else {
+            HoveredNameHook.Disable();
             NameHook.Disable();
         }
     }
