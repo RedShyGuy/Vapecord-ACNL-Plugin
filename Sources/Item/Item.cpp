@@ -64,8 +64,15 @@ namespace CTRPluginFramework {
 		u16 itemID = SetUpItem.Call<u16>(&ID);
 		SetUp.Call<void>(*(u32 *)Address(0x95EEDC).addr, add, (char *)"STR_Item_name", itemID);
 
+		u8 fixOffset = 0;
+	//No clue why, but the USA and EUR version have some formatting string parts at the beginning of the NPC race string which we need to skip
+		if (Address::IsRegion(Address::Region::USA) || Address::IsRegion(Address::Region::USAWA)
+	 		|| Address::IsRegion(Address::Region::EUR) || Address::IsRegion(Address::Region::EURWA))  {
+			fixOffset = 0xC;
+		}
+
 		std::string itemName = "";
-		Process::ReadString(Stack[1] + 0xC, itemName, 0x30, StringFormat::Utf16);
+		Process::ReadString(Stack[1] + fixOffset, itemName, 0x30, StringFormat::Utf16);
 
 		if (itemName.empty()) {
 			return "???";

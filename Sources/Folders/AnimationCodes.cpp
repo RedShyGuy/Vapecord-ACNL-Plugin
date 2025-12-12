@@ -20,33 +20,34 @@ namespace CTRPluginFramework {
 //Speed
 	bool speedmode = false;
 
-	static Address playerSelect(0x305EF0);
-	static Address playerSelect2 = playerSelect.MoveOffset(4);
+	bool IsPlayerSelectEnabled = false;
 
-	void PSelector_Set(u8 pIndex) {
-		playerSelect.Patch(0xE3A00000 + pIndex);
-		playerSelect2.Patch(0xE12FFF1E);
-	}
-	
-	void PSelector_OFF(void) {
-		playerSelect.Unpatch();
-		playerSelect2.Unpatch();
-	}
+	void TogglePlayerSelect(u8 pIndex) {
+		static Address playerSelect(0x305EF0);
+		static Address playerSelect2 = playerSelect.MoveOffset(4);
 
-	bool PSelector_ON(void) {
-		return (*(u32 *)playerSelect.addr != playerSelect.origVal);
+		if (pIndex < 4) {
+			playerSelect.Patch(0xE3A00000 + pIndex);
+			playerSelect2.Patch(0xE12FFF1E);
+			IsPlayerSelectEnabled = true;
+		}
+		else {
+			playerSelect.Unpatch();
+			playerSelect2.Unpatch();
+			IsPlayerSelectEnabled = false;
+		}
 	}
 
 //check to make player selector better
 	void PlayerSelectCheck(void) {
-		if(!PSelector_ON()) {
+		if(!IsPlayerSelectEnabled) {
 			return;
 		}
 		
 		u8 pIndex = Game::GetOnlinePlayerIndex();
 	//If player is not loaded or loading screen started, switch off the code
 		if(!PlayerClass::GetInstance()->IsLoaded() || !PlayerClass::GetInstance(pIndex)->IsLoaded() || Game::IsRoomLoading()) {
-			PSelector_OFF();
+			TogglePlayerSelect(4);
 		}
 	} 
 	
@@ -76,7 +77,7 @@ namespace CTRPluginFramework {
 			int pChoice = pKB.Open();
 			if(pChoice >= 0) {
 				if(pV[pChoice] != Color::Silver << "-Empty-") {
-					PSelector_Set(pChoice);
+					TogglePlayerSelect(pChoice);
 					OSD::Notify(Utils::Format("Controlling Player: %02X Enabled!", pChoice));
 				}
 				else {
@@ -86,16 +87,16 @@ namespace CTRPluginFramework {
 		}
 		
 		else if(entry->Hotkeys[1].IsPressed()) {
-			if(PSelector_ON()) {
+			if(IsPlayerSelectEnabled) {
 				OSD::Notify(Utils::Format("Controlling Player: %02X Disabled!", *(u8 *)(Address(0x75F010).addr + 0x10)));
-				PSelector_OFF();
+				TogglePlayerSelect(4);
 				return;
 			}
 			OSD::Notify("Error: No Player Is Selected!", Color::Red);
 		}
 
 		if(!entry->IsActivated()) {
-			PSelector_OFF();
+			TogglePlayerSelect(4);
 			PluginMenu *menu = PluginMenu::GetRunningInstance();
 			*menu -= PlayerSelectCheck;
 		}	
