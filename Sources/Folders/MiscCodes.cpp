@@ -469,19 +469,20 @@ namespace CTRPluginFramework {
 
 		static bool patched = false;
 		u8 roomID = Game::GetRoom();
-		if (roomID == 0x63 && entry->IsActivated()) { // Isabelle
-			if (Game::GameSaving()) {
-				speed.Unpatch();
+		if (roomID == 0x63) { // Isabelle
+			if (!patched) {
+				if (Game::GameSaving()) {
+					speed.Unpatch();
+				}
+				else {
+					speed.Patch(0xE3E004FF);
+				}
+				fastt.Patch(0xEA000000);
+				fastt2.Patch(0xE3500001);
+				patched = true;
 			}
-			else {
-				speed.Patch(0xE3E004FF);
-			}
-
-			fastt.Patch(0xEA000000);
-			fastt2.Patch(0xE3500001);
-			patched = true;
 		}
-		else if (patched) {
+		else if (patched) { // check if the other codes are enabled and don't unpatch if so entry->IsActivated()
 			speed.Unpatch();
 			fastt.Unpatch();
 			fastt2.Unpatch();
