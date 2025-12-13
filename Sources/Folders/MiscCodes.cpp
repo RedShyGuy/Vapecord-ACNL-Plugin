@@ -463,43 +463,43 @@ namespace CTRPluginFramework {
 	}
 //Fast Isabelle (Fast Text + Game Speed when in the Isabelle greeting room)
 	void fastisabelle(MenuEntry *entry) {
-		static Address speed(0x54DDB4);
 		static Address fastt(0x5FC6AC);
 		static Address fastt2 = fastt.MoveOffset(8);
+		static Address speed(0x54DDB4);
 		
-		static bool Speed_Enabled = false;
 		static bool Fastt_Enabled = false;
+		static bool Speed_Enabled = false;
 		if (entry->WasJustActivated()) { // save the current state of the patches in case of the separate entries
-			Speed_Enabled = speed.IsPatched();
-			OSD::Notify(Utils::Format("speed: %s", (Speed_Enabled ? "Enabled" : "Disabled")));
 			Fastt_Enabled = fastt.IsPatched();
-			OSD::Notify(Utils::Format("fastt: %s", (Fastt_Enabled ? "Enabled" : "Disabled")));
+			OSD::Notify(Utils::Format("text speed: %s", (Fastt_Enabled ? "Enabled" : "Disabled")));
+			Speed_Enabled = speed.IsPatched();
+			OSD::Notify(Utils::Format("game speed: %s", (Speed_Enabled ? "Enabled" : "Disabled")));
 		}
 
 		static bool patched = false;
 		u8 roomID = Game::GetRoom();
 		if (roomID == 0x63) { // Isabelle
+			if (!patched) {
+				fastt.Patch(0xEA000000);
+				fastt2.Patch(0xE3500001);
+				patched = true;
+			}
 			if (Game::GameSaving()) {
 				speed.Unpatch();
 			}
 			else {
 				speed.Patch(0xE3E004FF);
 			}
-			if (!patched) {
-				fastt.Patch(0xEA000000);
-				fastt2.Patch(0xE3500001);
-				patched = true;
-			}
 		}
 		else if (patched) {
-			if (!Speed_Enabled) {
-				speed.Unpatch();
-				OSD::Notify("unpatched speed");
-			}
 			if (!Fastt_Enabled) {
 				fastt.Unpatch();
 				fastt2.Unpatch();
 				OSD::Notify("unpatched fastt");
+			}
+			if (!Speed_Enabled) {
+				speed.Unpatch();
+				OSD::Notify("unpatched speed");
 			}
 			patched = false;
 		}
