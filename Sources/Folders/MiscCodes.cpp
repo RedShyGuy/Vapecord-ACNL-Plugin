@@ -466,26 +466,41 @@ namespace CTRPluginFramework {
 		static Address speed(0x54DDB4);
 		static Address fastt(0x5FC6AC);
 		static Address fastt2 = fastt.MoveOffset(8);
+		
+		static bool Speed_Enabled = false;
+		static bool Fastt_Enabled = false;
+		if (entry->WasJustActivated()) { // save the current state of the patches in case of the separate entries
+			Speed_Enabled = speed.IsPatched();
+			OSD::Notify(Utils::Format("speed: %s", (Speed_Enabled ? "Enabled" : "Disabled")));
+			Fastt_Enabled = fastt.IsPatched();
+			OSD::Notify(Utils::Format("fastt: %s", (Fastt_Enabled ? "Enabled" : "Disabled")));
+		}
 
 		static bool patched = false;
 		u8 roomID = Game::GetRoom();
 		if (roomID == 0x63) { // Isabelle
+			if (Game::GameSaving()) {
+				speed.Unpatch();
+			}
+			else {
+				speed.Patch(0xE3E004FF);
+			}
 			if (!patched) {
-				if (Game::GameSaving()) {
-					speed.Unpatch();
-				}
-				else {
-					speed.Patch(0xE3E004FF);
-				}
 				fastt.Patch(0xEA000000);
 				fastt2.Patch(0xE3500001);
 				patched = true;
 			}
 		}
-		else if (patched) { // check if the other codes are enabled and don't unpatch if so entry->IsActivated()
-			speed.Unpatch();
-			fastt.Unpatch();
-			fastt2.Unpatch();
+		else if (patched) {
+			if (!Speed_Enabled) {
+				speed.Unpatch();
+				OSD::Notify("unpatched speed");
+			}
+			if (!Fastt_Enabled) {
+				fastt.Unpatch();
+				fastt2.Unpatch();
+				OSD::Notify("unpatched fastt");
+			}
 			patched = false;
 		}
 	}

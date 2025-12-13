@@ -46,6 +46,7 @@ namespace CTRPluginFramework {
 			bool WriteFloat(float newValue);
 			bool Patch(u32 newValue);
 			bool Unpatch(void);
+			bool IsPatched(void);
 
 			template <typename T, class ...Args>
 			T Call(Args ...args) {
