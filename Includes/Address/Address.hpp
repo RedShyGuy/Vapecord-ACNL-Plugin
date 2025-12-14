@@ -50,6 +50,9 @@ namespace CTRPluginFramework {
 			template <typename T, class ...Args>
 			T Call(Args ...args) {
 				return((T(*)(Args...))(addr))(args...);
-			};	
+			};
+		private:
+		 	void SetAddressData(u32 address);
+			static std::unordered_map<u32, u32> origValList;
 	};
 }

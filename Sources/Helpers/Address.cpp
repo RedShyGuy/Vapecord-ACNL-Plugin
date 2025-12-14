@@ -49,19 +49,30 @@ namespace CTRPluginFramework {
 
 	Address::Address(u32 address) {
 		if (regionId == Region::USA) {
-			addr = address;
-			origVal = *(u32 *)addr;
+			SetAddressData(address);
 			return;
 		}
 
 		for (const auto& row : ADDRESSES) {
 			if (row[0] == address) {
-				addr = row[regionId];
-				origVal = *(u32 *)addr;
+				SetAddressData(row[regionId]);
 				return;
 			}
 		}
 	};
+
+	void Address::SetAddressData(u32 address) {
+		addr = address;
+
+		//If address was already stored, use the stored original value
+		if (origValList.find(addr) != origValList.end()) {
+			origVal = origValList[addr];
+			return;
+		}
+		//If not, read and store it
+		origVal = *(u32 *)addr;
+		origValList.emplace(addr, origVal);
+	}
 
 	Address::Address() {
 		addr = 0;
@@ -73,9 +84,7 @@ namespace CTRPluginFramework {
 		off = (off << 6) >> 6; //sign extend
 
 		Address address = Address();
-		address.addr = (u32)src + 8 + off;
-		address.origVal = *(u32 *)address.addr;
-		
+		address.SetAddressData((u32)src + 8 + off);
 		return address;
 	}
 
@@ -85,9 +94,7 @@ namespace CTRPluginFramework {
 
 	Address Address::MoveOffset(u32 offset) {
 		Address copy = *this;
-
-		copy.addr += offset;
-		copy.origVal = *(u32 *)copy.addr;
+		copy.SetAddressData(copy.addr + offset);
 		return copy;
 	}
 
