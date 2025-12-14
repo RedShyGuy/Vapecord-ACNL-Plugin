@@ -2,6 +2,7 @@
 #include "Address/Addresses.hpp"
 
 namespace CTRPluginFramework {
+	std::unordered_map<u32, u32> Address::origValList;
 	std::string Address::regionName = "";
 	Address::Region Address::regionId;
 
