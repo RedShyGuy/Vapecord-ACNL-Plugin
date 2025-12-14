@@ -469,21 +469,20 @@ namespace CTRPluginFramework {
 		
 		static bool Fastt_Enabled = false;
 		static bool Speed_Enabled = false;
-		if (entry->WasJustActivated()) { // save the current state of the patches in case of the separate entries
-			Fastt_Enabled = fastt.IsPatched();
-			OSD::Notify(Utils::Format("text speed: %s", (Fastt_Enabled ? "Enabled" : "Disabled")));
-			Speed_Enabled = speed.IsPatched();
-			OSD::Notify(Utils::Format("game speed: %s", (Speed_Enabled ? "Enabled" : "Disabled")));
-		}
 
 		static bool patched = false;
 		u8 roomID = Game::GetRoom();
+		if (roomID == 0x5E) { // title screen. save current state of patches
+			Fastt_Enabled = fastt.IsPatched();
+			Speed_Enabled = speed.IsPatched();
+		}
 		if (roomID == 0x63) { // Isabelle
 			if (!patched) {
 				fastt.Patch(0xEA000000);
 				fastt2.Patch(0xE3500001);
 				patched = true;
 			}
+			
 			if (Game::GameSaving()) {
 				speed.Unpatch();
 			}
@@ -495,11 +494,9 @@ namespace CTRPluginFramework {
 			if (!Fastt_Enabled) {
 				fastt.Unpatch();
 				fastt2.Unpatch();
-				OSD::Notify("unpatched fastt");
 			}
 			if (!Speed_Enabled) {
 				speed.Unpatch();
-				OSD::Notify("unpatched speed");
 			}
 			patched = false;
 		}
