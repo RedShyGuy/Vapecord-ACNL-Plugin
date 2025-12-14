@@ -102,4 +102,8 @@ namespace CTRPluginFramework {
 	bool Address::Unpatch(void) {
 		return Process::Patch(addr, origVal);
 	}
+
+	bool Address::IsPatched(void) {
+		return (*(u32*)addr != origVal);
+	}
 }

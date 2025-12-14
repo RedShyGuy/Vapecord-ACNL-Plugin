@@ -463,26 +463,42 @@ namespace CTRPluginFramework {
 	}
 //Fast Isabelle (Fast Text + Game Speed when in the Isabelle greeting room)
 	void fastisabelle(MenuEntry *entry) {
-		static Address speed(0x54DDB4);
 		static Address fastt(0x5FC6AC);
 		static Address fastt2 = fastt.MoveOffset(8);
+		static Address speed(0x54DDB4);
+		
+		static bool Fastt_Enabled = false;
+		static bool Speed_Enabled = false;
 
+		static bool patched = false;
 		u8 roomID = Game::GetRoom();
-		if (roomID == 0x63 && entry->IsActivated()) { // Isabelle
+		if (roomID == 0x5E) { // title screen. save current state of patches
+			Fastt_Enabled = fastt.IsPatched();
+			Speed_Enabled = speed.IsPatched();
+		}
+		if (roomID == 0x63) { // Isabelle
+			if (!patched) {
+				fastt.Patch(0xEA000000);
+				fastt2.Patch(0xE3500001);
+				patched = true;
+			}
+			
 			if (Game::GameSaving()) {
 				speed.Unpatch();
 			}
 			else {
 				speed.Patch(0xE3E004FF);
 			}
-
-			fastt.Patch(0xEA000000);
-			fastt2.Patch(0xE3500001);
 		}
-		else {
-			speed.Unpatch();
-			fastt.Unpatch();
-			fastt2.Unpatch();
+		else if (patched) {
+			if (!Fastt_Enabled) {
+				fastt.Unpatch();
+				fastt2.Unpatch();
+			}
+			if (!Speed_Enabled) {
+				speed.Unpatch();
+			}
+			patched = false;
 		}
 	}
 }
