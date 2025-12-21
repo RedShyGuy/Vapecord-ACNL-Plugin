@@ -358,18 +358,19 @@ namespace CTRPluginFramework {
         u16 Padding;
     };
 
+    //0x57A0 -> 0x57D3
     struct Player_Flags {
         u8 Unknown1 : 1;
         u8 Unknown2 : 1;
         u8 Unknown3 : 1;
         u8 Unknown4 : 1;
-        u8 Unknown5 : 1; //most likely player set their name and townname
-        u8 Unknown6 : 1;
+        u8 PlayerSetNameAndTownName : 1; //most likely player set their name and townname
+        u8 ReddIntroduced : 1;
         u8 Unknown7 : 1;
         u8 Unknown8 : 1;
         u8 Unknown9 : 1;
         u8 FinishedFirstDay : 1; //Introduction day finished
-        u8 Unknown11 : 1;
+        u8 Unknown11 : 1; //Meet Tommy or Timmy in shop for first time
         u8 Unknown12 : 1;
         u8 Unknown13 : 1;
         u8 Unknown14 : 1;
@@ -385,29 +386,29 @@ namespace CTRPluginFramework {
         u8 Unknown24 : 1;
         u8 Unknown25 : 1;
         u8 Unknown26 : 1;
-        u8 MainStreetUnlocked : 1;
+        u8 Unknown27 : 1;
         u8 TomNookIntroduced : 1;
-        u8 BlathersIntroduced : 1;
+        u8 BlathersIntroduced : 1; //somehow also set tom nook introduced to 1???
         u8 Unknown30 : 1;
         u8 Unknown31 : 1;
         u8 Unknown32 : 1;
         u8 Unknown33 : 1;
-        u8 Unknown34 : 1;
+        u8 Unknown34 : 1; //Reese and Tommy conversation (ReTail)
         u8 Unknown35 : 1;
         u8 Unknown36 : 1;
-        u8 Unknown37 : 1;
-        u8 Unknown38 : 1;
-        u8 Unknown39 : 1;
-        u8 Unknown40 : 1;
+        u8 TomNookDownFirstPayment : 1;
+        u8 ChooseHouseLocation : 1; //Tom nook first time meeting -> finding place to build house
+        u8 MainStreetUnlocked : 1; //go to tom nook after talking to isabelle in town hall at start of game
+        u8 HouseLocationChosen : 1; //Build House (Tom Nook placed down tent)
         u8 KnowIsabelleName : 1;
         u8 KnowKappn : 1;
-        u8 Unknown43 : 1;
-        u8 Unknown44 : 1;
+        u8 Unknown43 : 1; //after repaying loan in post office
+        u8 Unknown44 : 1; //set birthday in town hall / received TPC
         u8 Unknown45 : 1;
         u8 Unknown46 : 1;
         u8 Unknown47 : 1;
         u8 Unknown48 : 1;
-        u8 Unknown49 : 1;
+        u8 Unknown49 : 1; //Met Resetti for the first time
         u8 Unknown50 : 1;
         u8 Unknown51 : 1;
         u8 Unknown52 : 1;
@@ -419,15 +420,15 @@ namespace CTRPluginFramework {
         u8 Unknown58 : 1;
         u8 Unknown59 : 1;
         u8 Unknown60 : 1;
-        u8 Unknown61 : 1;
+        u8 Unknown61 : 1; //Meet Tommy or Timmy in shop for first time
         u8 Unknown62 : 1;
         u8 Unknown63 : 1;
         u8 Unknown64 : 1;
         u8 Unknown65 : 1;
         u8 Unknown66 : 1;
         u8 Unknown67 : 1;
-        u8 Unknown68 : 1;
-        u8 Unknown69 : 1;
+        u8 Unknown68 : 1; //Porter Introduction
+        u8 Unknown69 : 1; //i think got map from isabelle at start of game
         u8 Unknown70 : 1;
         u8 Unknown71 : 1;
         u8 Unknown72 : 1;
@@ -441,20 +442,20 @@ namespace CTRPluginFramework {
         u8 Unknown80 : 1;
         u8 Unknown81 : 1;
         u8 ResetPending : 1;
-        u8 Unknown83 : 1;
-        u8 Unknown84 : 1;
-        u8 Unknown85 : 1;
+        u8 Unknown83 : 1; //Villager related
+        u8 Unknown84 : 1; //Villager related
+        u8 Unknown85 : 1; //Villager related
         u8 Unknown86 : 1; 
-        u8 Unknown87 : 1; //isabelle welcomed you in your tent
-        u8 Unknown88 : 1; //first talked to pete
-        u8 Unknown89 : 1;
+        u8 Unknown87 : 1; //isabelle welcomed you in your tent (actually also gets set when placing any item in house for first time, if never been in tent)
+        u8 PeteIntroduction : 1;
+        u8 Unknown89 : 1; //Reese and Tommy conversation (ReTail)
         u8 Unknown90 : 1;
         u8 Unknown91 : 1;
-        u8 Unknown92 : 1;
-        u8 Unknown93 : 1;
+        u8 ExteriorRenovationsUnlocked : 1; //If house is max size
+        u8 HouseLoanRepayed : 1; //after repaying loan in post office = 1 | //Talking to tom nook to let him know you payed your loan = 0
         u8 Unknown94 : 1;
-        u8 Unknown95 : 1;
-        u8 Unknown96 : 1;
+        u8 Unknown95 : 1; //Gets set when you talk to tom nook after your house was built = 0
+        u8 HouseUpgradeFinished : 1; //next day when house upgrade is finished = 1 | when you talk to tom nook after your house was built = 0
         u8 Unknown97 : 1;
         u8 Unknown98 : 1; 
         u8 Unknown99 : 1;
@@ -467,25 +468,25 @@ namespace CTRPluginFramework {
         u8 MayorJobIntroduction : 1; //after permit
         u8 PermitApproval : 1; //if approval arrived
         u8 PermitIntroduction : 1; //Isabelle told you about the mayor permit
-        u8 Unknown109 : 1;
-        u8 Unknown110 : 1;
-        u8 Unknown111 : 1;
-        u8 PWPExplained : 1; //PWP system explained
-        u8 OrdinanceExplained : 1; //Ordinance system explained
+        u8 CitizenSatisfactionExplained : 1;
+        u8 TownFlagExplained : 1;
+        u8 TownTuneExplained : 1;
+        u8 PWPExplained : 1;
+        u8 OrdinanceExplained : 1;
         u8 Unknown114 : 1;
         u8 Unknown115 : 1;
-  /*73*/u8 PermitFinished : 1;
+        u8 PermitFinished : 1;
         u8 Unknown117 : 1;
         u8 Unknown118 : 1;
         u8 HasBeeSting : 1;
         u8 Unknown120 : 1;
-        u8 Unknown121 : 1;
+        u8 EditDesignIntro : 1;
         u8 Unknown122 : 1;
         u8 Unknown123 : 1;
         u8 CanTravel : 1; //i.e. can use train
         u8 HasTPCPicture : 1;
-        u8 Unknown126 : 1;
-        u8 Unknown127 : 1;
+        u8 Unknown126 : 1; //after first time asking porter to travel with no TPC
+        u8 Unknown127 : 1; //First time going in able sisters (Sable and mable)
         u8 Unknown128 : 1;
         u8 Unknown129 : 1;
         u8 Unknown130 : 1;
@@ -498,25 +499,25 @@ namespace CTRPluginFramework {
         u8 BefriendSable3 : 1;
         u8 Unknown138 : 1;
         u8 Unknown139 : 1;
-        u8 Unknown140 : 1;
+        u8 Unknown140 : 1; //Gets set when you talk to tom nook after your house was built
         u8 Unknown141 : 1;
         u8 Unknown142 : 1;
         u8 Unknown143 : 1;
         u8 Unknown144 : 1; 
         u8 Unknown145 : 1;
         u8 Unknown146 : 1;
-        u8 Unknown147 : 1;
+        u8 TalkToLyleForTheFirstTime : 1;
         u8 Unknown148 : 1;
-        u8 Unknown149 : 1;
+        u8 Unknown149 : 1; //Gets set when you talk to tom nook after your house was built
         u8 Unknown150 : 1;
         u8 Unknown151 : 1;
         u8 UnlockedKappn : 1; //unlocked kappn boat
-        u8 Unknown153 : 1; 
+        u8 LyleIntroduction : 1;
         u8 Unknown154 : 1;
         u8 RecievedHHSIntro : 1;
-        u8 Unknown156 : 1;
+        u8 Unknown156 : 1; //after repaying loan in post office
         u8 Unknown157 : 1;
-        u8 Unknown158 : 1;
+        u8 Unknown158 : 1; //Talked to tortimer
         u8 Unknown159 : 1;
         u8 Unknown160 : 1;
         u8 Unknown161 : 1;
@@ -531,8 +532,8 @@ namespace CTRPluginFramework {
         u8 Unknown170 : 1;
         u8 Unknown171 : 1;
         u8 Unknown172 : 1;
-        u8 Unknown173 : 1;
-        u8 Unknown174 : 1;
+        u8 IsabelleWallpaperGiftForGettingHouse : 1;
+        u8 KickIntroduced : 1;
         u8 Unknown175 : 1;
         u8 Unknown176 : 1;
         u8 Unknown177 : 1;
@@ -550,9 +551,9 @@ namespace CTRPluginFramework {
         u8 Unknown189 : 1;
         u8 Unknown190 : 1;
         u8 Unknown191 : 1;
-        u8 Unknown192 : 1;
-        u8 Unknown193 : 1;
-        u8 Unknown194 : 1;
+        u8 Unknown192 : 1; //Gets set and unset at a new day
+        u8 Unknown193 : 1; //Gets set and unset at a new day
+        u8 Unknown194 : 1; //Gets set and unset at a new day
         u8 Unknown195 : 1;
         u8 Unknown196 : 1;
         u8 Unknown197 : 1;
@@ -567,7 +568,7 @@ namespace CTRPluginFramework {
         u8 Unknown206 : 1;
         u8 Unknown207 : 1;
         u8 KnowsPermitRequirements : 1; //Isabelle explained how to obtain mayor permit
-        u8 Unknown209 : 1;
+        u8 TomNookToldYouFirstPayment : 1;
         u8 Permit_Points1 : 1; //written to bulletin board? (1 points)
         u8 Permit_Points2 : 1; //mayor permit (2 points)
         u8 Permit_Points3 : 1; //written to bulletin board? (4 points)
@@ -600,14 +601,14 @@ namespace CTRPluginFramework {
         u8 Unknown239 : 1;
         u8 Unknown240 : 1;
         u8 Unknown241 : 1;
-        u8 Unknown242 : 1;
-        u8 Unknown243 : 1;
-        u8 Unknown244 : 1;
-        u8 Unknown245 : 1;
-        u8 Unknown246 : 1;
-        u8 Unknown247 : 1;
-        u8 Unknown248 : 1;
-        u8 Unknown249 : 1;
+        u8 Unknown242 : 1; //Gets set and unset at a new day
+        u8 Unknown243 : 1; //Gets set and unset at a new day
+        u8 Unknown244 : 1; //Gets set and unset at a new day
+        u8 Unknown245 : 1; //Gets set and unset at a new day
+        u8 Unknown246 : 1; //Gets set and unset at a new day
+        u8 Unknown247 : 1; //Gets set and unset at a new day
+        u8 Unknown248 : 1; //Gets set and unset at a new day
+        u8 Unknown249 : 1; //Gets set and unset at a new day
         u8 Unknown250 : 1;
         u8 HasClubTortimerMembership : 1;
         u8 ClubTortimerFirstAsked : 1; //Kappn asks user for the first time 
@@ -616,8 +617,8 @@ namespace CTRPluginFramework {
         u8 Unknown255 : 1;
         u8 Unknown256 : 1;
         u8 Unknown257 : 1;
-        u8 Unknown258 : 1;
-        u8 Unknown259 : 1;
+        u8 Unknown258 : 1; //lyle talked to you at your house for becoming VIP
+        u8 Unknown259 : 1; //maybe after first day??
         u8 Unknown260 : 1;
         u8 Unknown261 : 1;
         u8 Unknown262 : 1;
@@ -625,7 +626,7 @@ namespace CTRPluginFramework {
         u8 Unknown264 : 1;
         u8 Unknown265 : 1;
         u8 Unknown266 : 1;
-        u8 Unknown267 : 1;
+        u8 Unknown267 : 1; //maybe donated fossil?
         u8 Unknown268 : 1;
         u8 Unknown269 : 1;
         u8 Unknown270 : 1;
@@ -639,26 +640,26 @@ namespace CTRPluginFramework {
         u8 Unknown278 : 1;
         u8 Unknown279 : 1;
         u8 Unknown280 : 1;
-        u8 Unknown281 : 1;
+        u8 Unknown281 : 1; //Tommy/Timmy first time selling item
         u8 Unknown282 : 1;
         u8 Unknown283 : 1;
-        u8 Unknown284 : 1;
-        u8 Unknown285 : 1;
-        u8 Unknown286 : 1;
-        u8 Unknown287 : 1;
-        u8 Unknown288 : 1;
-        u8 Unknown289 : 1;
-        u8 Unknown290 : 1;
-        u8 Unknown291 : 1;
+        u8 Unknown284 : 1; //Isabelle second advice? (Letters)
+        u8 Unknown285 : 1; //Isabelle second advice? (Letters)
+        u8 Unknown286 : 1; //Isabelle third advice (Beach)
+        u8 Unknown287 : 1; //Isabelle third advice (Beach)
+        u8 Unknown288 : 1; //Isabelle fourth advice (Timmy and Tommy)
+        u8 Unknown289 : 1; //Isabelle fifth advice (bury with shovel)
+        u8 Unknown290 : 1; //Isabelle fifth advice (bury with shovel)
+        u8 Unknown291 : 1; //Isabelle fifth advice (bury with shovel)
         u8 Unknown292 : 1;
-        u8 Unknown293 : 1;
-        u8 Unknown294 : 1;
-        u8 Unknown295 : 1;
-        u8 Unknown296 : 1;
+        u8 Unknown293 : 1; //Isabelle finished fishing/catching advice (got watering can)
+        u8 Unknown294 : 1; //Isabelle finished fishing/catching advice (got watering can)
+        u8 Unknown295 : 1; //Isabelle finished fishing/catching advice (got watering can)
+        u8 Unknown296 : 1; //Isabelle fifth advice (bury with shovel)
         u8 Unknown297 : 1;
-        u8 Unknown298 : 1;
+        u8 Unknown298 : 1; //Isabelle fourth advice? (Timmy and Tommy)
         u8 Unknown299 : 1;
-        u8 Unknown300 : 1;
+        u8 Unknown300 : 1; //Isabelle ask first advice (Talk to new villager)
         u8 Unknown301 : 1;
         u8 Unknown302 : 1;
         u8 Unknown303 : 1;
@@ -672,15 +673,15 @@ namespace CTRPluginFramework {
         u8 Unknown311 : 1;
         u8 Unknown312 : 1;
         u8 Unknown313 : 1;
-        u8 Unknown314 : 1;
-        u8 Unknown315 : 1;
-        u8 Unknown316 : 1;
-        u8 Unknown317 : 1;
-        u8 Unknown318 : 1;
-        u8 Unknown319 : 1;
-        u8 Unknown320 : 1;
+        u8 Unknown314 : 1; //Nintendo 3DS Image Share used for the first time
+        u8 SecretStorageExplained : 1; //Tom nook tells you what the secret storage is
+        u8 Unknown316 : 1; //Found magic lamp for the first time
+        u8 Unknown317 : 1; //Talked to wisp for the first time
+        u8 Unknown318 : 1; //isabelle wants to hold ceremony for becomign major | received tpc?
+        u8 BuildingSecretStorage : 1; //Next day secret storage will be built (1 = will be built -> afterwards 0 when built)
+        u8 UnlockedSecretStorage : 1;
         u8 Unknown321 : 1;
-        u8 Unknown322 : 1;
+        u8 Unknown322 : 1; //Talking to harvey for the first time
         u8 Unknown323 : 1;
         u8 Unknown324 : 1;
         u8 Unknown325 : 1;
@@ -706,19 +707,19 @@ namespace CTRPluginFramework {
         u8 Unknown345 : 1;
         u8 Unknown346 : 1;
         u8 Unknown347 : 1;
-        u8 Unknown348 : 1;
+        u8 Unknown348 : 1; //Related to scanning amiibo at wisp lamp
         u8 Unknown349 : 1;
-        u8 Unknown350 : 1;
-        u8 Unknown351 : 1;
+        u8 Unknown350 : 1; //Related to finishing first day
+        u8 Unknown351 : 1; //after talking to cat in train at beginning of game
         u8 Unknown352 : 1;
         u8 Unknown353 : 1;
         u8 Unknown354 : 1;
         u8 Unknown355 : 1;
-        u8 Unknown356 : 1;
+        u8 UnlockedHouseEditor : 1;
         u8 Unknown357 : 1;
-        u8 Unknown358 : 1;
+        u8 Unknown358 : 1; //talking to harvery for the first time
         u8 Unknown359 : 1;
-        u8 RecievedCATIntro : 1;
+        u8 RecievedCATIntro : 1; //at the townhall station
         u8 Unknown361 : 1;
         u8 Unknown362 : 1;
         u8 Unknown363 : 1;
@@ -743,11 +744,11 @@ namespace CTRPluginFramework {
         u8 Unknown382 : 1;
         u8 CanUseCensusMenu : 1;
         u8 Unknown384 : 1;
-        u8 Unknown385 : 1;
-        u8 Unknown386 : 1;
-        u8 Unknown387 : 1;
+        u8 Unknown385 : 1; //finished cat entry (First intro one?)
+        u8 Unknown386 : 1; //finished cat entry (Second Intro one)
+        u8 Unknown387 : 1; //finished all intro cat entries?
         u8 Unknown388 : 1;
-        u8 Unknown389 : 1;
+        u8 Unknown389 : 1; //TPC explained (Intro)
         u8 Unknown390 : 1;
         u8 Unknown391 : 1;
         u8 Unknown392 : 1;
@@ -756,11 +757,11 @@ namespace CTRPluginFramework {
         u8 Unknown395 : 1;
         u8 Unknown396 : 1;
         u8 Unknown397 : 1;
-        u8 Unknown398 : 1;
+        u8 Unknown398 : 1; //Related to finishing first day
         u8 Unknown399 : 1;
         u8 Unknown400 : 1;
         u8 Unknown401 : 1;
-        u8 Unknown402 : 1;
+        u8 Unknown402 : 1; //CAT explained in TPC (Intro)
         u8 Unknown403 : 1;
         u8 Unknown404 : 1;
         u8 Unknown405 : 1;
@@ -1367,16 +1368,17 @@ namespace CTRPluginFramework {
         u16 Unknown[0x10]; //ctor sets each to 0xFFFF
     };
 
+    //0x5D904 and 0x5D90D
     struct PlayerHouseExterior { //size = 0x9
-        u8 HouseSize;
-        u8 HouseStyle;
-        u8 HouseDoorShape;
-        u8 HouseBrick;
-        u8 HouseRoof;
-        u8 HouseDoor;
-        u8 HouseFence;
-        u8 HousePavement;
-        u8 HouseMailBox;
+        u8 HouseSize; //0x5D904 and 0x5D90D
+        u8 HouseStyle; //0x5D905 and 0x5D90E
+        u8 HouseDoorShape; //0x5D906 and 0x5D90F
+        u8 HouseBrick; //0x5D907 and 0x5D910
+        u8 HouseRoof; //0x5D908 and 0x5D911
+        u8 HouseDoor; //0x5D909 and 0x5D912
+        u8 HouseFence; //0x5D90A and 0x5D913
+        u8 HousePavement; //0x5D90B and 0x5D914
+        u8 HouseMailBox; //0x5D90C and 0x5D915
     };
 
     struct RoomFlags {
@@ -1404,14 +1406,14 @@ namespace CTRPluginFramework {
         u8 Unknown22; //0x5D92D
         u8 LightSwitchState; //0x5D92E //0 = Light OFF; 1 = Light ON
         u8 Unknown24; //0x5D92F
-        u8 Unknown25; //0x5D930
+        u8 Unknown25; //0x5D930 //How often you went into the middle room???
         u8 Unknown26; //0x5D931
         u8 Unknown27; //0x5D932
         u8 Unknown28; //0x5D933
         u8 Unknown29; //0x5D934
         u8 Unknown30; //0x5D935
         u8 RoomSize; //0x5D936
-        u8 Unknown32; //0x5D937
+        bool IsRoomUpgrading; //0x5D937
         u8 Unknown33; //0x5D938
         u8 Unknown34; //0x5D939
     };
@@ -1434,14 +1436,15 @@ namespace CTRPluginFramework {
         PlayerHouseExterior exterior2; //maybe if you are upgrading? //0x5D90D
         u16 Padding1; //0x5D916
         ACNL_Room MiddleRoom; //0x5D918
-        ACNL_Room SecondRoom;
-        ACNL_Room BasementRoom;
-        ACNL_Room RightRoom;
-        ACNL_Room LeftRoom;
-        ACNL_Room BackRoom;
-        u16 Unk7;
-        u8 Unk8;
-        u8 Padding2;
+        ACNL_Room SecondRoom; //0x5DC1A
+        ACNL_Room BasementRoom; //0x5DF1C
+        ACNL_Room RightRoom; //0x5E21E
+        ACNL_Room LeftRoom; //0x5E520
+        ACNL_Room BackRoom; //0x5E822
+        u8 CockroachAmount; //0x5EB24 //So you can have 255 cockroaches?? haha
+        u8 Unk8; //0x5EB25
+        u8 Unk9; //0x5EB26 //0x1E when killing all cockroaches in house
+        u8 Padding2; //0x5EB27
     };
 
     struct ACNL_MuseumExhibit {//size = 0xB98
@@ -1566,7 +1569,7 @@ namespace CTRPluginFramework {
         u8 Unknown84 : 1;
         u8 Unknown85 : 1;
         u8 Unknown86 : 1;
-        u8 Unknown87 : 1;
+        u8 Unknown87 : 1; //someone new moved in, isabelle mentions it, then its set to 0 again
         u8 Unknown88 : 1;
         u8 Unknown89 : 1;
         u8 Unknown90 : 1;
@@ -1584,7 +1587,7 @@ namespace CTRPluginFramework {
         u8 Unknown102 : 1;
         u8 Unknown103 : 1;
         u8 Unknown104 : 1;
-        u8 Unknown105 : 1;
+        u8 HHSStandUnlocked : 1; //lyles stand in tom nooks shop
         u8 Unknown106 : 1;
         u8 Unknown107 : 1;
         u8 Unknown108 : 1;
@@ -1604,7 +1607,7 @@ namespace CTRPluginFramework {
         u8 Unknown122 : 1;
         u8 Unknown123 : 1;
         u8 Unknown124 : 1;
-        u8 Unknown125 : 1;
+        u8 Unknown125 : 1; //its snowing/raining?
         u8 Unknown126 : 1;
         u8 Unknown127 : 1;
         u8 Unknown128 : 1;
