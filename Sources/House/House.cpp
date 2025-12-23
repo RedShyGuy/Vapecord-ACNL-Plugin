@@ -26,7 +26,7 @@ namespace CTRPluginFramework {
                     if (data0 != 0) {
                         u32 playerIndexByRoom = mapPlayerRoomToPlayerIndex[playerRoom];
 
-					    u32 houseSaveOffset = Save::GetInstance()->Address(0x5D900);
+					    u32 houseSaveOffset = Save::GetInstance()->AtOffset(0x5D900);
                         u32 houseSaveFromGivenPlayerOffset = Address(0x30F770).Call<u32>(houseSaveOffset, playerIndexByRoom);
 
                         u32 playerRoomIndex = mapPlayerRoomIndexToPlayerIndex[playerRoom];
@@ -35,6 +35,11 @@ namespace CTRPluginFramework {
                     }
 				}
 			}
+        }
+
+        RoomData* GetRoomData(u8 playerRoom) {
+            static Address getRoomAddr(0x2FE95C);
+            return getRoomAddr.Call<RoomData*>(playerRoom); //unsure why its shifted by one
         }
 
         void FinishedAllUpgrades(ACNL_Player* player) {
@@ -625,11 +630,6 @@ namespace CTRPluginFramework {
 
             LoadUpgradedRooms();
             Barrier::UpgradeTopRoomBarrier2State(playerIndex);
-        }
-
-        RoomData* GetRoomData(u8 playerRoom) {
-            static Address getRoomAddr(0x2FE95C);
-            return getRoomAddr.Call<RoomData*>(playerRoom); //unsure why its shifted by one
         }
     }
 }

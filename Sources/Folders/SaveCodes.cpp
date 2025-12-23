@@ -514,15 +514,6 @@ namespace CTRPluginFramework {
 		shopunlocks(entry);
 	}
 
-	static const std::vector<std::string> rooms = {
-		"Middle Room",
-		"Second floor",
-		"Basement",
-		"First Floor, on right",
-		"First Floor, on left",
-		"First Floor, in back"
-	};
-
 	void ReloadRoomIfInTownOrRoom() {
 		for (u8 roomId = 3; roomId < 0x1B; roomId++) {
 			if (Game::IsGameInRoom(roomId)) {
@@ -589,22 +580,22 @@ namespace CTRPluginFramework {
 
 	std::string GetUpgradeOptionName(UpgradeOption option) {
 		switch (option) {
-			case Upgrade_Middle: return "Middle Room";
-			case Upgrade_Second: return "Second floor";
-			case Upgrade_Basement: return "Basement";
-			case Upgrade_Right: return "First Floor, on right";
-			case Upgrade_Left: return "First Floor, on left";
-			case Upgrade_Back: return "First Floor, in back";
-			case Unlock_SecretStorage: return "Secret Storage";
-			default: return "Unknown";
+			case Upgrade_Middle: return Language::getInstance()->get("HOUSE_EDITOR_ROOM_MIDDLE");
+			case Upgrade_Second: return Language::getInstance()->get("HOUSE_EDITOR_ROOM_SECOND");
+			case Upgrade_Basement: return Language::getInstance()->get("HOUSE_EDITOR_ROOM_BASEMENT");
+			case Upgrade_Right: return Language::getInstance()->get("HOUSE_EDITOR_ROOM_RIGHT");
+			case Upgrade_Left: return Language::getInstance()->get("HOUSE_EDITOR_ROOM_LEFT");
+			case Upgrade_Back: return Language::getInstance()->get("HOUSE_EDITOR_ROOM_BACK");
+			case Unlock_SecretStorage: return Language::getInstance()->get("HOUSE_EDITOR_SECRET_STORAGE");
+			default: return "";
 		}
 	}
 
 	std::string GetUpgradeOptionAction(UpgradeOption option, u8 size) {
 		if (option == Unlock_SecretStorage) {
-			return "Unlock";
+			return Language::getInstance()->get("HOUSE_EDITOR_UNLOCK");
 		} else {
-			return (size < 2 ? "Build" : "Upgrade");
+			return (size < 2 ? Language::getInstance()->get("HOUSE_EDITOR_BUILD") : Language::getInstance()->get("HOUSE_EDITOR_UPGRADE"));
 		}
 	}
 
@@ -655,7 +646,7 @@ namespace CTRPluginFramework {
 		}
 
 		if (options.empty()) {
-			MessageBox("All rooms are already at maximum size!").SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get("HOUSE_EDITOR_ALL_FINISHED")).SetClear(ClearScreen::Top)();
 			return;
 		}
 
@@ -716,36 +707,36 @@ namespace CTRPluginFramework {
 		}
 
 		if (wasUpgraded) {
-			MessageBox("House upgraded successfully!", labels[idx]).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get("HOUSE_EDITOR_UPGRADE_SUCCESS"), labels[idx]).SetClear(ClearScreen::Top)();
 			ReloadRoomIfInTownOrRoom();
 		} else {
-			MessageBox("Failed to upgrade house.").SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get("HOUSE_EDITOR_UPGRADE_FAIL")).SetClear(ClearScreen::Top)();
 		}
 	}
 
 	void FinishHouse(ACNL_Player *player, ACNL_TownData *town, int playerIndex) {
 		if (House::IsHouseFinished(town, playerIndex)) {
-			MessageBox("House is already finished!").SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get("HOUSE_EDITOR_ALREADY_FINISHED")).SetClear(ClearScreen::Top)();
 			return;
 		}
 
 		House::FinishHouse(player, town, playerIndex);
-		MessageBox("House finished successfully!").SetClear(ClearScreen::Top)();
+		MessageBox(Language::getInstance()->get("HOUSE_EDITOR_FINISH_SUCCESS")).SetClear(ClearScreen::Top)();
 		ReloadRoomIfInTownOrRoom();
 	}
 
 	void EditExterior(ACNL_TownData *town, int playerIndex) {
 		std::vector<std::string> options = {
-			"Edit Door Style",
-			"Edit Exterior Style",
-			"Edit Fence Style",
-			"Edit Mailbox Style",
-			"Edit Pavement Style",
-			"Edit Roof Style"
+			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_DOOR"),
+			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_BRICK"),
+			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_FENCE"),
+			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_MAILBOX"),
+			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_PAVEMENT"),
+			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_ROOF")
 		};
 
 		if (House::IsExteriorMaxSize(town, playerIndex)) {
-			options.push_back("Edit Framework");
+			options.push_back(Language::getInstance()->get("HOUSE_EDITOR_HOUSE_STYLE"));
 		}
 
 		Keyboard extKB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), options);
@@ -791,12 +782,12 @@ namespace CTRPluginFramework {
 		};
 
 		if (extChoice == 0) {
-			bool res = MessageBox("Door Customization", "Should the door be arched or square shaped?\n\narched = Yes\nsquare = No (Or pressing B)", DialogType::DialogYesNo).SetClear(ClearScreen::Top)();
+			bool res = MessageBox(Language::getInstance()->get("HOUSE_EDITOR_DOOR_CUSTOM_LABEL"), Language::getInstance()->get("HOUSE_EDITOR_DOOR_CUSTOM_NOTE"), DialogType::DialogYesNo).SetClear(ClearScreen::Top)();
 			Exterior::SetDoorArched(town, playerIndex, res);
 		}
 
 		ops[extChoice](town, playerIndex, extOptions[chosenId].exteriorId);
-		MessageBox("Exterior edited successfully!").SetClear(ClearScreen::Top)();
+		MessageBox(Language::getInstance()->get("HOUSE_EDITOR_EXTERIOR_SUCCESS")).SetClear(ClearScreen::Top)();
 		ReloadRoomIfInTownOrRoom();
 	}
 
@@ -828,7 +819,7 @@ namespace CTRPluginFramework {
 
 		player = Player::GetSaveData(playerIndex);
 		if (!player->PlayerFlags.FinishedFirstDay || !player->PlayerFlags.HouseLocationChosen) {
-			MessageBox(Utils::Format("%s needs to finish the first day of the game!", player->PlayerInfo.PlayerData.GetName().c_str())).SetClear(ClearScreen::Top)();
+			MessageBox(Utils::Format(Language::getInstance()->get("HOUSE_EDITOR_PLAYER_NOT_READY").c_str(), player->PlayerInfo.PlayerData.GetName().c_str())).SetClear(ClearScreen::Top)();
 			return;
 		}
 
@@ -836,29 +827,29 @@ namespace CTRPluginFramework {
 		std::vector<HouseAction> actions;
 
 		if (!House::IsHouseBuilt(town, playerIndex)) {
-			houseEditorOptions.push_back("Build House");
+			houseEditorOptions.push_back(Language::getInstance()->get("HOUSE_EDITOR_BUILD_HOUSE"));
 			actions.push_back(HouseAction::Build);
 
-			houseEditorOptions.push_back("Finish House");
+			houseEditorOptions.push_back(Language::getInstance()->get("HOUSE_EDITOR_FINISH_HOUSE"));
 			actions.push_back(HouseAction::Finish);
 		} else if (!House::IsHouseFinished(town, playerIndex)) {
-			houseEditorOptions.push_back("Upgrade House");
+			houseEditorOptions.push_back(Language::getInstance()->get("HOUSE_EDITOR_UPGRADE_HOUSE"));
 			actions.push_back(HouseAction::Upgrade);
 
-			houseEditorOptions.push_back("Finish House");
+			houseEditorOptions.push_back(Language::getInstance()->get("HOUSE_EDITOR_FINISH_HOUSE"));
 			actions.push_back(HouseAction::Finish);
 		}
 
 		if (House::IsHouseBuilt(town, playerIndex)) {
-			houseEditorOptions.push_back("Edit Exterior");
+			houseEditorOptions.push_back(Language::getInstance()->get("HOUSE_EDITOR_EDIT_EXTERIOR"));
 			actions.push_back(HouseAction::Edit);
 		}
 
 		if (player->PlayerFlags.UnlockedSecretStorage) {
-			houseEditorOptions.push_back("Load Furniture Editing Tutorial");
+			houseEditorOptions.push_back(Language::getInstance()->get("HOUSE_EDITOR_LOAD_TUTORIAL"));
 			actions.push_back(HouseAction::Tutorial);
 		}
-		
+
 		Keyboard hKB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), houseEditorOptions);
 		
 		int hChoice = hKB.Open();
@@ -869,7 +860,7 @@ namespace CTRPluginFramework {
 		switch (actions[hChoice]) {
 			case HouseAction::Build:
 				House::BuildHouse(player, town, playerIndex);
-				MessageBox("House built successfully!").SetClear(ClearScreen::Top)();
+				MessageBox(Language::getInstance()->get("HOUSE_EDITOR_BUILT_HOUSE_SUCCESS")).SetClear(ClearScreen::Top)();
 				ReloadRoomIfInTownOrRoom();
 				break;
 			case HouseAction::Upgrade:

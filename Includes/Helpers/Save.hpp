@@ -46,7 +46,7 @@ namespace CTRPluginFramework {
 				return 0;
 			}
 
-			u32 Address(u32 add = 0);
+			u32 AtOffset(u32 offset = 0);
 
 			static Save *GetInstance();
 

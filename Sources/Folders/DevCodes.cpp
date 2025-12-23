@@ -1766,7 +1766,7 @@ namespace CTRPluginFramework {
 
 		TownFlagsSTRUCT tf;
 		u8* tarr = tf.data;
-		u32 toffset = Save::GetInstance()->Address(0x621CF);
+		u32 toffset = Save::GetInstance()->AtOffset(0x621CF);
 		u8* tsrc = (u8*)toffset;
 
 		for (size_t i = 0; i < 17; i++) {

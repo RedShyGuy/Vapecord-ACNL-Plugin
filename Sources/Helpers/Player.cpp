@@ -288,7 +288,7 @@ get room
 			return;
 		}
 
-		u32 GardenPlus = Save::GetInstance()->Address();
+		u32 GardenPlus = Save::GetInstance()->AtOffset();
 
 		PlayerID oldPlayerID = player->PlayerInfo.PlayerData;
 		player->PlayerInfo.PlayerData.Gender = pGender;
@@ -307,7 +307,7 @@ get room
 			return;
 		}
 
-		u32 GardenPlus = Save::GetInstance()->Address();
+		u32 GardenPlus = Save::GetInstance()->AtOffset();
 
 		PlayerID oldPlayerID = player->PlayerInfo.PlayerData;
 		Convert::STR_TO_U16(name, player->PlayerInfo.PlayerData.PlayerName);
