@@ -46,7 +46,8 @@ namespace CTRPluginFramework {
         for (int i = 0; i < 0x15; ++i) {
             doors.push_back(ExteriorOption{ static_cast<u16>(0x3452 + i), static_cast<u8>(i) });
         }
-        //Golden door missing, cause golden door only has arched variant as the other one is unused
+        //Golden door missing, cause golden door only has arched variant as the other one is unused (so i am just adding the arched one as the name)
+        doors.push_back(ExteriorOption{ static_cast<u16>(0x3451), 0x15 });
         return doors;
     }
 
