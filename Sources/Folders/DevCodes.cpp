@@ -14,7 +14,7 @@
 #include "Helpers/NPC.hpp"
 #include "Helpers/Save.hpp"
 #include "Helpers/IDList.hpp"
-#include "Helpers/House.hpp"
+#include "House/House.hpp"
 
 #include "Color.h"
 #include "Files.h"
@@ -1823,20 +1823,8 @@ namespace CTRPluginFramework {
 			SetPlayerFlag(&player->PlayerFlags, index-1, false);
 		}
 
-		if(Controller::IsKeysPressed(Key::ZL + Key::DPadDown)) {
-			for (u8 playerRoom = 2; playerRoom < 8; ++playerRoom) {
-				House::RoomData* roomData = Address(0x2FE95C).Call<House::RoomData*>(playerRoom);
-				if (roomData) {
-					File file;
-					int res = File::Open(file, Utils::Format("E:/Vapecord/Data/data%02X.bin", playerRoom+1), File::CREATE | File::WRITE);
-					if (res == File::OPResult::SUCCESS) {
-						file.Write(roomData->barrier, sizeof(roomData->barrier));
-						file.Close();
-						OSD::Notify("Created File");
-					}
-				}
-			}
-			OSD::Notify("Finished");
+		if (Controller::IsKeysPressed(Key::ZL + Key::DPadDown)) {
+			
 		}
 	}
 	

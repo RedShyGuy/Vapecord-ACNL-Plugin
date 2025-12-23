@@ -205,6 +205,15 @@ namespace CTRPluginFramework {
                     Unknown01 == townID.Unknown01 && 
                     Unknown02 == townID.Unknown02;
         }
+
+        std::string GetName() const {
+            std::string out;
+            Utils::ConvertUTF16ToUTF8(
+                out,
+                reinterpret_cast<const char16_t*>(DataTownName)
+            );
+            return out;
+        }
     };
 
     struct PlayerID {
@@ -218,6 +227,15 @@ namespace CTRPluginFramework {
                     std::equal(std::begin(PlayerName), std::end(PlayerName), std::begin(playerID.PlayerName)) && 
                     Gender == playerID.Gender && 
                     ZeroPad == playerID.ZeroPad;
+        }
+
+        std::string GetName() const {
+            std::string out;
+            Utils::ConvertUTF16ToUTF8(
+                out,
+                reinterpret_cast<const char16_t*>(PlayerName)
+            );
+            return out;
         }
     };
 
@@ -1237,7 +1255,7 @@ namespace CTRPluginFramework {
         u8 Unknown9 : 1;
         u8 Unknown10 : 1;
         u8 Unknown11 : 1;
-        u8 Unknown12 : 1;
+        u8 Unknown12 : 1; 
         u8 Unknown13 : 1;
         u8 RelatedToBelowButUnk : 1;
         u8 MovingToAnotherTown : 1;
@@ -1494,7 +1512,7 @@ namespace CTRPluginFramework {
         u8 Unknown9 : 1;
         u8 Unknown10 : 1;
         u8 Unknown11 : 1;
-        u8 Unknown12 : 1;
+        u8 Unknown12 : 1; //second player created?
         u8 Unknown13 : 1;
         u8 Unknown14 : 1;
         u8 Unknown15 : 1;
@@ -1593,7 +1611,7 @@ namespace CTRPluginFramework {
         u8 Unknown108 : 1;
         u8 Unknown109 : 1;
         u8 Unknown110 : 1;
-        u8 Unknown111 : 1;
+        u8 Unknown111 : 1; //found magic lamp?
         u8 Unknown112 : 1;
         u8 Unknown113 : 1;
         u8 Unknown114 : 1;

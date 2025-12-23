@@ -48,7 +48,7 @@ namespace CTRPluginFramework {
 		bool IsON;
 		
 		for(int i = 0; i < 4; ++i) { 
-			IsON = Game::GetGameType() == i;
+			IsON = Game::GetGameMode() == i;
 			gametype[i] = (IsON ? Color(pGreen) : Color(pRed)) << gametype[i];
 		}
 		
@@ -59,7 +59,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 	
-		Game::ChangeGameType(gametchoice);
+		Game::ChangeGameMode((Game::GameMode)gametchoice);
 		mgtype(entry);
     }
 //Unbreakable Flowers	

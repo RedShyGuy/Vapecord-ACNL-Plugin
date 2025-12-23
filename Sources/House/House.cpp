@@ -1,4 +1,4 @@
-#include "Helpers/House.hpp"
+#include "House/House.hpp"
 #include "Helpers/Save.hpp"
 #include "Address/Address.hpp"
 
@@ -31,10 +31,7 @@ namespace CTRPluginFramework {
 
                         u32 playerRoomIndex = mapPlayerRoomIndexToPlayerIndex[playerRoom];
                         u32 roomSize = Address(0x6FB9E8).Call<u32>(houseSaveFromGivenPlayerOffset, playerRoomIndex); //get room "size"
-
-                        Address(0x30CB54).Call<void>(data0, roomSize);
-                        
-                        Address(0x753938).Call<u32>(roomData, 0, 0);
+                        roomData->visualSize = roomSize;
                     }
 				}
 			}
@@ -71,8 +68,93 @@ namespace CTRPluginFramework {
             return leftRoomFinished && rightRoomFinished && backRoomFinished && basementRoomFinished && secondRoomFinished && mainRoomFinished;
         }
 
+        bool IsExteriorMaxSize(ACNL_TownData* town, int playerIndex) {
+            return town->PlayerHouse[playerIndex].exterior1.HouseSize == 7 
+                && town->PlayerHouse[playerIndex].exterior2.HouseSize == 7;
+        }
+
         bool IsHouseBuilt(ACNL_TownData* town, int playerIndex) {
-            return town->PlayerHouse[playerIndex].exterior1.HouseSize > 0 && town->PlayerHouse[playerIndex].exterior2.HouseSize > 0;
+            return town->PlayerHouse[playerIndex].exterior1.HouseSize > 0 
+                && town->PlayerHouse[playerIndex].exterior2.HouseSize > 0;
+        }
+
+        void FinishHouse(ACNL_Player* player, ACNL_TownData* town, int playerIndex) {
+            u8 middleRoomSize = town->PlayerHouse[playerIndex].MiddleRoom.flags.RoomSize;
+            while (middleRoomSize < 4) {
+                if (middleRoomSize < 2) {
+                    BuildHouse(player, town, playerIndex);
+                } else if (middleRoomSize == 2) {
+                    UpgradeHouseFirst(player, town, playerIndex);
+                } else if (middleRoomSize == 3) {
+                    UpgradeHouseSecond(player, town, playerIndex);
+                }
+                middleRoomSize = town->PlayerHouse[playerIndex].MiddleRoom.flags.RoomSize;
+            }
+
+            u8 secondRoomSize = town->PlayerHouse[playerIndex].SecondRoom.flags.RoomSize;
+            while (secondRoomSize < 4) {
+                if (secondRoomSize < 2) {
+                    BuildSecondRoom(player, town, playerIndex);
+                } else if (secondRoomSize == 2) {
+                    UpgradeSecondRoomFirst(player, town, playerIndex);
+                } else if (secondRoomSize == 3) {
+                    UpgradeSecondRoomSecond(player, town, playerIndex);
+                }
+                secondRoomSize = town->PlayerHouse[playerIndex].SecondRoom.flags.RoomSize;
+            }
+
+            u8 basementRoomSize = town->PlayerHouse[playerIndex].BasementRoom.flags.RoomSize;
+            while (basementRoomSize < 4) {
+                if (basementRoomSize < 2) {
+                    BuildBasementRoom(player, town, playerIndex);
+                } else if (basementRoomSize == 2) {
+                    UpgradeBasementRoomFirst(player, town, playerIndex);
+                } else if (basementRoomSize == 3) {
+                    UpgradeBasementRoomSecond(player, town, playerIndex);
+                }
+                basementRoomSize = town->PlayerHouse[playerIndex].BasementRoom.flags.RoomSize;
+            }
+
+            u8 rightRoomSize = town->PlayerHouse[playerIndex].RightRoom.flags.RoomSize;
+            while (rightRoomSize < 4) {
+                if (rightRoomSize < 2) {
+                    BuildRightRoom(player, town, playerIndex);
+                } else if (rightRoomSize == 2) {
+                    UpgradeRightRoomFirst(player, town, playerIndex);
+                } else if (rightRoomSize == 3) {
+                    UpgradeRightRoomSecond(player, town, playerIndex);
+                }
+                rightRoomSize = town->PlayerHouse[playerIndex].RightRoom.flags.RoomSize;
+            }
+
+            u8 leftRoomSize = town->PlayerHouse[playerIndex].LeftRoom.flags.RoomSize;
+            while (leftRoomSize < 4) {
+                if (leftRoomSize < 2) {
+                    BuildLeftRoom(player, town, playerIndex);
+                } else if (leftRoomSize == 2) {
+                    UpgradeLeftRoomFirst(player, town, playerIndex);
+                } else if (leftRoomSize == 3) {
+                    UpgradeLeftRoomSecond(player, town, playerIndex);
+                }
+                leftRoomSize = town->PlayerHouse[playerIndex].LeftRoom.flags.RoomSize;
+            }
+
+            u8 backRoomSize = town->PlayerHouse[playerIndex].BackRoom.flags.RoomSize;
+            while (backRoomSize < 4) {
+                if (backRoomSize < 2) {
+                    BuildBackRoom(player, town, playerIndex);
+                } else if (backRoomSize == 2) {
+                    UpgradeBackRoomFirst(player, town, playerIndex);
+                } else if (backRoomSize == 3) {
+                    UpgradeBackRoomSecond(player, town, playerIndex);
+                }
+                backRoomSize = town->PlayerHouse[playerIndex].BackRoom.flags.RoomSize;
+            }
+
+            bool secretStorageBuilt = player->PlayerFlags.UnlockedSecretStorage;
+            if (!secretStorageBuilt) {
+                BuildSecretStorage(player, town, playerIndex);
+            }
         }
 
         void BuildSecretStorage(ACNL_Player* player, ACNL_TownData* town, int playerIndex) {
@@ -98,10 +180,11 @@ namespace CTRPluginFramework {
         //Talking to tom nook to let him know you payed your loan
             player->PlayerFlags.HouseLoanRepayed = 0;
             player->PlayerFlags.Unknown382 = 0;
+        }
 
-            /*
-            TODO: Check out how to load the furniture editing tutorial with lottie to ask the player if he wants to load it
-            */
+        u8 GetRoofColorByPlayerIndex(int playerIndex) {
+            static const u8 roofs[4] = { 0x20, 0x00, 0x22, 0x21 };
+            return roofs[playerIndex];
         }
 
         void BuildHouse(ACNL_Player* player, ACNL_TownData* town, int playerIndex) {
@@ -111,7 +194,7 @@ namespace CTRPluginFramework {
 
             town->PlayerHouse[playerIndex].exterior2.HouseSize = 1;
             town->PlayerHouse[playerIndex].exterior2.HouseBrick = 0;
-            town->PlayerHouse[playerIndex].exterior2.HouseRoof = 0; //Red Roof = 0x00 || Blue Roof = 0x20 ||Yellow Roof = 0x21 ||Green Roof = 0x22
+            town->PlayerHouse[playerIndex].exterior2.HouseRoof = GetRoofColorByPlayerIndex(playerIndex);
             town->PlayerHouse[playerIndex].exterior2.HouseDoor = 0;
             town->PlayerHouse[playerIndex].exterior2.HouseFence = 1;
             town->PlayerHouse[playerIndex].exterior2.HouseMailBox = 0;
@@ -130,7 +213,7 @@ namespace CTRPluginFramework {
 
             town->PlayerHouse[playerIndex].exterior1.HouseSize = 1;
             town->PlayerHouse[playerIndex].exterior1.HouseBrick = 0;
-            town->PlayerHouse[playerIndex].exterior1.HouseRoof = 0;
+            town->PlayerHouse[playerIndex].exterior1.HouseRoof = GetRoofColorByPlayerIndex(playerIndex);
             town->PlayerHouse[playerIndex].exterior1.HouseDoor = 0;
             town->PlayerHouse[playerIndex].exterior1.HouseFence = 1;
             town->PlayerHouse[playerIndex].exterior1.HouseMailBox = 0;

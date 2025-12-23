@@ -51,7 +51,7 @@ namespace CTRPluginFramework {
             u32 unk20; //0x6C //Usually 0xA1C
             u32 unk21; //0x70 //Usually 1
             u32 unk22[7]; //0x74 //Usually 0
-            u16 barrier[0x500]; //0x90 //Size of 0xA00 bytes
+            u16 collision[0x500]; //0x90 //Size of 0xA00 bytes
             u32 unk24; //0xA90 //Jump to 0x5C
             u32 unk25; //0xA94 //Jump to 0xEA8
             u32 unk26; //0xA98 //Usually 9
@@ -93,23 +93,23 @@ namespace CTRPluginFramework {
             void UpgradeUpstairsBarrier2State(int playerIndex);
 
             /*
-            Sets the barrier for the stairs that go upstairs (main room)
+            Sets the collision for the stairs that go upstairs (main room)
             */
             void UpgradeBarrierUpstairs(int playerIndex);
             /*
-            Sets the barrier for the stairs that go downstairs (main room)
+            Sets the collision for the stairs that go downstairs (main room)
             */
             void UpgradeBarrierDownstairs(int playerIndex);
             /*
-            Sets the barrier for the path that goes to the left room (main room)
+            Sets the collision for the path that goes to the left room (main room)
             */
             void UpgradeBarrierLeftRoom(int playerIndex);
             /*
-            Sets the barrier for the path that goes to the right room (main room)
+            Sets the collision for the path that goes to the right room (main room)
             */
             void UpgradeBarrierRightRoom(int playerIndex);
             /*
-            Sets the barrier for the path that goes to the top room (main room)
+            Sets the collision for the path that goes to the top room (main room)
             */
             void UpgradeBarrierTopRoom(int playerIndex);
         }
@@ -140,8 +140,12 @@ namespace CTRPluginFramework {
         void UpgradeBackRoomFirst(ACNL_Player* player, ACNL_TownData* town, int playerIndex);
         void UpgradeBackRoomSecond(ACNL_Player* player, ACNL_TownData* town, int playerIndex);
 
+        void FinishHouse(ACNL_Player* player, ACNL_TownData* town, int playerIndex);
+
         void FinishedAllUpgrades(ACNL_Player* player);
+        bool IsExteriorMaxSize(ACNL_TownData* town, int playerIndex);
         bool IsHouseBuilt(ACNL_TownData* town, int playerIndex);
+        bool IsHouseFinished(ACNL_TownData* town, int playerIndex);
 
         bool IsMiddleRoomFinished(ACNL_TownData* town, int playerIndex);
         bool IsSecondRoomBuilt(ACNL_TownData* town, int playerIndex);
