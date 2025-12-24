@@ -48,7 +48,7 @@ namespace CTRPluginFramework {
 	}
 
 //Hook invalid pickup
-	u32 InvalidPickStop(u8 ID, Item *ItemToReplace, Item *ItemToPlace, Item *ItemToShow, u8 worldx, u8 worldy) {	
+	u32 InvalidPickStop(u8 ID, Item *ItemToReplace, Item *ItemToPlace, Item *ItemToShow, u8 worldx, u8 worldy) {
 		if(ItemToReplace->isValid()) {
 			if((ID == 0xA) || (ID == 0x12) || (ID == 0x13)) {
 				if(ItemToPlace->ID == 0x7FFE) {

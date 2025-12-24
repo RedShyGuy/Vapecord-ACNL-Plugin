@@ -257,8 +257,20 @@ If player exitst
 get location
 */
 	bool Player::IsIndoors() {
-		static Address getlocation(0x1E890C);
-		return getlocation.Call<bool>();
+		u8 roomId = Game::GetRoom();
+		if (roomId == 0 || //Town
+			roomId == 1 || //Main Street
+			roomId == 0x2D || //Bug-Off Ceremony
+			roomId == 0x2F || //Fishing Tourney Ceremony
+			roomId == 0x5E || //Title Screen
+			roomId >= 0x68 && roomId <= 0x80 || //Island/Tours
+			roomId >= 0x8E && roomId <= 0x91 || //Happy Home Showcase
+			roomId >= 0x9D && roomId <= 0xA0) { //Desert Island Escape/Puzzle League & Campground
+			return false;
+		} 
+		return true;
+		//static Address getlocation(0x1E890C);
+		//return getlocation.Call<bool>();
 	}
 /*
 get room
