@@ -18,7 +18,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 
-		u32 GardenPlus = Save::GetInstance()->Address();
+		u32 GardenPlus = Save::GetInstance()->AtOffset();
 
 		TownID oldTownID = player->PlayerInfo.TownData;
 		Convert::STR_TO_U16(name, player->PlayerInfo.TownData.DataTownName);

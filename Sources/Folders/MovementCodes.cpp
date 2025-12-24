@@ -74,6 +74,11 @@ namespace CTRPluginFramework {
 		if(pCoords == nullptr) {
 			return;
 		}
+
+		if (*PlayerClass::GetInstance()->GetAnimation() == 0x4F || 
+			*PlayerClass::GetInstance()->GetAnimation() == 0x52) {
+			return; // Prevent teleporting while shoveling
+		}
 		
 		if(!Game::MapBoolCheck()) {
 			return;

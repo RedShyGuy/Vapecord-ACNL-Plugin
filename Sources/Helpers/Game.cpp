@@ -105,16 +105,15 @@ namespace CTRPluginFramework {
 		static const Address d_mail(0x983050);
 		return *(u32 *)d_mail.addr;
 	}*/
-//get GameType
-	u8 Game::GetGameType() {
+
+	Game::GameMode Game::GetGameMode() {
 		static Address gtype(0x305ED8);
-		return gtype.Call<u8>();
+		return gtype.Call<Game::GameMode>();
 	}
 
-//Change GameType
-	void Game::ChangeGameType(u8 GameType) {
+	void Game::ChangeGameMode(Game::GameMode gameMode) {
 		static Address gtype(0x625B88);
-		gtype.Call<void>(GameType);
+		gtype.Call<void>(gameMode);
 	}
 
 //call menu

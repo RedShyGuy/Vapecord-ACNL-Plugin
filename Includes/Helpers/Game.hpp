@@ -17,6 +17,13 @@ namespace CTRPluginFramework {
 	}
 
 	namespace Game {
+		enum GameMode : u8 {
+			OFFLINE = 0,
+			ONLINE1 = 1,
+			ONLINE2 = 2,
+			DREAM = 3
+		};
+
 		ACNL_Date 			GetCurrentDate(void);
 		void				PlaySound(u16 soundID);
 	//save files
@@ -69,8 +76,8 @@ namespace CTRPluginFramework {
 		bool				IsRoomLoading();
 		bool				SetItem(Item *item);
 		void				OpenMenu(u8 menuID, bool NoMenCall = false);
-		void				ChangeGameType(u8 GameType);
-		u8					GetGameType();
+		void				ChangeGameMode(GameMode GameType);
+		GameMode			GetGameMode();
 		bool				GameSaving();
 		u32 				GetRoomData();
 		bool				WaterFlower(u8 wX, u8 wY);

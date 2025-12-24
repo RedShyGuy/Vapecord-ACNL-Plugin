@@ -11,6 +11,8 @@
 #include "Helpers/Converters.hpp"
 #include "Helpers/NPC.hpp"
 #include "Helpers/Save.hpp"
+#include "House/House.hpp"
+#include "House/Exterior.hpp"
 #include "Helpers/GameStructs.hpp"
 #include "Color.h"
 #include "Files.h"
@@ -512,81 +514,25 @@ namespace CTRPluginFramework {
 		shopunlocks(entry);
 	}
 
-	void HouseChanger(MenuEntry *entry) {
-		ACNL_Player *player = Player::GetSaveData();
-		ACNL_TownData *town = Town::GetSaveData();
-		if(!player || !town) {
-			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
-			return;
+	void ReloadRoomIfInTownOrRoom() {
+		for (u8 roomId = 3; roomId < 0x1B; roomId++) {
+			if (Game::IsGameInRoom(roomId)) {
+				Game::ReloadRoom();
+				return;
+			}
 		}
-		
-		if(Game::GetOnlinePlayerCount() != 0) {		
-			MessageBox(Language::getInstance()->get("ONLY_TOWN_ERROR")).SetClear(ClearScreen::Top)();
-			return;
+
+		if(Game::IsGameInRoom(0)) {
+			Game::ReloadRoom();
 		}
-		
+	}
+
+	int SelectPlayerToEditHouse() {
 		std::vector<std::string> pV = {
 			Color::Silver << "-Empty-",
 			Color::Silver << "-Empty-",
 			Color::Silver << "-Empty-",
 			Color::Silver << "-Empty-",
-		};
-		
-		static const std::vector<std::string> HouseSet = {
-			Language::getInstance()->get("HOUSE_EDITOR_EXT"),
-			Language::getInstance()->get("HOUSE_EDITOR_INT"),
-		};
-		
-		static const std::vector<std::string> HouseSettings = {
-			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_SIZE"),
-			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_STYLE"),
-			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_DOORSHAPE"),
-			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_BRICK"),
-			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_ROOF"),
-			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_DOOR"),
-			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_FENCE"),
-			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_PAVEMENT"),
-			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_MAILBOX"),
-		};
-		
-		static const std::vector<std::string> HouseInfo = {
-			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_SET1"),
-			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_SET2"),
-			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_SET3"),
-			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_SET4"),
-			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_SET5"),
-			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_SET6"),
-			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_SET7"),
-			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_SET8"),
-			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_SET9"),
-		};
-		
-		static const std::vector<std::string> RoomSet = {
-			Language::getInstance()->get("HOUSE_EDITOR_ROOM_MIDDLE"),
-			Language::getInstance()->get("HOUSE_EDITOR_ROOM_SECOND"),
-			Language::getInstance()->get("HOUSE_EDITOR_ROOM_BASEMENT"),
-			Language::getInstance()->get("HOUSE_EDITOR_ROOM_RIGHT"),
-			Language::getInstance()->get("HOUSE_EDITOR_ROOM_LEFT"),
-			Language::getInstance()->get("HOUSE_EDITOR_ROOM_BACK"),
-		};
-		
-		static const std::vector<std::string> RoomInfo = {
-			Language::getInstance()->get("HOUSE_EDITOR_ROOM_SET1"),
-			Language::getInstance()->get("HOUSE_EDITOR_ROOM_SET2"),
-			Language::getInstance()->get("HOUSE_EDITOR_ROOM_SET3"),
-			Language::getInstance()->get("HOUSE_EDITOR_ROOM_SET4"),
-			Language::getInstance()->get("HOUSE_EDITOR_ROOM_SET5"),
-			Language::getInstance()->get("HOUSE_EDITOR_ROOM_SET6"),
-		};
-		
-		static constexpr u8 ValidHouseValues[9][2] = {
-			{ 0x00, 0x07 }, { 0x00, 0x03 }, { 0x00, 0x01 },
-			{ 0x00, 0x1F }, { 0x00, 0x22 }, { 0x00, 0x15 },
-			{ 0x00, 0x16 }, { 0x00, 0x08 }, { 0x00, 0x15 },
-		};
-		
-		static constexpr u8 ValidRoomValues[6][2] = {
-			{ 0, 4 }, { 1, 4 }, { 1, 4 }, { 1, 4 }, { 1, 4 }, { 1, 4 },
 		};
 		
 		for(int i = 0; i <= 3; ++i) {
@@ -604,109 +550,331 @@ namespace CTRPluginFramework {
 	
 		int pChoice = pKB.Open();
 		if((pChoice < 0) || (pV[pChoice] == Color::Silver << "-Empty-")) {
+			return -1;
+		}
+
+		return pChoice;
+	}
+
+	void LoadHouseEditingTutorial(bool justUnlocked) {
+		if (!justUnlocked) {
+			if (Game::GetGameMode() != Game::GameMode::OFFLINE) {
+				MessageBox("This only works if you are playing offline!").SetClear(ClearScreen::Top)();
+			}
+		}
+
+		if((MessageBox(justUnlocked ? "Secret Storage And Furniture Mover Unlocked!" : "", "Do you want to load the tutorial for the furniture mover?\nThis will teleport you into the tutorial, afterwards you will be at the mainstreet.", DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
+			Game::RoomFunction(0xA3, 0, 0, 0);
+		}
+	}
+
+	enum UpgradeOption : int {
+		Upgrade_Middle = 0,
+		Upgrade_Second,
+		Upgrade_Basement,
+		Upgrade_Right,
+		Upgrade_Left,
+		Upgrade_Back,
+		Unlock_SecretStorage
+	};
+
+	std::string GetUpgradeOptionName(UpgradeOption option) {
+		switch (option) {
+			case Upgrade_Middle: return Language::getInstance()->get("HOUSE_EDITOR_ROOM_MIDDLE");
+			case Upgrade_Second: return Language::getInstance()->get("HOUSE_EDITOR_ROOM_SECOND");
+			case Upgrade_Basement: return Language::getInstance()->get("HOUSE_EDITOR_ROOM_BASEMENT");
+			case Upgrade_Right: return Language::getInstance()->get("HOUSE_EDITOR_ROOM_RIGHT");
+			case Upgrade_Left: return Language::getInstance()->get("HOUSE_EDITOR_ROOM_LEFT");
+			case Upgrade_Back: return Language::getInstance()->get("HOUSE_EDITOR_ROOM_BACK");
+			case Unlock_SecretStorage: return Language::getInstance()->get("HOUSE_EDITOR_SECRET_STORAGE");
+			default: return "";
+		}
+	}
+
+	std::string GetUpgradeOptionAction(UpgradeOption option, u8 size) {
+		if (option == Unlock_SecretStorage) {
+			return Language::getInstance()->get("HOUSE_EDITOR_UNLOCK");
+		} else {
+			return (size < 2 ? Language::getInstance()->get("HOUSE_EDITOR_BUILD") : Language::getInstance()->get("HOUSE_EDITOR_UPGRADE"));
+		}
+	}
+
+	void UpgradeHouse(ACNL_Player *player, ACNL_TownData *town, int playerIndex) {
+		struct Option { 
+			u8 size; 
+			UpgradeOption upgradeOption; 
+		};
+		std::vector<Option> options;
+
+		u8 middleRoomSize = town->PlayerHouse[playerIndex].MiddleRoom.flags.RoomSize;
+		u8 secondRoomSize = town->PlayerHouse[playerIndex].SecondRoom.flags.RoomSize;
+		u8 basementRoomSize = town->PlayerHouse[playerIndex].BasementRoom.flags.RoomSize;
+		u8 rightRoomSize = town->PlayerHouse[playerIndex].RightRoom.flags.RoomSize;
+		u8 leftRoomSize = town->PlayerHouse[playerIndex].LeftRoom.flags.RoomSize;
+		u8 backRoomSize = town->PlayerHouse[playerIndex].BackRoom.flags.RoomSize;
+		bool secretStorageBuilt = player->PlayerFlags.UnlockedSecretStorage;
+
+		if (middleRoomSize < 4) {
+			options.push_back({ middleRoomSize, Upgrade_Middle });
+		}
+
+		bool middleDone = House::IsMiddleRoomFinished(town, playerIndex);
+		bool secondBuilt = House::IsSecondRoomBuilt(town, playerIndex);
+
+		if (secondRoomSize < 4 && middleDone) {
+			options.push_back({ secondRoomSize, Upgrade_Second });
+		}
+
+		if (basementRoomSize < 4 && middleDone && secondBuilt) {
+			options.push_back({ basementRoomSize, Upgrade_Basement });
+		}
+
+		if (rightRoomSize < 4 && middleDone && secondBuilt) {
+			options.push_back({ rightRoomSize, Upgrade_Right });
+		}
+
+		if (leftRoomSize < 4 && middleDone && secondBuilt) {
+			options.push_back({ leftRoomSize, Upgrade_Left });
+		}
+
+		if (backRoomSize < 4 && middleDone && secondBuilt) {
+			options.push_back({ backRoomSize, Upgrade_Back });
+		}
+
+		if (!secretStorageBuilt && secondBuilt) {
+			options.push_back({ 0, Unlock_SecretStorage });
+		}
+
+		if (options.empty()) {
+			MessageBox(Language::getInstance()->get("HOUSE_EDITOR_ALL_FINISHED")).SetClear(ClearScreen::Top)();
+			return;
+		}
+
+		std::vector<std::string> labels;
+		labels.reserve(options.size());
+		for (const auto &o : options)  {
+			std::string action = GetUpgradeOptionAction(o.upgradeOption, o.size);
+			std::string name = GetUpgradeOptionName(o.upgradeOption);
+			labels.push_back(action + " " + name);
+		}
+
+		Keyboard upgradeKB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), labels);
+		int idx = upgradeKB.Open();
+		if (idx < 0) {
+			return;
+		}
+
+		const Option chosen = options[idx];
+		bool wasUpgraded = false;
+
+		using RoomOp = void(*)(ACNL_Player*, ACNL_TownData*, int);
+		struct RoomOps { 
+			RoomOp build; 
+			RoomOp up1; 
+			RoomOp up2; 
+		};
+
+		static const RoomOps ops[6] = {
+			/* 0: Main */	  { nullptr,                  House::UpgradeHouseFirst,        House::UpgradeHouseSecond },	
+			/* 1: Second */   { House::BuildSecondRoom,   House::UpgradeSecondRoomFirst,   House::UpgradeSecondRoomSecond },
+			/* 2: Basement */ { House::BuildBasementRoom, House::UpgradeBasementRoomFirst, House::UpgradeBasementRoomSecond },
+			/* 3: Right */    { House::BuildRightRoom,    House::UpgradeRightRoomFirst,    House::UpgradeRightRoomSecond },
+			/* 4: Left */     { House::BuildLeftRoom,     House::UpgradeLeftRoomFirst,     House::UpgradeLeftRoomSecond },
+			/* 5: Back */     { House::BuildBackRoom,     House::UpgradeBackRoomFirst,     House::UpgradeBackRoomSecond },
+		};
+
+		switch (chosen.upgradeOption) {
+			case Upgrade_Middle: case Upgrade_Second: case Upgrade_Basement: case Upgrade_Right: case Upgrade_Left: case Upgrade_Back: {
+				const RoomOps &ro = ops[chosen.upgradeOption];
+				if (chosen.size < 2 && ro.build) { 
+					ro.build(player, town, playerIndex); 
+					wasUpgraded = true; 
+				}
+				else if (chosen.size == 2 && ro.up1) { 
+					ro.up1(player, town, playerIndex); 
+					wasUpgraded = true; 
+				}
+				else if (chosen.size == 3 && ro.up2) { 
+					ro.up2(player, town, playerIndex); 
+					wasUpgraded = true; 
+				}
+				break;
+			}
+			case Unlock_SecretStorage:
+				House::BuildSecretStorage(player, town, playerIndex);
+				LoadHouseEditingTutorial(true);
+				return;
+		}
+
+		if (wasUpgraded) {
+			MessageBox(Language::getInstance()->get("HOUSE_EDITOR_UPGRADE_SUCCESS"), labels[idx]).SetClear(ClearScreen::Top)();
+			ReloadRoomIfInTownOrRoom();
+		} else {
+			MessageBox(Language::getInstance()->get("HOUSE_EDITOR_UPGRADE_FAIL")).SetClear(ClearScreen::Top)();
+		}
+	}
+
+	void FinishHouse(ACNL_Player *player, ACNL_TownData *town, int playerIndex) {
+		if (House::IsHouseFinished(town, playerIndex)) {
+			MessageBox(Language::getInstance()->get("HOUSE_EDITOR_ALREADY_FINISHED")).SetClear(ClearScreen::Top)();
+			return;
+		}
+
+		House::FinishHouse(player, town, playerIndex);
+		MessageBox(Language::getInstance()->get("HOUSE_EDITOR_FINISH_SUCCESS")).SetClear(ClearScreen::Top)();
+		ReloadRoomIfInTownOrRoom();
+	}
+
+	void EditExterior(ACNL_TownData *town, int playerIndex) {
+		std::vector<std::string> options = {
+			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_DOOR"),
+			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_BRICK"),
+			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_FENCE"),
+			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_MAILBOX"),
+			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_PAVEMENT"),
+			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_ROOF")
+		};
+
+		if (House::IsExteriorMaxSize(town, playerIndex)) {
+			options.push_back(Language::getInstance()->get("HOUSE_EDITOR_HOUSE_STYLE"));
+		}
+
+		Keyboard extKB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), options);
+		int extChoice = extKB.Open();
+		if (extChoice < 0) {
+			return;
+		}
+
+		using ExteriorList = std::vector<ExteriorOption>(*)();
+		static const ExteriorList listOps[7] = {
+			Exterior::GetDoorOptions,
+			Exterior::GetExteriorOptions,
+			Exterior::GetFenceOptions,
+			Exterior::GetMailboxOptions,
+			Exterior::GetPavementOptions,
+			Exterior::GetRoofOptions,
+			Exterior::GetFrameworkOptions,
+		};
+
+		std::vector<ExteriorOption> extOptions = listOps[extChoice]();
+		std::vector<std::string> extType;
+		for (ExteriorOption ext : extOptions) {
+			u16 rawItemId = ext.rawItemId;
+			std::string name = Item(rawItemId).GetName();
+			extType.push_back(name);
+		}
+
+		Keyboard chooseKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), extType);
+		int chosenId = chooseKb.Open();
+		if (chosenId < 0) {
 			return;
 		}
 		
-		Keyboard hKB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), HouseSet);
+		using ExteriorOp = void(*)(ACNL_TownData*, int, u8);
+		static const ExteriorOp ops[7] = {
+			Exterior::SetDoorStyle,
+			Exterior::SetExteriorStyle,
+        	Exterior::SetFenceStyle,
+        	Exterior::SetMailboxStyle,
+        	Exterior::SetPavementStyle,
+        	Exterior::SetRoofStyle,
+			Exterior::SetFrameworkStyle,
+		};
+
+		if (extChoice == 0) {
+			bool res = MessageBox(Language::getInstance()->get("HOUSE_EDITOR_DOOR_CUSTOM_LABEL"), Language::getInstance()->get("HOUSE_EDITOR_DOOR_CUSTOM_NOTE"), DialogType::DialogYesNo).SetClear(ClearScreen::Top)();
+			Exterior::SetDoorArched(town, playerIndex, res);
+		}
+
+		ops[extChoice](town, playerIndex, extOptions[chosenId].exteriorId);
+		MessageBox(Language::getInstance()->get("HOUSE_EDITOR_EXTERIOR_SUCCESS")).SetClear(ClearScreen::Top)();
+		ReloadRoomIfInTownOrRoom();
+	}
+
+	enum HouseAction {
+		Build,
+		Upgrade,
+		Finish,
+		Edit,
+		Tutorial
+	};
+
+	void HouseChanger(MenuEntry *entry) {
+		ACNL_Player *player = Player::GetSaveData();
+		ACNL_TownData *town = Town::GetSaveData();
+		if(!player || !town) {
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			return;
+		}
+		
+		if(Game::GetOnlinePlayerCount() != 0) {		
+			MessageBox(Language::getInstance()->get("ONLY_TOWN_ERROR")).SetClear(ClearScreen::Top)();
+			return;
+		}
+		
+		int playerIndex = SelectPlayerToEditHouse();
+		if(playerIndex < 0) {
+			return;
+		}
+
+		player = Player::GetSaveData(playerIndex);
+		if (!player->PlayerFlags.FinishedFirstDay || !player->PlayerFlags.HouseLocationChosen) {
+			MessageBox(Utils::Format(Language::getInstance()->get("HOUSE_EDITOR_PLAYER_NOT_READY").c_str(), player->PlayerInfo.PlayerData.GetName().c_str())).SetClear(ClearScreen::Top)();
+			return;
+		}
+
+		std::vector<std::string> houseEditorOptions;
+		std::vector<HouseAction> actions;
+
+		if (!House::IsHouseBuilt(town, playerIndex)) {
+			houseEditorOptions.push_back(Language::getInstance()->get("HOUSE_EDITOR_BUILD_HOUSE"));
+			actions.push_back(HouseAction::Build);
+
+			houseEditorOptions.push_back(Language::getInstance()->get("HOUSE_EDITOR_FINISH_HOUSE"));
+			actions.push_back(HouseAction::Finish);
+		} else if (!House::IsHouseFinished(town, playerIndex)) {
+			houseEditorOptions.push_back(Language::getInstance()->get("HOUSE_EDITOR_UPGRADE_HOUSE"));
+			actions.push_back(HouseAction::Upgrade);
+
+			houseEditorOptions.push_back(Language::getInstance()->get("HOUSE_EDITOR_FINISH_HOUSE"));
+			actions.push_back(HouseAction::Finish);
+		}
+
+		if (House::IsHouseBuilt(town, playerIndex)) {
+			houseEditorOptions.push_back(Language::getInstance()->get("HOUSE_EDITOR_EDIT_EXTERIOR"));
+			actions.push_back(HouseAction::Edit);
+		}
+
+		if (player->PlayerFlags.UnlockedSecretStorage) {
+			houseEditorOptions.push_back(Language::getInstance()->get("HOUSE_EDITOR_LOAD_TUTORIAL"));
+			actions.push_back(HouseAction::Tutorial);
+		}
+
+		Keyboard hKB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), houseEditorOptions);
 		
 		int hChoice = hKB.Open();
 		if(hChoice < 0) {
 			return;
 		}
-	
-	/*Exterior House Settings*/
-		if(hChoice == 0) {
-			Keyboard eKB(Language::getInstance()->get("HOUSE_EDITOR_SELECT_HOUSE"), HouseSettings);
 
-			int eChoice = eKB.Open();
-			if(eChoice < 0) {
-				return;
-			}
-			
-			u8 Value = 0;
-			if(Wrap::KB<u8>(HouseInfo[eChoice], true, 2, Value, Value)) {
-				if(!IDList::ValidID(Value, ValidHouseValues[eChoice][0], ValidHouseValues[eChoice][1])) {
-					MessageBox(Language::getInstance()->get("INVALID_ID")).SetClear(ClearScreen::Top)();
-					return;
-				}
-
-				switch(eChoice) {
-					case 0:
-						town->PlayerHouse[pChoice].exterior1.HouseSize = Value;
-						town->PlayerHouse[pChoice].exterior2.HouseSize = Value;
-					break;
-					case 1:
-						town->PlayerHouse[pChoice].exterior1.HouseStyle = Value;
-						town->PlayerHouse[pChoice].exterior2.HouseStyle = Value;
-					break;
-					case 2:
-						town->PlayerHouse[pChoice].exterior1.HouseDoorShape = Value;
-						town->PlayerHouse[pChoice].exterior2.HouseDoorShape = Value;
-					break;
-					case 3:
-						town->PlayerHouse[pChoice].exterior1.HouseBrick = Value;
-						town->PlayerHouse[pChoice].exterior2.HouseBrick = Value;
-					break;
-					case 4:
-						town->PlayerHouse[pChoice].exterior1.HouseRoof = Value;
-						town->PlayerHouse[pChoice].exterior2.HouseRoof = Value;
-					break;
-					case 5:
-						town->PlayerHouse[pChoice].exterior1.HouseDoor = Value;
-						town->PlayerHouse[pChoice].exterior2.HouseDoor = Value;
-					break;
-					case 6:
-						town->PlayerHouse[pChoice].exterior1.HouseFence = Value;
-						town->PlayerHouse[pChoice].exterior2.HouseFence = Value;
-					break;
-					case 7:
-						town->PlayerHouse[pChoice].exterior1.HousePavement = Value;
-						town->PlayerHouse[pChoice].exterior2.HousePavement = Value;
-					break;
-					case 8:
-						town->PlayerHouse[pChoice].exterior1.HouseMailBox = Value;
-						town->PlayerHouse[pChoice].exterior2.HouseMailBox = Value;
-					break;
-				}
-			}
-			return;
-		}
-	
-	/*Interior Room Size Settings*/
-		Keyboard rKB(Language::getInstance()->get("HOUSE_EDITOR_SELECT_ROOM"), RoomSet);
-
-		int rChoice = rKB.Open();
-		if(rChoice < 0) {
-			return;
-		}
-		
-		u8 RoomSize = 0;
-		if(Wrap::KB<u8>(RoomInfo[rChoice], true, 2, RoomSize, RoomSize)) {
-			if(!IDList::ValidID(RoomSize, ValidRoomValues[rChoice][0], ValidRoomValues[rChoice][1])) {
-				MessageBox(Language::getInstance()->get("INVALID_ID")).SetClear(ClearScreen::Top)();
-				return;
-			}
-
-			switch(rChoice) {
-				case 0:
-					town->PlayerHouse[pChoice].MiddleRoom.flags.RoomSize = RoomSize;
+		switch (actions[hChoice]) {
+			case HouseAction::Build:
+				House::BuildHouse(player, town, playerIndex);
+				MessageBox(Language::getInstance()->get("HOUSE_EDITOR_BUILT_HOUSE_SUCCESS")).SetClear(ClearScreen::Top)();
+				ReloadRoomIfInTownOrRoom();
 				break;
-				case 1:
-					town->PlayerHouse[pChoice].SecondRoom.flags.RoomSize = RoomSize;
+			case HouseAction::Upgrade:
+				UpgradeHouse(player, town, playerIndex);
 				break;
-				case 2:
-					town->PlayerHouse[pChoice].BasementRoom.flags.RoomSize = RoomSize;
+			case HouseAction::Finish:
+				FinishHouse(player, town, playerIndex);
 				break;
-				case 3:
-					town->PlayerHouse[pChoice].RightRoom.flags.RoomSize = RoomSize;
+			case HouseAction::Edit:
+				EditExterior(town, playerIndex);
 				break;
-				case 4:
-					town->PlayerHouse[pChoice].LeftRoom.flags.RoomSize = RoomSize;
+			case HouseAction::Tutorial:
+				LoadHouseEditingTutorial(false);
 				break;
-				case 5:
-					town->PlayerHouse[pChoice].BackRoom.flags.RoomSize = RoomSize;
-				break;
-			}
 		}
 	}
 

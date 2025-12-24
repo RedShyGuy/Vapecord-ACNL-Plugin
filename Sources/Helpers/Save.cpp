@@ -26,7 +26,7 @@ namespace CTRPluginFramework {
         return s_Instance;
 	}
 
-	u32 Save::Address(u32 add) {
-		return s_SaveAddress + add;
+	u32 Save::AtOffset(u32 offset) {
+		return s_SaveAddress + offset;
 	}
 }

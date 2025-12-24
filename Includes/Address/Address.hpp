@@ -46,10 +46,14 @@ namespace CTRPluginFramework {
 			bool WriteFloat(float newValue);
 			bool Patch(u32 newValue);
 			bool Unpatch(void);
+			bool IsPatched(void);
 
 			template <typename T, class ...Args>
 			T Call(Args ...args) {
 				return((T(*)(Args...))(addr))(args...);
-			};	
+			};
+		private:
+		 	void SetAddressData(u32 address);
+			static std::unordered_map<u32, u32> origValList;
 	};
 }

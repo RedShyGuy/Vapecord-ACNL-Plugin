@@ -20,6 +20,7 @@ INCLUDES	:= 	Includes \
 				Includes/Address \
 				Includes/Item \
 				Includes/Pretendo \
+				Includes/House \
 				
 SOURCES 	:= 	Sources \
                 Sources/Folders \
@@ -32,6 +33,7 @@ SOURCES 	:= 	Sources \
 				Sources/Plugin \
 				Sources/Item \
 				Sources/Pretendo \
+				Sources/House \
 
 PSF 		:= 	$(notdir $(TOPDIR)).plgInfo
 

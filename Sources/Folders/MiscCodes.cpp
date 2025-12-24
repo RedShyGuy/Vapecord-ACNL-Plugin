@@ -48,7 +48,7 @@ namespace CTRPluginFramework {
 		bool IsON;
 		
 		for(int i = 0; i < 4; ++i) { 
-			IsON = Game::GetGameType() == i;
+			IsON = Game::GetGameMode() == i;
 			gametype[i] = (IsON ? Color(pGreen) : Color(pRed)) << gametype[i];
 		}
 		
@@ -59,10 +59,10 @@ namespace CTRPluginFramework {
 			return;
 		}
 	
-		Game::ChangeGameType(gametchoice);
+		Game::ChangeGameMode((Game::GameMode)gametchoice);
 		mgtype(entry);
     }
-//Unbreakable Flowers	
+//Unbreakable Flowers
 	void unbreakableflower(MenuEntry *entry) { 
 		static Address unbreakableFlowerPatch(0x597F64);
 
@@ -239,7 +239,6 @@ namespace CTRPluginFramework {
 			0x44, //Gardening Store
 			0x48, //Shampoodle
 			0x5A, //Post Office
-			0x67, //Island (Might freeze?)
 		};
 
 		u8 stageID = CTRPluginFramework::Player::GetRoom(4);
@@ -432,8 +431,14 @@ namespace CTRPluginFramework {
 			OSD::Notify("Fast mode " << (RuntimeContext::getInstance()->isTurbo() ? Color::Green << "ON" : Color::Red << "OFF"));
 		}
 	}
+
+	static bool gFastTalkEnabled = false;
+	static bool gSpeedEnabled = false;
+
 //Fast Text Speed
-	void fasttalk(MenuEntry *entry) { 
+	void fasttalk(MenuEntry *entry) {
+		gFastTalkEnabled = entry->IsActivated();
+
 		static Address fastt(0x5FC6AC);
 		static Address fastt2 = fastt.MoveOffset(8);
 
@@ -441,13 +446,15 @@ namespace CTRPluginFramework {
 			fastt.Patch(0xEA000000);
 			fastt2.Patch(0xE3500001);
 		}
-		if(!entry->IsActivated()) {
+		if(!gFastTalkEnabled) {
 			fastt.Unpatch();
 			fastt2.Unpatch();
 		}	
 	}
 //Fast Game Speed	
 	void speedentry(MenuEntry *entry) {
+		gSpeedEnabled = entry->IsActivated();
+
 		static Address speed(0x54DDB4);
 
 		if (Game::GameSaving()) {
@@ -457,7 +464,7 @@ namespace CTRPluginFramework {
 			speed.Patch(0xE3E004FF);
 		}
 		
-		if(!entry->IsActivated()) {
+		if(!gSpeedEnabled) {
 			speed.Unpatch();
 		}
 	}
@@ -467,22 +474,41 @@ namespace CTRPluginFramework {
 		static Address fastt(0x5FC6AC);
 		static Address fastt2 = fastt.MoveOffset(8);
 
-		u8 roomID = Game::GetRoom();
-		if (roomID == 0x63 && entry->IsActivated()) { // Isabelle
-			if (Game::GameSaving()) {
-				speed.Unpatch();
-			}
-			else {
-				speed.Patch(0xE3E004FF);
-			}
+		static bool speedPatchedByIsabelle = false;
+		static bool fastTalkPatchedByIsabelle = false;
 
-			fastt.Patch(0xEA000000);
-			fastt2.Patch(0xE3500001);
+		bool active = (Game::GetRoom() == 0x63 && entry->IsActivated());
+
+		if (active) { // Isabelle
+			if (!gSpeedEnabled) {
+				if (Game::GameSaving()) {
+					speed.Unpatch();
+					speedPatchedByIsabelle = false;
+				}
+				else {
+					speed.Patch(0xE3E004FF);
+					speedPatchedByIsabelle = true;
+				}
+			}
+			
+			if (!gFastTalkEnabled && !fastTalkPatchedByIsabelle) {
+				fastt.Patch(0xEA000000);
+				fastt2.Patch(0xE3500001);
+				fastTalkPatchedByIsabelle = true;
+			}
+			Controller::InjectKey(Key::A);
 		}
 		else {
-			speed.Unpatch();
-			fastt.Unpatch();
-			fastt2.Unpatch();
+			if (speedPatchedByIsabelle && !gSpeedEnabled) {
+				speed.Unpatch();
+				speedPatchedByIsabelle = false;
+			}
+			
+			if (fastTalkPatchedByIsabelle && !gFastTalkEnabled) {
+				fastt.Unpatch();
+				fastt2.Unpatch();
+				fastTalkPatchedByIsabelle = false;
+			}
 		}
 	}
 }

@@ -14,6 +14,7 @@
 #include "Helpers/NPC.hpp"
 #include "Helpers/Save.hpp"
 #include "Helpers/IDList.hpp"
+#include "House/House.hpp"
 
 #include "Color.h"
 #include "Files.h"
@@ -249,10 +250,10 @@ namespace CTRPluginFramework {
 				playerFlag->Unknown4 = set; 
 			break;
 			case 4:
-				playerFlag->Unknown5 = set; 
+				playerFlag->PlayerSetNameAndTownName = set; 
 			break;
 			case 5:
-				playerFlag->Unknown6 = set; 
+				playerFlag->ReddIntroduced = set; 
 			break;
 			case 6:
 				playerFlag->Unknown7 = set; 
@@ -315,7 +316,7 @@ namespace CTRPluginFramework {
 				playerFlag->Unknown26 = set; 
 			break;
 			case 26:
-				playerFlag->MainStreetUnlocked = set; 
+				playerFlag->Unknown27 = set; 
 			break;
 			case 27:
 				playerFlag->TomNookIntroduced = set; 
@@ -345,16 +346,16 @@ namespace CTRPluginFramework {
 				playerFlag->Unknown36 = set; 
 			break;
 			case 36:
-				playerFlag->Unknown37 = set; 
+				playerFlag->TomNookDownFirstPayment = set; 
 			break;
 			case 37:
-				playerFlag->Unknown38 = set; 
+				playerFlag->ChooseHouseLocation = set; 
 			break;
 			case 38:
-				playerFlag->Unknown39 = set; 
+				playerFlag->MainStreetUnlocked = set; 
 			break;
 			case 39:
-				playerFlag->Unknown40 = set; 
+				playerFlag->HouseLocationChosen = set; 
 			break;
 			case 40:
 				playerFlag->KnowIsabelleName = set; 
@@ -498,7 +499,7 @@ namespace CTRPluginFramework {
 				playerFlag->Unknown87 = set; 
 			break;
 			case 87:
-				playerFlag->Unknown88 = set; 
+				playerFlag->PeteIntroduction = set; 
 			break;
 			case 88:
 				playerFlag->Unknown89 = set; 
@@ -510,19 +511,19 @@ namespace CTRPluginFramework {
 				playerFlag->Unknown91 = set; 
 			break;
 			case 91:
-				playerFlag->Unknown92 = set; 
+				playerFlag->ExteriorRenovationsUnlocked = set; 
 			break;
 			case 92:
-				playerFlag->Unknown93 = set; 
+				playerFlag->HouseLoanRepayed = set; 
 			break;
 			case 93:
-				playerFlag->Unknown94 = set; 
+				playerFlag->Unknown94 = set; //Unset(?) when Tom Nook speaks with you after your house was built
 			break;
 			case 94:
-				playerFlag->Unknown95 = set; 
+				playerFlag->Unknown95 = set; //Unset(?) when Tom Nook speaks with you after your house was built
 			break;
 			case 95:
-				playerFlag->Unknown96 = set; 
+				playerFlag->HouseUpgradeFinished = set; 
 			break;
 			case 96:
 				playerFlag->Unknown97 = set; 
@@ -561,13 +562,13 @@ namespace CTRPluginFramework {
 				playerFlag->PermitIntroduction = set; 
 			break;
 			case 108:
-				playerFlag->Unknown109 = set; 
+				playerFlag->CitizenSatisfactionExplained = set; 
 			break;
 			case 109:
-				playerFlag->Unknown110 = set; 
+				playerFlag->TownFlagExplained = set; 
 			break;
 			case 110:
-				playerFlag->Unknown111 = set; 
+				playerFlag->TownTuneExplained = set; 
 			break;
 			case 111:
 				playerFlag->PWPExplained = set; 
@@ -597,7 +598,7 @@ namespace CTRPluginFramework {
 				playerFlag->Unknown120 = set; 
 			break;
 			case 120:
-				playerFlag->Unknown121 = set; 
+				playerFlag->EditDesignIntro = set; 
 			break;
 			case 121:
 				playerFlag->Unknown122 = set; 
@@ -651,7 +652,7 @@ namespace CTRPluginFramework {
 				playerFlag->Unknown138 = set; 
 			break;
 			case 138:
-				playerFlag->Unknown139 = set; 
+				playerFlag->Unknown139 = set; //Set when Tom Nook speaks with you after your house was built
 			break;
 			case 139:
 				playerFlag->Unknown140 = set; 
@@ -675,10 +676,10 @@ namespace CTRPluginFramework {
 				playerFlag->Unknown146 = set; 
 			break;
 			case 146:
-				playerFlag->Unknown147 = set; 
+				playerFlag->TalkToLyleForTheFirstTime = set; 
 			break;
 			case 147:
-				playerFlag->Unknown148 = set; 
+				playerFlag->Unknown148 = set; //Set when Tom Nook speaks with you after your house was built
 			break;
 			case 148:
 				playerFlag->Unknown149 = set; 
@@ -693,7 +694,7 @@ namespace CTRPluginFramework {
 				playerFlag->UnlockedKappn = set; 
 			break;
 			case 152:
-				playerFlag->Unknown153 = set; 
+				playerFlag->LyleIntroduction = set; 
 			break;
 			case 153:
 				playerFlag->Unknown154 = set; 
@@ -753,10 +754,10 @@ namespace CTRPluginFramework {
 				playerFlag->Unknown172 = set; 
 			break;
 			case 172:
-				playerFlag->Unknown173 = set; 
+				playerFlag->IsabelleWallpaperGiftForGettingHouse = set; 
 			break;
 			case 173:
-				playerFlag->Unknown174 = set; 
+				playerFlag->KickIntroduced = set; 
 			break;
 			case 174:
 				playerFlag->Unknown175 = set; 
@@ -861,7 +862,7 @@ namespace CTRPluginFramework {
 				playerFlag->KnowsPermitRequirements = set; 
 			break;
 			case 208:
-				playerFlag->Unknown209 = set; 
+				playerFlag->TomNookToldYouFirstPayment = set; 
 			break;
 			case 209:
 				playerFlag->Permit_Points1 = set; 
@@ -1179,7 +1180,7 @@ namespace CTRPluginFramework {
 				playerFlag->Unknown314 = set; 
 			break;
 			case 314:
-				playerFlag->Unknown315 = set; 
+				playerFlag->SecretStorageExplained = set; 
 			break;
 			case 315:
 				playerFlag->Unknown316 = set; 
@@ -1191,10 +1192,10 @@ namespace CTRPluginFramework {
 				playerFlag->Unknown318 = set; 
 			break;
 			case 318:
-				playerFlag->Unknown319 = set; 
+				playerFlag->BuildingSecretStorage = set; 
 			break;
 			case 319:
-				playerFlag->Unknown320 = set; 
+				playerFlag->UnlockedSecretStorage = set; 
 			break;
 			case 320:
 				playerFlag->Unknown321 = set; 
@@ -1302,7 +1303,7 @@ namespace CTRPluginFramework {
 				playerFlag->Unknown355 = set; 
 			break;
 			case 355:
-				playerFlag->Unknown356 = set; 
+				playerFlag->UnlockedHouseEditor = set; 
 			break;
 			case 356:
 				playerFlag->Unknown357 = set; 
@@ -1486,65 +1487,255 @@ namespace CTRPluginFramework {
 			break;
 		}
 	}
-	
-	u64 GetFriendCode(u8 pIndex) {
-		u32 gPoint = *(u32 *)Address(0x954648).addr;
-		if(gPoint == 0)
-			return 0;
 
-		frdInit(false);
+	struct PlayerFlagsSTRUCT {
+		u8 data[0x34];
+	};
 
-		u32 pID = *(u32 *)((gPoint + 0xC0) + (0x18 * pIndex));
+	static u8 lastFlags[0x34] = {0};
 
-		if((int)pID == -3)
-			return 0;
-		
-		u64 fCode = 0;
-		FRD_PrincipalIdToFriendCode(pID, &fCode);
-
-		frdExit();
-
-		return fCode;
+	bool GetFlag(PlayerFlagsSTRUCT* flags, int idx) {
+		return (flags->data[idx >> 3] >> (idx & 7)) & 1;
 	}
 
-	static void Cheat_EatEvents(Handle debug) {
-        DebugEventInfo info;
-        Result r;
+	void CheckPlayerFlags(PlayerFlagsSTRUCT* flags) {
+		static bool initialized = false;
 
-        while(true) {
-            if((r = svcGetProcessDebugEvent(&info, debug)) != 0) {
-                if(r == (s32)(0xd8402009)) 
-                    break;
-            }
-            svcContinueDebugEvent(debug, (DebugFlags)3);
-        }
-    }
-
-	static u32 ReadWriteBuffer32 = 0;
-
-	void set32(u32 addr, u32 value) {
-		u32 pid = Process::GetProcessID();
-		Handle processHandle;
-		Result res = svcOpenProcess(&processHandle, pid);
-		if (!R_SUCCEEDED(res))
+		if (!initialized) {
+			memcpy(lastFlags, flags->data, 0x34);
+			initialized = true;
 			return;
+		}
 
-    	Handle gHandle;
-        res = svcDebugActiveProcess(&gHandle, Process::GetProcessID());
-        if (!R_SUCCEEDED(res))
-            return;
+		for (int byte = 0; byte < 0x34; byte++) {
+			u8 diff = lastFlags[byte] ^ flags->data[byte];
+			if (!diff) continue;
 
-        Cheat_EatEvents(gHandle);
+			for (int bit = 0; bit < 8; bit++) {
+				if (diff & (1 << bit)) {
+					int flagIndex = byte * 8 + bit;
+					OSD::Notify(Utils::Format("Player Flag %d changed to %d", flagIndex+1, GetFlag(flags, flagIndex)));
+				}
+			}
+		}
 
-        *((u32*) (&ReadWriteBuffer32)) = value;
-        svcWriteProcessMemory(gHandle, &ReadWriteBuffer32, addr, 4);
-
-        svcCloseHandle(gHandle);
+		memcpy(lastFlags, flags->data, 0x34);
 	}
 
-//Message Box Debug	
+	struct TownFlagsSTRUCT {
+		u8 data[17];
+	};
+
+	static u8 lastTownFlags[17] = {0};
+
+	bool GetTownFlag(TownFlagsSTRUCT* flags, int idx) {
+		return (flags->data[idx >> 3] >> (idx & 7)) & 1;
+	}
+
+	void CheckTownFlags(TownFlagsSTRUCT* flags) {
+		static bool initialized = false;
+
+		if (!initialized) {
+			memcpy(lastTownFlags, flags->data, 17);
+			initialized = true;
+			return;
+		}
+
+		for (int byte = 0; byte < 17; byte++) {
+			u8 diff = lastTownFlags[byte] ^ flags->data[byte];
+			if (!diff) continue;
+
+			for (int bit = 0; bit < 8; bit++) {
+				if (diff & (1 << bit)) {
+					int flagIndex = byte * 8 + bit;
+					OSD::Notify(Utils::Format("Town Flag %d changed to %d", flagIndex+1, GetTownFlag(flags, flagIndex)));
+				}
+			}
+		}
+
+		memcpy(lastTownFlags, flags->data, 17);
+	}
+
+	static PlayerHouseExterior lastExterior;
+
+	void CheckHouseSaveData(ACNL_TownData *town) {
+		static bool initialized = false;
+
+		if (!initialized) {
+			lastExterior = town->PlayerHouse[0].exterior2;
+			initialized = true;
+			return;
+		}
+
+		if (town->PlayerHouse[0].exterior2.HouseSize != lastExterior.HouseSize)
+			OSD::Notify(Utils::Format("House Size changed to %02X", town->PlayerHouse[0].exterior2.HouseSize));
+		if (town->PlayerHouse[0].exterior2.HouseStyle != lastExterior.HouseStyle)
+			OSD::Notify(Utils::Format("House Style changed to %02X", town->PlayerHouse[0].exterior2.HouseStyle));
+		if (town->PlayerHouse[0].exterior2.HouseDoorShape != lastExterior.HouseDoorShape)
+			OSD::Notify(Utils::Format("House Door Shape changed to %02X", town->PlayerHouse[0].exterior2.HouseDoorShape));
+		if (town->PlayerHouse[0].exterior2.HouseBrick != lastExterior.HouseBrick)
+			OSD::Notify(Utils::Format("House Brick changed to %02X", town->PlayerHouse[0].exterior2.HouseBrick));
+		if (town->PlayerHouse[0].exterior2.HouseRoof != lastExterior.HouseRoof)
+			OSD::Notify(Utils::Format("House Roof changed to %02X", town->PlayerHouse[0].exterior2.HouseRoof));
+		if (town->PlayerHouse[0].exterior2.HouseDoor != lastExterior.HouseDoor)
+			OSD::Notify(Utils::Format("House Door changed to %02X", town->PlayerHouse[0].exterior2.HouseDoor));
+		if (town->PlayerHouse[0].exterior2.HouseFence != lastExterior.HouseFence)
+			OSD::Notify(Utils::Format("House Fence changed to %02X", town->PlayerHouse[0].exterior2.HouseFence));
+		if (town->PlayerHouse[0].exterior2.HousePavement != lastExterior.HousePavement)
+			OSD::Notify(Utils::Format("House Pavement changed to %02X", town->PlayerHouse[0].exterior2.HousePavement));
+		if (town->PlayerHouse[0].exterior2.HouseMailBox != lastExterior.HouseMailBox)
+			OSD::Notify(Utils::Format("House MailBox changed to %02X", town->PlayerHouse[0].exterior2.HouseMailBox));
+
+		lastExterior = town->PlayerHouse[0].exterior2;
+	}
+
+	static std::vector<std::string> roomNames = {
+		"Middle Room", "SecondRoom", "BasementRoom", "RightRoom", "LeftRoom", "BackRoom"
+	};
+
+	static RoomFlags lastRoomflags[6];
+
+	void CheckRoomFlags(int roomIndex, ACNL_Room *room) {
+		static bool initialized[6] = {
+			false, false, false, false, false, false
+		};
+
+		if (!initialized[roomIndex]) {
+			lastRoomflags[roomIndex] = room->flags;
+			initialized[roomIndex] = true;
+			return;
+		}
+
+		if (room->flags.BrightLight != lastRoomflags[roomIndex].BrightLight)
+			OSD::Notify(Utils::Format("Bright Light changed to %02X for %s", room->flags.BrightLight, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown2 != lastRoomflags[roomIndex].Unknown2)
+			OSD::Notify(Utils::Format("Unknown2 changed to %02X for %s", room->flags.Unknown2, roomNames.at(roomIndex).c_str()));
+		if (room->flags.RegularLight != lastRoomflags[roomIndex].RegularLight)
+			OSD::Notify(Utils::Format("Regular Light changed to %02X for %s", room->flags.RegularLight, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown4 != lastRoomflags[roomIndex].Unknown4)
+			OSD::Notify(Utils::Format("Unknown4 changed to %02X for %s", room->flags.Unknown4, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown5 != lastRoomflags[roomIndex].Unknown5)
+			OSD::Notify(Utils::Format("Unknown5 changed to %02X for %s", room->flags.Unknown5, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown6 != lastRoomflags[roomIndex].Unknown6)
+			OSD::Notify(Utils::Format("Unknown6 changed to %02X for %s", room->flags.Unknown6, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown7 != lastRoomflags[roomIndex].Unknown7)
+			OSD::Notify(Utils::Format("Unknown7 changed to %02X for %s", room->flags.Unknown7, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown8 != lastRoomflags[roomIndex].Unknown8)
+			OSD::Notify(Utils::Format("Unknown8 changed to %02X for %s", room->flags.Unknown8, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown9 != lastRoomflags[roomIndex].Unknown9)
+			OSD::Notify(Utils::Format("Unknown9 changed to %02X for %s", room->flags.Unknown9, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown10 != lastRoomflags[roomIndex].Unknown10)
+			OSD::Notify(Utils::Format("Unknown10 changed to %02X for %s", room->flags.Unknown10, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown11 != lastRoomflags[roomIndex].Unknown11)
+			OSD::Notify(Utils::Format("Unknown11 changed to %02X for %s", room->flags.Unknown11, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown12 != lastRoomflags[roomIndex].Unknown12)
+			OSD::Notify(Utils::Format("Unknown12 changed to %02X for %s", room->flags.Unknown12, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown13 != lastRoomflags[roomIndex].Unknown13)
+			OSD::Notify(Utils::Format("Unknown13 changed to %02X for %s", room->flags.Unknown13, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown14 != lastRoomflags[roomIndex].Unknown14)
+			OSD::Notify(Utils::Format("Unknown14 changed to %02X for %s", room->flags.Unknown14, roomNames.at(roomIndex).c_str()));
+		if (room->flags.LowLight != lastRoomflags[roomIndex].LowLight)
+			OSD::Notify(Utils::Format("Low Light changed to %02X for %s", room->flags.LowLight, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown16 != lastRoomflags[roomIndex].Unknown16)
+			OSD::Notify(Utils::Format("Unknown16 changed to %02X for %s", room->flags.Unknown16, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown17 != lastRoomflags[roomIndex].Unknown17)
+			OSD::Notify(Utils::Format("Unknown17 changed to %02X for %s", room->flags.Unknown17, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown18 != lastRoomflags[roomIndex].Unknown18)
+			OSD::Notify(Utils::Format("Unknown18 changed to %02X for %s", room->flags.Unknown18, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown19 != lastRoomflags[roomIndex].Unknown19)
+			OSD::Notify(Utils::Format("Unknown19 changed to %02X for %s", room->flags.Unknown19, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown20 != lastRoomflags[roomIndex].Unknown20)
+			OSD::Notify(Utils::Format("Unknown20 changed to %02X for %s", room->flags.Unknown20, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown21 != lastRoomflags[roomIndex].Unknown21)
+			OSD::Notify(Utils::Format("Unknown21 changed to %02X for %s", room->flags.Unknown21, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown22 != lastRoomflags[roomIndex].Unknown22)
+			OSD::Notify(Utils::Format("Unknown22 changed to %02X for %s", room->flags.Unknown22, roomNames.at(roomIndex).c_str()));
+		if (room->flags.LightSwitchState != lastRoomflags[roomIndex].LightSwitchState)
+			OSD::Notify(Utils::Format("Light Switch State changed to %02X for %s", room->flags.LightSwitchState, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown24 != lastRoomflags[roomIndex].Unknown24)
+			OSD::Notify(Utils::Format("Unknown24 changed to %02X for %s", room->flags.Unknown24, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown25 != lastRoomflags[roomIndex].Unknown25)
+			OSD::Notify(Utils::Format("Unknown25 changed to %02X for %s", room->flags.Unknown25, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown26 != lastRoomflags[roomIndex].Unknown26)
+			OSD::Notify(Utils::Format("Unknown26 changed to %02X for %s", room->flags.Unknown26, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown27 != lastRoomflags[roomIndex].Unknown27)
+			OSD::Notify(Utils::Format("Unknown27 changed to %02X for %s", room->flags.Unknown27, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown28 != lastRoomflags[roomIndex].Unknown28)
+			OSD::Notify(Utils::Format("Unknown28 changed to %02X for %s", room->flags.Unknown28, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown29 != lastRoomflags[roomIndex].Unknown29)
+			OSD::Notify(Utils::Format("Unknown29 changed to %02X for %s", room->flags.Unknown29, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown30 != lastRoomflags[roomIndex].Unknown30)
+			OSD::Notify(Utils::Format("Unknown30 changed to %02X for %s", room->flags.Unknown30, roomNames.at(roomIndex).c_str()));
+		if (room->flags.RoomSize != lastRoomflags[roomIndex].RoomSize)
+			OSD::Notify(Utils::Format("Room Size changed to %02X for %s", room->flags.RoomSize, roomNames.at(roomIndex).c_str()));
+		if (room->flags.IsRoomUpgrading != lastRoomflags[roomIndex].IsRoomUpgrading)
+			OSD::Notify(Utils::Format("IsRoomUpgrading changed to %02X for %s", room->flags.IsRoomUpgrading, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown33 != lastRoomflags[roomIndex].Unknown33)
+			OSD::Notify(Utils::Format("Unknown33 changed to %02X for %s", room->flags.Unknown33, roomNames.at(roomIndex).c_str()));
+		if (room->flags.Unknown34 != lastRoomflags[roomIndex].Unknown34)
+			OSD::Notify(Utils::Format("Unknown34 changed to %02X for %s", room->flags.Unknown34, roomNames.at(roomIndex).c_str()));
+
+		lastRoomflags[roomIndex] = room->flags;
+	}
+
+	static ACNL_Room lastRoom[6];
+
+	void CheckMiniRoomStruct(int roomIndex, ACNL_Room *room) {
+		static bool initialized[6] = {
+			false, false, false, false, false, false
+		};
+
+		if (!initialized[roomIndex]) {
+			lastRoom[roomIndex] = *room;
+			initialized[roomIndex] = true;
+			return;
+		}
+
+		for (int i = 0; i < 0x10; ++i) {
+			if (room->Unk1.Unknown[i] != lastRoom[roomIndex].Unk1.Unknown[i]) {
+				OSD::Notify(Utils::Format("Unk1.Unknown[%d] changed to %02X for %s", i, room->Unk1.Unknown[i], roomNames.at(roomIndex).c_str()));
+			}
+			if (room->Unk2.Unknown[i] != lastRoom[roomIndex].Unk2.Unknown[i]) {
+				OSD::Notify(Utils::Format("Unk2.Unknown[%d] changed to %02X for %s", i, room->Unk2.Unknown[i], roomNames.at(roomIndex).c_str()));
+			}
+		}
+
+		if (room->UnkItem3 != lastRoom[roomIndex].UnkItem3)
+			OSD::Notify(Utils::Format("UnkItem3 changed to %04X for %s", room->UnkItem3.ID, roomNames.at(roomIndex).c_str()));
+		if (room->UnkItem4 != lastRoom[roomIndex].UnkItem4)
+			OSD::Notify(Utils::Format("UnkItem4 changed to %04X for %s", room->UnkItem4.ID, roomNames.at(roomIndex).c_str()));
+
+		lastRoom[roomIndex] = *room;
+	}
+
+	static ACNL_PlayerHouse lastPlayerHouse;
+
+	void CheckPlayerHouse(ACNL_PlayerHouse *playerHouse) {
+		if (!playerHouse) {
+			return;
+		}
+
+		static bool initialized = false;
+
+		if (!initialized) {
+			lastPlayerHouse = *playerHouse;
+			initialized = true;
+			return;
+		}
+
+		if (playerHouse->CockroachAmount != lastPlayerHouse.CockroachAmount)
+			OSD::Notify(Utils::Format("CockroachAmount changed to %02X", playerHouse->CockroachAmount));
+		if (playerHouse->Unk8 != lastPlayerHouse.Unk8)
+			OSD::Notify(Utils::Format("Unk8 changed to %02X", playerHouse->Unk8));
+		if (playerHouse->Unk9 != lastPlayerHouse.Unk9)
+			OSD::Notify(Utils::Format("Unk9 changed to %02X", playerHouse->Unk9));
+
+		lastPlayerHouse = *playerHouse;
+	}
+
+	//Message Box Debug	
 	void msgboxtest(MenuEntry *entry) {
-		static std::string text;
+		/*static std::string text;
 		if(Controller::IsKeysPressed(Key::R + Key::DPadLeft)) 
 			ACMSG::Notify(text);
 		if(Controller::IsKeysPressed(Key::R + Key::DPadRight)) {
@@ -1565,34 +1756,110 @@ namespace CTRPluginFramework {
 				std::string str = (std::string(buffer));
 				GameKeyboard::SendMessage(Utils::Format("Player %d: %s - %s - %s", i, str.substr(0, 4).c_str(), str.substr(4, 4).c_str(), str.substr(8, 4).c_str()));
 			}
-		}
-
-		if(Controller::IsKeysPressed(Key::ZR + Key::DPadDown)) {
-			u32 buffer = 0;
-			//CRO::GetMemAddress("Outdoor", buffer);
-			set32(0xA00000, 0xE3A00000);
-			//OSD::Notify(Utils::Format("%08X", (buffer + 0x1DB44)));
-			//OSD::Notify(Utils::Format("UnknownPattern %08X", (u32)std::addressof(Town::GetSaveData()->UnknownPattern) - 0x31F26F80));
-		}
+		}*/
 
 		ACNL_Player *player = Player::GetSaveData();
+		ACNL_TownData *town = Town::GetSaveData();
+
+		if (!town) 
+			return;
+
+		TownFlagsSTRUCT tf;
+		u8* tarr = tf.data;
+		u32 toffset = Save::GetInstance()->AtOffset(0x621CF);
+		u8* tsrc = (u8*)toffset;
+
+		for (size_t i = 0; i < 17; i++) {
+			tarr[i] = tsrc[i]; 
+		}
+
+		CheckTownFlags(&tf);
+
+		CheckHouseSaveData(town);
+
+		ACNL_PlayerHouse *house = &town->PlayerHouse[0];
+		if (house) {
+			ACNL_Room* rooms[6] = {
+				&house->MiddleRoom,
+				&house->SecondRoom,
+				&house->BasementRoom,
+				&house->RightRoom,
+				&house->LeftRoom,
+				&house->BackRoom
+			};
+
+			for (u32 i = 0; i < 6; i++) {
+				CheckRoomFlags(i, rooms[i]);
+				CheckMiniRoomStruct(i, rooms[i]);
+			}
+
+			CheckPlayerHouse(house);
+		}
 
 		if(!player) 
 			return;
 
-		static u32 index = 0; //170
+		PlayerFlagsSTRUCT pf;
+		u8* arr = pf.data;
+		u32 offset = Player::GetSaveOffset(4) + 0x5700;
+		u8* src = (u8*)offset;
+
+		for (size_t i = 0; i < 0x34; i++) {
+			arr[i] = src[i]; 
+		}
+
+		CheckPlayerFlags(&pf);
+
+		static u32 index = 0;
 
 		if(Controller::IsKeysPressed(Key::L + Key::DPadRight)) {
 			Keyboard KB("");
 			KB.Open(index, index);
 		}
 		if(Controller::IsKeysPressed(Key::L + Key::DPadUp)) {
-			SetPlayerFlag(&player->PlayerFlags, index, true);
+			SetPlayerFlag(&player->PlayerFlags, index-1, true);
 		}
 		if(Controller::IsKeysPressed(Key::L + Key::DPadDown)) {
-			SetPlayerFlag(&player->PlayerFlags, index, false);
+			SetPlayerFlag(&player->PlayerFlags, index-1, false);
+		}
+
+		if (Controller::IsKeysPressed(Key::ZL + Key::DPadDown)) {
+			
 		}
 	}
+	
+	/*u64 GetFriendCode(u8 pIndex) {
+		u32 gPoint = *(u32 *)Address(0x954648).addr;
+		if(gPoint == 0)
+			return 0;
+
+		frdInit(false);
+
+		u32 pID = *(u32 *)((gPoint + 0xC0) + (0x18 * pIndex));
+
+		if((int)pID == -3)
+			return 0;
+		
+		u64 fCode = 0;
+		FRD_PrincipalIdToFriendCode(pID, &fCode);
+
+		frdExit();
+
+		return fCode;
+	}*/
+
+	static void Cheat_EatEvents(Handle debug) {
+        DebugEventInfo info;
+        Result r;
+
+        while(true) {
+            if((r = svcGetProcessDebugEvent(&info, debug)) != 0) {
+                if(r == (s32)(0xd8402009)) 
+                    break;
+            }
+            svcContinueDebugEvent(debug, (DebugFlags)3);
+        }
+    }
 /*
 //Hook
 	bool randomfall(void) {
