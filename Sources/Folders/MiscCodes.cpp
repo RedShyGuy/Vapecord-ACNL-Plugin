@@ -470,10 +470,12 @@ namespace CTRPluginFramework {
 	}
 //Fast Isabelle (Fast Text + Game Speed when in the Isabelle greeting room)
 	void fastisabelle(MenuEntry *entry) {
+		static Address blockKeys(0x541FF8);
 		static Address speed(0x54DDB4);
 		static Address fastt(0x5FC6AC);
 		static Address fastt2 = fastt.MoveOffset(8);
 
+		static bool blockKeysPatchedByIsabelle = false;
 		static bool speedPatchedByIsabelle = false;
 		static bool fastTalkPatchedByIsabelle = false;
 
@@ -496,6 +498,13 @@ namespace CTRPluginFramework {
 				fastt2.Patch(0xE3500001);
 				fastTalkPatchedByIsabelle = true;
 			}
+
+
+			if (!blockKeysPatchedByIsabelle) {
+				blockKeys.Patch(0xEA000068); //Block all keys except A
+				blockKeysPatchedByIsabelle = true;
+			}
+
 			Controller::InjectKey(Key::A);
 		}
 		else {
@@ -508,6 +517,11 @@ namespace CTRPluginFramework {
 				fastt.Unpatch();
 				fastt2.Unpatch();
 				fastTalkPatchedByIsabelle = false;
+			}
+
+			if (blockKeysPatchedByIsabelle) {
+				blockKeys.Unpatch();
+				blockKeysPatchedByIsabelle = false;
 			}
 		}
 	}
