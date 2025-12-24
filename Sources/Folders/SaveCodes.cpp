@@ -725,6 +725,14 @@ namespace CTRPluginFramework {
 		ReloadRoomIfInTownOrRoom();
 	}
 
+	/*
+	Bugs:
+	- Unbreakable Flowers gets interfered by the Walking Item Remover (needs a check if the entry of unbreakflow is enabled)
+	- If shoveling item and using touch warp, game crashes
+	- Seed Items picking up (fix pickup crash) breaks after closing 3ds lid
+	- 
+	*/
+
 	void EditExterior(ACNL_TownData *town, int playerIndex) {
 		std::vector<std::string> options = {
 			Language::getInstance()->get("HOUSE_EDITOR_HOUSE_DOOR"),
