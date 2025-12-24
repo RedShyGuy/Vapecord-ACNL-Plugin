@@ -210,7 +210,7 @@ namespace CTRPluginFramework {
             std::string out;
             Utils::ConvertUTF16ToUTF8(
                 out,
-                reinterpret_cast<const char16_t*>(DataTownName)
+                reinterpret_cast<const u16*>(DataTownName)
             );
             return out;
         }
@@ -233,7 +233,7 @@ namespace CTRPluginFramework {
             std::string out;
             Utils::ConvertUTF16ToUTF8(
                 out,
-                reinterpret_cast<const char16_t*>(PlayerName)
+                reinterpret_cast<const u16*>(PlayerName)
             );
             return out;
         }
