@@ -1741,9 +1741,18 @@ namespace CTRPluginFramework {
         u8 Unused4 : 1;
     };
 
+    struct Player_Letters {
+        ACNL_Letter letters[10]; //0x73958 MailBox
+        Future_Letter futureLetter;
+    };
+
     struct Future_Letter {
         ACNL_Letter LetterForFutureSelf;
         u64 ReceiveDateInNanoSeconds; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+    };
+
+    struct Player_Secret_Storage { //Size: 0x5A0
+        Item StorageItems[360];
     };
 
     struct ACNL_TownData {
@@ -1914,18 +1923,11 @@ namespace CTRPluginFramework {
         ACNL_Building IslandBuildings[2]; //Island Hut and Lloid
         ACNL_Pattern TownFlag; //0x70F1C
         u8 Unknown80[0x2208]; //0x7178C
-        ACNL_Letter Player1Letters[10]; //0x73958 MailBox
-        Future_Letter Player1FutureLetter; //0x75258
-        ACNL_Letter Player2Letters[10]; //0x754E0 MailBox
-        Future_Letter Player2FutureLetter; //0x76DE0
-        ACNL_Letter Player3Letters[10]; //0x77068 MailBox
-        Future_Letter Player3FutureLetter; //0x78B68
-        ACNL_Letter Player4Letters[10]; //0x78BF0 MailBox
-        Future_Letter Player4FutureLetter; //0x7A4F0
-
-        //0x7A778 player secret storage
-
-        u8 unknown[0xF378];
+        Player_Letters PlayerLetters[4]; //0x73958
+        Player_Secret_Storage PlayerSecretStorages[4]; //0x7A778
+        ACNL_Letter LetterPool[80]; //0x7BDF8 //any letter that isn't in your mailbox yet (every player shares this pool)
+        //next is 0x885F8
+        u8 unknown[0x1508];
     };
 
     /*
@@ -1956,7 +1958,7 @@ namespace CTRPluginFramework {
         u8 HeaderPadding[0x19]; //Always 0
     };
 
-    struct Garden_Plus {
+    struct Garden_Plus { //Size: 0x89B00
         SecureValueHeader SecureValue;
         ACNL_SaveHeader Header;
         ACNL_Player Player1;
