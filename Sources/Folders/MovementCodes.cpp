@@ -80,7 +80,7 @@ namespace CTRPluginFramework {
 			return; // Prevent teleporting while shoveling
 		}
 		
-		if(!Game::MapBoolCheck()) {
+		if(!Game::IsMapOpened()) {
 			return;
 		}
 
@@ -341,7 +341,7 @@ namespace CTRPluginFramework {
 			
 			u8 val;
 			if(Wrap::KB<u8>(Language::getInstance()->get("ROOM_WARPING_ENTER_ID"), true, 2, val, 0, onRoomChange)) {		
-				s8 res = Game::RoomFunction(val, 1, 1, 0);	
+				s8 res = Game::TeleportToRoom(val, 1, 1, 0);	
 				if(res == 1) {
 					OSD::Notify(Utils::Format("Warping to room %02X", val));
 				}

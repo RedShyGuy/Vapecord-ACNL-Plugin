@@ -62,56 +62,6 @@ namespace CTRPluginFramework {
 		Game::ChangeGameMode((Game::GameMode)gametchoice);
 		mgtype(entry);
     }
-//Unbreakable Flowers
-	void unbreakableflower(MenuEntry *entry) { 
-		static Address unbreakableFlowerPatch(0x597F64);
-
-		if(entry->WasJustActivated()) {
-			unbreakableFlowerPatch.Patch(0xE3A0801D);
-		}
-		else if(!entry->IsActivated()) {
-			unbreakableFlowerPatch.Unpatch();
-		}
-	}
-//Weather Mod
-	void Weathermod(MenuEntry *entry) { 
-		static Address weather(0x62FC30);
-		
-		std::vector<std::string> weatheropt = {
-			Language::getInstance()->get("VECTOR_WEATHER_SUNNY"),
-			Language::getInstance()->get("VECTOR_WEATHER_CLOUDY"),
-			Language::getInstance()->get("VECTOR_WEATHER_RAINY"),
-			Language::getInstance()->get("VECTOR_WEATHER_STORMY"),
-			Language::getInstance()->get("VECTOR_WEATHER_SNOWY"),
-			Language::getInstance()->get("VECTOR_DISABLE")
-		};
-		
-		static constexpr u32 Weathers[5] = {
-			0xE3A00000, 0xE3A00002, 0xE3A00003, 0xE3A00004, 0xE3A00005
-		};
-
-		bool IsON;
-		
-		for(int i = 0; i < 5; ++i) { 
-			IsON = *(u32 *)weather.addr == Weathers[i];
-			weatheropt[i] = (IsON ? Color(pGreen) : Color(pRed)) << weatheropt[i];
-		}
-		
-		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), weatheropt);
-
-		int op = optKb.Open();
-		if(op < 0) {
-			return;
-		}
-		
-		if(op == 5) {
-			weather.Unpatch();
-			return;
-		}
-		
-		weather.Patch(Weathers[op]);
-		Weathermod(entry);
-	}
 
 	void ShowPlayingMusic(u32 musicData, u32 r1, u32 r2, u32 r3) {
 		/*
@@ -149,33 +99,6 @@ namespace CTRPluginFramework {
 		}
 	}
 
-//always aurora lights
-	void auroralights(MenuEntry *entry) {
-		static Address auroraPatch1(0x62FD4C);
-		static Address auroraPatch2(0x630590);
-		static Address auroraPatch3 = auroraPatch1.MoveOffset(0xA4);
-
-		if(entry->WasJustActivated()) {
-			auroraPatch1.Patch(0xEA000023); //Makes aurora appear no matter the date or time
-			auroraPatch2.Patch(0xE3A00001); //Makes aurora appear in every season and weather
-			auroraPatch3.WriteFloat(1.0); //Brightness of aurora lights
-
-			if(PlayerClass::GetInstance()->IsLoaded()) {
-				OSD::Notify("Reload the room to see changes!", Color(0xC430BAFF));
-			}
-		}
-
-		CRO::Write<u32>("Outdoor", 0x1DB44, 0xE1A00000);
-
-		if(!entry->IsActivated()) {
-			CRO::Write<u32>("Outdoor", 0x1DB44, 0x1A000002);
-
-			auroraPatch1.Unpatch();
-			auroraPatch2.Unpatch();
-			auroraPatch3.Unpatch();
-		}
-	}
-
 //reload room
 	void ReloadRoomCheat(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
@@ -196,7 +119,7 @@ namespace CTRPluginFramework {
 		}
 	}
 
-//Large FOV	
+	//Large FOV	
 	void fovlarge(MenuEntry *entry) {
 		static Address fovlargeMod(0x47E48C);
 
@@ -403,27 +326,6 @@ namespace CTRPluginFramework {
 		}
 	}
 
-//Always Daytime /*Made by Jay*/
-	void Daytime(MenuEntry *entry) {
-		static Address day1(0x4B10A4);
-		static Address day2(0x1E6D58);
-		static Address day3(0x4B10AC);
-		static Address day4(0x4B10C8);
-		
-		if(entry->WasJustActivated()) {
-			day1.Patch(0xE3A01788);
-			day2.WriteFloat(1.25);
-			day3.Patch(0xE3A00000);
-			day4.Patch(0xE8871015);
-		}
-		
-		if(!entry->IsActivated()) {
-			day1.Unpatch();
-			day2.Unpatch();
-			day3.Unpatch();
-			day4.Unpatch();
-		}
-	}
 //Fast Mode	
 	void fast(MenuEntry *entry) {
 		if(entry->Hotkeys[0].IsPressed()) { //Key::R + Key::DPadDown
@@ -457,7 +359,7 @@ namespace CTRPluginFramework {
 
 		static Address speed(0x54DDB4);
 
-		if (Game::GameSaving()) {
+		if (Game::IsGameSaving()) {
 			speed.Unpatch();
 		}
 		else {
@@ -470,6 +372,12 @@ namespace CTRPluginFramework {
 	}
 //Fast Isabelle (Fast Text + Game Speed when in the Isabelle greeting room)
 	void fastisabelle(MenuEntry *entry) {
+		if (entry->WasJustActivated() && Game::GetRoom() == 0x63) {
+			OSD::Notify("Please enable Fast Player Load outside of the Player Load room!", Color::Red);
+			entry->Disable();
+			return;
+		}
+
 		static Address blockKeys(0x541FF8);
 		static Address speed(0x54DDB4);
 		static Address fastt(0x5FC6AC);
@@ -483,7 +391,7 @@ namespace CTRPluginFramework {
 
 		if (active) { // Isabelle
 			if (!gSpeedEnabled) {
-				if (Game::GameSaving()) {
+				if (Game::IsGameSaving()) {
 					speed.Unpatch();
 					speedPatchedByIsabelle = false;
 				}

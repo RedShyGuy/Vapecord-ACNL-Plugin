@@ -1,6 +1,12 @@
 {
   "name": "日本語",
   "entries": {
+    "ENV_CODES": "かんきょうのコード",
+    "INSECT_CODES": "ムシのコード",
+    "SPAWN_INSECT": "ムシを出現させる",
+    "SPAWN_INSECT_NOTE": "ムシを出現させたり、消したりします（同時に最大12匹まで）。\n\nR + 十字キー上：ムシを出現\nR + 十字キー下：ムシをすべて消去\n\nキーボードアイコンを押して、出現させるムシのIDを編集できます",
+    "INSECT_CANT_SCARE": "ムシが逃げない",
+    "INSECT_CANT_SCARE_NOTE": "近づいたり、走ったり、アミを外してもムシが逃げなくなります。",
     "OPEN_MENU": "メニューを開く",
     "BUILDING_MOD_NAME": "建物モード",
     "BUILDING_MOD_NOTE": "町の建物を設置・移動・削除できます。",

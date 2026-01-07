@@ -21,6 +21,7 @@ INCLUDES	:= 	Includes \
 				Includes/Item \
 				Includes/Pretendo \
 				Includes/House \
+				Includes/Plugin \
 				
 SOURCES 	:= 	Sources \
                 Sources/Folders \
@@ -28,6 +29,7 @@ SOURCES 	:= 	Sources \
 				Sources/Folders/ExtraCodes \
 				Sources/Folders/PlayerCodes \
 				Sources/Folders/DefaultCodes \
+				Sources/Folders/EnvironmentCodes \
 				Sources/Helpers \
 				Sources/LibCtrpfExtras \
 				Sources/Plugin \
@@ -40,7 +42,7 @@ PSF 		:= 	$(notdir $(TOPDIR)).plgInfo
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
-DEVMODE 	?= 0
+DEVMODE 	?= 1
 
 ARCH		:=	-march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
 

@@ -3,7 +3,7 @@
 #include <CTRPluginFramework.hpp>
 
 #define majorV 2
-#define minorV 1
+#define minorV 2
 #define revisV 0
 
 namespace CTRPluginFramework {

@@ -111,12 +111,12 @@ Translators: みるえもん & みなと(Japanese), im a book(spanish), Fedecras
 			return 0;
 		}
 
+		EnableAllChecks();
+		EnableAllPatches();
+
 		CheckForLanguageFile();
 
 		SleepTime();
-
-		EnableAllChecks();
-		EnableAllPatches();
 
 		ItemSequence::Init();
 	//keeps internet connection when menu is opened

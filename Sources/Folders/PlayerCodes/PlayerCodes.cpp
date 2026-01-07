@@ -322,7 +322,7 @@ namespace CTRPluginFramework {
 
 //OSD For Show Players On The Map	
 	bool players(const Screen &screen) { 
-		if(screen.IsTop || !Game::MapBoolCheck()) {
+		if(screen.IsTop || !Game::IsMapOpened()) {
 			return 0;
 		}
 
@@ -367,7 +367,7 @@ namespace CTRPluginFramework {
 			hook.Enable();
 
 			u32 pInstance = PlayerClass::GetInstance()->Offset();
-			if(pInstance != 0 && Game::MapBoolCheck()) {
+			if(pInstance != 0 && Game::IsMapOpened()) {
 				u32 aInstance = Animation::GetAnimationInstance(pInstance, 0, 0, 0);
 
 				AnimData data;

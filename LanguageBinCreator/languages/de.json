@@ -1,6 +1,12 @@
 {
   "name": "Deutsch",
   "entries": {
+    "ENV_CODES": "Umgebungs-Codes",
+    "INSECT_CODES": "Insekten-Codes",
+    "SPAWN_INSECT": "Insekten erscheinen lassen",
+    "SPAWN_INSECT_NOTE": "Lässt Insekten erscheinen oder entfernt sie wieder (maximal 12 Insekten gleichzeitig).\n\nR + Steuerkreuz Hoch: Insekt erscheinen lassen\nR + Steuerkreuz Runter: Alle Insekten entfernen\n\nDrücke auf das Tastatur-Symbol, um die Insekten-ID zu bearbeiten",
+    "INSECT_CANT_SCARE": "Insekten fliehen nicht",
+    "INSECT_CANT_SCARE_NOTE": "Insekten fliegen nicht weg, wenn du dich näherst, rennst oder mit dem Kescher danebenschlägst.",
     "OPEN_MENU": "Menü Öffnen",
     "RADIO_PLAYER": "Radio Player",
     "RADIO_PLAYER_NOTE": "Zeigt dir die momentan laufende Musik im Spiel an.",

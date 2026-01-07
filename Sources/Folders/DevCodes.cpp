@@ -1822,12 +1822,8 @@ namespace CTRPluginFramework {
 		if(Controller::IsKeysPressed(Key::L + Key::DPadDown)) {
 			SetPlayerFlag(&player->PlayerFlags, index-1, false);
 		}
-
-		if (Controller::IsKeysPressed(Key::ZL + Key::DPadDown)) {
-			
-		}
 	}
-	
+
 	/*u64 GetFriendCode(u8 pIndex) {
 		u32 gPoint = *(u32 *)Address(0x954648).addr;
 		if(gPoint == 0)
@@ -2140,53 +2136,26 @@ namespace CTRPluginFramework {
 	32239378 = ModuleKotobuki.cro
 	*/
 	
-//Item Island Code
-	void islanditems(MenuEntry *entry) {
-		if (Controller::IsKeysPressed(Key::ZL + Key::DPadRight)) {
-			std::vector<ItemNamePack> results;
-
-			std::string keyword = "cap";
-			Item::searchAllByKeyword(keyword, results);
-			
-			OSD::Notify(Utils::Format("Found %d items with keyword: %s (1st Item: 0x%04X)", results.size(), keyword.c_str(), results.at(0)), Color::Cyan);
-		}
-
-		/*
-
-		*/
-		/*else if(Controller::IsKeysPressed(Key::R + Key::DPadRight)) {
-			int res = FUNCTION(0x30F5FC).Call<int>(0xAF88F8, "Test %d", 25);
-			char* buff = (char *)(0xAF88F8 + 0xC);
-			OSD::Notify(std::string(buff));
-		}
-
+	void unlockCroRegion(MenuEntry *entry) {
+		static std::string str = "";
+		static u32 buffer = 0;
+ 
 		if(Controller::IsKeysPressed(Key::R + Key::DPadUp)) {
-			AnimationData *globalData = new AnimationData(); //<u8, u8, u8, u8, u8, u16, u8>
-
-			u32 player = PlayerClass::GetInstance()->Offset();
-
-			globalData->roomID = 0;
-        	globalData->animID = 0xB9;
-			globalData->xCoordSH = Calculate16BitFloat(*(float *)(player + 0x14));
-			globalData->zCoordSH = Calculate16BitFloat(*(float *)(player + 0x1C));
-			globalData->rotationSH = PlayerClass::GetInstance()->GetRotation();
-
-			*(u8 *)globalData->data = 0x10;
-			*(u8 *)(globalData->data + 1) = 0;
-
-			*(u8 *)(globalData->data + 2) = 3;
-			*(u8 *)(globalData->data + 3) = 3;
-			*(u8 *)(globalData->data + 4) = 3;
-
-			*(u16 *)(globalData->data + 5) = 0x7FFE;
-
-			*(u8 *)(globalData->data + 7) = 0;
-
-			static FUNCT func(Address(0x64DB90););
-			func.Call<bool>(player, 0xB9, globalData, 0);
-
-			delete[] globalData;
-		}*/
+			if(Wrap::KB<std::string>("Enter Cro Name:", false, 15, str, str)) {
+				if(CRO::GetMemAddress(str.c_str(), buffer)) {
+					if(CRO::WritePermToggle(buffer, true)) {
+						OSD::Notify(Utils::Format("Unlocked %s | Address: %08X", str.c_str(), buffer));
+					}
+				}
+			}
+		}
+		else if(Controller::IsKeysPressed(Key::R + Key::DPadDown)) {
+			if(CRO::GetMemAddress(str.c_str(), buffer)) {
+				if(CRO::WritePermToggle(buffer, false)) {
+					OSD::Notify(Utils::Format("Locked %s | Address: %08X", str.c_str(), buffer));
+				}
+			}
+		}
 	}
 	
 	void PlayerLoader(MenuEntry *entry) {
@@ -2317,7 +2286,7 @@ namespace CTRPluginFramework {
 		if(Controller::IsKeysDown(Key::R)) {
 			if(random) {
 				FishID.ID = Utils::Random(0x22E1, 0x234A);
-				if(Game::GetItemCategorie(FishID) != Item_Categories::Fish) 
+				if(Game::GetItemCategory(FishID) != Item_Category::Fish) 
 					return;
 			}
 

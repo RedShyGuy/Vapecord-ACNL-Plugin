@@ -220,22 +220,96 @@ namespace CTRPluginFramework {
 			Language::getInstance()->get("VECTOR_ENZY_FILL"),
 			Language::getInstance()->get("VECTOR_ENZY_CLEAR"),
 		};
-			
+		
 		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), songopt);
-
-		switch(optKb.Open()) {
-			default: break;
-			case 0:
-				for(int i = 0; i < 20 * 8; ++i) {
-					building->UnlockedPWPs[i >> 5] |= (1 << (i & 0x1F));
-				}
-			break;
-			case 1: 
-				for(int i = 0; i < 20 * 8; ++i) {
-					building->UnlockedPWPs[i >> 5] &= ~(1 << (i & 0x1F));
-				}
-			break;
+		int res = optKb.Open();
+		if (res < 0) {
+			return;
 		}
+
+		bool unlock = (res == 0);
+
+		building->UnlockedPWPs.DefaultPWPs = unlock;
+        building->UnlockedPWPs.Topiaries = unlock;
+        building->UnlockedPWPs.DreamSuite = unlock;
+        building->UnlockedPWPs.MuseumRenovation = unlock;
+        building->UnlockedPWPs.Cafe = unlock;
+        building->UnlockedPWPs.ResetCenter = unlock;
+        building->UnlockedPWPs.PerfectTownPWPs = unlock;
+        building->UnlockedPWPs.StationReconstruction = unlock;
+        building->UnlockedPWPs.DrinkingFountain = unlock;
+        building->UnlockedPWPs.GarbageCan = unlock;
+        building->UnlockedPWPs.FlowerBed = unlock;
+        building->UnlockedPWPs.OutdoorChair = unlock;
+        building->UnlockedPWPs.FlowerArch = unlock;
+        building->UnlockedPWPs.FairyTaleClock = unlock;
+        building->UnlockedPWPs.FairyTaleBench = unlock;
+        building->UnlockedPWPs.FairyTaleStreetlight = unlock;
+        building->UnlockedPWPs.FairyTaleBridge = unlock;
+        building->UnlockedPWPs.MetalBench = unlock;
+        building->UnlockedPWPs.RoundStreetlight = unlock;
+        building->UnlockedPWPs.IlluminatedHeart = unlock;
+        building->UnlockedPWPs.IlluminatedClock = unlock;
+        building->UnlockedPWPs.IlluminatedTree = unlock;
+        building->UnlockedPWPs.Bell = unlock;
+        building->UnlockedPWPs.ArchwaySculpture = unlock;
+        building->UnlockedPWPs.StatueFountain = unlock;
+        building->UnlockedPWPs.HotSpring = unlock;
+        building->UnlockedPWPs.Streetlight = unlock;
+        building->UnlockedPWPs.IlluminatedArch = unlock;
+        building->UnlockedPWPs.Tower = unlock;
+        building->UnlockedPWPs.ModernClock = unlock;
+        building->UnlockedPWPs.ModernBench = unlock;
+        building->UnlockedPWPs.ModernStreetlight = unlock;
+        building->UnlockedPWPs.Scarecrow = unlock;
+        building->UnlockedPWPs.Geyser = unlock;
+        building->UnlockedPWPs.Windmill = unlock;
+        building->UnlockedPWPs.WoodBench = unlock;
+        building->UnlockedPWPs.WisteriaTrellis = unlock;
+        building->UnlockedPWPs.LogBench = unlock;
+        building->UnlockedPWPs.BusStop = unlock;
+        building->UnlockedPWPs.PicnicBlanket = unlock;
+        building->UnlockedPWPs.BalloonArch = unlock;
+        building->UnlockedPWPs.TireToy = unlock;
+        building->UnlockedPWPs.PileOfPipes = unlock;
+        building->UnlockedPWPs.CampingCot = unlock;
+        building->UnlockedPWPs.JungleGym = unlock;
+        building->UnlockedPWPs.Sandbox = unlock;
+        building->UnlockedPWPs.Hammock = unlock;
+        building->UnlockedPWPs.WaterPump = unlock;
+        building->UnlockedPWPs.InstrumentShelter = unlock;
+        building->UnlockedPWPs.Torch = unlock;
+        building->UnlockedPWPs.FirePit = unlock;
+        building->UnlockedPWPs.SolarPanel = unlock;
+        building->UnlockedPWPs.BlueBench = unlock;
+        building->UnlockedPWPs.TrafficSignal = unlock;
+        building->UnlockedPWPs.StadiumLight = unlock;
+        building->UnlockedPWPs.VideoScreen = unlock;
+        building->UnlockedPWPs.WoodenBridge = unlock;
+        building->UnlockedPWPs.ZenGarden = unlock;
+        building->UnlockedPWPs.ZenBell = unlock;
+        building->UnlockedPWPs.RackOfRice = unlock;
+        building->UnlockedPWPs.DrillingRig = unlock;
+        building->UnlockedPWPs.ZenClock = unlock;
+        building->UnlockedPWPs.ZenBench = unlock;
+        building->UnlockedPWPs.ZenStreetlight = unlock;
+        building->UnlockedPWPs.Sphinx = unlock;
+        building->UnlockedPWPs.TotemPole = unlock;
+        building->UnlockedPWPs.ParabolicAntenna = unlock;
+        building->UnlockedPWPs.MoaiStatue = unlock;
+        building->UnlockedPWPs.Stonehenge = unlock;
+        building->UnlockedPWPs.Pyramid = unlock;
+        building->UnlockedPWPs.CubeSculpture = unlock;
+        building->UnlockedPWPs.ChairSculpture = unlock;
+        building->UnlockedPWPs.PoliceStations = unlock;
+        building->UnlockedPWPs.Lighthouse = unlock;
+        building->UnlockedPWPs.BrickBridge = unlock;
+        building->UnlockedPWPs.ModernBridge = unlock;
+        building->UnlockedPWPs.StoneTablet = unlock;
+        building->UnlockedPWPs.WindTurbine = unlock;
+        building->UnlockedPWPs.CautionSign = unlock;
+        building->UnlockedPWPs.YieldSign = unlock;
+        building->UnlockedPWPs.FortuneTellersShop = unlock;
     }
 
 //Grass Type Changer | non player specific save code		
@@ -564,7 +638,7 @@ namespace CTRPluginFramework {
 		}
 
 		if((MessageBox(justUnlocked ? "Secret Storage And Furniture Mover Unlocked!" : "", "Do you want to load the tutorial for the furniture mover?\nThis will teleport you into the tutorial, afterwards you will be at the mainstreet.", DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
-			Game::RoomFunction(0xA3, 0, 0, 0);
+			Game::TeleportToRoom(0xA3, 0, 0, 0);
 		}
 	}
 
@@ -1176,7 +1250,7 @@ namespace CTRPluginFramework {
     }
 
 	void GetAcreID(void) {
-		if(!(Game::MapBoolCheck() && Game::IsGameInRoom(0) && Player::GetSaveOffset(4) != 0)) {
+		if(!(Game::IsMapOpened() && Game::IsGameInRoom(0) && Player::GetSaveOffset(4) != 0)) {
 			return;
 		}
 
@@ -1346,7 +1420,7 @@ namespace CTRPluginFramework {
 			*menu += GetAcreID;
 		}
 
-		bool IsOkay = (Game::MapBoolCheck() && Game::IsGameInRoom(0) && Player::GetSaveData());
+		bool IsOkay = (Game::IsMapOpened() && Game::IsGameInRoom(0) && Player::GetSaveData());
 		static bool WasActivated = false;
 		int res = 0;
 

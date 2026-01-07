@@ -1,6 +1,12 @@
 {
   "name": "English",
   "entries": {
+    "ENV_CODES": "Environment Codes",
+    "INSECT_CODES": "Insect Codes",
+    "SPAWN_INSECT": "Spawn Insects",
+    "SPAWN_INSECT_NOTE": "Spawn or despawn insects (max insects are 12 at a time).\n\nR + DPadUp: Spawn Insect\nR + DPadDown: Despawn All Insects\n\nPress the keyboard symbol to edit the insect id to spawn",
+    "INSECT_CANT_SCARE": "Insects Can't Be Scared",
+    "INSECT_CANT_SCARE_NOTE": "Insects will not fly away when you get close to them, when you are running or when you miss with the net.",
     "OPEN_MENU": "Open Menu",
     "RADIO_PLAYER": "Radio Player", 
     "RADIO_PLAYER_NOTE": "Shows you the currently playing music title.",

@@ -19,7 +19,7 @@ namespace CTRPluginFramework {
         Empty = 8
     };
 
-    enum Item_Categories : u32 {
+    enum Item_Category : u32 {
         MiiHead = 0, //(0x2000)
         NPCBuildingItems, //(0x2061 -> 0x2074)
         Bells, //(0x20AC -> 0x2117)
@@ -193,7 +193,7 @@ namespace CTRPluginFramework {
         Item Shoes; //Item ID < 0xXXXX
     };
 
-    struct TownID {
+    struct TownID { //0x16
         u16 TID; //Default is 0
         u16/*wchar*/ DataTownName[9]; //Default is 0
         u8 Unknown01; //Default is 0xA
@@ -216,7 +216,7 @@ namespace CTRPluginFramework {
         }
     };
 
-    struct PlayerID {
+    struct PlayerID { //0x16
         u16 PID;
         u16/*wchar*/ PlayerName[9];
         u8 Gender;
@@ -239,7 +239,7 @@ namespace CTRPluginFramework {
         }
     };
 
-    struct PersonalID {
+    struct PersonalID { //Size: 0x2E
         PlayerID PlayerData;
         TownID TownData;
         u8 TPC_Country;
@@ -253,7 +253,7 @@ namespace CTRPluginFramework {
         }
     };
 
-    struct ACNL_Pattern {
+    struct ACNL_Pattern { //Size: 0x870
         u16/*wchar*/ Title[21];
         PersonalID CreatorData;
         u8 Palette[15];
@@ -650,7 +650,7 @@ namespace CTRPluginFramework {
         u8 Unknown270 : 1;
         u8 Unknown271 : 1;
         u8 Unknown272 : 1;
-        u8 Unknown273 : 1;
+        u8 Unknown273 : 1; //Island People Here Tutorial
         u8 Unknown274 : 1;
         u8 Unknown275 : 1;
         u8 Unknown276 : 1;
@@ -796,27 +796,27 @@ namespace CTRPluginFramework {
         u8 Unknown416 : 1;
     };
 
-    struct ACNL_Letter {
-        PersonalID Reciever;
-        u16 ZeroPad_1;
-        u16 RecieverID;
-        u8 ZeroPad_2[50];
-        u16 Unknown2; //Some form of ID?
-        u16 ZeroPad_3;
-        u16/*wchar*/ Header[32]; //Max amount is 32 UTF-16 characters
-        u16 ZeroPad_4;
-        u16/*wchar*/ Body[192]; //Max amount is 192 UTF-16 characters
-        u16 ZeroPad_5;
-        u16/*wchar*/ Signature[32]; //Max amount is 32 UTF-16 characters
-        u16 ZeroPad_6;
-        u8 RecieverNameIndent;
-        u8 PaperID;
-        u8 LetterFlag;
-        u8 StringIDOfSender;
-        u8 LetterType;
-        u8 Unknown3;
-        Item AttachedItem;
-        u64  Unknown4;
+    struct ACNL_Letter { //Size: 0x280
+        PersonalID Reciever; //0
+        u16 ZeroPad_1; //0x2E
+        u16 RecieverID; //0x30
+        u8 ZeroPad_2[50]; //0x32
+        u16 Unknown2; //0x64 //Some form of ID? 
+        u16 ZeroPad_3; //0x66
+        u16/*wchar*/ Header[32]; //0x68 //Max amount is 32 UTF-16 characters
+        u16 ZeroPad_4; //0xA8
+        u16/*wchar*/ Body[192]; //0xAA //Max amount is 192 UTF-16 characters
+        u16 ZeroPad_5; //0x22A
+        u16/*wchar*/ Signature[32]; //0x22C //Max amount is 32 UTF-16 characters
+        u16 ZeroPad_6; //0x26C
+        u8 RecieverNameIndent; //0x26E
+        u8 PaperID; //0x26F
+        u8 LetterFlag; //0x270
+        u8 StringIDOfSender; //0x271
+        u8 LetterType; //0x272
+        u8 Unknown3; //0x273
+        Item AttachedItem; //0x274
+        u64  Unknown4; //0x278
     };
 
     struct UnknownStruct1 { //Initiatives 0x8A3C
@@ -1199,6 +1199,18 @@ namespace CTRPluginFramework {
         u16 Padding_19;
     };
 
+    struct ACNL_DateTime {
+        u16 Year;
+        u16 Unk0; //Maybe padding
+        u8 Month;
+        u8 Day;
+        u8 Unk1; //some sort of flag probably
+        u8 Hour;
+        u8 Minute;
+        u8 Second;
+        u16 Millisecond;
+    };
+
     struct ACNL_Date {
         u16 Year;
         u8 Month;
@@ -1335,41 +1347,132 @@ namespace CTRPluginFramework {
         u8 Unknown2[0x14];
     };
 
-    struct ACNL_Building {
+    struct ACNL_Building { //Size: 0x4
         u16 ID; //0xFC is none, only below 0xFC considered valid
         u8 XCoord;
         u8 YCoord;
     };
 
-    struct Town_Buildings {
+    struct Town_Buildings { //Size: 0xE8
         ACNL_Building Building[56];
         ACNL_Building EventPWP[2];
     };
 
+    struct Unlocked_PWPs {
+        u8 DefaultPWPs : 1; //All unlocked at default (cobblestone bridge, suspension bridge, yellow bench, water well, fountain, park clock, street lamp, campsite, fence, fire hydrant, custom-design sign, face-cutout standee, do-not-enter sign)
+        u8 Topiaries : 1; //round, square, tulip
+        u8 DreamSuite : 1;
+        u8 MuseumRenovation : 1;
+        u8 Cafe : 1;
+        u8 ResetCenter : 1;
+        u8 PerfectTownPWPs : 1; //town-hall renovations & flower clock
+        u8 StationReconstruction : 1;
+        u8 DrinkingFountain : 1;
+        u8 GarbageCan : 1;
+        u8 FlowerBed : 1;
+        u8 OutdoorChair : 1;
+        u8 FlowerArch : 1;
+        u8 FairyTaleClock : 1;
+        u8 FairyTaleBench : 1;
+        u8 FairyTaleStreetlight : 1;
+        u8 FairyTaleBridge : 1;
+        u8 MetalBench : 1;
+        u8 RoundStreetlight : 1;
+        u8 IlluminatedHeart : 1;
+        u8 IlluminatedClock : 1;
+        u8 IlluminatedTree : 1;
+        u8 Bell : 1;
+        u8 ArchwaySculpture : 1;
+        u8 StatueFountain : 1;
+        u8 HotSpring : 1;
+        u8 Streetlight : 1;
+        u8 IlluminatedArch : 1;
+        u8 Tower : 1;
+        u8 ModernClock : 1;
+        u8 ModernBench : 1;
+        u8 ModernStreetlight : 1;
+        u8 Scarecrow : 1;
+        u8 Geyser : 1;
+        u8 Windmill : 1;
+        u8 WoodBench : 1;
+        u8 WisteriaTrellis : 1;
+        u8 LogBench : 1;
+        u8 BusStop : 1;
+        u8 PicnicBlanket : 1;
+        u8 BalloonArch : 1;
+        u8 TireToy : 1;
+        u8 PileOfPipes : 1;
+        u8 CampingCot : 1;
+        u8 JungleGym : 1;
+        u8 Sandbox : 1;
+        u8 Hammock : 1;
+        u8 WaterPump : 1;
+        u8 InstrumentShelter : 1;
+        u8 Torch : 1;
+        u8 FirePit : 1;
+        u8 SolarPanel : 1;
+        u8 BlueBench : 1;
+        u8 TrafficSignal : 1;
+        u8 StadiumLight : 1;
+        u8 VideoScreen : 1;
+        u8 WoodenBridge : 1;
+        u8 ZenGarden : 1;
+        u8 ZenBell : 1;
+        u8 RackOfRice : 1;
+        u8 DrillingRig : 1;
+        u8 ZenClock : 1;
+        u8 ZenBench : 1;
+        u8 ZenStreetlight : 1;
+        u8 Sphinx : 1;
+        u8 TotemPole : 1;
+        u8 ParabolicAntenna : 1;
+        u8 MoaiStatue : 1;
+        u8 Stonehenge : 1;
+        u8 Pyramid : 1;
+        u8 CubeSculpture : 1;
+        u8 ChairSculpture : 1;
+        u8 PoliceStations : 1; //modern & classic
+        u8 Lighthouse : 1;
+        u8 BrickBridge : 1;
+        u8 ModernBridge : 1;
+        u8 StoneTablet : 1;
+        u8 WindTurbine : 1;
+        u8 CautionSign : 1;
+        u8 YieldSign : 1;
+        u8 FortuneTellersShop : 1;
+        //All unused flags
+        u8 Unused1 : 1;
+        u8 Unused2 : 1;
+        u8 Unused3 : 1;
+        u8 Unused4 : 1;
+        u8 Unused5 : 1;
+        u8 Unused6 : 1;
+        u8 Unused7 : 1;
+        u8 Unused8 : 1;
+        u8 Unused9 : 1;
+        u8 Unused10 : 1;
+        u8 Unused11 : 1;
+        u8 Unused12 : 1;
+        u8 Unused13 : 1;
+        u8 Unused14 : 1;
+        u8 Unused15 : 1;
+    };
+
+    struct DesignStand {
+        ACNL_Pattern Pattern;
+        u32 xCoord; //0xFFFFFFFF if none placed (idk why 32bit was needed, world coords are 8bit..)
+        u32 yCoord; //0xFFFFFFFF if none placed (idk why 32bit was needed, world coords are 8bit..)
+    };
+
     struct ACNL_BuildingData { //0x4BE80
-        u32 Checksum; //Checksum of the 0x44B8 of this data
-        u8 NormalPWPsAmount;
-        u8 EventPWPsAmount;
-        u8 TownTreeSize; //1 <-> 7
-        u8 Padding1;
-        Town_Buildings Buildings;
-        //These are for the design stands I think; "FF_Padding1" is probably not padding but which pattern corresponds to which pwp???
-        ACNL_Pattern UnkPattern1;
-        u64 FF_Padding1;
-        ACNL_Pattern UnkPattern2;
-        u64 FF_Padding2;
-        ACNL_Pattern UnkPattern3;
-        u64 FF_Padding3;
-        ACNL_Pattern UnkPattern4;
-        u64 FF_Padding4;
-        ACNL_Pattern UnkPattern5;
-        u64 FF_Padding5;
-        ACNL_Pattern UnkPattern6;
-        u64 FF_Padding6;
-        ACNL_Pattern UnkPattern7;
-        u64 FF_Padding7;
-        ACNL_Pattern UnkPattern8;
-        u32 UnlockedPWPs[5]; //Devs use bitfield for unlocked PWPS
+        u32 Checksum; //0x4BE80 //Checksum of the 0x44B8 of this data
+        u8 NormalPWPsAmount; //0x4BE84
+        u8 EventPWPsAmount; //0x4BE85
+        u8 TownTreeSize; //0x4BE86 //1 <-> 7
+        u8 Padding1; //0x4BE87
+        Town_Buildings Buildings; //0x4BE88
+        DesignStand Stands[8]; //0x4BF70
+        Unlocked_PWPs UnlockedPWPs; //0x50330
     };
 
     struct ACNL_MinigameData {
@@ -1572,7 +1675,7 @@ namespace CTRPluginFramework {
         u8 Unknown69 : 1;
         u8 Unknown70 : 1;
         u8 Unknown71 : 1;
-        u8 Unknown72 : 1;
+        u8 Unknown72 : 1; //gets set when you talked to isabelle after she wants to build the dream suite
         u8 Unknown73 : 1; //ctor sets this bit
         u8 Unknown74 : 1; //ctor sets this bit
         u8 Unknown75 : 1; //ctor sets this bit
@@ -1588,7 +1691,7 @@ namespace CTRPluginFramework {
         u8 Unknown85 : 1;
         u8 Unknown86 : 1;
         u8 Unknown87 : 1; //someone new moved in, isabelle mentions it, then its set to 0 again
-        u8 Unknown88 : 1;
+        u8 OpenPublicWorkProject : 1;
         u8 Unknown89 : 1;
         u8 Unknown90 : 1;
         u8 Unknown91 : 1;
@@ -1636,6 +1739,11 @@ namespace CTRPluginFramework {
         u8 Unused2 : 1;
         u8 Unused3 : 1;
         u8 Unused4 : 1;
+    };
+
+    struct Future_Letter {
+        ACNL_Letter LetterForFutureSelf;
+        u64 ReceiveDateInNanoSeconds; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
     };
 
     struct ACNL_TownData {
@@ -1807,17 +1915,33 @@ namespace CTRPluginFramework {
         ACNL_Pattern TownFlag; //0x70F1C
         u8 Unknown80[0x2208]; //0x7178C
         ACNL_Letter Player1Letters[10]; //0x73958 MailBox
-        u8 Unknown81[0x288];
+        Future_Letter Player1FutureLetter; //0x75258
         ACNL_Letter Player2Letters[10]; //0x754E0 MailBox
-        u8 Unknown82[0x288];
+        Future_Letter Player2FutureLetter; //0x76DE0
         ACNL_Letter Player3Letters[10]; //0x77068 MailBox
-        u8 Unknown83[0x288];
+        Future_Letter Player3FutureLetter; //0x78B68
         ACNL_Letter Player4Letters[10]; //0x78BF0 MailBox
+        Future_Letter Player4FutureLetter; //0x7A4F0
 
         //0x7A778 player secret storage
 
-        u8 unknown[0xF600];
+        u8 unknown[0xF378];
     };
+
+    /*
+    Letter1
+    1: 73958
+    2: 73BD8
+    3: 73E58
+    4: 740D8
+    5: 74358
+    6: 745D8
+    7: 74858
+    8: 74AD8
+    9: 74D58
+    10: 74FD8
+    Next: 75258
+    */
 
     struct SecureValueHeader {
         u64 SecureValue; //0x0 //Unused in ACNL WA

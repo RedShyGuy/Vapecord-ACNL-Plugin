@@ -267,7 +267,7 @@ namespace CTRPluginFramework {
 			for(s8 j = -size; j <= size; ++j) {
 				particleCoords[0] = (selectedX + j) * 0x20 + 0x10;
 				particleCoords[2] = (selectedY + i) * 0x20 + 0x10;
-				Game::Particles(0x20C, particleCoords);
+				Game::SpawnParticlesAtCoords(0x20C, particleCoords);
 				//0x20C = Orange Light
 				//0x214 = Blue Light
 			}
@@ -419,7 +419,7 @@ namespace CTRPluginFramework {
 							Dropper::PlaceItemWrapper(DropType, ItemIDToReplace, &dropitem, &dropitem, (selectedX + j), (selectedY + i), 0, 0, 0, 0, 0, waitAnim, 0xA5);
 						}
 						else {
-							Game::TrampleAt((selectedX + j), (selectedY + i)); 
+							Game::TrampleAtWorldCoords((selectedX + j), (selectedY + i)); 
 						}
 					}
 				}

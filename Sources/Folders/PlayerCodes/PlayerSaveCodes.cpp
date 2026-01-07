@@ -458,9 +458,9 @@ namespace CTRPluginFramework {
 			Language::getInstance()->get("VECTOR_ENZY_CLEAR"),
 		};
 
-		static const Item_Categories EncyclopediaID[3] = { 
-			Item_Categories::Bugs, Item_Categories::Fish, 
-			Item_Categories::SeaCreatures
+		static const Item_Category EncyclopediaID[3] = { 
+			Item_Category::Bugs, Item_Category::Fish, 
+			Item_Category::SeaCreatures
 		};
 		
 		Keyboard KB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), enzyopt);
@@ -600,15 +600,15 @@ namespace CTRPluginFramework {
 			Language::getInstance()->get("VECTOR_ENZY_CLEAR"),
 		};	
 
-		static const Item_Categories CatalogID[15] = {
-			Item_Categories::Wallpaper, Item_Categories::Carpets,
-			Item_Categories::Furniture, Item_Categories::Shirts,
-			Item_Categories::Dresses, Item_Categories::Trousers,
-			Item_Categories::Socks, Item_Categories::Shoes,
-			Item_Categories::Hats, Item_Categories::Accesories,
-			Item_Categories::Umbrellas, Item_Categories::MailPapers,
-			Item_Categories::Songs, Item_Categories::Gyroids,
-			Item_Categories::AnalyzedFossils
+		static const Item_Category CatalogID[15] = {
+			Item_Category::Wallpaper, Item_Category::Carpets,
+			Item_Category::Furniture, Item_Category::Shirts,
+			Item_Category::Dresses, Item_Category::Trousers,
+			Item_Category::Socks, Item_Category::Shoes,
+			Item_Category::Hats, Item_Category::Accesories,
+			Item_Category::Umbrellas, Item_Category::MailPapers,
+			Item_Category::Songs, Item_Category::Gyroids,
+			Item_Category::AnalyzedFossils
 		};
 		
 		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), songopt);

@@ -119,7 +119,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 		
-		if(Game::NextRoomCheck() == 0xA5 && Game::IsGameInRoom(0x65)) {
+		if(Game::GetNextRoom() == 0xA5 && Game::IsGameInRoom(0x65)) {
 			for(int i = 0; i < 4; ++i) {
 				Process::Write32(*(u32 *)IslandShopPointer.addr + 0x10 + (i * 4), ShopItem[i].isValid(false) ? *(u32 *)&ShopItem[i] : 0x2018);
 			}

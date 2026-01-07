@@ -312,35 +312,49 @@ namespace CTRPluginFramework {
 		})),
 		menu->Append(NPCC);
 
-	////////////////////
-	/*Fun Codes Folder*/
-	////////////////////
-		MenuFolderExtras *FUNC = new MenuFolderExtras("FUN_CODES", FolderType::Fun); 
-		FUNC->Append(new MenuEntryExtras("SIZE_CODES", nullptr, sizecodes, "SIZE_CODES_NOTE")),
-		FUNC->Append(new MenuEntryExtras("T_POSE", tposeentry, "T_POSE_NOTE")),
-		FUNC->Append(EntryWithHotkey(new MenuEntryExtras("TAKE_TPC_PIC", freezeframe, "TAKE_TPC_PIC_NOTE"), { 
-			HotkeyExtras(Key::L, "TAKE_TPC_PIC_KEY1"), 
-			HotkeyExtras(Key::A, "TAKE_TPC_PIC_KEY2") 
+	////////////////////////////
+	/*Environment Codes Folder*/
+	////////////////////////////
+		MenuFolderExtras *ENVC = new MenuFolderExtras("ENV_CODES", FolderType::Environment);
+	/////////////////////
+	/*Fish Codes Folder*/
+	/////////////////////
+		MenuFolderExtras *FISC = new MenuFolderExtras("FISH_CODES", FolderType::Environment);
+		FISC->Append(new MenuEntryExtras("FISH_ALWAYS_BITE_NAME", FishAlwaysBiteRightAway, "FISH_ALWAYS_BITE_NOTE")),
+		FISC->Append(new MenuEntryExtras("FISH_CANT_SCARE_NAME", FishCantBeScared, "FISH_CANT_SCARE_NOTE")),
+		ENVC->Append(FISC);
+	///////////////////////
+	/*Insect Codes Folder*/
+	///////////////////////
+		MenuFolderExtras *INSC = new MenuFolderExtras("INSECT_CODES", FolderType::Environment);
+		INSC->Append(new MenuEntryExtras("SPAWN_INSECT", SpawnInsectEntry, SetInsectIdEntry, "SPAWN_INSECT_NOTE")),
+		INSC->Append(new MenuEntryExtras("INSECT_CANT_SCARE", InsectsCantBeScared, "INSECT_CANT_SCARE_NOTE")),
+		ENVC->Append(INSC);
+		
+		ENVC->Append(new MenuEntryExtras("DAYTIME", Daytime, "DAYTIME_NOTE")),
+		ENVC->Append(new MenuEntryExtras("ALWAYS_AURORA_MOD", auroralights , "ALWAYS_AURORA_MOD_NOTE")),
+		ENVC->Append(new MenuEntryExtras("UNBREAK_FLOWER", unbreakableflower, "UNBREAK_FLOWER_NOTE")),
+		ENVC->Append(new MenuEntryExtras("WEATHER_MOD", nullptr, Weathermod , "WEATHER_MOD_NOTE")),
+		ENVC->Append(EntryWithHotkey(new MenuEntryExtras("WATER_FLOWERS_NAME", WaterAllFlowers, "WATER_FLOWERS_NOTE"), { 
+			HotkeyExtras(Key::R | Key::DPadLeft, "WATER_FLOWRES_HOTKEY1") 
 		})),
-		FUNC->Append(new MenuEntryExtras("MAX_TURBO", maxturbo, "MAX_TURBO_NOTE")),
-		FUNC->Append(new MenuEntryExtras("MULTI_PRESS", asmpresses, "MULTI_PRESS_NOTE")),
-		FUNC->Append(EntryWithHotkey(new MenuEntryExtras("ULTIMATE_POPPER", partypopper, "ULTIMATE_POPPER_NOTE"), { 
-			HotkeyExtras(Key::B | Key::DPadLeft, "ULTIMATE_POPPER_KEY1") 
+		ENVC->Append(EntryWithHotkey(new MenuEntryExtras("WEED_REMOVER_NAME", weedremover, "WEED_REMOVER_NOTE"), { 
+			HotkeyExtras(Key::L | Key::DPadRight, "WEED_REMOVER_HOTKEY1"), 
+			HotkeyExtras(Key::L | Key::DPadLeft, "WEED_REMOVER_HOTKEY2") 
 		})),
-	    FUNC->Append(new MenuEntryExtras("CAMERA_MOD", cameramod, "CAMERA_MOD_NOTE")),
-		menu->Append(FUNC);
+		ENVC->Append(EntryWithHotkey(new MenuEntryExtras("GRASS_EDITOR", grasseditor, grasscomplete, "GRASS_EDITOR_NOTE"), { 
+			HotkeyExtras(Key::R | Key::DPadDown, "GRASS_EDITOR_HOTKEY1"), 
+			HotkeyExtras(Key::R | Key::DPadUp, "GRASS_EDITOR_HOTKEY2"), 
+			HotkeyExtras(Key::R | Key::DPadRight, "GRASS_EDITOR_HOTKEY3") 
+		})),
+		ENVC->Append(new MenuEntryExtras("BURIED_INSPECTOR", BuriedInspector, "BURIED_INSPECTOR_NOTE")),
+
+		menu->Append(ENVC);
 
 	//////////////////////
 	/*Extra Codes Folder*/
 	//////////////////////
 		MenuFolderExtras *EXTC = new MenuFolderExtras("EXTRA_CODES", FolderType::Extra);
-	/////////////////////
-	/*Fish Codes Folder*/
-	/////////////////////
-		MenuFolderExtras *FISC = new MenuFolderExtras("FISH_CODES", FolderType::Extra);
-		FISC->Append(new MenuEntryExtras("FISH_ALWAYS_BITE_NAME", FishAlwaysBiteRightAway, "FISH_ALWAYS_BITE_NOTE")),
-		FISC->Append(new MenuEntryExtras("FISH_CANT_SCARE_NAME", FishCantBeScared, "FISH_CANT_SCARE_NOTE")),
-		EXTC->Append(FISC);
 	/////////////////////
 	/*Chat Codes Folder*/
 	/////////////////////
@@ -358,6 +372,23 @@ namespace CTRPluginFramework {
 		CHAC->Append(new MenuEntryExtras("CHAT_COMMANDS", chatCommands, "CHAT_COMMANDS_NOTE")),
 		CHAC->Append(new MenuEntryExtras("CHAT_BUTTON", ChatButton, "CHAT_BUTTON_NOTE")),
 		EXTC->Append(CHAC);
+	////////////////////
+	/*Fun Codes Folder*/
+	////////////////////
+		MenuFolderExtras *FUNC = new MenuFolderExtras("FUN_CODES", FolderType::Extra); 
+		FUNC->Append(new MenuEntryExtras("SIZE_CODES", nullptr, sizecodes, "SIZE_CODES_NOTE")),
+		FUNC->Append(new MenuEntryExtras("T_POSE", tposeentry, "T_POSE_NOTE")),
+		FUNC->Append(EntryWithHotkey(new MenuEntryExtras("TAKE_TPC_PIC", freezeframe, "TAKE_TPC_PIC_NOTE"), { 
+			HotkeyExtras(Key::L, "TAKE_TPC_PIC_KEY1"), 
+			HotkeyExtras(Key::A, "TAKE_TPC_PIC_KEY2") 
+		})),
+		FUNC->Append(new MenuEntryExtras("MAX_TURBO", maxturbo, "MAX_TURBO_NOTE")),
+		FUNC->Append(new MenuEntryExtras("MULTI_PRESS", asmpresses, "MULTI_PRESS_NOTE")),
+		FUNC->Append(EntryWithHotkey(new MenuEntryExtras("ULTIMATE_POPPER", partypopper, "ULTIMATE_POPPER_NOTE"), { 
+			HotkeyExtras(Key::B | Key::DPadLeft, "ULTIMATE_POPPER_KEY1") 
+		})),
+	    FUNC->Append(new MenuEntryExtras("CAMERA_MOD", cameramod, "CAMERA_MOD_NOTE")),
+		EXTC->Append(FUNC);
 		EXTC->Append(new MenuEntryExtras("SHOP_ALWAYS_OPEN_NAME", ShopsAlwaysOpen, "SHOP_ALWAYS_OPEN_NOTE")),
 		EXTC->Append(new MenuEntryExtras("DISABLE_SAVE", nonesave, "DISABLE_SAVE_NOTE")),
 		EXTC->Append(new MenuEntryExtras("DISABLE_ITEM_LOCKS", bypass, "DISABLE_ITEM_LOCKS_NOTE")),
@@ -365,25 +396,12 @@ namespace CTRPluginFramework {
 		EXTC->Append(new MenuEntryExtras("SET_SPOT_STATE_NAME", nullptr, SetSpotState, "SET_SPOT_STATE_NOTE")),
 		EXTC->Append(new MenuEntryExtras("SEARCH_REPLACE_NAME", nullptr, SearchReplace, "SEARCH_REPLACE_NOTE")),
 		EXTC->Append(new MenuEntryExtras("REMOVE_MAP_ITEMS_NAME", nullptr, RemoveItemsCheat, "REMOVE_MAP_ITEMS_NOTE")),
-	    EXTC->Append(EntryWithHotkey(new MenuEntryExtras("WATER_FLOWERS_NAME", WaterAllFlowers, "WATER_FLOWERS_NOTE"), { 
-			HotkeyExtras(Key::R | Key::DPadLeft, "WATER_FLOWRES_HOTKEY1") 
-		})),
-		EXTC->Append(EntryWithHotkey(new MenuEntryExtras("WEED_REMOVER_NAME", weedremover, "WEED_REMOVER_NOTE"), { 
-			HotkeyExtras(Key::L | Key::DPadRight, "WEED_REMOVER_HOTKEY1"), 
-			HotkeyExtras(Key::L | Key::DPadLeft, "WEED_REMOVER_HOTKEY2") 
-		})),
 		EXTC->Append(new MenuEntryExtras("EDIT_PATTERN_NAME", editpattern, "EDIT_PATTERN_NOTE")),
-		EXTC->Append(EntryWithHotkey(new MenuEntryExtras("GRASS_EDITOR", grasseditor, grasscomplete, "GRASS_EDITOR_NOTE"), { 
-			HotkeyExtras(Key::R | Key::DPadDown, "GRASS_EDITOR_HOTKEY1"), 
-			HotkeyExtras(Key::R | Key::DPadUp, "GRASS_EDITOR_HOTKEY2"), 
-			HotkeyExtras(Key::R | Key::DPadRight, "GRASS_EDITOR_HOTKEY3") 
-		})),
 		EXTC->Append(new MenuEntryExtras("AMIIBO_SPOOFER", AmiiboSpoofer, "AMIIBO_SPOOFER_NOTE")),
 		EXTC->Append(EntryWithHotkey(new MenuEntryExtras("TIME_TRAVEL", TimeTravel, TTKeyboard, "TIME_TRAVEL_NOTE"), { 
 			HotkeyExtras(Key::R | Key::DPadRight, "TIME_FORWARD"), 
 			HotkeyExtras(Key::R | Key::DPadLeft, "TIME_BACKWARDS") 
 		})),
-		EXTC->Append(new MenuEntryExtras("BURIED_INSPECTOR", BuriedInspector, "BURIED_INSPECTOR_NOTE")),
 		menu->Append(EXTC);
 
 	/////////////////////
@@ -392,10 +410,7 @@ namespace CTRPluginFramework {
 		MenuFolderExtras *MISC = new MenuFolderExtras("MISC_CODES", FolderType::Misc);		
 		MISC->Append(new MenuEntryExtras("TOOL_ANIM", nullptr, tooltype, "TOOL_ANIM_NOTE")),
 		MISC->Append(new MenuEntryExtras("GAME_TYPE", nullptr, mgtype, "GAME_TYPE_NOTE")),
-		MISC->Append(new MenuEntryExtras("UNBREAK_FLOWER", unbreakableflower, "UNBREAK_FLOWER_NOTE")),
-		MISC->Append(new MenuEntryExtras("WEATHER_MOD", nullptr, Weathermod , "WEATHER_MOD_NOTE")),
 		MISC->Append(new MenuEntryExtras("RADIO_PLAYER", radioPlayer , "RADIO_PLAYER_NOTE")),
-		MISC->Append(new MenuEntryExtras("ALWAYS_AURORA_MOD", auroralights , "ALWAYS_AURORA_MOD_NOTE")),
 		MISC->Append(new MenuEntryExtras("RELOAD_ROOM_NAME", nullptr, ReloadRoomCheat, "RELOAD_ROOM_NOTE")),
 		MISC->Append(new MenuEntryExtras("MORE_NUMBERS",  morenumberisland, "MORE_NUMBERS_NOTE")),
 		MISC->Append(new MenuEntryExtras("LARGE_FOV", fovlarge, "LARGE_FOV_NOTE")),
@@ -406,7 +421,6 @@ namespace CTRPluginFramework {
 		MISC->Append(EntryWithHotkey(new MenuEntryExtras("BEANS_PARTICLE", BeansParticleChanger, "BEANS_PARTICLE_NOTE"), { 
 			HotkeyExtras(Key::L | Key::DPadLeft, "BEANS_PARTICLE") 
 		})),
-		MISC->Append(new MenuEntryExtras("DAYTIME", Daytime, "DAYTIME_NOTE")),    
 		MISC->Append(EntryWithHotkey(new MenuEntryExtras("FAST_MODE", fast, "FAST_MODE_NOTE"), { 
 			HotkeyExtras(Key::R | Key::DPadDown, "FAST_MODE")
 		})),
@@ -425,7 +439,7 @@ namespace CTRPluginFramework {
 	DEFAULTC->Append(new MenuEntry("Change Rockbreak Particle", nullptr, ChangeRockbreakParticleEntry, "")),
 	DEFAULTC->Append(new MenuEntry("Drop Items Everywhere", nullptr, DropItemsEverywhereEntry, "")),
 	DEFAULTC->Append(new MenuEntry("Idle After Tree Shake/Cut", nullptr, IdleAfterTreeShakeOrCutEntry, "")),
-	DEFAULTC->Append(new MenuEntry("Don't Move NPC Back To Original Position", nullptr, DontMoveNPCBackToOriginalPositionEntry, "")),
+	//DEFAULTC->Append(new MenuEntry("Don't Move NPC Back To Original Position", nullptr, DontMoveNPCBackToOriginalPositionEntry, "")),
 	DEFAULTC->Append(new MenuEntry("Replace Drop Functions", nullptr, ReplaceDropFunctionsEntry, "")),
 	DEFAULTC->Append(new MenuEntry("Prevent Particle Crash", nullptr, PreventParticleCrashEntry, "")),
 	DEFAULTC->Append(new MenuEntry("Bypass Game Checks", nullptr, BypassGameChecksEntry, "")),
@@ -460,7 +474,7 @@ namespace CTRPluginFramework {
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "MSG Box", msgboxtest, "")),
 		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Unused Fall Down", falldownfishing, "")),
 		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Analyze Fossils", Analyzer, "")),
-		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Test Cheat", islanditems, "")),
+		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Unlock Cro Region", unlockCroRegion, "Unlock Cro Region: R + DPadUp\nLock Cro Region: R + DPadDown")),
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "ACNH Cheat", acnh, "")),
 		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Friend Code Test", PlayerLoader, "")),
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Player Dumper", nullptr, player_dumper, "")),
@@ -480,6 +494,6 @@ namespace CTRPluginFramework {
 		menu->Append(DEVC);
 	#endif
 
-		menu->Append(new MenuEntry("Set Plugin Language", nullptr, SetLanguageEntry, "Sets the plugin language."));
+		menu->Append(new MenuEntry("Plugin Settings", nullptr, pluginSettingsEntry, ""));
 	}
 }

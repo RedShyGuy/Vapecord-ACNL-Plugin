@@ -296,7 +296,7 @@ namespace CTRPluginFramework {
 		
 		if(RuntimeContext::getInstance()->isTurbo() ? entry->Hotkeys[1].IsDown() : entry->Hotkeys[1].IsPressed()) {//Key::L + Key::DPadDown
 			u32 wX, wY, u0;
-			if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !Game::GameSaving()) {
+			if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !Game::IsGameSaving()) {
 				Dropper::PlaceItemWrapper(DropType, ItemIDToReplace, &dropitem, &dropitem, wX, wY, 0, 0, 0, 0, 0, waitAnim, 0xA5);
 			}
 		}
@@ -318,7 +318,7 @@ namespace CTRPluginFramework {
 		}
 		
 		if(enabled) {
-			if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !Game::GameSaving()) {
+			if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !Game::IsGameSaving()) {
 				Dropper::PlaceItemWrapper(DropType, ItemIDToReplace, &dropitem, &dropitem, wX, wY, 0, 0, 0, 0, 0, waitAnim, 0xA5);
 			}
 		}
@@ -329,7 +329,7 @@ namespace CTRPluginFramework {
 			Wrap::KB<u32>(Language::getInstance()->get("ENTER_ID"), true, 8, *(u32 *)&dropitem, *(u32 *)&dropitem, ItemChange);
 		}
 		
-		if((RuntimeContext::getInstance()->isTurbo() ? Touch::IsDown() : Controller::IsKeyPressed(Key::Touchpad)) && Game::MapBoolCheck() == 1) {
+		if((RuntimeContext::getInstance()->isTurbo() ? Touch::IsDown() : Controller::IsKeyPressed(Key::Touchpad)) && Game::IsMapOpened()) {
 			UIntVector pos = Touch::GetPosition();
 			u32 worldx, worldy; 
 			switch(Game::GetRoom()) {
@@ -379,14 +379,14 @@ namespace CTRPluginFramework {
 		//Auto Drop
 			u32 wX, wY, u0;
 			if(enabled) {
-				if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !Game::GameSaving()) {
+				if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !Game::IsGameSaving()) {
 					Dropper::PlaceItemWrapper(DropType, ItemIDToReplace, &dropitemid, &dropitemid, wX, wY, 0, 0, 0, 0, 0, waitAnim, 0xA5);
 				}
 			}
 			
 		//Single Drop
 			if(RuntimeContext::getInstance()->isTurbo() ? entry->Hotkeys[1].IsDown() : entry->Hotkeys[1].IsPressed()) {
-				if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !Game::GameSaving()) {
+				if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !Game::IsGameSaving()) {
 					Dropper::PlaceItemWrapper(DropType, ItemIDToReplace, &dropitemid, &dropitemid, wX, wY, 0, 0, 0, 0, 0, waitAnim, 0xA5);
 				}
 			}

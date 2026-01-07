@@ -141,11 +141,28 @@ namespace CTRPluginFramework {
 	void SetFacialExpression(MenuEntry *entry);
 	void FacialExpressionMod(MenuEntry *entry);
 	void wandability(MenuEntry *entry);
-	
-//Extra Codes
+
+//Environment Codes
 	//Fish Codes
 	void FishAlwaysBiteRightAway(MenuEntry *entry);
 	void FishCantBeScared(MenuEntry *entry);
+
+	//Insect Codes
+	void SetInsectIdEntry(MenuEntry *entry);
+	void SpawnInsectEntry(MenuEntry *entry);
+	void InsectsCantBeScared(MenuEntry *entry);
+
+	void Daytime(MenuEntry *entry);
+	void auroralights(MenuEntry *entry);
+	void unbreakableflower(MenuEntry *entry);
+	void Weathermod(MenuEntry *entry);
+	void WaterAllFlowers(MenuEntry *entry);
+	void weedremover(MenuEntry *entry);
+	void grasscomplete(MenuEntry *entry);
+	void grasseditor(MenuEntry *entry);
+	void BuriedInspector(MenuEntry *entry);
+	
+//Extra Codes
 	//Chat Codes
 	void bubblesDisappear(MenuEntry *entry);
 	void Forcesendchat(MenuEntry *entry);
@@ -162,23 +179,15 @@ namespace CTRPluginFramework {
 	void SetSpotState(MenuEntry *entry);
 	void SearchReplace(MenuEntry *entry);
 	void RemoveItemsCheat(MenuEntry *entry);
-	void WaterAllFlowers(MenuEntry *entry);
-	void weedremover(MenuEntry *entry);
 	void editpattern(MenuEntry *entry);	
-	void grasscomplete(MenuEntry *entry);	
-	void grasseditor(MenuEntry *entry);
 	void AmiiboSpoof(MenuEntry *entry);
 	void TTKeyboard(MenuEntry *entry);
 	void TimeTravel(MenuEntry *entry);
-	void BuriedInspector(MenuEntry *entry);
 	
 //Misc Codes
 	void tooltype(MenuEntry *entry);
 	void mgtype(MenuEntry *entry);
-	void unbreakableflower(MenuEntry *entry);
-	void Weathermod(MenuEntry *entry);
 	void radioPlayer(MenuEntry *entry);
-	void auroralights(MenuEntry *entry);
 	void ReloadRoomCheat(MenuEntry *entry);
 	void morenumberisland(MenuEntry *entry);
 	void fovlarge(MenuEntry *entry);
@@ -187,7 +196,6 @@ namespace CTRPluginFramework {
 	void key_limit(MenuEntry* entry);
 	void CustomKeyboard(MenuEntry* entry);
 	void BeansParticleChanger(MenuEntry *entry);
-	void Daytime(MenuEntry *entry);
 	void fast(MenuEntry *entry);
 	void fasttalk(MenuEntry *entry);
 	void speedentry(MenuEntry *entry);
@@ -206,7 +214,7 @@ namespace CTRPluginFramework {
 	void falldownfishing(MenuEntry *entry);
 	void anticheat(MenuEntry *entry);
 	void Analyzer(MenuEntry *entry);
-	void islanditems(MenuEntry *entry);
+	void unlockCroRegion(MenuEntry *entry);
 	void acnh(MenuEntry *entry);
 	void PlayerLoader(MenuEntry *entry);
 	void player_dumper(MenuEntry *entry);
@@ -263,7 +271,7 @@ namespace CTRPluginFramework {
     void SetCustomSpritesForProDesigns(MenuEntry *entry);
 	void FruitStackingCheck(MenuEntry *entry);
 
-	void SetLanguageEntry(MenuEntry *entry);
+	void pluginSettingsEntry(MenuEntry *entry);
 	
 //Helper functions
   //Located in cheats.cpp

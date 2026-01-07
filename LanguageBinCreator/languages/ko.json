@@ -1,6 +1,12 @@
 {
   "name": "한국어",
   "entries": {
+    "ENV_CODES": "환경 코드",
+    "INSECT_CODES": "곤충 코드",
+    "SPAWN_INSECT": "곤충 생성",
+    "SPAWN_INSECT_NOTE": "곤충을 생성하거나 제거합니다 (동시에 최대 12마리까지).\n\nR + 방향키 위: 곤충 생성\nR + 방향키 아래: 모든 곤충 제거\n\n키보드 아이콘을 눌러 생성할 곤충 ID를 편집하세요",
+    "INSECT_CANT_SCARE": "곤충이 도망가지 않음",
+    "INSECT_CANT_SCARE_NOTE": "가까이 가거나 달리거나 그물을 빗맞혀도 곤충이 도망가지 않습니다.",
     "OPEN_MENU": "메뉴 열기",
     "BURIED_INSPECTOR": "묻힌 물건 확인",
     "BURIED_INSPECTOR_NOTE": "삽 없이도 손으로 집어 올려 파낼 수 있습니다.",

@@ -208,7 +208,7 @@ namespace CTRPluginFramework {
 		ChangeRockbreakParticle(true);
 		DropItemsEverywhere(true);
 		IdleAfterTreeShakeOrCut(true);
-		DontMoveNPCBackToOriginalPosition(true);
+		//DontMoveNPCBackToOriginalPosition(true);
 		ReplaceDropFunctions(true);
 		PreventParticleCrash(true);
 		BypassGameChecks(true);
@@ -222,7 +222,7 @@ namespace CTRPluginFramework {
 		ChangeRockbreakParticle(false);
 		DropItemsEverywhere(false);
 		IdleAfterTreeShakeOrCut(false);
-		DontMoveNPCBackToOriginalPosition(false);
+		//DontMoveNPCBackToOriginalPosition(false);
 		ReplaceDropFunctions(false);
 		PreventParticleCrash(false);
 		BypassGameChecks(false);

@@ -3,23 +3,11 @@
 #include <CTRPluginFramework.hpp>
 #include "Language.hpp"
 #include "MenuEntryExtras.hpp"
+#include "Plugin/Plugin_Color.hpp"
+#include "LibCtrpfExtras/FolderTypes.hpp"
+#include "Files.h"
 
 namespace CTRPluginFramework {
-    enum class FolderType {
-        Save,
-        Movement,
-        Inventory,
-        Player,
-        Animation,
-        Seeding,
-        Money,
-        Island,
-        NPC,
-        Fun,
-        Extra,
-        Misc
-    };
-
     class MenuFolderExtras : public MenuFolder {
     public:
         /**
@@ -41,29 +29,51 @@ namespace CTRPluginFramework {
          * \param item The folder to append
          */
         void    Append(MenuFolderExtras *item) const;
+
+        static std::string GetFolderName(FolderType type) {
+            switch (type) {
+                case FolderType::Save:          return Language::getInstance()->get("SAVE_CODES");
+                case FolderType::Movement:      return Language::getInstance()->get("MOVEMENT_CODES");
+                case FolderType::Inventory:     return Language::getInstance()->get("INVENTORY_CODES");
+                case FolderType::Player:        return Language::getInstance()->get("PLAYER_CODES");
+                case FolderType::Animation:     return Language::getInstance()->get("ANIMATION_CODES");
+                case FolderType::Seeding:       return Language::getInstance()->get("SEEDING_CODES");
+                case FolderType::Money:         return Language::getInstance()->get("MONEY_CODES");
+                case FolderType::Island:        return Language::getInstance()->get("ISLAND_CODES");
+                case FolderType::NPC:           return Language::getInstance()->get("NPC_CODES");
+                case FolderType::Environment:   return Language::getInstance()->get("ENV_CODES");
+                case FolderType::Extra:         return Language::getInstance()->get("EXTRA_CODES");
+                case FolderType::Misc:          return Language::getInstance()->get("MISC_CODES");
+            }
+            return "ERROR"; // fallback
+        }
+
+        static Color GetFolderColor(FolderType type) {
+            if (type < FolderType::Save || type > FolderType::Misc) {
+                return Color::White; // invalid type
+            }
+
+            if (CustomColorsExist()) {
+                std::vector<ColorEntry> customColors = GetCustomColors();
+                for (const ColorEntry& entry : customColors) {
+                    if (entry.folderType == type) {
+                        return Color(entry.r, entry.g, entry.b);
+                    }
+                }
+            }
+
+            for (const ColorEntry& entry : defaultColors) {
+                if (entry.folderType == type) {
+                    return Color(entry.r, entry.g, entry.b);
+                }
+            }
+            return Color::White; // fallback
+        }
     private:
         Color color;
         
         static std::string setLanguageByKey(const std::string& langKey) {
             return Language::getInstance()->get(langKey);
-        }
-
-        static Color GetFolderColor(FolderType type) {
-            switch (type) {
-                case FolderType::Save:      return Color(150, 100, 255);  // Violett
-                case FolderType::Movement:  return Color(80, 220, 120);   // Bright green
-                case FolderType::Inventory: return Color(255, 160, 70);   // Orange
-                case FolderType::Player:    return Color(70, 180, 255);   // Bright blue
-                case FolderType::Animation: return Color(255, 80, 180);   // Magenta
-                case FolderType::Seeding:   return Color(110, 200, 100);  // Green
-                case FolderType::Money:     return Color(255, 215, 60);   // Golden yellow
-                case FolderType::Island:    return Color(60, 220, 200);   // Cyan
-                case FolderType::NPC:       return Color(255, 100, 100);  // Warm red
-                case FolderType::Fun:       return Color(240, 120, 255);  // Pink purple
-                case FolderType::Extra:     return Color(150, 160, 180);  // Grey blue
-                case FolderType::Misc:      return Color(100, 100, 100);  // Dark grey
-            }
-            return Color::White; // fallback
         }
     };
 }

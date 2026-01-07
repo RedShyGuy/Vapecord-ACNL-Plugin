@@ -1,6 +1,12 @@
 {
   "name": "Italiano",
   "entries": {
+    "ENV_CODES": "Codici ambiente",
+    "INSECT_CODES": "Codici insetti",
+    "SPAWN_INSECT": "Genera insetti",
+    "SPAWN_INSECT_NOTE": "Genera o rimuove insetti (massimo 12 insetti alla volta).\n\nR + Croce direzionale Su: Genera insetto\nR + Croce direzionale Giù: Rimuovi tutti gli insetti\n\nPremi l’icona della tastiera per modificare l’ID dell’insetto",
+    "INSECT_CANT_SCARE": "Insetti non spaventabili",
+    "INSECT_CANT_SCARE_NOTE": "Gli insetti non voleranno via quando ti avvicini, corri o manchi il colpo con il retino.",
     "OPEN_MENU": "Apri Menu",
     "CHAT_BUTTON": "Pulsante chat",
     "CHAT_BUTTON_NOTE": "Pulsanti utili nel menu chat per copiare/incollare/cancellare/inviare contenuti.",

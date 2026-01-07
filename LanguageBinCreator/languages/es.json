@@ -1,6 +1,12 @@
 {
   "name": "Español",
   "entries": {
+    "ENV_CODES": "Códigos del entorno",
+    "INSECT_CODES": "Códigos de insectos",
+    "SPAWN_INSECT": "Generar insectos",
+    "SPAWN_INSECT_NOTE": "Genera o elimina insectos (máximo 12 insectos al mismo tiempo).\n\nR + Cruceta Arriba: Generar insecto\nR + Cruceta Abajo: Eliminar todos los insectos\n\nPulsa el icono del teclado para editar el ID del insecto",
+    "INSECT_CANT_SCARE": "Los insectos no huyen",
+    "INSECT_CANT_SCARE_NOTE": "Los insectos no saldrán volando cuando te acerques, corras o falles con la red.",
     "OPEN_MENU": "Abrir Menú",
     "BUILDING_MOD_NAME": "Mod de Edificios",
     "BUILDING_MOD_NOTE": "Te permite colocar, mover y eliminar edificios en tu pueblo.",
