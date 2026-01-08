@@ -1691,17 +1691,6 @@ namespace CTRPluginFramework {
 			return;
 		}
 
-		for (int i = 0; i < 0x10; ++i) {
-			if (room->Unk1.Unknown[i] != lastRoom[roomIndex].Unk1.Unknown[i]) {
-				OSD::Notify(Utils::Format("Unk1.Unknown[%d] changed to %02X for %s", i, room->Unk1.Unknown[i], roomNames.at(roomIndex).c_str()));
-			}
-			if (room->Unk2.Unknown[i] != lastRoom[roomIndex].Unk2.Unknown[i]) {
-				OSD::Notify(Utils::Format("Unk2.Unknown[%d] changed to %02X for %s", i, room->Unk2.Unknown[i], roomNames.at(roomIndex).c_str()));
-			}
-		}
-
-		if (room->UnkItem3 != lastRoom[roomIndex].UnkItem3)
-			OSD::Notify(Utils::Format("UnkItem3 changed to %04X for %s", room->UnkItem3.ID, roomNames.at(roomIndex).c_str()));
 		if (room->UnkItem4 != lastRoom[roomIndex].UnkItem4)
 			OSD::Notify(Utils::Format("UnkItem4 changed to %04X for %s", room->UnkItem4.ID, roomNames.at(roomIndex).c_str()));
 
@@ -1733,31 +1722,7 @@ namespace CTRPluginFramework {
 		lastPlayerHouse = *playerHouse;
 	}
 
-	//Message Box Debug	
-	void msgboxtest(MenuEntry *entry) {
-		/*static std::string text;
-		if(Controller::IsKeysPressed(Key::R + Key::DPadLeft)) 
-			ACMSG::Notify(text);
-		if(Controller::IsKeysPressed(Key::R + Key::DPadRight)) {
-			Keyboard kb("Enter Text");
-			kb.Open(text);
-		}
-
-		if(Controller::IsKeysPressed(Key::ZL + Key::DPadDown)) {
-			for(int i = 0; i < 4; ++i) {
-				u64 fCode = GetFriendCode(i);
-				if(fCode == 0) {
-					OSD::Notify(Utils::Format("Player %d: Not Loaded!", i));
-					continue;
-				}
-
-				char buffer[13];
-				sprintf(buffer, "%012lld", fCode);
-				std::string str = (std::string(buffer));
-				GameKeyboard::SendMessage(Utils::Format("Player %d: %s - %s - %s", i, str.substr(0, 4).c_str(), str.substr(4, 4).c_str(), str.substr(8, 4).c_str()));
-			}
-		}*/
-
+	void displaySaveFlagDifference(MenuEntry *entry) {
 		ACNL_Player *player = Player::GetSaveData();
 		ACNL_TownData *town = Town::GetSaveData();
 
@@ -1844,24 +1809,8 @@ namespace CTRPluginFramework {
 		return fCode;
 	}*/
 
-	static void Cheat_EatEvents(Handle debug) {
-        DebugEventInfo info;
-        Result r;
-
-        while(true) {
-            if((r = svcGetProcessDebugEvent(&info, debug)) != 0) {
-                if(r == (s32)(0xd8402009)) 
-                    break;
-            }
-            svcContinueDebugEvent(debug, (DebugFlags)3);
-        }
-    }
-/*
 //Hook
 	bool randomfall(void) {
-		if(Player::GetTool() == 0x3357) 
-			return 1;
-		
 		if(Controller::IsKeyDown(Key::A)) 
 			return 1;
 		
@@ -1873,267 +1822,25 @@ namespace CTRPluginFramework {
 		if(entry->WasJustActivated()) {
 			u32 addressToHookAt = 0x656CCC;
 			hook.Initialize(addressToHookAt, (u32)randomfall);
-		  	hook.SetFlags(USE_LR_TO_RETURN);
+			hook.SetFlags(USE_LR_TO_RETURN);
 			hook.Enable();
 		}
 
 		if(!entry->IsActivated()) 
-            hook.Disable();
-	}
-*/
-
-/*
-	u32 FUN_001C4940(void) {
-  		return *(u32 *)(0x951378 + 0x18);
+			hook.Disable();
 	}
 
-	u8 FUN_0082E21C(u32 param_1, uint param_2) {
-		u8 bVar1;
-		
-		if(param_2 < 7) {
-			bVar1 = *(u8 *)(param_1 + 0x3CA4 + (param_2 >> 3)) >> (param_2 & 7) & 1;
+	/*
+	//u32 Currentmap(0x9B5A24, 0x9B4A24, 0x9B4A24, 0x9B4A24, 0x9AEA04, 0x9ADA04, 0x9ADA24, 0x9ADA24);
+		void ItemPlacer(u32* ItemID) {
+			static FUNCT func(0x581E3C);
+			func.Call<void>(GameHelper::GetCurrentMap(), ItemID, PlayerClass::GetInstance()->GetCoordinates(), 0);
 		}
-
-		else {
-			bVar1 = 0;
-		}
-		return bVar1;
-	}
-
-	u32 FUN_007633f4(int param_1) {	
-		u32 iVar1 = FUN_001C4940();
-
-		u32 piVar2 = *(u32 *)(iVar1 + 0xECD0);
-
-		u8 val = *(u8 *)(param_1 + 0x34C);
-		u8 res = FUN_0082E21C(piVar2, val);
-		
-
-		if((*(u32 *)(param_1 + 0x348) == piVar2) && (val < *(u8 *)(iVar1 + 0xECD4)) && res != 0) { 
-			piVar2 = piVar2 + val * 0x22A + 3;
-		}
-		else {
-			piVar2 = 0;
-		}
-
-		iVar1 = *(u32 *)(piVar2 + 0x19A);
-		if(iVar1 != 0) {
-			iVar1 = 1;
-		}
-		return iVar1;
-	}
-*/
-
-/*
-//Analyze fossils
-	void Analyzer(MenuEntry *entry) {
-		u32 item = Inventory::ReadSlot(Inventory::GetSelectedSlot());
-		
-		if(item == 0x202A) 
-			Inventory::WriteSlot(Inventory::GetSelectedSlot(), Utils::Random(0x3130, 0x3172));
-	}
-*/
-
-/*
-//u32 Currentmap(0x9B5A24, 0x9B4A24, 0x9B4A24, 0x9B4A24, 0x9AEA04, 0x9ADA04, 0x9ADA24, 0x9ADA24);
-	void ItemPlacer(u32* ItemID) {
-		static FUNCT func(0x581E3C);
-		func.Call<void>(GameHelper::GetCurrentMap(), ItemID, PlayerClass::GetInstance()->GetCoordinates(), 0);
-	}
-*/
-	
+	*/
 
 	/*
 	Function which sets coordinates and all to storage for player
 	68dee8(u32 pinstance)
-	*/
-
-	/*
-	assigns data to save menu (options)
-	void FUN_005e7fd8(int param_1)
-
-	Save and continue function
-	void FUN_006a2f88(undefined4 param_1)
-	Save and quit function
-	void FUN_006a2b6c(undefined4 param_1)
-
-	0x6A3620(0x3307D284); //executes func for save menu
-	*/
-
-/*
-	u32 soundArray[11] = {
-		0x0100038E, 0x01000392, 0x0100038C, 0x010003E8, 
-		0x010003E9, 0x0100038F, 0x0100038D, 0x010003C5, 
-		0x01000393, 0x01000395, 0x010004BD
-	};
-
-//0x33084094
-	void FUN_005E7FD8(u32 param_1) {
-		u32 local_5c[3];
-		u32 local_40;
-		u32 local_3c[3];
-
-		u32 local_48 = param_1 + 0x518;
-		u32 local_4c = param_1 + 0x578;
-
-		u32 val = 0;
-		u32 funcArray = 0;
-
-		s8 i = 0;
-		while(i < 6) {
-			u32 var1 = (local_48 + i * 0x10); 
-			u32 var2 = (local_4c + i * 0x10);
-
-			u32 iVar7 = *(u32 *)(param_1 + i * 4 + 0x1274);
-
-			u32 iVar3 = *(u32 *)(iVar7 + 0xEC);
-			if(iVar3 != 0) {
-				Process::Write32(iVar7 + 4, *(u32 *)(iVar3 + 0xD8));
-				Process::Write32(iVar7 + 8, *(u32 *)(iVar3 + 0xDC));
-			}
-
-			iVar3 = *(u32 *)(iVar7 + 0xF0);
-			if(iVar3 != 0) {
-				Process::Write32(iVar7 + 0x48, *(u32 *)(iVar3 + 0xD8));
-				Process::Write32(iVar7 + 0x4C, *(u32 *)(iVar3 + 0xDC));
-			}
-
-			bool bVar12 = i < 0;
-			bool bVar14 = i == false;
-			bool bVar13 = bVar12;
-			if(!bVar12) {
-				iVar3 = *(u32 *)(param_1 + 8);
-				bVar13 = iVar3 - i < 0;
-				bVar14 = iVar3 == i;
-			}
-			
-			if((bVar14 || bVar13 != (!bVar12 && (iVar3 <= i))) || (local_40 = *(u32 *)(param_1 + 0xC) + i * 0xAC, local_40 == 0)) {
-				val = *(u32 *)var1;
-				if(*(u32 *)val != 0) {
-					funcArray = *(u32 *)val;
-
-					FUNCT(*(u32 *)(funcArray + 0x78)).Call<void>(val, 0x8CAF0E, 0); //0x4BBFAC
-				}
-
-				val = *(u32 *)var2;
-				if(*(u32 *)val != 0) {
-					funcArray = *(u32 *)val;
-
-					FUNCT(*(u32 *)(funcArray + 0x78)).Call<void>(val, 0x8CAF0E, 0); //0x4BBFAC
-				}
-
-				val = *(u32 *)(var1 + 4);
-				if(*(u32 *)val != 0) {
-					funcArray = *(u32 *)val;
-
-					FUNCT(*(u32 *)(funcArray + 0x78)).Call<void>(val, 0x8CAF0E, 0); //0x4BBFAC
-				}
-
-				val = *(u32 *)(var2 + 4);
-				if(*(u32 *)val != 0) {
-					funcArray = *(u32 *)val;
-
-					FUNCT(*(u32 *)(funcArray + 0x78)).Call<void>(val, 0x8CAF0E, 0); //0x4BBFAC
-				}
-			}
-
-			else {
-				**(u8 **)(iVar7 + 0x24) = 0;
-				**(u8 **)(iVar7 + 0x68) = 0;
-
-				Process::Write32(iVar7 + 0xE0, *(u32 *)(iVar7 + 0xEC));
-				Process::Write32(iVar7 + 0xE4, *(u32 *)(iVar7 + 0xF0));
-
-				local_3c[0] = FUNCT(*(u32 *)(local_40 + 8) + 0xC).Call<u32>();
-
-				FUNCT(0x602480).Call<void>(iVar7 + 0x78, local_3c, 0x95EF34);
-				FUNCT(0x60231c).Call<void>(iVar7 + 0x78, 0x95EF34);
-
-				Process::Write32(iVar7 + 0xE0, 0);
-				Process::Write32(iVar7 + 0xE4, 0);
-
-				local_5c[0] = *(u32 *)(iVar7 + 0x14);
-				u32 local_50 = *(u32 *)(*(u32 *)(iVar7 + 0x20) + (*(u32 *)(iVar7 + 0x1C) + -1) * 4);
-				iVar3 = FUNCT(0x5EAB78).Call<u32>(*(u32 *)(iVar7 + 0xEC), local_5c, &local_50);
-
-				val = *(u32 *)var1;
-				if(*(u32 *)val != 0) {
-					Process::Write32(val + 0x48, iVar3);
-					Process::Write32(val + 0x4C, val + 0x4C);
-				}
-
-				val = *(u32 *)var2;
-				if(*(u32 *)val != 0) {
-					Process::Write32(val + 0x48, iVar3);
-					Process::Write32(val + 0x4C, val + 0x4C);
-				}
-
-				val = *(u32 *)(var1 + 8);
-				if(*(u32 *)val != 0) {
-					Process::Write32(val + 0x48, iVar3);
-					Process::Write32(val + 0x4C, val + 0x4C);
-				}
-
-				FUNCT(0x5D77F8).Call<void>(iVar7);
-
-				u32 soundID = 0;
-
-				if(*(u8 *)(local_40 + 0xA4) < 0xB)
-					soundID = soundArray[*(u8 *)(local_40 + 0xA4)];
-				else
-					soundID = 0x100038E;
-
-				val = *(u32 *)(var1 + 0xC);
-				Process::Write32(val, soundID);
-			}
-			
-			i++;
-		}
-	}
-
-
-	void CustomSaveScreen(MenuEntry *entry) {
-		if(entry->WasJustActivated()) {
-			static Hook hook;
-			hook.Initialize(0x5E7FD8, (u32)FUN_005E7FD8);
-			hook.SetFlags(USE_LR_TO_RETURN);
-			hook.SetReturnAddress(0x5E821C);
-			hook.Enable();
-		}
-*/
-
-	//FUN_00584d88(int param_1,undefined4 param_2) Sets shampoodle sound?
-	
-	/*void SetMusic(u32 *data0x98B018, u32 soundID0x10000B2) {
-		FUNCT(0x2FD0BC).Call<void>(0x2C, data[1], 4);
-
-		u32 **var = FUNCT(0x586744).Call<u32 **>(data);
-		
-		var[8] = (u32 *)soundID;
-		*(u8 *)(var + 9) = 1;
-		*(u8 *)(var + 0x25) = 1;
-		*(u8 *)(var + 0x26) = 3;
-		var[0] = (u32 *)0x907BBC;
-	}
-
-	FUN_00584D88(0x98B018, uVar3, 0, 0x94F494);
-
-	struct OnlineGameDat {
-		u32 *unknown0;
-		u32 unknown1;
-		u32 unknown2;
-
-		//0x1329D, Game Type
-
-		//0x132B8, END
-	};
-
-	3238AE8 = nothing
-
-	32238C68 = ModuleEventNpc.cro
-	32238D94 = ModuleTour.cro
-
-	32239378 = ModuleKotobuki.cro
 	*/
 	
 	void unlockCroRegion(MenuEntry *entry) {
@@ -2157,71 +1864,6 @@ namespace CTRPluginFramework {
 			}
 		}
 	}
-	
-	void PlayerLoader(MenuEntry *entry) {
-		/*if(Controller::IsKeysPressed(Key::L + Key::DPadRight)) {
-			u32 principalID = 0;
-			u64 *friendcode = nullptr;
-			Keyboard KB("Enter Principal ID");
-			KB.IsHexadecimal(true);
-			if(KB.Open(principalID, principalID) == 0) {
-				FRD_PrincipalIdToFriendCode(principalID, friendcode);
-				OSD::Notify(Utils::Format("FriendCode: %ld", *friendcode));
-			}
-		}*/
-	}
-
-	/*bool ScreenshotmapperL(void) {
-		return Controller::IsKeyDown(Key::ZL);
-	}
-
-	bool ScreenshotmapperR(void) {
-		return Controller::IsKeyDown(Key::ZR);
-	}
-
-	float fu0 = 0.0, fu1 = 0.0;
-
-	void ChangeSpeed(u32 u0, u32 u1, u32 speedAddress) {
-		static FUNCT func(0x56BBA8);
-		func.Call<void>(fu0, fu1, speedAddress);
-	}
-
-	u32 itemID = 0;
-
-	void keymap(MenuEntry *entry) {	
-		static Hook hook;
-		u32 address(0x64FC1C, 0, 0, 0, 0, 0, 0, 0);
-		hook.Initialize(address, (u32)ChangeSpeed);
-		hook.SetFlags(USE_LR_TO_RETURN);
-		//hook.Enable();
-
-		if(Controller::IsKeysPressed(Key::L + Key::DPadRight)) {
-			OSD::Notify(IDList::GetItemName(itemID));
-		}
-
-		if(Controller::IsKeysPressed(Key::L + Key::DPadDown)) {
-			Keyboard KB("");
-			KB.Open(itemID, itemID);
-		}
-		
-		u32 LButton(0x5B4180, 0, 0, 0, 0, 0, 0, 0);
-		u32 RButton(0x5B4194, 0, 0, 0, 0, 0, 0, 0);
-		L1.Initialize(LButton, (u32)ScreenshotmapperL);
-		R1.Initialize(RButton, (u32)ScreenshotmapperR);
-		L1.SetFlags(USE_LR_TO_RETURN);
-		R1.SetFlags(USE_LR_TO_RETURN);
-		
-		L1.Enable();
-		R1.Enable();
-	}	
-
-	void valuedisplayer(MenuEntry *entry) {
-		if(entry->WasJustActivated())
-			Process::Write32(0x294E00, 0xE1A00000); //Disables menu from dissapearing
-
-		//34CAA0 E0800004
-		//34CAA0 E0400004
-	}*/
 
 	void lightswitch(MenuEntry *entry) {
 		static const Address TargetAddress(0x190EA8);
@@ -2297,51 +1939,4 @@ namespace CTRPluginFramework {
 		if(Controller::IsKeysDown(Key::R + Key::DPadUp)) 
 			Wrap::KB<u16>("Set Fish ID:", true, 4, FishID.ID, FishID.ID);
 	}
-
-//player_dumper 33077C8A
-	/*void RestoreAll(MenuEntry *entry) {
-		const std::vector<std::string> select = {
-			Color(0x0077FFFF) << "Restore Exhibition",
-			Color(0xFFDE00FF) << "Restore Friend",
-			Color(0xFF00EFFF) << "Restore Design",
-			Color(0xFF2C2CFF) << "Restore Mail"
-		};
-
-		Keyboard optKb(parser->getEntry("KEY_CHOOSE_OPTION"));
-		optKb.Populate(select);
-		switch(optKb.Open()) {
-			case 0: {
-				if(GameHelper::GetExhibition() == 0) {
-					MessageBox(Color(0x0077FFFF) << "Load Happy Home Showcase for it to work!").SetClear(ClearScreen::Top)();
-					return;
-				}
-				
-				Wrap::Restore(PATH_PLAYER, ".dat", "Restore Exhibition:", nullptr, WrapLoc{ GameHelper::GetExhibition(), 0x17BE10 }, WrapLoc{ (u32)-1, (u32)-1 }); 
-			} break;
-			case 1: {
-				if(GameHelper::GetFriend() == 0) {
-					MessageBox(Color(0xFFDE00FF) << "Load player save for it to work!").SetClear(ClearScreen::Top)();
-					return;
-				}
-				
-				Wrap::Restore(PATH_PLAYER, ".dat", "Restore Friend:", nullptr, WrapLoc{ GameHelper::GetFriend(), 0x29608 }, WrapLoc{ (u32)-1, (u32)-1 }); 
-			} break;
-			case 2: {
-				if(GameHelper::GetDesign() == 0) {
-					MessageBox(Color(0xFF00EFFF) << "Load design Save for it to work!").SetClear(ClearScreen::Top)();
-					return;
-				}
-				
-				Wrap::Restore(PATH_PLAYER, ".dat", "Restore Design:", nullptr, WrapLoc{ GameHelper::GetDesign(), 0x25F90 }, WrapLoc{ (u32)-1, (u32)-1 }); 
-			} break;
-			case 3: {
-				if(GameHelper::GetMail() == 0) {
-					MessageBox(Color(0xFF2C2CFF) << "Load mail save for it to work!").SetClear(ClearScreen::Top)();
-					return;
-				}
-				
-				Wrap::Restore(PATH_PLAYER, ".dat", "Restore Mail:", nullptr, WrapLoc{ GameHelper::GetMail(), 0x1C208 }, WrapLoc{ (u32)-1, (u32)-1 }); 
-			} break;
-		}
-	}*/
 }

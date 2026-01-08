@@ -1485,8 +1485,13 @@ namespace CTRPluginFramework {
         u8 Unknown[0x7F0];
     };
 
-    struct ACNL_MiniRoomStruct { //size=0x20
-        u16 Unknown[0x10]; //ctor sets each to 0xFFFF
+
+    /*
+    If furniture is "active", meaning if the lamp is turned on, if the tv is turned on, etc.
+    By default every spot in the room is active
+    */
+    struct ACNL_Room_Active_Struct { //size=0x20
+        u16 ActiveStates[16]; //default active
     };
 
     //0x5D904 and 0x5D90D
@@ -1507,7 +1512,7 @@ namespace CTRPluginFramework {
         u8 Unknown2; //0x5D919
         u8 RegularLight; //0x5D91A //or yellow light?
         u8 Unknown4; //0x5D91B
-        u8 Unknown5; //0x5D91C
+        u8 Unknown5; //0x5D91C //lighting related
         u8 Unknown6; //0x5D91D
         u8 Unknown7; //0x5D91E
         u8 Unknown8; //0x5D91F
@@ -1519,7 +1524,7 @@ namespace CTRPluginFramework {
         u8 Unknown14; //0x5D925
         u8 LowLight; //0x5D926 //dim light?
         u8 Unknown16; //0x5D927
-        u8 Unknown17; //0x5D928
+        u8 Unknown17; //0x5D928 //lighting related
         u8 Unknown18; //0x5D929
         u8 Unknown19; //0x5D92A
         u8 Unknown20; //0x5D92B
@@ -1529,9 +1534,9 @@ namespace CTRPluginFramework {
         u8 Unknown24; //0x5D92F
         u8 Unknown25; //0x5D930 //How often you went into the middle room???
         u8 Unknown26; //0x5D931
-        u8 Unknown27; //0x5D932
-        u8 Unknown28; //0x5D933
-        u8 Unknown29; //0x5D934
+        u8 Unknown27; //0x5D932 //lighting related
+        u8 Unknown28; //0x5D933 //lighting related
+        u8 Unknown29; //0x5D934 //lighting related
         u8 Unknown30; //0x5D935
         u8 RoomSize; //0x5D936
         bool IsRoomUpgrading; //0x5D937
@@ -1541,13 +1546,13 @@ namespace CTRPluginFramework {
 
     struct ACNL_Room { //size = 0x302
         RoomFlags flags; //0x5D918
-        ACNL_MiniRoomStruct Unk1; //ctor inits these seperately then all at once, idk if it's two arrays or one
-        ACNL_MiniRoomStruct Unk2;
-        Item RoomItems1[0x64];
-        Item RoomItems2[0x40];
+        ACNL_Room_Active_Struct RoomItemsActiveStates; //0x5D93A
+        ACNL_Room_Active_Struct RoomItemsPlacedOnOtherRoomItemsActiveStates; //0x5D95A
+        Item RoomItems[0x64]; //0x5D97A
+        Item RoomItemsPlacedOnOtherRoomItems[0x40]; //0x5DB0A
         Item Wallpaper;
         Item Flooring;
-        Item UnkItem3;
+        Item PlayingSong;
         Item UnkItem4;
     };
 
@@ -1741,14 +1746,13 @@ namespace CTRPluginFramework {
         u8 Unused4 : 1;
     };
 
-    struct Player_Letters {
-        ACNL_Letter letters[10]; //0x73958 MailBox
-        Future_Letter futureLetter;
-    };
-
     struct Future_Letter {
         ACNL_Letter LetterForFutureSelf;
         u64 ReceiveDateInNanoSeconds; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+    };
+    struct Player_Letters {
+        ACNL_Letter letters[10]; //0x73958 MailBox
+        Future_Letter futureLetter;
     };
 
     struct Player_Secret_Storage { //Size: 0x5A0
@@ -1926,24 +1930,8 @@ namespace CTRPluginFramework {
         Player_Letters PlayerLetters[4]; //0x73958
         Player_Secret_Storage PlayerSecretStorages[4]; //0x7A778
         ACNL_Letter LetterPool[80]; //0x7BDF8 //any letter that isn't in your mailbox yet (every player shares this pool)
-        //next is 0x885F8
-        u8 unknown[0x1508];
+        u8 unknown[0x1508]; //0x885F8
     };
-
-    /*
-    Letter1
-    1: 73958
-    2: 73BD8
-    3: 73E58
-    4: 740D8
-    5: 74358
-    6: 745D8
-    7: 74858
-    8: 74AD8
-    9: 74D58
-    10: 74FD8
-    Next: 75258
-    */
 
     struct SecureValueHeader {
         u64 SecureValue; //0x0 //Unused in ACNL WA

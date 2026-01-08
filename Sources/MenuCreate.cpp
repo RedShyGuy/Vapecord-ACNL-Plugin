@@ -471,15 +471,11 @@ namespace CTRPluginFramework {
 		MenuFolder *DEVC = new MenuFolder(Color(0xFF1A69FF) << "Dev Codes");
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Custom Dump", nullptr, customdump, "Lets you dump/restore custom dumps.")),
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Call Function", FunctionsCaller, FunctionsCallerSettings, "Lets you call functions")),
-		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "MSG Box", msgboxtest, "")),
-		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Unused Fall Down", falldownfishing, "")),
-		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Analyze Fossils", Analyzer, "")),
+		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Display Save Flag Difference", displaySaveFlagDifference, "")),
+		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Unused Fall Down", falldownfishing, "")),
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Unlock Cro Region", unlockCroRegion, "Unlock Cro Region: R + DPadUp\nLock Cro Region: R + DPadDown")),
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "ACNH Cheat", acnh, "")),
-		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Friend Code Test", PlayerLoader, "")),
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Player Dumper", nullptr, player_dumper, "")),
-		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Test", valuedisplayer, "")),
-		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Extra Save Restore", nullptr, RestoreAll, "")),
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Fish Thrower", FishThrower, "")),
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Wand Ability", wandability, "Gives the different wands abilitys.\n" +
 																			  ColorExtras::Format("%cBlue Wand: %cNULL\n", Color(0x0089FFFF), Color::White) +
@@ -490,7 +486,6 @@ namespace CTRPluginFramework {
 																			  ColorExtras::Format("%cKiki and Lala Wand: %cNULL", Color(0xFF7700FF), Color::White))),
 		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Light Switch Toggler", lightswitch, "Lets you toggle the light switch.\nHotkeys are:\nL + DPadUp : Toggle light in current room\nL + DPadRight : Set Room ID\nL + DPadLeft : Toggle light in set room")),
 		DEVC->Append(new MenuEntry("EXPRESSION_MOD", FacialExpressionMod, SetFacialExpression, "EXPRESSION_MOD_NOTE")),
-		//DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Custom Save Settings", CustomSaveScreen, "")),
 		menu->Append(DEVC);
 	#endif
 

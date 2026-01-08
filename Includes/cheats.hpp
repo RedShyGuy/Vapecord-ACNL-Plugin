@@ -53,6 +53,7 @@ namespace CTRPluginFramework {
 	void ClearInventory(MenuEntry *entry);
 	void getset(MenuEntry *entry);
 	void SettingsButton(MenuEntry *entry);
+	void chatt2i(MenuEntry *entry);
 	
 //Player Codes Folder
 	//Player Save Codes
@@ -74,10 +75,11 @@ namespace CTRPluginFramework {
 	void neckentry(MenuEntry *entry);
 	void debug(MenuEntry *entry);
 	void hatz(MenuEntry *entry);
-	//void pLoaderEntry(MenuEntry *entry);
 	void Faint(MenuEntry *entry);
 	void map(MenuEntry *entry);
 	void NeverBedHead(MenuEntry *entry);
+	void SaveColor(MenuEntry *entry);
+	void App_ColorMod(MenuEntry *entry);
 	
 //Animation Codes Folder
 	void playerSelector(MenuEntry *entry);
@@ -86,6 +88,7 @@ namespace CTRPluginFramework {
 	void idle(MenuEntry *entry);
 	void slmoanms(MenuEntry *entry);
 	void doonall(MenuEntry *entry);
+	void anticheat(MenuEntry *entry);
 	
 //Seeding Codes
 	//Seed Codes
@@ -205,27 +208,14 @@ namespace CTRPluginFramework {
 	void customdump(MenuEntry *entry);
 	void FunctionsCaller(MenuEntry *entry);
 	void FunctionsCallerSettings(MenuEntry *entry);
-	void callfunction(MenuEntry *entry);
-	void chatt2i(MenuEntry *entry);
-	void npcMenu(MenuEntry *entry);
-	void npcCoordinates(MenuEntry *entry);
-	void npcAnimation(MenuEntry *entry);
-	void msgboxtest(MenuEntry *entry);
+	
+	void displaySaveFlagDifference(MenuEntry *entry);
 	void falldownfishing(MenuEntry *entry);
-	void anticheat(MenuEntry *entry);
-	void Analyzer(MenuEntry *entry);
 	void unlockCroRegion(MenuEntry *entry);
 	void acnh(MenuEntry *entry);
-	void PlayerLoader(MenuEntry *entry);
 	void player_dumper(MenuEntry *entry);
-	void valuedisplayer(MenuEntry *entry);
-	void keymap(MenuEntry *entry);
-	void SaveColor(MenuEntry *entry);
-	void App_ColorMod(MenuEntry *entry);
-	//void RestoreAll(MenuEntry *entry);
 	void FishThrower(MenuEntry *entry);
 	void lightswitch(MenuEntry *entry);
-	void CustomSaveScreen(MenuEntry *entry);
 
 //NPC Codes
 	void NPCFunction(MenuEntry *entry);
