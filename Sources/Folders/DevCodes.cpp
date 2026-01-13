@@ -14,10 +14,13 @@
 #include "Helpers/NPC.hpp"
 #include "Helpers/Save.hpp"
 #include "Helpers/IDList.hpp"
+#include "Helpers/Inventory.hpp"
 #include "House/House.hpp"
 
 #include "Color.h"
 #include "Files.h"
+
+extern "C" void PATCH_CustomButtons(void);
 
 namespace CTRPluginFramework {
 //Integer For Custom Dumper
@@ -328,7 +331,7 @@ namespace CTRPluginFramework {
 				playerFlag->Unknown30 = set; 
 			break;
 			case 30:
-				playerFlag->Unknown31 = set; 
+				playerFlag->CelesteIntroduced = set; 
 			break;
 			case 31:
 				playerFlag->Unknown32 = set; 
@@ -541,7 +544,7 @@ namespace CTRPluginFramework {
 				playerFlag->Unknown101 = set; 
 			break;
 			case 101:
-				playerFlag->Unknown102 = set; 
+				playerFlag->MuseumExhibitExplained = set; 
 			break;
 			case 102:
 				playerFlag->Unknown103 = set; 

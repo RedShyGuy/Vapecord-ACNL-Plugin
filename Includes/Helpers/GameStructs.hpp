@@ -408,7 +408,7 @@ namespace CTRPluginFramework {
         u8 TomNookIntroduced : 1;
         u8 BlathersIntroduced : 1; //somehow also set tom nook introduced to 1???
         u8 Unknown30 : 1;
-        u8 Unknown31 : 1;
+        u8 CelesteIntroduced : 1;
         u8 Unknown32 : 1;
         u8 Unknown33 : 1;
         u8 Unknown34 : 1; //Reese and Tommy conversation (ReTail)
@@ -479,7 +479,7 @@ namespace CTRPluginFramework {
         u8 Unknown99 : 1;
         u8 Unknown100 : 1;
         u8 Unknown101 : 1;
-        u8 Unknown102 : 1;
+        u8 MuseumExhibitExplained : 1;
         u8 Unknown103 : 1;
         u8 Unknown104 : 1;
         u8 PermitApprovalArrived : 1; //day of arrival of permit
@@ -1123,7 +1123,7 @@ namespace CTRPluginFramework {
         u16/*wchar*/ LetterHeader[0x20]; //0x89A8 -> 0x89E7
         u16 Padding_11; //0x89E8 -> 0x89E9
         u16/*wchar*/ FutureLetterHeader[0x20]; //0x89EA -> 0x8A29
-        u16 Padding_12; //0x8A2A -> 0x8A2B    
+        u16 Padding_12; //0x8A2A -> 0x8A2B
         u16/*wchar*/ LetterSignature[0x20]; //0x8A2C -> 0x8A6B
         u16 Padding_13; //0x8A6C -> 0x8A6D
         u8 DefaultLtrRecieverNameIndent; //0x8A6E -> 0x8A6E
@@ -1489,6 +1489,7 @@ namespace CTRPluginFramework {
     /*
     If furniture is "active", meaning if the lamp is turned on, if the tv is turned on, etc.
     By default every spot in the room is active
+    Its a u16 : 1 bitflag
     */
     struct ACNL_Room_Active_Struct { //size=0x20
         u16 ActiveStates[16]; //default active
@@ -1573,13 +1574,13 @@ namespace CTRPluginFramework {
         u8 Padding2; //0x5EB27
     };
 
-    struct ACNL_MuseumExhibit {//size = 0xB98
-        u8 Unk1; //Flag of some sort, ctor sets to 0xFF
-        u8 Padding;
-        ACNL_Room museumRoom;
-        ACNL_Pattern UnkPattern1;
-        u16/*wchar*/ OwnerName[0x11];
-        u16 Padding2;
+    struct ACNL_MuseumExhibit { //size = 0xB98
+        u8 PlayerIndex; //0 //ctor sets to 0xFF
+        u8 Padding; //1
+        ACNL_Room MuseumRoom; //2
+        ACNL_Pattern ExhibitPoster; //0x304
+        u16/*wchar*/ ExhibitTitle[0x11]; //0xB74
+        u16 Padding2; //0xB96
     };
 
     struct ACNL_NewPWP {//size = 0x10
@@ -1593,16 +1594,8 @@ namespace CTRPluginFramework {
     };
 
     struct ACNL_BulletinBoardMessage { //size = 0x1AC
-        u32 Unk1; //ctor sets to 0
-        u32 Unk2; //ctor sets to 0
-        u32 Unk3; //ctor sets to 0
-        u32 Unk4; //ctor sets to 0
-        u16 Unk5; //ctor sets to 0
-        u32 Unk6; //ctor sets to 0
-        u32 Unk7; //ctor sets to 0
-        u32 Unk8; //ctor sets to 0
-        u32 Unk9; //ctor sets to 0
-        u16 Unk10; //ctor sets to 0
+        u16/*wchar*/ PlayerName[9]; //Only set when player writes the message
+        u16/*wchar*/ TownName[9]; //Only set when player from other town writes the message
         u16/*wchar*/ Message[0xC1];
         ACNL_Date MessageDate;
         u16 Unk11; //ctor sets to 0
@@ -1896,17 +1889,17 @@ namespace CTRPluginFramework {
     */
         ACNL_Date MuseumDonationDates[0x112]; //0x6AEB8
         u8 MuseumDonations[0x112]; //0x6B300
-        u8 Padding8[2];
-        ACNL_MuseumExhibit Exhibit[4]; 
-        u64 Unknown66; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
-        u8 Unknown67[7];
-        u64 Unknown68; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
-        u8 Unknown69[7];
-        u64 Unknown70; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
-        u8 Unknown71[10];
-        ACNL_NewPWP NextPWPToBuild;
-        ACNL_Building UnknownBuilding1;
-        ACNL_BulletinBoardMessage BBoardMessages[0xF];
+        u8 Padding8[2]; //0x6B412
+        ACNL_MuseumExhibit Exhibit[4]; //0x6B414
+        u64 Unknown66; //0x6E274 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u8 Unknown67[7]; //0x6E27C
+        u64 Unknown68; //0x6E283 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u8 Unknown69[7]; //0x6E28B
+        u64 Unknown70; //0x6E292 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u8 Unknown71[10]; //0x6E29A
+        ACNL_NewPWP NextPWPToBuild; //0x6E2A4
+        ACNL_Building UnknownBuilding1; //0x6E2B4
+        ACNL_BulletinBoardMessage BBoardMessages[0xF]; //0x6E2B8
         u64 Unknown72; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
         u8 Unknown73[0x14];
         u16 Unknown74;
@@ -1926,10 +1919,13 @@ namespace CTRPluginFramework {
         Item IslandItems[(16*16)*(2*2)]; //0x6FED8; 16*16 items per acre; Items only cover map acres (2*2); 0x400 of items
         ACNL_Building IslandBuildings[2]; //Island Hut and Lloid
         ACNL_Pattern TownFlag; //0x70F1C
+
         u8 Unknown80[0x2208]; //0x7178C
+
         Player_Letters PlayerLetters[4]; //0x73958
         Player_Secret_Storage PlayerSecretStorages[4]; //0x7A778
         ACNL_Letter LetterPool[80]; //0x7BDF8 //any letter that isn't in your mailbox yet (every player shares this pool)
+
         u8 unknown[0x1508]; //0x885F8
     };
 

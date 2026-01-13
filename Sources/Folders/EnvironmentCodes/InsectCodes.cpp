@@ -4,6 +4,7 @@
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/Game.hpp"
+#include "Helpers/Player.hpp"
 #include "Helpers/IDList.hpp"
 
 namespace CTRPluginFramework {
@@ -21,17 +22,61 @@ namespace CTRPluginFramework {
         return Item(0x7FFE); //invalid item
     }
 
-    void SetRoomPriority() {
-        static Address roomPrioritySendPacket(0x62287C);
-        static Address onlineData(0x954648);
+     void DespawnLastInsectInstantly() {
+        static Address dataPointer(0x950534);
+        static Address despawnInsect(0x521754);
 
-    //Remove Priority for all players
-        for (int i = 0; i < 4; i++) {
-            roomPrioritySendPacket.Call<void>(*(u32 *)(onlineData.addr) + 0x1C0, i, 0);
+        u32 dataOffset = *(u32 *)dataPointer.addr;
+        if (dataOffset == 0) {
+            OSD::Notify("Data Offset is NULL", Color::Red);
+            return;
         }
 
-    //Set Priority for selected player
-        roomPrioritySendPacket.Call<void>(*(u32 *)(onlineData.addr) + 0x1C0, Game::GetOnlinePlayerIndex(), 1);
+        u32 lastInsectData = 0;
+
+        u32 *piVar5;
+        for (piVar5 = *(u32 **)(dataOffset + 0x1C); piVar5; piVar5 = (u32 *)piVar5[1]) {
+            u32 insectData = *piVar5;
+            if (!insectData) {
+                continue;
+            }
+
+            if (*(u8 *)(insectData + 0xC6) != 2) {
+                continue;
+            }
+
+            lastInsectData = insectData;
+        }
+
+        if (lastInsectData == 0) {
+            return;
+        }
+
+        despawnInsect.Call<void>(lastInsectData);
+    }
+
+    void SetRoomPriorityForPlayer(u8 target) {
+        if (Game::GetOnlinePlayerCount() <= 1) {
+            return;
+        }
+
+        u8 packet[4];
+
+        static Address updateRoomControl(0x62287C);
+        static Address roomPrioritySetPacket(0x626348);
+        static Address enqueuePacket(0x625488);
+
+        u8 roomId = Game::GetRoom();
+
+        for (u8 i = 0; i < 4; i++) {
+            if (!Player::Exists(i) || !Player::IsInRoom(roomId, i)) {
+                continue;
+            }
+
+            updateRoomControl.Call<void>(((*(u32 *)Address(0x954648).addr) + 0x1C0), i, i == target);
+            roomPrioritySetPacket.Call<void>(packet, i, false, 0xA5, true, i == target, 4);
+            enqueuePacket.Call<void>(1, 4, &packet, sizeof(packet));
+        }
     }
 
     static u8 insectId = 0x51;
@@ -48,7 +93,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 
-        SetRoomPriority();
+        SetRoomPriorityForPlayer(Game::GetOnlinePlayerIndex());
 
         u8 insectIdLocal = insectId;
 
@@ -84,17 +129,11 @@ namespace CTRPluginFramework {
 		float coords[3];
 
 		if (*(u32 *)(dataOffset + 0x20) == 0) {
-            OSD::Notify("Can't spawn more insects", Color::Red);
-
-            //call 521754 to despawn last insect
-
+            DespawnLastInsectInstantly();
             return;
 		}
 
-		bool data = dataFunction.Call<bool>(coords, u0, insectIdLocal);
-		if (!data) {
-            OSD::Notify(Utils::Format("Data Result is false (%08X)", dataFunction.addr), Color::Red);
-		}
+		dataFunction.Call<bool>(coords, u0, insectIdLocal);
 
 		float *pCoords = PlayerClass::GetInstance()->GetCoordinates();
 		if (!pCoords) {
@@ -107,6 +146,8 @@ namespace CTRPluginFramework {
 		coords[2] = pCoords[2];
 
 		spawnInsect.Call<void>(dataOffset, insectIdLocal, coords, u0);
+
+        OSD::Notify(Utils::Format("Spawned at %08X", *(u32 *)(*(u32 *)(dataOffset + 0x1C))));
 
         //u32 insectData = *(u32 *)(*(u32 *)(dataOffset + 0x1C));
         //u8 insectIdLocal = *(u8 *)(insectData + 8);
@@ -205,7 +246,7 @@ namespace CTRPluginFramework {
 	}
 
 	void SpawnInsectEntry(MenuEntry *entry) {
-		static Address loopToHookOnto(0x1B6D88);
+		static Address loopToHookOnto(0x54DB00);
 		static Hook hook;
 
 		spawnInsectEnabled = entry->IsActivated();

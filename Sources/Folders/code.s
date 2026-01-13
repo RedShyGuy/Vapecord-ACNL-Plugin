@@ -156,3 +156,33 @@ FUNCTION    SetProperParticle
     LDREQ       R12, [SP, #0x84] @+0x14 due to stack changes (preserve LR and R0-R3)
     MOVNE       R12, #0
     POP         {R0-R3, PC}
+
+FUNCTION    PATCH_CustomButtons
+    PUSH {R0-R3, R4, LR}
+
+    @ --- Call 1 ---
+    MOV R12, #1
+    STR R12, [SP, #0x168]
+    MOV R12, #24
+    STR R12, [SP, #0x16C]
+    ADD R0, R11, R4, LSL #5
+    MOV R3, #0
+    MOV R2, #0xD
+    ADD R1, SP, #0x138
+    STR R9, [SP, #0x0]
+    BL 0x5E3F94
+    ADD R4, R4, #1
+
+    @ --- Call 2 ---
+    MOV R12, #1
+    STR R12, [SP, #0x168]
+    MOV R12, #0x29
+    STR R12, [SP, #0x16C]
+    ADD R0, R11, R4, LSL #5
+    MOV R3, #0
+    MOV R2, #0xB
+    ADD R1, SP, #0x138
+    STR R9, [SP, #0x0]
+    BL 0x5E3F94
+
+    POP {R0-R3, R4, LR}
