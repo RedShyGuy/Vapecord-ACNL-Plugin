@@ -799,7 +799,7 @@ namespace CTRPluginFramework {
     struct ACNL_Letter { //Size: 0x280
         PersonalID Reciever; //0
         u16 ZeroPad_1; //0x2E
-        u16 RecieverID; //0x30
+        u16 ReceiverID; //0x30
         u8 ZeroPad_2[50]; //0x32
         u16 Unknown2; //0x64 //Some form of ID? 
         u16 ZeroPad_3; //0x66
@@ -819,7 +819,10 @@ namespace CTRPluginFramework {
         u64  Unknown4; //0x278
     };
 
-    struct UnknownStruct1 { //Initiatives 0x8A3C
+    /*
+    Starts at 0x8ADC in player struct
+    */
+    struct UnknownStruct1 { 
         u32 Unk1; //0 //Set to 0 in Player ctor
         u32 Unk2; //4 //Set to 0 in Player ctor
         u8 Unk3; //8 //Set to 0 in Player ctor
@@ -897,12 +900,27 @@ namespace CTRPluginFramework {
         TownID TownData; //0x6A -> 0x7F
     };
 
-   struct UnknownStruct2 {
-        u32 Unknown5; //0x8B80 //???; Set to 0, then 0xFFFFFFFF in player ctor
-        u32 Unknown6; //0x8B84 //???; Set to 0, then 0x7FFFFFFF in player ctor
-        u8 Unknown7; //0x8B88 //???; Set to 0 in player ctor
-        u8 Unknown8; //0x8B89 //???; Set to 0 in player ctor
-        u32 Unknown9; //0x8B8A //???; Set to 0 in player ctor
+    /*
+    Monday is ID 1
+    */
+    struct Daily_Initiative { //Size: 0x7
+        u8 MondayInitiative; //0x0
+        u8 TuesdayInitiative; //0x1
+        u8 WednesdayInitiative; //0x2
+        u8 ThursdayInitiative; //0x3
+        u8 FridayInitiative; //0x4
+        u8 SaturdayInitiative; //0x5
+        u8 SundayInitiative; //0x6
+    };
+
+    struct ACNL_InitiativeList {
+        //there are 102 initiatives in total
+    };
+
+    struct ACNL_Initiative { //Initiatives
+        u64 Unknown5; //0x8B80 //???; Set to 0, then 0x7FFFFFFFFFFFFFFF in player ctor
+        u8 WeeklyInitiatives[2]; //0x8B88 //Set to 0 in player ctor
+        Daily_Initiative DailyInitiatives[2]; //0x8B8A //Set to 0 in player ctor
         u16 Unknown10; //0x8B8E //???; Set to 0 in player ctor
         u8 Unknown11; //0x8B90 //???; Set to 0 in player ctor
         u32 Unknown12; //0x8B91 //???; Set to 0 in player ctor
@@ -1032,7 +1050,7 @@ namespace CTRPluginFramework {
         u8 LyleWhatsNew : 5;
     };
 
-    struct MiiData1 {
+    struct MiiData {
         u8 MiiFace[92]; //0x5538 -> 0x5595 //Based on https://3dbrew.org/wiki/Mii#Mii_format
         u16 ZeroPad_1 = 0;  //0x5594 //U16 Zero Padding; Always 0x0000
         u16 Mii_CRC16;
@@ -1056,7 +1074,7 @@ namespace CTRPluginFramework {
         u16 Tan; //0xA8 //Values: 0x0 -> 0xF
     };
 
-    struct ACNL_Player { //UnknownNotSetYetX = Not set by player ctor
+    struct ACNL_Player { //Size: 0xA480 //UnknownNotSetYetX = Not set by player ctor
         u32 Checksum1; //0xA0 //Checksum of the first 0x6b84 of player data
         Player_Features PlayerFeatures;
         Item Hat; //0xAA //Item ID < 0xXXXX
@@ -1072,7 +1090,7 @@ namespace CTRPluginFramework {
         ACNL_Pattern Patterns[10]; //0xCC //10 Patterns
         u8 PatternOrder[10]; //0x552C -> 0x5535 //Order of patterns from 0x0 - 0x9
         u16 Padding_1; //0x5536 //U16 Zero Padding; Always 0x0000
-        MiiData1 PlayerMii;
+        MiiData PlayerMii;
         u8 HasMii; //0x55E0 //Values: 0 = No Mii, 1 = Has Mii, <1 = Has Mii, face doesn't show
         u8 Padding_2; //0x55E1 //Not Verified: U8 Zero Padding; Always 0x00
         u16 Padding_3; //0x55E2 -> 0x55E3 //Not Verified: U16 Zero Padding; Always 0x0000
@@ -1142,7 +1160,7 @@ namespace CTRPluginFramework {
         u8 HHAUnk1; //0x8B62
         u8 HHAUnk2; //0x8B63 //READU8(CurrentHouseTheme+1) | 0x80; Only When Exterior/Theme???
         u8 HHAUnk3[0x1C]; //0x8B63 -> //0x8B7F //Come back to later
-        UnknownStruct2 UnkBuffer2; //0x8B80 -> 0x8DBB
+        ACNL_Initiative Initiative; //0x8B80 -> 0x8DBB
         u64 MeowCoupons; //0x8DBC -> 0x8DC3: Encrypted Value
         u64 Unk2; //0x8DC4 -> 0x8DCB: Encrypted Value
         u64 Unk3; //0x8DCC -> 0x8DD3: Encrypted Value
@@ -1485,7 +1503,6 @@ namespace CTRPluginFramework {
         u8 Unknown[0x7F0];
     };
 
-
     /*
     If furniture is "active", meaning if the lamp is turned on, if the tv is turned on, etc.
     By default every spot in the room is active
@@ -1739,13 +1756,13 @@ namespace CTRPluginFramework {
         u8 Unused4 : 1;
     };
 
-    struct Future_Letter {
+    struct Future_Letter { //Size: 0x288
         ACNL_Letter LetterForFutureSelf;
         u64 ReceiveDateInNanoSeconds; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
     };
-    struct Player_Letters {
+    struct Player_Letters { //Size: 0x1B88
         ACNL_Letter letters[10]; //0x73958 MailBox
-        Future_Letter futureLetter;
+        Future_Letter futureLetter; //0x75258
     };
 
     struct Player_Secret_Storage { //Size: 0x5A0
@@ -1910,24 +1927,164 @@ namespace CTRPluginFramework {
         PersonalID UnknownPID2[3];
         u8 Unknown78[0x96];
         Item UnkItems10[3];
-
         u8 Unknown79[0x184]; //0x6FD32 //start of unknown
-
         u8 IslandGrassType; //[0-2]; 0: Triangle | 1: Circle | 2: Square;
         u8 Padding7;
         u16 IslandAcres[4*4]; //0x6FEB8; 16 acres in total; 4 colunms, 4 rows. Game reads Acre IDs as u16;
         Item IslandItems[(16*16)*(2*2)]; //0x6FED8; 16*16 items per acre; Items only cover map acres (2*2); 0x400 of items
         ACNL_Building IslandBuildings[2]; //Island Hut and Lloid
         ACNL_Pattern TownFlag; //0x70F1C
-
-        u8 Unknown80[0x2208]; //0x7178C
-
-        Player_Letters PlayerLetters[4]; //0x73958
-        Player_Secret_Storage PlayerSecretStorages[4]; //0x7A778
-        ACNL_Letter LetterPool[80]; //0x7BDF8 //any letter that isn't in your mailbox yet (every player shares this pool)
-
-        u8 unknown[0x1508]; //0x885F8
+        u8 Unknown80[0x174]; //0x7178C
     };
+
+    struct ACNL_Cenus_Data_Type { //Size: 0x14 
+        u32 TotalPlayerStat; //All player stats combined
+        u32 PlayerStats[4]; //For each player
+    };
+
+    /*
+    In this case money values are actually not encrypted like in other parts of the save
+
+    A few of these stats are not player relevant, those will only set the Stat at TotalPlayerStat, not at the playerstats
+    They are marked with NON_PLAYER_SPECIFIC
+
+    BlueRosesCreated is not tested, cause it sucks, but at 0x11570e the check actually checks for a blue rose creation
+    */
+    struct ACNL_Census_Player_Stats { //Size: 0x62C probably(?)
+        /*0x000*/ACNL_Cenus_Data_Type BellsEarned; //0x72510
+        /*0x014*/ACNL_Cenus_Data_Type ABDBalance; //0x72524
+        /*0x028*/ACNL_Cenus_Data_Type BellsSpent; //0x72538
+        /*0x03C*/ACNL_Cenus_Data_Type LoanPaid; //0x7254C
+        /*0x0*/ACNL_Cenus_Data_Type TurnipsBought; //0x72560
+        /*0x0*/ACNL_Cenus_Data_Type TurnipsSold; //0x72574
+        /*0x0*/ACNL_Cenus_Data_Type TurnipExpenses; //0x72588
+        /*0x0*/ACNL_Cenus_Data_Type TurnipProfits; //0x7259C
+        /*0x0A0*/ACNL_Cenus_Data_Type PublicWorkExpenses; //0x725B0
+        /*0x0*/ACNL_Cenus_Data_Type RecycleShopEarnings; //0x725C4
+        /*0x0*/ACNL_Cenus_Data_Type FlowersWatered; //0x725D8
+        /*0x0DC*/ACNL_Cenus_Data_Type FishCaught; //0x725EC
+        /*0x0F0*/ACNL_Cenus_Data_Type BugsCaught; //0x72600
+        /*0x104*/ACNL_Cenus_Data_Type SeaCreaturesCaught; //0x72614
+        /*0x*/ACNL_Cenus_Data_Type PublicWorksBuilt; //0x72628 //NON_PLAYER_SPECIFIC
+        /*0x*/ACNL_Cenus_Data_Type FruitGrown; //0x7263C //NON_PLAYER_SPECIFIC
+        /*0x*/ACNL_Cenus_Data_Type PerfectFruitGrown; //0x72650 //NON_PLAYER_SPECIFIC
+        /*0x*/ACNL_Cenus_Data_Type FruitsGrownOnTheBeach; //0x72664 //NON_PLAYER_SPECIFIC
+        /*0x168*/ACNL_Cenus_Data_Type FloweresPlanted; //0x72678
+        /*0x*/ACNL_Cenus_Data_Type TreesPlanted; //0x7268C
+        /*0x190*/ACNL_Cenus_Data_Type TreesCutDown; //0x726A0
+        /*0x*/ACNL_Cenus_Data_Type DreamTownsVisited; //0x726B4
+        /*0x*/ACNL_Cenus_Data_Type KKSliderConcertsAttended; //0x726C8
+        /*0x*/ACNL_Cenus_Data_Type ShrunkSketchesAttended; //0x726DC
+        /*0x*/ACNL_Cenus_Data_Type TourVisits; //0x726F0
+        /*0x*/ACNL_Cenus_Data_Type IslandVisits; //0x72704
+        /*0x208*/ACNL_Cenus_Data_Type LettersSent; //0x72718
+        /*0x*/ACNL_Cenus_Data_Type FurnitureCustomized; //0x7272C
+        /*0x*/ACNL_Cenus_Data_Type NooklingsExpenses; //0x72740
+        /*0x*/ACNL_Cenus_Data_Type GraciesExpenses; //0x72754
+        /*0x*/ACNL_Cenus_Data_Type GardeningShopExpenses; //0x72768
+        /*0x26C*/ACNL_Cenus_Data_Type WeedsPulled; //0x7277C
+        /*0x*/ACNL_Cenus_Data_Type AbleSistersExpenses; //0x72790
+        /*0x*/ACNL_Cenus_Data_Type KicksExpenses; //0x727A4
+        /*0x*/ACNL_Cenus_Data_Type KatrinaVisits; //0x727B8
+        /*0x*/ACNL_Cenus_Data_Type StreetPassVisitors; //0x727CC //NON_PLAYER_SPECIFIC
+        /*0x*/ACNL_Cenus_Data_Type TownsVisited; //0x727E0
+        /*0x2E4*/ACNL_Cenus_Data_Type TownVisitors; //0x727F4
+        /*0x*/ACNL_Cenus_Data_Type SaharaRedecorations; //0x72808
+        /*0x*/ACNL_Cenus_Data_Type JobsAtTheRoost; //0x7281C
+        /*0x*/ACNL_Cenus_Data_Type FossilsAnalyzed; //0x72830
+        /*0x*/ACNL_Cenus_Data_Type ProDesignsCreated; //0x72844
+        /*0x*/ACNL_Cenus_Data_Type EarnedBadges; //0x72858 //This one has no total amount
+        /*0x*/ACNL_Cenus_Data_Type HelpedGulliver; //0x7286C
+        /*0x*/ACNL_Cenus_Data_Type ShampoodleVisits; //0x72880
+        /*0x*/ACNL_Cenus_Data_Type BoughtArtAtRedds; //0x72894
+        /*0x*/ACNL_Cenus_Data_Type ScallopsGivenToPascal; //0x728A8
+        /*0x3AC*/ACNL_Cenus_Data_Type Unknown0; //0x728BC
+        /*0x*/ACNL_Cenus_Data_Type BalloonsPopped; //0x728D0
+        /*0x*/ACNL_Cenus_Data_Type TourneyFishCaught; //0x728E4 //Get cleared after event
+        /*0x*/ACNL_Cenus_Data_Type TourneyInsectCaught; //0x728F8 //Get cleared after event
+        /*0x3FC*/ACNL_Cenus_Data_Type FestivalFeathersCaught; //0x7290C
+        /*0x*/ACNL_Cenus_Data_Type EggsGivenToZipper; //0x72920
+        /*0x*/ACNL_Cenus_Data_Type FoundImposterBlanca; //0x72934
+        /*0x*/ACNL_Cenus_Data_Type FireworkDesignsGivenToIsabelle; //0x72948 //will be set right after the fireworks started
+        /*0x*/ACNL_Cenus_Data_Type ReceivedCandyOnHalloween; //0x7295C
+        /*0x*/ACNL_Cenus_Data_Type HarvestFestivalCoursesDone; //0x72970
+        /*0x*/ACNL_Cenus_Data_Type SnowmenBuiltByYouInTown; //0x72984
+        /*0x*/ACNL_Cenus_Data_Type GivenToyDayPresents; //0x72998
+        /*0x49C*/ACNL_Cenus_Data_Type SnowflakesCaught; //0x729AC
+        /*0x4B0*/ACNL_Cenus_Data_Type PartyPoppersPoppedAtNewYears; //0x729C0
+        /*0x4C4*/ACNL_Cenus_Data_Type TotalBingoWins; //0x729D4
+        /*0x*/ACNL_Cenus_Data_Type ShootingStarWishes; //0x729E8
+        /*0x4EC*/ACNL_Cenus_Data_Type Unknown1; //0x729FC
+        /*0x*/ACNL_Cenus_Data_Type LostItemsGivenBack; //0x72A10
+        /*0x*/ACNL_Cenus_Data_Type YouVisitedVillagers; //0x72A24
+        /*0x*/ACNL_Cenus_Data_Type VillagersVisitedYou; //0x72A38
+        /*0x*/ACNL_Cenus_Data_Type PlayedHideAndSeek; //0x72A4C
+        /*0x550*/ACNL_Cenus_Data_Type Unknown2; //0x72A60
+        /*0x564*/ACNL_Cenus_Data_Type Unknown3; //0x72A74
+        /*0x*/ACNL_Cenus_Data_Type AmiiboScanned; //0x72A88
+        /*0x*/ACNL_Cenus_Data_Type ResetSurveillanceCenterVisits; //0x72A9C
+        /*0x*/ACNL_Cenus_Data_Type DJKKVisits; //0x72AB0
+        /*0x*/ACNL_Cenus_Data_Type GoldenRosesCreated; //0x72AC4 //NON_PLAYER_SPECIFIC
+        /*0x5C8*/ACNL_Cenus_Data_Type BlueRosesCreated; //0x72AD8 //NON_PLAYER_SPECIFIC
+        /*0x5DC*/ACNL_Cenus_Data_Type FamousMushroomsEaten; //0x72AEC
+        /*0x5F0*/ACNL_Cenus_Data_Type TownInitiativesCompleted; //0x72B00
+        /*0x*/ACNL_Cenus_Data_Type MEOWCouponsEarned; //0x72B14
+        /*0x*/ACNL_Cenus_Data_Type MEOWCouponsSpent; //0x72B28
+        /*0x62C*/ACNL_Cenus_Data_Type Unused; //0x72B3C //NON_PLAYER_SPECIFIC //Pretty sure that this is unused, i never saw a save file where it was not 0
+        
+        /*0x1180*/ //0x73690 //that one seems to be set in the game, meaning there are more???
+    };
+
+    struct ACNL_Player_SharedData { //Size: 0x181FF //Starts at 0x71900
+        u32 Checksum; //0x71900
+        u8 Unknown0[8]; //0x71904 //structure unsure
+        u16 Unknown1; //0x7190C //ctor sets to 0
+        u32 Unknown2; //0x7190E //ctor sets to 0
+        u32 Unknown3; //0x71912 //ctor sets to 0
+        u32 Unknown4; //0x71916 //ctor sets to 0
+        u32 Unknown5; //0x7191A //ctor sets to 0
+        u16 Unknown6; //0x7191C //ctor sets to 0
+        u8 Unknown7; //0x7191E //ctor sets to 0
+        u8 Unknown8; //0x7191F //ctor sets to 0
+        u8 Unknown9[2]; //0x71920 //structure unsure
+        u16 Unknown10; //0x71922
+    
+        u8 Unknown11[0xBEE]; //0x71924 //structure unsure
+
+        ACNL_Census_Player_Stats PlayerStats; //0x72510 (Start + 0xC10)
+
+        u8 Unknown12[0xE1C]; //0x72B3C //structure unsure
+
+        Player_Letters PlayerMailBoxLetters[4]; //0x73958 (Start + 0x2058)
+        Player_Secret_Storage PlayerSecretStorages[4]; //0x7A778 (Start + 0x8e78)
+        ACNL_Letter LetterPool[80]; //0x7BDF8 (Start + 0xa4f8) //any letter that isn't in your mailbox yet (every player shares this pool)
+        //Next: 0x885F8
+
+        //u32 Unknown; //0x16CF8
+        //u32 Unknown; //0x16CFC
+        //0x88608 (Start + 0x16d08) ???
+        //0x887A8 (Start + 0x16ea8) ??? (size: 0x68?)
+        //0x88D50 (Start + 0x17450) ???
+
+        u8 Unknown13[0x1507];
+    };
+
+    /*
+    Snowman data probably lies in UnknownStruct1 & Unknown79 in TownData
+
+    Snowman:
+    Built:
+    0x31F2FAA4 0x07E9000D (Old: 0x0000000D)
+    0x31F2FAAC 0x07E9003C (Old: 0x07E9004C)
+    0x31F7D894 0x00007FF8 (Old: 0x00007FFE)
+    0x31F96DF8 0xCED7F0C0 (Old: 0xFFFFFFFF)
+    0x31F96DFC 0x0B6708EB (Old: 0x7FFFFFFF)
+    0x31F96E00 0x2F09FFFF (Old: 0x00000000)
+    0x31F99904 0x00000001 (Old: 0x00000000)
+    0x31F99908 0x00000001 (Old: 0x00000000)
+
+    0x31f96e00 seems to store the number of the day and if it was set already
+    */
 
     struct SecureValueHeader {
         u64 SecureValue; //0x0 //Unused in ACNL WA
@@ -1943,18 +2100,16 @@ namespace CTRPluginFramework {
     };
 
     struct Garden_Plus { //Size: 0x89B00
-        SecureValueHeader SecureValue;
-        ACNL_SaveHeader Header;
-        ACNL_Player Player1;
-        ACNL_Player Player2;
-        ACNL_Player Player3;
-        ACNL_Player Player4;
-        ACNL_VillagerData VillagerData;
-        ACNL_BuildingData BuildingData;
+        SecureValueHeader SecureValue; //0x0
+        ACNL_SaveHeader Header; //0x80
+        ACNL_Player Player[4]; //0xA0
+        ACNL_VillagerData VillagerData; //0x292A0
+        ACNL_BuildingData BuildingData; //0x4BE80
         ACNL_MinigameData MinigameData; //WA exclusive
         ACNL_UnknownData UnkData; //WA exclusive
-        ACNL_TownData TownData;
-        u8 padding;
+        ACNL_TownData TownData; //0x53424
+        ACNL_Player_SharedData PlayerSharedData; //0x71900
+        u8 padding; //0x89AFF
     };
 }
 
