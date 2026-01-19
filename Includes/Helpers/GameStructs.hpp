@@ -2025,6 +2025,7 @@ namespace CTRPluginFramework {
     They are marked with NON_PLAYER_SPECIFIC
 
     BlueRosesCreated is not tested, cause it sucks, but at 0x11570e the check actually checks for a blue rose creation
+    HelpedKatie is also not tested, but the function enables her letter where you helped her
 
     Census Data is got through the US 1.5 address 0x2fd00c
 
@@ -2092,13 +2093,16 @@ namespace CTRPluginFramework {
             iVar2 = GetGardenSaveData();
             puVar3 = DAT_000136a4;
             iVar1 = DAT_000136a0;
-            
+
             if ((*(char *)(iVar2 + DAT_000136a0 + 0x8e) < '\0') && (iVar2 = GetGardenSaveData(), (*(byte *)(iVar2 + iVar1 + 0x8f) & 1) == 0)) {
                 puVar3 = puVar3 + 0x1e;
             }
             FUN_0000e728(param_1,*puVar3,puVar3[1]);
         }
     }
+
+    KOKT63???
+    KOKT66???
     */
     struct ACNL_Census_Player_Stats { //Size: 0x62C probably(?)
         ACNL_Cenus_Data_Type BellsEarned; //0x72510
@@ -2148,7 +2152,7 @@ namespace CTRPluginFramework {
         ACNL_Cenus_Data_Type ShampoodleVisits; //0x72880
         ACNL_Cenus_Data_Type BoughtArtAtRedds; //0x72894
         ACNL_Cenus_Data_Type ScallopsGivenToPascal; //0x728A8
-        ACNL_Cenus_Data_Type HelpedKatie; //0x728BC
+        ACNL_Cenus_Data_Type HelpedKatieTravel; //0x728BC
         ACNL_Cenus_Data_Type BalloonsPopped; //0x728D0
         ACNL_Cenus_Data_Type TourneyFishCaught; //0x728E4 //Get cleared after event
         ACNL_Cenus_Data_Type TourneyInsectCaught; //0x728F8 //Get cleared after event
@@ -2169,8 +2173,8 @@ namespace CTRPluginFramework {
         ACNL_Cenus_Data_Type YouVisitedVillagers; //0x72A24
         ACNL_Cenus_Data_Type VillagersVisitedYou; //0x72A38
         ACNL_Cenus_Data_Type PlayedHideAndSeek; //0x72A4C
-        /*0x550*/ACNL_Cenus_Data_Type Unknown1; //0x72A60
-        /*0x564*/ACNL_Cenus_Data_Type Unknown2; //0x72A74
+        /*0x550*/ACNL_Cenus_Data_Type Unknown1; //0x72A60 //KOKT71
+        /*0x564*/ACNL_Cenus_Data_Type Unknown2; //0x72A74 //KOKT72
         ACNL_Cenus_Data_Type AmiiboScanned; //0x72A88
         ACNL_Cenus_Data_Type ResetSurveillanceCenterVisits; //0x72A9C
         ACNL_Cenus_Data_Type DJKKVisits; //0x72AB0
@@ -2180,7 +2184,7 @@ namespace CTRPluginFramework {
         ACNL_Cenus_Data_Type TownInitiativesCompleted; //0x72B00
         ACNL_Cenus_Data_Type MEOWCouponsEarned; //0x72B14
         ACNL_Cenus_Data_Type MEOWCouponsSpent; //0x72B28
-        /*0x62C*/ACNL_Cenus_Data_Type Unknown3; //0x72B3C //NON_PLAYER_SPECIFIC
+        /*0x62C*/ACNL_Cenus_Data_Type Unused; //0x72B3C //NON_PLAYER_SPECIFIC //KOKT82
         
         /*0x1180*/ //0x73690 //that one seems to be set in the game, meaning there are more???
         /*0x118C*/ //0x7369C
