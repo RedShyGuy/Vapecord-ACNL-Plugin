@@ -1,6 +1,9 @@
 #pragma once
 
 #include <CTRPluginFramework.hpp>
+#include <functional>
+#include "LibCtrpfExtras/FolderTypes.hpp"
+#include "LibCtrpfExtras/HotkeyExtras.hpp"
 #include "Language.hpp"
 
 namespace CTRPluginFramework {
@@ -23,10 +26,29 @@ namespace CTRPluginFramework {
         * \param noteKey Note Key for the entry (Optional)
         */
         MenuEntryExtras(const std::string &nameKey, FuncPointer gameFunc, const std::string &noteKey = "");
+
+        void    SetColor(const Color &color) {
+            this->color = color;
+        }
+
+        void    Update();
+
+        void    AppendHotkeyNameKey(const std::string &nameKey) {
+            hotkeyNameKeys.push_back(nameKey);
+        }
+
+        std::vector<std::string> GetHotkeyNameKeys() const {
+            return hotkeyNameKeys;
+        }
     private:
+        std::vector<std::string> hotkeyNameKeys;
+
+        std::function<std::string()> NameGetter;
+        std::function<std::string()> NoteGetter;
+        Color color;
+
         static std::string setLanguageByKey(const std::string& langKey) {
-            Language* lang = Language::getInstance();
-            return lang->get(langKey);
+            return Language::getInstance()->get(langKey);
         }
     };
 }

@@ -1854,9 +1854,9 @@ namespace CTRPluginFramework {
         u8 Padding1;
         u16 TownAcres[7*6]; //42 acres in total; 7 colunms, 6 rows. Game reads Acre IDs as u16; ctor sets each to 265 (0x109)
         Item TownItems[(16*16)*(5*4)]; //16*16 items per acre; Items only cover map acres (5*4); 0x1400 of items
-        u8 MapGrassToday[(16*16)*(5*4)]; //16*16 slots per acre; Grass deterioration only affects map acres (5*4); 0x1400 of grass
+        u8 MapGrassToday[(16*16)*(5*4)]; //0x584d8 //16*16 slots per acre; Grass deterioration only affects map acres (5*4); 0x1400 of grass
         u8 Unused2[40]; //Town data ctor never initializes this, so likely not used. Where the code would branch to do so, there is a NOP (both in WA and Orig).
-        u8 MapGrass[(16*16)*(8*6)];
+        u8 MapGrass[(16*16)*(8*6)]; //0x59900
         u8 Unused3[0x1000]; //Town data actually includes it with MapGrass (0x8000 in total), despite this portion not being used
         ACNL_PlayerHouse PlayerHouse[4]; //0x5D900
         s64 CurrentTime; //0x621A0

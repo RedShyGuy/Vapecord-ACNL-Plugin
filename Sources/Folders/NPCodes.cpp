@@ -45,6 +45,14 @@ namespace CTRPluginFramework {
 	}
 
 	void NPCFunction(MenuEntry *entry) {
+	#if DEVMODE
+		if (!entry->IsActivated()) {
+			PluginMenu *menu = PluginMenu::GetRunningInstance();
+			*menu -= checkloadstate;
+			OSD::Stop(ShowCoords);
+		}
+	#endif
+
 		if(!entry->Hotkeys[0].IsPressed()) {//Key::L + Key::A
 			return;
 		}

@@ -9,14 +9,16 @@ namespace CTRPluginFramework {
         if(entry != nullptr) {
             for(const HotkeyExtras &hotkey : hotkeys) {
 				entry->Hotkeys += hotkey;
+				entry->AppendHotkeyNameKey(hotkey.GetNameKey());
 			}
         }
         return entry;
-    }	
+    }
 	
 	static MenuEntryExtras *EntryWithHotkey(MenuEntryExtras *entry, const HotkeyExtras &hotkey) {
         if(entry != nullptr) {
             entry->Hotkeys += hotkey;
+			entry->AppendHotkeyNameKey(hotkey.GetNameKey());
         }
         return entry;
     }
@@ -26,7 +28,7 @@ namespace CTRPluginFramework {
 	/////////////////////
 	/*Save Codes Folder*/
 	/////////////////////
-		MenuFolderExtras *SAVEC = new MenuFolderExtras("SAVE_CODES", FolderType::Save);
+		MenuFolderExtras *SAVEC = new MenuFolderExtras(FolderType::Save);
 	    SAVEC->Append(new MenuEntryExtras("TOWN_NAME_CHANGER", nullptr, townnamechanger, "TOWN_NAME_CHANGER_NOTE")),
 		SAVEC->Append(new MenuEntryExtras("SAVE_BACKUP_NAME", nullptr, savebackup, "SAVE_BACKUP_NOTE")),	
 		SAVEC->Append(new MenuEntryExtras("BULL_BOARD_DUMPER", nullptr, bullboard, "BULL_BOARD_DUMPER_NOTE")),
@@ -47,7 +49,7 @@ namespace CTRPluginFramework {
 	/////////////////////////
 	/*Movement Codes Folder*/
 	/////////////////////////
-		MenuFolderExtras *MOVEC = new MenuFolderExtras("MOVEMENT_CODES", FolderType::Movement);
+		MenuFolderExtras *MOVEC = new MenuFolderExtras(FolderType::Movement);
 		MOVEC->Append(new MenuEntryExtras("CANT_PUSH", noPush, "CANT_PUSH_NOTE")),
 		MOVEC->Append(EntryWithHotkey(new MenuEntryExtras("COORD_MOD", coordinate, coordspeed, "COORD_MOD_NOTE"), {
 			HotkeyExtras(Key::A, "COORD_MOD_KEY1"), 
@@ -87,7 +89,7 @@ namespace CTRPluginFramework {
 	//////////////////////////
 	/*Inventory Codes Folder*/
 	//////////////////////////
-		MenuFolderExtras *INVC = new MenuFolderExtras("INVENTORY_CODES", FolderType::Inventory);
+		MenuFolderExtras *INVC = new MenuFolderExtras(FolderType::Inventory);
 		INVC->Append(EntryWithHotkey(new MenuEntryExtras("TEXT_2_ITEM", t2i, itemsearch, "TEXT_2_ITEM_NOTE"), { 
 			HotkeyExtras(Key::X | Key::DPadRight, "TEXT_2_ITEM_KEY1"), 
 			HotkeyExtras(Key::X |Key::DPadUp, "TEXT_2_ITEM_KEY2"), 
@@ -98,8 +100,7 @@ namespace CTRPluginFramework {
 			HotkeyExtras(Key::R | Key::X, "DUPE_ITEMS_KEY2") 
 		})),
 		INVC->Append(EntryWithHotkey(new MenuEntryExtras("CATALOG_TO_POCKET", catalog, "CATALOG_TO_POCKET_NOTE"), { 
-			HotkeyExtras(Key::L | Key::DPadRight, "CATALOG_TO_POCKET_KEY1"), 
-			HotkeyExtras(Key::L | Key::Y, "CATALOG_TO_POCKET_KEY2") 
+			HotkeyExtras(Key::L | Key::DPadRight, "CATALOG_TO_POCKET_KEY1")
 		})),
 		INVC->Append(EntryWithHotkey(new MenuEntryExtras("CHAT_T2I", chatt2i, "CHAT_T2I_NOTE"), { 
 			HotkeyExtras(Key::R | Key::DPadLeft, "CHAT_T2I_KEY1") 
@@ -114,11 +115,11 @@ namespace CTRPluginFramework {
 	///////////////////////
 	/*Player Codes Folder*/
 	///////////////////////
-		MenuFolderExtras *PLAYC = new MenuFolderExtras("PLAYER_CODES", FolderType::Player);
+		MenuFolderExtras *PLAYC = new MenuFolderExtras(FolderType::Player);
 	////////////////////////////
 	/*Player Save Codes Folder*/
 	////////////////////////////
-		MenuFolderExtras *PSAVEC = new MenuFolderExtras("PLAYER_SAVE_CODES", FolderType::Player);
+		MenuFolderExtras *PSAVEC = new MenuFolderExtras(FolderType::Player, SubFolder::PlayerSave);
 		PSAVEC->Append(new MenuEntryExtras("NAME_CHANGER", nullptr, NameChanger, "NAME_CHANGER_NOTE")),
 		PSAVEC->Append(new MenuEntryExtras("PLAYER_APPEARANCE", nullptr, playermod, "PLAYER_APPEARANCE_NOTE")),
 		PSAVEC->Append(new MenuEntryExtras("RANDOM_PLAYER", nullptr, randomoutfit, "RANDOM_PLAYER_NOTE")),
@@ -154,7 +155,7 @@ namespace CTRPluginFramework {
 	//////////////////////////
 	/*Animation Codes Folder*/
 	//////////////////////////
-		MenuFolderExtras *ANIMC = new MenuFolderExtras("ANIMATION_CODES", FolderType::Animation);
+		MenuFolderExtras *ANIMC = new MenuFolderExtras(FolderType::Animation);
 		ANIMC->Append(EntryWithHotkey(new MenuEntryExtras("PLAYER_SELECTOR", playerSelector, "PLAYER_SELECTOR_NOTE"), { 
 			HotkeyExtras(Key::L | Key::DPadRight, "PLAYER_SELECTOR_KEY1"), 
 			HotkeyExtras(Key::L | Key::DPadLeft, "PLAYER_SELECTOR_KEY2") 
@@ -185,11 +186,11 @@ namespace CTRPluginFramework {
 	////////////////////////
 	/*Seeding Codes Folder*/
 	////////////////////////
-		MenuFolderExtras *SEEDC = new MenuFolderExtras("SEEDING_CODES", FolderType::Seeding);
+		MenuFolderExtras *SEEDC = new MenuFolderExtras(FolderType::Seeding);
 	////////////////////////
 	/*Seed Codes SubFolder*/
 	////////////////////////
-		MenuFolderExtras *SEED1C = new MenuFolderExtras("SEED_CODES", FolderType::Seeding);
+		MenuFolderExtras *SEED1C = new MenuFolderExtras(FolderType::Seeding, SubFolder::Seed);
 		SEED1C->Append(EntryWithHotkey(new MenuEntryExtras("PICK_SEEDER", pickseeder, "PICK_SEEDER_NOTE"), { 
 			HotkeyExtras(Key::B | Key::DPadLeft, "PICK_SEEDER_KEY1"), 
 			HotkeyExtras(Key::B | Key::DPadDown, "PICK_SEEDER_KEY2"), 
@@ -221,7 +222,7 @@ namespace CTRPluginFramework {
 	////////////////////////
 	/*Drop Codes SubFolder*/
 	////////////////////////
-		MenuFolderExtras *DROPC = new MenuFolderExtras("DROP_CODES", FolderType::Seeding);
+		MenuFolderExtras *DROPC = new MenuFolderExtras(FolderType::Seeding, SubFolder::Drop);
 		DROPC->Append(new MenuEntryExtras("ITEM_SEQUENCER", nullptr, Entry_itemsequence, "ITEM_SEQUENCER_NOTE")),
 	    DROPC->Append(EntryWithHotkey(new MenuEntryExtras("DROP_MODS", dropMod, "DROP_MODS_NOTE"), { 
 			HotkeyExtras(Key::A | Key::DPadRight, "DROP_MODS_KEY1"), 
@@ -248,7 +249,7 @@ namespace CTRPluginFramework {
 	////////////////////////
 	/*Tree Codes SubFolder*/
 	////////////////////////
-		MenuFolderExtras *TREEC = new MenuFolderExtras("TREE_CODES", FolderType::Seeding);
+		MenuFolderExtras *TREEC = new MenuFolderExtras(FolderType::Seeding, SubFolder::Tree);
 		TREEC->Append(new MenuEntryExtras("INF_FRUIT_TREE", fruitStays, "INF_FRUIT_TREE_NOTE")),
 		TREEC->Append(new MenuEntryExtras("AXE_TREE_SHAKE", shakechop, "AXE_TREE_SHAKE_NOTE")),
 		TREEC->Append(EntryWithHotkey(new MenuEntryExtras("FRUIT_TREE_MOD", fruititemmod, "FRUIT_TREE_MOD_NOTE"), { 
@@ -261,7 +262,7 @@ namespace CTRPluginFramework {
 	//////////////////////
 	/*Money Codes Folder*/
 	//////////////////////
-		MenuFolderExtras *MONC = new MenuFolderExtras("MONEY_CODES", FolderType::Money);
+		MenuFolderExtras *MONC = new MenuFolderExtras(FolderType::Money);
 		MONC->Append(new MenuEntryExtras("WALLET", nullptr, wallet, "WALLET_NOTE")),
 		MONC->Append(new MenuEntryExtras("BANK", nullptr, bank, "BANK_NOTE")),
 		MONC->Append(new MenuEntryExtras("MEOW_COUPONS", nullptr, coupon, "MEOW_COUPONS_NOTE")),
@@ -273,7 +274,7 @@ namespace CTRPluginFramework {
 	///////////////////////
 	/*Island Codes Folder*/
 	///////////////////////
-		MenuFolderExtras *ISLC = new MenuFolderExtras("ISLAND_CODES", FolderType::Island);
+		MenuFolderExtras *ISLC = new MenuFolderExtras(FolderType::Island);
 		ISLC->Append(new MenuEntryExtras("UNLOCK_ISLAND", nullptr, UnlockIsland, "UNLOCK_ISLAND_NOTE")),
 		ISLC->Append(new MenuEntryExtras("FILL_INV_ORE", bonusOre, "FILL_INV_ORE_NOTE")),
 		ISLC->Append(new MenuEntryExtras("FILL_INV_FRUIT", instantFruit, "FILL_INV_FRUIT_NOTE")),
@@ -290,7 +291,7 @@ namespace CTRPluginFramework {
 	//////////////
 	/*NPC Folder*/
 	//////////////
-		MenuFolderExtras *NPCC = new MenuFolderExtras("NPC_CODES", FolderType::NPC);
+		MenuFolderExtras *NPCC = new MenuFolderExtras(FolderType::NPC);
 		NPCC->Append(EntryWithHotkey(new MenuEntryExtras("NPC_SELECTOR", NPCFunction, "NPC_SELECTOR_NOTE"), { 
 			HotkeyExtras(Key::L | Key::A, "NPC_SELECTOR_KEY1") 
 		})),
@@ -315,18 +316,18 @@ namespace CTRPluginFramework {
 	////////////////////////////
 	/*Environment Codes Folder*/
 	////////////////////////////
-		MenuFolderExtras *ENVC = new MenuFolderExtras("ENV_CODES", FolderType::Environment);
+		MenuFolderExtras *ENVC = new MenuFolderExtras(FolderType::Environment);
 	/////////////////////
 	/*Fish Codes Folder*/
 	/////////////////////
-		MenuFolderExtras *FISC = new MenuFolderExtras("FISH_CODES", FolderType::Environment);
+		MenuFolderExtras *FISC = new MenuFolderExtras(FolderType::Environment, SubFolder::Fish);
 		FISC->Append(new MenuEntryExtras("FISH_ALWAYS_BITE_NAME", FishAlwaysBiteRightAway, "FISH_ALWAYS_BITE_NOTE")),
 		FISC->Append(new MenuEntryExtras("FISH_CANT_SCARE_NAME", FishCantBeScared, "FISH_CANT_SCARE_NOTE")),
 		ENVC->Append(FISC);
 	///////////////////////
 	/*Insect Codes Folder*/
 	///////////////////////
-		MenuFolderExtras *INSC = new MenuFolderExtras("INSECT_CODES", FolderType::Environment);
+		MenuFolderExtras *INSC = new MenuFolderExtras(FolderType::Environment, SubFolder::Insect);
 		INSC->Append(new MenuEntryExtras("SPAWN_INSECT", SpawnInsectEntry, SetInsectIdEntry, "SPAWN_INSECT_NOTE")),
 		INSC->Append(new MenuEntryExtras("INSECT_CANT_SCARE", InsectsCantBeScared, "INSECT_CANT_SCARE_NOTE")),
 		ENVC->Append(INSC);
@@ -335,18 +336,14 @@ namespace CTRPluginFramework {
 		ENVC->Append(new MenuEntryExtras("ALWAYS_AURORA_MOD", auroralights , "ALWAYS_AURORA_MOD_NOTE")),
 		ENVC->Append(new MenuEntryExtras("UNBREAK_FLOWER", unbreakableflower, "UNBREAK_FLOWER_NOTE")),
 		ENVC->Append(new MenuEntryExtras("WEATHER_MOD", nullptr, Weathermod , "WEATHER_MOD_NOTE")),
-		ENVC->Append(EntryWithHotkey(new MenuEntryExtras("WATER_FLOWERS_NAME", WaterAllFlowers, "WATER_FLOWERS_NOTE"), { 
-			HotkeyExtras(Key::R | Key::DPadLeft, "WATER_FLOWRES_HOTKEY1") 
-		})),
-		ENVC->Append(EntryWithHotkey(new MenuEntryExtras("WEED_REMOVER_NAME", weedremover, "WEED_REMOVER_NOTE"), { 
-			HotkeyExtras(Key::L | Key::DPadRight, "WEED_REMOVER_HOTKEY1"), 
-			HotkeyExtras(Key::L | Key::DPadLeft, "WEED_REMOVER_HOTKEY2") 
-		})),
+		ENVC->Append(new MenuEntryExtras("WATER_FLOWERS_NAME", nullptr, WaterAllFlowers, "WATER_FLOWERS_NOTE")),
+		ENVC->Append(new MenuEntryExtras("WEED_REMOVER_NAME", nullptr, weedremover, "WEED_REMOVER_NOTE")),
 		ENVC->Append(EntryWithHotkey(new MenuEntryExtras("GRASS_EDITOR", grasseditor, grasscomplete, "GRASS_EDITOR_NOTE"), { 
 			HotkeyExtras(Key::R | Key::DPadDown, "GRASS_EDITOR_HOTKEY1"), 
 			HotkeyExtras(Key::R | Key::DPadUp, "GRASS_EDITOR_HOTKEY2"), 
 			HotkeyExtras(Key::R | Key::DPadRight, "GRASS_EDITOR_HOTKEY3") 
 		})),
+		ENVC->Append(new MenuEntryExtras("KEEP_GRASS_STATE", KeepGrassState, "KEEP_GRASS_STATE_NOTE")),
 		ENVC->Append(new MenuEntryExtras("BURIED_INSPECTOR", BuriedInspector, "BURIED_INSPECTOR_NOTE")),
 
 		menu->Append(ENVC);
@@ -354,11 +351,11 @@ namespace CTRPluginFramework {
 	//////////////////////
 	/*Extra Codes Folder*/
 	//////////////////////
-		MenuFolderExtras *EXTC = new MenuFolderExtras("EXTRA_CODES", FolderType::Extra);
+		MenuFolderExtras *EXTC = new MenuFolderExtras(FolderType::Extra);
 	/////////////////////
 	/*Chat Codes Folder*/
 	/////////////////////
-		MenuFolderExtras *CHAC = new MenuFolderExtras("CHAT_CODES", FolderType::Extra);
+		MenuFolderExtras *CHAC = new MenuFolderExtras(FolderType::Extra, SubFolder::Chat);
 		CHAC->Append(new MenuEntryExtras("CHAT_DONT_DISSAPEAR", bubblesDisappear, "CHAT_DONT_DISSAPEAR_NOTE")),
 		CHAC->Append(EntryWithHotkey(new MenuEntryExtras("CHATCOPYPASTE", ChatCopyPaste, "CHATCOPYPASTE_NOTE"), {
 			HotkeyExtras(Key::L | Key::DPadRight, "CHATCOPYPASTE_KEY1"),
@@ -375,11 +372,11 @@ namespace CTRPluginFramework {
 	////////////////////
 	/*Fun Codes Folder*/
 	////////////////////
-		MenuFolderExtras *FUNC = new MenuFolderExtras("FUN_CODES", FolderType::Extra); 
+		MenuFolderExtras *FUNC = new MenuFolderExtras(FolderType::Extra, SubFolder::Fun); 
 		FUNC->Append(new MenuEntryExtras("SIZE_CODES", nullptr, sizecodes, "SIZE_CODES_NOTE")),
 		FUNC->Append(new MenuEntryExtras("T_POSE", tposeentry, "T_POSE_NOTE")),
 		FUNC->Append(EntryWithHotkey(new MenuEntryExtras("TAKE_TPC_PIC", freezeframe, "TAKE_TPC_PIC_NOTE"), { 
-			HotkeyExtras(Key::L, "TAKE_TPC_PIC_KEY1"), 
+			HotkeyExtras(Key::DPadRight, "TAKE_TPC_PIC_KEY1"), 
 			HotkeyExtras(Key::A, "TAKE_TPC_PIC_KEY2") 
 		})),
 		FUNC->Append(new MenuEntryExtras("MAX_TURBO", maxturbo, "MAX_TURBO_NOTE")),
@@ -407,7 +404,7 @@ namespace CTRPluginFramework {
 	/////////////////////
 	/*Misc Codes Folder*/
 	/////////////////////
-		MenuFolderExtras *MISC = new MenuFolderExtras("MISC_CODES", FolderType::Misc);		
+		MenuFolderExtras *MISC = new MenuFolderExtras(FolderType::Misc);		
 		MISC->Append(new MenuEntryExtras("TOOL_ANIM", nullptr, tooltype, "TOOL_ANIM_NOTE")),
 		MISC->Append(new MenuEntryExtras("GAME_TYPE", nullptr, mgtype, "GAME_TYPE_NOTE")),
 		MISC->Append(new MenuEntryExtras("RADIO_PLAYER", radioPlayer , "RADIO_PLAYER_NOTE")),
@@ -427,68 +424,63 @@ namespace CTRPluginFramework {
 		MISC->Append(new MenuEntryExtras("FAST_TEXT_SPEED", fasttalk, "FAST_TEXT_SPEED_NOTE")),
 		MISC->Append(new MenuEntryExtras("FAST_GAME_SPEED", speedentry, "FAST_GAME_SPEED_NOTE")),
 		MISC->Append(new MenuEntryExtras("FAST_ISABELLE", fastisabelle, "FAST_ISABELLE_NOTE")),
+		MISC->UseBottomSeparator(Separator::Stippled);
 		menu->Append(MISC);
 
 	////////////////////////
 	/*Default Codes Folder*/
 	////////////////////////
-	MenuFolder *DEFAULTC = new MenuFolder("Default Codes");
+	MenuFolderExtras *DEFAULTC = new MenuFolderExtras(FolderType::Default);
 
-	DEFAULTC->Append(new MenuEntry("Set Seed Item Legitimacy", nullptr, SeedItemLegitimacyEntry, "")),
-	DEFAULTC->Append(new MenuEntry("Online Drop Lag Remover", nullptr, OnlineDropLagRemoverEntry, "")),
-	DEFAULTC->Append(new MenuEntry("Change Rockbreak Particle", nullptr, ChangeRockbreakParticleEntry, "")),
-	DEFAULTC->Append(new MenuEntry("Drop Items Everywhere", nullptr, DropItemsEverywhereEntry, "")),
-	DEFAULTC->Append(new MenuEntry("Idle After Tree Shake/Cut", nullptr, IdleAfterTreeShakeOrCutEntry, "")),
-	//DEFAULTC->Append(new MenuEntry("Don't Move NPC Back To Original Position", nullptr, DontMoveNPCBackToOriginalPositionEntry, "")),
-	DEFAULTC->Append(new MenuEntry("Replace Drop Functions", nullptr, ReplaceDropFunctionsEntry, "")),
-	DEFAULTC->Append(new MenuEntry("Prevent Particle Crash", nullptr, PreventParticleCrashEntry, "")),
-	DEFAULTC->Append(new MenuEntry("Bypass Game Checks", nullptr, BypassGameChecksEntry, "")),
-	DEFAULTC->Append(new MenuEntry("Disable Non Seed Item Check", nullptr, DisableNonSeedItemCheckEntry, "")),
-	DEFAULTC->Append(new MenuEntry("Patch Drop Function", nullptr, PatchDropFunctionEntry, "")),
+	DEFAULTC->Append(new MenuEntryExtras("SEED_ITEM_LEGIT", nullptr, SeedItemLegitimacyEntry, "")),
+	DEFAULTC->Append(new MenuEntryExtras("DROP_LAG_REMOVE", nullptr, OnlineDropLagRemoverEntry, "")),
+	DEFAULTC->Append(new MenuEntryExtras("CHANGE_ROCKBREAK_PARTICLE", nullptr, ChangeRockbreakParticleEntry, "")),
+	DEFAULTC->Append(new MenuEntryExtras("DROP_ITEMS_EVERYWHERE", nullptr, DropItemsEverywhereEntry, "")),
+	DEFAULTC->Append(new MenuEntryExtras("IDLE_AFTER_TREE_SHAKE_OR_CUT", nullptr, IdleAfterTreeShakeOrCutEntry, "")),
+	//DEFAULTC->Append(new MenuEntryExtras("DONT_MOVE_NPC_BACK_TO_ORIGINAL_POSITION", nullptr, DontMoveNPCBackToOriginalPositionEntry, "")),
+	DEFAULTC->Append(new MenuEntryExtras("REPLACE_DROP_FUNCTIONS", nullptr, ReplaceDropFunctionsEntry, "")),
+	DEFAULTC->Append(new MenuEntryExtras("PREVENT_PARTICLE_CRASH", nullptr, PreventParticleCrashEntry, "")),
+	DEFAULTC->Append(new MenuEntryExtras("BYPASS_GAME_CHECKS", nullptr, BypassGameChecksEntry, "")),
+	DEFAULTC->Append(new MenuEntryExtras("DISABLE_NON_SEED_ITEM_CHECK", nullptr, DisableNonSeedItemCheckEntry, "")),
+	DEFAULTC->Append(new MenuEntryExtras("PATCH_DROP_FUNCTION", nullptr, PatchDropFunctionEntry, "")),
 
-	DEFAULTC->Append(new MenuEntry("Fix Invalid Badge Crash", nullptr, CheckInvalidBadgeEntry, "")),
-	DEFAULTC->Append(new MenuEntry("Disable Open Save Menu With Start Button", nullptr, DisableOpenSaveMenuWithStartButton, "")),
-	DEFAULTC->Append(new MenuEntry("Disable Catalog Search Function", nullptr, DisableCatalogSearchFunction, "")),
-	DEFAULTC->Append(new MenuEntry("Fix Invalid Pickup Crash", nullptr, FixInvalidPickupCrash, "")),
-	DEFAULTC->Append(new MenuEntry("Fix Invalid Drop/Plant Crash", nullptr, FixInvalidDropPlantCrash, "")),
-	DEFAULTC->Append(new MenuEntry("Fix Invalid Sprite Crash", nullptr, FixInvalidSpriteCrash, "")),
-	DEFAULTC->Append(new MenuEntry("Fix Invalid Give Item Crash", nullptr, FixInvalidGiveItemCrash, "")),
-	DEFAULTC->Append(new MenuEntry("Fix Invalid Hole Crash", nullptr, FixInvalidHoleCrash, "")),
-	DEFAULTC->Append(new MenuEntry("Fix Invalid Item Crash", nullptr, FixInvalidItemCrash, "")),
-	DEFAULTC->Append(new MenuEntry("Convert Flower From Seed Item To Normal Item", nullptr, ConvertFlowerFromSeedItemToNormalItem, "")),
-	DEFAULTC->Append(new MenuEntry("Set Seed Item Names", nullptr, SetSeedItemNames, "")),
-	DEFAULTC->Append(new MenuEntry("Set Item Replacement Rules", nullptr, SetItemReplacementRules, "")),
-	DEFAULTC->Append(new MenuEntry("Set Drop Rules", nullptr, SetDropRules, "")),
-	DEFAULTC->Append(new MenuEntry("Set Plant Rules", nullptr, SetPlantRules, "")),
-	DEFAULTC->Append(new MenuEntry("Fix Particles In Puzzle League", nullptr, FixParticlesInPuzzleLeague, "")),
-	DEFAULTC->Append(new MenuEntry("Set Custom Sprites For Pro Designs", nullptr, SetCustomSpritesForProDesigns, "")),
+	DEFAULTC->Append(new MenuEntryExtras("CHECK_INVALID_BADGE", nullptr, CheckInvalidBadgeEntry, "")),
+	DEFAULTC->Append(new MenuEntryExtras("DISABLE_OPEN_SAVE_MENU_WITH_START_BUTTON", nullptr, DisableOpenSaveMenuWithStartButton, "")),
+	DEFAULTC->Append(new MenuEntryExtras("DISABLE_CATALOG_SEARCH_FUNCTION", nullptr, DisableCatalogSearchFunction, "")),
+	DEFAULTC->Append(new MenuEntryExtras("FIX_INVALID_PICKUP_CRASH", nullptr, FixInvalidPickupCrash, "")),
+	DEFAULTC->Append(new MenuEntryExtras("FIX_INVALID_DROP_PLANT_CRASH", nullptr, FixInvalidDropPlantCrash, "")),
+	DEFAULTC->Append(new MenuEntryExtras("FIX_INVALID_SPRITE_CRASH", nullptr, FixInvalidSpriteCrash, "")),
+	DEFAULTC->Append(new MenuEntryExtras("FIX_INVALID_GIVE_ITEM_CRASH", nullptr, FixInvalidGiveItemCrash, "")),
+	DEFAULTC->Append(new MenuEntryExtras("FIX_INVALID_HOLE_CRASH", nullptr, FixInvalidHoleCrash, "")),
+	DEFAULTC->Append(new MenuEntryExtras("FIX_INVALID_ITEM_CRASH", nullptr, FixInvalidItemCrash, "")),
+	DEFAULTC->Append(new MenuEntryExtras("CONVERT_FLOWER_FROM_SEED_ITEM_TO_NORMAL_ITEM", nullptr, ConvertFlowerFromSeedItemToNormalItem, "")),
+	DEFAULTC->Append(new MenuEntryExtras("SET_SEED_ITEM_NAMES", nullptr, SetSeedItemNames, "")),
+	DEFAULTC->Append(new MenuEntryExtras("SET_ITEM_REPLACEMENT_RULES", nullptr, SetItemReplacementRules, "")),
+	DEFAULTC->Append(new MenuEntryExtras("SET_DROP_RULES", nullptr, SetDropRules, "")),
+	DEFAULTC->Append(new MenuEntryExtras("SET_PLANT_RULES", nullptr, SetPlantRules, "")),
+	DEFAULTC->Append(new MenuEntryExtras("FIX_PARTICLES_IN_PUZZLE_LEAGUE", nullptr, FixParticlesInPuzzleLeague, "")),
+	DEFAULTC->Append(new MenuEntryExtras("SET_CUSTOM_SPRITES_FOR_PRO_DESIGNS", nullptr, SetCustomSpritesForProDesigns, "")),
 	menu->Append(DEFAULTC);
 
 	////////////////////
 	/*Dev Codes Folder*/
 	////////////////////
 	#if DEVMODE
-		MenuFolder *DEVC = new MenuFolder(Color(0xFF1A69FF) << "Dev Codes");
-		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Custom Dump", nullptr, customdump, "Lets you dump/restore custom dumps.")),
-		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Call Function", FunctionsCaller, FunctionsCallerSettings, "Lets you call functions")),
-		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Display Save Flag Difference", displaySaveFlagDifference, "")),
-		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Unused Fall Down", falldownfishing, "")),
-		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Unlock Cro Region", unlockCroRegion, "Unlock Cro Region: R + DPadUp\nLock Cro Region: R + DPadDown")),
-		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "ACNH Cheat", acnh, "")),
-		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Player Dumper", nullptr, player_dumper, "")),
-		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Fish Thrower", FishThrower, "")),
-		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Wand Ability", wandability, "Gives the different wands abilitys.\n" +
-																			  ColorExtras::Format("%cBlue Wand: %cNULL\n", Color(0x0089FFFF), Color::White) +
-																			  ColorExtras::Format("%cGreen Wand: %cRestores wilted flowers instantly\n", Color(0x2BFF00FF), Color::White) +
-																			  ColorExtras::Format("%cPink Wand: %cNULL\n", Color(0xFF00E6FF), Color::White) +
-																			  ColorExtras::Format("%cYellow Wand: %cNULL\n", Color(0xEFFF00FF), Color::White) +
-																			  ColorExtras::Format("%cFlower Fairy Wand: %cGrows Tree instantly\n", Color(0xCD00FFFF), Color::White) +
-																			  ColorExtras::Format("%cKiki and Lala Wand: %cNULL", Color(0xFF7700FF), Color::White))),
-		DEVC->Append(new MenuEntry(Color(0xFF1A69FF) << "Light Switch Toggler", lightswitch, "Lets you toggle the light switch.\nHotkeys are:\nL + DPadUp : Toggle light in current room\nL + DPadRight : Set Room ID\nL + DPadLeft : Toggle light in set room")),
-		DEVC->Append(new MenuEntry("EXPRESSION_MOD", FacialExpressionMod, SetFacialExpression, "EXPRESSION_MOD_NOTE")),
+		MenuFolderExtras *DEVC = new MenuFolderExtras(FolderType::Dev);
+		DEVC->Append(new MenuEntryExtras("CUSTOM_DUMP", nullptr, customdump, "CUSTOM_DUMP_NOTE")),
+		DEVC->Append(new MenuEntryExtras("CALL_FUNCTION", FunctionsCaller, FunctionsCallerSettings, "CALL_FUNCTION_NOTE")),
+		DEVC->Append(new MenuEntryExtras("DISPLAY_SAVE_FLAG_DIFFERENCE", displaySaveFlagDifference, "")),
+		DEVC->Append(new MenuEntryExtras("UNUSED_FALL_DOWN", falldownfishing, "")),
+		DEVC->Append(new MenuEntryExtras("UNLOCK_CRO_REGION", unlockCroRegion, "UNLOCK_CRO_REGION_NOTE")),
+		DEVC->Append(new MenuEntryExtras("ACNH_CHEAT", acnh, "")),
+		DEVC->Append(new MenuEntryExtras("PLAYER_DUMPER", nullptr, player_dumper, "")),
+		DEVC->Append(new MenuEntryExtras("FISH_THROWER", FishThrower, "")),
+		DEVC->Append(new MenuEntryExtras("WAND_ABILITY", wandability, "WAND_ABILITY_NOTE")),
+		DEVC->Append(new MenuEntryExtras("LIGHT_SWITCH_TOGGLER", lightswitch, "LIGHT_SWITCH_TOGGLER_NOTE")),
+		DEVC->Append(new MenuEntryExtras("EXPRESSION_MOD", FacialExpressionMod, SetFacialExpression, "EXPRESSION_MOD_NOTE")),
 		menu->Append(DEVC);
 	#endif
 
-		menu->Append(new MenuEntry("Plugin Settings", nullptr, pluginSettingsEntry, ""));
+		menu->Append(new MenuEntryExtras("PLUGIN_SETTINGS", nullptr, pluginSettingsEntry, ""));
 	}
 }

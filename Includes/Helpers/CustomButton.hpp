@@ -9,6 +9,7 @@ namespace CTRPluginFramework {
         void RemoveItem(u32 InvData);
         void PutItemToStorage(u32 InvData);
         void PayDebt(u32 InvData);
+        void DeleteItem(u32 InvData);
 
         void RandomOutfit(u32 InvData);
     }

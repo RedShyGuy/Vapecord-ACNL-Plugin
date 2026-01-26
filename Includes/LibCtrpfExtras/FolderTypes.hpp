@@ -3,7 +3,7 @@
 #include <CTRPluginFramework.hpp>
 
 namespace CTRPluginFramework {
-    enum FolderType : u8 {
+    enum class FolderType : u8 {
         Save = 0,
         Movement,
         Inventory,
@@ -15,6 +15,21 @@ namespace CTRPluginFramework {
         NPC,
         Environment,
         Extra,
-        Misc
+        Misc,
+        Default,
+        Dev,
+        None
+    };
+
+    enum class SubFolder : u8 {
+        PlayerSave = 0,
+        Seed,
+        Drop,
+        Tree,
+        Fish,
+        Insect,
+        Chat,
+        Fun,
+        None
     };
 }

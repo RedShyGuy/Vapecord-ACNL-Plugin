@@ -1,6 +1,7 @@
 #include <CTRPluginFramework.hpp>
 #include "LibCtrpfExtras/MenuFolderExtras.hpp"
 #include "LibCtrpfExtras/ColorExtras.hpp"
+#include "LibCtrpfExtras/PluginMenuExtras.hpp"
 #include "Address/Address.hpp"
 #include "Helpers/Game.hpp"
 
@@ -26,7 +27,7 @@ namespace CTRPluginFramework {
 	void EditColors() {
 		std::vector<std::string> folders;
 		std::string foldersStr;
-		for (int i = FolderType::Save; i < FolderType::Misc+1; ++i) {
+		for (int i = static_cast<int>(FolderType::Save); i < static_cast<int>(FolderType::Misc) + 1; ++i) {
 			FolderType folder = static_cast<FolderType>(i);
 
 			Color color = MenuFolderExtras::GetFolderColor(folder);
@@ -80,7 +81,9 @@ namespace CTRPluginFramework {
 		}
 		WriteCustomColors(colors);
 
-        MessageBox("Color changed successfully!\nReload the plugin to see changes!").SetClear(ClearScreen::Top)();
+		PluginMenuExtras::Update();
+		
+        MessageBox("Color changed successfully!").SetClear(ClearScreen::Top)();
 	}
 
     bool CustomColorsExist() {

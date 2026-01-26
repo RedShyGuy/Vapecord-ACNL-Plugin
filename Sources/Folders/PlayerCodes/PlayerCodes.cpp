@@ -18,7 +18,7 @@ extern "C" void SetPlayerIconCoordinates(void);
 namespace CTRPluginFramework {
 	static std::vector<std::string> strings1 = { "", "", "", "", "", "" };
 		
-	static std::vector<std::string> strings2 = { "", "", "", "" };
+	static std::vector<std::string> strings2 = { "", "", "", "", "" };
 	
 	void GetPlayerInfoData(void) {	
 		u8 pIndex = Game::GetOnlinePlayerIndex();
@@ -58,11 +58,14 @@ namespace CTRPluginFramework {
 		else {
 			itemslotid = ReplaceEverything;
 		}
+
+		u8 menuID = Inventory::GetCurrent();
 		
-		strings2[0] = (Utils::Format("Pickup: %08X", PickupSeederItemID));
-		strings2[1] = (Utils::Format("Drop: %08X", dropitem));
+		strings2[0] = Utils::Format("Pickup: %08X", PickupSeederItemID);
+		strings2[1] = Utils::Format("Drop: %08X", dropitem);
 		strings2[2] = ("Replace: " << (ItemIDToReplace == ReplaceEverything ? "everything" : Utils::Format("%08X", ItemIDToReplace)));
 		strings2[3] = (itemslotid != ReplaceEverything) ? Utils::Format("Item ID: %08X", itemslotid) : "No Slot Selected";
+		strings2[4] = menuID != 0xFF ? Utils::Format("Current Menu ID: %02X", menuID) : "No Menu Opened";
 	}
 //debug OSD
 	bool debugOSD(const Screen &screen) {
@@ -76,7 +79,7 @@ namespace CTRPluginFramework {
 		}
 		
 		static constexpr u8 YPositions1[7] = { 10, 20, 30, 40, 50, 60 };
-		static constexpr u8 YPositions2[4] = { 0, 10, 20, 30 };
+		static constexpr u8 YPositions2[5] = { 0, 10, 20, 30, 40 };
 		
 		int i = 0, j = 0;
 		
@@ -92,7 +95,7 @@ namespace CTRPluginFramework {
 
 	//If own player is loaded
 		if(PlayerClass::GetInstance()->IsLoaded()) {	
-			while(j < 4) {
+			while(j < 5) {
 				for(auto GetString = strings2.begin(); GetString != strings2.end(); ++GetString) {
 					screen.Draw(*GetString, 285, YPositions2[j]);
 					j++;

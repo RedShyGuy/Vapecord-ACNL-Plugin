@@ -12,52 +12,106 @@ namespace CTRPluginFramework {
     public:
         /**
         * \brief Sets up a MenuFolder with the language key as the name
-        * \param nameKey Name key
         * \param folderType Type of the folder
-        * \param noteKey Note key for the folder (Optional)
         */
-        MenuFolderExtras(const std::string &nameKey, const FolderType folderType, const std::string &noteKey = "");
+        MenuFolderExtras(const FolderType folderType, const SubFolder subFolder = SubFolder::None);
     
         /**
          * \brief Append a MenuEntryExtras object to this folder, will set the folder color to the entry
          * \param item The entry to append
          */
-        void    Append(MenuEntryExtras *item) const;
+        void    Append(MenuEntryExtras *item);
 
         /**
          * \brief Append a MenuFolder object to this folder
          * \param item The folder to append
          */
-        void    Append(MenuFolderExtras *item) const;
+        void    Append(MenuFolderExtras *item);
+
+        /**
+         * \brief Update the menu folders name and color
+         */
+        void    Update();
+
+        FolderType  GetFolderType() const {
+            return folderType;
+        }
 
         static std::string GetFolderName(FolderType type) {
-            switch (type) {
-                case FolderType::Save:          return Language::getInstance()->get("SAVE_CODES");
-                case FolderType::Movement:      return Language::getInstance()->get("MOVEMENT_CODES");
-                case FolderType::Inventory:     return Language::getInstance()->get("INVENTORY_CODES");
-                case FolderType::Player:        return Language::getInstance()->get("PLAYER_CODES");
-                case FolderType::Animation:     return Language::getInstance()->get("ANIMATION_CODES");
-                case FolderType::Seeding:       return Language::getInstance()->get("SEEDING_CODES");
-                case FolderType::Money:         return Language::getInstance()->get("MONEY_CODES");
-                case FolderType::Island:        return Language::getInstance()->get("ISLAND_CODES");
-                case FolderType::NPC:           return Language::getInstance()->get("NPC_CODES");
-                case FolderType::Environment:   return Language::getInstance()->get("ENV_CODES");
-                case FolderType::Extra:         return Language::getInstance()->get("EXTRA_CODES");
-                case FolderType::Misc:          return Language::getInstance()->get("MISC_CODES");
+            static const std::unordered_map<FolderType, const char*> keys = {
+                { FolderType::Save,        "SAVE_CODES" },
+                { FolderType::Movement,    "MOVEMENT_CODES" },
+                { FolderType::Inventory,   "INVENTORY_CODES" },
+                { FolderType::Player,      "PLAYER_CODES" },
+                { FolderType::Animation,   "ANIMATION_CODES" },
+                { FolderType::Seeding,     "SEEDING_CODES" },
+                { FolderType::Money,       "MONEY_CODES" },
+                { FolderType::Island,      "ISLAND_CODES" },
+                { FolderType::NPC,         "NPC_CODES" },
+                { FolderType::Environment, "ENV_CODES" },
+                { FolderType::Extra,       "EXTRA_CODES" },
+                { FolderType::Misc,        "MISC_CODES" },
+                { FolderType::Default,     "DEFAULT_CODES" },
+                { FolderType::Dev,         "DEV_CODES" }
+            };
+
+            auto it = keys.find(type);
+            return it != keys.end() ? Language::getInstance()->get(it->second) : "ERROR";
+        }
+
+        static std::string GetSubFolderName(FolderType parent, SubFolder sub) {
+            if (sub == SubFolder::None) {
+                return "";
             }
-            return "ERROR"; // fallback
+
+            switch (parent) {
+                case FolderType::Player:
+                    switch (sub) {
+                        case SubFolder::PlayerSave: return Language::getInstance()->get("PLAYER_SAVE_CODES");
+                        default: break;
+                    }
+                    break;
+
+                case FolderType::Seeding:
+                    switch (sub) {
+                        case SubFolder::Seed: return Language::getInstance()->get("SEED_CODES");
+                        case SubFolder::Drop: return Language::getInstance()->get("DROP_CODES");
+                        case SubFolder::Tree: return Language::getInstance()->get("TREE_CODES");
+                        default: break;
+                    }
+                    break;
+
+                case FolderType::Environment:
+                    switch (sub) {
+                        case SubFolder::Fish: return Language::getInstance()->get("FISH_CODES");
+                        case SubFolder::Insect: return Language::getInstance()->get("INSECT_CODES");
+                        default: break;
+                    }
+                    break;
+
+                case FolderType::Extra:
+                    switch (sub) {
+                        case SubFolder::Chat: return Language::getInstance()->get("CHAT_CODES");
+                        case SubFolder::Fun: return Language::getInstance()->get("FUN_CODES");
+                        default: break;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+
+            return "ERROR";
         }
 
         static Color GetFolderColor(FolderType type) {
-            if (type < FolderType::Save || type > FolderType::Misc) {
-                return Color::White; // invalid type
-            }
-
-            if (CustomColorsExist()) {
-                std::vector<ColorEntry> customColors = GetCustomColors();
-                for (const ColorEntry& entry : customColors) {
-                    if (entry.folderType == type) {
-                        return Color(entry.r, entry.g, entry.b);
+            if (type >= FolderType::Save && type <= FolderType::Misc) {
+                if (CustomColorsExist()) {
+                    std::vector<ColorEntry> customColors = GetCustomColors();
+                    for (const ColorEntry& entry : customColors) {
+                        if (entry.folderType == type) {
+                            return Color(entry.r, entry.g, entry.b);
+                        }
                     }
                 }
             }
@@ -70,8 +124,10 @@ namespace CTRPluginFramework {
             return Color::White; // fallback
         }
     private:
-        Color color;
-        
+        std::function<std::string()> NameGetter;
+        FolderType folderType;
+        SubFolder subFolder;
+
         static std::string setLanguageByKey(const std::string& langKey) {
             return Language::getInstance()->get(langKey);
         }

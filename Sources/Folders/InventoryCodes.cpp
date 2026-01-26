@@ -136,8 +136,18 @@ namespace CTRPluginFramework {
 		}
 	}
 
-	void CatalogGetItem(u32 invData) {
-		Item CurrentItem = *(Item *)(invData + 0x3B9C - 0x28);
+	/*
+	RV: 0x32DF77CC
+
+	Default: 0x3022D9A0
+
+	Item at 0x305AB784
+	*/
+	void CatalogGetItem(u32 invData, u32 u0, u32 u1) {
+		static Address getCurrentCatalogItem(0x692FD0);
+
+		u32 catalogItemPtr = getCurrentCatalogItem.Call<u32>();
+		Item CurrentItem = *(Item *)(catalogItemPtr + 4);
 
 		if(Game::SetItem(&CurrentItem)) {
 			std::string itemName = CurrentItem.GetName();
@@ -149,16 +159,19 @@ namespace CTRPluginFramework {
 
 		static Address argData(0x8499E4);
 
-		static Address restoreButton(0x81825C);
-		restoreButton.Call<void>(invData, *(u32 *)argData.addr, *(u32 *)(argData.addr + 4));
+		const HookContext &curr = HookContext::GetCurrent();
+		static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
+		func.Call<void>(invData, *(u32 *)argData.addr, *(u32 *)(argData.addr + 4));
 	}
 
 	static bool isCatalogOpen = false;
 //Catalog To Pockets
 	void catalog(MenuEntry *entry) {
 		static Hook catalogHook;
-		static Address AllItemsBuyable(0x70E494);
-		static Address AllItemsBuyable1 = AllItemsBuyable.MoveOffset(4);
+
+		static Address AllItemsBuyable(0x21B3AC);
+		static Address AllItemsHavePrices(0x21AB60);
+
 		static Address cHook(0x21B4B0);
 
 		if(entry->WasJustActivated()) {
@@ -168,7 +181,7 @@ namespace CTRPluginFramework {
 			catalogHook.Enable();
 
 			AllItemsBuyable.Patch(0xE3A00000);
-			AllItemsBuyable1.Patch(0xEA00000B);
+			AllItemsHavePrices.Patch(0xE3A00000);
 		}
 
 		if(entry->Hotkeys[0].IsPressed()) {
@@ -195,8 +208,9 @@ namespace CTRPluginFramework {
 		
 		if(!entry->IsActivated()) {
 			catalogHook.Disable();
+			
 			AllItemsBuyable.Unpatch();
-			AllItemsBuyable1.Unpatch();
+			AllItemsHavePrices.Unpatch();
 
 			isCatalogOpen = false;
 		}

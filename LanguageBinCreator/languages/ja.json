@@ -220,7 +220,6 @@
     "CATALOG_TO_POCKET": "注文商品をポケットに配置",
     "CATALOG_TO_POCKET_NOTE": "注文したアイテムをポケットに配置します。",
     "CATALOG_TO_POCKET_KEY1": "カタログからアイテム入手",
-    "CATALOG_TO_POCKET_KEY2": "情報を隠す",
     "CHAT_T2I": "テキストアイテム",
     "CHAT_T2I_NOTE": "チャットに入力したIDのアイテムを召喚できます。",
     "CHAT_T2I_KEY1": "アイテムを召喚する",

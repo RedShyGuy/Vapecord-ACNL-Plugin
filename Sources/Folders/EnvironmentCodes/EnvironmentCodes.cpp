@@ -112,60 +112,53 @@ namespace CTRPluginFramework {
 	}
 
 	//Water All Flowers	
-	void WaterAllFlowers(MenuEntry *entry) {	
-		if(entry->Hotkeys[0].IsPressed()) {
-			u32 x = 0x10, y = 0x10;
-			bool res = true;
-			
+	void WaterAllFlowers(MenuEntry *entry) {
+		if (!MessageBox(Language::getInstance()->get("WATER_FLOWER_QUESTION"), DialogType::DialogYesNo).SetClear(ClearScreen::Both)()) {
+			return;
+		}
+
+		u32 x = 0x10, y = 0x10;
+		bool res = true;
+		
+		while(res) {
 			while(res) {
-				while(res) {
-					if(Game::GetItemAtWorldCoords(x, y)) {
-						Game::WaterFlowerAtWorldCoords(x, y);
-					}
-					else {
-						res = false;
-					}
-
-					y++;
+				if(Game::GetItemAtWorldCoords(x, y)) {
+					Game::WaterFlowerAtWorldCoords(x, y);
 				}
-				
-				res = true;
-				y = 0x10;
-				x++;
-
-				if(!Game::GetItemAtWorldCoords(x, y)) {
+				else {
 					res = false;
 				}
+
+				y++;
 			}
-			OSD::Notify("Success!");
+			
+			res = true;
+			y = 0x10;
+			x++;
+
+			if(!Game::GetItemAtWorldCoords(x, y)) {
+				res = false;
+			}
 		}
+
+		MessageBox(Language::getInstance()->get("WATER_FLOWER_SUCCESS")).SetClear(ClearScreen::Both)();
     }
 //Weed Remover
 	void weedremover(MenuEntry *entry) {	
-		const std::vector<std::string> weedopt = {
-			Language::getInstance()->get("WEED_REMOVER_OFF"), 
-			Language::getInstance()->get("WEED_REMOVER_ON")
-		};
-		
-		static int size = 400;
-		if(entry->Hotkeys[0].IsPressed()) {
-			Keyboard KB(Language::getInstance()->get("WEED_REMOVER_KEY"), weedopt);
-
-			switch(KB.Open()) {
-				case 0: size = 5000; break;
-				case 1: 
-				default: size = 300; break;
-			}
+		if (!MessageBox(Language::getInstance()->get("REMOVE_WEED_QUESTION"), DialogType::DialogYesNo).SetClear(ClearScreen::Both)()) {
+			return;
 		}
 		
-		else if(entry->Hotkeys[1].IsPressed()) {
-			int res = Dropper::Search_Replace(size, { {0x7C, 0}, {0x7D, 0}, {0x7E, 0}, {0x7F, 0}, {0xCC, 0}, {0xF8, 0} }, {0x7FFE, 0}, 0x3D, false, "Weed Removed!", true);
-			if(res == -1) {
-				OSD::Notify("Your player needs to be loaded!", Color::Red);
-			}
-			else if(res == -2) {
-				OSD::Notify("Only works outdoors!", Color::Red);
-			}
+		static int size = 300;
+		
+		int res = Dropper::Search_Replace(size, { {0x7C, 0}, {0x7D, 0}, {0x7E, 0}, {0x7F, 0}, {0xCC, 0}, {0xF8, 0} }, {0x7FFE, 0}, 0x3D, false, "Weed Removed!", true);
+		if(res == -1) {
+			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
+		}
+		else if(res == -2) {
+			MessageBox(Language::getInstance()->get("REMOVE_WEED_ONLY_OUTDOORS")).SetClear(ClearScreen::Both)();
+		} else {
+			MessageBox(Language::getInstance()->get("REMOVE_WEED_SUCCESS")).SetClear(ClearScreen::Both)();
 		}
 	}
 
@@ -250,6 +243,16 @@ namespace CTRPluginFramework {
 					opt = false;
 				break;
 			}
+		}
+	}
+
+	void KeepGrassState(MenuEntry *entry) {
+		static Address grassPatch(0x30CB34);
+
+		if (entry->WasJustActivated()) {
+			grassPatch.Patch(0xE12FFF1E); //bx lr
+		} else if (!entry->IsActivated()) {
+			grassPatch.Unpatch();
 		}
 	}
 

@@ -1,8 +1,8 @@
 #include "LibCtrpfExtras/HotkeyExtras.hpp"
 
-namespace CTRPluginFramework
-{
+namespace CTRPluginFramework {
     HotkeyExtras::HotkeyExtras(u32 keys, const std::string &nameKey)
-        : Hotkey(keys, setLanguageByKey(nameKey))
-    {}
+        : Hotkey(keys, setLanguageByKey(nameKey)) {
+        this->NameKey = nameKey;
+    }
 }

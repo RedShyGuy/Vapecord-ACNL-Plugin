@@ -3,6 +3,7 @@
 #include "Files.h"
 #include "Language.hpp"
 #include "Address/Address.hpp"
+#include "LibCtrpfExtras/PluginMenuExtras.hpp"
 
 namespace CTRPluginFramework {	
     void SetupLanguage(bool SetInMenu) {
@@ -56,7 +57,8 @@ namespace CTRPluginFramework {
 		}
 
 		if (SetInMenu) {
-			MessageBox("Successfully set new language, please restart the game to see changes.").SetClear(ClearScreen::Top)();
+			PluginMenuExtras::Update();
+			MessageBox("Successfully set new language!").SetClear(ClearScreen::Top)();
 		}
     }
 

@@ -211,7 +211,6 @@
     "CATALOG_TO_POCKET": "카탈로그 아이템을 내 주머니로",
     "CATALOG_TO_POCKET_NOTE": "카탈로그에 있는 아이템을 내 주머니로 쉽게 불러옵니다.\\n",
     "CATALOG_TO_POCKET_KEY1": "카탈로그 열기/아이템 얻기",
-    "CATALOG_TO_POCKET_KEY2": "정보 숨기기",
     "CHAT_T2I": "채팅으로 아이템 만들기",
     "CHAT_T2I_NOTE": "채팅 창을 열고 아이템 코드를 입력하고 특정 명령어 버튼을 누르면 아이템이 생성됩니다. 예) 2117 입력 후 '십자버튼 왼쪽'+'R' 동시에 누르기",
     "CHAT_T2I_KEY1": "아이템 생성",

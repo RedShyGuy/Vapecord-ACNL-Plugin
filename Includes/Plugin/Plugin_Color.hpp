@@ -27,6 +27,8 @@ namespace CTRPluginFramework {
         { FolderType::Environment, 0x64, 0xA0, 0x78 }, // Muted green
         { FolderType::Extra, 0x96, 0x96, 0xAA }, // Neutral grey-blue
         { FolderType::Misc, 0x5A, 0x5A, 0x5A }, // Dark grey
+        { FolderType::Default, 0xFF, 0xFF, 0xFF }, // White
+        { FolderType::Dev, 0xFF, 0x1A, 0x69 }  // Vibrant red
     };
 
     void WriteCustomColors(const std::vector<ColorEntry>& colors);

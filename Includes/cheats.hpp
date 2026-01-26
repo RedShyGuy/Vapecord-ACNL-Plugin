@@ -163,6 +163,7 @@ namespace CTRPluginFramework {
 	void weedremover(MenuEntry *entry);
 	void grasscomplete(MenuEntry *entry);
 	void grasseditor(MenuEntry *entry);
+	void KeepGrassState(MenuEntry *entry);
 	void BuriedInspector(MenuEntry *entry);
 	
 //Extra Codes
