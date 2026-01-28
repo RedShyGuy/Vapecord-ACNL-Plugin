@@ -5,75 +5,82 @@ from pathlib import Path
 BASE_DIR = Path(__file__).parent
 LANG_DIR = BASE_DIR / "languages"
 OUTPUT_BIN = BASE_DIR / "language.bin"
+ENUM_FILE = BASE_DIR.parent / "Includes/TextID.hpp"
 
-# Load language blocks from separate JSON files
-language_blocks = {}
+#Load Languages
+languages = {}
 lang_names = {}
-
 for file in sorted(LANG_DIR.glob("*.json")):
-    lang_code = file.stem  # filename without .json
+    lang_code = file.stem
     with open(file, "r", encoding="utf-8") as f:
-        content = json.load(f)
+        data = json.load(f)
+    languages[lang_code] = data["entries"]
+    lang_names[lang_code] = data.get("name", lang_code)
 
-    lang_name = content.get("name", lang_code)
-    entries = content.get("entries", {})
+#Sort keys
+master_keys = list(languages[next(iter(languages))].keys())
 
-    lang_names[lang_code] = lang_name
+#build binary for each language
+language_blocks = {}
+for lang, entries in languages.items():
+    blob = bytearray()
+    offsets = []
 
-    block = bytearray()
-    block += struct.pack("<I", len(entries))  # entry count
+    for key in master_keys:
+        text = entries[key]
+        offsets.append(len(blob))
+        blob += text.encode("utf-8") + b"\0"
 
-    for key, val in entries.items():
-        key_b = key.encode("utf-8")
-        val_b = val.encode("utf-8")
+    # Header for each language: [count u16][offsets u16*count][blob]
+    block = struct.pack("<H", len(master_keys))
+    for off in offsets:
+        block += struct.pack("<H", off)
+    block += blob
+    language_blocks[lang] = block
 
-        block += struct.pack("<H", len(key_b))
-        block += key_b
-        block += struct.pack("<H", len(val_b))
-        block += val_b
-
-    language_blocks[lang_code] = bytes(block)
-
-# ---- Build Header ----
+# Header for binary
 # [uint32 langCount]
-# For each language:
-# [uint8 langCodeLen][char[] langCode]
-# [uint8 langNameLen][char[] langName]
-# [uint32 offset][uint32 size]
-
+# for each language: [uint8 codeLen][char[] code] [uint8 nameLen][char[] name] [uint32 offset][uint32 size]
 header = bytearray()
 header += struct.pack("<I", len(language_blocks))
 
-# Calculate offset start (after header)
 offset = 4
 for lang, block in language_blocks.items():
-    name_b = lang.encode("utf-8")
-    display_b = lang_names[lang].encode("utf-8")
-    offset += 1 + len(name_b) + 1 + len(display_b) + 8
+    code_b = lang.encode("utf-8")
+    name_b = lang_names[lang].encode("utf-8")
+    offset += 1 + len(code_b) + 1 + len(name_b) + 8
 
 data_start = offset
 
-# Build final header with correct offsets
 final_header = bytearray()
 final_header += struct.pack("<I", len(language_blocks))
-
 current_offset = data_start
+
 for lang, block in language_blocks.items():
-    name_b = lang.encode("utf-8")
-    display_b = lang_names[lang].encode("utf-8")
+    code_b = lang.encode("utf-8")
+    name_b = lang_names[lang].encode("utf-8")
 
-    final_header += struct.pack("<B", len(name_b))
-    final_header += name_b
-    final_header += struct.pack("<B", len(display_b))
-    final_header += display_b
+    final_header += struct.pack("<B", len(code_b)) + code_b
+    final_header += struct.pack("<B", len(name_b)) + name_b
     final_header += struct.pack("<II", current_offset, len(block))
-
     current_offset += len(block)
 
-# ---- Write the binary output file ----
-with open(OUTPUT_BIN, "wb") as out:
-    out.write(final_header)
+#Write final binary file
+with open(OUTPUT_BIN, "wb") as f:
+    f.write(final_header)
     for lang in language_blocks:
-        out.write(language_blocks[lang])
+        f.write(language_blocks[lang])
 
 print(f"Created {OUTPUT_BIN.name} with {len(language_blocks)} languages")
+
+#Generate enum
+with open(ENUM_FILE, "w", encoding="utf-8") as f:
+    f.write("#pragma once\n\n")
+    f.write("#include <cstdint>\n\n")
+    f.write("enum class TextID : uint16_t {\n")
+    for i, key in enumerate(master_keys):
+        f.write(f"    {key} = {i},\n")
+    f.write(f"    NONE = {len(master_keys)},\n")
+    f.write("};\n")
+
+print(f"Created {ENUM_FILE.name} with {len(master_keys)} keys")

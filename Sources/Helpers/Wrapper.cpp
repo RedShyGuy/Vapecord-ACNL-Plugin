@@ -16,7 +16,7 @@ namespace CTRPluginFramework {
 			
 	//Couldnt open file		
 		if(dir.OpenFile(file, filename, File::RWC) != 0) {
-			MessageBox(Language::getInstance()->get("DUMP_ERROR2")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get(TextID::DUMP_ERROR2)).SetClear(ClearScreen::Top)();
 			return ExHandler::ERROR_OP; //error opening file
 		}
 
@@ -25,18 +25,18 @@ namespace CTRPluginFramework {
 
 		while(dump != nullptr) { //the last arg needs to be nullptr in order for the while loop to exit
 			if(file.Dump(*(u32 *)&dump->Address, dump->Lenght) != 0) {
-				MessageBox(Language::getInstance()->get("DUMP_ERROR1")).SetClear(ClearScreen::Top)();
+				MessageBox(Language::getInstance()->get(TextID::DUMP_ERROR1)).SetClear(ClearScreen::Top)();
 				return ExHandler::ERROR_DRD; //error dumping file
 			}
 
-			OSD::Notify(Utils::Format("Address: %08X", dump->Address));
-			OSD::Notify(Utils::Format("Lenght: %08X", dump->Lenght));
+			OSD::Notify(Utils::Format(Language::getInstance()->get(TextID::WRAPPER_ADDRESS).c_str(), dump->Address));
+			OSD::Notify(Utils::Format(Language::getInstance()->get(TextID::WRAPPER_LENGHT).c_str(), dump->Lenght));
 
 			dump = va_arg(dumps, WrapLoc*); //go to next argument		
 		}
 		va_end(dumps);
 
-		MessageBox(Language::getInstance()->get("DUMP_DUMPED") + file.GetFullName()).SetClear(ClearScreen::Top)();
+		MessageBox(Language::getInstance()->get(TextID::DUMP_DUMPED) + file.GetFullName()).SetClear(ClearScreen::Top)();
 		return ExHandler::SUCCESS; //success
 	}
 
@@ -63,7 +63,7 @@ namespace CTRPluginFramework {
 	//error if no directory and files found
 		if(f_Dir.empty() && f_File.empty()) {
 			if(HasMSGBox) {
-				MessageBox(Language::getInstance()->get("RESTORE_NOFILES")).SetClear(ClearScreen::Top)();
+				MessageBox(Language::getInstance()->get(TextID::RESTORE_NOFILES)).SetClear(ClearScreen::Top)();
 			}
 
 			return ExHandler::ERROR_LI; //error listing files
@@ -125,7 +125,7 @@ namespace CTRPluginFramework {
 
 		if(restoreDIR.OpenFile(file, f_All[uchoice] + filetype, File::RWC) != Directory::OPResult::SUCCESS) {
 			if(HasMSGBox) {
-				MessageBox(Language::getInstance()->get("RESTORE_ERROR2")).SetClear(ClearScreen::Top)();
+				MessageBox(Language::getInstance()->get(TextID::RESTORE_ERROR2)).SetClear(ClearScreen::Top)();
 			}
 
 			return ExHandler::ERROR_OP; //error opening file
@@ -137,7 +137,7 @@ namespace CTRPluginFramework {
 		while(rest != nullptr) {
 			if(file.Inject(*(u32 *)&rest->Address, rest->Lenght) != 0) {
 				if(HasMSGBox) {
-					MessageBox(Language::getInstance()->get("RESTORE_ERROR1")).SetClear(ClearScreen::Top)();
+					MessageBox(Language::getInstance()->get(TextID::RESTORE_ERROR1)).SetClear(ClearScreen::Top)();
 				}
 
 				return ExHandler::ERROR_DRD; //error injecting file
@@ -148,7 +148,7 @@ namespace CTRPluginFramework {
 		va_end(restore);
 
 		if(HasMSGBox) {
-			MessageBox(Language::getInstance()->get("RESTORE_RESTORE")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get(TextID::RESTORE_RESTORE)).SetClear(ClearScreen::Top)();
 		}
 
 		return ExHandler::SUCCESS; //success
@@ -164,7 +164,7 @@ namespace CTRPluginFramework {
 		}
 
 		if(f_list.empty()) {
-            MessageBox(Language::getInstance()->get("FILE_RES2")).SetClear(ClearScreen::Top)();
+            MessageBox(Language::getInstance()->get(TextID::FILE_RES2)).SetClear(ClearScreen::Top)();
             return ExHandler::ERROR_LI; //error listing files | no files found
         }
 
@@ -177,20 +177,20 @@ namespace CTRPluginFramework {
 		}
 
 		if(dir.OpenFile(file, f_list[uchoice], File::RWC) != 0) {
-			MessageBox(Language::getInstance()->get("RESTORE_ERROR2")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get(TextID::RESTORE_ERROR2)).SetClear(ClearScreen::Top)();
 			return ExHandler::ERROR_OP; //error opening file
 		}
 
-		if((MessageBox(Utils::Format(Language::getInstance()->get("FILE_PROMPT").c_str(), f_list.at(uchoice).c_str()), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
+		if((MessageBox(Utils::Format(Language::getInstance()->get(TextID::FILE_PROMPT).c_str(), f_list.at(uchoice).c_str()), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
 			File::Open(file, (path << std::string("/") << f_list.at(uchoice)), File::Mode::WRITE);
 			file.Flush();
 			file.Close();
 
 			if(File::Remove(path << std::string("/") << f_list.at(uchoice)) != 0) {
-				MessageBox(Language::getInstance()->get("FILE_RES3")).SetClear(ClearScreen::Top)();
+				MessageBox(Language::getInstance()->get(TextID::FILE_RES3)).SetClear(ClearScreen::Top)();
 				return ExHandler::ERROR_DRD; //error deleting file
 			}
-			MessageBox(Utils::Format(Language::getInstance()->get("FILE_RES1").c_str(), f_list.at(uchoice).c_str())).SetClear(ClearScreen::Top)();
+			MessageBox(Utils::Format(Language::getInstance()->get(TextID::FILE_RES1).c_str(), f_list.at(uchoice).c_str())).SetClear(ClearScreen::Top)();
 		}
 		dir.Close();
 		return ExHandler::SUCCESS; //success

@@ -6,6 +6,7 @@
 #include "Plugin/Plugin_Color.hpp"
 #include "LibCtrpfExtras/FolderTypes.hpp"
 #include "Files.h"
+#include "TextID.hpp"
 
 namespace CTRPluginFramework {
     class MenuFolderExtras : public MenuFolder {
@@ -38,70 +39,70 @@ namespace CTRPluginFramework {
         }
 
         static std::string GetFolderName(FolderType type) {
-            static const std::unordered_map<FolderType, const char*> keys = {
-                { FolderType::Save,        "SAVE_CODES" },
-                { FolderType::Movement,    "MOVEMENT_CODES" },
-                { FolderType::Inventory,   "INVENTORY_CODES" },
-                { FolderType::Player,      "PLAYER_CODES" },
-                { FolderType::Animation,   "ANIMATION_CODES" },
-                { FolderType::Seeding,     "SEEDING_CODES" },
-                { FolderType::Money,       "MONEY_CODES" },
-                { FolderType::Island,      "ISLAND_CODES" },
-                { FolderType::NPC,         "NPC_CODES" },
-                { FolderType::Environment, "ENV_CODES" },
-                { FolderType::Extra,       "EXTRA_CODES" },
-                { FolderType::Misc,        "MISC_CODES" },
-                { FolderType::Default,     "DEFAULT_CODES" },
-                { FolderType::Dev,         "DEV_CODES" }
+            static const std::unordered_map<FolderType, const TextID> keys = {
+                { FolderType::Save,        TextID::SAVE_CODES },
+                { FolderType::Movement,    TextID::MOVEMENT_CODES },
+                { FolderType::Inventory,   TextID::INVENTORY_CODES },
+                { FolderType::Player,      TextID::PLAYER_CODES },
+                { FolderType::Animation,   TextID::ANIMATION_CODES },
+                { FolderType::Seeding,     TextID::SEEDING_CODES },
+                { FolderType::Money,       TextID::MONEY_CODES },
+                { FolderType::Island,      TextID::ISLAND_CODES },
+                { FolderType::NPC,         TextID::NPC_CODES },
+                { FolderType::Environment, TextID::ENV_CODES },
+                { FolderType::Extra,       TextID::EXTRA_CODES },
+                { FolderType::Misc,        TextID::MISC_CODES },
+                { FolderType::Default,     TextID::DEFAULT_CODES },
+                { FolderType::Dev,         TextID::DEV_CODES }
             };
 
             auto it = keys.find(type);
-            return it != keys.end() ? Language::getInstance()->get(it->second) : "ERROR";
+            return it != keys.end() ? Language::getInstance()->get(it->second) : Language::getInstance()->get(TextID::NONE);
         }
 
         static std::string GetSubFolderName(FolderType parent, SubFolder sub) {
-            if (sub == SubFolder::None) {
-                return "";
+            TextID textID = TextID::NONE;
+
+            if (sub != SubFolder::None) {
+                switch (parent) {
+                    case FolderType::Player:
+                        switch (sub) {
+                            case SubFolder::PlayerSave: textID = TextID::PLAYER_SAVE_CODES;
+                            default: break;
+                        }
+                        break;
+
+                    case FolderType::Seeding:
+                        switch (sub) {
+                            case SubFolder::Seed: textID = TextID::SEED_CODES;
+                            case SubFolder::Drop: textID = TextID::DROP_CODES;
+                            case SubFolder::Tree: textID = TextID::TREE_CODES;
+                            default: break;
+                        }
+                        break;
+
+                    case FolderType::Environment:
+                        switch (sub) {
+                            case SubFolder::Fish: textID = TextID::FISH_CODES;
+                            case SubFolder::Insect: textID = TextID::INSECT_CODES;
+                            default: break;
+                        }
+                        break;
+
+                    case FolderType::Extra:
+                        switch (sub) {
+                            case SubFolder::Chat: textID = TextID::CHAT_CODES;
+                            case SubFolder::Fun: textID = TextID::FUN_CODES;
+                            default: break;
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
             }
 
-            switch (parent) {
-                case FolderType::Player:
-                    switch (sub) {
-                        case SubFolder::PlayerSave: return Language::getInstance()->get("PLAYER_SAVE_CODES");
-                        default: break;
-                    }
-                    break;
-
-                case FolderType::Seeding:
-                    switch (sub) {
-                        case SubFolder::Seed: return Language::getInstance()->get("SEED_CODES");
-                        case SubFolder::Drop: return Language::getInstance()->get("DROP_CODES");
-                        case SubFolder::Tree: return Language::getInstance()->get("TREE_CODES");
-                        default: break;
-                    }
-                    break;
-
-                case FolderType::Environment:
-                    switch (sub) {
-                        case SubFolder::Fish: return Language::getInstance()->get("FISH_CODES");
-                        case SubFolder::Insect: return Language::getInstance()->get("INSECT_CODES");
-                        default: break;
-                    }
-                    break;
-
-                case FolderType::Extra:
-                    switch (sub) {
-                        case SubFolder::Chat: return Language::getInstance()->get("CHAT_CODES");
-                        case SubFolder::Fun: return Language::getInstance()->get("FUN_CODES");
-                        default: break;
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-
-            return "ERROR";
+            return Language::getInstance()->get(textID);
         }
 
         static Color GetFolderColor(FolderType type) {
@@ -124,12 +125,8 @@ namespace CTRPluginFramework {
             return Color::White; // fallback
         }
     private:
-        std::function<std::string()> NameGetter;
+        std::vector<TextID> NameKeys;
         FolderType folderType;
         SubFolder subFolder;
-
-        static std::string setLanguageByKey(const std::string& langKey) {
-            return Language::getInstance()->get(langKey);
-        }
     };
 }

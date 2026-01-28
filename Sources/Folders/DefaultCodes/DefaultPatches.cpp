@@ -7,11 +7,11 @@
 namespace CTRPluginFramework {
 	void ToggleWithOptionKeyboard(const std::function<void(bool)>& fn) {
         std::vector<std::string> cmnOpt =  {
-			Language::getInstance()->get("VECTOR_ENABLE"),
-			Language::getInstance()->get("VECTOR_DISABLE")
+			Language::getInstance()->get(TextID::VECTOR_ENABLE),
+			Language::getInstance()->get(TextID::VECTOR_DISABLE)
 		};
 
-		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), cmnOpt);
+		Keyboard optKb(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION), cmnOpt);
         int res = optKb.Open();
 		if (res < 0) {
 			return;

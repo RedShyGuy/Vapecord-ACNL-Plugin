@@ -36,7 +36,7 @@ namespace CTRPluginFramework {
 
 		Keyboard CKB("text");
 
-		Keyboard OKB(Language::getInstance()->get("KEY_CHOOSE_OPTION"));
+		Keyboard OKB(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION));
 		OKB.Populate(customdopt);
 		switch(OKB.Open()) {
 			default: break;
@@ -92,11 +92,11 @@ namespace CTRPluginFramework {
 		std::vector<std::string> cmnOpt =  { "" };
 
 		if(Turbo_Call) 
-			cmnOpt[0] = Color(pGreen) << Language::getInstance()->get("VECTOR_ENABLED");
+			cmnOpt[0] = Color(pGreen) << Language::getInstance()->get(TextID::VECTOR_ENABLED);
 		else 
-			cmnOpt[0] = Color(pRed) << Language::getInstance()->get("VECTOR_DISABLED");
+			cmnOpt[0] = Color(pRed) << Language::getInstance()->get(TextID::VECTOR_DISABLED);
 
-		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"));
+		Keyboard optKb(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION));
 		optKb.Populate(cmnOpt);
 		int op = optKb.Open();
 		if(op == -1)
@@ -174,7 +174,7 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO"))();
+			MessageBox(Language::getInstance()->get(TextID::SAVE_PLAYER_NO))();
 			return;
 		}
 		
@@ -193,7 +193,7 @@ namespace CTRPluginFramework {
 
 		WrapLoc locPlayer;
 		
-		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"));
+		Keyboard optKb(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION));
 		optKb.Populate(select);
 		switch(optKb.Open()) {
 			default: break;
@@ -209,7 +209,7 @@ namespace CTRPluginFramework {
 					}
 				}
 		
-				Keyboard pKB(Language::getInstance()->get("KEY_SELECT_PLAYER"));
+				Keyboard pKB(Language::getInstance()->get(TextID::KEY_SELECT_PLAYER));
 				pKB.Populate(pV);
 				int pChoice = pKB.Open();
 				
@@ -1700,31 +1700,6 @@ namespace CTRPluginFramework {
 		lastRoom[roomIndex] = *room;
 	}
 
-	static ACNL_PlayerHouse lastPlayerHouse;
-
-	void CheckPlayerHouse(ACNL_PlayerHouse *playerHouse) {
-		if (!playerHouse) {
-			return;
-		}
-
-		static bool initialized = false;
-
-		if (!initialized) {
-			lastPlayerHouse = *playerHouse;
-			initialized = true;
-			return;
-		}
-
-		if (playerHouse->CockroachAmount != lastPlayerHouse.CockroachAmount)
-			OSD::Notify(Utils::Format("CockroachAmount changed to %02X", playerHouse->CockroachAmount));
-		if (playerHouse->Unk8 != lastPlayerHouse.Unk8)
-			OSD::Notify(Utils::Format("Unk8 changed to %02X", playerHouse->Unk8));
-		if (playerHouse->Unk9 != lastPlayerHouse.Unk9)
-			OSD::Notify(Utils::Format("Unk9 changed to %02X", playerHouse->Unk9));
-
-		lastPlayerHouse = *playerHouse;
-	}
-
 	void displaySaveFlagDifference(MenuEntry *entry) {
 		ACNL_Player *player = Player::GetSaveData();
 		ACNL_TownData *town = Town::GetSaveData();
@@ -1760,8 +1735,6 @@ namespace CTRPluginFramework {
 				CheckRoomFlags(i, rooms[i]);
 				CheckMiniRoomStruct(i, rooms[i]);
 			}
-
-			CheckPlayerHouse(house);
 		}
 
 		if(!player) 

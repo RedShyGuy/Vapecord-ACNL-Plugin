@@ -34,23 +34,23 @@ namespace CTRPluginFramework {
 		static Address corrupt(0x47E3F0);
 		
 		static const std::vector<std::string> sizeopt = {
-			Language::getInstance()->get("VECTOR_SIZE_PLAYER"),
-			Language::getInstance()->get("VECTOR_SIZE_BUGFISH"),
-			Language::getInstance()->get("VECTOR_SIZE_NPC"),
-			Language::getInstance()->get("VECTOR_SIZE_EFFECT"),
-			Language::getInstance()->get("VECTOR_SIZE_SHADOW"),
-			Language::getInstance()->get("VECTOR_SIZE_TOWN"),
-			Language::getInstance()->get("VECTOR_SIZE_HORI"),
-			Language::getInstance()->get("VECTOR_SIZE_VERT"),
-			Language::getInstance()->get("VECTOR_SIZE_HEAD"),
-			Language::getInstance()->get("VECTOR_SIZE_CORRUPT"),
-			Language::getInstance()->get("VECTOR_SIZE_RESET")
+			Language::getInstance()->get(TextID::VECTOR_SIZE_PLAYER),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_BUGFISH),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_NPC),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_EFFECT),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_SHADOW),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_TOWN),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_HORI),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_VERT),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_HEAD),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_CORRUPT),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_RESET)
 		};
 		
 		std::vector<std::string> sizesopt = {
-			Language::getInstance()->get("VECTOR_SIZE_BIGGER"),
-			Language::getInstance()->get("VECTOR_SIZE_DEFAULT"),
-			Language::getInstance()->get("VECTOR_SIZE_SMALLER"),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_BIGGER),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_DEFAULT),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_SMALLER),
 			"Custom"
 		};
 		
@@ -65,7 +65,7 @@ namespace CTRPluginFramework {
 
 		float size = 0.0;
 		
-		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), sizeopt);
+		Keyboard optKb(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION), sizeopt);
 
 		int op = optKb.Open();
 		if(op < 0) {
@@ -210,7 +210,7 @@ namespace CTRPluginFramework {
 		}
 
 		if(entry->Hotkeys[0].IsPressed()) {
-			Wrap::KB<u16>(Language::getInstance()->get("ULTIMATE_PARTY_POPPER_ENTER_EFFECT"), true, 3, PartyEffectID, PartyEffectID);
+			Wrap::KB<u16>(Language::getInstance()->get(TextID::ULTIMATE_PARTY_POPPER_ENTER_EFFECT), true, 3, PartyEffectID, PartyEffectID);
 		}
 
 		if(player->HeldItem.ID == 0x336A) {
@@ -411,13 +411,13 @@ namespace CTRPluginFramework {
 			"Eye Expression", "Mouth Expression"
 		};
 		
-		Keyboard KB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), options);
+		Keyboard KB(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION), options);
 		int res = KB.Open();
 		if(res < 0) {
 			return;
 		}
 
-		KB.GetMessage() = Language::getInstance()->get("ENTER_ID");
+		KB.GetMessage() = Language::getInstance()->get(TextID::ENTER_ID);
 		KB.IsHexadecimal(true);
 		KB.Open(res == 0 ? c_eyeID : c_mouthID, res == 0 ? c_eyeID : c_mouthID);
 	}

@@ -21,7 +21,7 @@ namespace CTRPluginFramework {
 		
 		Color color(r, g, b);
 
-		keyboard.GetMessage() = color << loremIpsum + ColorExtras::RemoveColor("\n\nFormat: RRGGBB");
+		keyboard.GetMessage() = color << loremIpsum + "\n\n" + ColorExtras::RemoveColor(Language::getInstance()->get(TextID::COLOR_FORMAT_RGB));
 	}
 
 	void EditColors() {
@@ -83,7 +83,7 @@ namespace CTRPluginFramework {
 
 		PluginMenuExtras::Update();
 		
-        MessageBox("Color changed successfully!").SetClear(ClearScreen::Top)();
+        MessageBox(Language::getInstance()->get(TextID::COLOR_CHANGE_SUCCESS)).SetClear(ClearScreen::Top)();
 	}
 
     bool CustomColorsExist() {

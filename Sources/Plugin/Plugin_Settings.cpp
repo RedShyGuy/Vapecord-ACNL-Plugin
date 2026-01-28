@@ -8,11 +8,11 @@
 namespace CTRPluginFramework {
 	void pluginSettingsEntry(MenuEntry *entry) {
 		static const std::vector<std::string> settingsOptions = {
-			"Change Language",
-			"Change Menu Colors"
+			Language::getInstance()->get(TextID::CHANGE_LANGUAGE),
+			Language::getInstance()->get(TextID::CHANGE_MENU_COLORS)
 		};
 
-		Keyboard keyboard("Plugin Settings", settingsOptions);
+		Keyboard keyboard(Language::getInstance()->get(TextID::PLUGIN_SETTINGS), settingsOptions);
 		int choice = keyboard.Open();
 		if (choice < 0) {
 			return;

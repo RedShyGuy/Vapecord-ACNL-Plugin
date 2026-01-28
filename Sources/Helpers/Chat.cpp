@@ -44,7 +44,7 @@ namespace CTRPluginFramework {
 			Sleep(Seconds(2));
 			Animation::ExecuteAnimationWrapper(GetPlayerIndex(), 6, {0, 0}, 0, 0, 0, 0, x, y, true);
 
-			OSD::Notify(Utils::Format("Animation: %02X", animID)); 
+			OSD::Notify(Utils::Format(Language::getInstance()->get(TextID::CHAT_ANIMATION).c_str(), animID)); 
 		}
 	}
 
@@ -55,7 +55,7 @@ namespace CTRPluginFramework {
 			Sleep(Seconds(2));
 			Animation::ExecuteAnimationWrapper(GetPlayerIndex(), 6, {0, 0}, 0, 0, 0, 0, x, y, true);
 
-			OSD::Notify(Utils::Format("Emotion: %02X", emotionID));
+			OSD::Notify(Utils::Format(Language::getInstance()->get(TextID::CHAT_EMOTION).c_str(), emotionID));
 		}
 	}
 
@@ -66,7 +66,7 @@ namespace CTRPluginFramework {
 			Sleep(Seconds(2));
 			Animation::ExecuteAnimationWrapper(GetPlayerIndex(), 6, {0, 0}, 0, 0, 0, 0, x, y, true);
 
-			OSD::Notify(Utils::Format("Snake: %03X", snakeID)); 
+			OSD::Notify(Utils::Format(Language::getInstance()->get(TextID::CHAT_SNAKE).c_str(), snakeID)); 
 		}
 	}
 
@@ -77,7 +77,7 @@ namespace CTRPluginFramework {
 			Sleep(Milliseconds(100));
 			Animation::ExecuteAnimationWrapper(GetPlayerIndex(), 6, {0, 0}, 0, 0, 0, 0, x, y, true);
 
-			OSD::Notify(Utils::Format("Music: %03X", musicID)); 
+			OSD::Notify(Utils::Format(Language::getInstance()->get(TextID::CHAT_MUSIC).c_str(), musicID)); 
 		}
 	}
 
@@ -86,7 +86,7 @@ namespace CTRPluginFramework {
 		if(PlayerClass::GetInstance()->GetWorldCoords(&x, &y)) {	
 			Dropper::PlaceItemWrapper(0xA, ReplaceEverything, &itemID, &itemID, x, y, 0, 0, 0, 0, 0, 0x56, 0xA5, false);
 
-			OSD::Notify(Utils::Format("Item: %08X", *(u32*)&itemID));
+			OSD::Notify(Utils::Format(Language::getInstance()->get(TextID::CHAT_ITEM).c_str(), *(u32*)&itemID));
 		}	
 	}
 
@@ -126,7 +126,7 @@ namespace CTRPluginFramework {
 				AnimationCommand();
 			}
 			else {
-				OSD::Notify("Invalid Animation ID");
+				OSD::Notify(Language::getInstance()->get(TextID::CHAT_INVALID_ANIMATION));
                 return;
             }
 		}
@@ -137,7 +137,7 @@ namespace CTRPluginFramework {
 				EmotionCommand();
 			}
 			else {
-				OSD::Notify("Invalid Emotion ID");
+				OSD::Notify(Language::getInstance()->get(TextID::CHAT_INVALID_EMOTION));
                 return;
             }
 		}
@@ -148,7 +148,7 @@ namespace CTRPluginFramework {
 				SnakeCommand();
 			}
 			else {
-				OSD::Notify("Invalid Snake ID");
+				OSD::Notify(Language::getInstance()->get(TextID::CHAT_INVALID_SNAKE));
                 return;
             }
 		}
@@ -159,7 +159,7 @@ namespace CTRPluginFramework {
 				MusicCommand();
 			}
 			else {
-				OSD::Notify("Invalid Music ID");
+				OSD::Notify(Language::getInstance()->get(TextID::CHAT_INVALID_MUSIC));
                 return;
             }
 		}
@@ -173,7 +173,7 @@ namespace CTRPluginFramework {
 				ItemCommand();
 			}
 			else {
-				OSD::Notify("Invalid Item ID");
+				OSD::Notify(Language::getInstance()->get(TextID::INVALID_ITEM));
 				return;
 			}
 		}
@@ -182,13 +182,13 @@ namespace CTRPluginFramework {
 			UtilsExtras::Trim(ItemName);
 			ItemNamePack match;
 			if (!Item::searchByKeyword(ItemName, match)) {
-				OSD::Notify("No Item found with that name");
+				OSD::Notify(Language::getInstance()->get(TextID::CHAT_NO_ITEM_FOUND));
 				return;
 			}
 
 			itemID = Item(match.ID); //sets item
 			if(!itemID.isValid()) { //should always be true if orig file is used
-				OSD::Notify("Invalid Item ID");
+				OSD::Notify(Language::getInstance()->get(TextID::INVALID_ITEM));
 				return;
 			}
 

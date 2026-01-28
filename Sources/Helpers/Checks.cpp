@@ -9,6 +9,8 @@
 #include "Files.h"
 #include "Helpers/Checks.hpp"
 #include "RuntimeContext.hpp"
+#include "Language.hpp"
+#include "TextID.hpp"
 
 extern "C" bool __IsAnimID(u8 toolAnimID) {
 	static const u8 toolAnimIDArr[18] = { 0xB0, 0x49, 0x55, 0x6C, 0xA0, 0x98, 0x8F, 0x91, 0xC3, 0xCE, 0xCF, 0x8D, 0x8E, 0x91, 0xB1, 0xB1, 0x70, 0x9A };
@@ -38,7 +40,7 @@ extern "C" bool __IsPlayerHouse() {
 namespace CTRPluginFramework {
 	void CheckInvalidBadge(u32 data, u32 badge, int badgeType, u32 r3, u32 r4) {
 		if (badgeType > 3) {
-			OSD::Notify("Invalid Badge Type! Can't display badge properly.", Color::Red);
+			OSD::Notify(Language::getInstance()->get(TextID::CHECKS_INVALID_BADGE), Color::Red);
 			return;
 		}
 
@@ -153,7 +155,7 @@ namespace CTRPluginFramework {
 					Process::Write32(r1 + 0x1C, 0x00040000);
 					Process::Write32(r1 + 0x20, 0xCD030100);
 
-					Process::WriteString(r1 + 0x24, itemslotid.isValid(false) ? name : "Invalid Item", StringFormat::Utf16);				
+					Process::WriteString(r1 + 0x24, itemslotid.isValid(false) ? name : Language::getInstance()->get(TextID::INVALID_ITEM), StringFormat::Utf16);				
 				}
 			}
 		}
@@ -177,7 +179,7 @@ namespace CTRPluginFramework {
 					Process::Write32(InvPointer + 0xD00, 0x00040000);
 					Process::Write32(InvPointer + 0xD04, 0xCD030100);
  
-					Process::WriteString(InvPointer + 0xD08, itemslotid.isValid(false) ? name : "Invalid Item", StringFormat::Utf16);				
+					Process::WriteString(InvPointer + 0xD08, itemslotid.isValid(false) ? name : Language::getInstance()->get(TextID::INVALID_ITEM), StringFormat::Utf16);				
 				}
 			}
 		}
@@ -223,7 +225,7 @@ namespace CTRPluginFramework {
 
 	int CatalogPatch_Keyboard(u32 u0, u32 u1, u32 u2) {
 		if(!Game::IsGameInRoom(0x38) && !Game::IsGameInRoom(0x39) && !Game::IsGameInRoom(0x3A) && !Game::IsGameInRoom(0x3B) && !Game::IsGameInRoom(0x3C)) {
-			OSD::Notify("Search function is currently not supported!", Color::Red);
+			OSD::Notify(Language::getInstance()->get(TextID::CHECKS_SEARCH_NOT_SUPPORTED), Color::Red);
 			return 0;
 		}
 
@@ -244,7 +246,7 @@ namespace CTRPluginFramework {
 		return Controller::IsKeyDown(Key::Start);
 	}
 
-    void SetTitle(u32 dataParam, u32 *stack) {
+    /*void SetTitle(u32 dataParam, u32 *stack) {
         Process::WriteString(stack[1], "Did you know?", StringFormat::Utf16);
 
 		const HookContext &curr = HookContext::GetCurrent();
@@ -259,6 +261,7 @@ namespace CTRPluginFramework {
         static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
         func.Call<void>(dataParam, stack);
     }
+	*/
 
 	const char* SetProDesignStyle(Item *ItemID, u32 data, u32 data2) {
 		switch(ItemID->ID) {

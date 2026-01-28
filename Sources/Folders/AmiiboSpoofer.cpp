@@ -13,7 +13,7 @@ namespace CTRPluginFramework {
         u32 offset = *(u32*)arg;
         Process::Pause(); //Pause game while user selects, so the timeout doesn't occur
 
-        Keyboard keyboard(Language::getInstance()->get("AMIIBO_SPOOFER_SPECIES"));
+        Keyboard keyboard(Language::getInstance()->get(TextID::AMIIBO_SPOOFER_SPECIES));
         std::vector<std::string> keyVec;
 
         NPC::PopulateRace(keyVec);
@@ -24,7 +24,7 @@ namespace CTRPluginFramework {
 
         Process::Write32(offset + 0x10C, 0); //Game always sets this in the original function, so I'll do it too 
         if(res >= 0) { //User picked a species
-            keyboard.GetMessage() = std::string(Language::getInstance()->get("AMIIBO_SPOOFER_VILLAGER"));
+            keyboard.GetMessage() = std::string(Language::getInstance()->get(TextID::AMIIBO_SPOOFER_VILLAGER));
             keyVec.clear();
 
             std::vector<PACKED_AmiiboInfo> amiiboVec;

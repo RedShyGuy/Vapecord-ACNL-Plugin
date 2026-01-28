@@ -8,6 +8,8 @@
 #include "Helpers/Town.hpp"
 #include "Address/Address.hpp"
 #include "RuntimeContext.hpp"
+#include "Language.hpp"
+#include "TextID.hpp"
 
 namespace CTRPluginFramework {
 	namespace Game {
@@ -121,22 +123,22 @@ namespace CTRPluginFramework {
 		void MoveBuilding() {
 			ACNL_BuildingData *building = Building::GetSaveData();
 			if(!building) {
-				OSD::Notify("Unknown Error: Building Save Data not loaded!", Color::Red);
+				OSD::Notify(Language::getInstance()->get(TextID::BUILDING_MOD_SAVE_DATA_NOT_LOADED), Color::Red);
 				return;
 			}
 
 			if(!PlayerClass::GetInstance()->IsLoaded()) {
-				OSD::Notify("Error: Player Needs To Be Loaded!", Color::Red);
+				OSD::Notify(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
 				return;
 			}
 			
 			if(!IsGameInRoom(0)) {
-				OSD::Notify("Error: Only Works In Town!", Color::Red);
+				OSD::Notify(Language::getInstance()->get(TextID::BUILDING_MOD_NOT_IN_TOWN), Color::Red);
 				return;
 			}
 			
 			if(GetOnlinePlayerCount() != 0) {
-				OSD::Notify("Error: Only Works In Your Own Town!", Color::Red);
+				OSD::Notify(Language::getInstance()->get(TextID::BUILDING_MOD_NOT_IN_OWN_TOWN), Color::Red);
 				return;
 			}
 			
@@ -172,22 +174,22 @@ namespace CTRPluginFramework {
 		void RemoveBuilding() {
 			ACNL_BuildingData *building = Building::GetSaveData();
 			if(!building) {
-				OSD::Notify("Unknown Error: Building Save Data not loaded!", Color::Red);
+				OSD::Notify(Language::getInstance()->get(TextID::BUILDING_MOD_SAVE_DATA_NOT_LOADED), Color::Red);
 				return;
 			}
 
 			if(!PlayerClass::GetInstance()->IsLoaded()) {
-				OSD::Notify("Error: Player Needs To Be Loaded!", Color::Red);
+				OSD::Notify(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
 				return;
 			}
 			
 			if(!IsGameInRoom(0)) {
-				OSD::Notify("Error: Only Works In Town!", Color::Red);
+				OSD::Notify(Language::getInstance()->get(TextID::BUILDING_MOD_NOT_IN_TOWN), Color::Red);
 				return;
 			}
 			
 			if(GetOnlinePlayerCount() != 0) {
-				OSD::Notify("Error: Only Works In Your Own Town!", Color::Red);
+				OSD::Notify(Language::getInstance()->get(TextID::BUILDING_MOD_NOT_IN_OWN_TOWN), Color::Red);
 				return;
 			}
 			
@@ -211,7 +213,7 @@ namespace CTRPluginFramework {
 			}
 			
 			if(!IDList::BuildingValid(building->Buildings.Building[index.at(val)].ID)) {
-				OSD::Notify("Error: You can not remove that building!", Color::Red);
+				OSD::Notify(Language::getInstance()->get(TextID::BUILDING_MOD_CANT_REMOVE), Color::Red);
 				return;
 			}
 
@@ -248,27 +250,27 @@ namespace CTRPluginFramework {
 	//place building
 		void PlaceBuilding(u8 buildingID) {
 			if(!PlayerClass::GetInstance()->IsLoaded()) {
-				OSD::Notify("Error: Player Needs To Be Loaded!", Color::Red);
+				OSD::Notify(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
 				return;
 			}
 			
 			if(!IsGameInRoom(0)) {
-				OSD::Notify("Error: Only Works In Town!", Color::Red);
+				OSD::Notify(Language::getInstance()->get(TextID::BUILDING_MOD_NOT_IN_TOWN), Color::Red);
 				return;
 			}
 			
 			if(!IDList::BuildingValid(buildingID)) {
-				OSD::Notify("Error: Building Invalid!", Color::Red);
+				OSD::Notify(Language::getInstance()->get(TextID::BUILDING_MOD_INVALID_ID), Color::Red);
 				return;
 			}
 			
 			if(GetOnlinePlayerCount() != 0) {
-				OSD::Notify("Error: Only Works In Your Own Town!", Color::Red);
+				OSD::Notify(Language::getInstance()->get(TextID::BUILDING_MOD_NOT_IN_OWN_TOWN), Color::Red);
 				return;
 			}
 			
 			if(!IsBuildingSpotFree()) {
-				OSD::Notify("Error: No Building Slot free!", Color::Red);
+				OSD::Notify(Language::getInstance()->get(TextID::BUILDING_MOD_NO_SLOT_FREE), Color::Red);
 				return;
 			}
 		
@@ -495,7 +497,7 @@ namespace CTRPluginFramework {
 
 							Controller::Update();
 							if(Controller::IsKeyPressed(Key::B) && allowAbort) {
-								OSD::Notify("Aborted.");
+								OSD::Notify(Language::getInstance()->get(TextID::SEARCH_REPLACE_ABORT));
 								goto end;
 							}
 						}
@@ -528,7 +530,7 @@ namespace CTRPluginFramework {
 			}
 			
 			if(counting) {
-				OSD::Notify(std::to_string(count) << " items removed!");
+				OSD::Notify(Utils::Format(Language::getInstance()->get(TextID::SEARCH_REPLACE_REPLACED).c_str(), count));
 			}
 			
 			return true;

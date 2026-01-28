@@ -5,21 +5,12 @@ import re
 # Config
 PROJECT_ROOT = Path(__file__).parent
 LANG_JSON_DIR = PROJECT_ROOT / "LanguageBinCreator" / "languages"
+TEXTID_ENUM_FILE = PROJECT_ROOT.parent / "Includes" / "TextID.hpp"
 
-# Regex: match anything inside get("...") or get('...')
-LANG_PATTERN = re.compile(r'Language::getInstance\(\)->get\(\s*["\'](.+?)["\']\s*\)')
+# Regex: match anything like TextID::SOME_KEY
+TEXTID_PATTERN = re.compile(r'TextID::([A-Z0-9_]+)')
 
-# MenuFolderExtras: first parameter
-MENUFOLDER_PATTERN = re.compile(r'MenuFolderExtras\(\s*["\'](.+?)["\']')
-
-# MenuEntryExtras: last string parameter
-
-MENUENTRY_PATTERN = re.compile(r'MenuEntryExtras\((.*?)\)')
-
-# HotkeyExtras: second parameter
-HOTKEY_PATTERN = re.compile(r'HotkeyExtras\([^,]+,\s*["\'](.+?)["\']\s*\)')
-
-# Scan code files for keys
+# Scan code files for enum keys
 keys_used = set()
 
 for file_path in PROJECT_ROOT.rglob("*"):
@@ -30,18 +21,13 @@ for file_path in PROJECT_ROOT.rglob("*"):
             print(f"[WARNING] Could not read {file_path}: {e}")
             continue
 
-        matches = MENUFOLDER_PATTERN.findall(content) + \
-          HOTKEY_PATTERN.findall(content) + \
-          LANG_PATTERN.findall(content)
-
+        matches = TEXTID_PATTERN.findall(content)
         keys_used.update(matches)
 
-        params = MENUENTRY_PATTERN.findall(content)
-        for param_str in params:
-            string_keys = re.findall(r'["\'](.+?)["\']', param_str)
-            keys_used.update(string_keys)
+# Ignore NONE
+keys_used.discard("NONE")
 
-# Load all JSON entries
+# Load all JSON entries (master_keys)
 json_files = list(LANG_JSON_DIR.glob("*.json"))
 json_entries_per_file = {}
 
@@ -66,11 +52,11 @@ for key in keys_used:
 
 # Print results
 if not missing_keys_report:
-    print("All language keys exist in every JSON file!")
+    print("All TextID keys exist in every JSON file!")
 else:
-    print(f"Some language keys are missing in JSON files ({len(missing_keys_report)}):")
+    print(f"Some TextID keys are missing in JSON files ({len(missing_keys_report)}):")
     for key, missing_files in sorted(missing_keys_report.items()):
         print(f"  - {key} missing in: {', '.join(missing_files)}")
 
-print(f"\nTotal keys found in code: {len(keys_used)}")
+print(f"\nTotal TextID keys found in code: {len(keys_used)}")
 print(f"JSON files scanned: {len(json_files)}")

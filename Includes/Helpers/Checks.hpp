@@ -21,8 +21,8 @@ namespace CTRPluginFramework {
     int CatalogPatch_Keyboard(u32 u0, u32 u1, u32 u2);
     bool CatalogPatch_SearchFunction(void);
     bool IsSTARTDown(u32 data, u32 key);
-    void SetTitle(u32 dataParam, u32 *stack);
-    void SetText(u32 dataParam, u32 *stack);
+    //void SetTitle(u32 dataParam, u32 *stack);
+    //void SetText(u32 dataParam, u32 *stack);
     const char* SetProDesignStyle(Item *ItemID, u32 data, u32 data2);
     bool FruitStacking(u32 InvAddress, int slot, Item *item, u32 ItemLock, u32 ItemToReplace);
 }

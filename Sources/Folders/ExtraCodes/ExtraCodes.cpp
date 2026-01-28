@@ -82,15 +82,15 @@ namespace CTRPluginFramework {
 
 	void SetSpotState(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get(TextID::SAVE_PLAYER_NO)).SetClear(ClearScreen::Top)();
 			return;
 		}
 
 		const std::vector<std::string> spotVEC = {
-			Language::getInstance()->get("VECTOR_QUICK_LOCK_SPOT"), 
-			Language::getInstance()->get("VECTOR_QUICK_UNLOCK_SPOT"),
-			Language::getInstance()->get("VECTOR_QUICK_LOCK_MAP"),
-			Language::getInstance()->get("VECTOR_QUICK_UNLOCK_MAP")
+			Language::getInstance()->get(TextID::VECTOR_QUICK_LOCK_SPOT), 
+			Language::getInstance()->get(TextID::VECTOR_QUICK_UNLOCK_SPOT),
+			Language::getInstance()->get(TextID::VECTOR_QUICK_LOCK_MAP),
+			Language::getInstance()->get(TextID::VECTOR_QUICK_UNLOCK_MAP)
 		};
 
 		u32 x = 0, y = 0;
@@ -100,7 +100,7 @@ namespace CTRPluginFramework {
 			Dropper::DropItemLock(false);
 		}
 
-		Keyboard KB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), spotVEC);
+		Keyboard KB(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION), spotVEC);
 		switch(KB.Open()) {
 			default: break;
 			case 0: {
@@ -169,7 +169,7 @@ namespace CTRPluginFramework {
 //search and replace
 	void SearchReplace(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get(TextID::SAVE_PLAYER_NO)).SetClear(ClearScreen::Top)();
 			return;
 		}
 
@@ -178,11 +178,11 @@ namespace CTRPluginFramework {
 		Item ItemToSearch = {0x7FFE, 0};
 		Item ItemToReplace = {0x7FFE, 0};
 		
-		if(!Wrap::KB<u32>(Language::getInstance()->get("QUICK_MENU_SEARCH_REPLACE_SEARCH"), true, 8, *(u32 *)&ItemToSearch, 0x7FFE)) {
+		if(!Wrap::KB<u32>(Language::getInstance()->get(TextID::QUICK_MENU_SEARCH_REPLACE_SEARCH), true, 8, *(u32 *)&ItemToSearch, 0x7FFE)) {
 			return;
 		}
 		
-		if(!Wrap::KB<u32>(Language::getInstance()->get("QUICK_MENU_SEARCH_REPLACE_REPLACE"), true, 8, *(u32 *)&ItemToReplace, *(u32 *)&ItemToReplace)) {
+		if(!Wrap::KB<u32>(Language::getInstance()->get(TextID::QUICK_MENU_SEARCH_REPLACE_REPLACE), true, 8, *(u32 *)&ItemToReplace, *(u32 *)&ItemToReplace)) {
 			return;
 		}
 		
@@ -205,11 +205,11 @@ namespace CTRPluginFramework {
 //remove all town items
 	void RemoveItemsCheat(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get(TextID::SAVE_PLAYER_NO)).SetClear(ClearScreen::Top)();
 			return;
 		}
 
-		if((MessageBox(Language::getInstance()->get("REMOVE_ITEM_WARNING"), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
+		if((MessageBox(Language::getInstance()->get(TextID::REMOVE_ITEM_WARNING), DialogType::DialogYesNo)).SetClear(ClearScreen::Top)()) {
 			Game::RemoveItems(true, 0, 0, 0xFF, 0xFF, true, true);
 		}
 	}
@@ -228,16 +228,16 @@ namespace CTRPluginFramework {
 	
 	bool CheckTimeInput(const void *input, std::string &error) {
 		const std::string TimeMode[5] = { 
-			Language::getInstance()->get("TIME_MINUTE"),
-			Language::getInstance()->get("TIME_HOUR"),
-			Language::getInstance()->get("TIME_DAY"),
-			Language::getInstance()->get("TIME_MONTH"),
-			Language::getInstance()->get("TIME_YEAR")
+			Language::getInstance()->get(TextID::TIME_MINUTE),
+			Language::getInstance()->get(TextID::TIME_HOUR),
+			Language::getInstance()->get(TextID::TIME_DAY),
+			Language::getInstance()->get(TextID::TIME_MONTH),
+			Language::getInstance()->get(TextID::TIME_YEAR)
 		};
 
         u16 in = *static_cast<const u16 *>(input);
         if(in >= TimeMax[CurrTime]) {
-			error = Utils::Format(Language::getInstance()->get("TIME_ERROR").c_str(), (TimeMax[CurrTime] - 1), TimeMode[CurrTime].c_str());
+			error = Utils::Format(Language::getInstance()->get(TextID::TIME_ERROR).c_str(), (TimeMax[CurrTime] - 1), TimeMode[CurrTime].c_str());
             return 0;
         }
 
@@ -246,16 +246,16 @@ namespace CTRPluginFramework {
 	
 	void TTKeyboard(MenuEntry *entry) {
 		const std::string TimeMode[5] = {
-			Language::getInstance()->get("TIME_MINUTE"),
-			Language::getInstance()->get("TIME_HOUR"),
-			Language::getInstance()->get("TIME_DAY"),
-			Language::getInstance()->get("TIME_MONTH"),
-			Language::getInstance()->get("TIME_YEAR")
+			Language::getInstance()->get(TextID::TIME_MINUTE),
+			Language::getInstance()->get(TextID::TIME_HOUR),
+			Language::getInstance()->get(TextID::TIME_DAY),
+			Language::getInstance()->get(TextID::TIME_MONTH),
+			Language::getInstance()->get(TextID::TIME_YEAR)
 		};
 
 		std::vector<std::string> TTKB {
-			Language::getInstance()->get("TIME_BACKWARDS"),
-			Language::getInstance()->get("TIME_FORWARD")
+			Language::getInstance()->get(TextID::TIME_BACKWARDS),
+			Language::getInstance()->get(TextID::TIME_FORWARD)
 		};
 		
 		u8 timedat[5] = { 0, 0, 0, 0, 0 };
@@ -265,8 +265,8 @@ namespace CTRPluginFramework {
 			return;
 		}
 		
-		for(int i = 0; i < 5; ++i) {			
-			Keyboard KBS(Utils::Format(Language::getInstance()->get("TIME_KB1").c_str(), TimeMode[i].c_str()));
+		for(int i = 0; i < 5; ++i) {
+			Keyboard KBS(Utils::Format(Language::getInstance()->get(TextID::TIME_KB1).c_str(), TimeMode[i].c_str()));
 			KBS.IsHexadecimal(false);
 			KBS.SetMaxLength(2);
 			CurrTime = i;

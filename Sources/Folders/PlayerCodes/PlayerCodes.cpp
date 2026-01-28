@@ -194,9 +194,9 @@ namespace CTRPluginFramework {
 
 	void SaveColor(MenuEntry *entry) {
 		std::vector<std::string> opt = {
-			Language::getInstance()->get("CUSTOM_SET_HAIR"),
-			Language::getInstance()->get("CUSTOM_SET_EYE"),
-			Language::getInstance()->get("CUSTOM_SAVE"),
+			Language::getInstance()->get(TextID::CUSTOM_SET_HAIR),
+			Language::getInstance()->get(TextID::CUSTOM_SET_EYE),
+			Language::getInstance()->get(TextID::CUSTOM_SAVE),
 		};
 
 		Keyboard KB("", opt);
@@ -204,7 +204,7 @@ namespace CTRPluginFramework {
 		switch(KB.Open()) {
 			default: break;
 			case 0: {
-				Keyboard kb(Language::getInstance()->get("CUSTOM_ENTER_HAIR"));
+				Keyboard kb(Language::getInstance()->get(TextID::CUSTOM_ENTER_HAIR));
 				kb.IsHexadecimal(true);
 
 				int res = kb.Open(rval1);
@@ -216,7 +216,7 @@ namespace CTRPluginFramework {
 			} break;
 
 			case 1: {
-				Keyboard kb(Language::getInstance()->get("CUSTOM_ENTER_EYE"));
+				Keyboard kb(Language::getInstance()->get(TextID::CUSTOM_ENTER_EYE));
 				kb.IsHexadecimal(true);
 
 				int res = kb.Open(rval2);
@@ -238,7 +238,7 @@ namespace CTRPluginFramework {
 				f_color.Flush();
                 f_color.Close();
 
-				MessageBox(Language::getInstance()->get("CUSTOM_FILE_SAVED")).SetClear(ClearScreen::Top)();
+				MessageBox(Language::getInstance()->get(TextID::CUSTOM_FILE_SAVED)).SetClear(ClearScreen::Top)();
 			} break;
 		}
 	}

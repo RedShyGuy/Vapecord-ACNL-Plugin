@@ -21,7 +21,7 @@ namespace CTRPluginFramework {
 //Change Tool Animation
 	void tooltype(MenuEntry *entry) {
 		static Hook hook;
-		if(Wrap::KB<u8>(Language::getInstance()->get("TOOL_ANIM_ENTER_ANIM"), true, 2, toolTypeAnimID, toolTypeAnimID)) {
+		if(Wrap::KB<u8>(Language::getInstance()->get(TextID::TOOL_ANIM_ENTER_ANIM), true, 2, toolTypeAnimID, toolTypeAnimID)) {
 			if(toolTypeAnimID == 0) { //if switched OFF
 				hook.Disable();
 				return;
@@ -39,10 +39,10 @@ namespace CTRPluginFramework {
 //Change Gametype
 	void mgtype(MenuEntry *entry) {
 		std::vector<std::string> gametype = {
-			Language::getInstance()->get("VECTOR_GAMETYPE_OFFLINE"),
-			Language::getInstance()->get("VECTOR_GAMETYPE_ONLINE1"),
-			Language::getInstance()->get("VECTOR_GAMETYPE_ONLINE2"),
-			Language::getInstance()->get("VECTOR_GAMETYPE_DREAM"),
+			Language::getInstance()->get(TextID::VECTOR_GAMETYPE_OFFLINE),
+			Language::getInstance()->get(TextID::VECTOR_GAMETYPE_ONLINE1),
+			Language::getInstance()->get(TextID::VECTOR_GAMETYPE_ONLINE2),
+			Language::getInstance()->get(TextID::VECTOR_GAMETYPE_DREAM),
 		};
 
 		bool IsON;
@@ -52,7 +52,7 @@ namespace CTRPluginFramework {
 			gametype[i] = (IsON ? Color(pGreen) : Color(pRed)) << gametype[i];
 		}
 		
-        Keyboard keyboard(Language::getInstance()->get("GAME_TYPE_CHOOSE"), gametype);
+        Keyboard keyboard(Language::getInstance()->get(TextID::GAME_TYPE_CHOOSE), gametype);
 
         int gametchoice = keyboard.Open();
         if(gametchoice < 0)	{
@@ -316,7 +316,7 @@ namespace CTRPluginFramework {
         static u16 input = 0; 
 		
         if(entry->Hotkeys[0].IsDown()) {
-			if(Wrap::KB<u16>(Language::getInstance()->get("BEANS_PARTICLE_ENTER_ID"), true, 3, input, 0)) {
+			if(Wrap::KB<u16>(Language::getInstance()->get(TextID::BEANS_PARTICLE_ENTER_ID), true, 3, input, 0)) {
 				beans.Patch(input);
 			}
 		}

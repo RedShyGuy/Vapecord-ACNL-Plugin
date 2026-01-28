@@ -218,7 +218,7 @@ namespace CTRPluginFramework {
 
         static u16 itemInsectId;
 
-        Keyboard KB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), options);
+        Keyboard KB(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION), options);
         int choice = KB.Open();
         if (choice < 0) {
             return;
@@ -236,7 +236,7 @@ namespace CTRPluginFramework {
 
             insectList.push_back("random insect");
 
-            Keyboard listKB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), insectList);
+            Keyboard listKB(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION), insectList);
             int insectChoice = listKB.Open();
             if (insectChoice < 0) {
                 return;

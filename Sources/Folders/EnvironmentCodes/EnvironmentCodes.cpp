@@ -8,6 +8,8 @@
 #include "Helpers/CROEditing.hpp"
 #include "Helpers/Game.hpp"
 #include "Helpers/Dropper.hpp"
+#include "Helpers/NPC.hpp"
+#include "Helpers/Town.hpp"
 #include "Color.h"
 
 namespace CTRPluginFramework {
@@ -76,12 +78,12 @@ namespace CTRPluginFramework {
 		static Address weather(0x62FC30);
 		
 		std::vector<std::string> weatheropt = {
-			Language::getInstance()->get("VECTOR_WEATHER_SUNNY"),
-			Language::getInstance()->get("VECTOR_WEATHER_CLOUDY"),
-			Language::getInstance()->get("VECTOR_WEATHER_RAINY"),
-			Language::getInstance()->get("VECTOR_WEATHER_STORMY"),
-			Language::getInstance()->get("VECTOR_WEATHER_SNOWY"),
-			Language::getInstance()->get("VECTOR_DISABLE")
+			Language::getInstance()->get(TextID::VECTOR_WEATHER_SUNNY),
+			Language::getInstance()->get(TextID::VECTOR_WEATHER_CLOUDY),
+			Language::getInstance()->get(TextID::VECTOR_WEATHER_RAINY),
+			Language::getInstance()->get(TextID::VECTOR_WEATHER_STORMY),
+			Language::getInstance()->get(TextID::VECTOR_WEATHER_SNOWY),
+			Language::getInstance()->get(TextID::VECTOR_DISABLE)
 		};
 		
 		static constexpr u32 Weathers[5] = {
@@ -95,7 +97,7 @@ namespace CTRPluginFramework {
 			weatheropt[i] = (IsON ? Color(pGreen) : Color(pRed)) << weatheropt[i];
 		}
 		
-		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), weatheropt);
+		Keyboard optKb(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION), weatheropt);
 
 		int op = optKb.Open();
 		if(op < 0) {
@@ -113,7 +115,7 @@ namespace CTRPluginFramework {
 
 	//Water All Flowers	
 	void WaterAllFlowers(MenuEntry *entry) {
-		if (!MessageBox(Language::getInstance()->get("WATER_FLOWER_QUESTION"), DialogType::DialogYesNo).SetClear(ClearScreen::Both)()) {
+		if (!MessageBox(Language::getInstance()->get(TextID::WATER_FLOWER_QUESTION), DialogType::DialogYesNo).SetClear(ClearScreen::Both)()) {
 			return;
 		}
 
@@ -141,11 +143,11 @@ namespace CTRPluginFramework {
 			}
 		}
 
-		MessageBox(Language::getInstance()->get("WATER_FLOWER_SUCCESS")).SetClear(ClearScreen::Both)();
+		MessageBox(Language::getInstance()->get(TextID::WATER_FLOWER_SUCCESS)).SetClear(ClearScreen::Both)();
     }
 //Weed Remover
 	void weedremover(MenuEntry *entry) {	
-		if (!MessageBox(Language::getInstance()->get("REMOVE_WEED_QUESTION"), DialogType::DialogYesNo).SetClear(ClearScreen::Both)()) {
+		if (!MessageBox(Language::getInstance()->get(TextID::REMOVE_WEED_QUESTION), DialogType::DialogYesNo).SetClear(ClearScreen::Both)()) {
 			return;
 		}
 		
@@ -153,12 +155,12 @@ namespace CTRPluginFramework {
 		
 		int res = Dropper::Search_Replace(size, { {0x7C, 0}, {0x7D, 0}, {0x7E, 0}, {0x7F, 0}, {0xCC, 0}, {0xF8, 0} }, {0x7FFE, 0}, 0x3D, false, "Weed Removed!", true);
 		if(res == -1) {
-			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO")).SetClear(ClearScreen::Both)();
+			MessageBox(Language::getInstance()->get(TextID::SAVE_PLAYER_NO)).SetClear(ClearScreen::Both)();
 		}
 		else if(res == -2) {
-			MessageBox(Language::getInstance()->get("REMOVE_WEED_ONLY_OUTDOORS")).SetClear(ClearScreen::Both)();
+			MessageBox(Language::getInstance()->get(TextID::ONLY_OUTDOORS)).SetClear(ClearScreen::Both)();
 		} else {
-			MessageBox(Language::getInstance()->get("REMOVE_WEED_SUCCESS")).SetClear(ClearScreen::Both)();
+			MessageBox(Language::getInstance()->get(TextID::REMOVE_WEED_SUCCESS)).SetClear(ClearScreen::Both)();
 		}
 	}
 
@@ -181,19 +183,19 @@ namespace CTRPluginFramework {
 	
 	void grasscomplete(MenuEntry *entry) {		
 		const std::vector<std::string> GrassKB {
-			Language::getInstance()->get("GRASS_EDITOR_FILL"),
-			Language::getInstance()->get("GRASS_EDITOR_CLEAR")
+			Language::getInstance()->get(TextID::GRASS_EDITOR_FILL),
+			Language::getInstance()->get(TextID::GRASS_EDITOR_CLEAR)
 		};
 		
 		if(!Game::IsGameInRoom(0)) {
-			MessageBox(Color::Red << Language::getInstance()->get("ONLY_TOWN_ERROR")).SetClear(ClearScreen::Top)();
+			MessageBox(Color::Red << Language::getInstance()->get(TextID::ONLY_TOWN_ERROR)).SetClear(ClearScreen::Top)();
 			return;
 		}
 		
 		const u32 GrassStart = *(u32 *)(Game::GetCurrentMap() + 0x28);
-		Keyboard KB(Language::getInstance()->get("GRASS_EDITOR_KB1") << "\n" << Color(0x228B22FF) << 
-					Language::getInstance()->get("GRASS_EDITOR_KB2")  << "\n" << Color(0xCD853FFF) << 
-					Language::getInstance()->get("GRASS_EDITOR_KB3"), GrassKB);
+		Keyboard KB(Language::getInstance()->get(TextID::GRASS_EDITOR_KB1) << "\n" << Color(0x228B22FF) << 
+					Language::getInstance()->get(TextID::GRASS_EDITOR_KB2)  << "\n" << Color(0xCD853FFF) << 
+					Language::getInstance()->get(TextID::GRASS_EDITOR_KB3), GrassKB);
 					
 		switch(KB.Open()) {
 			case 0:
@@ -292,6 +294,17 @@ namespace CTRPluginFramework {
 		else if(!entry->IsActivated()) {
 			BuriedHook.Disable();
 			PickBuriedHook.Disable();
+		}
+	}
+
+	void ItemsDontDissappearOnInvalidPositions(MenuEntry *entry) {
+		static Address itemDeletePatch(0x6FC0DC);
+
+		if(entry->WasJustActivated()) {
+			itemDeletePatch.Patch(0xE3A00000);
+		}
+		else if(!entry->IsActivated()) {
+			itemDeletePatch.Unpatch();
 		}
 	}
 }

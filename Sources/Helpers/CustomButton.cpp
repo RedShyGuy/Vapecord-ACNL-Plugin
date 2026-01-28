@@ -6,6 +6,7 @@
 #include "Helpers/Wrapper.hpp"
 #include "Address/Address.hpp"
 #include "Language.hpp"
+#include "TextID.hpp"
 
 namespace CTRPluginFramework {
 	struct ItemButtonSettings {
@@ -14,10 +15,10 @@ namespace CTRPluginFramework {
 	};
 
 	static std::vector<ItemButtonSettings> citemsettings = { 
-		{ "Duplicate", false }, 
-		{ "Wrap it!", false }, 
-		{ "Put in Storage", false }, 
-		{ "Pay Debt", false }
+		{ Language::getInstance()->get(TextID::CUSTOM_BUTTON_DUPLICATE), false }, 
+		{ Language::getInstance()->get(TextID::CUSTOM_BUTTON_WRAP), false }, 
+		{ Language::getInstance()->get(TextID::CUSTOM_BUTTON_PUT_IN_STORAGE), false }, 
+		{ Language::getInstance()->get(TextID::CUSTOM_BUTTON_PAY_DEBT), false }
 	};
 
 	void CustomButton::DuplicateItem(u32 ItemData) {
@@ -114,16 +115,16 @@ namespace CTRPluginFramework {
 			u32 res = func.Call<u32>(DataPointer, stack, SYS_2D_UI, 0xD);
 
 			if(sysID == 0x250) {
-				Process::WriteString(stack[1], "Duplicate", 0x20, StringFormat::Utf16);
+				Process::WriteString(stack[1], Language::getInstance()->get(TextID::CUSTOM_BUTTON_DUPLICATE), 0x20, StringFormat::Utf16);
 			}
 			else if(sysID == 0x251) {
-				Process::WriteString(stack[1], "Wrap it!", 0x20, StringFormat::Utf16);
+				Process::WriteString(stack[1], Language::getInstance()->get(TextID::CUSTOM_BUTTON_WRAP), 0x20, StringFormat::Utf16);
 			}
 			else if(sysID == 0x252) {
-				Process::WriteString(stack[1], "Put in Storage", 0x20, StringFormat::Utf16);
+				Process::WriteString(stack[1], Language::getInstance()->get(TextID::CUSTOM_BUTTON_PUT_IN_STORAGE), 0x20, StringFormat::Utf16);
 			}
 			else if(sysID == 0x253) {
-				Process::WriteString(stack[1], "Pay Debt", 0x20, StringFormat::Utf16);
+				Process::WriteString(stack[1], Language::getInstance()->get(TextID::CUSTOM_BUTTON_PAY_DEBT), 0x20, StringFormat::Utf16);
 			}
 
 			return res;
@@ -286,7 +287,7 @@ namespace CTRPluginFramework {
 			}
 		}
 
-		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"));
+		Keyboard optKb(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION));
 		optKb.Populate(options);
 		int op = optKb.Open();
 		if(op < 0) {
@@ -328,7 +329,7 @@ namespace CTRPluginFramework {
 		SettingsButton(entry);
 	}
 
-	void CustomButton::RandomOutfit(u32 ItemData) {
+	/*void CustomButton::RandomOutfit(u32 ItemData) {
 		Player::WriteOutfit(4, (Item)Utils::Random(0x280B, 0x28F3), 
 							   (Item)Utils::Random(0x28F5, 0x295B), 
 							   (Item)Utils::Random(0x2493, 0x26F5), 
@@ -339,7 +340,7 @@ namespace CTRPluginFramework {
 		Address(0x19D2A0).Call<void>(*(u32 *)(Game::BaseInvPointer() + 0xC));
 	}
 
-	/*void claim(void) {
+	void claim(void) {
 		u32 DesignData = *(u32 *)(GameHelper::BaseInvPointer() + 0xC) + 0x464; //0x32DC4E1C
 		
 		const u32 GetSlot = 0x724214;
@@ -394,7 +395,7 @@ namespace CTRPluginFramework {
 		    hook.Disable();
 		}
 	}
-	*/	
+		
 
 	static const std::vector<std::string> coutfitsettings = { 
 		"Random Outfit", "Disable", 
@@ -408,4 +409,5 @@ namespace CTRPluginFramework {
 		Process::Patch(WetSuitButton.addr, 0xE1A00000); //Always Remove Wet Suit
 		Process::Patch(SocksButton.addr, 0xEA000009); //Disable Remove Socks
 	}
+	*/
 }

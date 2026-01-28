@@ -5,6 +5,7 @@
 #include "Helpers/GameStructs.hpp"
 #include "Address/Address.hpp"
 #include "Language.hpp"
+#include "TextID.hpp"
 
 extern CTRPluginFramework::Item PickupSeederItemID;
 
@@ -165,6 +166,7 @@ namespace CTRPluginFramework {
 	void grasseditor(MenuEntry *entry);
 	void KeepGrassState(MenuEntry *entry);
 	void BuriedInspector(MenuEntry *entry);
+	void ItemsDontDissappearOnInvalidPositions(MenuEntry *entry);
 	
 //Extra Codes
 	//Chat Codes

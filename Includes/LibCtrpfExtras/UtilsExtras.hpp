@@ -2,6 +2,8 @@
 
 #include <CTRPluginFramework.hpp>
 #include <cstdarg>
+#include "TextID.hpp"
+#include "Language.hpp"
 
 namespace CTRPluginFramework {
     class UtilsExtras : public Utils {
@@ -30,6 +32,10 @@ namespace CTRPluginFramework {
 
         static std::string& Trim(std::string& str) {
             return (Ltrim(Rtrim(str)));
+        }
+
+        static std::string setLanguageByKey(const TextID& langKey) {
+            return Language::getInstance()->get(langKey);
         }
     };
 }

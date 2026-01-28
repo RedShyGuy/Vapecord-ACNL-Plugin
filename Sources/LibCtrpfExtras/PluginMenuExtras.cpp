@@ -18,7 +18,7 @@ namespace CTRPluginFramework {
 
             for (int i = 0; i < entry->Hotkeys.Count(); i++) {
                 Hotkey &hotkey = entry->Hotkeys[i];
-                std::string nameKey = extraEntry->GetHotkeyNameKeys()[i];
+                TextID nameKey = extraEntry->GetHotkeyNameKeys()[i];
 
                 hotkey.operator=(Language::getInstance()->get(nameKey));
             }

@@ -3,6 +3,8 @@
 #include "Helpers/Player.hpp"
 #include "Helpers/IDList.hpp"
 #include "RuntimeContext.hpp"
+#include "Language.hpp"
+#include "TextID.hpp"
 
 namespace CTRPluginFramework {
 /*
@@ -160,7 +162,7 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 		for(int i = 0; i < 35; ++i) {
 			vec.push_back(GetRace(i));
 		}
-		vec.push_back("special characters");
+		vec.push_back(Language::getInstance()->get(TextID::NPC_RACE_SPECIAL));
 	}
 
  	u16 NPC::GetVID(u32 npcData) {

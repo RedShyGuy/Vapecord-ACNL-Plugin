@@ -17,7 +17,7 @@ namespace CTRPluginFramework {
         * \param menuFunc Menu function for the entry
         * \param noteKey Note Key for the entry (Optional)
         */
-        MenuEntryExtras(const std::string &nameKey, FuncPointer gameFunc, FuncPointer menuFunc, const std::string &noteKey = "");
+        MenuEntryExtras(const TextID &nameKey, FuncPointer gameFunc, FuncPointer menuFunc, const TextID &noteKey = TextID::NONE);
 
         /**
         * \brief Sets up a MenuEntry with the language key as the name
@@ -25,7 +25,7 @@ namespace CTRPluginFramework {
         * \param gameFunc Game function for the entry
         * \param noteKey Note Key for the entry (Optional)
         */
-        MenuEntryExtras(const std::string &nameKey, FuncPointer gameFunc, const std::string &noteKey = "");
+        MenuEntryExtras(const TextID &nameKey, FuncPointer gameFunc, const TextID &noteKey = TextID::NONE);
 
         void    SetColor(const Color &color) {
             this->color = color;
@@ -33,22 +33,17 @@ namespace CTRPluginFramework {
 
         void    Update();
 
-        void    AppendHotkeyNameKey(const std::string &nameKey) {
+        void    AppendHotkeyNameKey(const TextID &nameKey) {
             hotkeyNameKeys.push_back(nameKey);
         }
 
-        std::vector<std::string> GetHotkeyNameKeys() const {
+        std::vector<TextID> GetHotkeyNameKeys() const {
             return hotkeyNameKeys;
         }
     private:
-        std::vector<std::string> hotkeyNameKeys;
-
-        std::function<std::string()> NameGetter;
-        std::function<std::string()> NoteGetter;
+        std::vector<TextID> hotkeyNameKeys;
+        TextID nameKey;
+        TextID noteKey;
         Color color;
-
-        static std::string setLanguageByKey(const std::string& langKey) {
-            return Language::getInstance()->get(langKey);
-        }
     };
 }

@@ -20,11 +20,11 @@ namespace CTRPluginFramework {
 
     int OptionKeyboard(void) {
         std::vector<std::string> cmnOpt =  {
-			Language::getInstance()->get("VECTOR_ENABLE"),
-			Language::getInstance()->get("VECTOR_DISABLE")
+			Language::getInstance()->get(TextID::VECTOR_ENABLE),
+			Language::getInstance()->get(TextID::VECTOR_DISABLE)
 		};
 
-		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), cmnOpt);
+		Keyboard optKb(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION), cmnOpt);
         return optKb.Open();
     }
 
