@@ -28,11 +28,11 @@ namespace CTRPluginFramework {
 	static std::string filetype = "dat";
 //Custom Dumper	
 	void customdump(MenuEntry *entry) {	
-		std::vector<std::string> customdopt = { "Set Custom Dump", "Dump/Restore" };
+		const std::vector<std::string> customdopt = { "Set Custom Dump", "Dump/Restore" };
 		
-		std::vector<std::string> customdopt1 = { "Start Offset", "Dump length", "File Type" };
+		const std::vector<std::string> customdopt1 = { "Start Offset", "Dump length", "File Type" };
 		
-		std::vector<std::string> customdopt2 = { "Dump", "Restore", "Delete" };
+		const std::vector<std::string> customdopt2 = { "Dump", "Restore", "Delete" };
 
 		Keyboard CKB("text");
 
@@ -125,7 +125,7 @@ namespace CTRPluginFramework {
 					
 					if(KB.Open(p[i]) == -1) {
 						size = i--;
-						OSD::Notify(Utils::Format("Set Function: %08X with %02d parameters!", funcaddress, size));
+						OSDExtras::Notify(Utils::Format("Set Function: %08X with %02d parameters!", funcaddress, size));
 						return;
 					}
 
@@ -166,7 +166,7 @@ namespace CTRPluginFramework {
 				case 10: result = func.Call<u32>(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8], p[9]); break;
 				case 11: result = func.Call<u32>(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8], p[9], p[10]); break;
 			}
-			OSD::Notify(Utils::Format("Returned Value: %08X", result));
+			OSDExtras::Notify(Utils::Format("Returned Value: %08X", result));
 		}
     }
 
@@ -1517,7 +1517,7 @@ namespace CTRPluginFramework {
 			for (int bit = 0; bit < 8; bit++) {
 				if (diff & (1 << bit)) {
 					int flagIndex = byte * 8 + bit;
-					OSD::Notify(Utils::Format("Player Flag %d changed to %d", flagIndex+1, GetFlag(flags, flagIndex)));
+					OSDExtras::Notify(Utils::Format("Player Flag %d changed to %d", flagIndex+1, GetFlag(flags, flagIndex)));
 				}
 			}
 		}
@@ -1551,7 +1551,7 @@ namespace CTRPluginFramework {
 			for (int bit = 0; bit < 8; bit++) {
 				if (diff & (1 << bit)) {
 					int flagIndex = byte * 8 + bit;
-					OSD::Notify(Utils::Format("Town Flag %d changed to %d", flagIndex+1, GetTownFlag(flags, flagIndex)));
+					OSDExtras::Notify(Utils::Format("Town Flag %d changed to %d", flagIndex+1, GetTownFlag(flags, flagIndex)));
 				}
 			}
 		}
@@ -1571,28 +1571,28 @@ namespace CTRPluginFramework {
 		}
 
 		if (town->PlayerHouse[0].exterior2.HouseSize != lastExterior.HouseSize)
-			OSD::Notify(Utils::Format("House Size changed to %02X", town->PlayerHouse[0].exterior2.HouseSize));
+			OSDExtras::Notify(Utils::Format("House Size changed to %02X", town->PlayerHouse[0].exterior2.HouseSize));
 		if (town->PlayerHouse[0].exterior2.HouseStyle != lastExterior.HouseStyle)
-			OSD::Notify(Utils::Format("House Style changed to %02X", town->PlayerHouse[0].exterior2.HouseStyle));
+			OSDExtras::Notify(Utils::Format("House Style changed to %02X", town->PlayerHouse[0].exterior2.HouseStyle));
 		if (town->PlayerHouse[0].exterior2.HouseDoorShape != lastExterior.HouseDoorShape)
-			OSD::Notify(Utils::Format("House Door Shape changed to %02X", town->PlayerHouse[0].exterior2.HouseDoorShape));
+			OSDExtras::Notify(Utils::Format("House Door Shape changed to %02X", town->PlayerHouse[0].exterior2.HouseDoorShape));
 		if (town->PlayerHouse[0].exterior2.HouseBrick != lastExterior.HouseBrick)
-			OSD::Notify(Utils::Format("House Brick changed to %02X", town->PlayerHouse[0].exterior2.HouseBrick));
+			OSDExtras::Notify(Utils::Format("House Brick changed to %02X", town->PlayerHouse[0].exterior2.HouseBrick));
 		if (town->PlayerHouse[0].exterior2.HouseRoof != lastExterior.HouseRoof)
-			OSD::Notify(Utils::Format("House Roof changed to %02X", town->PlayerHouse[0].exterior2.HouseRoof));
+			OSDExtras::Notify(Utils::Format("House Roof changed to %02X", town->PlayerHouse[0].exterior2.HouseRoof));
 		if (town->PlayerHouse[0].exterior2.HouseDoor != lastExterior.HouseDoor)
-			OSD::Notify(Utils::Format("House Door changed to %02X", town->PlayerHouse[0].exterior2.HouseDoor));
+			OSDExtras::Notify(Utils::Format("House Door changed to %02X", town->PlayerHouse[0].exterior2.HouseDoor));
 		if (town->PlayerHouse[0].exterior2.HouseFence != lastExterior.HouseFence)
-			OSD::Notify(Utils::Format("House Fence changed to %02X", town->PlayerHouse[0].exterior2.HouseFence));
+			OSDExtras::Notify(Utils::Format("House Fence changed to %02X", town->PlayerHouse[0].exterior2.HouseFence));
 		if (town->PlayerHouse[0].exterior2.HousePavement != lastExterior.HousePavement)
-			OSD::Notify(Utils::Format("House Pavement changed to %02X", town->PlayerHouse[0].exterior2.HousePavement));
+			OSDExtras::Notify(Utils::Format("House Pavement changed to %02X", town->PlayerHouse[0].exterior2.HousePavement));
 		if (town->PlayerHouse[0].exterior2.HouseMailBox != lastExterior.HouseMailBox)
-			OSD::Notify(Utils::Format("House MailBox changed to %02X", town->PlayerHouse[0].exterior2.HouseMailBox));
+			OSDExtras::Notify(Utils::Format("House MailBox changed to %02X", town->PlayerHouse[0].exterior2.HouseMailBox));
 
 		lastExterior = town->PlayerHouse[0].exterior2;
 	}
 
-	static std::vector<std::string> roomNames = {
+	const std::vector<std::string> roomNames = {
 		"Middle Room", "SecondRoom", "BasementRoom", "RightRoom", "LeftRoom", "BackRoom"
 	};
 
@@ -1610,73 +1610,73 @@ namespace CTRPluginFramework {
 		}
 
 		if (room->flags.BrightLight != lastRoomflags[roomIndex].BrightLight)
-			OSD::Notify(Utils::Format("Bright Light changed to %02X for %s", room->flags.BrightLight, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Bright Light changed to %02X for %s", room->flags.BrightLight, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown2 != lastRoomflags[roomIndex].Unknown2)
-			OSD::Notify(Utils::Format("Unknown2 changed to %02X for %s", room->flags.Unknown2, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown2 changed to %02X for %s", room->flags.Unknown2, roomNames.at(roomIndex).c_str()));
 		if (room->flags.RegularLight != lastRoomflags[roomIndex].RegularLight)
-			OSD::Notify(Utils::Format("Regular Light changed to %02X for %s", room->flags.RegularLight, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Regular Light changed to %02X for %s", room->flags.RegularLight, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown4 != lastRoomflags[roomIndex].Unknown4)
-			OSD::Notify(Utils::Format("Unknown4 changed to %02X for %s", room->flags.Unknown4, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown4 changed to %02X for %s", room->flags.Unknown4, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown5 != lastRoomflags[roomIndex].Unknown5)
-			OSD::Notify(Utils::Format("Unknown5 changed to %02X for %s", room->flags.Unknown5, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown5 changed to %02X for %s", room->flags.Unknown5, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown6 != lastRoomflags[roomIndex].Unknown6)
-			OSD::Notify(Utils::Format("Unknown6 changed to %02X for %s", room->flags.Unknown6, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown6 changed to %02X for %s", room->flags.Unknown6, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown7 != lastRoomflags[roomIndex].Unknown7)
-			OSD::Notify(Utils::Format("Unknown7 changed to %02X for %s", room->flags.Unknown7, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown7 changed to %02X for %s", room->flags.Unknown7, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown8 != lastRoomflags[roomIndex].Unknown8)
-			OSD::Notify(Utils::Format("Unknown8 changed to %02X for %s", room->flags.Unknown8, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown8 changed to %02X for %s", room->flags.Unknown8, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown9 != lastRoomflags[roomIndex].Unknown9)
-			OSD::Notify(Utils::Format("Unknown9 changed to %02X for %s", room->flags.Unknown9, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown9 changed to %02X for %s", room->flags.Unknown9, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown10 != lastRoomflags[roomIndex].Unknown10)
-			OSD::Notify(Utils::Format("Unknown10 changed to %02X for %s", room->flags.Unknown10, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown10 changed to %02X for %s", room->flags.Unknown10, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown11 != lastRoomflags[roomIndex].Unknown11)
-			OSD::Notify(Utils::Format("Unknown11 changed to %02X for %s", room->flags.Unknown11, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown11 changed to %02X for %s", room->flags.Unknown11, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown12 != lastRoomflags[roomIndex].Unknown12)
-			OSD::Notify(Utils::Format("Unknown12 changed to %02X for %s", room->flags.Unknown12, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown12 changed to %02X for %s", room->flags.Unknown12, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown13 != lastRoomflags[roomIndex].Unknown13)
-			OSD::Notify(Utils::Format("Unknown13 changed to %02X for %s", room->flags.Unknown13, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown13 changed to %02X for %s", room->flags.Unknown13, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown14 != lastRoomflags[roomIndex].Unknown14)
-			OSD::Notify(Utils::Format("Unknown14 changed to %02X for %s", room->flags.Unknown14, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown14 changed to %02X for %s", room->flags.Unknown14, roomNames.at(roomIndex).c_str()));
 		if (room->flags.LowLight != lastRoomflags[roomIndex].LowLight)
-			OSD::Notify(Utils::Format("Low Light changed to %02X for %s", room->flags.LowLight, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Low Light changed to %02X for %s", room->flags.LowLight, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown16 != lastRoomflags[roomIndex].Unknown16)
-			OSD::Notify(Utils::Format("Unknown16 changed to %02X for %s", room->flags.Unknown16, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown16 changed to %02X for %s", room->flags.Unknown16, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown17 != lastRoomflags[roomIndex].Unknown17)
-			OSD::Notify(Utils::Format("Unknown17 changed to %02X for %s", room->flags.Unknown17, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown17 changed to %02X for %s", room->flags.Unknown17, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown18 != lastRoomflags[roomIndex].Unknown18)
-			OSD::Notify(Utils::Format("Unknown18 changed to %02X for %s", room->flags.Unknown18, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown18 changed to %02X for %s", room->flags.Unknown18, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown19 != lastRoomflags[roomIndex].Unknown19)
-			OSD::Notify(Utils::Format("Unknown19 changed to %02X for %s", room->flags.Unknown19, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown19 changed to %02X for %s", room->flags.Unknown19, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown20 != lastRoomflags[roomIndex].Unknown20)
-			OSD::Notify(Utils::Format("Unknown20 changed to %02X for %s", room->flags.Unknown20, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown20 changed to %02X for %s", room->flags.Unknown20, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown21 != lastRoomflags[roomIndex].Unknown21)
-			OSD::Notify(Utils::Format("Unknown21 changed to %02X for %s", room->flags.Unknown21, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown21 changed to %02X for %s", room->flags.Unknown21, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown22 != lastRoomflags[roomIndex].Unknown22)
-			OSD::Notify(Utils::Format("Unknown22 changed to %02X for %s", room->flags.Unknown22, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown22 changed to %02X for %s", room->flags.Unknown22, roomNames.at(roomIndex).c_str()));
 		if (room->flags.LightSwitchState != lastRoomflags[roomIndex].LightSwitchState)
-			OSD::Notify(Utils::Format("Light Switch State changed to %02X for %s", room->flags.LightSwitchState, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Light Switch State changed to %02X for %s", room->flags.LightSwitchState, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown24 != lastRoomflags[roomIndex].Unknown24)
-			OSD::Notify(Utils::Format("Unknown24 changed to %02X for %s", room->flags.Unknown24, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown24 changed to %02X for %s", room->flags.Unknown24, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown25 != lastRoomflags[roomIndex].Unknown25)
-			OSD::Notify(Utils::Format("Unknown25 changed to %02X for %s", room->flags.Unknown25, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown25 changed to %02X for %s", room->flags.Unknown25, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown26 != lastRoomflags[roomIndex].Unknown26)
-			OSD::Notify(Utils::Format("Unknown26 changed to %02X for %s", room->flags.Unknown26, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown26 changed to %02X for %s", room->flags.Unknown26, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown27 != lastRoomflags[roomIndex].Unknown27)
-			OSD::Notify(Utils::Format("Unknown27 changed to %02X for %s", room->flags.Unknown27, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown27 changed to %02X for %s", room->flags.Unknown27, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown28 != lastRoomflags[roomIndex].Unknown28)
-			OSD::Notify(Utils::Format("Unknown28 changed to %02X for %s", room->flags.Unknown28, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown28 changed to %02X for %s", room->flags.Unknown28, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown29 != lastRoomflags[roomIndex].Unknown29)
-			OSD::Notify(Utils::Format("Unknown29 changed to %02X for %s", room->flags.Unknown29, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown29 changed to %02X for %s", room->flags.Unknown29, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown30 != lastRoomflags[roomIndex].Unknown30)
-			OSD::Notify(Utils::Format("Unknown30 changed to %02X for %s", room->flags.Unknown30, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown30 changed to %02X for %s", room->flags.Unknown30, roomNames.at(roomIndex).c_str()));
 		if (room->flags.RoomSize != lastRoomflags[roomIndex].RoomSize)
-			OSD::Notify(Utils::Format("Room Size changed to %02X for %s", room->flags.RoomSize, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Room Size changed to %02X for %s", room->flags.RoomSize, roomNames.at(roomIndex).c_str()));
 		if (room->flags.IsRoomUpgrading != lastRoomflags[roomIndex].IsRoomUpgrading)
-			OSD::Notify(Utils::Format("IsRoomUpgrading changed to %02X for %s", room->flags.IsRoomUpgrading, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("IsRoomUpgrading changed to %02X for %s", room->flags.IsRoomUpgrading, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown33 != lastRoomflags[roomIndex].Unknown33)
-			OSD::Notify(Utils::Format("Unknown33 changed to %02X for %s", room->flags.Unknown33, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown33 changed to %02X for %s", room->flags.Unknown33, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown34 != lastRoomflags[roomIndex].Unknown34)
-			OSD::Notify(Utils::Format("Unknown34 changed to %02X for %s", room->flags.Unknown34, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown34 changed to %02X for %s", room->flags.Unknown34, roomNames.at(roomIndex).c_str()));
 
 		lastRoomflags[roomIndex] = room->flags;
 	}
@@ -1695,7 +1695,7 @@ namespace CTRPluginFramework {
 		}
 
 		if (room->UnkItem4 != lastRoom[roomIndex].UnkItem4)
-			OSD::Notify(Utils::Format("UnkItem4 changed to %04X for %s", room->UnkItem4.ID, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("UnkItem4 changed to %04X for %s", room->UnkItem4.ID, roomNames.at(roomIndex).c_str()));
 
 		lastRoom[roomIndex] = *room;
 	}
@@ -1827,7 +1827,7 @@ namespace CTRPluginFramework {
 			if(Wrap::KB<std::string>("Enter Cro Name:", false, 15, str, str)) {
 				if(CRO::GetMemAddress(str.c_str(), buffer)) {
 					if(CRO::WritePermToggle(buffer, true)) {
-						OSD::Notify(Utils::Format("Unlocked %s | Address: %08X", str.c_str(), buffer));
+						OSDExtras::Notify(Utils::Format("Unlocked %s | Address: %08X", str.c_str(), buffer));
 					}
 				}
 			}
@@ -1835,7 +1835,7 @@ namespace CTRPluginFramework {
 		else if(Controller::IsKeysPressed(Key::R + Key::DPadDown)) {
 			if(CRO::GetMemAddress(str.c_str(), buffer)) {
 				if(CRO::WritePermToggle(buffer, false)) {
-					OSD::Notify(Utils::Format("Locked %s | Address: %08X", str.c_str(), buffer));
+					OSDExtras::Notify(Utils::Format("Locked %s | Address: %08X", str.c_str(), buffer));
 				}
 			}
 		}
@@ -1893,12 +1893,12 @@ namespace CTRPluginFramework {
 			if(playerID == 3) playerID = 0;		
 			else playerID++;
 
-			OSD::Notify(Utils::Format("Player %02X selected!", playerID));
+			OSDExtras::Notify(Utils::Format("Player %02X selected!", playerID));
 		}
 
 		if(Controller::IsKeysPressed(Key::L + Key::DPadLeft)) {
 			random = !random;
-			OSD::Notify("Random Mode: " << (random ? (Color::Green << "ON") : (Color::Red << "OFF")));
+			OSDExtras::Notify("Random Mode: " << (random ? (Color::Green << "ON") : (Color::Red << "OFF")));
 		}
 
 		if(Controller::IsKeysDown(Key::R)) {

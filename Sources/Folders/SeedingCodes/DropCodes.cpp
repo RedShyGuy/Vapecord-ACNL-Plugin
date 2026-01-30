@@ -88,7 +88,7 @@ namespace CTRPluginFramework {
 	//Modify Drop Radius
 		if(entry->Hotkeys[1].IsPressed()) {
 			if(Player::IsIndoors()) {
-				OSD::Notify("Drop Radius Modifier is not usable indoors!", Color::Red);
+				OSDExtras::Notify(TextID::DROP_RADIUS_ONLY_OUTDOORS, Color::Red);
 				return;
 			}
 
@@ -101,7 +101,7 @@ namespace CTRPluginFramework {
 				default: return;
 			//Full Square
 				case 0: {
-					if(Wrap::KB<u8>(Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\nMax Value: 0x15", true, 1, val, 0)) {
+					if(Wrap::KB<u8>(Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\n" << Language::getInstance()->get(TextID::DROP_RADIUS_MAX_VALUE) << " " << "0x15", true, 1, val, 0)) {
 						if(val > 0x15) {
 							val = 0x15;
 						}
@@ -123,7 +123,7 @@ namespace CTRPluginFramework {
 				} break;
 			//circle	
 				case 1: {
-					if(Wrap::KB<u8>(Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\nMax Value: 9", true, 1, val, 0)) {
+					if(Wrap::KB<u8>(Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\n" << Language::getInstance()->get(TextID::DROP_RADIUS_MAX_VALUE) << " " << "9", true, 1, val, 0)) {
 						if(val > 9) {
 							val = 9;
 						}
@@ -142,7 +142,7 @@ namespace CTRPluginFramework {
 				} break;
 			//horizontal line	
 				case 2: {
-					if(Wrap::KB<u8>(Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\nMax Value: 0x10", true, 2, val, 0)) {
+					if(Wrap::KB<u8>(Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\n" << Language::getInstance()->get(TextID::DROP_RADIUS_MAX_VALUE) << " " << "0x10", true, 2, val, 0)) {
 						if(val > 0x10) {
 							val = 0x10;
 						}
@@ -161,7 +161,7 @@ namespace CTRPluginFramework {
 				} break;
 			//Vertical line	
 				case 3: {
-					if(Wrap::KB<u8>(Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\nMax Value: 0x10", true, 2, val, 0)) {
+					if(Wrap::KB<u8>(Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\n" << Language::getInstance()->get(TextID::DROP_RADIUS_MAX_VALUE) << " " << "0x10", true, 2, val, 0)) {
 						if(val > 0x10) {
 							val = 0x10;
 						}
@@ -180,7 +180,7 @@ namespace CTRPluginFramework {
 				} break;	
 			//square	
 				case 4: {
-					if(Wrap::KB<u8>(Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\nMax Value: 0x10", true, 2, val, 0)) {
+					if(Wrap::KB<u8>(Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\n" << Language::getInstance()->get(TextID::DROP_RADIUS_MAX_VALUE) << " " << "0x10", true, 2, val, 0)) {
 						if(val > 0x10) {
 							val = 0x10;
 						}
@@ -205,7 +205,7 @@ namespace CTRPluginFramework {
 				} break;
 			//NE to SW line	
 				case 5: {
-					if(Wrap::KB<u8>(Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\nMax Value: 0x10", true, 2, val, 0)) {
+					if(Wrap::KB<u8>(Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\n" << Language::getInstance()->get(TextID::DROP_RADIUS_MAX_VALUE) << " " << "0x10", true, 2, val, 0)) {
 						if(val > 0x10) {
 							val = 0x10;
 						}
@@ -223,7 +223,7 @@ namespace CTRPluginFramework {
 				} break;
 			//NW to SE line	
 				case 6:	{
-					if(Wrap::KB<u8>(Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\nMax Value: 0x10", true, 2, val, 0)) {
+					if(Wrap::KB<u8>(Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\n" << Language::getInstance()->get(TextID::DROP_RADIUS_MAX_VALUE) << " " << "0x10", true, 2, val, 0)) {
 						if(val > 0x10) {
 							val = 0x10;
 						}
@@ -259,7 +259,7 @@ namespace CTRPluginFramework {
 	//set replace item	
 		if(entry->Hotkeys[2].IsPressed()) {
 			if(Wrap::KB<u32>(Language::getInstance()->get(TextID::DROP_MODS_ENTER_ID), true, 8, *(u32 *)&ItemIDToReplace, 0x7FFE)) {
-				OSD::Notify("Now replacing: " << (ItemIDToReplace == ReplaceEverything ? "everything" : Utils::Format("%08X", ItemIDToReplace)));
+				OSDExtras::Notify(Language::getInstance()->get(TextID::DROP_RADIUS_NOW_REPLACING) << (ItemIDToReplace == ReplaceEverything ? Language::getInstance()->get(TextID::DROP_RADIUS_NOW_REPLACING_EVERYTHING) : Utils::Format("%08X", ItemIDToReplace)));
 			}
 		}
 
@@ -314,7 +314,7 @@ namespace CTRPluginFramework {
 		
 		else if(entry->Hotkeys[1].IsPressed()) {
 			enabled = !enabled;
-			OSD::Notify("Auto drop " << (enabled ? Color::Green << "ON" : Color::Red << "OFF"));
+			OSDExtras::Notify(Language::getInstance()->get(TextID::AUTO_DROP) << " " << (enabled ? Color::Green << Language::getInstance()->get(TextID::STATE_ON) : Color::Red << Language::getInstance()->get(TextID::STATE_OFF)));
 		}
 		
 		if(enabled) {
@@ -366,7 +366,7 @@ namespace CTRPluginFramework {
 	//Auto Drop Hotkeys
 		if(entry->Hotkeys[0].IsPressed()) {
 			enabled = !enabled;
-			OSD::Notify("Multi Slot Drop " << (enabled ? Color::Green << "ON" : Color::Red << "OFF"));
+			OSDExtras::Notify(Language::getInstance()->get(TextID::ITEM_SLOT_MULTI_DROPPER) << " " << (enabled ? Color::Green << Language::getInstance()->get(TextID::STATE_ON) : Color::Red << Language::getInstance()->get(TextID::STATE_OFF)));
 		}
 		
 		u8 slot = 0;

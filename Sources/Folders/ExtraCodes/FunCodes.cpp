@@ -33,7 +33,7 @@ namespace CTRPluginFramework {
 		static Address head(0x568064);
 		static Address corrupt(0x47E3F0);
 		
-		static const std::vector<std::string> sizeopt = {
+		const std::vector<std::string> sizeopt = {
 			Language::getInstance()->get(TextID::VECTOR_SIZE_PLAYER),
 			Language::getInstance()->get(TextID::VECTOR_SIZE_BUGFISH),
 			Language::getInstance()->get(TextID::VECTOR_SIZE_NPC),
@@ -51,7 +51,7 @@ namespace CTRPluginFramework {
 			Language::getInstance()->get(TextID::VECTOR_SIZE_BIGGER),
 			Language::getInstance()->get(TextID::VECTOR_SIZE_DEFAULT),
 			Language::getInstance()->get(TextID::VECTOR_SIZE_SMALLER),
-			"Custom"
+			Language::getInstance()->get(TextID::SIZE_CODES_CUSTOM)
 		};
 		
 		static Address sizeAddresses[10] = { 
@@ -131,7 +131,7 @@ namespace CTRPluginFramework {
 		if(entry->Hotkeys[0].IsPressed()) {
 			ACNL_Player *player = Player::GetSaveData();
 			if(!player) {
-				OSD::Notify("Player needs to be loaded!", Color::Red);
+				OSDExtras::Notify(TextID::SAVE_PLAYER_NO, Color::Red);
 				return;
 			}
 
@@ -307,12 +307,12 @@ namespace CTRPluginFramework {
             if(Controller::IsKeysPressed(Key::R + Key::Y)) {
 				switch(isOn) {
 					case 0: 
-						OSD::Notify("Player: " << Color::Red << "Locked"); 
+						OSDExtras::Notify(Language::getInstance()->get(TextID::CAMERA_MOD_PLAYER) << " " << Color::Red << Language::getInstance()->get(TextID::CAMERA_MOD_LOCKED)); 
 						Animation::ExecuteAnimationWrapper(4, 0xF, {0, 0}, 0, 0, 0, 0, 0, 0, 0);
 						isOn = true;
 					break;
 					case 1: 
-						OSD::Notify("Player: " << Color::Green << "Unlocked");
+						OSDExtras::Notify(Language::getInstance()->get(TextID::CAMERA_MOD_PLAYER) << " " << Color::Green << Language::getInstance()->get(TextID::CAMERA_MOD_UNLOCKED));
 						Animation::ExecuteAnimationWrapper(4, 6, {0, 0}, 0, 0, 0, 0, 0, 0, 0);
 						isOn = false;
 					break;
@@ -362,7 +362,7 @@ namespace CTRPluginFramework {
         patch:
             if(!isPatched) {
             //disable camera following
-				OSD::Notify("Camera following: " << Color::Red << "OFF"); 
+				OSDExtras::Notify(Language::getInstance()->get(TextID::CAMERA_MOD_CAM_FOLLOWING) << " " << Color::Red << Language::getInstance()->get(TextID::STATE_OFF)); 
 				cameraAsm.Patch(0xEA000020);
                 isPatched = true;
             }
@@ -370,7 +370,7 @@ namespace CTRPluginFramework {
         unpatch:
             if(isPatched) {
 			//reenable camera followig
-				OSD::Notify("Camera following: " << Color::Green << "ON"); 
+				OSDExtras::Notify(Language::getInstance()->get(TextID::CAMERA_MOD_CAM_FOLLOWING) << " " << Color::Green << Language::getInstance()->get(TextID::STATE_ON)); 
 				cameraAsm.Unpatch();
                 isPatched = false;
             }
@@ -407,8 +407,9 @@ namespace CTRPluginFramework {
 	}
 
 	void SetFacialExpression(MenuEntry *entry) {
-		static const std::vector<std::string> options = {
-			"Eye Expression", "Mouth Expression"
+		const std::vector<std::string> options = {
+			Language::getInstance()->get(TextID::FACIAL_EXPRESS_EYE), 
+			Language::getInstance()->get(TextID::FACIAL_EXPRESS_MOUTH)
 		};
 		
 		Keyboard KB(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION), options);

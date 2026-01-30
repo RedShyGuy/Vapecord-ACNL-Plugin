@@ -19,7 +19,7 @@ namespace CTRPluginFramework {
 	}
 
     int OptionKeyboard(void) {
-        std::vector<std::string> cmnOpt =  {
+        const std::vector<std::string> cmnOpt =  {
 			Language::getInstance()->get(TextID::VECTOR_ENABLE),
 			Language::getInstance()->get(TextID::VECTOR_DISABLE)
 		};

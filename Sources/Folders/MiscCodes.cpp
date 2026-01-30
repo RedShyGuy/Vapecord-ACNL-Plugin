@@ -77,9 +77,9 @@ namespace CTRPluginFramework {
 
 		u16 musicID = *(u16 *)(musicData + 8);
 		if ((u8)musicID <= 0xFF) {
-			OSD::Notify(Utils::Format("Now Playing: %s", IDList::GetMusicName(musicID).c_str()), Color(0x00FF00FF));
+			OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::PLAYING_MUSIC_NOW_PLAYING_STRING).c_str(), IDList::GetMusicName(musicID).c_str()), Color(0x00FF00FF));
 		} else {
-			OSD::Notify(Utils::Format("Now Playing: %04X", musicID), Color(0x00FF00FF));
+			OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::PLAYING_MUSIC_NOW_PLAYING_ID).c_str(), musicID), Color(0x00FF00FF));
 		}
 
 		const HookContext &curr = HookContext::GetCurrent();
@@ -102,7 +102,7 @@ namespace CTRPluginFramework {
 //reload room
 	void ReloadRoomCheat(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			OSD::Notify("Your player needs to be loaded!", Color::Red);
+			OSDExtras::Notify(TextID::SAVE_PLAYER_NO, Color::Red);
 			return;
 		}
 
@@ -330,7 +330,7 @@ namespace CTRPluginFramework {
 	void fast(MenuEntry *entry) {
 		if(entry->Hotkeys[0].IsPressed()) { //Key::R + Key::DPadDown
 			RuntimeContext::getInstance()->setTurbo(!RuntimeContext::getInstance()->isTurbo());
-			OSD::Notify("Fast mode " << (RuntimeContext::getInstance()->isTurbo() ? Color::Green << "ON" : Color::Red << "OFF"));
+			OSDExtras::Notify(Language::getInstance()->get(TextID::FAST_MODE) + " " << (RuntimeContext::getInstance()->isTurbo() ? Color::Green << Language::getInstance()->get(TextID::STATE_ON) : Color::Red << Language::getInstance()->get(TextID::STATE_OFF)));
 		}
 	}
 
@@ -373,7 +373,7 @@ namespace CTRPluginFramework {
 //Fast Isabelle (Fast Text + Game Speed when in the Isabelle greeting room)
 	void fastisabelle(MenuEntry *entry) {
 		if (entry->WasJustActivated() && Game::GetRoom() == 0x63) {
-			OSD::Notify("Please enable Fast Player Load outside of the Player Load room!", Color::Red);
+			OSDExtras::Notify(TextID::FAST_PLAYER_SELECT_INFO, Color::Red);
 			entry->Disable();
 			return;
 		}

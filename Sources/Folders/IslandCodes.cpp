@@ -270,7 +270,7 @@ namespace CTRPluginFramework {
 			}
 		}
 		
-		OSD::Notify(Utils::Format("%d items placed!", count));
+		OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::ISLAND_RESTORE_PLACED_COUNT).c_str(), count));
 
 	//OFF
 		if(!bypassing) {
@@ -293,7 +293,13 @@ namespace CTRPluginFramework {
 				return;
 			}
 
-			Keyboard KB(Language::getInstance()->get(TextID::ISLAND_SAVER_DUMPER_DUMP), std::vector<std::string>{ Language::getInstance()->get(TextID::ISLAND_SAVER_BACKUP_ISLAND), Language::getInstance()->get(TextID::ISLAND_SAVER_RESTORE_ISLAND), Language::getInstance()->get(TextID::FILE_DELETE) });
+			const std::vector<std::string> options = {
+				Language::getInstance()->get(TextID::ISLAND_SAVER_BACKUP_ISLAND), 
+				Language::getInstance()->get(TextID::ISLAND_SAVER_RESTORE_ISLAND), 
+				Language::getInstance()->get(TextID::FILE_DELETE)
+			};
+
+			Keyboard KB(Language::getInstance()->get(TextID::ISLAND_SAVER_DUMPER_DUMP), options);
 			int index = KB.Open();
 			switch(index) {
 				default: break;
@@ -319,11 +325,11 @@ namespace CTRPluginFramework {
 				} break;
 
 				case 1: {
-					size_t arrSize = 0x400;//number of elements in array
+					size_t arrSize = 0x400; //number of elements in array
 					u32 fileData[arrSize];
 					std::vector<Item> IslandItems;
 					if (!fileData) {
-						OSD::Notify("Failed to accolate memory");
+						OSDExtras::Notify(TextID::ISLAND_SAVE_FAILED_ALLOCATE);
 						return;
 					}
 					

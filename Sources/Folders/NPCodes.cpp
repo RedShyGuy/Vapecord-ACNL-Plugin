@@ -57,8 +57,10 @@ namespace CTRPluginFramework {
 			return;
 		}
 
-		static const std::vector<std::string> option = {
-			"Normal NPC", "Special NPC", "Player NPC"
+		const std::vector<std::string> option = {
+			Language::getInstance()->get(TextID::NPC_FUNC_NORMAL), 
+			Language::getInstance()->get(TextID::NPC_RACE_SPECIAL), 
+			Language::getInstance()->get(TextID::NPC_FUNC_PLAYER)
 		};
 		
 		std::vector<NPCdata> npc[3];
@@ -68,7 +70,7 @@ namespace CTRPluginFramework {
 		NPC::GetLoadedSPNPC(npc[1]);
 		NPC::GetLoadedPNPC(npc[2]);
 
-		Keyboard KB("Select NPC Type:", option);
+		Keyboard KB(Language::getInstance()->get(TextID::NPC_FUNC_SELECT), option);
 
 	redo:
 		int res = KB.Open();
@@ -77,7 +79,7 @@ namespace CTRPluginFramework {
 		}
 
 		if(npc[res].empty()) {
-			MessageBox(Utils::Format("No %s is currently loaded!", option[res].c_str())).SetClear(ClearScreen::Both)();
+			MessageBox(Utils::Format(Language::getInstance()->get(TextID::NPC_FUNC_NPC_NOT_LOADED).c_str(), option[res].c_str())).SetClear(ClearScreen::Both)();
 			goto redo;
 		}
 
@@ -85,7 +87,7 @@ namespace CTRPluginFramework {
 			vec.push_back(str.name);
 		}
 
-		KB.GetMessage() = "Select Loaded NPC:";
+		KB.GetMessage() = Language::getInstance()->get(TextID::NPC_FUNC_SELECT_LOADED_NPC);
 		KB.Populate(vec);
 
 		int res2 = KB.Open();
@@ -95,7 +97,7 @@ namespace CTRPluginFramework {
 
 		CurrAddress = npc[res][res2].data;
 
-		OSD::Notify(Utils::Format("%s selected!", npc[res][res2].name.c_str()));
+		OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::NPC_FUNC_SELECTED).c_str(), npc[res][res2].name.c_str()));
 
 	#if DEVMODE
 		PluginMenu *menu = PluginMenu::GetRunningInstance();
@@ -107,16 +109,21 @@ namespace CTRPluginFramework {
 	static u16 npcID = 0;
 
 	void NPCSetAnim(MenuEntry *entry) {
-		static const std::vector<std::string> vec = { "Animation", "Snake", "Emotion", "Item" };	
+		const std::vector<std::string> vec = { 
+			Language::getInstance()->get(TextID::NPC_ANIM_ANIMATION), 
+			Language::getInstance()->get(TextID::NPC_ANIM_SNAKE), 
+			Language::getInstance()->get(TextID::NPC_ANIM_EMOTION), 
+			Language::getInstance()->get(TextID::NPC_ANIM_ITEM)
+		};	
 
-		Keyboard KB("Select Option", vec);
+		Keyboard KB(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION), vec);
 
 		int op = KB.Open();
 		if(op < 0) {
 			return;
 		}
 
-		if(Wrap::KB<u16>(Utils::Format("Set %s ID:", vec[op].c_str()), true, 4, npcID, npcID)) {
+		if(Wrap::KB<u16>(Utils::Format(Language::getInstance()->get(TextID::NPC_ANIM_SET).c_str(), vec[op].c_str()), true, 4, npcID, npcID)) {
 			mode = op;
 		}
 	}
@@ -191,7 +198,7 @@ namespace CTRPluginFramework {
 			pCoords[0] = coords[0];
 			pCoords[1] = coords[1];
 			pCoords[2] = coords[2];
-			OSD::Notify("NPC teleported to you!", Color(0x00FA9AFF));
+			OSDExtras::Notify(TextID::NPC_TELEPORTED_TO_YOU, Color(0x00FA9AFF));
 		}
 	}
 

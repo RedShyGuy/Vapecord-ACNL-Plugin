@@ -38,7 +38,7 @@ namespace CTRPluginFramework {
 		if(!player) {
 			MessageBox(Language::getInstance()->get(TextID::SAVE_PLAYER_NO)).SetClear(ClearScreen::Both)();
 			return;
-		}	
+		}
 
 		static const u8 ValidID[5][2] = {
 			{ 0x00, 0x21 }, { 0x00, 0x0F }, 
@@ -54,7 +54,7 @@ namespace CTRPluginFramework {
 			{ 0x279F, 0x27E5 }
 		};
 		
-		static const std::vector<std::string> playeropt = {
+		const std::vector<std::string> playeropt = {
 			Language::getInstance()->get(TextID::VECTOR_PLAYER_MOD_HAIR_STYLE),
 			Language::getInstance()->get(TextID::VECTOR_PLAYER_MOD_HAIR_COLOR),
 			Language::getInstance()->get(TextID::VECTOR_PLAYER_MOD_EYE_STYLE),
@@ -65,19 +65,19 @@ namespace CTRPluginFramework {
 			Language::getInstance()->get(TextID::VECTOR_PLAYER_MOD_OUTFIT)
 		};
 		
-		static const std::vector<std::string> genderopt = {
+		const std::vector<std::string> genderopt = {
 			Language::getInstance()->get(TextID::VECTOR_PLAYER_MOD_GENDER_MALE), 
 			Language::getInstance()->get(TextID::VECTOR_PLAYER_MOD_GENDER_FEMALE),
 		};
 		
-		static const std::vector<std::string> tanopt = {
+		const std::vector<std::string> tanopt = {
 			Language::getInstance()->get(TextID::VECTOR_PLAYER_MOD_TAN_DARK),
 			Language::getInstance()->get(TextID::VECTOR_PLAYER_MOD_TAN_TAN),
 			Language::getInstance()->get(TextID::VECTOR_PLAYER_MOD_TAN_FAIR),
 			Language::getInstance()->get(TextID::VECTOR_PLAYER_MOD_TAN_CUSTOM),
 		};
 		
-		static const std::vector<std::string> outfitplayeropt = {
+		const std::vector<std::string> outfitplayeropt = {
 			Language::getInstance()->get(TextID::VECTOR_OUTFIT_HEADGEAR), 
 			Language::getInstance()->get(TextID::VECTOR_OUTFIT_GLASSES), 
 			Language::getInstance()->get(TextID::VECTOR_OUTFIT_SHIRT), 
@@ -177,7 +177,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 	
-		static const std::vector<std::string> randomopt = {
+		const std::vector<std::string> randomopt = {
 			Language::getInstance()->get(TextID::VECTOR_RANDOM_OUTFIT),
 			Language::getInstance()->get(TextID::VECTOR_RANDOM_PLAYER)
 		};	
@@ -223,7 +223,7 @@ namespace CTRPluginFramework {
 
 		WrapLoc locPlayer = { (u32 *)player, sizeof(ACNL_Player) };
 		
-		static const std::vector<std::string> backopt = {
+		const std::vector<std::string> backopt = {
 			Language::getInstance()->get(TextID::VECTOR_RANDOM_BACKUP),
 			Language::getInstance()->get(TextID::VECTOR_RANDOM_RESTORE),
 			Language::getInstance()->get(TextID::FILE_DELETE),  
@@ -279,14 +279,14 @@ namespace CTRPluginFramework {
 			return;
 		}
 
-		static const std::vector<std::string> g_player = {
+		const std::vector<std::string> g_player = {
 			Language::getInstance()->get(TextID::VECTOR_PLAYER_1), 
 			Language::getInstance()->get(TextID::VECTOR_PLAYER_2), 
 			Language::getInstance()->get(TextID::VECTOR_PLAYER_3), 
 			Language::getInstance()->get(TextID::VECTOR_PLAYER_4), 
 		};
 		
-		static const std::vector<std::string> tpcselectopt = {
+		const std::vector<std::string> tpcselectopt = {
 			Language::getInstance()->get(TextID::VECTOR_TPCDUMP_DUMP),
 			Language::getInstance()->get(TextID::VECTOR_TPCDUMP_RESTORE),
 			Language::getInstance()->get(TextID::FILE_DELETE),  
@@ -347,7 +347,7 @@ namespace CTRPluginFramework {
 			designslots.push_back(Utils::Format(Language::getInstance()->get(TextID::VECTOR_DESIGN).c_str(), i));
 		}
 		
-		static const std::vector<std::string> designselect = {
+		const std::vector<std::string> designselect = {
 			Language::getInstance()->get(TextID::VECTOR_DESIGNDUMP_DUMP), 
 			Language::getInstance()->get(TextID::VECTOR_DESIGNDUMP_RESTORE), 
 			Language::getInstance()->get(TextID::FILE_DELETE),  
@@ -407,7 +407,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 		
-		static const std::vector<std::string> emoteopt = {
+		const std::vector<std::string> emoteopt = {
 			Language::getInstance()->get(TextID::VECTOR_EMOTIONLIST_FILL_LIST),
 			Language::getInstance()->get(TextID::VECTOR_EMOTIONLIST_FILL_EMOTION),
 			Language::getInstance()->get(TextID::VECTOR_EMOTIONLIST_CLEAR_LIST),
@@ -453,7 +453,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 		
-		static const std::vector<std::string> enzyopt = {
+		const std::vector<std::string> enzyopt = {
 			Language::getInstance()->get(TextID::VECTOR_ENZY_FILL),
 			Language::getInstance()->get(TextID::VECTOR_ENZY_CLEAR),
 		};
@@ -560,7 +560,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 		
-		static const std::vector<std::string> songopt = {
+		const std::vector<std::string> songopt = {
 			Language::getInstance()->get(TextID::VECTOR_ENZY_FILL),
 			Language::getInstance()->get(TextID::VECTOR_ENZY_CLEAR),
 		};
@@ -597,7 +597,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 		
-		static const std::vector<std::string> songopt = {
+		const std::vector<std::string> songopt = {
 			Language::getInstance()->get(TextID::VECTOR_ENZY_FILL),
 			Language::getInstance()->get(TextID::VECTOR_ENZY_CLEAR),
 		};	
@@ -640,7 +640,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 		
-		std::vector<std::string> cmnOpt =  {
+		const std::vector<std::string> cmnOpt =  {
 			Language::getInstance()->get(TextID::VECTOR_ENABLE),
 			Language::getInstance()->get(TextID::VECTOR_DISABLE)
 		};

@@ -425,7 +425,6 @@ namespace CTRPluginFramework {
 		MISC->Append(new MenuEntryExtras(TextID::FAST_TEXT_SPEED, fasttalk, TextID::FAST_TEXT_SPEED_NOTE)),
 		MISC->Append(new MenuEntryExtras(TextID::FAST_GAME_SPEED, speedentry, TextID::FAST_GAME_SPEED_NOTE)),
 		MISC->Append(new MenuEntryExtras(TextID::FAST_ISABELLE, fastisabelle, TextID::FAST_ISABELLE_NOTE)),
-		MISC->UseBottomSeparator(Separator::Stippled);
 		menu->Append(MISC);
 
 	////////////////////////

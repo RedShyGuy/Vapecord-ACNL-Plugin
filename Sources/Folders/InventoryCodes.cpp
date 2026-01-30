@@ -19,7 +19,7 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			MessageBox("Error: Player needs to be loaded!", Color::Red).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red).SetClear(ClearScreen::Top)();
 			return;
 		}
 
@@ -57,17 +57,17 @@ namespace CTRPluginFramework {
 		
 		u8 slot = 0;
 		if(!Inventory::GetNextItem({0x7FFE, 0}, slot)) {
-			MessageBox("Inventory Full!",  Color::Red).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get(TextID::INVENTORY_SEARCH_INV_FULL),  Color::Red).SetClear(ClearScreen::Top)();
 			return;
 		}
 		
 		if(!item.isValid(false)) {
-			MessageBox("Invalid Item!",  Color::Red).SetClear(ClearScreen::Top)();
+			MessageBox(Language::getInstance()->get(TextID::INVENTORY_SEARCH_INVALID),  Color::Red).SetClear(ClearScreen::Top)();
 			return;
 		}	
 
 		Inventory::WriteSlot(slot, item);
-		MessageBox(Utils::Format("Set Item %04X to slot %d", item.ID, slot)).SetClear(ClearScreen::Top)();
+		MessageBox(Utils::Format(Language::getInstance()->get(TextID::INVENTORY_SEARCH_SET).c_str(), item.ID, slot)).SetClear(ClearScreen::Top)();
 	}
 
 //Text to Item
@@ -77,7 +77,7 @@ namespace CTRPluginFramework {
 
 		if(entry->Hotkeys[0].IsPressed()) {
 			if(!player) {
-				OSD::Notify("Error: Player needs to be loaded!", Color::Red);
+				OSDExtras::Notify(TextID::SAVE_PLAYER_NO, Color::Red);
 				return;
 			}
 
@@ -89,7 +89,7 @@ namespace CTRPluginFramework {
 		
 		else if(entry->Hotkeys[1].IsPressed()) {
 			if(!player) {
-				OSD::Notify("Error: Player needs to be loaded!", Color::Red);
+				OSDExtras::Notify(TextID::SAVE_PLAYER_NO, Color::Red);
 				return;
 			}
 
@@ -103,7 +103,7 @@ namespace CTRPluginFramework {
 		
 		else if(entry->Hotkeys[2].IsPressed()) {
 			if(!player) {
-				OSD::Notify("Error: Player needs to be loaded!", Color::Red);
+				OSDExtras::Notify(TextID::SAVE_PLAYER_NO, Color::Red);
 				return;
 			}
 
@@ -112,7 +112,7 @@ namespace CTRPluginFramework {
 				Item *item = Game::GetItemAtWorldCoords(x, y);
 				if(item) {
 					Inventory::WriteSlot(0, *item);
-					OSD::Notify(Utils::Format("Item ID: %08X", *(u32 *)item));
+					OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::INVENTORY_T2I_SET).c_str(), *(u32 *)item));
 				}
 			}
 		}
@@ -151,10 +151,10 @@ namespace CTRPluginFramework {
 
 		if(Game::SetItem(&CurrentItem)) {
 			std::string itemName = CurrentItem.GetName();
-			OSD::Notify(Utils::Format("Spawned Item: %s (%04X)", itemName.c_str(), CurrentItem.ID));
+			OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::INVENTORY_CATALOG_SET_ITEM).c_str(), itemName.c_str(), CurrentItem.ID));
 		}
 		else {
-			OSD::Notify("Inventory Full!");
+			OSDExtras::Notify(TextID::INVENTORY_SEARCH_INV_FULL, Color::Red);
 		}
 
 		static Address argData(0x8499E4);
@@ -186,7 +186,7 @@ namespace CTRPluginFramework {
 
 		if(entry->Hotkeys[0].IsPressed()) {
 			if(!PlayerClass::GetInstance()->IsLoaded()) {
-				OSD::Notify("Player needs to be loaded!");
+				OSDExtras::Notify(TextID::SAVE_PLAYER_NO, Color::Red);
 				return;
 			}
 			
@@ -222,17 +222,17 @@ namespace CTRPluginFramework {
 		}
 		
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			OSD::Notify("Player needs to be loaded!", Color::Red);
+			OSDExtras::Notify(TextID::SAVE_PLAYER_NO, Color::Red);
 			return;
 		}
 		
 		if(!GameKeyboard::IsOpen()) {
-			OSD::Notify("Open your Keyboard!", Color::Red);
+			OSDExtras::Notify(TextID::CHAT_TEXT_2_I_OPEN_KEYBOARD, Color::Red);
 			return;
 		}
 
 		if(GameKeyboard::IsEmpty()) {
-			OSD::Notify("Keyboard is empty!", Color::Red);
+			OSDExtras::Notify(TextID::CHAT_TEXT_2_I_KEYBOARD_EMPTY, Color::Red);
 			return;
 		}
 		
@@ -240,30 +240,30 @@ namespace CTRPluginFramework {
 		Item itemID;
 
 		if(!GameKeyboard::Copy(chatStr, 0, 0x16)) {
-			OSD::Notify("Somehow couldn't copy!", Color::Red);
+			OSDExtras::Notify(TextID::CHAT_TEXT_2_I_COPY_ERROR, Color::Red);
 			return;
 		}
 
 		if(!GameKeyboard::ConvertToItemID(chatStr, itemID)) {
-			OSD::Notify("Invalid Character!", Color::Red);
+			OSDExtras::Notify(TextID::CHAT_TEXT_2_I_INVALID, Color::Red);
 			return;
 		}
 		
 		u8 slot = 0;
 		if(!Inventory::GetNextItem({0x7FFE, 0}, slot)) {
-			OSD::Notify("Inventory Full!", Color::Red);
+			OSDExtras::Notify(TextID::INVENTORY_SEARCH_INV_FULL, Color::Red);
 			return;
 		}
 			
 		if(!itemID.isValid(false)) {
-			OSD::Notify("Invalid Item!", Color::Red);
+			OSDExtras::Notify(TextID::INVENTORY_SEARCH_INVALID, Color::Red);
 			return;
 		}
 		
 		Inventory::WriteSlot(slot, itemID);
 
 		std::string itemName = itemID.GetName();
-		OSD::Notify(Utils::Format("Spawned Item: %s (%08X)", itemName.c_str(), itemID));
+		OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::CHAT_TEXT_2_I_SPAWNED).c_str(), itemName.c_str(), itemID));
 	}
 //Clear Inventory
 	void ClearInventory(MenuEntry *entry) {
@@ -365,7 +365,7 @@ namespace CTRPluginFramework {
 	void Hook_MenuPatch(u32 r0, u32 r1, u32 r3) {
 		u8 roomId = Player::GetRoom(4);
 		if (roomId == 0xA1 || roomId == 0xA2 || (roomId >= 0x92 && roomId <= 0x97)) {
-			OSD::Notify("Custom Save Menu doesn't work in this room!", Color::Red);
+			OSDExtras::Notify(TextID::MENU_CHANGER_INVALID_ROOM, Color::Red);
 
 			const HookContext &curr = HookContext::GetCurrent();
 			static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
@@ -516,12 +516,12 @@ namespace CTRPluginFramework {
 			return;
 		}
 	
-		static const std::vector<std::string> setopt = {
+		const std::vector<std::string> setopt = {
 			Language::getInstance()->get(TextID::VECTOR_GETSET_FURN),
 			Language::getInstance()->get(TextID::VECTOR_GETSET_CUSTOM),
 		};
 	
-		static const std::vector<std::string> custinvopt = {
+		const std::vector<std::string> custinvopt = {
 			Language::getInstance()->get(TextID::VECTOR_GETSET_CUSTOM_BACKUP),
 			Language::getInstance()->get(TextID::VECTOR_GETSET_CUSTOM_RESTORE),
 			Language::getInstance()->get(TextID::FILE_DELETE),  

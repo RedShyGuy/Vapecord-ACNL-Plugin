@@ -105,16 +105,16 @@ namespace CTRPluginFramework {
 			default: break;
 			case 0: {
 				if(Game::CreateLockedSpot(0x12, x, y, Game::GetRoom(), true) == 0xFFFFFFFF) {
-					OSD::Notify("Error: Too many locked spots are already existing!");		
+					OSDExtras::Notify(TextID::SPOT_STATE_TOO_MANY);		
 				}	
 				else {
-					OSD::Notify("Locked Spot");
+					OSDExtras::Notify(TextID::SPOT_STATE_LOCK);
 				}
 			} break;
 
 			case 1: {
 				Game::ClearLockedSpot(x, y, Game::GetRoom(), 4);
-				OSD::Notify("Unlocked Spot");
+				OSDExtras::Notify(TextID::SPOT_STATE_UNLOCK);
 			} break;
 
 			case 2: {
@@ -128,7 +128,7 @@ namespace CTRPluginFramework {
 					
 					Sleep(Milliseconds(40));
 				}
-				OSD::Notify("Locked Map");
+				OSDExtras::Notify(TextID::SPOT_STATE_MAP_LOCK);
 			} break;
 
 			case 3: {
@@ -156,7 +156,7 @@ namespace CTRPluginFramework {
 						res = false;
 					}
 				}
-				OSD::Notify("Unlocked Map");
+				OSDExtras::Notify(TextID::SPOT_STATE_MAP_UNLOCK);
 			} break;
 		}
 
@@ -187,17 +187,17 @@ namespace CTRPluginFramework {
 		}
 		
 		if(!ItemToReplace.isValid()) {
-			OSD::Notify("Item Is Invalid!", Color::Red);
+			OSDExtras::Notify(TextID::INVALID_ITEM, Color::Red);
 			return;
 		}
 
-		int res = Dropper::Search_Replace(300, { ItemToSearch }, ItemToReplace, 0x3D, true, "items replaced!", true);
+		int res = Dropper::Search_Replace(300, { ItemToSearch }, ItemToReplace, 0x3D, true, Language::getInstance()->get(TextID::SEARCH_REPLACE_ITEMS_REPLACED), true);
 		if(res == -1) {
-			OSD::Notify("Your player needs to be loaded!", Color::Red);
+			OSDExtras::Notify(TextID::SAVE_PLAYER_NO, Color::Red);
 			return;
 		}
 		else if(res == -2) {
-			OSD::Notify("Only works outside!", Color::Red);
+			OSDExtras::Notify(TextID::ONLY_OUTDOORS, Color::Red);
 			return;
 		}
 	}
@@ -253,7 +253,7 @@ namespace CTRPluginFramework {
 			Language::getInstance()->get(TextID::TIME_YEAR)
 		};
 
-		std::vector<std::string> TTKB {
+		const std::vector<std::string> TTKB {
 			Language::getInstance()->get(TextID::TIME_BACKWARDS),
 			Language::getInstance()->get(TextID::TIME_FORWARD)
 		};

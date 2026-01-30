@@ -10,6 +10,7 @@
 #include "RuntimeContext.hpp"
 #include "Language.hpp"
 #include "TextID.hpp"
+#include "LibCtrpfExtras/OSDExtras.hpp"
 
 namespace CTRPluginFramework {
 	namespace Game {
@@ -123,22 +124,22 @@ namespace CTRPluginFramework {
 		void MoveBuilding() {
 			ACNL_BuildingData *building = Building::GetSaveData();
 			if(!building) {
-				OSD::Notify(Language::getInstance()->get(TextID::BUILDING_MOD_SAVE_DATA_NOT_LOADED), Color::Red);
+				OSDExtras::Notify(TextID::BUILDING_MOD_SAVE_DATA_NOT_LOADED, Color::Red);
 				return;
 			}
 
 			if(!PlayerClass::GetInstance()->IsLoaded()) {
-				OSD::Notify(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
+				OSDExtras::Notify(TextID::SAVE_PLAYER_NO, Color::Red);
 				return;
 			}
 			
 			if(!IsGameInRoom(0)) {
-				OSD::Notify(Language::getInstance()->get(TextID::BUILDING_MOD_NOT_IN_TOWN), Color::Red);
+				OSDExtras::Notify(TextID::BUILDING_MOD_NOT_IN_TOWN, Color::Red);
 				return;
 			}
 			
 			if(GetOnlinePlayerCount() != 0) {
-				OSD::Notify(Language::getInstance()->get(TextID::BUILDING_MOD_NOT_IN_OWN_TOWN), Color::Red);
+				OSDExtras::Notify(TextID::BUILDING_MOD_NOT_IN_OWN_TOWN, Color::Red);
 				return;
 			}
 			
@@ -174,22 +175,22 @@ namespace CTRPluginFramework {
 		void RemoveBuilding() {
 			ACNL_BuildingData *building = Building::GetSaveData();
 			if(!building) {
-				OSD::Notify(Language::getInstance()->get(TextID::BUILDING_MOD_SAVE_DATA_NOT_LOADED), Color::Red);
+				OSDExtras::Notify(TextID::BUILDING_MOD_SAVE_DATA_NOT_LOADED, Color::Red);
 				return;
 			}
 
 			if(!PlayerClass::GetInstance()->IsLoaded()) {
-				OSD::Notify(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
+				OSDExtras::Notify(TextID::SAVE_PLAYER_NO, Color::Red);
 				return;
 			}
 			
 			if(!IsGameInRoom(0)) {
-				OSD::Notify(Language::getInstance()->get(TextID::BUILDING_MOD_NOT_IN_TOWN), Color::Red);
+				OSDExtras::Notify(TextID::BUILDING_MOD_NOT_IN_TOWN, Color::Red);
 				return;
 			}
 			
 			if(GetOnlinePlayerCount() != 0) {
-				OSD::Notify(Language::getInstance()->get(TextID::BUILDING_MOD_NOT_IN_OWN_TOWN), Color::Red);
+				OSDExtras::Notify(TextID::BUILDING_MOD_NOT_IN_OWN_TOWN, Color::Red);
 				return;
 			}
 			
@@ -213,7 +214,7 @@ namespace CTRPluginFramework {
 			}
 			
 			if(!IDList::BuildingValid(building->Buildings.Building[index.at(val)].ID)) {
-				OSD::Notify(Language::getInstance()->get(TextID::BUILDING_MOD_CANT_REMOVE), Color::Red);
+				OSDExtras::Notify(TextID::BUILDING_MOD_CANT_REMOVE, Color::Red);
 				return;
 			}
 
@@ -250,27 +251,27 @@ namespace CTRPluginFramework {
 	//place building
 		void PlaceBuilding(u8 buildingID) {
 			if(!PlayerClass::GetInstance()->IsLoaded()) {
-				OSD::Notify(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
+				OSDExtras::Notify(TextID::SAVE_PLAYER_NO, Color::Red);
 				return;
 			}
 			
 			if(!IsGameInRoom(0)) {
-				OSD::Notify(Language::getInstance()->get(TextID::BUILDING_MOD_NOT_IN_TOWN), Color::Red);
+				OSDExtras::Notify(TextID::BUILDING_MOD_NOT_IN_TOWN, Color::Red);
 				return;
 			}
 			
 			if(!IDList::BuildingValid(buildingID)) {
-				OSD::Notify(Language::getInstance()->get(TextID::BUILDING_MOD_INVALID_ID), Color::Red);
+				OSDExtras::Notify(TextID::BUILDING_MOD_INVALID_ID, Color::Red);
 				return;
 			}
 			
 			if(GetOnlinePlayerCount() != 0) {
-				OSD::Notify(Language::getInstance()->get(TextID::BUILDING_MOD_NOT_IN_OWN_TOWN), Color::Red);
+				OSDExtras::Notify(TextID::BUILDING_MOD_NOT_IN_OWN_TOWN, Color::Red);
 				return;
 			}
 			
 			if(!IsBuildingSpotFree()) {
-				OSD::Notify(Language::getInstance()->get(TextID::BUILDING_MOD_NO_SLOT_FREE), Color::Red);
+				OSDExtras::Notify(TextID::BUILDING_MOD_NO_SLOT_FREE, Color::Red);
 				return;
 			}
 		
@@ -497,7 +498,7 @@ namespace CTRPluginFramework {
 
 							Controller::Update();
 							if(Controller::IsKeyPressed(Key::B) && allowAbort) {
-								OSD::Notify(Language::getInstance()->get(TextID::SEARCH_REPLACE_ABORT));
+								OSDExtras::Notify(TextID::SEARCH_REPLACE_ABORT);
 								goto end;
 							}
 						}
@@ -530,7 +531,7 @@ namespace CTRPluginFramework {
 			}
 			
 			if(counting) {
-				OSD::Notify(Utils::Format(Language::getInstance()->get(TextID::SEARCH_REPLACE_REPLACED).c_str(), count));
+				OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::SEARCH_REPLACE_REPLACED).c_str(), count));
 			}
 			
 			return true;

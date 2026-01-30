@@ -7,6 +7,7 @@
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/Dropper.hpp"
 #include "Color.h"
+#include "LibCtrpfExtras/OSDExtras.hpp"
 
 extern "C" void SetWalkParticleID(void);
 
@@ -119,13 +120,13 @@ namespace CTRPluginFramework {
 				for(int i = 0; i < 8; ++i) {
 					WalkOver[i].Patch(WalkOverPatch[i]);
 				}
-				OSD::Notify("Walk Over Things " << Color::Green << "ON");
+				OSDExtras::Notify(Language::getInstance()->get(TextID::WALK_OVER) + " " << Color::Green << Language::getInstance()->get(TextID::STATE_ON));
 			}
 			else {
 				for(int i = 0; i < 8; ++i) {
 					WalkOver[i].Unpatch();
 				}
-				OSD::Notify("Walk Over Things " << Color::Red << "OFF");
+				OSDExtras::Notify(Language::getInstance()->get(TextID::WALK_OVER) + " " << Color::Red << Language::getInstance()->get(TextID::STATE_OFF));
 			}
         }
 
@@ -157,10 +158,10 @@ namespace CTRPluginFramework {
 	
 		if(entry->Hotkeys[0].IsPressed()) {
 			if(isWalking) {
-				OSD::Notify("Movement Mode: Swimming", Color::Blue);
+				OSDExtras::Notify(TextID::MOVEMENT_CHANGE_SWIM, Color::Blue);
 			}
 		    else {
-				OSD::Notify("Movement Mode: Walking", Color::Green);
+				OSDExtras::Notify(TextID::MOVEMENT_CHANGE_WALK, Color::Green);
 			}
 			
 			for(int i = 0; i < 6; ++i) {
@@ -209,7 +210,7 @@ namespace CTRPluginFramework {
 				pos = -1;
 			}
 				
-			OSD::Notify(allforce ? "Teleport: all players" : Utils::Format("Teleport: player %02X", pos));
+			OSDExtras::Notify(allforce ? Language::getInstance()->get(TextID::PLAYER_TELEPORT_ALL) : Utils::Format(Language::getInstance()->get(TextID::PLAYER_TELEPORT_PLAYER).c_str(), pos));
 		}
 		
 		else if(entry->Hotkeys[1].IsPressed()) {
@@ -217,13 +218,13 @@ namespace CTRPluginFramework {
 			if(PlayerClass::GetInstance()->GetWorldCoords(&x, &y)) {
 				if(!allforce && pos >= 0) {
 					Animation::ExecuteAnimationWrapper(pos, 0x34, {1, 0}, 1, 1, 1, 0, x, y, true);
-					OSD::Notify(Utils::Format("Teleported player %02X to you", pos));
+					OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::PLAYER_TELEPORT_PLAYER_TELEPORTED).c_str(), pos));
 				}
 				else {
 					for(u8 i = 0; i < 4; ++i) {
 						Animation::ExecuteAnimationWrapper(i, 0x34, {1, 0}, 1, 1, 1, 0, x, y, true);
 					}
-					OSD::Notify("Teleported players to you");
+					OSDExtras::Notify(TextID::PLAYER_TELEPORT_ALL_TELEPORTED);
 				}
 			}
 		}
@@ -250,15 +251,15 @@ namespace CTRPluginFramework {
 			switch(*(u32 *)visi2.addr) {
 				case 0xE1A07002:
 					mode = 0;
-					OSD::Notify("Visibility: Stationary", Color::Blue);
+					OSDExtras::Notify(TextID::VISIBILITY_STATIONARY, Color::Blue);
 				break;
 				case 0xE3A07006:
 					mode = 1;
-					OSD::Notify("Visibility: Invisible", Color::Yellow);
+					OSDExtras::Notify(TextID::VISIBILITY_INVISIBLE, Color::Yellow);
 				break;
 				case 0xE3A07000:
 					mode = 2;
-					OSD::Notify("Visibility: Default", Color::Green);
+					OSDExtras::Notify(TextID::VISIBILITY_DEFAULT, Color::Green);
 				break;
 			}
 
@@ -335,24 +336,24 @@ namespace CTRPluginFramework {
 	void roomWarp(MenuEntry *entry) {	
 		if(entry->Hotkeys[0].IsPressed()) {
 			if(!PlayerClass::GetInstance()->IsLoaded()) {
-				OSD::Notify("Player needs to be loaded to use room teleport!");
+				OSDExtras::Notify(TextID::SAVE_PLAYER_NO, Color::Red);
 				return;
-			}		
+			}
 			
 			u8 val;
 			if(Wrap::KB<u8>(Language::getInstance()->get(TextID::ROOM_WARPING_ENTER_ID), true, 2, val, 0, onRoomChange)) {		
 				s8 res = Game::TeleportToRoom(val, 1, 1, 0);	
 				if(res == 1) {
-					OSD::Notify(Utils::Format("Warping to room %02X", val));
+					OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::ROOM_LOADER_WARPING_TO_ROOM).c_str(), val));
 				}
 				else if(res == -1) {
-					OSD::Notify("Player needs to be loaded to warp!", Color::Red);
+					OSDExtras::Notify(TextID::SAVE_PLAYER_NO, Color::Red);
 				}
 				else if(res == -2) {
-					OSD::Notify("Only works while playing offline!", Color::Red);
+					OSDExtras::Notify(TextID::ONLY_OFFLINE, Color::Red);
 				}
 				else {
-					OSD::Notify("An error has occurred while trying to warp!", Color::Red);
+					OSDExtras::Notify(TextID::ROOM_LOADER_ERROR, Color::Red);
 				}
 			}
 		}

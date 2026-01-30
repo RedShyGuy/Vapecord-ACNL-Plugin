@@ -28,7 +28,7 @@ namespace CTRPluginFramework {
 
         u32 dataOffset = *(u32 *)dataPointer.addr;
         if (dataOffset == 0) {
-            OSD::Notify("Data Offset is NULL", Color::Red);
+            OSDExtras::Notify(TextID::INSECT_DATA_NOT_LOADED, Color::Red);
             return;
         }
 
@@ -89,7 +89,7 @@ namespace CTRPluginFramework {
 		u32 dataOffset = *(u32 *)dataPointer.addr;
 
 		if (dataOffset == 0) {
-            OSD::Notify("Data Offset is NULL", Color::Red);
+            OSDExtras::Notify(TextID::INSECT_DATA_NOT_LOADED, Color::Red);
 			return;
 		}
 
@@ -102,7 +102,7 @@ namespace CTRPluginFramework {
 		}
 
 		if (insectIdLocal > 0x50) {
-			OSD::Notify("Invalid Insect ID!", Color::Red);
+			OSDExtras::Notify(TextID::INSECT_INVALID_ID, Color::Red);
 			return;
 		}
 
@@ -114,13 +114,13 @@ namespace CTRPluginFramework {
         */
         if (insectIdLocal == 0x10 || insectIdLocal == 0x11 || insectIdLocal == 0x1D || insectIdLocal == 0x29) {
             Item insectItem = ConvertInsectIdToItemId(insectIdLocal);
-            OSD::Notify(Utils::Format("Can't spawn %s!", insectItem.GetName().c_str()), Color::Red);
+            OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::INSECT_CANT_SPAWN).c_str(), insectItem.GetName().c_str()), Color::Red);
 			return;
         }
 
 		u32 *table = (u32 *)functionTable.addr;
 		if (!table) {
-            OSD::Notify("Data Table is NULL", Color::Red);
+            OSDExtras::Notify(TextID::INSECT_DATA_NOT_LOADED, Color::Red);
 			return;
 		}
 		Address dataFunction(table[insectIdLocal]);
@@ -137,7 +137,7 @@ namespace CTRPluginFramework {
 
 		float *pCoords = PlayerClass::GetInstance()->GetCoordinates();
 		if (!pCoords) {
-            OSD::Notify("Player Coords are NULL", Color::Red);
+            OSDExtras::Notify(TextID::SAVE_PLAYER_NO, Color::Red);
             return;
 		}
 
@@ -147,12 +147,12 @@ namespace CTRPluginFramework {
 
 		spawnInsect.Call<void>(dataOffset, insectIdLocal, coords, u0);
 
-        OSD::Notify(Utils::Format("Spawned at %08X", *(u32 *)(*(u32 *)(dataOffset + 0x1C))));
+        OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::INSECT_SPAWNED).c_str(), *(u32 *)(*(u32 *)(dataOffset + 0x1C))));
 
         //u32 insectData = *(u32 *)(*(u32 *)(dataOffset + 0x1C));
         //u8 insectIdLocal = *(u8 *)(insectData + 8);
         //Item insectItem = ConvertInsectIdToItemId(insectIdLocal);
-        //OSD::Notify(Utils::Format("Spawned %s (%08X)", insectItem.GetName().c_str(), insectData), Color::Green);
+        //OSDExtras::Notify(Utils::Format("Spawned %s (%08X)", insectItem.GetName().c_str(), insectData), Color::Green);
 	}
     
     void DespawnAllInsects() {
@@ -160,7 +160,7 @@ namespace CTRPluginFramework {
 
 		u32 dataOffset = *(u32 *)dataPointer.addr;
         if (dataOffset == 0) {
-            OSD::Notify("Data Offset is NULL", Color::Red);
+            OSDExtras::Notify(TextID::INSECT_DATA_NOT_LOADED, Color::Red);
             return;
         }
 
@@ -190,7 +190,7 @@ namespace CTRPluginFramework {
             count++;
         }
 
-        OSD::Notify(Utils::Format("Despawned %d insects", count), Color::Green);
+        OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::INSECT_DESPAWNED).c_str(), count), Color::Green);
     }
 
 	static bool spawnInsectEnabled = false;
@@ -211,9 +211,9 @@ namespace CTRPluginFramework {
 	}
 
 	void SetInsectIdEntry(MenuEntry *entry) {
-        static const std::vector<std::string> options = {
-            "Set Insect Id",
-            "Choose from list"
+        const std::vector<std::string> options = {
+            Language::getInstance()->get(TextID::INSECT_SET_ID),
+            Language::getInstance()->get(TextID::INSECT_CHOOSE_LIST)
         };
 
         static u16 itemInsectId;
@@ -234,7 +234,7 @@ namespace CTRPluginFramework {
                 insectList.push_back(item.GetName().c_str());
             }
 
-            insectList.push_back("random insect");
+            insectList.push_back(Language::getInstance()->get(TextID::INSECT_RANDOM_INSECT));
 
             Keyboard listKB(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION), insectList);
             int insectChoice = listKB.Open();

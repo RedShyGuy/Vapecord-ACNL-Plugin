@@ -16,9 +16,9 @@ extern "C" void BGRHook(void);
 extern "C" void SetPlayerIconCoordinates(void);
 
 namespace CTRPluginFramework {
-	static std::vector<std::string> strings1 = { "", "", "", "", "", "" };
+	std::vector<std::string> strings1 = { "", "", "", "", "", "" };
 		
-	static std::vector<std::string> strings2 = { "", "", "", "", "" };
+	std::vector<std::string> strings2 = { "", "", "", "", "" };
 	
 	void GetPlayerInfoData(void) {	
 		u8 pIndex = Game::GetOnlinePlayerIndex();
@@ -43,12 +43,12 @@ namespace CTRPluginFramework {
 			return;
 		}
 		
-		strings1[0] = ("Coordinates: " << std::to_string(pCoords[0]).erase(4) << "|" << std::to_string(pCoords[2]).erase(4));
-		strings1[1] = (Utils::Format("World Coordinates: %02X|%02X", (u8)(selectedX & 0xFF), (u8)(selectedY & 0xFF)));
-		strings1[2] = ("Velocity: " << std::to_string(*PlayerClass::GetInstance(pIndex)->GetVelocity()).erase(4));
-		strings1[3] = (Utils::Format("Animation: %02X / %03X", *PlayerClass::GetInstance(pIndex)->GetAnimation(), *PlayerClass::GetInstance(pIndex)->GetSnake()));
-		strings1[4] = ("Standing on: " << (pItem->ID != 0 ? Utils::Format("%08X", *(u32 *)pItem) : "N/A") << (Game::GetLockedSpotIndex(selectedX, selectedY) != 0xFFFFFFFF ? "(Locked)" : ""));
-		strings1[5] = (Utils::Format("Room: %02X", Player::GetRoom(pIndex)));
+		strings1[0] = (Language::getInstance()->get(TextID::PLAYER_INFO_COORDS) << " " << std::to_string(pCoords[0]).erase(4) << "|" << std::to_string(pCoords[2]).erase(4));
+		strings1[1] = (Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_WORLD_COORDS).c_str(), (u8)(selectedX & 0xFF), (u8)(selectedY & 0xFF)));
+		strings1[2] = (Language::getInstance()->get(TextID::PLAYER_INFO_VELOCITY) << " " << std::to_string(*PlayerClass::GetInstance(pIndex)->GetVelocity()).erase(4));
+		strings1[3] = (Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_ANIMATION).c_str(), *PlayerClass::GetInstance(pIndex)->GetAnimation(), *PlayerClass::GetInstance(pIndex)->GetSnake()));
+		strings1[4] = (Language::getInstance()->get(TextID::PLAYER_INFO_ITEM_STANDING) << " " << (pItem->ID != 0 ? Utils::Format("%08X", *(u32 *)pItem) : Language::getInstance()->get(TextID::PLAYER_INFO_ITEM_NA)) << (Game::GetLockedSpotIndex(selectedX, selectedY) != 0xFFFFFFFF ? Language::getInstance()->get(TextID::PLAYER_INFO_ITEM_LOCKED) : ""));
+		strings1[5] = (Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_ROOM).c_str(), Player::GetRoom(pIndex)));
 
 	//gets inv item
 		u8 slot = 0;
@@ -61,11 +61,11 @@ namespace CTRPluginFramework {
 
 		u8 menuID = Inventory::GetCurrent();
 		
-		strings2[0] = Utils::Format("Pickup: %08X", PickupSeederItemID);
-		strings2[1] = Utils::Format("Drop: %08X", dropitem);
-		strings2[2] = ("Replace: " << (ItemIDToReplace == ReplaceEverything ? "everything" : Utils::Format("%08X", ItemIDToReplace)));
-		strings2[3] = (itemslotid != ReplaceEverything) ? Utils::Format("Item ID: %08X", itemslotid) : "No Slot Selected";
-		strings2[4] = menuID != 0xFF ? Utils::Format("Current Menu ID: %02X", menuID) : "No Menu Opened";
+		strings2[0] = Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_PICKUP).c_str(), PickupSeederItemID);
+		strings2[1] = Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_DROP).c_str(), dropitem);
+		strings2[2] = (Language::getInstance()->get(TextID::PLAYER_INFO_REPLACE) << " " << (ItemIDToReplace == ReplaceEverything ? Language::getInstance()->get(TextID::DROP_RADIUS_NOW_REPLACING_EVERYTHING) : Utils::Format("%08X", ItemIDToReplace)));
+		strings2[3] = (itemslotid != ReplaceEverything) ? Utils::Format(Language::getInstance()->get(TextID::INVENTORY_T2I_SET).c_str(), itemslotid) : Language::getInstance()->get(TextID::PLAYER_INFO_INV_NO_SLOT);
+		strings2[4] = menuID != 0xFF ? Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_MENU_ID).c_str(), menuID) : Language::getInstance()->get(TextID::PLAYER_INFO_MENU_ID_NO);
 	}
 //debug OSD
 	bool debugOSD(const Screen &screen) {
@@ -84,7 +84,7 @@ namespace CTRPluginFramework {
 		int i = 0, j = 0;
 		
 	//gets player
-		screen.Draw(Utils::Format("Player %02X", pIndex), 0, 0, Player::GetColor(pIndex));
+		screen.Draw(Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_PLAYER).c_str(), pIndex), 0, 0, Player::GetColor(pIndex));
 		
 		while(i < 6) {
 			for(auto GetString = strings1.begin(); GetString != strings1.end(); ++GetString) {
@@ -193,7 +193,7 @@ namespace CTRPluginFramework {
 	};
 
 	void SaveColor(MenuEntry *entry) {
-		std::vector<std::string> opt = {
+		const std::vector<std::string> opt = {
 			Language::getInstance()->get(TextID::CUSTOM_SET_HAIR),
 			Language::getInstance()->get(TextID::CUSTOM_SET_EYE),
 			Language::getInstance()->get(TextID::CUSTOM_SAVE),
@@ -256,7 +256,7 @@ namespace CTRPluginFramework {
 
 				rval1 = OldColor.Hair_BGR;
 				rval2 = OldColor.Eye_BGR;
-				OSD::Notify("Loaded colors from file!", Color::Orange);
+				OSDExtras::Notify(TextID::COLOR_MOD_PLAYER_LOADED, Color::Orange);
 			}
 
 			static const Address address(0x4A33C8);

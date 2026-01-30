@@ -1,5 +1,6 @@
 #include <CTRPluginFramework.hpp>
 #include "Helpers/Chat.hpp"
+#include "LibCtrpfExtras/OSDExtras.hpp"
 
 namespace CTRPluginFramework {
 	u32 Chat::GetPlayerMessageData() {
@@ -44,7 +45,7 @@ namespace CTRPluginFramework {
 			Sleep(Seconds(2));
 			Animation::ExecuteAnimationWrapper(GetPlayerIndex(), 6, {0, 0}, 0, 0, 0, 0, x, y, true);
 
-			OSD::Notify(Utils::Format(Language::getInstance()->get(TextID::CHAT_ANIMATION).c_str(), animID)); 
+			OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::CHAT_ANIMATION).c_str(), animID)); 
 		}
 	}
 
@@ -55,7 +56,7 @@ namespace CTRPluginFramework {
 			Sleep(Seconds(2));
 			Animation::ExecuteAnimationWrapper(GetPlayerIndex(), 6, {0, 0}, 0, 0, 0, 0, x, y, true);
 
-			OSD::Notify(Utils::Format(Language::getInstance()->get(TextID::CHAT_EMOTION).c_str(), emotionID));
+			OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::CHAT_EMOTION).c_str(), emotionID));
 		}
 	}
 
@@ -66,7 +67,7 @@ namespace CTRPluginFramework {
 			Sleep(Seconds(2));
 			Animation::ExecuteAnimationWrapper(GetPlayerIndex(), 6, {0, 0}, 0, 0, 0, 0, x, y, true);
 
-			OSD::Notify(Utils::Format(Language::getInstance()->get(TextID::CHAT_SNAKE).c_str(), snakeID)); 
+			OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::CHAT_SNAKE).c_str(), snakeID)); 
 		}
 	}
 
@@ -77,7 +78,7 @@ namespace CTRPluginFramework {
 			Sleep(Milliseconds(100));
 			Animation::ExecuteAnimationWrapper(GetPlayerIndex(), 6, {0, 0}, 0, 0, 0, 0, x, y, true);
 
-			OSD::Notify(Utils::Format(Language::getInstance()->get(TextID::CHAT_MUSIC).c_str(), musicID)); 
+			OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::CHAT_MUSIC).c_str(), musicID)); 
 		}
 	}
 
@@ -86,7 +87,7 @@ namespace CTRPluginFramework {
 		if(PlayerClass::GetInstance()->GetWorldCoords(&x, &y)) {	
 			Dropper::PlaceItemWrapper(0xA, ReplaceEverything, &itemID, &itemID, x, y, 0, 0, 0, 0, 0, 0x56, 0xA5, false);
 
-			OSD::Notify(Utils::Format(Language::getInstance()->get(TextID::CHAT_ITEM).c_str(), *(u32*)&itemID));
+			OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::CHAT_ITEM).c_str(), *(u32*)&itemID));
 		}	
 	}
 
@@ -126,7 +127,7 @@ namespace CTRPluginFramework {
 				AnimationCommand();
 			}
 			else {
-				OSD::Notify(Language::getInstance()->get(TextID::CHAT_INVALID_ANIMATION));
+				OSDExtras::Notify(TextID::CHAT_INVALID_ANIMATION, Color::Red);
                 return;
             }
 		}
@@ -137,7 +138,7 @@ namespace CTRPluginFramework {
 				EmotionCommand();
 			}
 			else {
-				OSD::Notify(Language::getInstance()->get(TextID::CHAT_INVALID_EMOTION));
+				OSDExtras::Notify(TextID::CHAT_INVALID_EMOTION, Color::Red);
                 return;
             }
 		}
@@ -148,7 +149,7 @@ namespace CTRPluginFramework {
 				SnakeCommand();
 			}
 			else {
-				OSD::Notify(Language::getInstance()->get(TextID::CHAT_INVALID_SNAKE));
+				OSDExtras::Notify(TextID::CHAT_INVALID_SNAKE, Color::Red);
                 return;
             }
 		}
@@ -159,7 +160,7 @@ namespace CTRPluginFramework {
 				MusicCommand();
 			}
 			else {
-				OSD::Notify(Language::getInstance()->get(TextID::CHAT_INVALID_MUSIC));
+				OSDExtras::Notify(TextID::CHAT_INVALID_MUSIC, Color::Red);
                 return;
             }
 		}
@@ -173,7 +174,7 @@ namespace CTRPluginFramework {
 				ItemCommand();
 			}
 			else {
-				OSD::Notify(Language::getInstance()->get(TextID::INVALID_ITEM));
+				OSDExtras::Notify(TextID::INVALID_ITEM, Color::Red);
 				return;
 			}
 		}
@@ -182,13 +183,13 @@ namespace CTRPluginFramework {
 			UtilsExtras::Trim(ItemName);
 			ItemNamePack match;
 			if (!Item::searchByKeyword(ItemName, match)) {
-				OSD::Notify(Language::getInstance()->get(TextID::CHAT_NO_ITEM_FOUND));
+				OSDExtras::Notify(TextID::CHAT_NO_ITEM_FOUND, Color::Red);
 				return;
 			}
 
 			itemID = Item(match.ID); //sets item
 			if(!itemID.isValid()) { //should always be true if orig file is used
-				OSD::Notify(Language::getInstance()->get(TextID::INVALID_ITEM));
+				OSDExtras::Notify(TextID::INVALID_ITEM, Color::Red);
 				return;
 			}
 

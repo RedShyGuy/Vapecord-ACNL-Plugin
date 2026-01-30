@@ -11,6 +11,7 @@
 #include "RuntimeContext.hpp"
 #include "Language.hpp"
 #include "TextID.hpp"
+#include "LibCtrpfExtras/OSDExtras.hpp"
 
 extern "C" bool __IsAnimID(u8 toolAnimID) {
 	static const u8 toolAnimIDArr[18] = { 0xB0, 0x49, 0x55, 0x6C, 0xA0, 0x98, 0x8F, 0x91, 0xC3, 0xCE, 0xCF, 0x8D, 0x8E, 0x91, 0xB1, 0xB1, 0x70, 0x9A };
@@ -40,7 +41,7 @@ extern "C" bool __IsPlayerHouse() {
 namespace CTRPluginFramework {
 	void CheckInvalidBadge(u32 data, u32 badge, int badgeType, u32 r3, u32 r4) {
 		if (badgeType > 3) {
-			OSD::Notify(Language::getInstance()->get(TextID::CHECKS_INVALID_BADGE), Color::Red);
+			OSDExtras::Notify(TextID::CHECKS_INVALID_BADGE, Color::Red);
 			return;
 		}
 
@@ -225,7 +226,7 @@ namespace CTRPluginFramework {
 
 	int CatalogPatch_Keyboard(u32 u0, u32 u1, u32 u2) {
 		if(!Game::IsGameInRoom(0x38) && !Game::IsGameInRoom(0x39) && !Game::IsGameInRoom(0x3A) && !Game::IsGameInRoom(0x3B) && !Game::IsGameInRoom(0x3C)) {
-			OSD::Notify(Language::getInstance()->get(TextID::CHECKS_SEARCH_NOT_SUPPORTED), Color::Red);
+			OSDExtras::Notify(TextID::CHECKS_SEARCH_NOT_SUPPORTED, Color::Red);
 			return 0;
 		}
 

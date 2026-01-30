@@ -6,6 +6,7 @@
 #include "Address/Address.hpp"
 #include "Language.hpp"
 #include "TextID.hpp"
+#include "LibCtrpfExtras/OSDExtras.hpp"
 
 extern CTRPluginFramework::Item PickupSeederItemID;
 

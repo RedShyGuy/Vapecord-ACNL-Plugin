@@ -57,7 +57,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 		
-		static const std::vector<std::string> badgesopt = {
+		const std::vector<std::string> badgesopt = {
 			Color(0xFFD700FF) << Language::getInstance()->get(TextID::VECTOR_BADGE_GOLD),
 			Color(0xC0C0C0FF) << Language::getInstance()->get(TextID::VECTOR_BADGE_SILVER),
 			Color(0xCD7F32FF) << Language::getInstance()->get(TextID::VECTOR_BADGE_BRONZE),
@@ -71,7 +71,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 
-		bool WithStats = MessageBox("Do you want to set the appropiate badge stats?\n(This will edit all badge related game stats)", DialogType::DialogYesNo).SetClear(ClearScreen::Top)();
+		bool WithStats = MessageBox(Language::getInstance()->get(TextID::BADGE_SETTER_STATS_QUESTION), DialogType::DialogYesNo).SetClear(ClearScreen::Top)();
 
 		for(int i = 0; i < 24; ++i) {
 			Game::SetBadges(i, std::abs(index - 3), WithStats);

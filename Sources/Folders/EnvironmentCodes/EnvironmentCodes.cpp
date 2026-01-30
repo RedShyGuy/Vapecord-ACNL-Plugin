@@ -47,7 +47,7 @@ namespace CTRPluginFramework {
 			auroraPatch3.WriteFloat(1.0); //Brightness of aurora lights
 
 			if(PlayerClass::GetInstance()->IsLoaded()) {
-				OSD::Notify("Reload the room to see changes!", Color(0xC430BAFF));
+				OSDExtras::Notify(TextID::AURORALIGHTS_RELOAD_ROOM, Color(0xC430BAFF));
 			}
 		}
 
@@ -217,14 +217,14 @@ namespace CTRPluginFramework {
 
 		if(entry->Hotkeys[0].IsPressed()) {
 			if(!Game::IsGameInRoom(0)) {
-				OSD::Notify("Error: Only Works In Town!", Color::Red);
+				OSDExtras::Notify(TextID::GRASS_EDITOR_ONLY_IN_TOWN, Color::Red);
 				return;
 			}
 			
 			u32 x, y;
 			if(PlayerClass::GetInstance()->GetWorldCoords(&x, &y)) {
 				Process::Write8(GetTileOffset(x, y), type);
-				OSD::Notify(Utils::Format("Changed Grass at: X%02X|Y%02X", (u8)x, (u8)y));
+				OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::GRASS_EDITOR_CHANGED_GRASS).c_str(), (u8)x, (u8)y));
 			}
 		}
 		
@@ -236,12 +236,12 @@ namespace CTRPluginFramework {
 			switch(opt) {
 				case 0:
 					type = 0xFF;
-					OSD::Notify("Grass: Fill-Mode Active!", Color(0x228B22FF));
+					OSDExtras::Notify(TextID::GRASS_EDITOR_FILL_MODE, Color(0x228B22FF));
 					opt = true;
 				break;
 				case 1:
 					type = 0;
-					OSD::Notify("Grass: Clear-Mode Active!", Color(0xCD853FFF));
+					OSDExtras::Notify(TextID::GRASS_EDITOR_CLEAR_MODE, Color(0xCD853FFF));
 					opt = false;
 				break;
 			}

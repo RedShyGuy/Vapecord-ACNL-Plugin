@@ -67,32 +67,32 @@ namespace CTRPluginFramework {
                 switch (parent) {
                     case FolderType::Player:
                         switch (sub) {
-                            case SubFolder::PlayerSave: textID = TextID::PLAYER_SAVE_CODES;
+                            case SubFolder::PlayerSave: textID = TextID::PLAYER_SAVE_CODES; break;
                             default: break;
                         }
                         break;
 
                     case FolderType::Seeding:
                         switch (sub) {
-                            case SubFolder::Seed: textID = TextID::SEED_CODES;
-                            case SubFolder::Drop: textID = TextID::DROP_CODES;
-                            case SubFolder::Tree: textID = TextID::TREE_CODES;
+                            case SubFolder::Seed: textID = TextID::SEED_CODES; break;
+                            case SubFolder::Drop: textID = TextID::DROP_CODES; break;
+                            case SubFolder::Tree: textID = TextID::TREE_CODES; break;
                             default: break;
                         }
                         break;
 
                     case FolderType::Environment:
                         switch (sub) {
-                            case SubFolder::Fish: textID = TextID::FISH_CODES;
-                            case SubFolder::Insect: textID = TextID::INSECT_CODES;
+                            case SubFolder::Fish: textID = TextID::FISH_CODES; break;
+                            case SubFolder::Insect: textID = TextID::INSECT_CODES; break;
                             default: break;
                         }
                         break;
 
                     case FolderType::Extra:
                         switch (sub) {
-                            case SubFolder::Chat: textID = TextID::CHAT_CODES;
-                            case SubFolder::Fun: textID = TextID::FUN_CODES;
+                            case SubFolder::Chat: textID = TextID::CHAT_CODES; break;
+                            case SubFolder::Fun: textID = TextID::FUN_CODES; break;
                             default: break;
                         }
                         break;

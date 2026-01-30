@@ -7,7 +7,7 @@
 
 namespace CTRPluginFramework {
 	void pluginSettingsEntry(MenuEntry *entry) {
-		static const std::vector<std::string> settingsOptions = {
+		const std::vector<std::string> settingsOptions = {
 			Language::getInstance()->get(TextID::CHANGE_LANGUAGE),
 			Language::getInstance()->get(TextID::CHANGE_MENU_COLORS)
 		};

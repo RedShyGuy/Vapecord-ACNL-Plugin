@@ -397,7 +397,7 @@ namespace CTRPluginFramework {
 	}
 		
 
-	static const std::vector<std::string> coutfitsettings = { 
+	const std::vector<std::string> coutfitsettings = { 
 		"Random Outfit", "Disable", 
 	};
 	

@@ -99,12 +99,12 @@ namespace CTRPluginFramework {
 			if(!pickItemHook.IsEnabled()) {
 				pickItemHook.Enable();
 				closeholeItemHook.Enable();
-				OSD::Notify(Color::Magenta << "Seed Item" << Color::Green << " Enabled"); //Enabled Seeding
+				OSDExtras::Notify(Color::Magenta << Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_ITEM) << Color::Green << " " + Language::getInstance()->get(TextID::STATE_ON)); //Enabled Seeding
 			}
 			else {
 				pickItemHook.Disable();
 				closeholeItemHook.Disable();
-				OSD::Notify(Color::Turquoise << "Remove Item" << Color::Green << " Enabled"); //Disabled Seeding
+				OSDExtras::Notify(Color::Turquoise << Language::getInstance()->get(TextID::PICKUP_SEEDER_REMOVE_ITEM) << Color::Green << " " + Language::getInstance()->get(TextID::STATE_ON)); //Disabled Seeding
 			}
         }
 		
@@ -119,7 +119,7 @@ namespace CTRPluginFramework {
 				speedHook.Disable();
 			}
 			
-			OSD::Notify("Seed Speed" << (speedHook.IsEnabled() ? Color::Green << " Enabled" : Color::Red << " Disabled"));
+			OSDExtras::Notify(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_SPEED) << (speedHook.IsEnabled() ? Color::Green << " " + Language::getInstance()->get(TextID::STATE_ON) : Color::Red << " " + Language::getInstance()->get(TextID::STATE_OFF)));
 		}
 		
 	//Switches Modes of Pickup
@@ -131,27 +131,27 @@ namespace CTRPluginFramework {
 				case 0:
 					Mode++;
 					Index = 0;
-					OSD::Notify("Seed Type: Pickup", Color::Red);
+					OSDExtras::Notify(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_TYPE) + Language::getInstance()->get(TextID::PICKUP_SEEDER_TYPE_PICKUP), Color::Red);
 				break;
 				case 1:
 					Mode++;
 					Index = 1;
-					OSD::Notify("Seed Type: Pluck", Color::Orange);
+					OSDExtras::Notify(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_TYPE) + Language::getInstance()->get(TextID::PICKUP_SEEDER_TYPE_PLUCK), Color::Orange);
 				break;
 				case 2:
 					Mode++;
 					Index = 2;
-					OSD::Notify("Seed Type: FlipDrop", Color::Green);
+					OSDExtras::Notify(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_TYPE) + Language::getInstance()->get(TextID::PICKUP_SEEDER_TYPE_FLIPDROP), Color::Green);
 				break;
 				case 3:
 					Mode++;
 					Index = 3;
-					OSD::Notify("Seed Type: RockBreak", Color::Blue);
+					OSDExtras::Notify(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_TYPE) + Language::getInstance()->get(TextID::PICKUP_SEEDER_TYPE_ROCKBREAK), Color::Blue);
 				break;
 				case 4:
 					Mode = 0;
 					Index = 4;
-					OSD::Notify("Seed Type: Dig Hole", Color::Purple);
+					OSDExtras::Notify(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_TYPE) + Language::getInstance()->get(TextID::PICKUP_SEEDER_TYPE_DIGHOLE), Color::Purple);
 				break;
 			}
 			
@@ -168,7 +168,7 @@ namespace CTRPluginFramework {
 				AutoPick[i].Patch(AutoPatch[IsON][i]);
 			}
 
-            OSD::Notify("Auto-Pickup: " << (IsON ? Color::Red << "OFF" : Color::Green << "ON"));
+            OSDExtras::Notify(Language::getInstance()->get(TextID::PICKUP_SEEDER_AUTO_PICKUP) << (IsON ? Color::Red << Language::getInstance()->get(TextID::STATE_OFF) : Color::Green << Language::getInstance()->get(TextID::STATE_ON)));
 		}	
 	
 		if(!entry->IsActivated()) {
@@ -203,12 +203,12 @@ namespace CTRPluginFramework {
 		if(entry->Hotkeys[0].IsPressed()) {	
 			if (!set) {
 				walkseed.Patch(0xEA000014);
-				OSD::Notify("Delete Items " << Color::Green << "ON");
+				OSDExtras::Notify(Language::getInstance()->get(TextID::WALK_SEEDER_DELETE_ITEMS) << Color::Green << Language::getInstance()->get(TextID::STATE_ON));
 				set = true;
 			} 
 			else {
 				walkseed.Unpatch();
-				OSD::Notify("Delete Items " << Color::Red << "OFF");
+				OSDExtras::Notify(Language::getInstance()->get(TextID::WALK_SEEDER_DELETE_ITEMS) << Color::Red << Language::getInstance()->get(TextID::STATE_OFF));
 				set = false;
 			}
 		}	
@@ -249,7 +249,7 @@ namespace CTRPluginFramework {
 //OSD for Map Editor
 	bool editorID(const Screen &screen) { 
 		if(screen.IsTop) {
-			screen.Draw(Utils::Format("ID: %08X", dropitem), 320, 220, Color::White); 
+			screen.Draw(Utils::Format(Language::getInstance()->get(TextID::INVENTORY_T2I_SET).c_str(), dropitem), 320, 220, Color::White); 
 		}
 
 		return 1;
@@ -305,7 +305,7 @@ namespace CTRPluginFramework {
 				OSD::Run(editorID);	
 				
 				Process::Patch(Address(0x1A51C8).addr, 0xE8BD81F0);
-				OSD::Notify("Map Editor " << Color::Green << "ON");
+				OSDExtras::Notify(Language::getInstance()->get(TextID::MAP_EDITOR) + " " << Color::Green << Language::getInstance()->get(TextID::STATE_ON));
 				MapEditorActive = true;
 
 				*(float *)(Camera::GetInstance() + 4) = (float)(selectedX * 0x20 + 0x10);
@@ -328,7 +328,7 @@ namespace CTRPluginFramework {
 				OSD::Stop(editorID);
 				
 				Process::Patch(Address(0x1A51C8).addr, 0xE2805C01);
-				OSD::Notify("Map Editor " << Color::Red << "OFF");
+				OSDExtras::Notify(Language::getInstance()->get(TextID::MAP_EDITOR) + " " << Color::Red << Language::getInstance()->get(TextID::STATE_OFF));
 				MapEditorActive = false;		
 			}
 		}
@@ -397,13 +397,13 @@ namespace CTRPluginFramework {
 					size = 0;
 				}
 				
-				OSD::Notify(Utils::Format("Size set to %d", size));
+				OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::MAP_EDITOR_SIZE_SET).c_str(), size));
 			}
 			
 			if(entry->Hotkeys[8].IsPressed()) {
 				removal = !removal;
 
-				OSD::Notify("Removal mode " << (removal ? Color::Green << "ON" : Color::Red << "OFF")); 
+				OSDExtras::Notify(Language::getInstance()->get(TextID::MAP_EDITOR_REMOVAL_MODE) + " " << (removal ? Color::Green << Language::getInstance()->get(TextID::STATE_ON) : Color::Red << Language::getInstance()->get(TextID::STATE_OFF))); 
 			}
 			
 			if(RuntimeContext::getInstance()->isTurbo() ? entry->Hotkeys[9].IsDown() : entry->Hotkeys[9].IsPressed()) {//Key::A

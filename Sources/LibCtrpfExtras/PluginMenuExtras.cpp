@@ -40,7 +40,22 @@ namespace CTRPluginFramework {
                 }
 
 				UpdateFolderAndEntries(folder);
-			}
+            }
+
+            for (MenuEntry *entry : menu->GetEntryList()) {
+                auto extraEntry = static_cast<MenuEntryExtras*>(entry);
+                extraEntry->SetColor(Color::White);
+                extraEntry->Update();
+
+                for (int i = 0; i < entry->Hotkeys.Count(); i++) {
+                    Hotkey &hotkey = entry->Hotkeys[i];
+                    TextID nameKey = extraEntry->GetHotkeyNameKeys()[i];
+
+                    hotkey.operator=(Language::getInstance()->get(nameKey));
+                }
+
+                entry->RefreshNote();
+            }
 		}
     }
 }
