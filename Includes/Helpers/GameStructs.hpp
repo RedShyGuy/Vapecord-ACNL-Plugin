@@ -5,6 +5,8 @@
 
 #pragma pack(push, 1)
 
+typedef char16_t wchar; ///< Wide character type
+
 namespace CTRPluginFramework {
 
     enum class PlayerStatus : u8 {
@@ -195,7 +197,7 @@ namespace CTRPluginFramework {
 
     struct TownID { //0x16
         u16 TID; //Default is 0
-        u16/*wchar*/ DataTownName[9]; //Default is 0
+        wchar DataTownName[9]; //Default is 0
         u8 Unknown01; //Default is 0xA
         u8 Unknown02;
 
@@ -210,7 +212,7 @@ namespace CTRPluginFramework {
             std::string out;
             Utils::ConvertUTF16ToUTF8(
                 out,
-                reinterpret_cast<const u16*>(DataTownName)
+                DataTownName
             );
             return out;
         }
@@ -218,7 +220,7 @@ namespace CTRPluginFramework {
 
     struct PlayerID { //0x16
         u16 PID;
-        u16/*wchar*/ PlayerName[9];
+        wchar PlayerName[9];
         u8 Gender;
         u8 ZeroPad;
 
@@ -233,7 +235,7 @@ namespace CTRPluginFramework {
             std::string out;
             Utils::ConvertUTF16ToUTF8(
                 out,
-                reinterpret_cast<const u16*>(PlayerName)
+                PlayerName
             );
             return out;
         }
@@ -254,7 +256,7 @@ namespace CTRPluginFramework {
     };
 
     struct ACNL_Pattern { //Size: 0x870
-        u16/*wchar*/ Title[21];
+        wchar Title[21];
         PersonalID CreatorData;
         u8 Palette[15];
         u8 UnusedChecksum = 1; //changing seems to have no effect //Default: 1, Set at 0x1B4F74 EUR 1.5
@@ -372,7 +374,7 @@ namespace CTRPluginFramework {
         u32 DCPart1;
         u32 DCPart2; //Code checks it's less than 1, aka 0
         bool HasDreamAddress;
-        u8  DCPart3;
+        u8 DCPart3;
         u16 Padding;
     };
 
@@ -803,11 +805,11 @@ namespace CTRPluginFramework {
         u8 ZeroPad_2[50]; //0x32
         u16 Unknown2; //0x64 //Some form of ID? 
         u16 ZeroPad_3; //0x66
-        u16/*wchar*/ Header[32]; //0x68 //Max amount is 32 UTF-16 characters
+        wchar Header[32]; //0x68 //Max amount is 32 UTF-16 characters
         u16 ZeroPad_4; //0xA8
-        u16/*wchar*/ Body[192]; //0xAA //Max amount is 192 UTF-16 characters
+        wchar Body[192]; //0xAA //Max amount is 192 UTF-16 characters
         u16 ZeroPad_5; //0x22A
-        u16/*wchar*/ Signature[32]; //0x22C //Max amount is 32 UTF-16 characters
+        wchar Signature[32]; //0x22C //Max amount is 32 UTF-16 characters
         u16 ZeroPad_6; //0x26C
         u8 RecieverNameIndent; //0x26E
         u8 PaperID; //0x26F
@@ -1182,7 +1184,7 @@ namespace CTRPluginFramework {
         Player_Flags PlayerFlags; //0x57A0 -> 0x57D3
         u32 HasTPCPic; //0x57D4 -> 0x57D7
         u8 TPCPic[0x1400]; //0x57D8 -> 0x6BD7
-        u16/*wchar*/ TPCText[33]; //0x6BD8 -> 0x6C19
+        wchar TPCText[33]; //0x6BD8 -> 0x6C19
         u8 Unknown1; //0x6C1A //Unknown: Was 1 on a save, 2 on another
         u8 Unknown2; //0x6C1B
         u32 Unknown3; //0x6C1C -> 0x6C19
@@ -1207,11 +1209,11 @@ namespace CTRPluginFramework {
         Item UnknownItem1; //0x70A0 -> 0x70A3
         Item UnknownItem2; //0x70A4 -> 0x70A7
         ACNL_Letter Letters[10]; //0x70A8 -> 0x89A7
-        u16/*wchar*/ LetterHeader[0x20]; //0x89A8 -> 0x89E7
+        wchar LetterHeader[0x20]; //0x89A8 -> 0x89E7
         u16 Padding_11; //0x89E8 -> 0x89E9
-        u16/*wchar*/ FutureLetterHeader[0x20]; //0x89EA -> 0x8A29
+        wchar FutureLetterHeader[0x20]; //0x89EA -> 0x8A29
         u16 Padding_12; //0x8A2A -> 0x8A2B
-        u16/*wchar*/ LetterSignature[0x20]; //0x8A2C -> 0x8A6B
+        wchar LetterSignature[0x20]; //0x8A2C -> 0x8A6B
         u16 Padding_13; //0x8A6C -> 0x8A6D
         u8 DefaultLtrRecieverNameIndent; //0x8A6E -> 0x8A6E
         u8 DefaultFutureLtrRecieverNameIndent; //0x8A6F -> 0x8A6F //Cannot be >= 0x20
@@ -1264,7 +1266,7 @@ namespace CTRPluginFramework {
         Item SantaBagInv[10]; //0x9048 -> 0x906F
         u8 PlayerZero_Filler[0x320]; //Always 0?? Game just memclr's in player ctor
         Item Dressers[180]; //Each dresser is 60 long
-        u16/*wchar*/ BDayWish[0x22]; //0x9660 -> 0x96A4
+        wchar BDayWish[0x22]; //0x9660 -> 0x96A4
         /*
         ACNL_Letter Letter1; 
         ACNL_Letter Letter2;
@@ -1307,7 +1309,7 @@ namespace CTRPluginFramework {
     struct VillagerFutureHome { //Size: 0xF2
         PersonalID unknownPID; //0x0
         u8 Zerod[0x22]; //0x2E //Related to class script::WordPtrSv, technically same buffer as UnkName
-        u16/*wchar*/ UnkName[9]; //0x50 //Related to class script::WordPtrSv, technically same buffer as Zerod
+        wchar UnkName[9]; //0x50 //Related to class script::WordPtrSv, technically same buffer as Zerod
         Item UnkItem1; //0x62 //Group 1; Some Item; Set to 0x00007ffe in player ctor
         Item UnkItem2; //0x66 //Group 1; Some Item; Set to 0x00007ffe in player ctor
         Item UnkItem3; //0x6A //Group 1; Some Item; Set to 0x00007ffe in player ctor
@@ -1409,7 +1411,7 @@ namespace CTRPluginFramework {
         Item Umbrella; //0x24AA //247E - 2481
         Item Furniture[16]; //0x24AE //2482 - 24C1
         ACNL_Date Date1; //0x24EE //24C2 - 24C5
-        u16/*wchar*/ Catchphrase[11]; //0x24F2 //Last character is null terminator | 24C6 - 24DB
+        wchar Catchphrase[11]; //0x24F2 //Last character is null terminator | 24C6 - 24DB
         u8 Unknown3; //0x2508 //ctor sets to 7
         u8 Padding2; //0x2509
         ACNL_Date Date2; //0x250A //This seems to be a date, maybe date last talked??
@@ -1715,7 +1717,7 @@ namespace CTRPluginFramework {
         u8 Padding; //1
         ACNL_Room MuseumRoom; //2
         ACNL_Pattern ExhibitPoster; //0x304
-        u16/*wchar*/ ExhibitTitle[0x11]; //0xB74
+        wchar ExhibitTitle[0x11]; //0xB74
         u16 Padding2; //0xB96
     };
 
@@ -1730,9 +1732,9 @@ namespace CTRPluginFramework {
     };
 
     struct ACNL_BulletinBoardMessage { //size = 0x1AC
-        u16/*wchar*/ PlayerName[9]; //Only set when player writes the message
-        u16/*wchar*/ TownName[9]; //Only set when player from other town writes the message
-        u16/*wchar*/ Message[0xC1];
+        wchar PlayerName[9]; //Only set when player writes the message
+        wchar TownName[9]; //Only set when player from other town writes the message
+        wchar Message[0xC1];
         ACNL_Date MessageDate;
         u16 UsedFlag; //if message is written
     };
@@ -1937,7 +1939,7 @@ namespace CTRPluginFramework {
         Item LabellesItems[7]; //Accessories in right of shop
         u8 Unknown18[8]; //likely padding
         u64 Unknown19; //encrypted value
-        u16/*wchar*/ ScrappedString[4];
+        wchar ScrappedString[4];
         u64 Unknown20; //encrypted value
         u8 LeifUnlockStatus; //0 = locked; 1 = Being Built; X = Levels
         u8 Unknown21; 

@@ -27,7 +27,7 @@
                 "databaseFilename": ""
             },
             "cStandard": "c11",
-            "cppStandard": "gnu++20",
+            "cppStandard": "c++11",
             "intelliSenseMode": "gcc-arm"  
         }
     ],
