@@ -3,16 +3,11 @@
 #include <CTRPluginFramework.hpp>
 #include "TextID.hpp"
 #include "Language.hpp"
+#include "LibCtrpfExtras/ScreenExtras.hpp"
 
 namespace CTRPluginFramework {
     class OSDExtras : public OSD {
     public:
-        static u32 SystemFontSize(const char* str) {
-            u32 size = OSD::GetTextWidth(true, str);
-            size += 1; //To give a little padding
-            return (size);
-        }
-
         struct  OSDMessage {
             std::string     text;
             int             width;
@@ -23,7 +18,7 @@ namespace CTRPluginFramework {
 
             OSDMessage(const std::string &str, const Color &fg, const Color &bg) {
                 text = str;
-                width = SystemFontSize(text.c_str());
+                width = ScreenExtras::SystemFontSize(text.c_str());
                 drawn = false;
                 foreground = fg;
                 background = bg;

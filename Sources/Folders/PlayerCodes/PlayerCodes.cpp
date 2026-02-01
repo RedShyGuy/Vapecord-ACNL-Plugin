@@ -78,17 +78,17 @@ namespace CTRPluginFramework {
 			return 0;
 		}
 		
-		static constexpr u8 YPositions1[7] = { 10, 20, 30, 40, 50, 60 };
-		static constexpr u8 YPositions2[5] = { 0, 10, 20, 30, 40 };
+		static constexpr u8 YPositions1[7] = { 16, 32, 48, 64, 80, 96 };
+		static constexpr u8 YPositions2[5] = { 0, 16, 32, 48, 64 };
 		
 		int i = 0, j = 0;
 		
 	//gets player
-		screen.Draw(Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_PLAYER).c_str(), pIndex), 0, 0, Player::GetColor(pIndex));
+		screen.DrawSysfont(Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_PLAYER).c_str(), pIndex), 0, 0, Player::GetColor(pIndex));
 		
 		while(i < 6) {
 			for(auto GetString = strings1.begin(); GetString != strings1.end(); ++GetString) {
-				screen.Draw(*GetString, 0, YPositions1[i]);
+				screen.DrawSysfont(*GetString, 0, YPositions1[i]);
 				i++;
 			}	
 		}
@@ -97,7 +97,7 @@ namespace CTRPluginFramework {
 		if(PlayerClass::GetInstance()->IsLoaded()) {	
 			while(j < 5) {
 				for(auto GetString = strings2.begin(); GetString != strings2.end(); ++GetString) {
-					screen.Draw(*GetString, 285, YPositions2[j]);
+					screen.DrawSysfont(*GetString, 280, YPositions2[j]);
 					j++;
 				}	
 			}

@@ -1,7 +1,7 @@
 #include <CTRPluginFramework.hpp>
 #include "LibCtrpfExtras/MenuFolderExtras.hpp"
-#include "LibCtrpfExtras/ColorExtras.hpp"
 #include "LibCtrpfExtras/PluginMenuExtras.hpp"
+#include "LibCtrpfExtras/ColorExtras.hpp"
 #include "Address/Address.hpp"
 #include "Helpers/Game.hpp"
 
@@ -18,7 +18,7 @@ namespace CTRPluginFramework {
 		u8 r = (rgb >> 16) & 0xFF;
 		u8 g = (rgb >> 8)  & 0xFF;
 		u8 b = (rgb >> 0)  & 0xFF;
-		
+
 		Color color(r, g, b);
 
 		keyboard.GetMessage() = color << loremIpsum + "\n\n" + ColorExtras::RemoveColor(Language::getInstance()->get(TextID::COLOR_FORMAT_RGB));
@@ -82,7 +82,7 @@ namespace CTRPluginFramework {
 		WriteCustomColors(colors);
 
 		PluginMenuExtras::Update();
-		
+
         MessageBox(Language::getInstance()->get(TextID::COLOR_CHANGE_SUCCESS)).SetClear(ClearScreen::Top)();
 	}
 

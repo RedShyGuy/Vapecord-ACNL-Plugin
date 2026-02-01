@@ -14,17 +14,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Download libctrpf
+    - name: Clone libctrpf (develop)
       run: |
-        wget -O libctrpf.tar.bz2 "https://gitlab.com/-/project/35748837/uploads/8d2a3dc282f32b6a75d5f6abaeafe88f/libctrpf-0.8.0.tar.bz2"
-        tar -xjf libctrpf.tar.bz2
+        git clone --depth=1 --branch develop https://gitlab.com/thepixellizeross/ctrpluginframework.git libctrpf
 
-    - name: Install libctrpf
+    - name: Build & Install libctrpf
       run: |
-        mkdir -p /opt/devkitpro/libctrpf/include
-        mkdir -p /opt/devkitpro/libctrpf/lib
-        cp -r include/* /opt/devkitpro/libctrpf/include/
-        cp -r lib/* /opt/devkitpro/libctrpf/lib/
+        cd libctrpf
+        make
+        make install
 
     - name: Download 3gxtool
       run: |

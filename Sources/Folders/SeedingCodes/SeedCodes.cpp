@@ -249,7 +249,9 @@ namespace CTRPluginFramework {
 //OSD for Map Editor
 	bool editorID(const Screen &screen) { 
 		if(screen.IsTop) {
-			screen.Draw(Utils::Format(Language::getInstance()->get(TextID::INVENTORY_T2I_SET).c_str(), dropitem), 320, 220, Color::White); 
+			std::string str = Utils::Format(Language::getInstance()->get(TextID::INVENTORY_T2I_SET).c_str(), dropitem);
+			screen.DrawRect(308, 220, OSD::GetTextWidth(true, str) + 1 + (2 * 2), 16, Color::Black, true);
+			screen.DrawSysfont(str, 310, 220); 
 		}
 
 		return 1;

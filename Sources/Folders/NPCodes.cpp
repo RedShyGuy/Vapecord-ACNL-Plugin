@@ -6,6 +6,7 @@
 #include "Helpers/PlayerClass.hpp"
 #include "Helpers/Dropper.hpp"
 #include "RuntimeContext.hpp"
+#include "LibCtrpfExtras/ScreenExtras.hpp"
 
 namespace CTRPluginFramework {
     static u32 CurrAddress = 0;
@@ -21,12 +22,15 @@ namespace CTRPluginFramework {
 			return 0;
 		}
 
+		Color darkGrey(40, 40, 40, 100);
+
 		if(screen.IsTop) {
-			screen.Draw(Utils::Format("X | %f", coord[0]), 0, 0);
-			screen.Draw(Utils::Format("Y | %f", coord[1]), 0, 10);
-			screen.Draw(Utils::Format("Z | %f", coord[2]), 0, 20);
-			screen.Draw(Utils::Format("R | %04X", rotation), 0, 30);
-			screen.Draw(Utils::Format("A | %08X", CurrAddress), 0, 40);
+			ScreenExtras extras(screen);
+			extras.DrawSysfont(Utils::Format("X | %f", coord[0]), 0, 0, Color::White, darkGrey);
+			extras.DrawSysfont(Utils::Format("Y | %f", coord[1]), 0, 16, Color::White, darkGrey);
+			extras.DrawSysfont(Utils::Format("Z | %f", coord[2]), 0, 32, Color::White, darkGrey);
+			extras.DrawSysfont(Utils::Format("R | %04X", rotation), 0, 48, Color::White, darkGrey);
+			extras.DrawSysfont(Utils::Format("A | %08X", CurrAddress), 0, 64, Color::White, darkGrey);
 			return 1;
 		}
 

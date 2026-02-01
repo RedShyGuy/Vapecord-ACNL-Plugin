@@ -2,7 +2,6 @@
 #include "LibCtrpfExtras/MenuEntryExtras.hpp"
 #include "LibCtrpfExtras/MenuFolderExtras.hpp"
 #include "LibCtrpfExtras/HotkeyExtras.hpp"
-#include "LibCtrpfExtras/ColorExtras.hpp"
 
 namespace CTRPluginFramework {
     static MenuEntryExtras *EntryWithHotkey(MenuEntryExtras *entry, const std::vector<HotkeyExtras> &hotkeys) {
@@ -14,7 +13,7 @@ namespace CTRPluginFramework {
         }
         return entry;
     }
-	
+
 	static MenuEntryExtras *EntryWithHotkey(MenuEntryExtras *entry, const HotkeyExtras &hotkey) {
         if(entry != nullptr) {
             entry->Hotkeys += hotkey;
@@ -30,9 +29,9 @@ namespace CTRPluginFramework {
 	/////////////////////
 		MenuFolderExtras *SAVEC = new MenuFolderExtras(FolderType::Save);
 	    SAVEC->Append(new MenuEntryExtras(TextID::TOWN_NAME_CHANGER, nullptr, townnamechanger, TextID::TOWN_NAME_CHANGER_NOTE)),
-		SAVEC->Append(new MenuEntryExtras(TextID::SAVE_BACKUP_NAME, nullptr, savebackup, TextID::SAVE_BACKUP_NOTE)),	
+		SAVEC->Append(new MenuEntryExtras(TextID::SAVE_BACKUP_NAME, nullptr, savebackup, TextID::SAVE_BACKUP_NOTE)),
 		SAVEC->Append(new MenuEntryExtras(TextID::BULL_BOARD_DUMPER, nullptr, bullboard, TextID::BULL_BOARD_DUMPER_NOTE)),
-		SAVEC->Append(new MenuEntryExtras(TextID::TREESIZE_NAME, nullptr, TreeSizeChanger, TextID::TREESIZE_NOTE)),	
+		SAVEC->Append(new MenuEntryExtras(TextID::TREESIZE_NAME, nullptr, TreeSizeChanger, TextID::TREESIZE_NOTE)),
 		SAVEC->Append(new MenuEntryExtras(TextID::CHANGE_NATIVE_NAME, nullptr, ChangeNativeFruit, TextID::CHANGE_NATIVE_NOTE)),
 		SAVEC->Append(new MenuEntryExtras(TextID::PWP_UNLOCK_NAME, nullptr, PWPUnlock, TextID::PWP_UNLOCK_NOTE)),
 		SAVEC->Append(new MenuEntryExtras(TextID::GRASS_CHANGER_NAME, nullptr, GrassChanger, TextID::GRASS_CHANGER_NOTE)),
@@ -45,43 +44,43 @@ namespace CTRPluginFramework {
 		SAVEC->Append(new MenuEntryExtras(TextID::MAYOR_PERMIT_NAME, Permit100, TextID::MAYOR_PERMIT_NOTE)),
 		SAVEC->Append(new MenuEntryExtras(TextID::REAL_TIME_ACRE, MapEditor, TextID::REAL_TIME_ACRE_NOTE)),
 		menu->Append(SAVEC);
-		
+
 	/////////////////////////
 	/*Movement Codes Folder*/
 	/////////////////////////
 		MenuFolderExtras *MOVEC = new MenuFolderExtras(FolderType::Movement);
 		MOVEC->Append(new MenuEntryExtras(TextID::CANT_PUSH, noPush, TextID::CANT_PUSH_NOTE)),
 		MOVEC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::COORD_MOD, coordinate, coordspeed, TextID::COORD_MOD_NOTE), {
-			HotkeyExtras(Key::A, TextID::COORD_MOD_KEY1), 
-			HotkeyExtras(Key::DPadRight, TextID::COORD_MOD_KEY2), 
-			HotkeyExtras(Key::DPadLeft, TextID::COORD_MOD_KEY3), 
-			HotkeyExtras(Key::DPadDown, TextID::COORD_MOD_KEY4), 
-			HotkeyExtras(Key::DPadUp, TextID::COORD_MOD_KEY5) 
+			HotkeyExtras(Key::A, TextID::COORD_MOD_KEY1),
+			HotkeyExtras(Key::DPadRight, TextID::COORD_MOD_KEY2),
+			HotkeyExtras(Key::DPadLeft, TextID::COORD_MOD_KEY3),
+			HotkeyExtras(Key::DPadDown, TextID::COORD_MOD_KEY4),
+			HotkeyExtras(Key::DPadUp, TextID::COORD_MOD_KEY5)
 		})),
-		MOVEC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::MOON_JUMP, moonjump, TextID::MOON_JUMP_NOTE), { 
-			HotkeyExtras(Key::L | Key::DPadUp, TextID::MOON_JUMP_KEY1), 
-			HotkeyExtras(Key::L | Key::DPadDown, TextID::MOON_JUMP_KEY2) 
+		MOVEC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::MOON_JUMP, moonjump, TextID::MOON_JUMP_NOTE), {
+			HotkeyExtras(Key::L | Key::DPadUp, TextID::MOON_JUMP_KEY1),
+			HotkeyExtras(Key::L | Key::DPadDown, TextID::MOON_JUMP_KEY2)
 		})),
 		MOVEC->Append(new MenuEntryExtras(TextID::TOUCH_WARP, tch_warp, TextID::TOUCH_WARP_NOTE)),
-		MOVEC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::WALK_OVER, walkOver, TextID::WALK_OVER_NOTE), { 
-			HotkeyExtras(Key::L | Key::DPadUp, TextID::WALK_OVER) 
-		})),		   
-		MOVEC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::MOVEMENT_CHANGE, MovementChanger, TextID::MOVEMENT_CHANGE_NOTE), { 
-			HotkeyExtras(Key::L | Key::B, TextID::MOVEMENT_CHANGE) 
+		MOVEC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::WALK_OVER, walkOver, TextID::WALK_OVER_NOTE), {
+			HotkeyExtras(Key::L | Key::DPadUp, TextID::WALK_OVER)
 		})),
-		MOVEC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::WALK_PARTICLE_CHANGE, Walkparticle, TextID::WALK_PARTICLE_CHANGE_NOTE), { 
+		MOVEC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::MOVEMENT_CHANGE, MovementChanger, TextID::MOVEMENT_CHANGE_NOTE), {
+			HotkeyExtras(Key::L | Key::B, TextID::MOVEMENT_CHANGE)
+		})),
+		MOVEC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::WALK_PARTICLE_CHANGE, Walkparticle, TextID::WALK_PARTICLE_CHANGE_NOTE), {
 			HotkeyExtras(Key::L | Key::X, TextID::WALK_PARTICLE_CHANGE)
 		})),
-		MOVEC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::PLAYER_TELEPORT, stalk, TextID::PLAYER_TELEPORT_NOTE), { 
-			HotkeyExtras(Key::R | Key::DPadLeft, TextID::PLAYER_TELEPORT_KEY1), 
-			HotkeyExtras(Key::R | Key::DPadRight, TextID::PLAYER_TELEPORT_KEY2) 
+		MOVEC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::PLAYER_TELEPORT, stalk, TextID::PLAYER_TELEPORT_NOTE), {
+			HotkeyExtras(Key::R | Key::DPadLeft, TextID::PLAYER_TELEPORT_KEY1),
+			HotkeyExtras(Key::R | Key::DPadRight, TextID::PLAYER_TELEPORT_KEY2)
 		})),
-		MOVEC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::VISIBILITY_MOD, onlineplayermod, TextID::VISIBILITY_MOD_NOTE), { 
-			HotkeyExtras(Key::L | Key::A, TextID::VISIBILITY_MOD_KEY1) 
+		MOVEC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::VISIBILITY_MOD, onlineplayermod, TextID::VISIBILITY_MOD_NOTE), {
+			HotkeyExtras(Key::L | Key::A, TextID::VISIBILITY_MOD_KEY1)
 		})),
 		MOVEC->Append(new MenuEntryExtras(TextID::SPEED_MOD, speedMod, menuSpeedMod, TextID::SPEED_MOD_NOTE)),
-		MOVEC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::ROOM_WARPING, roomWarp, TextID::ROOM_WARPING_NOTE), { 
-			HotkeyExtras(Key::L | Key::X, TextID::ROOM_WARPING) 
+		MOVEC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::ROOM_WARPING, roomWarp, TextID::ROOM_WARPING_NOTE), {
+			HotkeyExtras(Key::L | Key::X, TextID::ROOM_WARPING)
 		})),
 		MOVEC->Append(new MenuEntryExtras(TextID::SHOVEL_KNOCKBACK, shovelknockback, TextID::SHOVEL_KNOCKBACK_NOTE)),
 		menu->Append(MOVEC);
@@ -90,20 +89,20 @@ namespace CTRPluginFramework {
 	/*Inventory Codes Folder*/
 	//////////////////////////
 		MenuFolderExtras *INVC = new MenuFolderExtras(FolderType::Inventory);
-		INVC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::TEXT_2_ITEM, t2i, itemsearch, TextID::TEXT_2_ITEM_NOTE), { 
-			HotkeyExtras(Key::X | Key::DPadRight, TextID::TEXT_2_ITEM_KEY1), 
-			HotkeyExtras(Key::X |Key::DPadUp, TextID::TEXT_2_ITEM_KEY2), 
+		INVC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::TEXT_2_ITEM, t2i, itemsearch, TextID::TEXT_2_ITEM_NOTE), {
+			HotkeyExtras(Key::X | Key::DPadRight, TextID::TEXT_2_ITEM_KEY1),
+			HotkeyExtras(Key::X |Key::DPadUp, TextID::TEXT_2_ITEM_KEY2),
 			HotkeyExtras(Key::X | Key::DPadDown, TextID::TEXT_2_ITEM_KEY3),
 		})),
-		INVC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::DUPE_ITEMS, duplication, TextID::DUPE_ITEMS_NOTE), { 
-			HotkeyExtras(Key::R, TextID::DUPE_ITEMS_KEY1), 
-			HotkeyExtras(Key::R | Key::X, TextID::DUPE_ITEMS_KEY2) 
+		INVC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::DUPE_ITEMS, duplication, TextID::DUPE_ITEMS_NOTE), {
+			HotkeyExtras(Key::R, TextID::DUPE_ITEMS_KEY1),
+			HotkeyExtras(Key::R | Key::X, TextID::DUPE_ITEMS_KEY2)
 		})),
-		INVC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::CATALOG_TO_POCKET, catalog, TextID::CATALOG_TO_POCKET_NOTE), { 
+		INVC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::CATALOG_TO_POCKET, catalog, TextID::CATALOG_TO_POCKET_NOTE), {
 			HotkeyExtras(Key::L | Key::DPadRight, TextID::CATALOG_TO_POCKET_KEY1)
 		})),
-		INVC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::CHAT_T2I, chatt2i, TextID::CHAT_T2I_NOTE), { 
-			HotkeyExtras(Key::R | Key::DPadLeft, TextID::CHAT_T2I_KEY1) 
+		INVC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::CHAT_T2I, chatt2i, TextID::CHAT_T2I_NOTE), {
+			HotkeyExtras(Key::R | Key::DPadLeft, TextID::CHAT_T2I_KEY1)
 		})),
 		INVC->Append(new MenuEntryExtras(TextID::CLEAR_INV_NAME, nullptr, ClearInventory, TextID::CLEAR_INV_NOTE)),
 		INVC->Append(new MenuEntryExtras(TextID::ITEM_SETTINGS, nullptr, itemsettings, TextID::ITEM_SETTINGS_NOTE)),
@@ -137,10 +136,10 @@ namespace CTRPluginFramework {
 		PLAYC->Append(PSAVEC);
 		PLAYC->Append(new MenuEntryExtras(TextID::PLAYER_INFO, debug, TextID::PLAYER_INFO_NOTE)),
 	//PLAYC->Append(new MenuEntryExtras(TextID::PLAYER_LOADER, nullptr, pLoaderEntry, TextID::PLAYER_LOADER_NOTE)),
-		PLAYC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::NECK_POSITION, neckentry, TextID::NECK_POSITION_NOTE), { 
-			HotkeyExtras(Key::L | Key::DPadDown, TextID::NECK_POSITION) 
+		PLAYC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::NECK_POSITION, neckentry, TextID::NECK_POSITION_NOTE), {
+			HotkeyExtras(Key::L | Key::DPadDown, TextID::NECK_POSITION)
 		})),
-		PLAYC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::CUSTOM_HAIR_EYE, App_ColorMod, SaveColor, TextID::CUSTOM_HAIR_EYE_NOTE), { 
+		PLAYC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::CUSTOM_HAIR_EYE, App_ColorMod, SaveColor, TextID::CUSTOM_HAIR_EYE_NOTE), {
 			HotkeyExtras(Key::R, TextID::CUSTOM_HAIR_EYE_KEY1)
 		})),
 		PLAYC->Append(new MenuEntryExtras(TextID::WEAR_HELMET, hatz, TextID::WEAR_HELMET_NOTE)),
@@ -156,30 +155,30 @@ namespace CTRPluginFramework {
 	/*Animation Codes Folder*/
 	//////////////////////////
 		MenuFolderExtras *ANIMC = new MenuFolderExtras(FolderType::Animation);
-		ANIMC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::PLAYER_SELECTOR, playerSelector, TextID::PLAYER_SELECTOR_NOTE), { 
-			HotkeyExtras(Key::L | Key::DPadRight, TextID::PLAYER_SELECTOR_KEY1), 
-			HotkeyExtras(Key::L | Key::DPadLeft, TextID::PLAYER_SELECTOR_KEY2) 
+		ANIMC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::PLAYER_SELECTOR, playerSelector, TextID::PLAYER_SELECTOR_NOTE), {
+			HotkeyExtras(Key::L | Key::DPadRight, TextID::PLAYER_SELECTOR_KEY1),
+			HotkeyExtras(Key::L | Key::DPadLeft, TextID::PLAYER_SELECTOR_KEY2)
 		})),
 		ANIMC->Append(new MenuEntryExtras(TextID::ANTI_ANIM, anticheat, TextID::ANTI_ANIM_NOTE)),
-		ANIMC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::ANIMATION_MOD, execAnim, TextID::ANIMATION_MOD_NOTE), { 
-			HotkeyExtras(Key::A | Key::DPadRight, TextID::ANIMATIONS_NOTE_HOTKEY1), 
-			HotkeyExtras(Key::A | Key::DPadLeft, TextID::ANIMATIONS_NOTE_HOTKEY2), 
-			HotkeyExtras(Key::A | Key::DPadUp, TextID::ANIMATIONS_NOTE_HOTKEY3), 
-			HotkeyExtras(Key::A | Key::B, TextID::ANIMATIONS_NOTE_HOTKEY4) 
+		ANIMC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::ANIMATION_MOD, execAnim, TextID::ANIMATION_MOD_NOTE), {
+			HotkeyExtras(Key::A | Key::DPadRight, TextID::ANIMATIONS_NOTE_HOTKEY1),
+			HotkeyExtras(Key::A | Key::DPadLeft, TextID::ANIMATIONS_NOTE_HOTKEY2),
+			HotkeyExtras(Key::A | Key::DPadUp, TextID::ANIMATIONS_NOTE_HOTKEY3),
+			HotkeyExtras(Key::A | Key::B, TextID::ANIMATIONS_NOTE_HOTKEY4)
 		})),
-		ANIMC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::EMOTION_LOOP, inf_expression, TextID::EMOTION_LOOP_NOTE), { 
-			HotkeyExtras(Key::B, TextID::EMOTION_LOOP) 
+		ANIMC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::EMOTION_LOOP, inf_expression, TextID::EMOTION_LOOP_NOTE), {
+			HotkeyExtras(Key::B, TextID::EMOTION_LOOP)
 		})),
-		ANIMC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::IDLE, idle, TextID::IDLE_NOTE), { 
-			HotkeyExtras(Key::R, TextID::IDLE) 
+		ANIMC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::IDLE, idle, TextID::IDLE_NOTE), {
+			HotkeyExtras(Key::R, TextID::IDLE)
 		})),
-		ANIMC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::SLOW_MO_ANIM, slmoanms, TextID::SLOW_MO_ANIM_NOTE), { 
-			HotkeyExtras(Key::L | Key::DPadLeft, TextID::SLOW_MO_ANIM) 
+		ANIMC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::SLOW_MO_ANIM, slmoanms, TextID::SLOW_MO_ANIM_NOTE), {
+			HotkeyExtras(Key::L | Key::DPadLeft, TextID::SLOW_MO_ANIM)
 		})),
-		ANIMC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::ANIM_ON_ALL, doonall, TextID::ANIM_ON_ALL_NOTE), { 
-			HotkeyExtras(Key::R | Key::A, TextID::ANIM_ON_ALL_KEY1), 
-			HotkeyExtras(Key::R | Key::B, TextID::ANIM_ON_ALL_KEY2), 
-			HotkeyExtras(Key::R | Key::Y, TextID::ANIM_ON_ALL_KEY3) 
+		ANIMC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::ANIM_ON_ALL, doonall, TextID::ANIM_ON_ALL_NOTE), {
+			HotkeyExtras(Key::R | Key::A, TextID::ANIM_ON_ALL_KEY1),
+			HotkeyExtras(Key::R | Key::B, TextID::ANIM_ON_ALL_KEY2),
+			HotkeyExtras(Key::R | Key::Y, TextID::ANIM_ON_ALL_KEY3)
 		})),
 		menu->Append(ANIMC);
 
@@ -191,32 +190,32 @@ namespace CTRPluginFramework {
 	/*Seed Codes SubFolder*/
 	////////////////////////
 		MenuFolderExtras *SEED1C = new MenuFolderExtras(FolderType::Seeding, SubFolder::Seed);
-		SEED1C->Append(EntryWithHotkey(new MenuEntryExtras(TextID::PICK_SEEDER, pickseeder, TextID::PICK_SEEDER_NOTE), { 
-			HotkeyExtras(Key::B | Key::DPadLeft, TextID::PICK_SEEDER_KEY1), 
-			HotkeyExtras(Key::B | Key::DPadDown, TextID::PICK_SEEDER_KEY2), 
-			HotkeyExtras(Key::B | Key::DPadUp, TextID::PICK_SEEDER_KEY3), 
-			HotkeyExtras(Key::B | Key::DPadRight, TextID::PICK_SEEDER_KEY4), 
-			HotkeyExtras(Key::B | Key::L, TextID::PICK_SEEDER_KEY5) 
+		SEED1C->Append(EntryWithHotkey(new MenuEntryExtras(TextID::PICK_SEEDER, pickseeder, TextID::PICK_SEEDER_NOTE), {
+			HotkeyExtras(Key::B | Key::DPadLeft, TextID::PICK_SEEDER_KEY1),
+			HotkeyExtras(Key::B | Key::DPadDown, TextID::PICK_SEEDER_KEY2),
+			HotkeyExtras(Key::B | Key::DPadUp, TextID::PICK_SEEDER_KEY3),
+			HotkeyExtras(Key::B | Key::DPadRight, TextID::PICK_SEEDER_KEY4),
+			HotkeyExtras(Key::B | Key::L, TextID::PICK_SEEDER_KEY5)
 		})),
-		SEED1C->Append(EntryWithHotkey(new MenuEntryExtras(TextID::WALK_SEEDER, Walkseeder, TextID::WALK_SEEDER_NOTE), { 
-			HotkeyExtras(Key::R | Key::B, TextID::WALK_SEEDER) 
+		SEED1C->Append(EntryWithHotkey(new MenuEntryExtras(TextID::WALK_SEEDER, Walkseeder, TextID::WALK_SEEDER_NOTE), {
+			HotkeyExtras(Key::R | Key::B, TextID::WALK_SEEDER)
 		})),
 		SEED1C->Append(new MenuEntryExtras(TextID::FIREWORK_SEEDER, nullptr, fireworkentry, TextID::FIREWORK_SEEDER_NOTE)),
-		SEED1C->Append(EntryWithHotkey(new MenuEntryExtras(TextID::MAP_EDITOR, tileSelector, TextID::MAP_EDITOR_NOTE), { 
-			HotkeyExtras(Key::Start | Key::DPadUp, TextID::MAP_EDITOR_KEY1), 
-			HotkeyExtras(Key::DPadRight, TextID::MAP_EDITOR_KEY2), 
-			HotkeyExtras(Key::DPadLeft, TextID::MAP_EDITOR_KEY3), 
-			HotkeyExtras(Key::DPadDown, TextID::MAP_EDITOR_KEY4), 
-			HotkeyExtras(Key::DPadUp, TextID::MAP_EDITOR_KEY5), 
-			HotkeyExtras(Key::L, TextID::MAP_EDITOR_KEY6), 
-			HotkeyExtras(Key::R, TextID::MAP_EDITOR_KEY7), 
-			HotkeyExtras(Key::Start | Key::DPadDown, TextID::MAP_EDITOR_KEY8), 
-			HotkeyExtras(Key::Start | Key::DPadLeft, TextID::MAP_EDITOR_KEY9), 
-			HotkeyExtras(Key::A, TextID::MAP_EDITOR_KEY10), 
-			HotkeyExtras(Key::Start | Key::DPadRight, TextID::MAP_EDITOR_KEY11) 
+		SEED1C->Append(EntryWithHotkey(new MenuEntryExtras(TextID::MAP_EDITOR, tileSelector, TextID::MAP_EDITOR_NOTE), {
+			HotkeyExtras(Key::Start | Key::DPadUp, TextID::MAP_EDITOR_KEY1),
+			HotkeyExtras(Key::DPadRight, TextID::MAP_EDITOR_KEY2),
+			HotkeyExtras(Key::DPadLeft, TextID::MAP_EDITOR_KEY3),
+			HotkeyExtras(Key::DPadDown, TextID::MAP_EDITOR_KEY4),
+			HotkeyExtras(Key::DPadUp, TextID::MAP_EDITOR_KEY5),
+			HotkeyExtras(Key::L, TextID::MAP_EDITOR_KEY6),
+			HotkeyExtras(Key::R, TextID::MAP_EDITOR_KEY7),
+			HotkeyExtras(Key::Start | Key::DPadDown, TextID::MAP_EDITOR_KEY8),
+			HotkeyExtras(Key::Start | Key::DPadLeft, TextID::MAP_EDITOR_KEY9),
+			HotkeyExtras(Key::A, TextID::MAP_EDITOR_KEY10),
+			HotkeyExtras(Key::Start | Key::DPadRight, TextID::MAP_EDITOR_KEY11)
 		})),
-		SEED1C->Append(EntryWithHotkey(new MenuEntryExtras(TextID::ALL_SEEDER, everythingseeder, E_Seeder_KB, TextID::ALL_SEEDER_NOTE), { 
-			HotkeyExtras(Key::L, TextID::ALL_SEEDER_KEY1) 
+		SEED1C->Append(EntryWithHotkey(new MenuEntryExtras(TextID::ALL_SEEDER, everythingseeder, E_Seeder_KB, TextID::ALL_SEEDER_NOTE), {
+			HotkeyExtras(Key::L, TextID::ALL_SEEDER_KEY1)
 		})),
 		SEEDC->Append(SEED1C);
 	////////////////////////
@@ -224,26 +223,26 @@ namespace CTRPluginFramework {
 	////////////////////////
 		MenuFolderExtras *DROPC = new MenuFolderExtras(FolderType::Seeding, SubFolder::Drop);
 		DROPC->Append(new MenuEntryExtras(TextID::ITEM_SEQUENCER, nullptr, Entry_itemsequence, TextID::ITEM_SEQUENCER_NOTE)),
-	    DROPC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::DROP_MODS, dropMod, TextID::DROP_MODS_NOTE), { 
-			HotkeyExtras(Key::A | Key::DPadRight, TextID::DROP_MODS_KEY1), 
-			HotkeyExtras(Key::A | Key::DPadLeft, TextID::DROP_MODS_KEY2), 
-			HotkeyExtras(Key::A | Key::DPadDown, TextID::DROP_MODS_KEY3), 
-			HotkeyExtras(Key::A | Key::DPadUp, TextID::DROP_MODS_KEY4) 
+	    DROPC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::DROP_MODS, dropMod, TextID::DROP_MODS_NOTE), {
+			HotkeyExtras(Key::A | Key::DPadRight, TextID::DROP_MODS_KEY1),
+			HotkeyExtras(Key::A | Key::DPadLeft, TextID::DROP_MODS_KEY2),
+			HotkeyExtras(Key::A | Key::DPadDown, TextID::DROP_MODS_KEY3),
+			HotkeyExtras(Key::A | Key::DPadUp, TextID::DROP_MODS_KEY4)
 		})),
-		DROPC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::DROP_ITEMS, instantDrop, TextID::DROP_ITEMS_NOTE), { 
-			HotkeyExtras(Key::Y | Key::DPadRight, TextID::DROP_ITEMS_KEY1), 
-			HotkeyExtras(Key::L | Key::DPadDown, TextID::DROP_ITEMS_KEY2) 
+		DROPC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::DROP_ITEMS, instantDrop, TextID::DROP_ITEMS_NOTE), {
+			HotkeyExtras(Key::Y | Key::DPadRight, TextID::DROP_ITEMS_KEY1),
+			HotkeyExtras(Key::L | Key::DPadDown, TextID::DROP_ITEMS_KEY2)
 		})),
-		DROPC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::AUTO_DROP, autoDrop, TextID::AUTO_DROP_NOTE), { 
-			HotkeyExtras(Key::Y | Key::DPadRight, TextID::AUTO_DROP_KEY1), 
-			HotkeyExtras(Key::Y | Key::DPadLeft, TextID::AUTO_DROP_KEY2) 
+		DROPC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::AUTO_DROP, autoDrop, TextID::AUTO_DROP_NOTE), {
+			HotkeyExtras(Key::Y | Key::DPadRight, TextID::AUTO_DROP_KEY1),
+			HotkeyExtras(Key::Y | Key::DPadLeft, TextID::AUTO_DROP_KEY2)
 		})),
-		DROPC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::TOUCH_DROP, touchDrop, TextID::TOUCH_DROP_NOTE), { 
-			HotkeyExtras(Key::Y | Key::DPadRight, TextID::TOUCH_DROP_KEY1) 
+		DROPC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::TOUCH_DROP, touchDrop, TextID::TOUCH_DROP_NOTE), {
+			HotkeyExtras(Key::Y | Key::DPadRight, TextID::TOUCH_DROP_KEY1)
 		})),
-		DROPC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::SLOT_DROP, ShowInvSlotID, TextID::SLOT_DROP_NOTE), { 
-			HotkeyExtras(Key::R | Key::Y, TextID::SLOT_DROP_KEY1), 
-			HotkeyExtras(Key::R | Key::X, TextID::SLOT_DROP_KEY2) 
+		DROPC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::SLOT_DROP, ShowInvSlotID, TextID::SLOT_DROP_NOTE), {
+			HotkeyExtras(Key::R | Key::Y, TextID::SLOT_DROP_KEY1),
+			HotkeyExtras(Key::R | Key::X, TextID::SLOT_DROP_KEY2)
 		})),
 		SEEDC->Append(DROPC);
 	////////////////////////
@@ -252,8 +251,8 @@ namespace CTRPluginFramework {
 		MenuFolderExtras *TREEC = new MenuFolderExtras(FolderType::Seeding, SubFolder::Tree);
 		TREEC->Append(new MenuEntryExtras(TextID::INF_FRUIT_TREE, fruitStays, TextID::INF_FRUIT_TREE_NOTE)),
 		TREEC->Append(new MenuEntryExtras(TextID::AXE_TREE_SHAKE, shakechop, TextID::AXE_TREE_SHAKE_NOTE)),
-		TREEC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::FRUIT_TREE_MOD, fruititemmod, TextID::FRUIT_TREE_MOD_NOTE), { 
-			HotkeyExtras(Key::A | Key::DPadLeft, TextID::FRUIT_TREE_MOD_KEY1) 
+		TREEC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::FRUIT_TREE_MOD, fruititemmod, TextID::FRUIT_TREE_MOD_NOTE), {
+			HotkeyExtras(Key::A | Key::DPadLeft, TextID::FRUIT_TREE_MOD_KEY1)
 		})),
 		TREEC->Append(new MenuEntryExtras(TextID::INST_TREE_CHOP, instantchop, TextID::INST_TREE_CHOP_NOTE)),
 		SEEDC->Append(TREEC),
@@ -283,7 +282,7 @@ namespace CTRPluginFramework {
 		ISLC->Append(new MenuEntryExtras(TextID::ALL_TOURS, alltour, TextID::ALL_TOURS_NOTE)),
 		ISLC->Append(new MenuEntryExtras(TextID::ISLAND_ACRE, acreMod, menuAcreMod, TextID::ISLAND_ACRE_NOTE)),
 		ISLC->Append(new MenuEntryExtras(TextID::ISLAND_BUILDING, buildingMod, menuBuildingMod, TextID::ISLAND_BUILDING_NOTE)),
-		ISLC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::ISLAND_SAVER, IslandSaver, TextID::ISLAND_SAVER_NOTE), { 
+		ISLC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::ISLAND_SAVER, IslandSaver, TextID::ISLAND_SAVER_NOTE), {
 			HotkeyExtras(Key::L | Key::Y, TextID::OPEN_MENU)
 		})),
 		menu->Append(ISLC);
@@ -292,24 +291,24 @@ namespace CTRPluginFramework {
 	/*NPC Folder*/
 	//////////////
 		MenuFolderExtras *NPCC = new MenuFolderExtras(FolderType::NPC);
-		NPCC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::NPC_SELECTOR, NPCFunction, TextID::NPC_SELECTOR_NOTE), { 
-			HotkeyExtras(Key::L | Key::A, TextID::NPC_SELECTOR_KEY1) 
+		NPCC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::NPC_SELECTOR, NPCFunction, TextID::NPC_SELECTOR_NOTE), {
+			HotkeyExtras(Key::L | Key::A, TextID::NPC_SELECTOR_KEY1)
 		})),
-		NPCC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::NPC_ANIMATION,  NPCAnimation, NPCSetAnim, TextID::NPC_ANIMATION_NOTE), { 
-			HotkeyExtras(Key::L | Key::B, TextID::NPC_ANIMATION_KEY1) 
+		NPCC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::NPC_ANIMATION,  NPCAnimation, NPCSetAnim, TextID::NPC_ANIMATION_NOTE), {
+			HotkeyExtras(Key::L | Key::B, TextID::NPC_ANIMATION_KEY1)
 		})),
-		NPCC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::NPC_COORDINATE, NPCCoordinates, TextID::NPC_COORDINATE_NOTE), { 
+		NPCC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::NPC_COORDINATE, NPCCoordinates, TextID::NPC_COORDINATE_NOTE), {
 			HotkeyExtras(Key::L, TextID::NPC_COORDINATE_KEY1),
-			HotkeyExtras(Key::DPadRight, TextID::NPC_COORDINATE_KEY2), 
-			HotkeyExtras(Key::DPadLeft, TextID::NPC_COORDINATE_KEY3), 
-			HotkeyExtras(Key::DPadDown, TextID::NPC_COORDINATE_KEY4), 
+			HotkeyExtras(Key::DPadRight, TextID::NPC_COORDINATE_KEY2),
+			HotkeyExtras(Key::DPadLeft, TextID::NPC_COORDINATE_KEY3),
+			HotkeyExtras(Key::DPadDown, TextID::NPC_COORDINATE_KEY4),
 			HotkeyExtras(Key::DPadUp, TextID::NPC_COORDINATE_KEY5)
 		})),
-		NPCC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::NPC_TELEPORT, NPCTeleportToYou, TextID::NPC_TELEPORT_NOTE), { 
-			HotkeyExtras(Key::L | Key::Y, TextID::NPC_TELEPORT_KEY1) 
+		NPCC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::NPC_TELEPORT, NPCTeleportToYou, TextID::NPC_TELEPORT_NOTE), {
+			HotkeyExtras(Key::L | Key::Y, TextID::NPC_TELEPORT_KEY1)
 		})),
-		NPCC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::NPC_ROTATION, NPCRotate, TextID::NPC_ROTATION_NOTE), { 
-			HotkeyExtras(Key::L, TextID::NPC_ROTATION_KEY1) 
+		NPCC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::NPC_ROTATION, NPCRotate, TextID::NPC_ROTATION_NOTE), {
+			HotkeyExtras(Key::L, TextID::NPC_ROTATION_KEY1)
 		})),
 		menu->Append(NPCC);
 
@@ -331,17 +330,17 @@ namespace CTRPluginFramework {
 		INSC->Append(new MenuEntryExtras(TextID::SPAWN_INSECT, SpawnInsectEntry, SetInsectIdEntry, TextID::SPAWN_INSECT_NOTE)),
 		INSC->Append(new MenuEntryExtras(TextID::INSECT_CANT_SCARE, InsectsCantBeScared, TextID::INSECT_CANT_SCARE_NOTE)),
 		ENVC->Append(INSC);
-		
+
 		ENVC->Append(new MenuEntryExtras(TextID::DAYTIME, Daytime, TextID::DAYTIME_NOTE)),
 		ENVC->Append(new MenuEntryExtras(TextID::ALWAYS_AURORA_MOD, auroralights , TextID::ALWAYS_AURORA_MOD_NOTE)),
 		ENVC->Append(new MenuEntryExtras(TextID::UNBREAK_FLOWER, unbreakableflower, TextID::UNBREAK_FLOWER_NOTE)),
 		ENVC->Append(new MenuEntryExtras(TextID::WEATHER_MOD, nullptr, Weathermod , TextID::WEATHER_MOD_NOTE)),
 		ENVC->Append(new MenuEntryExtras(TextID::WATER_FLOWERS_NAME, nullptr, WaterAllFlowers, TextID::WATER_FLOWERS_NOTE)),
 		ENVC->Append(new MenuEntryExtras(TextID::WEED_REMOVER_NAME, nullptr, weedremover, TextID::WEED_REMOVER_NOTE)),
-		ENVC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::GRASS_EDITOR, grasseditor, grasscomplete, TextID::GRASS_EDITOR_NOTE), { 
-			HotkeyExtras(Key::R | Key::DPadDown, TextID::GRASS_EDITOR_HOTKEY1), 
-			HotkeyExtras(Key::R | Key::DPadUp, TextID::GRASS_EDITOR_HOTKEY2), 
-			HotkeyExtras(Key::R | Key::DPadRight, TextID::GRASS_EDITOR_HOTKEY3) 
+		ENVC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::GRASS_EDITOR, grasseditor, grasscomplete, TextID::GRASS_EDITOR_NOTE), {
+			HotkeyExtras(Key::R | Key::DPadDown, TextID::GRASS_EDITOR_HOTKEY1),
+			HotkeyExtras(Key::R | Key::DPadUp, TextID::GRASS_EDITOR_HOTKEY2),
+			HotkeyExtras(Key::R | Key::DPadRight, TextID::GRASS_EDITOR_HOTKEY3)
 		})),
 		ENVC->Append(new MenuEntryExtras(TextID::KEEP_GRASS_STATE, KeepGrassState, TextID::KEEP_GRASS_STATE_NOTE)),
 		ENVC->Append(new MenuEntryExtras(TextID::BURIED_INSPECTOR, BuriedInspector, TextID::BURIED_INSPECTOR_NOTE)),
@@ -364,8 +363,8 @@ namespace CTRPluginFramework {
 			HotkeyExtras(Key::L | Key::DPadDown, TextID::CHATCOPYPASTE_KEY3),
 			HotkeyExtras(Key::L | Key::DPadLeft, TextID::CHATCOPYPASTE_KEY4)
 		})),
-		CHAC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::FORCE_CHAT, Forcesendchat, TextID::FORCE_CHAT_NOTE), { 
-			HotkeyExtras(Key::R, TextID::FORCE_CHAT) 
+		CHAC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::FORCE_CHAT, Forcesendchat, TextID::FORCE_CHAT_NOTE), {
+			HotkeyExtras(Key::R, TextID::FORCE_CHAT)
 		})),
 		CHAC->Append(new MenuEntryExtras(TextID::CHAT_COMMANDS, chatCommands, TextID::CHAT_COMMANDS_NOTE)),
 		CHAC->Append(new MenuEntryExtras(TextID::CHAT_BUTTON, ChatButton, TextID::CHAT_BUTTON_NOTE)),
@@ -373,17 +372,17 @@ namespace CTRPluginFramework {
 	////////////////////
 	/*Fun Codes Folder*/
 	////////////////////
-		MenuFolderExtras *FUNC = new MenuFolderExtras(FolderType::Extra, SubFolder::Fun); 
+		MenuFolderExtras *FUNC = new MenuFolderExtras(FolderType::Extra, SubFolder::Fun);
 		FUNC->Append(new MenuEntryExtras(TextID::SIZE_CODES, nullptr, sizecodes, TextID::SIZE_CODES_NOTE)),
 		FUNC->Append(new MenuEntryExtras(TextID::T_POSE, tposeentry, TextID::T_POSE_NOTE)),
-		FUNC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::TAKE_TPC_PIC, freezeframe, TextID::TAKE_TPC_PIC_NOTE), { 
-			HotkeyExtras(Key::DPadRight, TextID::TAKE_TPC_PIC_KEY1), 
-			HotkeyExtras(Key::A, TextID::TAKE_TPC_PIC_KEY2) 
+		FUNC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::TAKE_TPC_PIC, freezeframe, TextID::TAKE_TPC_PIC_NOTE), {
+			HotkeyExtras(Key::DPadRight, TextID::TAKE_TPC_PIC_KEY1),
+			HotkeyExtras(Key::A, TextID::TAKE_TPC_PIC_KEY2)
 		})),
 		FUNC->Append(new MenuEntryExtras(TextID::MAX_TURBO, maxturbo, TextID::MAX_TURBO_NOTE)),
 		FUNC->Append(new MenuEntryExtras(TextID::MULTI_PRESS, asmpresses, TextID::MULTI_PRESS_NOTE)),
-		FUNC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::ULTIMATE_POPPER, partypopper, TextID::ULTIMATE_POPPER_NOTE), { 
-			HotkeyExtras(Key::B | Key::DPadLeft, TextID::ULTIMATE_POPPER_KEY1) 
+		FUNC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::ULTIMATE_POPPER, partypopper, TextID::ULTIMATE_POPPER_NOTE), {
+			HotkeyExtras(Key::B | Key::DPadLeft, TextID::ULTIMATE_POPPER_KEY1)
 		})),
 	    FUNC->Append(new MenuEntryExtras(TextID::CAMERA_MOD, cameramod, TextID::CAMERA_MOD_NOTE)),
 		EXTC->Append(FUNC);
@@ -396,16 +395,16 @@ namespace CTRPluginFramework {
 		EXTC->Append(new MenuEntryExtras(TextID::REMOVE_MAP_ITEMS_NAME, nullptr, RemoveItemsCheat, TextID::REMOVE_MAP_ITEMS_NOTE)),
 		EXTC->Append(new MenuEntryExtras(TextID::EDIT_PATTERN_NAME, editpattern, TextID::EDIT_PATTERN_NOTE)),
 		EXTC->Append(new MenuEntryExtras(TextID::AMIIBO_SPOOFER, AmiiboSpoofer, TextID::AMIIBO_SPOOFER_NOTE)),
-		EXTC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::TIME_TRAVEL, TimeTravel, TTKeyboard, TextID::TIME_TRAVEL_NOTE), { 
-			HotkeyExtras(Key::R | Key::DPadRight, TextID::TIME_FORWARD), 
-			HotkeyExtras(Key::R | Key::DPadLeft, TextID::TIME_BACKWARDS) 
+		EXTC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::TIME_TRAVEL, TimeTravel, TTKeyboard, TextID::TIME_TRAVEL_NOTE), {
+			HotkeyExtras(Key::R | Key::DPadRight, TextID::TIME_FORWARD),
+			HotkeyExtras(Key::R | Key::DPadLeft, TextID::TIME_BACKWARDS)
 		})),
 		menu->Append(EXTC);
 
 	/////////////////////
 	/*Misc Codes Folder*/
 	/////////////////////
-		MenuFolderExtras *MISC = new MenuFolderExtras(FolderType::Misc);		
+		MenuFolderExtras *MISC = new MenuFolderExtras(FolderType::Misc);
 		MISC->Append(new MenuEntryExtras(TextID::TOOL_ANIM, nullptr, tooltype, TextID::TOOL_ANIM_NOTE)),
 		MISC->Append(new MenuEntryExtras(TextID::GAME_TYPE, nullptr, mgtype, TextID::GAME_TYPE_NOTE)),
 		MISC->Append(new MenuEntryExtras(TextID::RADIO_PLAYER, radioPlayer , TextID::RADIO_PLAYER_NOTE)),
@@ -416,10 +415,10 @@ namespace CTRPluginFramework {
 		MISC->Append(new MenuEntryExtras(TextID::WALK_TALK, walktalkentry, TextID::WALK_TALK_NOTE)),
 		MISC->Append(new MenuEntryExtras(TextID::KEY_EXTEND, key_limit, TextID::KEY_EXTEND_NOTE)),
 		MISC->Append(new MenuEntryExtras(TextID::CUSTOM_KEY, CustomKeyboard, TextID::CUSTOM_KEY_NOTE)),
-		MISC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::BEANS_PARTICLE, BeansParticleChanger, TextID::BEANS_PARTICLE_NOTE), { 
-			HotkeyExtras(Key::L | Key::DPadLeft, TextID::BEANS_PARTICLE) 
+		MISC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::BEANS_PARTICLE, BeansParticleChanger, TextID::BEANS_PARTICLE_NOTE), {
+			HotkeyExtras(Key::L | Key::DPadLeft, TextID::BEANS_PARTICLE)
 		})),
-		MISC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::FAST_MODE, fast, TextID::FAST_MODE_NOTE), { 
+		MISC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::FAST_MODE, fast, TextID::FAST_MODE_NOTE), {
 			HotkeyExtras(Key::R | Key::DPadDown, TextID::FAST_MODE)
 		})),
 		MISC->Append(new MenuEntryExtras(TextID::FAST_TEXT_SPEED, fasttalk, TextID::FAST_TEXT_SPEED_NOTE)),
