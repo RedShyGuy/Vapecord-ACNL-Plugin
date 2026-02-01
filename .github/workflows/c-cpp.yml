@@ -29,7 +29,6 @@ jobs:
       run: |
         cd libctrpf
         make
-        make install
 
     - name: Build Plugin
       run: make
