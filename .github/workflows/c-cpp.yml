@@ -2,7 +2,7 @@ name: Build 3GX Plugin
 
 on:
   push:
-    branches: ["master"]
+    branches: ["release/2.2.0"]
   pull_request:
     branches: ["master"]
   workflow_dispatch:
