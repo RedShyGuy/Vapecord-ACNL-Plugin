@@ -4,6 +4,13 @@
 namespace CTRPluginFramework {
 	u32 Chat::GetPlayerMessageData() {
 		u8 _pID = Game::GetActualPlayerIndex();
+		// swap your index with player 0 in order to get the correct pointer
+		if(_pID == Game::GetOnlinePlayerIndex()) {
+			_pID = 0;
+		}
+		else if(_pID == 0) {
+			_pID = Game::GetOnlinePlayerIndex();
+		}
 		
 	    u32 PTR = *(u32 *)Address(0x94FD84).addr; //0x94FD84
 		PTR += 0x464; //33078FA0
@@ -194,6 +201,11 @@ namespace CTRPluginFramework {
 
 			ItemCommand();
 		}
+		
+		else { // any other message
+			return;
+		}
+		ClearPlayerMessage();
 	}
 
     void Chat::CommandCallback(void) {
@@ -203,7 +215,6 @@ namespace CTRPluginFramework {
 
         Chat chat;
         chat.CommandLoop();
-		chat.ClearPlayerMessage();
     }
 
     void Chat::EnableCommands(void) {
