@@ -15,7 +15,7 @@ namespace CTRPluginFramework {
         * \brief Sets up a MenuFolder with the language key as the name
         * \param folderType Type of the folder
         */
-        MenuFolderExtras(const FolderType folderType, const SubFolder subFolder = SubFolder::None);
+        MenuFolderExtras(const FolderType folderType, const SubFolder subFolder = SubFolder::None, const std::string& note = "");
     
         /**
          * \brief Append a MenuEntryExtras object to this folder, will set the folder color to the entry

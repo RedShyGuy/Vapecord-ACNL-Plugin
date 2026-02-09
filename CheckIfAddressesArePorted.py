@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 from pathlib import Path
 
 # CONFIG
@@ -67,8 +68,12 @@ def main():
             print(f"\n{file}:")
             for line, val in entries:
                 print(f"  Line {line}: {val}")
+        exit_code = 1
     else:
         print("\nAll Address-Entries are ported!")
+        exit_code = 0
+
+    sys.exit(exit_code)
 
 if __name__ == "__main__":
     main()

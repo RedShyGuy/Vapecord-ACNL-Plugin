@@ -9,6 +9,10 @@ namespace CTRPluginFramework {
     public:
         ScreenExtras(const Screen& screen) : screen(screen) {}
 
+        u8*     GetPixelPtr(u32 x, u32 y) const;
+        void    ReadPixel(u32 posX, u32 posY, Color &color) const;
+        void    WritePixel(u32 posX, u32 posY, const Color &color) const;
+        void    BlendRect(u32 startX, u32 startY, u32 width, u32 height, const Color &color) const;
         /**
         * \brief Draw a string using system font (support utf8 strings with special chars & unicode)
         * \param str The string to draw
@@ -18,7 +22,7 @@ namespace CTRPluginFramework {
         * \param background The color of the background
         * \return posY + 16 (line feed)
         */
-        u32     DrawSysfont(const std::string &str, u32 posX, u32 posY, const Color &foreground = Color::White, const Color &background = Color::Black) const;
+        u32     DrawSysfontWithBackground(const std::string &str, u32 posX, u32 posY, const Color &foreground = Color::White, const Color &background = Color::Black) const;
     
         static u32 SystemFontSize(const char* str) {
             u32 size = OSD::GetTextWidth(true, str);
@@ -28,6 +32,7 @@ namespace CTRPluginFramework {
     private:
         const Screen& screen;
 
+        static const int maxScreenHeight = 240;
         static const int lineHeight = 16;
         static const int spacingY = 3;
         static const int spacingX = 2;

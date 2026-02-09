@@ -59,8 +59,8 @@ namespace CTRPluginFramework {
 			return 0;
 		
 		if(screen.IsTop) {	
-			screen.DrawRect(0, 0, 85, 18, Color(0xF0E68CFF));
-			screen.DrawSysfont(Utils::Format("Fruit: %d|10", FruitCount), 0, 0, Color::Black);
+			ScreenExtras extras(screen);
+			extras.DrawSysfontWithBackground(Utils::Format("Fruit: %d|10", FruitCount), 0, 0, Color::Black, Color(0xF0E68CAF));
 		}	
 		return 1;
 	}	

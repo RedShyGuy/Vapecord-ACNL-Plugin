@@ -62,7 +62,7 @@ namespace CTRPluginFramework {
 	void moonjump(MenuEntry *entry) {
 		u32 i = PlayerClass::GetInstance()->Offset(0x8C6);
 		if(entry->Hotkeys[0].IsDown()) {
-			Process::Write32(i, 0x7FFFFF); 
+			Process::Write32(i, 0x7FFFFF);
 		}
 		else if(entry->Hotkeys[1].IsDown()) {
 			Process::Write32(i, 0x19D5D);

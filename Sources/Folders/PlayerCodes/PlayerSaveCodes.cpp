@@ -101,10 +101,10 @@ namespace CTRPluginFramework {
 			KeyRange::Set({ ValidID[choice][0], ValidID[choice][1] });
 			if(Wrap::KB<u8>(Language::getInstance()->get(TextID::ENTER_ID) << Utils::Format("%02X -> %02X", ValidID[choice][0], ValidID[choice][1]), true, 2, ID, ID, ValidKeyboardCheck)) {
 				switch(choice) {
-					case 0: player->PlayerFeatures.HairStyle = ID; goto update;
-					case 1: player->PlayerFeatures.HairColor = ID; goto update;
-					case 2: player->PlayerFeatures.Face = ID; goto update;
-					case 3: player->PlayerFeatures.EyeColor = ID; goto update;
+					case 0: player->PlayerAppearance.PlayerFeatures.HairStyle = ID; goto update;
+					case 1: player->PlayerAppearance.PlayerFeatures.HairColor = ID; goto update;
+					case 2: player->PlayerAppearance.PlayerFeatures.Face = ID; goto update;
+					case 3: player->PlayerAppearance.PlayerFeatures.EyeColor = ID; goto update;
 				}
 			}
 		}
@@ -125,13 +125,13 @@ namespace CTRPluginFramework {
 
 			switch(optKb.Open()) {
 				default: break;	
-				case 0: player->PlayerFeatures.Tan = 0xF; goto tanupdate;
-				case 1: player->PlayerFeatures.Tan = 0xA; goto tanupdate;
-				case 2: player->PlayerFeatures.Tan = 0; goto tanupdate;
+				case 0: player->PlayerAppearance.PlayerFeatures.Tan = 0xF; goto tanupdate;
+				case 1: player->PlayerAppearance.PlayerFeatures.Tan = 0xA; goto tanupdate;
+				case 2: player->PlayerAppearance.PlayerFeatures.Tan = 0; goto tanupdate;
 				case 3: {
 					u8 val = 0;
 					if(Wrap::KB<u8>(Language::getInstance()->get(TextID::PLAYER_APPEARANCE_TAN_LEVEL) << "0x00 -> 0x0F", false, 2, val, 0)) {
-						player->PlayerFeatures.Tan = val;
+						player->PlayerAppearance.PlayerFeatures.Tan = val;
 					}
 				} goto tanupdate;
 			}
@@ -148,15 +148,21 @@ namespace CTRPluginFramework {
 			KeyRange::Set({ ValidID2[res][0], ValidID2[res][1] });
 			if(Wrap::KB<u16>(Language::getInstance()->get(TextID::ENTER_ID) << Utils::Format("%04X -> %04X", ValidID2[res][0], ValidID2[res][1]), true, 4, item, item, ValidKeyboardCheck)) {
 				switch(res) {
-					case 0: player->Hat.ID = item; break;
-					case 1: player->Accessory.ID = item; break;
-					case 2: player->TopWear.ID = item; break;
-					case 3: player->BottomWear.ID = item; break;
-					case 4: player->Socks.ID = item; break;
-					case 5: player->Shoes.ID = item; break;
+					case 0: player->PlayerAppearance.PlayerOutfit.Hat.ID = item; break;
+					case 1: player->PlayerAppearance.PlayerOutfit.Accessory.ID = item; break;
+					case 2: player->PlayerAppearance.PlayerOutfit.TopWear.ID = item; break;
+					case 3: player->PlayerAppearance.PlayerOutfit.BottomWear.ID = item; break;
+					case 4: player->PlayerAppearance.PlayerOutfit.Socks.ID = item; break;
+					case 5: player->PlayerAppearance.PlayerOutfit.Shoes.ID = item; break;
 				}
 
-				Player::WriteOutfit(Game::GetOnlinePlayerIndex(), player->Hat, player->Accessory, player->TopWear, player->BottomWear, player->Socks, player->Shoes);
+				Player::WriteOutfit(Game::GetOnlinePlayerIndex(), 
+					player->PlayerAppearance.PlayerOutfit.Hat, 
+					player->PlayerAppearance.PlayerOutfit.Accessory, 
+					player->PlayerAppearance.PlayerOutfit.TopWear, 
+					player->PlayerAppearance.PlayerOutfit.BottomWear, 
+					player->PlayerAppearance.PlayerOutfit.Socks, 
+					player->PlayerAppearance.PlayerOutfit.Shoes);
 			}
 		}
 
@@ -194,18 +200,18 @@ namespace CTRPluginFramework {
 																		(Item)Utils::Random(0x279F, 0x27E5));
 			break;
 			case 1: {
-				player->PlayerFeatures.HairStyle = Utils::Random(0, 0x21);
-				player->PlayerFeatures.HairColor = Utils::Random(0, 0xF);
-				player->PlayerFeatures.Face = Utils::Random(0, 4);
-				player->PlayerFeatures.EyeColor = Utils::Random(0, 4);
-				player->PlayerFeatures.Tan = Utils::Random(0, 0xF);
+				player->PlayerAppearance.PlayerFeatures.HairStyle = Utils::Random(0, 0x21);
+				player->PlayerAppearance.PlayerFeatures.HairColor = Utils::Random(0, 0xF);
+				player->PlayerAppearance.PlayerFeatures.Face = Utils::Random(0, 4);
+				player->PlayerAppearance.PlayerFeatures.EyeColor = Utils::Random(0, 4);
+				player->PlayerAppearance.PlayerFeatures.Tan = Utils::Random(0, 0xF);
 				
-				player->Hat.ID = Utils::Random(0x280B, 0x28F3);
-				player->Accessory.ID = Utils::Random(0x28F5, 0x295B);
-				player->TopWear.ID = Utils::Random(0x2493, 0x26F5);
-				player->BottomWear.ID = Utils::Random(0x26F8, 0x2776);
-				player->Socks.ID = Utils::Random(0x2777, 0x279E);
-				player->Shoes.ID = Utils::Random(0x279F, 0x27E5);
+				player->PlayerAppearance.PlayerOutfit.Hat.ID = Utils::Random(0x280B, 0x28F3);
+				player->PlayerAppearance.PlayerOutfit.Accessory.ID = Utils::Random(0x28F5, 0x295B);
+				player->PlayerAppearance.PlayerOutfit.TopWear.ID = Utils::Random(0x2493, 0x26F5);
+				player->PlayerAppearance.PlayerOutfit.BottomWear.ID = Utils::Random(0x26F8, 0x2776);
+				player->PlayerAppearance.PlayerOutfit.Socks.ID = Utils::Random(0x2777, 0x279E);
+				player->PlayerAppearance.PlayerOutfit.Shoes.ID = Utils::Random(0x279F, 0x27E5);
 
 			//Reloads player style
 				Player::UpdateStyle();

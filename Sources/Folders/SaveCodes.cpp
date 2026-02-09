@@ -393,7 +393,7 @@ namespace CTRPluginFramework {
 		const PACKED_AmiiboInfo& amiibo = amiiboVec[res];
 
 		town->CampgroundCaravan[caravan] = amiibo.VID;
-		OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::CARAVAN_SET).c_str(), amiibo.Name.c_str(), caravan));
+		OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::CARAVAN_SET_CARAVAN).c_str(), amiibo.Name.c_str(), caravan));
 	}
 
 	void SetCampingVillager(MenuEntry *entry) {

@@ -131,6 +131,7 @@ Translators: みるえもん & みなと(Japanese), im a book(spanish), Fedecras
 		InitMenu(menu);
 
 	//Load Callbacks
+		menu->OnOpening = SetSeederInfos;
 		menu->Callback(IndoorsSeedItemCheck);
 		OSD::Run(OSDExtras::UpdateOSDSystem);
 		Process::exceptionCallback = CustomExceptionHandler;

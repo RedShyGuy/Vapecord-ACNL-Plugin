@@ -22,15 +22,15 @@ namespace CTRPluginFramework {
 			return 0;
 		}
 
-		Color darkGrey(40, 40, 40, 100);
+		Color darkGrey(40, 40, 40, 175);
 
 		if(screen.IsTop) {
 			ScreenExtras extras(screen);
-			extras.DrawSysfont(Utils::Format("X | %f", coord[0]), 0, 0, Color::White, darkGrey);
-			extras.DrawSysfont(Utils::Format("Y | %f", coord[1]), 0, 16, Color::White, darkGrey);
-			extras.DrawSysfont(Utils::Format("Z | %f", coord[2]), 0, 32, Color::White, darkGrey);
-			extras.DrawSysfont(Utils::Format("R | %04X", rotation), 0, 48, Color::White, darkGrey);
-			extras.DrawSysfont(Utils::Format("A | %08X", CurrAddress), 0, 64, Color::White, darkGrey);
+			extras.DrawSysfontWithBackground(Utils::Format("X | %f", coord[0]), 0, 0, Color::White, darkGrey);
+			extras.DrawSysfontWithBackground(Utils::Format("Y | %f", coord[1]), 0, 16, Color::White, darkGrey);
+			extras.DrawSysfontWithBackground(Utils::Format("Z | %f", coord[2]), 0, 32, Color::White, darkGrey);
+			extras.DrawSysfontWithBackground(Utils::Format("R | %04X", rotation), 0, 48, Color::White, darkGrey);
+			extras.DrawSysfontWithBackground(Utils::Format("A | %08X", CurrAddress), 0, 64, Color::White, darkGrey);
 			return 1;
 		}
 

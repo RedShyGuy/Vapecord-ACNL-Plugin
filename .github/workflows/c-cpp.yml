@@ -2,7 +2,7 @@ name: Build 3GX Plugin
 
 on:
   push:
-    branches: ["release/2.2.0"]
+    branches: ["master"]
   pull_request:
     branches: ["master"]
   workflow_dispatch:
@@ -49,11 +49,17 @@ jobs:
             cp -r Files/snd/* package/luma/plugins/$folder/snd/
         done
 
-    - name: Upload Artifacts
+    - name: Upload Package Artifact
       uses: actions/upload-artifact@v4
       with:
         name: Vapecord.Public
         path: package/
+
+    - name: Upload ELF Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Vapecord.Public.elf
+        path: Vapecord_Public.elf
 
     - name: Check For Unused Text
       run: python3 CheckForUnusedText.py
@@ -63,6 +69,9 @@ jobs:
 
     - name: Check If Text Is Translated
       run: python3 CheckIfTextIsTranslated.py
+
+    - name: Check For Unused Addresses
+      run: python3 CheckForUnusedAddresses.py
 
 
 

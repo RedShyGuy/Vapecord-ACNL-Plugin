@@ -8,6 +8,8 @@
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/IDList.hpp"
 #include "RuntimeContext.hpp"
+#include "Helpers/CROEditing.hpp"
+#include "LibCtrpfExtras/OSDExtras.hpp"
 #include "Color.h"
 
 namespace CTRPluginFramework {
@@ -219,6 +221,8 @@ namespace CTRPluginFramework {
 		for(int i = 0; i < 10; ++i) {
 			Player::StealDesign(i);
 		}
+
+		OSDExtras::Notify(TextID::PATTERN_STOLEN, Color::Orange);
 
 		entry->Disable();
 	}

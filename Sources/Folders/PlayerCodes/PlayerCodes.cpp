@@ -17,15 +17,13 @@ extern "C" void SetPlayerIconCoordinates(void);
 
 namespace CTRPluginFramework {
 	std::vector<std::string> strings1 = { "", "", "", "", "", "" };
-		
-	std::vector<std::string> strings2 = { "", "", "", "", "" };
 	
 	void GetPlayerInfoData(void) {	
 		u8 pIndex = Game::GetOnlinePlayerIndex();
 		if(!PlayerClass::GetInstance(pIndex)->IsLoaded() || !Player::GetSaveData(pIndex)) {
 			return;
 		}
-			
+		
 	//gets coordinates
 		float *pCoords = PlayerClass::GetInstance(pIndex)->GetCoordinates();
 		if(!pCoords) {
@@ -42,13 +40,6 @@ namespace CTRPluginFramework {
 		if(!pItem) {
 			return;
 		}
-		
-		strings1[0] = (Language::getInstance()->get(TextID::PLAYER_INFO_COORDS) << " " << std::to_string(pCoords[0]).erase(4) << "|" << std::to_string(pCoords[2]).erase(4));
-		strings1[1] = (Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_WORLD_COORDS).c_str(), (u8)(selectedX & 0xFF), (u8)(selectedY & 0xFF)));
-		strings1[2] = (Language::getInstance()->get(TextID::PLAYER_INFO_VELOCITY) << " " << std::to_string(*PlayerClass::GetInstance(pIndex)->GetVelocity()).erase(4));
-		strings1[3] = (Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_ANIMATION).c_str(), *PlayerClass::GetInstance(pIndex)->GetAnimation(), *PlayerClass::GetInstance(pIndex)->GetSnake()));
-		strings1[4] = (Language::getInstance()->get(TextID::PLAYER_INFO_ITEM_STANDING) << " " << (pItem->ID != 0 ? Utils::Format("%08X", *(u32 *)pItem) : Language::getInstance()->get(TextID::PLAYER_INFO_ITEM_NA)) << (Game::GetLockedSpotIndex(selectedX, selectedY) != 0xFFFFFFFF ? Language::getInstance()->get(TextID::PLAYER_INFO_ITEM_LOCKED) : ""));
-		strings1[5] = (Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_ROOM).c_str(), Player::GetRoom(pIndex)));
 
 	//gets inv item
 		u8 slot = 0;
@@ -61,11 +52,12 @@ namespace CTRPluginFramework {
 
 		u8 menuID = Inventory::GetCurrent();
 		
-		strings2[0] = Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_PICKUP).c_str(), PickupSeederItemID);
-		strings2[1] = Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_DROP).c_str(), dropitem);
-		strings2[2] = (Language::getInstance()->get(TextID::PLAYER_INFO_REPLACE) << " " << (ItemIDToReplace == ReplaceEverything ? Language::getInstance()->get(TextID::DROP_RADIUS_NOW_REPLACING_EVERYTHING) : Utils::Format("%08X", ItemIDToReplace)));
-		strings2[3] = (itemslotid != ReplaceEverything) ? Utils::Format(Language::getInstance()->get(TextID::INVENTORY_T2I_SET).c_str(), itemslotid) : Language::getInstance()->get(TextID::PLAYER_INFO_INV_NO_SLOT);
-		strings2[4] = menuID != 0xFF ? Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_MENU_ID).c_str(), menuID) : Language::getInstance()->get(TextID::PLAYER_INFO_MENU_ID_NO);
+		strings1[0] = (Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_WORLD_COORDS).c_str(), (u8)(selectedX & 0xFF), (u8)(selectedY & 0xFF)));
+		strings1[1] = (Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_ANIMATION).c_str(), *PlayerClass::GetInstance(pIndex)->GetAnimation(), *PlayerClass::GetInstance(pIndex)->GetSnake()));
+		strings1[2] = (Language::getInstance()->get(TextID::PLAYER_INFO_ITEM_STANDING) << " " << (pItem->ID != 0 ? Utils::Format("%08X", *(u32 *)pItem) : Language::getInstance()->get(TextID::PLAYER_INFO_ITEM_NA)) << (Game::GetLockedSpotIndex(selectedX, selectedY) != 0xFFFFFFFF ? Language::getInstance()->get(TextID::PLAYER_INFO_ITEM_LOCKED) : ""));
+		strings1[3] = (itemslotid != ReplaceEverything) ? Utils::Format(Language::getInstance()->get(TextID::INVENTORY_T2I_SET).c_str(), itemslotid) : Language::getInstance()->get(TextID::PLAYER_INFO_INV_NO_SLOT);
+		strings1[4] = menuID != 0xFF ? Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_MENU_ID).c_str(), menuID) : Language::getInstance()->get(TextID::PLAYER_INFO_MENU_ID_NO);
+		strings1[5] = (Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_ROOM).c_str(), Player::GetRoom(pIndex)));
 	}
 //debug OSD
 	bool debugOSD(const Screen &screen) {
@@ -78,30 +70,19 @@ namespace CTRPluginFramework {
 			return 0;
 		}
 		
-		static constexpr u8 YPositions1[7] = { 16, 32, 48, 64, 80, 96 };
-		static constexpr u8 YPositions2[5] = { 0, 16, 32, 48, 64 };
-		
-		int i = 0, j = 0;
+		static constexpr u8 YPositions1[7] = { 16, 32, 48, 64, 80, 96, 112 };
+
+		Color darkGrey(40, 40, 40, 175);
+
+		ScreenExtras extras(screen);
 		
 	//gets player
-		screen.DrawSysfont(Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_PLAYER).c_str(), pIndex), 0, 0, Player::GetColor(pIndex));
+		extras.DrawSysfontWithBackground(Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_PLAYER).c_str(), pIndex), 0, 0, Player::GetColor(pIndex), darkGrey);
 		
-		while(i < 6) {
-			for(auto GetString = strings1.begin(); GetString != strings1.end(); ++GetString) {
-				screen.DrawSysfont(*GetString, 0, YPositions1[i]);
-				i++;
-			}	
+		for (int i = 0; i < 6; ++i) {
+			extras.DrawSysfontWithBackground(strings1.at(i), 0, YPositions1[i], Color::White, darkGrey);
 		}
 
-	//If own player is loaded
-		if(PlayerClass::GetInstance()->IsLoaded()) {	
-			while(j < 5) {
-				for(auto GetString = strings2.begin(); GetString != strings2.end(); ++GetString) {
-					screen.DrawSysfont(*GetString, 280, YPositions2[j]);
-					j++;
-				}	
-			}
-		}
 		return 1;
 	}
 //enable debug OSD

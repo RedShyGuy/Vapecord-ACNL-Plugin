@@ -213,8 +213,8 @@ namespace CTRPluginFramework {
 			Wrap::KB<u16>(Language::getInstance()->get(TextID::ULTIMATE_PARTY_POPPER_ENTER_EFFECT), true, 3, PartyEffectID, PartyEffectID);
 		}
 
-		if(player->HeldItem.ID == 0x336A) {
-			player->HeldItem.ID = 0x336A;
+		if(player->PlayerAppearance.PlayerOutfit.HeldItem.ID == 0x336A) {
+			player->PlayerAppearance.PlayerOutfit.HeldItem.ID = 0x336A;
 			PartyEffect.Patch(PartyEffectID);
 
 			PartySnakeSpeed.WriteFloat(8.0);
@@ -225,7 +225,7 @@ namespace CTRPluginFramework {
 			hook2.Enable();
 		}
    
-		if(!entry->IsActivated() || player->HeldItem.ID != 0x336A) {
+		if(!entry->IsActivated() || player->PlayerAppearance.PlayerOutfit.HeldItem.ID != 0x336A) {
 			PartyEffect.Unpatch();
 			PartySnakeSpeed.Unpatch();
 			party2.Unpatch();
@@ -498,7 +498,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 		
-		switch(player->HeldItem.ID) {
+		switch(player->PlayerAppearance.PlayerOutfit.HeldItem.ID) {
 			default: break;
 		/*If Blue Wand*/
 			case 0x3398: {

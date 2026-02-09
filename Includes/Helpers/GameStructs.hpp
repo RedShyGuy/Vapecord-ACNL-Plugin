@@ -1145,9 +1145,7 @@ namespace CTRPluginFramework {
         u16 Tan; //0xA8 //Values: 0x0 -> 0xF
     };
 
-    struct ACNL_Player { //Size: 0xA480 //UnknownNotSetYetX = Not set by player ctor
-        u32 Checksum1; //0xA0 //Checksum of the first 0x6b84 of player data
-        Player_Features PlayerFeatures;
+    struct Player_Outfit { //sizeof = 0x21
         Item Hat; //0xAA //Item ID < 0xXXXX
         Item Accessory; //0xAE //Item ID < 0xXXXX
         Item TopWear; //0xB2 //Item ID < 0xXXXX
@@ -1157,6 +1155,16 @@ namespace CTRPluginFramework {
         Item Shoes; //0xC2 //Item ID < 0xXXXX
         Item HeldItem; //0xC6 //Item ID < 0xXXXX
         u8 Unknown0; //0xCA //Inverted gender(?): 1 for male, 0 for female. Default = 1 in PlayerConstructor (EUR 1.5 0x20D27C)
+    };
+
+    struct Player_Appearance { // sizeof = 0x27
+        Player_Features PlayerFeatures;
+        Player_Outfit PlayerOutfit;
+    };
+
+    struct ACNL_Player { //Size: 0xA480 //UnknownNotSetYetX = Not set by player ctor
+        u32 Checksum1; //0xA0 //Checksum of the first 0x6b84 of player data
+        Player_Appearance PlayerAppearance; //0xA4
         u8 Padding_0 = 0; //0xCB
         ACNL_Pattern Patterns[10]; //0xCC //10 Patterns
         u8 PatternOrder[10]; //0x552C -> 0x5535 //Order of patterns from 0x0 - 0x9
@@ -1917,13 +1925,13 @@ namespace CTRPluginFramework {
         u64 Unknown6; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
         Item TownFruit; //Yes, the game uses an item id to represent the town fruit lol
         u16 DaysPlayed; //0x6223E
-        u8 Unknown7[0xC];
-        u8 Unknown8; //Group 1
-        u8 Unknown9; //Group 1
-        u8 Unknown10; //Group 1
-        u8 Padding2;
-        u64 Unknown11; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
-        u64 Unknown12; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u8 Unknown7[0xC]; //0x62240
+        u8 Unknown8; //0x6224C //Group 1
+        u8 Unknown9; //0x6224D //Group 1
+        u8 Unknown10; //0x6224E //Group 1
+        u8 Padding2; //0x6224F
+        u64 Unknown11; //0x62250 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u64 Unknown12; //0x62258 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
         u8 Unknown13[4]; //0x62260
         u8 NooklingState; //level of nookling shop
         u8 NooklingStateUnknown;

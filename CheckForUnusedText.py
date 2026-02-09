@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 import re
+import sys
 
 # Config
 PROJECT_ROOT = Path(__file__).parent
@@ -49,12 +50,15 @@ for json_name, entries in json_entries_per_file.items():
 # Print results
 if not unused_keys_report:
     print("All language keys in JSON files are used in the code!")
+    exit_code = 0
 else:
     print(f"Unused language keys found ({sum(len(v) for v in unused_keys_report.values())}):")
     for json_name, keys in sorted(unused_keys_report.items()):
         print(f"\n{json_name} ({len(keys)} unused keys):")
         for key in sorted(keys):
             print(f"  - {key}")
+    exit_code = 1
 
 print(f"\nTotal TextID keys used in code: {len(keys_used)}")
 print(f"JSON files scanned: {len(json_files)}")
+sys.exit(exit_code)

@@ -73,7 +73,7 @@ Update Tan
 	//This Stores the Tan Data Correctly
 		
 		static Address GetTanDataOffset(0x713798);
-		u8 Tan = GetTanDataOffset.Call<u8>(&player->PlayerFeatures);
+		u8 Tan = GetTanDataOffset.Call<u8>(&player->PlayerAppearance.PlayerFeatures);
 		
 		Process::Write8(GetStoredData + 0x1C0, Tan);
 		

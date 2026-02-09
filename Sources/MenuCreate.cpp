@@ -202,17 +202,16 @@ namespace CTRPluginFramework {
 		})),
 		SEED1C->Append(new MenuEntryExtras(TextID::FIREWORK_SEEDER, nullptr, fireworkentry, TextID::FIREWORK_SEEDER_NOTE)),
 		SEED1C->Append(EntryWithHotkey(new MenuEntryExtras(TextID::MAP_EDITOR, tileSelector, TextID::MAP_EDITOR_NOTE), {
-			HotkeyExtras(Key::Start | Key::DPadUp, TextID::MAP_EDITOR_KEY1),
+			HotkeyExtras(Key::Start | Key::DPadUp, TextID::MAP_EDITOR_KEY1), //Toggle Editor
 			HotkeyExtras(Key::DPadRight, TextID::MAP_EDITOR_KEY2),
 			HotkeyExtras(Key::DPadLeft, TextID::MAP_EDITOR_KEY3),
 			HotkeyExtras(Key::DPadDown, TextID::MAP_EDITOR_KEY4),
 			HotkeyExtras(Key::DPadUp, TextID::MAP_EDITOR_KEY5),
-			HotkeyExtras(Key::L, TextID::MAP_EDITOR_KEY6),
-			HotkeyExtras(Key::R, TextID::MAP_EDITOR_KEY7),
-			HotkeyExtras(Key::Start | Key::DPadDown, TextID::MAP_EDITOR_KEY8),
-			HotkeyExtras(Key::Start | Key::DPadLeft, TextID::MAP_EDITOR_KEY9),
-			HotkeyExtras(Key::A, TextID::MAP_EDITOR_KEY10),
-			HotkeyExtras(Key::Start | Key::DPadRight, TextID::MAP_EDITOR_KEY11)
+			HotkeyExtras(Key::R, TextID::MAP_EDITOR_KEY6), //Cycle Size
+			HotkeyExtras(Key::A, TextID::MAP_EDITOR_KEY7), //Place Item
+			HotkeyExtras(Key::X, TextID::MAP_EDITOR_KEY8), //Remove Item
+			HotkeyExtras(Key::Y, TextID::MAP_EDITOR_KEY9), //Copy Item
+			HotkeyExtras(Key::L, TextID::MAP_EDITOR_KEY10) //Set Item ID
 		})),
 		SEED1C->Append(EntryWithHotkey(new MenuEntryExtras(TextID::ALL_SEEDER, everythingseeder, E_Seeder_KB, TextID::ALL_SEEDER_NOTE), {
 			HotkeyExtras(Key::L, TextID::ALL_SEEDER_KEY1)

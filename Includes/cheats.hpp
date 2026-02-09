@@ -93,6 +93,7 @@ namespace CTRPluginFramework {
 	void anticheat(MenuEntry *entry);
 	
 //Seeding Codes
+	bool SetSeederInfos(void);
 	//Seed Codes
 	void pickseeder(MenuEntry *entry);
 	void Walkseeder(MenuEntry *entry);
