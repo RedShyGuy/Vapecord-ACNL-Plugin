@@ -1,6 +1,7 @@
 {
   "name": "Français",
   "entries": {
+    "BUILDING_MOD_NO_DESIGN_STAND_FREE": "Nombre maximum de présentoirs de design atteint !",
     "PATTERN_STOLEN": "Tous les motifs volés (modifiables) !",
     "CHATCOPYPASTE_PASTE": "Collé :",
     "CHATCOPYPASTE_COPY": "Copié :",

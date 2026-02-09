@@ -8,12 +8,31 @@ namespace CTRPluginFramework {
         return instance;
     }
 
+    bool Language::verifyVersion(const std::string& filePath, u32 expectedVersion) {
+        File f;
+        if (File::Open(f, filePath, File::READ) != File::SUCCESS) {
+            return false;
+        }
+
+        u32 fileVersion = 0;
+        if (f.Read(&fileVersion, sizeof(fileVersion)) != File::SUCCESS) {
+            f.Close();
+            return false;
+        }
+
+        f.Close();
+        return fileVersion == expectedVersion;
+    }
+
     std::vector<Language::LangHeader> Language::listAvailableLanguages(const std::string& filePath) {
         std::vector<LangHeader> langs;
         File f;
         if (File::Open(f, filePath, File::READ) != File::SUCCESS) {
             return langs;
         }
+
+        // skip 4 bytes version
+        f.Seek(4, File::SET);
 
         u32 langCount = 0;
         f.Read(&langCount, sizeof(langCount));
@@ -43,6 +62,9 @@ namespace CTRPluginFramework {
         if (File::Open(f, filePath, File::READ) != File::SUCCESS) {
             return false;
         }
+
+        // skip 4 bytes version
+        f.Seek(4, File::SET);
 
         u32 langCount = 0;
         f.Read(&langCount, sizeof(langCount));

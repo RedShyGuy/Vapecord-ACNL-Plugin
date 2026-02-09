@@ -1,6 +1,7 @@
 {
   "name": "日本語",
   "entries": {
+    "BUILDING_MOD_NO_DESIGN_STAND_FREE": "デザインスタンドの最大数に達しました！",
     "PATTERN_STOLEN": "すべてのパターンを盗みました（編集可能）！",
     "CHATCOPYPASTE_PASTE": "貼り付け:",
     "CHATCOPYPASTE_COPY": "コピー:",

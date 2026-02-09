@@ -30,6 +30,8 @@ namespace CTRPluginFramework {
     public:
         static Language* getInstance();
 
+        bool verifyVersion(const std::string& filePath, u32 expectedVersion);
+
         static std::vector<LangHeader> listAvailableLanguages(const std::string& filePath);
 
         bool loadFromBinary(const std::string& filePath, const std::string& lang);

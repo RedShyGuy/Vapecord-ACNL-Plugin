@@ -1,6 +1,7 @@
 {
   "name": "Deutsch",
   "entries": {
+    "BUILDING_MOD_NO_DESIGN_STAND_FREE": "Maximale Anzahl an Design-Ständern erreicht!",
     "PATTERN_STOLEN": "Alle Muster gestohlen (bearbeitbar)!",
     "CHATCOPYPASTE_PASTE": "Eingefügt:",
     "CHATCOPYPASTE_COPY": "Kopiert:",

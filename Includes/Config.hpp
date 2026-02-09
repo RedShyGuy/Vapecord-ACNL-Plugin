@@ -2,9 +2,11 @@
 
 #include <CTRPluginFramework.hpp>
 
-#define majorV 2
-#define minorV 2
+#define majorV 3
+#define minorV 0
 #define revisV 0
+
+#define APP_VERSION (majorV * 100 + minorV * 10 + revisV)
 
 namespace CTRPluginFramework {
 	bool WriteLanguage(const std::string& langCode);

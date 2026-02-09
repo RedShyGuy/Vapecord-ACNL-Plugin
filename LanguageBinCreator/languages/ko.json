@@ -1,6 +1,7 @@
 {
   "name": "한국어",
   "entries": {
+    "BUILDING_MOD_NO_DESIGN_STAND_FREE": "최대 디자인 스탠드 수에 도달했습니다!",
     "PATTERN_STOLEN": "모든 패턴을 훔쳤습니다 (편집 가능)!",
     "CHATCOPYPASTE_PASTE": "붙여넣기:",
     "CHATCOPYPASTE_COPY": "복사됨:",

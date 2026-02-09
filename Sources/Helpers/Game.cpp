@@ -121,6 +121,21 @@ namespace CTRPluginFramework {
 			OpenMenu.Call<void>(menuID, 0, 0);
 		}
 
+		void EditFaceCutOutData(u32 oldX, u32 oldY, u32 newX, u32 newY) {
+			ACNL_BuildingData *building = Building::GetSaveData();
+			if(!building) {
+				return;
+			}
+
+			for (int i = 0; i < 8; ++i) {
+				if (building->Stands[i].xCoord == oldX && building->Stands[i].yCoord == oldY) {
+					building->Stands[i].xCoord = newX & 0xFF;
+					building->Stands[i].yCoord = newY & 0xFF;
+					return;
+				}
+			}
+		}
+
 		void MoveBuilding() {
 			ACNL_BuildingData *building = Building::GetSaveData();
 			if(!building) {
@@ -162,9 +177,18 @@ namespace CTRPluginFramework {
 			if(val < 0) {
 				return;
 			}
-			
+
 			u32 x, y;
 			PlayerClass::GetInstance()->GetWorldCoords(&x, &y);
+
+			if (building->Buildings.Building[index.at(val)].ID == 0xDC || building->Buildings.Building[index.at(val)].ID == 0xDD) {
+				EditFaceCutOutData(
+					building->Buildings.Building[index.at(val)].XCoord, 
+					building->Buildings.Building[index.at(val)].YCoord,
+					x & 0xFF,
+					y & 0xFF);
+			}
+			
 			building->Buildings.Building[index.at(val)].XCoord = x & 0xFF;
 			building->Buildings.Building[index.at(val)].YCoord = y & 0xFF;
 
@@ -218,6 +242,16 @@ namespace CTRPluginFramework {
 				return;
 			}
 
+		//Remove face cutout stand data if there is one
+			if (building->Buildings.Building[index.at(val)].ID == 0xDC || building->Buildings.Building[index.at(val)].ID == 0xDD) {
+				for (int i = 0; i < 8; ++i) {
+					if (building->Stands[i].xCoord == building->Buildings.Building[index.at(val)].XCoord && building->Stands[i].yCoord == building->Buildings.Building[index.at(val)].YCoord) {
+						building->Stands[i].xCoord = -1;
+						building->Stands[i].yCoord = -1;
+					}
+				}
+			}
+
 			building->Buildings.Building[index.at(val)].ID = 0xFC;
 			building->Buildings.Building[index.at(val)].XCoord = 0;
 			building->Buildings.Building[index.at(val)].YCoord = 0;
@@ -248,6 +282,48 @@ namespace CTRPluginFramework {
 			}
 		}
 
+		bool IsFaceCutOutSpaceFree(u8 buildingID) {
+			ACNL_BuildingData *building = Building::GetSaveData();
+			if(!building) {
+				return false;
+			}
+			
+			if (buildingID != 0xDC && buildingID != 0xDD) { //Not a face cutout standee
+				return false;
+			}
+
+			for (int i = 0; i < 8; ++i) {
+				if (building->Stands[i].xCoord == -1 && building->Stands[i].yCoord == -1) { //Empty stand found
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		void SetFaceCutOutData(u32 x, u32 y) {
+			ACNL_BuildingData *building = Building::GetSaveData();
+			if(!building) {
+				return;
+			}
+
+			for (int i = 0; i < 8; ++i) {
+				if (building->Stands[i].xCoord == -1 && building->Stands[i].yCoord == -1) { //Empty stand found
+					building->Stands[i].xCoord = x & 0xFF;
+					building->Stands[i].yCoord = y & 0xFF;
+
+				//Move default design to next empty one
+					for (int j = 0; j < 8; ++j) {
+						if (building->Stands[j].xCoord == -1 && building->Stands[j].yCoord == -1) { 
+							building->Stands[j].Pattern = building->Stands[i].Pattern;
+						}
+					}
+					
+					return;
+				}
+			}
+		}
+
 	//place building
 		void PlaceBuilding(u8 buildingID) {
 			if(!PlayerClass::GetInstance()->IsLoaded()) {
@@ -274,10 +350,19 @@ namespace CTRPluginFramework {
 				OSDExtras::Notify(TextID::BUILDING_MOD_NO_SLOT_FREE, Color::Red);
 				return;
 			}
-		
+
+			if (!IsFaceCutOutSpaceFree(buildingID)) {
+				OSDExtras::Notify(TextID::BUILDING_MOD_NO_DESIGN_STAND_FREE, Color::Red);
+				return;
+			}
+
 			u32 x, y;	
 			PlayerClass::GetInstance()->GetWorldCoords(&x, &y);
 			PlaceBuildingUpdateCollisions(x, y, buildingID);
+
+			if (buildingID == 0xDC || buildingID == 0xDD) {
+				SetFaceCutOutData(x, y);
+			}
 
 			Sleep(Milliseconds(20));
 

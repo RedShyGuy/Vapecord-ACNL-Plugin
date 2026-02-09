@@ -16,6 +16,12 @@ namespace CTRPluginFramework {
 			return;
 		}
 
+		if (!Language::getInstance()->verifyVersion(PATH_LANGUAGE_BIN, APP_VERSION)) {
+			MessageBox(Utils::Format("Error 606\nThe language.bin version is outdated. Please redownload the latest version of the plugin to get the updated language.bin!\nGet more info and help on the Discord Server: %s\nGame will be closed now!", DISCORDINV)).SetClear(ClearScreen::Top)();
+			Process::ReturnToHomeMenu();
+			return;
+		}
+
 		auto languages = Language::getInstance()->listAvailableLanguages(PATH_LANGUAGE_BIN);
 		if (languages.empty()) {
 			MessageBox(Utils::Format("Error 578\nThe language.bin is empty or corrupted!\nGet more info and help on the Discord Server: %s\nGame will be closed now!", DISCORDINV)).SetClear(ClearScreen::Top)();

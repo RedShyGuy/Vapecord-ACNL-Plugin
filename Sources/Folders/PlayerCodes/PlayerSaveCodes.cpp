@@ -532,6 +532,8 @@ namespace CTRPluginFramework {
 	}
 //Enable Unused Menu | player specific save code
 	void debug1(MenuEntry *entry) {
+		static Address currentSelectedTPCMenu(0x951014);
+
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
@@ -552,7 +554,14 @@ namespace CTRPluginFramework {
 			return;
 		}
 
-		player->PlayerFlags.CanUseCensusMenu = !IsON;
+		if (IsON) {
+			player->PlayerFlags.CanUseCensusMenu = false;
+			if (*(u8 *)(currentSelectedTPCMenu.addr) == 1) { //Census Menu is selected
+				*(u8 *)(currentSelectedTPCMenu.addr) = 2; //Set to TPC Menu
+			}
+		} else {
+			player->PlayerFlags.CanUseCensusMenu = true;
+		}
 
 		debug1(entry);
 	}

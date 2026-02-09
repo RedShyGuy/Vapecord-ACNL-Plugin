@@ -85,7 +85,9 @@ namespace CTRPluginFramework {
 	}
 //if building is valid
 	bool IDList::BuildingValid(u8 buildingID) {
-		if(buildingID > 0x4B && buildingID < 0x69 || buildingID > 0x6A && buildingID < 0x81 || buildingID > 0x8F && buildingID < 0xFC) {
+		if(buildingID > 0x4B && buildingID < 0x69 || //Special PWPs
+			buildingID > 0x6A && buildingID < 0x7F || //Face Cutout Standees
+			buildingID > 0x8F && buildingID < 0xFC) { //Bridges & PWPs & Campground Fence Lock
 			return true;
 		}
 		
