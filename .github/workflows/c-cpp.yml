@@ -30,11 +30,11 @@ jobs:
         cd libctrpf
         make
 
-    - name: Build Plugin
-      run: make
-
     - name: Run Language Python Script
       run: python3 LanguageBinCreator/json_to_bin.py
+
+    - name: Build Plugin
+      run: make
 
     - name: Package Plugin
       run: |
@@ -72,6 +72,7 @@ jobs:
 
     - name: Check For Unused Addresses
       run: python3 CheckForUnusedAddresses.py
+
 
 
 
