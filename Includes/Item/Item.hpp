@@ -23,6 +23,10 @@ namespace CTRPluginFramework {
             return (ID + Flags) > (item.ID + item.Flags);
         }
 
+        Item operator+(const u32& val) const {
+            return Item(ID + val, Flags);
+        }
+
         operator u32() const {
             return (Flags << 16) | (ID & 0xFFFF);
         }

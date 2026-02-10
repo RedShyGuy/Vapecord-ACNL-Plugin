@@ -26,7 +26,7 @@ namespace CTRPluginFramework {
 		ACNL_Player		*GetSaveData(u8 PlayerIndex = 4);
 		bool 			SaveExists(ACNL_Player *player);
 
-		bool 			SetUnlockableBitField(ACNL_Player *player, u8 ID, bool state);
+		bool 			SetUnlockableBitField(ACNL_Player *player, Item_Category category, bool state);
 
 		void 			EditGender(u8 pIndex, u8 pGender);
 		void 			EditName(u8 pIndex, const std::string& name);

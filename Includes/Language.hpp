@@ -1,16 +1,11 @@
 #pragma once
-
-#include <string>
-#include <vector>
-#include <map>
 #include <CTRPluginFramework.hpp>
+#include "TextID.hpp"
+#include <vector>
+#include <string>
 
 namespace CTRPluginFramework {
     class Language {
-        using TextMap = std::map<std::string, std::string>;
-        using TextMapIter = TextMap::iterator;
-		using TextMapConstIter = TextMap::const_iterator;
-
     private:
         struct LangHeader {
             std::string shortName;
@@ -20,20 +15,31 @@ namespace CTRPluginFramework {
 
             bool operator==(const std::string& other) const {
                 return shortName == other;
-            }
+            };
         };
 
-        TextMap translations;
-        std::string currentLang;
-        std::string filePath;
+        std::vector<u8> buffer;
+        const LangHeader* currentHeader;
+        std::vector<u16> offsets;
         bool loaded = false;
-        static Language *instance;
+        std::string currentLang;
+
+        static Language* instance;
+        Language() = default;
 
     public:
         static Language* getInstance();
-        static std::vector<LangHeader> listAvailableLanguages(const std::string &filePath);
+
+        bool verifyVersion(const std::string& filePath, u32 expectedVersion);
+
+        static std::vector<LangHeader> listAvailableLanguages(const std::string& filePath);
+
         bool loadFromBinary(const std::string& filePath, const std::string& lang);
-        std::string get(const std::string& key);
-        const std::string& getCurrentLang() const { return currentLang; }
+
+        std::string get(TextID id) const;
+
+        const std::string& getCurrentLang() const { 
+            return currentLang; 
+        }
     };
 }

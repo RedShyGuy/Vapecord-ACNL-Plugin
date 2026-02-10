@@ -5,6 +5,7 @@
 #define PATH_PICON		    "E:/Vapecord/Data/PlayerIcon/Player%d.bin"
 
 #define PATH_LANGUAGE_BIN   "E:/Vapecord/Data/language.bin"
+#define PATH_COLOR_BIN      "E:/Vapecord/Data/color.bin"
 
 #define PATH_ISLAND	        "E:/Vapecord/%s/Island"
 #define PATH_BULLETIN	    "E:/Vapecord/%s/Bulletin"

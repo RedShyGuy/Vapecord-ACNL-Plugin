@@ -18,9 +18,9 @@ namespace CTRPluginFramework {
 	void Entry_itemsequence(MenuEntry *entry) {	
 		std::vector<std::string> cmnOpt = { "" };
 
-		cmnOpt[0] = (ItemSequence::Enabled() ? Color(pGreen) << Language::getInstance()->get("VECTOR_ENABLED") : Color(pRed) << Language::getInstance()->get("VECTOR_DISABLED"));
+		cmnOpt[0] = (ItemSequence::Enabled() ? Color(pGreen) << Language::getInstance()->get(TextID::VECTOR_ENABLED) : Color(pRed) << Language::getInstance()->get(TextID::VECTOR_DISABLED));
 
-		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), cmnOpt);
+		Keyboard optKb(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION), cmnOpt);
 
 		int op = optKb.Open();
 		if(op < 0) {
@@ -43,25 +43,25 @@ namespace CTRPluginFramework {
 		static Address radius(0x85FE58);
 		
 		const std::vector<std::string> g_dropmod = {
-			Language::getInstance()->get("VECTOR_DROP_PICK"), 
-			Language::getInstance()->get("VECTOR_DROP_PULL"),
-			Language::getInstance()->get("VECTOR_DROP_DROP"),
-			Language::getInstance()->get("VECTOR_DROP_BURY"),
-			Language::getInstance()->get("VECTOR_DROP_PLANT"),
-			Language::getInstance()->get("VECTOR_DROP_PATTERN"),
-			Language::getInstance()->get("VECTOR_DROP_ROCK"),
-			Language::getInstance()->get("VECTOR_DROP_DIG"),
+			Language::getInstance()->get(TextID::VECTOR_DROP_PICK), 
+			Language::getInstance()->get(TextID::VECTOR_DROP_PULL),
+			Language::getInstance()->get(TextID::VECTOR_DROP_DROP),
+			Language::getInstance()->get(TextID::VECTOR_DROP_BURY),
+			Language::getInstance()->get(TextID::VECTOR_DROP_PLANT),
+			Language::getInstance()->get(TextID::VECTOR_DROP_PATTERN),
+			Language::getInstance()->get(TextID::VECTOR_DROP_ROCK),
+			Language::getInstance()->get(TextID::VECTOR_DROP_DIG),
 		};
 		
 		const std::vector<std::string> shapeOpt = {
-			Language::getInstance()->get("VECTOR_SHAPE_FULL_SQUARE"), //0x15 max
-			Language::getInstance()->get("VECTOR_SHAPE_CIRCLE"), //9 max
-			Language::getInstance()->get("VECTOR_SHAPE_HORI_LINE"), //0x10 max
-			Language::getInstance()->get("VECTOR_SHAPE_VERT_LINE"), //0x10 max
-			Language::getInstance()->get("VECTOR_SHAPE_SQUAREE"), //0x10 max
-			Language::getInstance()->get("VECTOR_SHAPE_NE_TO_SW"), //0x10 max
-			Language::getInstance()->get("VECTOR_SHAPE_NW_TO_SE"), //0x10 max
-			Language::getInstance()->get("VECTOR_SHAPE_RESET"),
+			Language::getInstance()->get(TextID::VECTOR_SHAPE_FULL_SQUARE), //0x15 max
+			Language::getInstance()->get(TextID::VECTOR_SHAPE_CIRCLE), //9 max
+			Language::getInstance()->get(TextID::VECTOR_SHAPE_HORI_LINE), //0x10 max
+			Language::getInstance()->get(TextID::VECTOR_SHAPE_VERT_LINE), //0x10 max
+			Language::getInstance()->get(TextID::VECTOR_SHAPE_SQUAREE), //0x10 max
+			Language::getInstance()->get(TextID::VECTOR_SHAPE_NE_TO_SW), //0x10 max
+			Language::getInstance()->get(TextID::VECTOR_SHAPE_NW_TO_SE), //0x10 max
+			Language::getInstance()->get(TextID::VECTOR_SHAPE_RESET),
 		};
 
 		if(entry->WasJustActivated()) {
@@ -71,7 +71,7 @@ namespace CTRPluginFramework {
 		
 	//Modify Drop Type	
 		if(entry->Hotkeys[0].IsPressed()) { 
-			Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), g_dropmod);
+			Keyboard optKb(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION), g_dropmod);
 			
 			int res = optKb.Open();
 			if(res < 0) {
@@ -88,20 +88,20 @@ namespace CTRPluginFramework {
 	//Modify Drop Radius
 		if(entry->Hotkeys[1].IsPressed()) {
 			if(Player::IsIndoors()) {
-				OSD::Notify("Drop Radius Modifier is not usable indoors!", Color::Red);
+				OSDExtras::Notify(TextID::DROP_RADIUS_ONLY_OUTDOORS, Color::Red);
 				return;
 			}
 
 			u8 range, count, val;
 
-			Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), shapeOpt);
+			Keyboard optKb(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION), shapeOpt);
 			
 			int index = optKb.Open();
 			switch(index) {
 				default: return;
 			//Full Square
 				case 0: {
-					if(Wrap::KB<u8>(Language::getInstance()->get("DROP_MODS_RADIUS") << "\nMax Value: 0x15", true, 1, val, 0)) {
+					if(Wrap::KB<u8>(Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\n" << Language::getInstance()->get(TextID::DROP_RADIUS_MAX_VALUE) << " " << "0x15", true, 1, val, 0)) {
 						if(val > 0x15) {
 							val = 0x15;
 						}
@@ -123,7 +123,7 @@ namespace CTRPluginFramework {
 				} break;
 			//circle	
 				case 1: {
-					if(Wrap::KB<u8>(Language::getInstance()->get("DROP_MODS_RADIUS") << "\nMax Value: 9", true, 1, val, 0)) {
+					if(Wrap::KB<u8>(Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\n" << Language::getInstance()->get(TextID::DROP_RADIUS_MAX_VALUE) << " " << "9", true, 1, val, 0)) {
 						if(val > 9) {
 							val = 9;
 						}
@@ -142,7 +142,7 @@ namespace CTRPluginFramework {
 				} break;
 			//horizontal line	
 				case 2: {
-					if(Wrap::KB<u8>(Language::getInstance()->get("DROP_MODS_RADIUS") << "\nMax Value: 0x10", true, 2, val, 0)) {
+					if(Wrap::KB<u8>(Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\n" << Language::getInstance()->get(TextID::DROP_RADIUS_MAX_VALUE) << " " << "0x10", true, 2, val, 0)) {
 						if(val > 0x10) {
 							val = 0x10;
 						}
@@ -161,7 +161,7 @@ namespace CTRPluginFramework {
 				} break;
 			//Vertical line	
 				case 3: {
-					if(Wrap::KB<u8>(Language::getInstance()->get("DROP_MODS_RADIUS") << "\nMax Value: 0x10", true, 2, val, 0)) {
+					if(Wrap::KB<u8>(Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\n" << Language::getInstance()->get(TextID::DROP_RADIUS_MAX_VALUE) << " " << "0x10", true, 2, val, 0)) {
 						if(val > 0x10) {
 							val = 0x10;
 						}
@@ -180,7 +180,7 @@ namespace CTRPluginFramework {
 				} break;	
 			//square	
 				case 4: {
-					if(Wrap::KB<u8>(Language::getInstance()->get("DROP_MODS_RADIUS") << "\nMax Value: 0x10", true, 2, val, 0)) {
+					if(Wrap::KB<u8>(Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\n" << Language::getInstance()->get(TextID::DROP_RADIUS_MAX_VALUE) << " " << "0x10", true, 2, val, 0)) {
 						if(val > 0x10) {
 							val = 0x10;
 						}
@@ -205,7 +205,7 @@ namespace CTRPluginFramework {
 				} break;
 			//NE to SW line	
 				case 5: {
-					if(Wrap::KB<u8>(Language::getInstance()->get("DROP_MODS_RADIUS") << "\nMax Value: 0x10", true, 2, val, 0)) {
+					if(Wrap::KB<u8>(Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\n" << Language::getInstance()->get(TextID::DROP_RADIUS_MAX_VALUE) << " " << "0x10", true, 2, val, 0)) {
 						if(val > 0x10) {
 							val = 0x10;
 						}
@@ -223,7 +223,7 @@ namespace CTRPluginFramework {
 				} break;
 			//NW to SE line	
 				case 6:	{
-					if(Wrap::KB<u8>(Language::getInstance()->get("DROP_MODS_RADIUS") << "\nMax Value: 0x10", true, 2, val, 0)) {
+					if(Wrap::KB<u8>(Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\n" << Language::getInstance()->get(TextID::DROP_RADIUS_MAX_VALUE) << " " << "0x10", true, 2, val, 0)) {
 						if(val > 0x10) {
 							val = 0x10;
 						}
@@ -258,8 +258,8 @@ namespace CTRPluginFramework {
 
 	//set replace item	
 		if(entry->Hotkeys[2].IsPressed()) {
-			if(Wrap::KB<u32>(Language::getInstance()->get("DROP_MODS_ENTER_ID"), true, 8, *(u32 *)&ItemIDToReplace, 0x7FFE)) {
-				OSD::Notify("Now replacing: " << (ItemIDToReplace == ReplaceEverything ? "everything" : Utils::Format("%08X", ItemIDToReplace)));
+			if(Wrap::KB<u32>(Language::getInstance()->get(TextID::DROP_MODS_ENTER_ID), true, 8, *(u32 *)&ItemIDToReplace, 0x7FFE)) {
+				OSDExtras::Notify(Language::getInstance()->get(TextID::DROP_RADIUS_NOW_REPLACING) << (ItemIDToReplace == ReplaceEverything ? Language::getInstance()->get(TextID::DROP_RADIUS_NOW_REPLACING_EVERYTHING) : Utils::Format("%08X", ItemIDToReplace)));
 			}
 		}
 
@@ -291,12 +291,12 @@ namespace CTRPluginFramework {
 //Drop Items	
 	void instantDrop(MenuEntry *entry) {
 		if(entry->Hotkeys[0].IsPressed()) {
-			Wrap::KB<u32>(Language::getInstance()->get("ENTER_ID"), true, 8, *(u32 *)&dropitem, *(u32 *)&dropitem, ItemChange);
+			Wrap::KB<u32>(Language::getInstance()->get(TextID::ENTER_ID), true, 8, *(u32 *)&dropitem, *(u32 *)&dropitem, ItemChange);
 		}
 		
 		if(RuntimeContext::getInstance()->isTurbo() ? entry->Hotkeys[1].IsDown() : entry->Hotkeys[1].IsPressed()) {//Key::L + Key::DPadDown
 			u32 wX, wY, u0;
-			if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !Game::GameSaving()) {
+			if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !Game::IsGameSaving()) {
 				Dropper::PlaceItemWrapper(DropType, ItemIDToReplace, &dropitem, &dropitem, wX, wY, 0, 0, 0, 0, 0, waitAnim, 0xA5);
 			}
 		}
@@ -309,16 +309,16 @@ namespace CTRPluginFramework {
 		u32 wX, wY, u0;
 		
 		if(entry->Hotkeys[0].IsPressed()) {
-			Wrap::KB<u32>(Language::getInstance()->get("ENTER_ID"), true, 8, *(u32 *)&dropitem, *(u32 *)&dropitem, ItemChange);
+			Wrap::KB<u32>(Language::getInstance()->get(TextID::ENTER_ID), true, 8, *(u32 *)&dropitem, *(u32 *)&dropitem, ItemChange);
 		}
 		
 		else if(entry->Hotkeys[1].IsPressed()) {
 			enabled = !enabled;
-			OSD::Notify("Auto drop " << (enabled ? Color::Green << "ON" : Color::Red << "OFF"));
+			OSDExtras::Notify(Language::getInstance()->get(TextID::AUTO_DROP) << " " << (enabled ? Color::Green << Language::getInstance()->get(TextID::STATE_ON) : Color::Red << Language::getInstance()->get(TextID::STATE_OFF)));
 		}
 		
 		if(enabled) {
-			if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !Game::GameSaving()) {
+			if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !Game::IsGameSaving()) {
 				Dropper::PlaceItemWrapper(DropType, ItemIDToReplace, &dropitem, &dropitem, wX, wY, 0, 0, 0, 0, 0, waitAnim, 0xA5);
 			}
 		}
@@ -326,10 +326,10 @@ namespace CTRPluginFramework {
 //Touch Drop
 	void touchDrop(MenuEntry *entry) {
 		if(entry->Hotkeys[0].IsPressed()) {
-			Wrap::KB<u32>(Language::getInstance()->get("ENTER_ID"), true, 8, *(u32 *)&dropitem, *(u32 *)&dropitem, ItemChange);
+			Wrap::KB<u32>(Language::getInstance()->get(TextID::ENTER_ID), true, 8, *(u32 *)&dropitem, *(u32 *)&dropitem, ItemChange);
 		}
 		
-		if((RuntimeContext::getInstance()->isTurbo() ? Touch::IsDown() : Controller::IsKeyPressed(Key::Touchpad)) && Game::MapBoolCheck() == 1) {
+		if((RuntimeContext::getInstance()->isTurbo() ? Touch::IsDown() : Controller::IsKeyPressed(Key::Touchpad)) && Game::IsMapOpened()) {
 			UIntVector pos = Touch::GetPosition();
 			u32 worldx, worldy; 
 			switch(Game::GetRoom()) {
@@ -366,7 +366,7 @@ namespace CTRPluginFramework {
 	//Auto Drop Hotkeys
 		if(entry->Hotkeys[0].IsPressed()) {
 			enabled = !enabled;
-			OSD::Notify("Multi Slot Drop " << (enabled ? Color::Green << "ON" : Color::Red << "OFF"));
+			OSDExtras::Notify(Language::getInstance()->get(TextID::ITEM_SLOT_MULTI_DROPPER) << " " << (enabled ? Color::Green << Language::getInstance()->get(TextID::STATE_ON) : Color::Red << Language::getInstance()->get(TextID::STATE_OFF)));
 		}
 		
 		u8 slot = 0;
@@ -379,14 +379,14 @@ namespace CTRPluginFramework {
 		//Auto Drop
 			u32 wX, wY, u0;
 			if(enabled) {
-				if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !Game::GameSaving()) {
+				if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !Game::IsGameSaving()) {
 					Dropper::PlaceItemWrapper(DropType, ItemIDToReplace, &dropitemid, &dropitemid, wX, wY, 0, 0, 0, 0, 0, waitAnim, 0xA5);
 				}
 			}
 			
 		//Single Drop
 			if(RuntimeContext::getInstance()->isTurbo() ? entry->Hotkeys[1].IsDown() : entry->Hotkeys[1].IsPressed()) {
-				if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !Game::GameSaving()) {
+				if(Dropper::DropCheck(&wX, &wY, &u0, 0, 0) && !Game::IsGameSaving()) {
 					Dropper::PlaceItemWrapper(DropType, ItemIDToReplace, &dropitemid, &dropitemid, wX, wY, 0, 0, 0, 0, 0, waitAnim, 0xA5);
 				}
 			}

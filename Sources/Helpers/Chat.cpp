@@ -1,9 +1,17 @@
 #include <CTRPluginFramework.hpp>
 #include "Helpers/Chat.hpp"
+#include "LibCtrpfExtras/OSDExtras.hpp"
 
 namespace CTRPluginFramework {
 	u32 Chat::GetPlayerMessageData() {
 		u8 _pID = Game::GetActualPlayerIndex();
+		// swap your index with player 0 in order to get the correct pointer
+		if(_pID == Game::GetOnlinePlayerIndex()) {
+			_pID = 0;
+		}
+		else if(_pID == 0) {
+			_pID = Game::GetOnlinePlayerIndex();
+		}
 		
 	    u32 PTR = *(u32 *)Address(0x94FD84).addr; //0x94FD84
 		PTR += 0x464; //33078FA0
@@ -44,7 +52,7 @@ namespace CTRPluginFramework {
 			Sleep(Seconds(2));
 			Animation::ExecuteAnimationWrapper(GetPlayerIndex(), 6, {0, 0}, 0, 0, 0, 0, x, y, true);
 
-			OSD::Notify(Utils::Format("Animation: %02X", animID)); 
+			OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::CHAT_ANIMATION).c_str(), animID)); 
 		}
 	}
 
@@ -55,7 +63,7 @@ namespace CTRPluginFramework {
 			Sleep(Seconds(2));
 			Animation::ExecuteAnimationWrapper(GetPlayerIndex(), 6, {0, 0}, 0, 0, 0, 0, x, y, true);
 
-			OSD::Notify(Utils::Format("Emotion: %02X", emotionID));
+			OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::CHAT_EMOTION).c_str(), emotionID));
 		}
 	}
 
@@ -66,7 +74,7 @@ namespace CTRPluginFramework {
 			Sleep(Seconds(2));
 			Animation::ExecuteAnimationWrapper(GetPlayerIndex(), 6, {0, 0}, 0, 0, 0, 0, x, y, true);
 
-			OSD::Notify(Utils::Format("Snake: %03X", snakeID)); 
+			OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::CHAT_SNAKE).c_str(), snakeID)); 
 		}
 	}
 
@@ -77,7 +85,7 @@ namespace CTRPluginFramework {
 			Sleep(Milliseconds(100));
 			Animation::ExecuteAnimationWrapper(GetPlayerIndex(), 6, {0, 0}, 0, 0, 0, 0, x, y, true);
 
-			OSD::Notify(Utils::Format("Music: %03X", musicID)); 
+			OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::CHAT_MUSIC).c_str(), musicID)); 
 		}
 	}
 
@@ -86,7 +94,7 @@ namespace CTRPluginFramework {
 		if(PlayerClass::GetInstance()->GetWorldCoords(&x, &y)) {	
 			Dropper::PlaceItemWrapper(0xA, ReplaceEverything, &itemID, &itemID, x, y, 0, 0, 0, 0, 0, 0x56, 0xA5, false);
 
-			OSD::Notify(Utils::Format("Item: %08X", *(u32*)&itemID));
+			OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::CHAT_ITEM).c_str(), *(u32*)&itemID));
 		}	
 	}
 
@@ -126,7 +134,7 @@ namespace CTRPluginFramework {
 				AnimationCommand();
 			}
 			else {
-				OSD::Notify("Invalid Animation ID");
+				OSDExtras::Notify(TextID::CHAT_INVALID_ANIMATION, Color::Red);
                 return;
             }
 		}
@@ -137,7 +145,7 @@ namespace CTRPluginFramework {
 				EmotionCommand();
 			}
 			else {
-				OSD::Notify("Invalid Emotion ID");
+				OSDExtras::Notify(TextID::CHAT_INVALID_EMOTION, Color::Red);
                 return;
             }
 		}
@@ -148,7 +156,7 @@ namespace CTRPluginFramework {
 				SnakeCommand();
 			}
 			else {
-				OSD::Notify("Invalid Snake ID");
+				OSDExtras::Notify(TextID::CHAT_INVALID_SNAKE, Color::Red);
                 return;
             }
 		}
@@ -159,7 +167,7 @@ namespace CTRPluginFramework {
 				MusicCommand();
 			}
 			else {
-				OSD::Notify("Invalid Music ID");
+				OSDExtras::Notify(TextID::CHAT_INVALID_MUSIC, Color::Red);
                 return;
             }
 		}
@@ -173,7 +181,7 @@ namespace CTRPluginFramework {
 				ItemCommand();
 			}
 			else {
-				OSD::Notify("Invalid Item ID");
+				OSDExtras::Notify(TextID::INVALID_ITEM, Color::Red);
 				return;
 			}
 		}
@@ -182,18 +190,23 @@ namespace CTRPluginFramework {
 			UtilsExtras::Trim(ItemName);
 			ItemNamePack match;
 			if (!Item::searchByKeyword(ItemName, match)) {
-				OSD::Notify("No Item found with that name");
+				OSDExtras::Notify(TextID::CHAT_NO_ITEM_FOUND, Color::Red);
 				return;
 			}
 
 			itemID = Item(match.ID); //sets item
 			if(!itemID.isValid()) { //should always be true if orig file is used
-				OSD::Notify("Invalid Item ID");
+				OSDExtras::Notify(TextID::INVALID_ITEM, Color::Red);
 				return;
 			}
 
 			ItemCommand();
 		}
+		
+		else { // any other message
+			return;
+		}
+		ClearPlayerMessage();
 	}
 
     void Chat::CommandCallback(void) {
@@ -203,7 +216,6 @@ namespace CTRPluginFramework {
 
         Chat chat;
         chat.CommandLoop();
-		chat.ClearPlayerMessage();
     }
 
     void Chat::EnableCommands(void) {

@@ -8,6 +8,7 @@
 #include "Helpers/Game.hpp"
 #include "Helpers/GameStructs.hpp"
 #include "RuntimeContext.hpp"
+#include "LibCtrpfExtras/MenuFolderExtras.hpp"
 
 extern "C" void PATCH_EverythingSeed(void);
 extern "C" void PATCH_SnakeSpeed(void);
@@ -22,6 +23,35 @@ CTRPluginFramework::Item EverythingSeederItemID = {0x7FFE, 0x8000};
 CTRPluginFramework::Item PickupSeederItemID = {0x7FFE, 0};
 
 namespace CTRPluginFramework {
+	bool SetSeederInfos(void) {
+		PluginMenu *menu = PluginMenu::GetRunningInstance();
+		if (!menu) {
+			return false;
+		}
+
+		std::string seederInfo;
+		seederInfo += Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_PICKUP).c_str(), PickupSeederItemID);
+		seederInfo += "\n";
+		seederInfo += Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_DROP).c_str(), dropitem);
+		seederInfo += "\n";
+		seederInfo += Language::getInstance()->get(TextID::PLAYER_INFO_REPLACE) << " " << (ItemIDToReplace == ReplaceEverything
+			? Language::getInstance()->get(TextID::DROP_RADIUS_NOW_REPLACING_EVERYTHING)
+			: Utils::Format("%08X", ItemIDToReplace));
+
+		for (MenuFolder *folder : menu->GetFolderList()) {
+			auto extraFolder = static_cast<MenuFolderExtras*>(folder);
+			if (extraFolder->GetFolderType() == FolderType::Seeding) {
+				extraFolder->Note() = seederInfo;
+
+				for (MenuFolder *subFolder : extraFolder->GetFolderList()) {
+					auto extraSubFolder = static_cast<MenuFolderExtras*>(subFolder);
+					extraSubFolder->Note() = seederInfo;
+				}
+			}
+		}
+		return true;
+	}
+
 //Pickup Seeder
 	void pickseeder(MenuEntry *entry) {
 		static Address HoleSpeedPatch(0x65256C);
@@ -91,7 +121,7 @@ namespace CTRPluginFramework {
 		}
 		
 		if(entry->Hotkeys[0].IsPressed()) {
-			Wrap::KB<u32>(Language::getInstance()->get("ENTER_ID"), true, 8, *(u32 *)&PickupSeederItemID, *(u32 *)&PickupSeederItemID, ItemChange);
+			Wrap::KB<u32>(Language::getInstance()->get(TextID::ENTER_ID), true, 8, *(u32 *)&PickupSeederItemID, *(u32 *)&PickupSeederItemID, ItemChange);
         }	
 		
 	//Switches Seed Item to Remove Item
@@ -99,12 +129,12 @@ namespace CTRPluginFramework {
 			if(!pickItemHook.IsEnabled()) {
 				pickItemHook.Enable();
 				closeholeItemHook.Enable();
-				OSD::Notify(Color::Magenta << "Seed Item" << Color::Green << " Enabled"); //Enabled Seeding
+				OSDExtras::Notify(Color::Magenta << Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_ITEM) << Color::Green << " " + Language::getInstance()->get(TextID::STATE_ON)); //Enabled Seeding
 			}
 			else {
 				pickItemHook.Disable();
 				closeholeItemHook.Disable();
-				OSD::Notify(Color::Turquoise << "Remove Item" << Color::Green << " Enabled"); //Disabled Seeding
+				OSDExtras::Notify(Color::Turquoise << Language::getInstance()->get(TextID::PICKUP_SEEDER_REMOVE_ITEM) << Color::Green << " " + Language::getInstance()->get(TextID::STATE_ON)); //Disabled Seeding
 			}
         }
 		
@@ -119,7 +149,7 @@ namespace CTRPluginFramework {
 				speedHook.Disable();
 			}
 			
-			OSD::Notify("Seed Speed" << (speedHook.IsEnabled() ? Color::Green << " Enabled" : Color::Red << " Disabled"));
+			OSDExtras::Notify(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_SPEED) << (speedHook.IsEnabled() ? Color::Green << " " + Language::getInstance()->get(TextID::STATE_ON) : Color::Red << " " + Language::getInstance()->get(TextID::STATE_OFF)));
 		}
 		
 	//Switches Modes of Pickup
@@ -131,27 +161,27 @@ namespace CTRPluginFramework {
 				case 0:
 					Mode++;
 					Index = 0;
-					OSD::Notify("Seed Type: Pickup", Color::Red);
+					OSDExtras::Notify(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_TYPE) + Language::getInstance()->get(TextID::PICKUP_SEEDER_TYPE_PICKUP), Color::Red);
 				break;
 				case 1:
 					Mode++;
 					Index = 1;
-					OSD::Notify("Seed Type: Pluck", Color::Orange);
+					OSDExtras::Notify(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_TYPE) + Language::getInstance()->get(TextID::PICKUP_SEEDER_TYPE_PLUCK), Color::Orange);
 				break;
 				case 2:
 					Mode++;
 					Index = 2;
-					OSD::Notify("Seed Type: FlipDrop", Color::Green);
+					OSDExtras::Notify(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_TYPE) + Language::getInstance()->get(TextID::PICKUP_SEEDER_TYPE_FLIPDROP), Color::Green);
 				break;
 				case 3:
 					Mode++;
 					Index = 3;
-					OSD::Notify("Seed Type: RockBreak", Color::Blue);
+					OSDExtras::Notify(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_TYPE) + Language::getInstance()->get(TextID::PICKUP_SEEDER_TYPE_ROCKBREAK), Color::Blue);
 				break;
 				case 4:
 					Mode = 0;
 					Index = 4;
-					OSD::Notify("Seed Type: Dig Hole", Color::Purple);
+					OSDExtras::Notify(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_TYPE) + Language::getInstance()->get(TextID::PICKUP_SEEDER_TYPE_DIGHOLE), Color::Purple);
 				break;
 			}
 			
@@ -168,7 +198,7 @@ namespace CTRPluginFramework {
 				AutoPick[i].Patch(AutoPatch[IsON][i]);
 			}
 
-            OSD::Notify("Auto-Pickup: " << (IsON ? Color::Red << "OFF" : Color::Green << "ON"));
+            OSDExtras::Notify(Language::getInstance()->get(TextID::PICKUP_SEEDER_AUTO_PICKUP) << (IsON ? Color::Red << Language::getInstance()->get(TextID::STATE_OFF) : Color::Green << Language::getInstance()->get(TextID::STATE_ON)));
 		}	
 	
 		if(!entry->IsActivated()) {
@@ -203,12 +233,12 @@ namespace CTRPluginFramework {
 		if(entry->Hotkeys[0].IsPressed()) {	
 			if (!set) {
 				walkseed.Patch(0xEA000014);
-				OSD::Notify("Delete Items " << Color::Green << "ON");
+				OSDExtras::Notify(Language::getInstance()->get(TextID::WALK_SEEDER_DELETE_ITEMS) << Color::Green << Language::getInstance()->get(TextID::STATE_ON));
 				set = true;
 			} 
 			else {
 				walkseed.Unpatch();
-				OSD::Notify("Delete Items " << Color::Red << "OFF");
+				OSDExtras::Notify(Language::getInstance()->get(TextID::WALK_SEEDER_DELETE_ITEMS) << Color::Red << Language::getInstance()->get(TextID::STATE_OFF));
 				set = false;
 			}
 		}	
@@ -223,18 +253,18 @@ namespace CTRPluginFramework {
 		static Address firework(0x597870);
 		
 		const std::vector<std::string> fireOpt = {
-			Language::getInstance()->get("VECTOR_FIREWORK_CHANGE_ID"),
-			Language::getInstance()->get("VECTOR_FIREWORK_SPAWN"),
-			Language::getInstance()->get("VECTOR_DISABLE")
+			Language::getInstance()->get(TextID::VECTOR_FIREWORK_CHANGE_ID),
+			Language::getInstance()->get(TextID::VECTOR_FIREWORK_SPAWN),
+			Language::getInstance()->get(TextID::VECTOR_DISABLE)
 		};
 		
 		Item input = {0x7FFE, 0};
-		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), fireOpt);
+		Keyboard optKb(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION), fireOpt);
 		
 		switch(optKb.Open()) {
 			default: break;
 			case 0: {
-				if(Wrap::KB<u16>(Language::getInstance()->get("FIREWORK_SEEDER_ENTER_ID"), true, 4, *(u16 *)&input, *(u16 *)&input, ItemChange)) {
+				if(Wrap::KB<u16>(Language::getInstance()->get(TextID::FIREWORK_SEEDER_ENTER_ID), true, 4, *(u16 *)&input, *(u16 *)&input, ItemChange)) {
 					firework.Patch(*(u16 *)&input);
 				}
 			} break;
@@ -246,10 +276,26 @@ namespace CTRPluginFramework {
 			break;
 		}
 	}
+
+	static MenuEntry *editorEntry;
+
 //OSD for Map Editor
 	bool editorID(const Screen &screen) { 
+		ScreenExtras extras(screen);
+		Color darkGrey(40, 40, 40, 175);
+
 		if(screen.IsTop) {
-			screen.Draw(Utils::Format("ID: %08X", dropitem), 320, 220, Color::White); 
+			std::string str = Utils::Format(Language::getInstance()->get(TextID::INVENTORY_T2I_SET).c_str(), dropitem);
+			extras.DrawSysfontWithBackground(str, 0, 220, Color::White, darkGrey);
+		} else {
+			if (!editorEntry) {
+				return 1;
+			}
+
+			for (int i = 0; i < 5; ++i) {
+				Hotkey &hotkey = editorEntry->Hotkeys[5+i];
+				extras.DrawSysfontWithBackground(hotkey.ToString(true), 0, 20 + (16 * i), Color::White, darkGrey);
+			}
 		}
 
 		return 1;
@@ -267,7 +313,7 @@ namespace CTRPluginFramework {
 			for(s8 j = -size; j <= size; ++j) {
 				particleCoords[0] = (selectedX + j) * 0x20 + 0x10;
 				particleCoords[2] = (selectedY + i) * 0x20 + 0x10;
-				Game::Particles(0x20C, particleCoords);
+				Game::SpawnParticlesAtCoords(0x20C, particleCoords);
 				//0x20C = Orange Light
 				//0x214 = Blue Light
 			}
@@ -281,31 +327,32 @@ namespace CTRPluginFramework {
 				goto OFF;
 			}
 
-			return; //if player is not loaded return
+			return;
 		}
 		
 		static u32 keyPressedTicks = 0, DPadKeyPressedTicks = 0;
-		static bool removal = false;
+
+		editorEntry = entry;
 			
-		if(!MapEditorActive) {//If Map Editor is OFF get Coords
+		if (!MapEditorActive) { //If Map Editor is OFF get Coords
 			PlayerClass::GetInstance()->GetWorldCoords(&selectedX, &selectedY);
 		}
 		
-		if(entry->Hotkeys[0].IsPressed()) {
-			if(!MapEditorActive) { //Map Editor ON
+		if (entry->Hotkeys[0].IsPressed()) { //Activate
+			if (!MapEditorActive) { //Map Editor ON
 				PluginMenu *menu = PluginMenu::GetRunningInstance();
 				*menu += ParticleCallBack;
 
 				RuntimeContext::getInstance()->setFov(true);
 				
-				if(!RuntimeContext::getInstance()->isSaveMenuDisabled()) {//If No Save is OFF switch it ON
+				if(!RuntimeContext::getInstance()->isSaveMenuDisabled()) { //If No Save is OFF switch it ON
 					Process::Patch(Address(0x1A0980).addr, 0xE1A00000);
 				}
 				
 				OSD::Run(editorID);	
 				
 				Process::Patch(Address(0x1A51C8).addr, 0xE8BD81F0);
-				OSD::Notify("Map Editor " << Color::Green << "ON");
+				OSDExtras::Notify(Language::getInstance()->get(TextID::MAP_EDITOR) + " " << Color::Green << Language::getInstance()->get(TextID::STATE_ON));
 				MapEditorActive = true;
 
 				*(float *)(Camera::GetInstance() + 4) = (float)(selectedX * 0x20 + 0x10);
@@ -315,21 +362,7 @@ namespace CTRPluginFramework {
 			}
 			
 			else { //Map Editor OFF
-			OFF:
-				PluginMenu *menu = PluginMenu::GetRunningInstance();
-				*menu -= ParticleCallBack;
-
-				RuntimeContext::getInstance()->setFov(false);
-				
-				if(!RuntimeContext::getInstance()->isSaveMenuDisabled()) {//If No Save is OFF switch it back OFF
-					Process::Patch(Address(0x1A0980).addr, 0xE8900006);
-				}
-				
-				OSD::Stop(editorID);
-				
-				Process::Patch(Address(0x1A51C8).addr, 0xE2805C01);
-				OSD::Notify("Map Editor " << Color::Red << "OFF");
-				MapEditorActive = false;		
+				goto OFF;
 			}
 		}
 		
@@ -366,47 +399,23 @@ namespace CTRPluginFramework {
 				}
 			}
 			
-			if(Controller::IsKeysReleased(entry->Hotkeys[5].GetKeys()) || Controller::IsKeysReleased(entry->Hotkeys[6].GetKeys())) {
-				keyPressedTicks = 0;
-			}
-			
 			if(Controller::IsKeysReleased(entry->Hotkeys[1].GetKeys()) || 
 				Controller::IsKeysReleased(entry->Hotkeys[2].GetKeys()) || 
 					Controller::IsKeysReleased(entry->Hotkeys[3].GetKeys()) || 
 						Controller::IsKeysReleased(entry->Hotkeys[4].GetKeys())) {
 				DPadKeyPressedTicks = 0;
 			}
-				
-			if(entry->Hotkeys[5].IsDown()) {
-				keyPressedTicks++;
-				if((keyPressedTicks < 90 ? (keyPressedTicks % 10) == 1 : (keyPressedTicks % 3) == 1) || keyPressedTicks > 220) {
-					dropitem.ID = (dropitem.ID - 1 == 0x1FFF ? 0xFD : dropitem.ID - 1) % 0x4000;
-				}
-			}
 			
-			if(entry->Hotkeys[6].IsDown()) {
-				keyPressedTicks++;
-				if((keyPressedTicks < 90 ? (keyPressedTicks % 10) == 1 : (keyPressedTicks % 3) == 1) || keyPressedTicks > 220) {
-					dropitem.ID = (dropitem.ID + 1 == 0xFE ? 0x2000 : dropitem.ID + 1) % 0x4000;
-				}
-			}
-			
-			if(entry->Hotkeys[7].IsPressed()) {
+			if(entry->Hotkeys[5].IsDown()) { //Cycle Size (R)
 				size++;
 				if(size >= 4) {
 					size = 0;
 				}
 				
-				OSD::Notify(Utils::Format("Size set to %d", size));
+				OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::MAP_EDITOR_SIZE_SET).c_str(), size));
 			}
 			
-			if(entry->Hotkeys[8].IsPressed()) {
-				removal = !removal;
-
-				OSD::Notify("Removal mode " << (removal ? Color::Green << "ON" : Color::Red << "OFF")); 
-			}
-			
-			if(RuntimeContext::getInstance()->isTurbo() ? entry->Hotkeys[9].IsDown() : entry->Hotkeys[9].IsPressed()) {//Key::A
+			if(RuntimeContext::getInstance()->isTurbo() ? entry->Hotkeys[6].IsDown() : entry->Hotkeys[6].IsPressed()) { //Place (A)
 				Item *pItem = Game::GetItemAtWorldCoords(selectedX, selectedY);
 				
 				if(!pItem) {
@@ -415,34 +424,62 @@ namespace CTRPluginFramework {
 				
 				for(s8 i = -size; i <= size; ++i) {
 					for(s8 j = -size; j <= size; ++j) {
-						if(!removal) {
-							Dropper::PlaceItemWrapper(DropType, ItemIDToReplace, &dropitem, &dropitem, (selectedX + j), (selectedY + i), 0, 0, 0, 0, 0, waitAnim, 0xA5);
-						}
-						else {
-							Game::TrampleAt((selectedX + j), (selectedY + i)); 
-						}
+						Dropper::PlaceItemWrapper(DropType, ItemIDToReplace, &dropitem, &dropitem, (selectedX + j), (selectedY + i), 0, 0, 0, 0, 0, waitAnim, 0xA5);
 					}
 				}
 			}
+
+			if(RuntimeContext::getInstance()->isTurbo() ? entry->Hotkeys[7].IsDown() : entry->Hotkeys[7].IsPressed()) { //Remove (X)
+				Item *pItem = Game::GetItemAtWorldCoords(selectedX, selectedY);
+				
+				if(!pItem) {
+					return;
+				}
+				
+				for(s8 i = -size; i <= size; ++i) {
+					for(s8 j = -size; j <= size; ++j) {
+						Game::TrampleAtWorldCoords((selectedX + j), (selectedY + i));
+					}
+				}
+			}
+
+			if(entry->Hotkeys[8].IsPressed()) { //Copy (Y)
+				Item *pItem = Game::GetItemAtWorldCoords(selectedX, selectedY);
+				
+				if(!pItem) {
+					return;
+				}
+				
+				dropitem = *pItem;
+			}
 			
-			if(entry->Hotkeys[10].IsPressed()) {
-				Wrap::KB<u32>(Language::getInstance()->get("ENTER_ID"), true, 8, *(u32 *)&dropitem, *(u32 *)&dropitem, ItemChange);
+			if(entry->Hotkeys[9].IsPressed()) { //Set Item ID (L)
+				Wrap::KB<u32>(Language::getInstance()->get(TextID::ENTER_ID), true, 8, *(u32 *)&dropitem, *(u32 *)&dropitem, ItemChange);
 			}
 		}
 		
 		if(!entry->IsActivated()) { 
+		OFF:
+			PluginMenu *menu = PluginMenu::GetRunningInstance();
+			*menu -= ParticleCallBack;
+
 			RuntimeContext::getInstance()->setFov(false);
-			OSD::Stop(editorID);
-			Process::Patch(Address(0x1A51C8).addr, 0xE2805C01);
-				
+			
 			if(!RuntimeContext::getInstance()->isSaveMenuDisabled()) {//If No Save is OFF switch it back OFF
 				Process::Patch(Address(0x1A0980).addr, 0xE8900006);
 			}
+			
+			OSD::Stop(editorID);
+			
+			Process::Patch(Address(0x1A51C8).addr, 0xE2805C01);
+			OSDExtras::Notify(Language::getInstance()->get(TextID::MAP_EDITOR) + " " << Color::Red << Language::getInstance()->get(TextID::STATE_OFF));
+			
+			MapEditorActive = false;
 		}
 	}
 
 	void E_Seeder_KB(MenuEntry *entry) {
-		Wrap::KB<u32>(Language::getInstance()->get("ENTER_ID"), true, 8, *(u32 *)&EverythingSeederItemID, *(u32 *)&EverythingSeederItemID, ItemChange);
+		Wrap::KB<u32>(Language::getInstance()->get(TextID::ENTER_ID), true, 8, *(u32 *)&EverythingSeederItemID, *(u32 *)&EverythingSeederItemID, ItemChange);
 	}
 
 	void everythingseeder(MenuEntry *entry) {

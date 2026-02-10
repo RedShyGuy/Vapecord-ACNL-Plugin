@@ -33,25 +33,25 @@ namespace CTRPluginFramework {
 		static Address head(0x568064);
 		static Address corrupt(0x47E3F0);
 		
-		static const std::vector<std::string> sizeopt = {
-			Language::getInstance()->get("VECTOR_SIZE_PLAYER"),
-			Language::getInstance()->get("VECTOR_SIZE_BUGFISH"),
-			Language::getInstance()->get("VECTOR_SIZE_NPC"),
-			Language::getInstance()->get("VECTOR_SIZE_EFFECT"),
-			Language::getInstance()->get("VECTOR_SIZE_SHADOW"),
-			Language::getInstance()->get("VECTOR_SIZE_TOWN"),
-			Language::getInstance()->get("VECTOR_SIZE_HORI"),
-			Language::getInstance()->get("VECTOR_SIZE_VERT"),
-			Language::getInstance()->get("VECTOR_SIZE_HEAD"),
-			Language::getInstance()->get("VECTOR_SIZE_CORRUPT"),
-			Language::getInstance()->get("VECTOR_SIZE_RESET")
+		const std::vector<std::string> sizeopt = {
+			Language::getInstance()->get(TextID::VECTOR_SIZE_PLAYER),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_BUGFISH),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_NPC),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_EFFECT),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_SHADOW),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_TOWN),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_HORI),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_VERT),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_HEAD),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_CORRUPT),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_RESET)
 		};
 		
 		std::vector<std::string> sizesopt = {
-			Language::getInstance()->get("VECTOR_SIZE_BIGGER"),
-			Language::getInstance()->get("VECTOR_SIZE_DEFAULT"),
-			Language::getInstance()->get("VECTOR_SIZE_SMALLER"),
-			"Custom"
+			Language::getInstance()->get(TextID::VECTOR_SIZE_BIGGER),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_DEFAULT),
+			Language::getInstance()->get(TextID::VECTOR_SIZE_SMALLER),
+			Language::getInstance()->get(TextID::SIZE_CODES_CUSTOM)
 		};
 		
 		static Address sizeAddresses[10] = { 
@@ -65,7 +65,7 @@ namespace CTRPluginFramework {
 
 		float size = 0.0;
 		
-		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"), sizeopt);
+		Keyboard optKb(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION), sizeopt);
 
 		int op = optKb.Open();
 		if(op < 0) {
@@ -131,7 +131,7 @@ namespace CTRPluginFramework {
 		if(entry->Hotkeys[0].IsPressed()) {
 			ACNL_Player *player = Player::GetSaveData();
 			if(!player) {
-				OSD::Notify("Player needs to be loaded!", Color::Red);
+				OSDExtras::Notify(TextID::SAVE_PLAYER_NO, Color::Red);
 				return;
 			}
 
@@ -210,11 +210,11 @@ namespace CTRPluginFramework {
 		}
 
 		if(entry->Hotkeys[0].IsPressed()) {
-			Wrap::KB<u16>(Language::getInstance()->get("ULTIMATE_PARTY_POPPER_ENTER_EFFECT"), true, 3, PartyEffectID, PartyEffectID);
+			Wrap::KB<u16>(Language::getInstance()->get(TextID::ULTIMATE_PARTY_POPPER_ENTER_EFFECT), true, 3, PartyEffectID, PartyEffectID);
 		}
 
-		if(player->HeldItem.ID == 0x336A) {
-			player->HeldItem.ID = 0x336A;
+		if(player->PlayerAppearance.PlayerOutfit.HeldItem.ID == 0x336A) {
+			player->PlayerAppearance.PlayerOutfit.HeldItem.ID = 0x336A;
 			PartyEffect.Patch(PartyEffectID);
 
 			PartySnakeSpeed.WriteFloat(8.0);
@@ -225,7 +225,7 @@ namespace CTRPluginFramework {
 			hook2.Enable();
 		}
    
-		if(!entry->IsActivated() || player->HeldItem.ID != 0x336A) {
+		if(!entry->IsActivated() || player->PlayerAppearance.PlayerOutfit.HeldItem.ID != 0x336A) {
 			PartyEffect.Unpatch();
 			PartySnakeSpeed.Unpatch();
 			party2.Unpatch();
@@ -307,12 +307,12 @@ namespace CTRPluginFramework {
             if(Controller::IsKeysPressed(Key::R + Key::Y)) {
 				switch(isOn) {
 					case 0: 
-						OSD::Notify("Player: " << Color::Red << "Locked"); 
+						OSDExtras::Notify(Language::getInstance()->get(TextID::CAMERA_MOD_PLAYER) << " " << Color::Red << Language::getInstance()->get(TextID::CAMERA_MOD_LOCKED)); 
 						Animation::ExecuteAnimationWrapper(4, 0xF, {0, 0}, 0, 0, 0, 0, 0, 0, 0);
 						isOn = true;
 					break;
 					case 1: 
-						OSD::Notify("Player: " << Color::Green << "Unlocked");
+						OSDExtras::Notify(Language::getInstance()->get(TextID::CAMERA_MOD_PLAYER) << " " << Color::Green << Language::getInstance()->get(TextID::CAMERA_MOD_UNLOCKED));
 						Animation::ExecuteAnimationWrapper(4, 6, {0, 0}, 0, 0, 0, 0, 0, 0, 0);
 						isOn = false;
 					break;
@@ -362,7 +362,7 @@ namespace CTRPluginFramework {
         patch:
             if(!isPatched) {
             //disable camera following
-				OSD::Notify("Camera following: " << Color::Red << "OFF"); 
+				OSDExtras::Notify(Language::getInstance()->get(TextID::CAMERA_MOD_CAM_FOLLOWING) << " " << Color::Red << Language::getInstance()->get(TextID::STATE_OFF)); 
 				cameraAsm.Patch(0xEA000020);
                 isPatched = true;
             }
@@ -370,7 +370,7 @@ namespace CTRPluginFramework {
         unpatch:
             if(isPatched) {
 			//reenable camera followig
-				OSD::Notify("Camera following: " << Color::Green << "ON"); 
+				OSDExtras::Notify(Language::getInstance()->get(TextID::CAMERA_MOD_CAM_FOLLOWING) << " " << Color::Green << Language::getInstance()->get(TextID::STATE_ON)); 
 				cameraAsm.Unpatch();
                 isPatched = false;
             }
@@ -407,17 +407,18 @@ namespace CTRPluginFramework {
 	}
 
 	void SetFacialExpression(MenuEntry *entry) {
-		static const std::vector<std::string> options = {
-			"Eye Expression", "Mouth Expression"
+		const std::vector<std::string> options = {
+			Language::getInstance()->get(TextID::FACIAL_EXPRESS_EYE), 
+			Language::getInstance()->get(TextID::FACIAL_EXPRESS_MOUTH)
 		};
 		
-		Keyboard KB(Language::getInstance()->get("KEY_CHOOSE_OPTION"), options);
+		Keyboard KB(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION), options);
 		int res = KB.Open();
 		if(res < 0) {
 			return;
 		}
 
-		KB.GetMessage() = Language::getInstance()->get("ENTER_ID");
+		KB.GetMessage() = Language::getInstance()->get(TextID::ENTER_ID);
 		KB.IsHexadecimal(true);
 		KB.Open(res == 0 ? c_eyeID : c_mouthID, res == 0 ? c_eyeID : c_mouthID);
 	}
@@ -497,7 +498,7 @@ namespace CTRPluginFramework {
 			return;
 		}
 		
-		switch(player->HeldItem.ID) {
+		switch(player->PlayerAppearance.PlayerOutfit.HeldItem.ID) {
 			default: break;
 		/*If Blue Wand*/
 			case 0x3398: {
@@ -531,7 +532,7 @@ namespace CTRPluginFramework {
 				Game::RemoveItems(true, x, y, 1, 1, false, false, false);
 			//Some neat particles for a nice effect | do it 20 times to spam it	
 				for(int i = 0; i <= 20; ++i) 
-					Game::Particles(0x10B, PlayerClass::GetInstance()->GetCoordinates(x, y));	
+					Game::SpawnParticlesAtCoords(0x10B, PlayerClass::GetInstance()->GetCoordinates(x, y));	
 
 				//GameHelper::PlaySound(0);
 
@@ -580,7 +581,7 @@ namespace CTRPluginFramework {
 
 			//Some neat particles for a nice effect | do it 20 times to spam it	
 				for(int i = 0; i <= 20; ++i) {
-					Game::Particles(0x19A, PlayerClass::GetInstance()->GetCoordinates(x, y));	
+					Game::SpawnParticlesAtCoords(0x19A, PlayerClass::GetInstance()->GetCoordinates(x, y));	
 				}
 								
 			//Places Grown Tree

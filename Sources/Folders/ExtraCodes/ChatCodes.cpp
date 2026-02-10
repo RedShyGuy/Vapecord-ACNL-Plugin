@@ -47,7 +47,7 @@ namespace CTRPluginFramework {
 			f_board.Close();
 
 			if(GameKeyboard::Write(Holder)) {
-				OSD::Notify("Pasted: " << Holder, Color(0x0091FFFF));
+				OSDExtras::Notify(Language::getInstance()->get(TextID::CHATCOPYPASTE_PASTE) << " " << Holder, Color(0x0091FFFF));
 			}
 		}
 
@@ -67,7 +67,7 @@ namespace CTRPluginFramework {
 				f_board.Flush();
 				f_board.Close();
 
-				OSD::Notify("Copied: " << Holder, Color(0xFF0077FF));
+				OSDExtras::Notify(Language::getInstance()->get(TextID::CHATCOPYPASTE_COPY) << " " << Holder, Color(0xFF0077FF));
 			}
 		}
 
@@ -89,13 +89,13 @@ namespace CTRPluginFramework {
 				f_board.Flush();
 				f_board.Close();
 
-				OSD::Notify("Cut: " << Holder, Color(0x00FF6FFF));
+				OSDExtras::Notify(Language::getInstance()->get(TextID::CHATCOPYPASTE_CUT) << " " << Holder, Color(0x00FF6FFF));
 			}
 		}
 
 		else if(entry->Hotkeys[3].IsPressed()) {
 			if(GameKeyboard::DeleteSelected()) {
-				OSD::Notify("Deleted Selected", Color::Red);
+				OSDExtras::Notify(TextID::CHATCOPYPASTE_DELETE, Color::Red);
 			}
 		}
 	}
@@ -174,11 +174,11 @@ namespace CTRPluginFramework {
 			return false;
 		}
 
-		scr.Draw("Copy", ButtonList[0][0], ButtonList[0][1], Color::Yellow, Color::Black);
-		scr.Draw("Paste", ButtonList[1][0], ButtonList[1][1], Color::Yellow, Color::Black);
-		scr.Draw("Cut", ButtonList[2][0], ButtonList[2][1], Color::Yellow, Color::Black);
-		scr.Draw("Delete", ButtonList[3][0], ButtonList[3][1], Color::Yellow, Color::Black);
-		scr.Draw("Send", ButtonList[4][0], ButtonList[4][1], Color::Yellow, Color::Black);
+		scr.Draw(Language::getInstance()->get(TextID::CHAT_BUTTON_COPY), ButtonList[0][0], ButtonList[0][1], Color::Yellow, Color::Black);
+		scr.Draw(Language::getInstance()->get(TextID::CHAT_BUTTON_PASTE), ButtonList[1][0], ButtonList[1][1], Color::Yellow, Color::Black);
+		scr.Draw(Language::getInstance()->get(TextID::CHAT_BUTTON_CUT), ButtonList[2][0], ButtonList[2][1], Color::Yellow, Color::Black);
+		scr.Draw(Language::getInstance()->get(TextID::CHAT_BUTTON_DELETE), ButtonList[3][0], ButtonList[3][1], Color::Yellow, Color::Black);
+		scr.Draw(Language::getInstance()->get(TextID::CHAT_BUTTON_SEND), ButtonList[4][0], ButtonList[4][1], Color::Yellow, Color::Black);
 		
 		return true;
 	}
@@ -226,7 +226,7 @@ namespace CTRPluginFramework {
 
 						f_board.Flush();
 						f_board.Close();
-						OSD::Notify("Copied", Color(0xFF0077FF));
+						OSDExtras::Notify(TextID::CHAT_BUTTON_COPIED, Color(0xFF0077FF));
 					}
 				}
 				break;
@@ -262,7 +262,7 @@ namespace CTRPluginFramework {
 						f_board.Flush();
 						f_board.Close();
 
-						OSD::Notify("Cut", Color(0x00FF6FFF));
+						OSDExtras::Notify(TextID::CHAT_BUTTON_CUT, Color(0x00FF6FFF));
 					}
 				}
 				break;

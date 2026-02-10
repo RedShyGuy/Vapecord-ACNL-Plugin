@@ -21,6 +21,7 @@ INCLUDES	:= 	Includes \
 				Includes/Item \
 				Includes/Pretendo \
 				Includes/House \
+				Includes/Plugin \
 				
 SOURCES 	:= 	Sources \
                 Sources/Folders \
@@ -28,6 +29,7 @@ SOURCES 	:= 	Sources \
 				Sources/Folders/ExtraCodes \
 				Sources/Folders/PlayerCodes \
 				Sources/Folders/DefaultCodes \
+				Sources/Folders/EnvironmentCodes \
 				Sources/Helpers \
 				Sources/LibCtrpfExtras \
 				Sources/Plugin \
@@ -40,7 +42,7 @@ PSF 		:= 	$(notdir $(TOPDIR)).plgInfo
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
-DEVMODE 	?= 0
+DEVMODE 	?= 1
 
 ARCH		:=	-march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
 
@@ -52,7 +54,7 @@ CFLAGS		:=	$(ARCH) -Os -mword-relocations \
 
 CFLAGS		+=	$(INCLUDE) -D__3DS__
 
-CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++17 -DDEVMODE=$(DEVMODE)
+CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++20 -DDEVMODE=$(DEVMODE)
 
 ASFLAGS		:=	$(ARCH)
 LDFLAGS		:= -T $(TOPDIR)/3gx.ld $(ARCH) -Os -Wl,--gc-sections,--strip-discarded,--strip-debug

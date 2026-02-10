@@ -7,6 +7,7 @@
 #include "cheats.hpp"
 #include "Pretendo/Pretendo.hpp"
 #include "Pretendo/PatternManager.hpp"
+#include "LibCtrpfExtras/OSDExtras.hpp"
 
 namespace CTRPluginFramework {
 	static const std::string NOTE =
@@ -70,7 +71,7 @@ Translators: みるえもん & みなと(Japanese), im a book(spanish), Fedecras
 		}
 
 		else if(res == STRING_NOT_FOUND) {
-			OSD::Notify("Game Version Not Found!");
+			OSDExtras::Notify("Game Version Not Found!");
 			return false;
 		}
 
@@ -99,24 +100,27 @@ Translators: みるえもん & みなと(Japanese), im a book(spanish), Fedecras
 
 		PluginMenu *menu = new PluginMenu(Color::White << "ACNL Vapecord Plugin " << region, majorV, minorV, revisV, NOTE);
 		menu->SynchronizeWithFrame(true);
+		menu->ShowWelcomeMessage(false);
 
 	//If title isn't ACNL
 		if(region.empty()) {
+			OSDExtras::Notify("Plugin ready!");
 			menu->Run();
 			return 0;
 		}
 
 		if (!CheckGameVersion()) {
+			OSDExtras::Notify("Plugin ready!");
 			menu->Run();
 			return 0;
 		}
 
+		EnableAllChecks();
+		EnableAllPatches();
+
 		CheckForLanguageFile();
 
 		SleepTime();
-
-		EnableAllChecks();
-		EnableAllPatches();
 
 		ItemSequence::Init();
 	//keeps internet connection when menu is opened
@@ -127,8 +131,9 @@ Translators: みるえもん & みなと(Japanese), im a book(spanish), Fedecras
 		InitMenu(menu);
 
 	//Load Callbacks
+		menu->OnOpening = SetSeederInfos;
 		menu->Callback(IndoorsSeedItemCheck);
-		//menu->OnNewFrame = SendPlayerData;
+		OSD::Run(OSDExtras::UpdateOSDSystem);
 		Process::exceptionCallback = CustomExceptionHandler;
 
 	//Patch Pretendo + RCE fix
@@ -139,6 +144,7 @@ Translators: みるえもん & みなと(Japanese), im a book(spanish), Fedecras
 
         enablePretendoPatches();
 
+		OSDExtras::Notify("ACNL Vapecord Plugin ready!");
 	//Run Menu Loop
 		menu->Run();
 		return 0;

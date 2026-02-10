@@ -3,67 +3,130 @@
 #include <CTRPluginFramework.hpp>
 #include "Language.hpp"
 #include "MenuEntryExtras.hpp"
+#include "Plugin/Plugin_Color.hpp"
+#include "LibCtrpfExtras/FolderTypes.hpp"
+#include "Files.h"
+#include "TextID.hpp"
 
 namespace CTRPluginFramework {
-    enum class FolderType {
-        Save,
-        Movement,
-        Inventory,
-        Player,
-        Animation,
-        Seeding,
-        Money,
-        Island,
-        NPC,
-        Fun,
-        Extra,
-        Misc
-    };
-
     class MenuFolderExtras : public MenuFolder {
     public:
         /**
         * \brief Sets up a MenuFolder with the language key as the name
-        * \param nameKey Name key
         * \param folderType Type of the folder
-        * \param noteKey Note key for the folder (Optional)
         */
-        MenuFolderExtras(const std::string &nameKey, const FolderType folderType, const std::string &noteKey = "");
+        MenuFolderExtras(const FolderType folderType, const SubFolder subFolder = SubFolder::None, const std::string& note = "");
     
         /**
          * \brief Append a MenuEntryExtras object to this folder, will set the folder color to the entry
          * \param item The entry to append
          */
-        void    Append(MenuEntryExtras *item) const;
+        void    Append(MenuEntryExtras *item);
 
         /**
          * \brief Append a MenuFolder object to this folder
          * \param item The folder to append
          */
-        void    Append(MenuFolderExtras *item) const;
-    private:
-        Color color;
-        
-        static std::string setLanguageByKey(const std::string& langKey) {
-            return Language::getInstance()->get(langKey);
+        void    Append(MenuFolderExtras *item);
+
+        /**
+         * \brief Update the menu folders name and color
+         */
+        void    Update();
+
+        FolderType  GetFolderType() const {
+            return folderType;
+        }
+
+        static std::string GetFolderName(FolderType type) {
+            static const std::unordered_map<FolderType, const TextID> keys = {
+                { FolderType::Save,        TextID::SAVE_CODES },
+                { FolderType::Movement,    TextID::MOVEMENT_CODES },
+                { FolderType::Inventory,   TextID::INVENTORY_CODES },
+                { FolderType::Player,      TextID::PLAYER_CODES },
+                { FolderType::Animation,   TextID::ANIMATION_CODES },
+                { FolderType::Seeding,     TextID::SEEDING_CODES },
+                { FolderType::Money,       TextID::MONEY_CODES },
+                { FolderType::Island,      TextID::ISLAND_CODES },
+                { FolderType::NPC,         TextID::NPC_CODES },
+                { FolderType::Environment, TextID::ENV_CODES },
+                { FolderType::Extra,       TextID::EXTRA_CODES },
+                { FolderType::Misc,        TextID::MISC_CODES },
+                { FolderType::Default,     TextID::DEFAULT_CODES },
+                { FolderType::Dev,         TextID::DEV_CODES }
+            };
+
+            auto it = keys.find(type);
+            return it != keys.end() ? Language::getInstance()->get(it->second) : Language::getInstance()->get(TextID::NONE);
+        }
+
+        static std::string GetSubFolderName(FolderType parent, SubFolder sub) {
+            TextID textID = TextID::NONE;
+
+            if (sub != SubFolder::None) {
+                switch (parent) {
+                    case FolderType::Player:
+                        switch (sub) {
+                            case SubFolder::PlayerSave: textID = TextID::PLAYER_SAVE_CODES; break;
+                            default: break;
+                        }
+                        break;
+
+                    case FolderType::Seeding:
+                        switch (sub) {
+                            case SubFolder::Seed: textID = TextID::SEED_CODES; break;
+                            case SubFolder::Drop: textID = TextID::DROP_CODES; break;
+                            case SubFolder::Tree: textID = TextID::TREE_CODES; break;
+                            default: break;
+                        }
+                        break;
+
+                    case FolderType::Environment:
+                        switch (sub) {
+                            case SubFolder::Fish: textID = TextID::FISH_CODES; break;
+                            case SubFolder::Insect: textID = TextID::INSECT_CODES; break;
+                            default: break;
+                        }
+                        break;
+
+                    case FolderType::Extra:
+                        switch (sub) {
+                            case SubFolder::Chat: textID = TextID::CHAT_CODES; break;
+                            case SubFolder::Fun: textID = TextID::FUN_CODES; break;
+                            default: break;
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            return Language::getInstance()->get(textID);
         }
 
         static Color GetFolderColor(FolderType type) {
-            switch (type) {
-                case FolderType::Save:      return Color(150, 100, 255);  // Violett
-                case FolderType::Movement:  return Color(80, 220, 120);   // Bright green
-                case FolderType::Inventory: return Color(255, 160, 70);   // Orange
-                case FolderType::Player:    return Color(70, 180, 255);   // Bright blue
-                case FolderType::Animation: return Color(255, 80, 180);   // Magenta
-                case FolderType::Seeding:   return Color(110, 200, 100);  // Green
-                case FolderType::Money:     return Color(255, 215, 60);   // Golden yellow
-                case FolderType::Island:    return Color(60, 220, 200);   // Cyan
-                case FolderType::NPC:       return Color(255, 100, 100);  // Warm red
-                case FolderType::Fun:       return Color(240, 120, 255);  // Pink purple
-                case FolderType::Extra:     return Color(150, 160, 180);  // Grey blue
-                case FolderType::Misc:      return Color(100, 100, 100);  // Dark grey
+            if (type >= FolderType::Save && type <= FolderType::Misc) {
+                if (CustomColorsExist()) {
+                    std::vector<ColorEntry> customColors = GetCustomColors();
+                    for (const ColorEntry& entry : customColors) {
+                        if (entry.folderType == type) {
+                            return Color(entry.r, entry.g, entry.b);
+                        }
+                    }
+                }
+            }
+
+            for (const ColorEntry& entry : defaultColors) {
+                if (entry.folderType == type) {
+                    return Color(entry.r, entry.g, entry.b);
+                }
             }
             return Color::White; // fallback
         }
+    private:
+        std::vector<TextID> NameKeys;
+        FolderType folderType;
+        SubFolder subFolder;
     };
 }

@@ -14,10 +14,13 @@
 #include "Helpers/NPC.hpp"
 #include "Helpers/Save.hpp"
 #include "Helpers/IDList.hpp"
+#include "Helpers/Inventory.hpp"
 #include "House/House.hpp"
 
 #include "Color.h"
 #include "Files.h"
+
+extern "C" void PATCH_CustomButtons(void);
 
 namespace CTRPluginFramework {
 //Integer For Custom Dumper
@@ -25,15 +28,15 @@ namespace CTRPluginFramework {
 	static std::string filetype = "dat";
 //Custom Dumper	
 	void customdump(MenuEntry *entry) {	
-		std::vector<std::string> customdopt = { "Set Custom Dump", "Dump/Restore" };
+		const std::vector<std::string> customdopt = { "Set Custom Dump", "Dump/Restore" };
 		
-		std::vector<std::string> customdopt1 = { "Start Offset", "Dump length", "File Type" };
+		const std::vector<std::string> customdopt1 = { "Start Offset", "Dump length", "File Type" };
 		
-		std::vector<std::string> customdopt2 = { "Dump", "Restore", "Delete" };
+		const std::vector<std::string> customdopt2 = { "Dump", "Restore", "Delete" };
 
 		Keyboard CKB("text");
 
-		Keyboard OKB(Language::getInstance()->get("KEY_CHOOSE_OPTION"));
+		Keyboard OKB(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION));
 		OKB.Populate(customdopt);
 		switch(OKB.Open()) {
 			default: break;
@@ -89,11 +92,11 @@ namespace CTRPluginFramework {
 		std::vector<std::string> cmnOpt =  { "" };
 
 		if(Turbo_Call) 
-			cmnOpt[0] = Color(pGreen) << Language::getInstance()->get("VECTOR_ENABLED");
+			cmnOpt[0] = Color(pGreen) << Language::getInstance()->get(TextID::VECTOR_ENABLED);
 		else 
-			cmnOpt[0] = Color(pRed) << Language::getInstance()->get("VECTOR_DISABLED");
+			cmnOpt[0] = Color(pRed) << Language::getInstance()->get(TextID::VECTOR_DISABLED);
 
-		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"));
+		Keyboard optKb(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION));
 		optKb.Populate(cmnOpt);
 		int op = optKb.Open();
 		if(op == -1)
@@ -122,7 +125,7 @@ namespace CTRPluginFramework {
 					
 					if(KB.Open(p[i]) == -1) {
 						size = i--;
-						OSD::Notify(Utils::Format("Set Function: %08X with %02d parameters!", funcaddress, size));
+						OSDExtras::Notify(Utils::Format("Set Function: %08X with %02d parameters!", funcaddress, size));
 						return;
 					}
 
@@ -163,7 +166,7 @@ namespace CTRPluginFramework {
 				case 10: result = func.Call<u32>(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8], p[9]); break;
 				case 11: result = func.Call<u32>(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8], p[9], p[10]); break;
 			}
-			OSD::Notify(Utils::Format("Returned Value: %08X", result));
+			OSDExtras::Notify(Utils::Format("Returned Value: %08X", result));
 		}
     }
 
@@ -171,7 +174,7 @@ namespace CTRPluginFramework {
 		ACNL_Player *player = Player::GetSaveData();
 
 		if(!player) {
-			MessageBox(Language::getInstance()->get("SAVE_PLAYER_NO"))();
+			MessageBox(Language::getInstance()->get(TextID::SAVE_PLAYER_NO))();
 			return;
 		}
 		
@@ -190,7 +193,7 @@ namespace CTRPluginFramework {
 
 		WrapLoc locPlayer;
 		
-		Keyboard optKb(Language::getInstance()->get("KEY_CHOOSE_OPTION"));
+		Keyboard optKb(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION));
 		optKb.Populate(select);
 		switch(optKb.Open()) {
 			default: break;
@@ -206,7 +209,7 @@ namespace CTRPluginFramework {
 					}
 				}
 		
-				Keyboard pKB(Language::getInstance()->get("KEY_SELECT_PLAYER"));
+				Keyboard pKB(Language::getInstance()->get(TextID::KEY_SELECT_PLAYER));
 				pKB.Populate(pV);
 				int pChoice = pKB.Open();
 				
@@ -328,7 +331,7 @@ namespace CTRPluginFramework {
 				playerFlag->Unknown30 = set; 
 			break;
 			case 30:
-				playerFlag->Unknown31 = set; 
+				playerFlag->CelesteIntroduced = set; 
 			break;
 			case 31:
 				playerFlag->Unknown32 = set; 
@@ -541,7 +544,7 @@ namespace CTRPluginFramework {
 				playerFlag->Unknown101 = set; 
 			break;
 			case 101:
-				playerFlag->Unknown102 = set; 
+				playerFlag->MuseumExhibitExplained = set; 
 			break;
 			case 102:
 				playerFlag->Unknown103 = set; 
@@ -1514,7 +1517,7 @@ namespace CTRPluginFramework {
 			for (int bit = 0; bit < 8; bit++) {
 				if (diff & (1 << bit)) {
 					int flagIndex = byte * 8 + bit;
-					OSD::Notify(Utils::Format("Player Flag %d changed to %d", flagIndex+1, GetFlag(flags, flagIndex)));
+					OSDExtras::Notify(Utils::Format("Player Flag %d changed to %d", flagIndex+1, GetFlag(flags, flagIndex)));
 				}
 			}
 		}
@@ -1548,7 +1551,7 @@ namespace CTRPluginFramework {
 			for (int bit = 0; bit < 8; bit++) {
 				if (diff & (1 << bit)) {
 					int flagIndex = byte * 8 + bit;
-					OSD::Notify(Utils::Format("Town Flag %d changed to %d", flagIndex+1, GetTownFlag(flags, flagIndex)));
+					OSDExtras::Notify(Utils::Format("Town Flag %d changed to %d", flagIndex+1, GetTownFlag(flags, flagIndex)));
 				}
 			}
 		}
@@ -1568,28 +1571,28 @@ namespace CTRPluginFramework {
 		}
 
 		if (town->PlayerHouse[0].exterior2.HouseSize != lastExterior.HouseSize)
-			OSD::Notify(Utils::Format("House Size changed to %02X", town->PlayerHouse[0].exterior2.HouseSize));
+			OSDExtras::Notify(Utils::Format("House Size changed to %02X", town->PlayerHouse[0].exterior2.HouseSize));
 		if (town->PlayerHouse[0].exterior2.HouseStyle != lastExterior.HouseStyle)
-			OSD::Notify(Utils::Format("House Style changed to %02X", town->PlayerHouse[0].exterior2.HouseStyle));
+			OSDExtras::Notify(Utils::Format("House Style changed to %02X", town->PlayerHouse[0].exterior2.HouseStyle));
 		if (town->PlayerHouse[0].exterior2.HouseDoorShape != lastExterior.HouseDoorShape)
-			OSD::Notify(Utils::Format("House Door Shape changed to %02X", town->PlayerHouse[0].exterior2.HouseDoorShape));
+			OSDExtras::Notify(Utils::Format("House Door Shape changed to %02X", town->PlayerHouse[0].exterior2.HouseDoorShape));
 		if (town->PlayerHouse[0].exterior2.HouseBrick != lastExterior.HouseBrick)
-			OSD::Notify(Utils::Format("House Brick changed to %02X", town->PlayerHouse[0].exterior2.HouseBrick));
+			OSDExtras::Notify(Utils::Format("House Brick changed to %02X", town->PlayerHouse[0].exterior2.HouseBrick));
 		if (town->PlayerHouse[0].exterior2.HouseRoof != lastExterior.HouseRoof)
-			OSD::Notify(Utils::Format("House Roof changed to %02X", town->PlayerHouse[0].exterior2.HouseRoof));
+			OSDExtras::Notify(Utils::Format("House Roof changed to %02X", town->PlayerHouse[0].exterior2.HouseRoof));
 		if (town->PlayerHouse[0].exterior2.HouseDoor != lastExterior.HouseDoor)
-			OSD::Notify(Utils::Format("House Door changed to %02X", town->PlayerHouse[0].exterior2.HouseDoor));
+			OSDExtras::Notify(Utils::Format("House Door changed to %02X", town->PlayerHouse[0].exterior2.HouseDoor));
 		if (town->PlayerHouse[0].exterior2.HouseFence != lastExterior.HouseFence)
-			OSD::Notify(Utils::Format("House Fence changed to %02X", town->PlayerHouse[0].exterior2.HouseFence));
+			OSDExtras::Notify(Utils::Format("House Fence changed to %02X", town->PlayerHouse[0].exterior2.HouseFence));
 		if (town->PlayerHouse[0].exterior2.HousePavement != lastExterior.HousePavement)
-			OSD::Notify(Utils::Format("House Pavement changed to %02X", town->PlayerHouse[0].exterior2.HousePavement));
+			OSDExtras::Notify(Utils::Format("House Pavement changed to %02X", town->PlayerHouse[0].exterior2.HousePavement));
 		if (town->PlayerHouse[0].exterior2.HouseMailBox != lastExterior.HouseMailBox)
-			OSD::Notify(Utils::Format("House MailBox changed to %02X", town->PlayerHouse[0].exterior2.HouseMailBox));
+			OSDExtras::Notify(Utils::Format("House MailBox changed to %02X", town->PlayerHouse[0].exterior2.HouseMailBox));
 
 		lastExterior = town->PlayerHouse[0].exterior2;
 	}
 
-	static std::vector<std::string> roomNames = {
+	const std::vector<std::string> roomNames = {
 		"Middle Room", "SecondRoom", "BasementRoom", "RightRoom", "LeftRoom", "BackRoom"
 	};
 
@@ -1607,73 +1610,73 @@ namespace CTRPluginFramework {
 		}
 
 		if (room->flags.BrightLight != lastRoomflags[roomIndex].BrightLight)
-			OSD::Notify(Utils::Format("Bright Light changed to %02X for %s", room->flags.BrightLight, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Bright Light changed to %02X for %s", room->flags.BrightLight, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown2 != lastRoomflags[roomIndex].Unknown2)
-			OSD::Notify(Utils::Format("Unknown2 changed to %02X for %s", room->flags.Unknown2, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown2 changed to %02X for %s", room->flags.Unknown2, roomNames.at(roomIndex).c_str()));
 		if (room->flags.RegularLight != lastRoomflags[roomIndex].RegularLight)
-			OSD::Notify(Utils::Format("Regular Light changed to %02X for %s", room->flags.RegularLight, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Regular Light changed to %02X for %s", room->flags.RegularLight, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown4 != lastRoomflags[roomIndex].Unknown4)
-			OSD::Notify(Utils::Format("Unknown4 changed to %02X for %s", room->flags.Unknown4, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown4 changed to %02X for %s", room->flags.Unknown4, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown5 != lastRoomflags[roomIndex].Unknown5)
-			OSD::Notify(Utils::Format("Unknown5 changed to %02X for %s", room->flags.Unknown5, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown5 changed to %02X for %s", room->flags.Unknown5, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown6 != lastRoomflags[roomIndex].Unknown6)
-			OSD::Notify(Utils::Format("Unknown6 changed to %02X for %s", room->flags.Unknown6, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown6 changed to %02X for %s", room->flags.Unknown6, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown7 != lastRoomflags[roomIndex].Unknown7)
-			OSD::Notify(Utils::Format("Unknown7 changed to %02X for %s", room->flags.Unknown7, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown7 changed to %02X for %s", room->flags.Unknown7, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown8 != lastRoomflags[roomIndex].Unknown8)
-			OSD::Notify(Utils::Format("Unknown8 changed to %02X for %s", room->flags.Unknown8, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown8 changed to %02X for %s", room->flags.Unknown8, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown9 != lastRoomflags[roomIndex].Unknown9)
-			OSD::Notify(Utils::Format("Unknown9 changed to %02X for %s", room->flags.Unknown9, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown9 changed to %02X for %s", room->flags.Unknown9, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown10 != lastRoomflags[roomIndex].Unknown10)
-			OSD::Notify(Utils::Format("Unknown10 changed to %02X for %s", room->flags.Unknown10, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown10 changed to %02X for %s", room->flags.Unknown10, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown11 != lastRoomflags[roomIndex].Unknown11)
-			OSD::Notify(Utils::Format("Unknown11 changed to %02X for %s", room->flags.Unknown11, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown11 changed to %02X for %s", room->flags.Unknown11, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown12 != lastRoomflags[roomIndex].Unknown12)
-			OSD::Notify(Utils::Format("Unknown12 changed to %02X for %s", room->flags.Unknown12, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown12 changed to %02X for %s", room->flags.Unknown12, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown13 != lastRoomflags[roomIndex].Unknown13)
-			OSD::Notify(Utils::Format("Unknown13 changed to %02X for %s", room->flags.Unknown13, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown13 changed to %02X for %s", room->flags.Unknown13, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown14 != lastRoomflags[roomIndex].Unknown14)
-			OSD::Notify(Utils::Format("Unknown14 changed to %02X for %s", room->flags.Unknown14, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown14 changed to %02X for %s", room->flags.Unknown14, roomNames.at(roomIndex).c_str()));
 		if (room->flags.LowLight != lastRoomflags[roomIndex].LowLight)
-			OSD::Notify(Utils::Format("Low Light changed to %02X for %s", room->flags.LowLight, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Low Light changed to %02X for %s", room->flags.LowLight, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown16 != lastRoomflags[roomIndex].Unknown16)
-			OSD::Notify(Utils::Format("Unknown16 changed to %02X for %s", room->flags.Unknown16, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown16 changed to %02X for %s", room->flags.Unknown16, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown17 != lastRoomflags[roomIndex].Unknown17)
-			OSD::Notify(Utils::Format("Unknown17 changed to %02X for %s", room->flags.Unknown17, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown17 changed to %02X for %s", room->flags.Unknown17, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown18 != lastRoomflags[roomIndex].Unknown18)
-			OSD::Notify(Utils::Format("Unknown18 changed to %02X for %s", room->flags.Unknown18, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown18 changed to %02X for %s", room->flags.Unknown18, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown19 != lastRoomflags[roomIndex].Unknown19)
-			OSD::Notify(Utils::Format("Unknown19 changed to %02X for %s", room->flags.Unknown19, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown19 changed to %02X for %s", room->flags.Unknown19, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown20 != lastRoomflags[roomIndex].Unknown20)
-			OSD::Notify(Utils::Format("Unknown20 changed to %02X for %s", room->flags.Unknown20, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown20 changed to %02X for %s", room->flags.Unknown20, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown21 != lastRoomflags[roomIndex].Unknown21)
-			OSD::Notify(Utils::Format("Unknown21 changed to %02X for %s", room->flags.Unknown21, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown21 changed to %02X for %s", room->flags.Unknown21, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown22 != lastRoomflags[roomIndex].Unknown22)
-			OSD::Notify(Utils::Format("Unknown22 changed to %02X for %s", room->flags.Unknown22, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown22 changed to %02X for %s", room->flags.Unknown22, roomNames.at(roomIndex).c_str()));
 		if (room->flags.LightSwitchState != lastRoomflags[roomIndex].LightSwitchState)
-			OSD::Notify(Utils::Format("Light Switch State changed to %02X for %s", room->flags.LightSwitchState, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Light Switch State changed to %02X for %s", room->flags.LightSwitchState, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown24 != lastRoomflags[roomIndex].Unknown24)
-			OSD::Notify(Utils::Format("Unknown24 changed to %02X for %s", room->flags.Unknown24, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown24 changed to %02X for %s", room->flags.Unknown24, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown25 != lastRoomflags[roomIndex].Unknown25)
-			OSD::Notify(Utils::Format("Unknown25 changed to %02X for %s", room->flags.Unknown25, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown25 changed to %02X for %s", room->flags.Unknown25, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown26 != lastRoomflags[roomIndex].Unknown26)
-			OSD::Notify(Utils::Format("Unknown26 changed to %02X for %s", room->flags.Unknown26, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown26 changed to %02X for %s", room->flags.Unknown26, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown27 != lastRoomflags[roomIndex].Unknown27)
-			OSD::Notify(Utils::Format("Unknown27 changed to %02X for %s", room->flags.Unknown27, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown27 changed to %02X for %s", room->flags.Unknown27, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown28 != lastRoomflags[roomIndex].Unknown28)
-			OSD::Notify(Utils::Format("Unknown28 changed to %02X for %s", room->flags.Unknown28, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown28 changed to %02X for %s", room->flags.Unknown28, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown29 != lastRoomflags[roomIndex].Unknown29)
-			OSD::Notify(Utils::Format("Unknown29 changed to %02X for %s", room->flags.Unknown29, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown29 changed to %02X for %s", room->flags.Unknown29, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown30 != lastRoomflags[roomIndex].Unknown30)
-			OSD::Notify(Utils::Format("Unknown30 changed to %02X for %s", room->flags.Unknown30, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown30 changed to %02X for %s", room->flags.Unknown30, roomNames.at(roomIndex).c_str()));
 		if (room->flags.RoomSize != lastRoomflags[roomIndex].RoomSize)
-			OSD::Notify(Utils::Format("Room Size changed to %02X for %s", room->flags.RoomSize, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Room Size changed to %02X for %s", room->flags.RoomSize, roomNames.at(roomIndex).c_str()));
 		if (room->flags.IsRoomUpgrading != lastRoomflags[roomIndex].IsRoomUpgrading)
-			OSD::Notify(Utils::Format("IsRoomUpgrading changed to %02X for %s", room->flags.IsRoomUpgrading, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("IsRoomUpgrading changed to %02X for %s", room->flags.IsRoomUpgrading, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown33 != lastRoomflags[roomIndex].Unknown33)
-			OSD::Notify(Utils::Format("Unknown33 changed to %02X for %s", room->flags.Unknown33, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown33 changed to %02X for %s", room->flags.Unknown33, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown34 != lastRoomflags[roomIndex].Unknown34)
-			OSD::Notify(Utils::Format("Unknown34 changed to %02X for %s", room->flags.Unknown34, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("Unknown34 changed to %02X for %s", room->flags.Unknown34, roomNames.at(roomIndex).c_str()));
 
 		lastRoomflags[roomIndex] = room->flags;
 	}
@@ -1691,73 +1694,13 @@ namespace CTRPluginFramework {
 			return;
 		}
 
-		for (int i = 0; i < 0x10; ++i) {
-			if (room->Unk1.Unknown[i] != lastRoom[roomIndex].Unk1.Unknown[i]) {
-				OSD::Notify(Utils::Format("Unk1.Unknown[%d] changed to %02X for %s", i, room->Unk1.Unknown[i], roomNames.at(roomIndex).c_str()));
-			}
-			if (room->Unk2.Unknown[i] != lastRoom[roomIndex].Unk2.Unknown[i]) {
-				OSD::Notify(Utils::Format("Unk2.Unknown[%d] changed to %02X for %s", i, room->Unk2.Unknown[i], roomNames.at(roomIndex).c_str()));
-			}
-		}
-
-		if (room->UnkItem3 != lastRoom[roomIndex].UnkItem3)
-			OSD::Notify(Utils::Format("UnkItem3 changed to %04X for %s", room->UnkItem3.ID, roomNames.at(roomIndex).c_str()));
 		if (room->UnkItem4 != lastRoom[roomIndex].UnkItem4)
-			OSD::Notify(Utils::Format("UnkItem4 changed to %04X for %s", room->UnkItem4.ID, roomNames.at(roomIndex).c_str()));
+			OSDExtras::Notify(Utils::Format("UnkItem4 changed to %04X for %s", room->UnkItem4.ID, roomNames.at(roomIndex).c_str()));
 
 		lastRoom[roomIndex] = *room;
 	}
 
-	static ACNL_PlayerHouse lastPlayerHouse;
-
-	void CheckPlayerHouse(ACNL_PlayerHouse *playerHouse) {
-		if (!playerHouse) {
-			return;
-		}
-
-		static bool initialized = false;
-
-		if (!initialized) {
-			lastPlayerHouse = *playerHouse;
-			initialized = true;
-			return;
-		}
-
-		if (playerHouse->CockroachAmount != lastPlayerHouse.CockroachAmount)
-			OSD::Notify(Utils::Format("CockroachAmount changed to %02X", playerHouse->CockroachAmount));
-		if (playerHouse->Unk8 != lastPlayerHouse.Unk8)
-			OSD::Notify(Utils::Format("Unk8 changed to %02X", playerHouse->Unk8));
-		if (playerHouse->Unk9 != lastPlayerHouse.Unk9)
-			OSD::Notify(Utils::Format("Unk9 changed to %02X", playerHouse->Unk9));
-
-		lastPlayerHouse = *playerHouse;
-	}
-
-	//Message Box Debug	
-	void msgboxtest(MenuEntry *entry) {
-		/*static std::string text;
-		if(Controller::IsKeysPressed(Key::R + Key::DPadLeft)) 
-			ACMSG::Notify(text);
-		if(Controller::IsKeysPressed(Key::R + Key::DPadRight)) {
-			Keyboard kb("Enter Text");
-			kb.Open(text);
-		}
-
-		if(Controller::IsKeysPressed(Key::ZL + Key::DPadDown)) {
-			for(int i = 0; i < 4; ++i) {
-				u64 fCode = GetFriendCode(i);
-				if(fCode == 0) {
-					OSD::Notify(Utils::Format("Player %d: Not Loaded!", i));
-					continue;
-				}
-
-				char buffer[13];
-				sprintf(buffer, "%012lld", fCode);
-				std::string str = (std::string(buffer));
-				GameKeyboard::SendMessage(Utils::Format("Player %d: %s - %s - %s", i, str.substr(0, 4).c_str(), str.substr(4, 4).c_str(), str.substr(8, 4).c_str()));
-			}
-		}*/
-
+	void displaySaveFlagDifference(MenuEntry *entry) {
 		ACNL_Player *player = Player::GetSaveData();
 		ACNL_TownData *town = Town::GetSaveData();
 
@@ -1792,8 +1735,6 @@ namespace CTRPluginFramework {
 				CheckRoomFlags(i, rooms[i]);
 				CheckMiniRoomStruct(i, rooms[i]);
 			}
-
-			CheckPlayerHouse(house);
 		}
 
 		if(!player) 
@@ -1822,12 +1763,8 @@ namespace CTRPluginFramework {
 		if(Controller::IsKeysPressed(Key::L + Key::DPadDown)) {
 			SetPlayerFlag(&player->PlayerFlags, index-1, false);
 		}
-
-		if (Controller::IsKeysPressed(Key::ZL + Key::DPadDown)) {
-			
-		}
 	}
-	
+
 	/*u64 GetFriendCode(u8 pIndex) {
 		u32 gPoint = *(u32 *)Address(0x954648).addr;
 		if(gPoint == 0)
@@ -1848,24 +1785,8 @@ namespace CTRPluginFramework {
 		return fCode;
 	}*/
 
-	static void Cheat_EatEvents(Handle debug) {
-        DebugEventInfo info;
-        Result r;
-
-        while(true) {
-            if((r = svcGetProcessDebugEvent(&info, debug)) != 0) {
-                if(r == (s32)(0xd8402009)) 
-                    break;
-            }
-            svcContinueDebugEvent(debug, (DebugFlags)3);
-        }
-    }
-/*
 //Hook
 	bool randomfall(void) {
-		if(Player::GetTool() == 0x3357) 
-			return 1;
-		
 		if(Controller::IsKeyDown(Key::A)) 
 			return 1;
 		
@@ -1877,382 +1798,48 @@ namespace CTRPluginFramework {
 		if(entry->WasJustActivated()) {
 			u32 addressToHookAt = 0x656CCC;
 			hook.Initialize(addressToHookAt, (u32)randomfall);
-		  	hook.SetFlags(USE_LR_TO_RETURN);
+			hook.SetFlags(USE_LR_TO_RETURN);
 			hook.Enable();
 		}
 
 		if(!entry->IsActivated()) 
-            hook.Disable();
-	}
-*/
-
-/*
-	u32 FUN_001C4940(void) {
-  		return *(u32 *)(0x951378 + 0x18);
+			hook.Disable();
 	}
 
-	u8 FUN_0082E21C(u32 param_1, uint param_2) {
-		u8 bVar1;
-		
-		if(param_2 < 7) {
-			bVar1 = *(u8 *)(param_1 + 0x3CA4 + (param_2 >> 3)) >> (param_2 & 7) & 1;
+	/*
+	//u32 Currentmap(0x9B5A24, 0x9B4A24, 0x9B4A24, 0x9B4A24, 0x9AEA04, 0x9ADA04, 0x9ADA24, 0x9ADA24);
+		void ItemPlacer(u32* ItemID) {
+			static FUNCT func(0x581E3C);
+			func.Call<void>(GameHelper::GetCurrentMap(), ItemID, PlayerClass::GetInstance()->GetCoordinates(), 0);
 		}
-
-		else {
-			bVar1 = 0;
-		}
-		return bVar1;
-	}
-
-	u32 FUN_007633f4(int param_1) {	
-		u32 iVar1 = FUN_001C4940();
-
-		u32 piVar2 = *(u32 *)(iVar1 + 0xECD0);
-
-		u8 val = *(u8 *)(param_1 + 0x34C);
-		u8 res = FUN_0082E21C(piVar2, val);
-		
-
-		if((*(u32 *)(param_1 + 0x348) == piVar2) && (val < *(u8 *)(iVar1 + 0xECD4)) && res != 0) { 
-			piVar2 = piVar2 + val * 0x22A + 3;
-		}
-		else {
-			piVar2 = 0;
-		}
-
-		iVar1 = *(u32 *)(piVar2 + 0x19A);
-		if(iVar1 != 0) {
-			iVar1 = 1;
-		}
-		return iVar1;
-	}
-*/
-
-/*
-//Analyze fossils
-	void Analyzer(MenuEntry *entry) {
-		u32 item = Inventory::ReadSlot(Inventory::GetSelectedSlot());
-		
-		if(item == 0x202A) 
-			Inventory::WriteSlot(Inventory::GetSelectedSlot(), Utils::Random(0x3130, 0x3172));
-	}
-*/
-
-/*
-//u32 Currentmap(0x9B5A24, 0x9B4A24, 0x9B4A24, 0x9B4A24, 0x9AEA04, 0x9ADA04, 0x9ADA24, 0x9ADA24);
-	void ItemPlacer(u32* ItemID) {
-		static FUNCT func(0x581E3C);
-		func.Call<void>(GameHelper::GetCurrentMap(), ItemID, PlayerClass::GetInstance()->GetCoordinates(), 0);
-	}
-*/
-	
+	*/
 
 	/*
 	Function which sets coordinates and all to storage for player
 	68dee8(u32 pinstance)
 	*/
-
-	/*
-	assigns data to save menu (options)
-	void FUN_005e7fd8(int param_1)
-
-	Save and continue function
-	void FUN_006a2f88(undefined4 param_1)
-	Save and quit function
-	void FUN_006a2b6c(undefined4 param_1)
-
-	0x6A3620(0x3307D284); //executes func for save menu
-	*/
-
-/*
-	u32 soundArray[11] = {
-		0x0100038E, 0x01000392, 0x0100038C, 0x010003E8, 
-		0x010003E9, 0x0100038F, 0x0100038D, 0x010003C5, 
-		0x01000393, 0x01000395, 0x010004BD
-	};
-
-//0x33084094
-	void FUN_005E7FD8(u32 param_1) {
-		u32 local_5c[3];
-		u32 local_40;
-		u32 local_3c[3];
-
-		u32 local_48 = param_1 + 0x518;
-		u32 local_4c = param_1 + 0x578;
-
-		u32 val = 0;
-		u32 funcArray = 0;
-
-		s8 i = 0;
-		while(i < 6) {
-			u32 var1 = (local_48 + i * 0x10); 
-			u32 var2 = (local_4c + i * 0x10);
-
-			u32 iVar7 = *(u32 *)(param_1 + i * 4 + 0x1274);
-
-			u32 iVar3 = *(u32 *)(iVar7 + 0xEC);
-			if(iVar3 != 0) {
-				Process::Write32(iVar7 + 4, *(u32 *)(iVar3 + 0xD8));
-				Process::Write32(iVar7 + 8, *(u32 *)(iVar3 + 0xDC));
-			}
-
-			iVar3 = *(u32 *)(iVar7 + 0xF0);
-			if(iVar3 != 0) {
-				Process::Write32(iVar7 + 0x48, *(u32 *)(iVar3 + 0xD8));
-				Process::Write32(iVar7 + 0x4C, *(u32 *)(iVar3 + 0xDC));
-			}
-
-			bool bVar12 = i < 0;
-			bool bVar14 = i == false;
-			bool bVar13 = bVar12;
-			if(!bVar12) {
-				iVar3 = *(u32 *)(param_1 + 8);
-				bVar13 = iVar3 - i < 0;
-				bVar14 = iVar3 == i;
-			}
-			
-			if((bVar14 || bVar13 != (!bVar12 && (iVar3 <= i))) || (local_40 = *(u32 *)(param_1 + 0xC) + i * 0xAC, local_40 == 0)) {
-				val = *(u32 *)var1;
-				if(*(u32 *)val != 0) {
-					funcArray = *(u32 *)val;
-
-					FUNCT(*(u32 *)(funcArray + 0x78)).Call<void>(val, 0x8CAF0E, 0); //0x4BBFAC
-				}
-
-				val = *(u32 *)var2;
-				if(*(u32 *)val != 0) {
-					funcArray = *(u32 *)val;
-
-					FUNCT(*(u32 *)(funcArray + 0x78)).Call<void>(val, 0x8CAF0E, 0); //0x4BBFAC
-				}
-
-				val = *(u32 *)(var1 + 4);
-				if(*(u32 *)val != 0) {
-					funcArray = *(u32 *)val;
-
-					FUNCT(*(u32 *)(funcArray + 0x78)).Call<void>(val, 0x8CAF0E, 0); //0x4BBFAC
-				}
-
-				val = *(u32 *)(var2 + 4);
-				if(*(u32 *)val != 0) {
-					funcArray = *(u32 *)val;
-
-					FUNCT(*(u32 *)(funcArray + 0x78)).Call<void>(val, 0x8CAF0E, 0); //0x4BBFAC
-				}
-			}
-
-			else {
-				**(u8 **)(iVar7 + 0x24) = 0;
-				**(u8 **)(iVar7 + 0x68) = 0;
-
-				Process::Write32(iVar7 + 0xE0, *(u32 *)(iVar7 + 0xEC));
-				Process::Write32(iVar7 + 0xE4, *(u32 *)(iVar7 + 0xF0));
-
-				local_3c[0] = FUNCT(*(u32 *)(local_40 + 8) + 0xC).Call<u32>();
-
-				FUNCT(0x602480).Call<void>(iVar7 + 0x78, local_3c, 0x95EF34);
-				FUNCT(0x60231c).Call<void>(iVar7 + 0x78, 0x95EF34);
-
-				Process::Write32(iVar7 + 0xE0, 0);
-				Process::Write32(iVar7 + 0xE4, 0);
-
-				local_5c[0] = *(u32 *)(iVar7 + 0x14);
-				u32 local_50 = *(u32 *)(*(u32 *)(iVar7 + 0x20) + (*(u32 *)(iVar7 + 0x1C) + -1) * 4);
-				iVar3 = FUNCT(0x5EAB78).Call<u32>(*(u32 *)(iVar7 + 0xEC), local_5c, &local_50);
-
-				val = *(u32 *)var1;
-				if(*(u32 *)val != 0) {
-					Process::Write32(val + 0x48, iVar3);
-					Process::Write32(val + 0x4C, val + 0x4C);
-				}
-
-				val = *(u32 *)var2;
-				if(*(u32 *)val != 0) {
-					Process::Write32(val + 0x48, iVar3);
-					Process::Write32(val + 0x4C, val + 0x4C);
-				}
-
-				val = *(u32 *)(var1 + 8);
-				if(*(u32 *)val != 0) {
-					Process::Write32(val + 0x48, iVar3);
-					Process::Write32(val + 0x4C, val + 0x4C);
-				}
-
-				FUNCT(0x5D77F8).Call<void>(iVar7);
-
-				u32 soundID = 0;
-
-				if(*(u8 *)(local_40 + 0xA4) < 0xB)
-					soundID = soundArray[*(u8 *)(local_40 + 0xA4)];
-				else
-					soundID = 0x100038E;
-
-				val = *(u32 *)(var1 + 0xC);
-				Process::Write32(val, soundID);
-			}
-			
-			i++;
-		}
-	}
-
-
-	void CustomSaveScreen(MenuEntry *entry) {
-		if(entry->WasJustActivated()) {
-			static Hook hook;
-			hook.Initialize(0x5E7FD8, (u32)FUN_005E7FD8);
-			hook.SetFlags(USE_LR_TO_RETURN);
-			hook.SetReturnAddress(0x5E821C);
-			hook.Enable();
-		}
-*/
-
-	//FUN_00584d88(int param_1,undefined4 param_2) Sets shampoodle sound?
 	
-	/*void SetMusic(u32 *data0x98B018, u32 soundID0x10000B2) {
-		FUNCT(0x2FD0BC).Call<void>(0x2C, data[1], 4);
-
-		u32 **var = FUNCT(0x586744).Call<u32 **>(data);
-		
-		var[8] = (u32 *)soundID;
-		*(u8 *)(var + 9) = 1;
-		*(u8 *)(var + 0x25) = 1;
-		*(u8 *)(var + 0x26) = 3;
-		var[0] = (u32 *)0x907BBC;
-	}
-
-	FUN_00584D88(0x98B018, uVar3, 0, 0x94F494);
-
-	struct OnlineGameDat {
-		u32 *unknown0;
-		u32 unknown1;
-		u32 unknown2;
-
-		//0x1329D, Game Type
-
-		//0x132B8, END
-	};
-
-	3238AE8 = nothing
-
-	32238C68 = ModuleEventNpc.cro
-	32238D94 = ModuleTour.cro
-
-	32239378 = ModuleKotobuki.cro
-	*/
-	
-//Item Island Code
-	void islanditems(MenuEntry *entry) {
-		if (Controller::IsKeysPressed(Key::ZL + Key::DPadRight)) {
-			std::vector<ItemNamePack> results;
-
-			std::string keyword = "cap";
-			Item::searchAllByKeyword(keyword, results);
-			
-			OSD::Notify(Utils::Format("Found %d items with keyword: %s (1st Item: 0x%04X)", results.size(), keyword.c_str(), results.at(0)), Color::Cyan);
-		}
-
-		/*
-
-		*/
-		/*else if(Controller::IsKeysPressed(Key::R + Key::DPadRight)) {
-			int res = FUNCTION(0x30F5FC).Call<int>(0xAF88F8, "Test %d", 25);
-			char* buff = (char *)(0xAF88F8 + 0xC);
-			OSD::Notify(std::string(buff));
-		}
-
+	void unlockCroRegion(MenuEntry *entry) {
+		static std::string str = "";
+		static u32 buffer = 0;
+ 
 		if(Controller::IsKeysPressed(Key::R + Key::DPadUp)) {
-			AnimationData *globalData = new AnimationData(); //<u8, u8, u8, u8, u8, u16, u8>
-
-			u32 player = PlayerClass::GetInstance()->Offset();
-
-			globalData->roomID = 0;
-        	globalData->animID = 0xB9;
-			globalData->xCoordSH = Calculate16BitFloat(*(float *)(player + 0x14));
-			globalData->zCoordSH = Calculate16BitFloat(*(float *)(player + 0x1C));
-			globalData->rotationSH = PlayerClass::GetInstance()->GetRotation();
-
-			*(u8 *)globalData->data = 0x10;
-			*(u8 *)(globalData->data + 1) = 0;
-
-			*(u8 *)(globalData->data + 2) = 3;
-			*(u8 *)(globalData->data + 3) = 3;
-			*(u8 *)(globalData->data + 4) = 3;
-
-			*(u16 *)(globalData->data + 5) = 0x7FFE;
-
-			*(u8 *)(globalData->data + 7) = 0;
-
-			static FUNCT func(Address(0x64DB90););
-			func.Call<bool>(player, 0xB9, globalData, 0);
-
-			delete[] globalData;
-		}*/
-	}
-	
-	void PlayerLoader(MenuEntry *entry) {
-		/*if(Controller::IsKeysPressed(Key::L + Key::DPadRight)) {
-			u32 principalID = 0;
-			u64 *friendcode = nullptr;
-			Keyboard KB("Enter Principal ID");
-			KB.IsHexadecimal(true);
-			if(KB.Open(principalID, principalID) == 0) {
-				FRD_PrincipalIdToFriendCode(principalID, friendcode);
-				OSD::Notify(Utils::Format("FriendCode: %ld", *friendcode));
+			if(Wrap::KB<std::string>("Enter Cro Name:", false, 15, str, str)) {
+				if(CRO::GetMemAddress(str.c_str(), buffer)) {
+					if(CRO::WritePermToggle(buffer, true)) {
+						OSDExtras::Notify(Utils::Format("Unlocked %s | Address: %08X", str.c_str(), buffer));
+					}
+				}
 			}
-		}*/
-	}
-
-	/*bool ScreenshotmapperL(void) {
-		return Controller::IsKeyDown(Key::ZL);
-	}
-
-	bool ScreenshotmapperR(void) {
-		return Controller::IsKeyDown(Key::ZR);
-	}
-
-	float fu0 = 0.0, fu1 = 0.0;
-
-	void ChangeSpeed(u32 u0, u32 u1, u32 speedAddress) {
-		static FUNCT func(0x56BBA8);
-		func.Call<void>(fu0, fu1, speedAddress);
-	}
-
-	u32 itemID = 0;
-
-	void keymap(MenuEntry *entry) {	
-		static Hook hook;
-		u32 address(0x64FC1C, 0, 0, 0, 0, 0, 0, 0);
-		hook.Initialize(address, (u32)ChangeSpeed);
-		hook.SetFlags(USE_LR_TO_RETURN);
-		//hook.Enable();
-
-		if(Controller::IsKeysPressed(Key::L + Key::DPadRight)) {
-			OSD::Notify(IDList::GetItemName(itemID));
 		}
-
-		if(Controller::IsKeysPressed(Key::L + Key::DPadDown)) {
-			Keyboard KB("");
-			KB.Open(itemID, itemID);
+		else if(Controller::IsKeysPressed(Key::R + Key::DPadDown)) {
+			if(CRO::GetMemAddress(str.c_str(), buffer)) {
+				if(CRO::WritePermToggle(buffer, false)) {
+					OSDExtras::Notify(Utils::Format("Locked %s | Address: %08X", str.c_str(), buffer));
+				}
+			}
 		}
-		
-		u32 LButton(0x5B4180, 0, 0, 0, 0, 0, 0, 0);
-		u32 RButton(0x5B4194, 0, 0, 0, 0, 0, 0, 0);
-		L1.Initialize(LButton, (u32)ScreenshotmapperL);
-		R1.Initialize(RButton, (u32)ScreenshotmapperR);
-		L1.SetFlags(USE_LR_TO_RETURN);
-		R1.SetFlags(USE_LR_TO_RETURN);
-		
-		L1.Enable();
-		R1.Enable();
-	}	
-
-	void valuedisplayer(MenuEntry *entry) {
-		if(entry->WasJustActivated())
-			Process::Write32(0x294E00, 0xE1A00000); //Disables menu from dissapearing
-
-		//34CAA0 E0800004
-		//34CAA0 E0400004
-	}*/
+	}
 
 	void lightswitch(MenuEntry *entry) {
 		static const Address TargetAddress(0x190EA8);
@@ -2306,18 +1893,18 @@ namespace CTRPluginFramework {
 			if(playerID == 3) playerID = 0;		
 			else playerID++;
 
-			OSD::Notify(Utils::Format("Player %02X selected!", playerID));
+			OSDExtras::Notify(Utils::Format("Player %02X selected!", playerID));
 		}
 
 		if(Controller::IsKeysPressed(Key::L + Key::DPadLeft)) {
 			random = !random;
-			OSD::Notify("Random Mode: " << (random ? (Color::Green << "ON") : (Color::Red << "OFF")));
+			OSDExtras::Notify("Random Mode: " << (random ? (Color::Green << "ON") : (Color::Red << "OFF")));
 		}
 
 		if(Controller::IsKeysDown(Key::R)) {
 			if(random) {
 				FishID.ID = Utils::Random(0x22E1, 0x234A);
-				if(Game::GetItemCategorie(FishID) != Item_Categories::Fish) 
+				if(Game::GetItemCategory(FishID) != Item_Category::Fish) 
 					return;
 			}
 
@@ -2328,51 +1915,4 @@ namespace CTRPluginFramework {
 		if(Controller::IsKeysDown(Key::R + Key::DPadUp)) 
 			Wrap::KB<u16>("Set Fish ID:", true, 4, FishID.ID, FishID.ID);
 	}
-
-//player_dumper 33077C8A
-	/*void RestoreAll(MenuEntry *entry) {
-		const std::vector<std::string> select = {
-			Color(0x0077FFFF) << "Restore Exhibition",
-			Color(0xFFDE00FF) << "Restore Friend",
-			Color(0xFF00EFFF) << "Restore Design",
-			Color(0xFF2C2CFF) << "Restore Mail"
-		};
-
-		Keyboard optKb(parser->getEntry("KEY_CHOOSE_OPTION"));
-		optKb.Populate(select);
-		switch(optKb.Open()) {
-			case 0: {
-				if(GameHelper::GetExhibition() == 0) {
-					MessageBox(Color(0x0077FFFF) << "Load Happy Home Showcase for it to work!").SetClear(ClearScreen::Top)();
-					return;
-				}
-				
-				Wrap::Restore(PATH_PLAYER, ".dat", "Restore Exhibition:", nullptr, WrapLoc{ GameHelper::GetExhibition(), 0x17BE10 }, WrapLoc{ (u32)-1, (u32)-1 }); 
-			} break;
-			case 1: {
-				if(GameHelper::GetFriend() == 0) {
-					MessageBox(Color(0xFFDE00FF) << "Load player save for it to work!").SetClear(ClearScreen::Top)();
-					return;
-				}
-				
-				Wrap::Restore(PATH_PLAYER, ".dat", "Restore Friend:", nullptr, WrapLoc{ GameHelper::GetFriend(), 0x29608 }, WrapLoc{ (u32)-1, (u32)-1 }); 
-			} break;
-			case 2: {
-				if(GameHelper::GetDesign() == 0) {
-					MessageBox(Color(0xFF00EFFF) << "Load design Save for it to work!").SetClear(ClearScreen::Top)();
-					return;
-				}
-				
-				Wrap::Restore(PATH_PLAYER, ".dat", "Restore Design:", nullptr, WrapLoc{ GameHelper::GetDesign(), 0x25F90 }, WrapLoc{ (u32)-1, (u32)-1 }); 
-			} break;
-			case 3: {
-				if(GameHelper::GetMail() == 0) {
-					MessageBox(Color(0xFF2C2CFF) << "Load mail save for it to work!").SetClear(ClearScreen::Top)();
-					return;
-				}
-				
-				Wrap::Restore(PATH_PLAYER, ".dat", "Restore Mail:", nullptr, WrapLoc{ GameHelper::GetMail(), 0x1C208 }, WrapLoc{ (u32)-1, (u32)-1 }); 
-			} break;
-		}
-	}*/
 }

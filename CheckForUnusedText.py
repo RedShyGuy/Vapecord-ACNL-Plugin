@@ -1,24 +1,16 @@
 import json
 from pathlib import Path
 import re
+import sys
 
 # Config
 PROJECT_ROOT = Path(__file__).parent
 LANG_JSON_DIR = PROJECT_ROOT / "LanguageBinCreator" / "languages"
 
-# Regex: match anything inside get("...") or get('...')
-LANG_PATTERN = re.compile(r'Language::getInstance\(\)->get\(\s*["\'](.+?)["\']\s*\)')
+# Regex: match anything like TextID::KEY
+TEXTID_PATTERN = re.compile(r'TextID::([A-Z0-9_]+)')
 
-# MenuFolderExtras
-MENUFOLDER_PATTERN = re.compile(r'MenuFolderExtras\(\s*["\'](.+?)["\']')
-
-# MenuEntryExtras
-MENUENTRY_PATTERN = re.compile(r'MenuEntryExtras\((.*?)\)')
-
-# HotkeyExtras
-HOTKEY_PATTERN = re.compile(r'HotkeyExtras\([^,]+,\s*["\'](.+?)["\']\s*\)')
-
-# Scan code files for keys
+# Scan code files for enum keys
 keys_used = set()
 
 for file_path in PROJECT_ROOT.rglob("*"):
@@ -29,16 +21,11 @@ for file_path in PROJECT_ROOT.rglob("*"):
             print(f"[WARNING] Could not read {file_path}: {e}")
             continue
 
-        matches = MENUFOLDER_PATTERN.findall(content) + \
-          HOTKEY_PATTERN.findall(content) + \
-          LANG_PATTERN.findall(content)
-        
+        matches = TEXTID_PATTERN.findall(content)
         keys_used.update(matches)
 
-        params = MENUENTRY_PATTERN.findall(content)
-        for param_str in params:
-            string_keys = re.findall(r'["\'](.+?)["\']', param_str)
-            keys_used.update(string_keys)
+# Ignore TextID::NONE
+keys_used.discard("NONE")
 
 # Load all JSON entries
 json_files = list(LANG_JSON_DIR.glob("*.json"))
@@ -63,12 +50,15 @@ for json_name, entries in json_entries_per_file.items():
 # Print results
 if not unused_keys_report:
     print("All language keys in JSON files are used in the code!")
+    exit_code = 0
 else:
     print(f"Unused language keys found ({sum(len(v) for v in unused_keys_report.values())}):")
     for json_name, keys in sorted(unused_keys_report.items()):
         print(f"\n{json_name} ({len(keys)} unused keys):")
         for key in sorted(keys):
             print(f"  - {key}")
+    exit_code = 1
 
-print(f"\nTotal keys used in code: {len(keys_used)}")
+print(f"\nTotal TextID keys used in code: {len(keys_used)}")
 print(f"JSON files scanned: {len(json_files)}")
+sys.exit(exit_code)

@@ -10,6 +10,10 @@
 #include "Address/Address.hpp"
 #include "RuntimeContext.hpp"
 
+#include "Language.hpp"
+#include "TextID.hpp"
+#include "LibCtrpfExtras/OSDExtras.hpp"
+
 namespace CTRPluginFramework {
 	const s_DropType DropTypes[8] = {
 		{ 1, 0x3D }, //Pick
@@ -108,7 +112,7 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 		}		
 		
 		if(DisplayMSG) {
-			OSD::Notify(Utils::Format("%d %s", count, msg.c_str()));
+			OSDExtras::Notify(Utils::Format("%d %s", count, msg.c_str()));
 		}
 
 	//OFF
@@ -159,7 +163,7 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 			return 0;
 
 		if(!ItemToPlace->isValid()) {
-			OSD::Notify(Utils::Format("Invalid Item: %08X", *(u32 *)ItemToPlace));
+			OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::DROPPER_INVALID_ITEM).c_str(), *(u32 *)ItemToPlace));
 			return 0;
 		}
 

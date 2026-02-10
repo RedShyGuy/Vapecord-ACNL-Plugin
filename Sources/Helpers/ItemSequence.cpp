@@ -16,7 +16,7 @@ namespace CTRPluginFramework {
 	void ItemSequence::OpenIS() {
 		Item AddedItem;
 		
-		Keyboard AddKB(Language::getInstance()->get("ITEM_SEQUENCER_ENTER_ID"));
+		Keyboard AddKB(Language::getInstance()->get(TextID::ITEM_SEQUENCER_ENTER_ID));
 		AddKB.CanAbort(true);
 		AddKB.IsHexadecimal(true);
 		AddKB.SetMaxLength(8);
@@ -24,7 +24,7 @@ namespace CTRPluginFramework {
 		
 	//Clears and adds all items to vector
 		KBItems.clear();
-		KBItems.push_back("Standard Drop Item");
+		KBItems.push_back(Language::getInstance()->get(TextID::ITEMSEQ_STANDARD_DROP));
 	//if item vector is not empty add existing items to keyboard
 		if(ItemID.size() != 0) {
 			for(u8 i = 1; i < ItemID.size(); i++) {
@@ -32,9 +32,9 @@ namespace CTRPluginFramework {
 			}
 		}
 		
-		KBItems.push_back("Add...");
+		KBItems.push_back(Language::getInstance()->get(TextID::ITEMSEQ_ADD));
 		
-		Keyboard OptKB(Language::getInstance()->get("ITEM_SEQUENCER_CHOOSE"));
+		Keyboard OptKB(Language::getInstance()->get(TextID::ITEM_SEQUENCER_CHOOSE));
 		OptKB.CanAbort(true);
 		OptKB.Populate(KBItems);
 		int Select;

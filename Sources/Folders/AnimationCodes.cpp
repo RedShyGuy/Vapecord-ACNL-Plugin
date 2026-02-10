@@ -59,40 +59,40 @@ namespace CTRPluginFramework {
 		}
 
 		std::vector<std::string> pV = {
-			Color::Silver << "-Empty-",
-			Color::Silver << "-Empty-",
-			Color::Silver << "-Empty-",
-			Color::Silver << "-Empty-",
+			Color::Silver << Language::getInstance()->get(TextID::SAVE_PLAYER_EMPTY),
+			Color::Silver << Language::getInstance()->get(TextID::SAVE_PLAYER_EMPTY),
+			Color::Silver << Language::getInstance()->get(TextID::SAVE_PLAYER_EMPTY),
+			Color::Silver << Language::getInstance()->get(TextID::SAVE_PLAYER_EMPTY),
 		};	
 		
 		if(entry->Hotkeys[0].IsPressed()) {
 			for(int i = 0; i <= 3; ++i) {
 				if(PlayerClass::GetInstance(i)->IsLoaded()) {
-					pV[i] = Player::GetColor(i) << "Player: " << std::to_string(i);
+					pV[i] = Player::GetColor(i) << Language::getInstance()->get(TextID::PLAYER_SELECTOR_PLAYER) << std::to_string(i);
 				}
 			}
 			
-			Keyboard pKB(Language::getInstance()->get("KEY_SELECT_PLAYER"), pV);
+			Keyboard pKB(Language::getInstance()->get(TextID::KEY_SELECT_PLAYER), pV);
 			
 			int pChoice = pKB.Open();
 			if(pChoice >= 0) {
-				if(pV[pChoice] != Color::Silver << "-Empty-") {
+				if(pV[pChoice] != Color::Silver << Language::getInstance()->get(TextID::SAVE_PLAYER_EMPTY)) {
 					TogglePlayerSelect(pChoice);
-					OSD::Notify(Utils::Format("Controlling Player: %02X Enabled!", pChoice));
+					OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::PLAYER_SELECT_CONTROLLING_ENABLED).c_str(), pChoice));
 				}
 				else {
-					OSD::Notify("Error: Player doesn't exist!", Color::Red);
+					OSDExtras::Notify(TextID::PLAYER_SELECT_PLAYER_NOT_EXISTS, Color::Red);
 				}
 			}
 		}
 		
 		else if(entry->Hotkeys[1].IsPressed()) {
 			if(IsPlayerSelectEnabled) {
-				OSD::Notify(Utils::Format("Controlling Player: %02X Disabled!", *(u8 *)(Address(0x75F010).addr + 0x10)));
+				OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::PLAYER_SELECT_CONTROLLING_DISABLED).c_str(), *(u8 *)(Address(0x75F010).addr + 0x10)));
 				TogglePlayerSelect(4);
 				return;
 			}
-			OSD::Notify("Error: No Player Is Selected!", Color::Red);
+			OSDExtras::Notify(TextID::PLAYER_SELECT_NOT_SELECTED, Color::Red);
 		}
 
 		if(!entry->IsActivated()) {
@@ -132,7 +132,7 @@ namespace CTRPluginFramework {
 		std::string& input = keyboard.GetInput();	
 		u8 ID = StringToHex<u8>(input, 0xFF);
 		if(!IDList::AnimationValid((ID & 0xFF), Game::GetOnlinePlayerIndex())) {
-			keyboard.SetError(Color::Red << Language::getInstance()->get("INVALID_ID"));
+			keyboard.SetError(Color::Red << Language::getInstance()->get(TextID::INVALID_ID));
 			return;
 		}
 	}
@@ -141,7 +141,7 @@ namespace CTRPluginFramework {
 		std::string& input = keyboard.GetInput();	
 		u16 ID = StringToHex<u16>(input, 0xFFFF);
 		if(!IDList::SnakeValid((ID & 0xFFFF))) {
-			keyboard.SetError(Color::Red << Language::getInstance()->get("INVALID_ID"));
+			keyboard.SetError(Color::Red << Language::getInstance()->get(TextID::INVALID_ID));
 			return;
 		}
 	}
@@ -150,7 +150,7 @@ namespace CTRPluginFramework {
 		std::string& input = keyboard.GetInput();	
 		u8 ID = StringToHex<u8>(input, 0xFF);
 		if(!IDList::EmotionValid((ID & 0xFF))) {
-			keyboard.SetError(Color::Red << Language::getInstance()->get("INVALID_ID"));
+			keyboard.SetError(Color::Red << Language::getInstance()->get(TextID::INVALID_ID));
 			return;
 		}
 	}
@@ -159,7 +159,7 @@ namespace CTRPluginFramework {
 		std::string& input = keyboard.GetInput();	
 		u16 ID = StringToHex<u16>(input, 0xFFFF);
 		if(!IDList::MusicValid((ID & 0xFFFF))) {
-			keyboard.SetError(Color::Red << Language::getInstance()->get("INVALID_ID"));
+			keyboard.SetError(Color::Red << Language::getInstance()->get(TextID::INVALID_ID));
 			return;
 		}
 	}
@@ -175,32 +175,32 @@ namespace CTRPluginFramework {
 			switch(mode) {
 				default: break;
 				case 0:
-					OSD::Notify("Animation Mode", Color::Red);
+					OSDExtras::Notify(TextID::ANIM_MOD_ANIM_MODE, Color::Red);
 					mode++;
 					setmode = 1;
 				break;
 				case 1:
-					OSD::Notify("Tool Mode", Color::Orange);
+					OSDExtras::Notify(TextID::ANIM_MOD_TOOL_MODE, Color::Orange);
 					mode++;
 					setmode = 2;
 				break;
 				case 2:
-					OSD::Notify("Snake Mode", Color::Lime);
+					OSDExtras::Notify(TextID::ANIM_MOD_SNAKE_MODE, Color::Lime);
 					mode++;
 					setmode = 3;
 				break;
 				case 3:
-					OSD::Notify("Emotion Mode", Color::Cyan);
+					OSDExtras::Notify(TextID::ANIM_MOD_EMOTION_MODE, Color::Cyan);
 					mode++;
 					setmode = 4;
 				break;
 				case 4:
-					OSD::Notify("Sound Mode", Color::Magenta);
+					OSDExtras::Notify(TextID::ANIM_MOD_SOUND_MODE, Color::Magenta);
 					mode++;
 					setmode = 5;
 				break;
 				case 5:
-					OSD::Notify("Appearance Mode", Color::Yellow);
+					OSDExtras::Notify(TextID::ANIM_MOD_APPEARANCE_MODE, Color::Yellow);
 					mode = mode - 5;
 					setmode = 6;
 				break;
@@ -211,32 +211,32 @@ namespace CTRPluginFramework {
 			switch(setmode) {
 				case 0: return;
 				case 1: 
-					Wrap::KB<u8>(Language::getInstance()->get("ANIMATIONS_ANIM_NOTE"), true, 2, a_AnimID, a_AnimID, AnimChange);
+					Wrap::KB<u8>(Language::getInstance()->get(TextID::ANIMATIONS_ANIM_NOTE), true, 2, a_AnimID, a_AnimID, AnimChange);
 				break;
 				case 2:
-					Wrap::KB<u32>(Language::getInstance()->get("ANIMATIONS_TOOL_NOTE"), true, 8, *(u32 *)&a_ItemID, *(u32 *)&a_ItemID, ItemChange);
+					Wrap::KB<u32>(Language::getInstance()->get(TextID::ANIMATIONS_TOOL_NOTE), true, 8, *(u32 *)&a_ItemID, *(u32 *)&a_ItemID, ItemChange);
 				break;
 				case 3:
-					Wrap::KB<u16>(Language::getInstance()->get("ANIMATIONS_SNAKE_NOTE"), true, 3, a_SnakeID, a_SnakeID, SnakeChange);
+					Wrap::KB<u16>(Language::getInstance()->get(TextID::ANIMATIONS_SNAKE_NOTE), true, 3, a_SnakeID, a_SnakeID, SnakeChange);
 				break;
 				case 4:
-					Wrap::KB<u8>(Language::getInstance()->get("ANIMATIONS_EMOTE_NOTE"), true, 2, a_EmoteID, a_EmoteID, EmotionChange);
+					Wrap::KB<u8>(Language::getInstance()->get(TextID::ANIMATIONS_EMOTE_NOTE), true, 2, a_EmoteID, a_EmoteID, EmotionChange);
 				break;
 				case 5:
-					Wrap::KB<u16>(Language::getInstance()->get("ANIMATIONS_SOUND_NOTE"), true, 3, a_SoundID, a_SoundID, MusicChange);
+					Wrap::KB<u16>(Language::getInstance()->get(TextID::ANIMATIONS_SOUND_NOTE), true, 3, a_SoundID, a_SoundID, MusicChange);
 				break;
 				case 6: {
 					//They cant really crash so no valid check
-					Wrap::KB<u8>(Language::getInstance()->get("ANIMATIONS_APPEAR_NOTE1"), true, 2, a_AppearanceID[0], a_AppearanceID[0]);
-					Wrap::KB<u8>(Language::getInstance()->get("ANIMATIONS_APPEAR_NOTE2"), true, 2, a_AppearanceID[1], a_AppearanceID[1]);
-					Wrap::KB<u8>(Language::getInstance()->get("ANIMATIONS_APPEAR_NOTE3"), true, 2, a_AppearanceID[2], a_AppearanceID[2]);
+					Wrap::KB<u8>(Language::getInstance()->get(TextID::ANIMATIONS_APPEAR_NOTE1), true, 2, a_AppearanceID[0], a_AppearanceID[0]);
+					Wrap::KB<u8>(Language::getInstance()->get(TextID::ANIMATIONS_APPEAR_NOTE2), true, 2, a_AppearanceID[1], a_AppearanceID[1]);
+					Wrap::KB<u8>(Language::getInstance()->get(TextID::ANIMATIONS_APPEAR_NOTE3), true, 2, a_AppearanceID[2], a_AppearanceID[2]);
 				} break;
 			}
 		}
 		
 		else if(entry->Hotkeys[2].IsPressed()) {
 			speedmode = !speedmode;
-			OSD::Notify("Speed Mode " << (speedmode ? Color::Green << "ON" : Color::Red << "OFF"));			
+			OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::ANIM_MOD_SPEED_MODE).c_str(), (speedmode ? Color::Green << Language::getInstance()->get(TextID::STATE_ON) : Color::Red << Language::getInstance()->get(TextID::STATE_OFF))));			
 		}
 		
 		if(entry->Hotkeys[3].IsPressed()) {
@@ -322,13 +322,13 @@ namespace CTRPluginFramework {
 				slo1.WriteFloat(8.0);
 				slo1.WriteFloat(6.0);
 
-				OSD::Notify("Slow Animations " << Color::Green << "ON");
+				OSDExtras::Notify(Language::getInstance()->get(TextID::SLOW_MO_ANIM) + " " << Color::Green << Language::getInstance()->get(TextID::STATE_ON));
 			} else {
 				slo1.Unpatch();
 				slo2.Unpatch();
 				slo3.Unpatch();
 
-				OSD::Notify("Slow Animations " << Color::Red << "OFF");
+				OSDExtras::Notify(Language::getInstance()->get(TextID::SLOW_MO_ANIM) + " " << Color::Red << Language::getInstance()->get(TextID::STATE_OFF));
 			}
 		}
 

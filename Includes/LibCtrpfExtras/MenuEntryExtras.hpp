@@ -1,6 +1,9 @@
 #pragma once
 
 #include <CTRPluginFramework.hpp>
+#include <functional>
+#include "LibCtrpfExtras/FolderTypes.hpp"
+#include "LibCtrpfExtras/HotkeyExtras.hpp"
 #include "Language.hpp"
 
 namespace CTRPluginFramework {
@@ -14,7 +17,7 @@ namespace CTRPluginFramework {
         * \param menuFunc Menu function for the entry
         * \param noteKey Note Key for the entry (Optional)
         */
-        MenuEntryExtras(const std::string &nameKey, FuncPointer gameFunc, FuncPointer menuFunc, const std::string &noteKey = "");
+        MenuEntryExtras(const TextID &nameKey, FuncPointer gameFunc, FuncPointer menuFunc, const TextID &noteKey = TextID::NONE);
 
         /**
         * \brief Sets up a MenuEntry with the language key as the name
@@ -22,11 +25,25 @@ namespace CTRPluginFramework {
         * \param gameFunc Game function for the entry
         * \param noteKey Note Key for the entry (Optional)
         */
-        MenuEntryExtras(const std::string &nameKey, FuncPointer gameFunc, const std::string &noteKey = "");
-    private:
-        static std::string setLanguageByKey(const std::string& langKey) {
-            Language* lang = Language::getInstance();
-            return lang->get(langKey);
+        MenuEntryExtras(const TextID &nameKey, FuncPointer gameFunc, const TextID &noteKey = TextID::NONE);
+
+        void    SetColor(const Color &color) {
+            this->color = color;
         }
+
+        void    Update();
+
+        void    AppendHotkeyNameKey(const TextID &nameKey) {
+            hotkeyNameKeys.push_back(nameKey);
+        }
+
+        std::vector<TextID> GetHotkeyNameKeys() const {
+            return hotkeyNameKeys;
+        }
+    private:
+        std::vector<TextID> hotkeyNameKeys;
+        TextID nameKey;
+        TextID noteKey;
+        Color color;
     };
 }

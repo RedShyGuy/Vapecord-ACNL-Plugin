@@ -2,9 +2,9 @@
 #include "Helpers/QRCodeGen.hpp"
 #include "Helpers/Wrapper.hpp"
 #include "Address/Address.hpp"
-#include "LibCtrpfExtras/ColorExtras.hpp"
 #include "Files.h"
 #include "Config.hpp"
+#include "LibCtrpfExtras/ColorExtras.hpp"
 
 namespace CTRPluginFramework {
     void DrawQrCode(const Screen& screen, u32 posX, u32 posY, const u8* qrcode) {
@@ -54,7 +54,7 @@ namespace CTRPluginFramework {
 					if(entry->IsActivated()) {
 						str += (ColorExtras::RemoveColor(folder->Name()) + " -> " + ColorExtras::RemoveColor(subfolder->Name()) + " -> " + ColorExtras::RemoveColor(entry->Name())) + "\n";
 					}
-				}	
+				}
 			}
 
 			Entrys = folder->GetEntryList();
@@ -70,13 +70,13 @@ namespace CTRPluginFramework {
 
 	int SaveActiveCheats(const std::string &str) {
 		const char* data = str.c_str();
-		
+
 		Directory dir(Utils::Format(PATH_CRASH, Address::regionName.c_str()), true);
 		File file;
 
 		std::string filename = "Active_Cheats";
 		filename += ".txt";
-		
+
 		if(dir.OpenFile(file, filename, File::RWC | File::TRUNCATE) != 0) {
 			return -1;
 		}
@@ -90,13 +90,13 @@ namespace CTRPluginFramework {
 
 	std::string GetExceptionType(ERRF_ExceptionType& type) {
 		switch(type) {
-			case ERRF_ExceptionType::ERRF_EXCEPTION_PREFETCH_ABORT: 
+			case ERRF_ExceptionType::ERRF_EXCEPTION_PREFETCH_ABORT:
 				return "Prefetch Abort";
-			case ERRF_ExceptionType::ERRF_EXCEPTION_DATA_ABORT: 
+			case ERRF_ExceptionType::ERRF_EXCEPTION_DATA_ABORT:
 				return "Data Abort";
-			case ERRF_ExceptionType::ERRF_EXCEPTION_UNDEFINED: 
+			case ERRF_ExceptionType::ERRF_EXCEPTION_UNDEFINED:
 				return "Undefined Instruction";
-			case ERRF_ExceptionType::ERRF_EXCEPTION_VFP: 
+			case ERRF_ExceptionType::ERRF_EXCEPTION_VFP:
 				return "VFP Exception";
 		}
 		return "Unknown Error";
@@ -134,7 +134,7 @@ namespace CTRPluginFramework {
 
 		str += ("Vapecord ACNL Plugin | Version: " + Utils::Format("%d.%d.%d", majorV, minorV, revisV)) + "\n";
 		str += ("Exception Type: " + GetExceptionType(excep->type)) + "\n";
-		
+
 		std::string name = "";
 		Process::GetName(name);
 		str += ("Process: " + name) + "\n";
@@ -198,7 +198,7 @@ namespace CTRPluginFramework {
 
 		const char* data = datastr.c_str();
 		qrcodegen_encodeText(data, temp, qrcode, qrcodegen_Ecc_LOW, qrcodegen_VERSION_MIN, qrcodegen_VERSION_MAX, qrcodegen_Mask_AUTO, true);
-	
+
 		DrawQrCode(TopScreen, 175, 15, qrcode);
 
 		TopScreen.Draw("Oh Uh, looks like", 15, 15, Color(225 ,0 ,52));
@@ -209,7 +209,7 @@ namespace CTRPluginFramework {
 		TopScreen.Draw("by sending the QR-Code", 15, 65);
 		TopScreen.Draw("with a description of", 15, 75);
 		TopScreen.Draw("what happened!", 15, 85);
-	
+
 		if(WasSaved == 0) {
 			TopScreen.Draw("A | Save Crash Dump", 15, 125, Color::DimGrey);
 		}
@@ -226,12 +226,12 @@ namespace CTRPluginFramework {
 			TopScreen.Draw("X | Save QR-Code", 15, 145, Color::DimGrey);
 		}
 		else if(QRSaved == 1) {
-			TopScreen.Draw("QR-Code saved!", 15, 145, Color::DarkGrey); 
+			TopScreen.Draw("QR-Code saved!", 15, 145, Color::DarkGrey);
 		}
 		else {
-			TopScreen.Draw("Not supported!", 15, 145, Color::Red); 
+			TopScreen.Draw("Not supported!", 15, 145, Color::Red);
 		}
-		//else TopScreen.Draw("Error!", 15, 145, Color::Red); 
+		//else TopScreen.Draw("Error!", 15, 145, Color::Red);
 
 		if(!ShowInfo) {
 			TopScreen.Draw("Y | Show Crash Info", 15, 155, Color::DimGrey);
@@ -255,7 +255,7 @@ namespace CTRPluginFramework {
 			BottomScreen.Draw(vec[1], 15, 30, Color::Red); //Exception Type
 			BottomScreen.Draw(vec[2], 15, 45); //Process Name
 			BottomScreen.Draw(vec[3], 15, 55); //Title ID
-			
+
 		//Registers 0 - 6
 			for(int i = 4; i < 18; i += 2) {
 				BottomScreen.Draw(vec[i], 15, 75 + (10 * ((i / 2) - 2)));

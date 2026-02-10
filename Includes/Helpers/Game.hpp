@@ -32,7 +32,7 @@ namespace CTRPluginFramework {
 		//u32				GetFriend();
 		//u32 				GetExhibition();
 
-		Item_Categories 	GetItemCategorie(Item itemID);
+		Item_Category 		GetItemCategory(Item itemID);
 	//value display
 		bool 				SetValueDisplay(u8 type);
 		void 				ResetValueDisplay(void);
@@ -59,28 +59,28 @@ namespace CTRPluginFramework {
 		bool 				IsOutdoorItem(Item item);
 		void				ReloadRoom(float *coords = PlayerClass::GetInstance()->GetCoordinates());
 		void				Catalog(bool directcall = false);
-		u32					RoomFunction(u8 room, bool u0, bool u1, bool u2);
+		u32					TeleportToRoom(u8 room, bool u0, bool u1, bool u2);
 		u8					GetOnlinePlayerIndex();
 		u8					GetActualPlayerIndex();
 		u8					GetOnlinePlayerCount();
 		Item				*GetItemAtWorldCoords(u32 x, u32 y);
 		u32					GetCurrentMap(void);	
 		bool				RemoveItems(bool trample, u8 wX, u8 wY, u8 width, u8 length, bool allowAbort, bool removeEverything, bool counting = true);
-		void				Particles(u32 particleID, float *floats);
-		void				TrampleAt(u8 wX, u8 wY);
+		void				SpawnParticlesAtCoords(u32 particleID, float *coords);
+		void				TrampleAtWorldCoords(u8 wX, u8 wY);
 
 		bool				IsGameInRoom(u8 room);
 		u8					GetRoom();
-		u8					NextRoomCheck();
-		bool				MapBoolCheck();
+		u8					GetNextRoom();
+		bool				IsMapOpened();
 		bool				IsRoomLoading();
 		bool				SetItem(Item *item);
 		void				OpenMenu(u8 menuID, bool NoMenCall = false);
 		void				ChangeGameMode(GameMode GameType);
 		GameMode			GetGameMode();
-		bool				GameSaving();
+		bool				IsGameSaving();
 		u32 				GetRoomData();
-		bool				WaterFlower(u8 wX, u8 wY);
+		bool				WaterFlowerAtWorldCoords(u8 wX, u8 wY);
 		void				SetCurrentTime(bool forward, int Minutes = 0, int Hours = 0, int Days = 0, int Months = 0, int Years = 0);
 	}
 

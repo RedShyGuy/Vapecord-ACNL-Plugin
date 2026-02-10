@@ -18,7 +18,7 @@ namespace CTRPluginFramework {
 		std::string& input = keyboard.GetInput();	
 		u16 ID = StringToHex<u16>(input, 0xFFFF);
 		if(!IDList::ValidID((ID & 0xFFFF), KeyRange::sRange.start, KeyRange::sRange.end)) {
-			keyboard.SetError(Color::Red << Language::getInstance()->get("INVALID_ID"));
+			keyboard.SetError(Color::Red << Language::getInstance()->get(TextID::INVALID_ID));
 			return;
 		}
 	}
@@ -27,7 +27,7 @@ namespace CTRPluginFramework {
 		std::string& input = keyboard.GetInput();	
 		Item ID = (Item)StringToHex<u32>(input, 0xFFFF);
 		if(!ID.isValid()) {
-			keyboard.SetError(Color::Red << "Invalid ID!");
+			keyboard.SetError(Color::Red << Language::getInstance()->get(TextID::INVALID_ID));
 			return;
 		}
 	}
@@ -38,7 +38,7 @@ namespace CTRPluginFramework {
 
 		if(!ID.isValid(false)) {
 			keyboard.GetMessage() = "";
-			keyboard.SetError(Color::Red << Language::getInstance()->get("INVALID_ID"));
+			keyboard.SetError(Color::Red << Language::getInstance()->get(TextID::INVALID_ID));
 			return;
 		}
 
@@ -85,7 +85,9 @@ namespace CTRPluginFramework {
 	}
 //if building is valid
 	bool IDList::BuildingValid(u8 buildingID) {
-		if(buildingID > 0x4B && buildingID < 0x69 || buildingID > 0x6A && buildingID < 0x81 || buildingID > 0x8F && buildingID < 0xFC) {
+		if(buildingID > 0x4B && buildingID < 0x69 || //Special PWPs
+			buildingID > 0x6A && buildingID < 0x7F || //Face Cutout Standees
+			buildingID > 0x8F && buildingID < 0xFC) { //Bridges & PWPs & Campground Fence Lock
 			return true;
 		}
 		
@@ -169,7 +171,7 @@ namespace CTRPluginFramework {
 				return std::string(music.Name);
 			}
 		}
-		return Language::getInstance()->get("INVALID");
+		return Language::getInstance()->get(TextID::INVALID);
 	}
 
 //Get Building Name
@@ -180,7 +182,7 @@ namespace CTRPluginFramework {
 				return Utils::Format("NPC %d", ID - 8);
 			}
 
-			u16 VID = villager->Villager[ID - 8].Mini1.VillagerID;
+			u16 VID = villager->Villager[ID - 8].villagerType.VillagerID;
 			if(VID == 0xFFFF) {
 				return "NPC -Empty-";
 			}
@@ -194,7 +196,7 @@ namespace CTRPluginFramework {
 			}
 		}
 
-		return Language::getInstance()->get("INVALID");
+		return Language::getInstance()->get(TextID::INVALID);
 	}
 
 	//struct MsgBox {
@@ -253,7 +255,7 @@ namespace CTRPluginFramework {
 			return Color::Green << (std::string)(RoomName.Call<char *>(ID));
 		}
 		
-		return Color::Red << Language::getInstance()->get("INVALID");
+		return Color::Red << Language::getInstance()->get(TextID::INVALID);
 	}
 //If Invalid ID
 	bool IDList::ValidID(u16 ID, u16 StardID, u16 EndID) {

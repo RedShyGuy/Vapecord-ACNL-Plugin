@@ -5,6 +5,7 @@ on:
     branches: ["master"]
   pull_request:
     branches: ["master"]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -14,29 +15,26 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Download libctrpf
-      run: |
-        wget -O libctrpf.tar.bz2 "https://gitlab.com/-/project/35748837/uploads/8d2a3dc282f32b6a75d5f6abaeafe88f/libctrpf-0.8.0.tar.bz2"
-        tar -xjf libctrpf.tar.bz2
-
-    - name: Install libctrpf
-      run: |
-        mkdir -p /opt/devkitpro/libctrpf/include
-        mkdir -p /opt/devkitpro/libctrpf/lib
-        cp -r include/* /opt/devkitpro/libctrpf/include/
-        cp -r lib/* /opt/devkitpro/libctrpf/lib/
-
     - name: Download 3gxtool
       run: |
         wget -O 3gxtool "https://gitlab.com/-/project/35893975/uploads/7cf27fcdc26921d9a6c5505c1e5bbcaa/3gxtool"
         chmod +x 3gxtool
         cp 3gxtool /opt/devkitpro/tools/bin/3gxtool
 
-    - name: Build Plugin
-      run: make
+    - name: Clone libctrpf (develop)
+      run: |
+        git clone --depth=1 --branch develop https://gitlab.com/thepixellizeross/ctrpluginframework.git libctrpf
+
+    - name: Build & Install libctrpf
+      run: |
+        cd libctrpf
+        make
 
     - name: Run Language Python Script
       run: python3 LanguageBinCreator/json_to_bin.py
+
+    - name: Build Plugin
+      run: make
 
     - name: Package Plugin
       run: |
@@ -51,11 +49,17 @@ jobs:
             cp -r Files/snd/* package/luma/plugins/$folder/snd/
         done
 
-    - name: Upload Artifacts
+    - name: Upload Package Artifact
       uses: actions/upload-artifact@v4
       with:
         name: Vapecord.Public
         path: package/
+
+    - name: Upload ELF Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Vapecord.Public.elf
+        path: Vapecord_Public.elf
 
     - name: Check For Unused Text
       run: python3 CheckForUnusedText.py
@@ -65,6 +69,10 @@ jobs:
 
     - name: Check If Text Is Translated
       run: python3 CheckIfTextIsTranslated.py
+
+    - name: Check For Unused Addresses
+      run: python3 CheckForUnusedAddresses.py
+
 
 
 

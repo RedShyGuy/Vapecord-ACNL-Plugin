@@ -7,6 +7,7 @@
 #include "Helpers/Wrapper.hpp"
 #include "Helpers/Dropper.hpp"
 #include "Color.h"
+#include "LibCtrpfExtras/OSDExtras.hpp"
 
 extern "C" void SetWalkParticleID(void);
 
@@ -29,8 +30,8 @@ namespace CTRPluginFramework {
 	float cspeed = 5.0;
 //Coordinate Mod Speed Changer Keyboard
 	void coordspeed(MenuEntry *entry) {
-		Keyboard kb(Language::getInstance()->get("ENTER_ID"));
-		kb.GetMessage() = Utils::Format(Language::getInstance()->get("COORD_MOD_ENTER_SPEED").c_str(), 5);
+		Keyboard kb(Language::getInstance()->get(TextID::ENTER_ID));
+		kb.GetMessage() = Utils::Format(Language::getInstance()->get(TextID::COORD_MOD_ENTER_SPEED).c_str(), 5);
 		kb.IsHexadecimal(false);
 		kb.SetMaxLength(2);
 		kb.Open(cspeed);
@@ -61,7 +62,7 @@ namespace CTRPluginFramework {
 	void moonjump(MenuEntry *entry) {
 		u32 i = PlayerClass::GetInstance()->Offset(0x8C6);
 		if(entry->Hotkeys[0].IsDown()) {
-			Process::Write32(i, 0x7FFFFF); 
+			Process::Write32(i, 0x7FFFFF);
 		}
 		else if(entry->Hotkeys[1].IsDown()) {
 			Process::Write32(i, 0x19D5D);
@@ -80,7 +81,7 @@ namespace CTRPluginFramework {
 			return; // Prevent teleporting while shoveling
 		}
 		
-		if(!Game::MapBoolCheck()) {
+		if(!Game::IsMapOpened()) {
 			return;
 		}
 
@@ -119,13 +120,13 @@ namespace CTRPluginFramework {
 				for(int i = 0; i < 8; ++i) {
 					WalkOver[i].Patch(WalkOverPatch[i]);
 				}
-				OSD::Notify("Walk Over Things " << Color::Green << "ON");
+				OSDExtras::Notify(Language::getInstance()->get(TextID::WALK_OVER) + " " << Color::Green << Language::getInstance()->get(TextID::STATE_ON));
 			}
 			else {
 				for(int i = 0; i < 8; ++i) {
 					WalkOver[i].Unpatch();
 				}
-				OSD::Notify("Walk Over Things " << Color::Red << "OFF");
+				OSDExtras::Notify(Language::getInstance()->get(TextID::WALK_OVER) + " " << Color::Red << Language::getInstance()->get(TextID::STATE_OFF));
 			}
         }
 
@@ -157,10 +158,10 @@ namespace CTRPluginFramework {
 	
 		if(entry->Hotkeys[0].IsPressed()) {
 			if(isWalking) {
-				OSD::Notify("Movement Mode: Swimming", Color::Blue);
+				OSDExtras::Notify(TextID::MOVEMENT_CHANGE_SWIM, Color::Blue);
 			}
 		    else {
-				OSD::Notify("Movement Mode: Walking", Color::Green);
+				OSDExtras::Notify(TextID::MOVEMENT_CHANGE_WALK, Color::Green);
 			}
 			
 			for(int i = 0; i < 6; ++i) {
@@ -185,7 +186,7 @@ namespace CTRPluginFramework {
 		}
 
         if(entry->Hotkeys[0].IsPressed()) {
-			if(Wrap::KB<u32>(Language::getInstance()->get("WALK_PARTICLE_CHANGE_ENTER_ID"), true, 3, WalkParticleID, WalkParticleID)) {
+			if(Wrap::KB<u32>(Language::getInstance()->get(TextID::WALK_PARTICLE_CHANGE_ENTER_ID), true, 3, WalkParticleID, WalkParticleID)) {
 				hook.Enable();
 			}
 		}
@@ -209,7 +210,7 @@ namespace CTRPluginFramework {
 				pos = -1;
 			}
 				
-			OSD::Notify(allforce ? "Teleport: all players" : Utils::Format("Teleport: player %02X", pos));
+			OSDExtras::Notify(allforce ? Language::getInstance()->get(TextID::PLAYER_TELEPORT_ALL) : Utils::Format(Language::getInstance()->get(TextID::PLAYER_TELEPORT_PLAYER).c_str(), pos));
 		}
 		
 		else if(entry->Hotkeys[1].IsPressed()) {
@@ -217,13 +218,13 @@ namespace CTRPluginFramework {
 			if(PlayerClass::GetInstance()->GetWorldCoords(&x, &y)) {
 				if(!allforce && pos >= 0) {
 					Animation::ExecuteAnimationWrapper(pos, 0x34, {1, 0}, 1, 1, 1, 0, x, y, true);
-					OSD::Notify(Utils::Format("Teleported player %02X to you", pos));
+					OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::PLAYER_TELEPORT_PLAYER_TELEPORTED).c_str(), pos));
 				}
 				else {
 					for(u8 i = 0; i < 4; ++i) {
 						Animation::ExecuteAnimationWrapper(i, 0x34, {1, 0}, 1, 1, 1, 0, x, y, true);
 					}
-					OSD::Notify("Teleported players to you");
+					OSDExtras::Notify(TextID::PLAYER_TELEPORT_ALL_TELEPORTED);
 				}
 			}
 		}
@@ -250,15 +251,15 @@ namespace CTRPluginFramework {
 			switch(*(u32 *)visi2.addr) {
 				case 0xE1A07002:
 					mode = 0;
-					OSD::Notify("Visibility: Stationary", Color::Blue);
+					OSDExtras::Notify(TextID::VISIBILITY_STATIONARY, Color::Blue);
 				break;
 				case 0xE3A07006:
 					mode = 1;
-					OSD::Notify("Visibility: Invisible", Color::Yellow);
+					OSDExtras::Notify(TextID::VISIBILITY_INVISIBLE, Color::Yellow);
 				break;
 				case 0xE3A07000:
 					mode = 2;
-					OSD::Notify("Visibility: Default", Color::Green);
+					OSDExtras::Notify(TextID::VISIBILITY_DEFAULT, Color::Green);
 				break;
 			}
 
@@ -278,7 +279,7 @@ namespace CTRPluginFramework {
 		std::string& input = keyboard.GetInput();	
 		float ID = atof(input.c_str());
 		if(ID >= 15.0f) {
-			keyboard.SetError(Color::Red << Language::getInstance()->get("SPEED_MOD_ERROR"));
+			keyboard.SetError(Color::Red << Language::getInstance()->get(TextID::SPEED_MOD_ERROR));
 			return;
 		}
 	}
@@ -311,8 +312,8 @@ namespace CTRPluginFramework {
 	}
 //Player Speed Changer Keyboard
 	void menuSpeedMod(MenuEntry *entry) {
-		Keyboard kb(Language::getInstance()->get("ENTER_ID"));
-		kb.GetMessage() = Utils::Format(Language::getInstance()->get("SPEED_MOD_SPEED").c_str(), 1);
+		Keyboard kb(Language::getInstance()->get(TextID::ENTER_ID));
+		kb.GetMessage() = Utils::Format(Language::getInstance()->get(TextID::SPEED_MOD_SPEED).c_str(), 1);
 		kb.IsHexadecimal(false);
 		kb.SetMaxLength(7);
 		kb.OnKeyboardEvent(SpeedCheck);
@@ -324,35 +325,35 @@ namespace CTRPluginFramework {
 		std::string& input = k.GetInput();	
 		u8 ID = StringToHex<u8>(input, 0xFF);
 		if(!IDList::RoomValid(ID & 0xFF)) {
-			k.SetError(Color::Red << Language::getInstance()->get("INVALID_ID"));
+			k.SetError(Color::Red << Language::getInstance()->get(TextID::INVALID_ID));
 			return;
 		}
 		
-		k.GetMessage() = Language::getInstance()->get("ROOM_WARPING_ENTER_ID") << "\n\n" << IDList::GetRoomName(!input.empty() ? ID : 0);
+		k.GetMessage() = Language::getInstance()->get(TextID::ROOM_WARPING_ENTER_ID) << "\n\n" << IDList::GetRoomName(!input.empty() ? ID : 0);
 	}
 
 //Room Warper
 	void roomWarp(MenuEntry *entry) {	
 		if(entry->Hotkeys[0].IsPressed()) {
 			if(!PlayerClass::GetInstance()->IsLoaded()) {
-				OSD::Notify("Player needs to be loaded to use room teleport!");
+				OSDExtras::Notify(TextID::SAVE_PLAYER_NO, Color::Red);
 				return;
-			}		
+			}
 			
 			u8 val;
-			if(Wrap::KB<u8>(Language::getInstance()->get("ROOM_WARPING_ENTER_ID"), true, 2, val, 0, onRoomChange)) {		
-				s8 res = Game::RoomFunction(val, 1, 1, 0);	
+			if(Wrap::KB<u8>(Language::getInstance()->get(TextID::ROOM_WARPING_ENTER_ID), true, 2, val, 0, onRoomChange)) {		
+				s8 res = Game::TeleportToRoom(val, 1, 1, 0);	
 				if(res == 1) {
-					OSD::Notify(Utils::Format("Warping to room %02X", val));
+					OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::ROOM_LOADER_WARPING_TO_ROOM).c_str(), val));
 				}
 				else if(res == -1) {
-					OSD::Notify("Player needs to be loaded to warp!", Color::Red);
+					OSDExtras::Notify(TextID::SAVE_PLAYER_NO, Color::Red);
 				}
 				else if(res == -2) {
-					OSD::Notify("Only works while playing offline!", Color::Red);
+					OSDExtras::Notify(TextID::ONLY_OFFLINE, Color::Red);
 				}
 				else {
-					OSD::Notify("An error has occured while trying to warp!", Color::Red);
+					OSDExtras::Notify(TextID::ROOM_LOADER_ERROR, Color::Red);
 				}
 			}
 		}
