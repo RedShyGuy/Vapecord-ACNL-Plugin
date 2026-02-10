@@ -15,7 +15,7 @@ You can get help on the [Vapecord Discord Server](https://discord.gg/QwqdBpKWf3)
 If you want to build the plugin you need to install [DevkitPro](https://github.com/devkitPro/installer/releases).
 This will create a new folder called `devkitPro` on your main drive.
 
-Then you need to download [LibCtrpf Version 0.8.0](https://gitlab.com/thepixellizeross/ctrpluginframework/-/releases/0.8.0).
-Place the contents of the libctrpf `.tar.bz2` file inside the `devkitPro` folder in a newly created folder called `libctrpf`.
+Then you need to download [LibCtrpf](https://gitlab.com/thepixellizeross/ctrpluginframework) (the dev branch).
+Then build the library, place the result files inside the `devkitPro` folder in a newly created folder called `libctrpf`.
 
 Afterwards you can just pull the Vapecord project and run the `build.bat` file.
