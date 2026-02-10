@@ -253,7 +253,7 @@
     "CLEAR_INV_NAME": "Vider l’inventaire",
     "CLEAR_INV_NOTE": "Supprime tous les objets de ton inventaire.",
     "CUSTOM_BUTTON": "Boutons personnalisés",
-    "CUSTOM_BUTTON_NOTE": "Ajoute des boutons aux pop-ups de l’inventaire.",
+    "CUSTOM_BUTTON_NOTE": "Ajoute des boutons aux fenêtres contextuelles de ton inventaire.\nLe nombre maximum de boutons par objet est de 6 (bouton quitter inclus).\nSi un bouton personnalisé ne s’affiche pas, désactive-en un autre.",
     "FAST_ISABELLE": "Sélection rapide du joueur",
     "FAST_ISABELLE_NOTE": "Accélère le texte et le jeu dans la salle de bienvenue.",
     "FILL_MUSEUM_NAME": "Mod musée",

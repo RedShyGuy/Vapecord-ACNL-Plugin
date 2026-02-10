@@ -458,7 +458,7 @@
     "GET_SET_DUMP": "Backup your custom inventory set\\n\\nName the backup you'd like to create.",
     "GET_SET_RESTORE": "Select which backup to restore.",
     "CUSTOM_BUTTON": "Custom Buttons",
-    "CUSTOM_BUTTON_NOTE": "Adds buttons to the pop-ups in your inventory.",
+    "CUSTOM_BUTTON_NOTE": "Adds buttons to the pop-ups in your inventory.\nThe maximum amount of buttons on one item are 6 (Quit Button included).\nIf a custom button isn't shown, disable a different one.",
     "PLAYER_CODES": "Player Codes",
     "PLAYER_SAVE_CODES": "Player Save Codes",
     "NAME_CHANGER": "Player Name Changer",

@@ -251,7 +251,7 @@
     "CLEAR_INV_NAME": "Vaciar inventario",
     "CLEAR_INV_NOTE": "Elimina todos los objetos de tu inventario.",
     "CUSTOM_BUTTON": "Botones personalizados",
-    "CUSTOM_BUTTON_NOTE": "Añade botones a las ventanas emergentes del inventario.",
+    "CUSTOM_BUTTON_NOTE": "Añade botones a las ventanas emergentes de tu inventario.\nEl número máximo de botones por objeto es 6 (incluido el botón de salir).\nSi un botón personalizado no aparece, desactiva otro.",
     "FAST_ISABELLE": "Selección rápida de jugador",
     "FAST_ISABELLE_NOTE": "Acelera el texto y el juego en la sala de bienvenida.",
     "FILL_MUSEUM_NAME": "Mod del museo",

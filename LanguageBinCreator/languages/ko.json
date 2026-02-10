@@ -247,7 +247,7 @@
     "CHAT_COMMANDS": "채팅 명령어",
     "CHAT_COMMANDS_NOTE": "유용한 명령어:\\nA:XX → 애니메이션\\nS:XXX → 스네이크\\nM:XXX → 음악\\nE:XX → 감정표현\\nI:XXXX → 아이템\\nI:XXXXF:YYYY → 플래그 포함 아이템",
     "CUSTOM_BUTTON": "추가 버튼",
-    "CUSTOM_BUTTON_NOTE": "가방 팝업에 버튼을 추가합니다.",
+    "CUSTOM_BUTTON_NOTE": "인벤토리 팝업에 버튼을 추가합니다.\n아이템 하나당 최대 버튼 수는 6개입니다(종료 버튼 포함).\n사용자 지정 버튼이 보이지 않으면 다른 버튼을 비활성화하세요.",
     "FAST_ISABELLE": "빠른 플레이어 선택",
     "FAST_ISABELLE_NOTE": "인사 방에서 텍스트와 게임 속도가 빨라집니다.",
     "ISLAND_SAVER": "섬 세이버",

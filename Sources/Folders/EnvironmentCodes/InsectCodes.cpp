@@ -147,7 +147,7 @@ namespace CTRPluginFramework {
 
 		spawnInsect.Call<void>(dataOffset, insectIdLocal, coords, u0);
 
-        OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::INSECT_SPAWNED).c_str(), *(u32 *)(*(u32 *)(dataOffset + 0x1C))));
+        //OSDExtras::Notify(Utils::Format(Language::getInstance()->get(TextID::INSECT_SPAWNED).c_str(), *(u32 *)(*(u32 *)(dataOffset + 0x1C))));
 
         //u32 insectData = *(u32 *)(*(u32 *)(dataOffset + 0x1C));
         //u8 insectIdLocal = *(u8 *)(insectData + 8);

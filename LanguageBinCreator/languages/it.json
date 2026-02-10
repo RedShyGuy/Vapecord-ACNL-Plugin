@@ -461,7 +461,7 @@
     "GET_SET_DUMP": "Salva il tuo set personalizzato\\n\\nDai un nome al salvataggio che vorresti creare.",
     "GET_SET_RESTORE": "Scegli quale salvataggio ripristinare.",
     "CUSTOM_BUTTON": "Pulsanti Personalizzati",
-    "CUSTOM_BUTTON_NOTE": "Aggiunge pulsanti ai pop-up nel tuo inventario.",
+    "CUSTOM_BUTTON_NOTE": "Aggiunge pulsanti alle finestre del tuo inventario.\nIl numero massimo di pulsanti per oggetto è 6 (pulsante di uscita incluso).\nSe un pulsante personalizzato non viene mostrato, disattivane un altro.",
     "PLAYER_CODES": "Codici Giocatore",
     "NAME_CHANGER": "Cambia Nome",
     "NAME_CHANGER_NOTE": "Cambia il nome del giocatore, basta scrivere il nome che vuoi utilizzare e selezionare una posizione.",

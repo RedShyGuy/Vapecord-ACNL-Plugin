@@ -253,7 +253,7 @@
     "CLEAR_INV_NAME": "Inventar leeren",
     "CLEAR_INV_NOTE": "Entfernt alle Items aus deinem Inventar.",
     "CUSTOM_BUTTON": "Benutzerdefinierte Buttons",
-    "CUSTOM_BUTTON_NOTE": "Fügt Buttons in den Inventar-Pop-ups hinzu.",
+    "CUSTOM_BUTTON_NOTE": "Fügt den Pop-ups in deinem Inventar Buttons hinzu.\nDie maximale Anzahl an Buttons pro Item beträgt 6 (inklusive Beenden-Button).\nWenn ein benutzerdefinierter Button nicht angezeigt wird, deaktiviere einen anderen.",
     "FAST_ISABELLE": "Schnelle Spielerauswahl",
     "FAST_ISABELLE_NOTE": "Erhöht Text- und Spielgeschwindigkeit im Begrüßungsraum.",
     "FILL_MUSEUM_NAME": "Museums-Mod",

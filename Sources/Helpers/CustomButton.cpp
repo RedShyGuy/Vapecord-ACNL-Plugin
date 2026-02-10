@@ -10,15 +10,15 @@
 
 namespace CTRPluginFramework {
 	struct ItemButtonSettings {
-		std::string name;
+		TextID textId;
 		bool active;
 	};
 
-	static std::vector<ItemButtonSettings> citemsettings = { 
-		{ Language::getInstance()->get(TextID::CUSTOM_BUTTON_DUPLICATE), false }, 
-		{ Language::getInstance()->get(TextID::CUSTOM_BUTTON_WRAP), false }, 
-		{ Language::getInstance()->get(TextID::CUSTOM_BUTTON_PUT_IN_STORAGE), false }, 
-		{ Language::getInstance()->get(TextID::CUSTOM_BUTTON_PAY_DEBT), false }
+	std::vector<ItemButtonSettings> citemsettings = { 
+		{ TextID::CUSTOM_BUTTON_DUPLICATE, false }, 
+		{ TextID::CUSTOM_BUTTON_WRAP, false }, 
+		{ TextID::CUSTOM_BUTTON_PUT_IN_STORAGE, false }, 
+		{ TextID::CUSTOM_BUTTON_PAY_DEBT, false }
 	};
 
 	void CustomButton::DuplicateItem(u32 ItemData) {
@@ -133,21 +133,34 @@ namespace CTRPluginFramework {
 		}
 	}
 
-	void SetButtonData(u32 *data, u32 stringContext, u32 stringId, u32 u0, u32 u1, u32 functionId, u8 u2) {
-		data[0] = 1;
-		data[1] = 0;
+	struct ButtonData {
+		u8 flag;
+		u8 pad1[3];
+		u32 zero0;
+		u32 stringContext;
+		u32 stringId;
+		u32 u0;
+		u32 u1;
+		u32 functionId;
+		u8 u2;
+		u8 zero1[3];
+	};
+
+	void SetButtonData(ButtonData *data, u32 stringContext, u32 stringId, u32 u0, u32 u1, u32 functionId, u8 u2) {
+		data->flag = 1;
 		
-		data[0x1D] = 0;
-		data[0x1E] = 0;
-		data[0x1F] = 0;
+		data->zero0 = 0;
 
-		data[2] = stringContext;
-		data[3] = stringId;
-		data[4] = u0;
-		data[5] = u1;
-		data[6] = functionId;
+		data->stringContext = stringContext;
+		data->stringId = stringId;
+		data->u0 = u0;
+		data->u1 = u1;
+		data->functionId = functionId;
+		data->u2 = u2;
 
-		data[0x1C] = u2;
+		data->zero1[0] = 0;
+		data->zero1[1] = 0;
+		data->zero1[2] = 0;
 	}
 
 	/*
@@ -164,19 +177,19 @@ namespace CTRPluginFramework {
 		int addedOptions = 0;
 
 		if (citemsettings[0].active && (optionCount + (addedOptions + 1)) < 5) {
-			SetButtonData(data + (addedOptions * 8), sys2dUi, 0x250, 0, 0, 0x40, 7); //Duplicate
+			SetButtonData((ButtonData *)(data + (addedOptions * 8)), sys2dUi, 0x250, 0, 0, 0x40, 7); //Duplicate
 			addedOptions++;
 		}
 		if (citemsettings[1].active && (optionCount + (addedOptions + 1)) < 5) {
-			SetButtonData(data + (addedOptions * 8), sys2dUi, 0x251, 0, 0, 0x41, 7); //Wrap It
+			SetButtonData((ButtonData *)(data + (addedOptions * 8)), sys2dUi, 0x251, 0, 0, 0x41, 7); //Wrap It
 			addedOptions++;
 		}
 		if (citemsettings[2].active && (optionCount + (addedOptions + 1)) < 5) {
-			SetButtonData(data + (addedOptions * 8), sys2dUi, 0x252, 0, 0, 0x42, 7); //Put in Storage
+			SetButtonData((ButtonData *)(data + (addedOptions * 8)), sys2dUi, 0x252, 0, 0, 0x42, 7); //Put in Storage
 			addedOptions++;
 		}
 		if (citemsettings[3].active && category == Item_Category::Bells && (optionCount + (addedOptions + 1)) < 5) {
-			SetButtonData(data + (addedOptions * 8), sys2dUi, 0x253, 0, 0, 0x43, 7); //Pay Debt
+			SetButtonData((ButtonData *)(data + (addedOptions * 8)), sys2dUi, 0x253, 0, 0, 0x43, 7); //Pay Debt
 			addedOptions++;
 		}
 
@@ -186,7 +199,7 @@ namespace CTRPluginFramework {
 		buttonDataFuncOption1.Patch(0xE2846001 + addedOptions);
 		buttonDataFuncOption2.Patch(0xE2842000 + addedOptions);
 
-		SetButtonData(data + (addedOptions * 8), sys2dUi, 0xB, 0, 0, 0x29, 1); //Quit Button
+		SetButtonData((ButtonData *)(data + (addedOptions * 8)), sys2dUi, 0xB, 0, 0, 0x29, 1); //Quit Button
 	}
 
 	using FuncType = u32(*)(u32*);
@@ -281,9 +294,9 @@ namespace CTRPluginFramework {
 		std::vector<std::string> options;
 		for (ItemButtonSettings &setting : citemsettings) {
 			if (setting.active) {
-				options.push_back(Color::Green << setting.name);
+				options.push_back(Color::Green << Language::getInstance()->get(setting.textId));
 			} else {
-				options.push_back(Color::Red << setting.name);
+				options.push_back(Color::Red << Language::getInstance()->get(setting.textId));
 			}
 		}
 
