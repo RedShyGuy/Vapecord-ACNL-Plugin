@@ -282,16 +282,11 @@ namespace CTRPluginFramework {
 			}
 		}
 
-		bool IsFaceCutOutSpaceFree(u8 buildingID) {
+		bool IsFaceCutOutSpaceFree() {
 			ACNL_BuildingData *building = Building::GetSaveData();
 			if(!building) {
 				return false;
 			}
-			
-			if (buildingID != 0xDC && buildingID != 0xDD) { //Not a face cutout standee
-				return false;
-			}
-
 			for (int i = 0; i < 8; ++i) {
 				if (building->Stands[i].xCoord == -1 && building->Stands[i].yCoord == -1) { //Empty stand found
 					return true;
@@ -351,9 +346,11 @@ namespace CTRPluginFramework {
 				return;
 			}
 
-			if (!IsFaceCutOutSpaceFree(buildingID)) {
-				OSDExtras::Notify(TextID::BUILDING_MOD_NO_DESIGN_STAND_FREE, Color::Red);
-				return;
+			if (buildingID == 0xDC || buildingID == 0xDD) { 
+				if (!IsFaceCutOutSpaceFree()) {
+					OSDExtras::Notify(TextID::BUILDING_MOD_NO_DESIGN_STAND_FREE, Color::Red);
+					return;
+				}
 			}
 
 			u32 x, y;	
