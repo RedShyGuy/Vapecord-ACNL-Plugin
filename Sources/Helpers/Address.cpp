@@ -60,6 +60,9 @@ namespace CTRPluginFramework {
 				return;
 			}
 		}
+
+	//if none was found, its a dynamic address, so just set it
+		SetAddressData(address);
 	};
 
 	void Address::SetAddressData(u32 address) {

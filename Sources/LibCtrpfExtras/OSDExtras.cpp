@@ -83,18 +83,58 @@ namespace CTRPluginFramework {
         return Notify(Language::getInstance()->get(textID), foreground, background);
     }
 
+    std::vector<std::string> SplitText(const std::string& text, int maxWidth) {
+        std::vector<std::string> lines;
+        std::string remaining = text;
+
+        while (!remaining.empty()) {
+            std::string current = remaining;
+
+            bool isFirstLine = lines.empty();
+            std::string prefix = isFirstLine ? "" : "...";
+            std::string suffix = "";
+
+            //Always expect a new line
+            suffix = "...";
+
+            while (!current.empty()) {
+                std::string candidate = prefix + current + suffix;
+
+                if (ScreenExtras::SystemFontSize(candidate.c_str()) <= maxWidth) {
+                    break;
+                }
+
+                current.pop_back();
+            }
+
+            //If everything fits, no suffix needed
+            if (current.size() == remaining.size()) {
+                suffix = "";
+            }
+
+            lines.push_back(prefix + current + suffix);
+
+            remaining.erase(0, current.size());
+        }
+
+        return lines;
+    }
+
     int OSDExtras::Notify(const std::string &text, const Color &foreground, const Color &background) {
+        auto lines = SplitText(text, 375);
+
         Lock();
 
-        if (Notifications.size() >= 50) {
+        if (Notifications.size() + lines.size() > 50) {
             Unlock();
             return -1;
         }
 
-        Notifications.push_back(new OSDMessage(text, foreground, background));
+        for (auto it = lines.rbegin(); it != lines.rend(); ++it) {
+            Notifications.push_back(new OSDMessage(*it, foreground, background));
+        }
 
         Unlock();
-
         return 0;
     }
 

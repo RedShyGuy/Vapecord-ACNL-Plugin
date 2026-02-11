@@ -34,7 +34,7 @@ jobs:
       run: python3 LanguageBinCreator/json_to_bin.py
 
     - name: Build Plugin
-      run: make
+      run: make DEVMODE=0
 
     - name: Package Plugin
       run: |
