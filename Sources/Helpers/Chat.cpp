@@ -5,7 +5,7 @@
 namespace CTRPluginFramework {
 	u32 Chat::GetPlayerMessageData() {
 		u8 _pID = Game::GetActualPlayerIndex();
-		// swap your index with player 0 in order to get the correct pointer
+		//swap your index with player 0 in order to get the correct pointer
 		if(_pID == Game::GetOnlinePlayerIndex()) {
 			_pID = 0;
 		}
@@ -209,7 +209,7 @@ namespace CTRPluginFramework {
 			ItemCommand();
 		}
 		
-		else { // any other message
+		else { //any other message
 			return;
 		}
 		ClearPlayerMessage();
