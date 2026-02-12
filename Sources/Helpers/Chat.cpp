@@ -99,6 +99,12 @@ namespace CTRPluginFramework {
 	}
 
 	void Chat::CommandLoop() {
+		
+		//macro to clean up
+		#define CLEAR_RET \
+		ClearPlayerMessage(); \
+		return;
+		
 		if(!IsPlayerMessageOnScreen()) {
 			return;
 		}
@@ -135,7 +141,7 @@ namespace CTRPluginFramework {
 			}
 			else {
 				OSDExtras::Notify(TextID::CHAT_INVALID_ANIMATION, Color::Red);
-                return;
+				CLEAR_RET
             }
 		}
 
@@ -146,7 +152,7 @@ namespace CTRPluginFramework {
 			}
 			else {
 				OSDExtras::Notify(TextID::CHAT_INVALID_EMOTION, Color::Red);
-                return;
+				CLEAR_RET
             }
 		}
 
@@ -157,7 +163,7 @@ namespace CTRPluginFramework {
 			}
 			else {
 				OSDExtras::Notify(TextID::CHAT_INVALID_SNAKE, Color::Red);
-                return;
+				CLEAR_RET
             }
 		}
 
@@ -168,7 +174,7 @@ namespace CTRPluginFramework {
 			}
 			else {
 				OSDExtras::Notify(TextID::CHAT_INVALID_MUSIC, Color::Red);
-                return;
+				CLEAR_RET
             }
 		}
 
@@ -182,7 +188,7 @@ namespace CTRPluginFramework {
 			}
 			else {
 				OSDExtras::Notify(TextID::INVALID_ITEM, Color::Red);
-				return;
+				CLEAR_RET
 			}
 		}
 
@@ -191,13 +197,13 @@ namespace CTRPluginFramework {
 			ItemNamePack match;
 			if (!Item::searchByKeyword(ItemName, match)) {
 				OSDExtras::Notify(TextID::CHAT_NO_ITEM_FOUND, Color::Red);
-				return;
+				CLEAR_RET
 			}
 
 			itemID = Item(match.ID); //sets item
 			if(!itemID.isValid()) { //should always be true if orig file is used
 				OSDExtras::Notify(TextID::INVALID_ITEM, Color::Red);
-				return;
+				CLEAR_RET
 			}
 
 			ItemCommand();
