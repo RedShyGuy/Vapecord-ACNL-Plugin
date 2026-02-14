@@ -367,6 +367,9 @@ namespace CTRPluginFramework {
 		})),
 		CHAC->Append(new MenuEntryExtras(TextID::CHAT_COMMANDS, chatCommands, TextID::CHAT_COMMANDS_NOTE)),
 		CHAC->Append(new MenuEntryExtras(TextID::CHAT_BUTTON, ChatButton, TextID::CHAT_BUTTON_NOTE)),
+		CHAC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::CHAT_TRANSLATION_OPTIONS, ChatTranslationOptions, TextID::CHAT_TRANSLATION_OPTIONS_NOTE), {
+			HotkeyExtras(Key::X | Key::DPadLeft, TextID::CHAT_TRANSLATION_OPTIONS)
+		})),
 		EXTC->Append(CHAC);
 	////////////////////
 	/*Fun Codes Folder*/
