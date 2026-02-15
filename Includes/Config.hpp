@@ -3,8 +3,8 @@
 #include <CTRPluginFramework.hpp>
 
 #define majorV 3
-#define minorV 0
-#define revisV 1
+#define minorV 1
+#define revisV 0
 
 #define APP_VERSION (majorV * 100 + minorV * 10 + revisV)
 
