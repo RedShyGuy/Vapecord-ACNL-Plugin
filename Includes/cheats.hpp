@@ -177,6 +177,7 @@ namespace CTRPluginFramework {
 	void chatCommands(MenuEntry *entry);
 	void ChatCopyPaste(MenuEntry *entry);
 	void ChatButton(MenuEntry *entry);
+	void ChatTranslationOptions(MenuEntry *entry);
 
 	void AmiiboSpoofer(MenuEntry *entry);
 	void ShopsAlwaysOpen(MenuEntry *entry);
