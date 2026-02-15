@@ -14,7 +14,7 @@ namespace CTRPluginFramework {
         std::string(
 R"(Creator: Kwadukathole (Lukas)
 
-Cheat Credits: Nico, Jay, Levi, Slattz, Kominost, Elominator and more
+Cheat Credits: Nico, Jay, Levi, Slattz, Gokiro, Kominost, Elominator and more
 
 Code Credits: PabloMK7, Jon & DaniElectra (Pretendo) and more
 
