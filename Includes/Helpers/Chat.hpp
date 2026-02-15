@@ -24,13 +24,19 @@ namespace CTRPluginFramework {
         protected:
             static void CommandCallback(void);
 
-        private:    
+        private:
             void CommandLoop(void);
 			void AnimationCommand(void);
 			void EmotionCommand(void);
 			void SnakeCommand(void);
 			void MusicCommand(void);
 			void ItemCommand(void);
+			bool AnimationContext(const std::string &ID_8Bit);
+			bool EmotionContext(const std::string &ID_8Bit);
+			bool SnakeContext(const std::string &ID_12Bit);
+			bool MusicContext(const std::string &ID_12Bit);
+			bool ItemContext(const std::string &ID_16Bit, const std::string &SPCommand, const std::string &SPID_16Bit);
+			bool NameContext(std::string &ItemName);
 
 			u8 animID = 6;
 			u8 emotionID = 1;
