@@ -370,6 +370,9 @@ namespace CTRPluginFramework {
 		CHAC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::CHAT_TRANSLATION_OPTIONS, ChatTranslationOptions, TextID::CHAT_TRANSLATION_OPTIONS_NOTE), {
 			HotkeyExtras(Key::X | Key::DPadLeft, TextID::CHAT_TRANSLATION_OPTIONS)
 		})),
+		CHAC->Append(new MenuEntryExtras(TextID::KEY_EXTEND, key_limit, TextID::KEY_EXTEND_NOTE)),
+		CHAC->Append(new MenuEntryExtras(TextID::CUSTOM_KEY, CustomKeyboard, TextID::CUSTOM_KEY_NOTE)),
+		CHAC->Append(new MenuEntryExtras(TextID::MORE_NUMBERS,  morenumberisland, TextID::MORE_NUMBERS_NOTE)),
 		EXTC->Append(CHAC);
 	////////////////////
 	/*Fun Codes Folder*/
@@ -411,12 +414,9 @@ namespace CTRPluginFramework {
 		MISC->Append(new MenuEntryExtras(TextID::GAME_TYPE, nullptr, mgtype, TextID::GAME_TYPE_NOTE)),
 		MISC->Append(new MenuEntryExtras(TextID::RADIO_PLAYER, radioPlayer , TextID::RADIO_PLAYER_NOTE)),
 		MISC->Append(new MenuEntryExtras(TextID::RELOAD_ROOM_NAME, nullptr, ReloadRoomCheat, TextID::RELOAD_ROOM_NOTE)),
-		MISC->Append(new MenuEntryExtras(TextID::MORE_NUMBERS,  morenumberisland, TextID::MORE_NUMBERS_NOTE)),
 		MISC->Append(new MenuEntryExtras(TextID::LARGE_FOV, fovlarge, TextID::LARGE_FOV_NOTE)),
 		MISC->Append(new MenuEntryExtras(TextID::MOVE_FURN, roomSeeder, TextID::MOVE_FURN_NOTE)),
 		MISC->Append(new MenuEntryExtras(TextID::WALK_TALK, walktalkentry, TextID::WALK_TALK_NOTE)),
-		MISC->Append(new MenuEntryExtras(TextID::KEY_EXTEND, key_limit, TextID::KEY_EXTEND_NOTE)),
-		MISC->Append(new MenuEntryExtras(TextID::CUSTOM_KEY, CustomKeyboard, TextID::CUSTOM_KEY_NOTE)),
 		MISC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::BEANS_PARTICLE, BeansParticleChanger, TextID::BEANS_PARTICLE_NOTE), {
 			HotkeyExtras(Key::L | Key::DPadLeft, TextID::BEANS_PARTICLE)
 		})),

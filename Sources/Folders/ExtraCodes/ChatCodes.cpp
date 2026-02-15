@@ -2,6 +2,7 @@
 #include "Helpers/GameKeyboard.hpp"
 #include "Helpers/Chat.hpp"
 #include "Helpers/Player.hpp"
+#include "Helpers/Inventory.hpp"
 #include "Files.h"
 
 #include <optional>
@@ -283,6 +284,73 @@ namespace CTRPluginFramework {
 				default:
 				break;
 			}
+		}
+	}
+
+	void key_limit(MenuEntry* entry) {
+		if(!GameKeyboard::IsOpen()) {
+			return;
+		}
+		
+		if(Inventory::GetCurrent() == 4) {
+			return;
+		}
+		
+		u32 KeyData = *(u32 *)(Game::BaseInvPointer() + 0xC) + 0x1328;
+		static const Address KeyEnter(0xAD7253);
+		static const Address KeyAt(0xAD75C0);
+	
+		Process::Write8(KeyData + 0xC, 0x41);
+		Process::Write8(KeyData + 0x12B, 0x44);
+		Process::Write8(KeyEnter.addr, 1);
+		Process::Write8(KeyAt.addr, 1);
+    }
+
+	void CustomKeyboard(MenuEntry* entry) {   	
+		static constexpr u16 patch[110] = {
+			0xE000, 0xE001, 0xE002, 0xE003, 0xE004, 0xE005, 0xE006, 0xE008, 0xE009,
+			0xE070, 0xE06F, 0xE06C, 0xE00C, 0xE00D, 0xE00E, 0xE00F, 0xE010, 0xE011,
+			0xE012, 0xE013, 0xE014, 0xE03C, 0xE03B, 0xE03D, 0xE072, 0xE019, 0xE01A,
+			0xE01B, 0xE01C, 0xE01D, 0xE01E, 0xE01F, 0xE020, 0xE021, 0xE022, 0xE023,
+			0xE024, 0xE025, 0xE026, 0xE027, 0xE028, 0xE029, 0xE02A, 0xE02B, 0xE02C,
+			0xE02D, 0xE02E, 0xE02F, 0xE030, 0xE031, 0xE032, 0xE033, 0xE034, 0xE035,
+			0xE036, 0xE037, 0xE038, 0xE039, 0xE079, 0xE07A, 0xE07B, 0xE07C, 0xE03E,
+			0xE03F, 0xE040, 0xE041, 0xE042, 0xE043, 0xE044, 0xE045, 0xE046, 0xE047,
+			0xE048, 0xE049, 0xE04A, 0xE04B, 0xE04C, 0xE04D, 0xE04E, 0xE04F, 0xE050,
+			0xE051, 0xE052, 0xE053, 0xE054, 0xE055, 0xE056, 0xE057, 0xE058, 0xE059,
+			0xE05A, 0xE05B, 0xE05C, 0xE05D, 0xE05E, 0xE05F, 0xE060, 0xE061, 0xE062,
+			0xE063, 0xE064, 0xE065, 0xE069, 0xE06A, 0xE073, 0xE067, 0xE074, 0xE075,
+			0xE076, 0xE077
+        };	
+	
+		static const Address IsOpen(0xAD7050);
+
+        if(*(u16 *)IsOpen.addr == 0x0103) {
+			u32 offset = 0;
+			static const Address customKey(0xAD7630);	
+            offset = *(u32 *)customKey.addr;
+            if(offset != 0) {
+                Process::Read32(offset + 0x224, offset);
+
+				u16 value = 0;
+			//US/EU French, US/EU English, US/EU Spanish, EU Italian, EU German
+				if(Process::Read16(offset + 0x26, value) && value == 0x2E) {
+					Process::CopyMemory((void *)(offset + 0x26), (void *)patch, 0x6E * 2); 
+				}
+			//Japanese Keyboard
+				else if(Process::Read16(offset + 0x1DC, value) && value == 0x3001) {
+					Process::CopyMemory((void *)(offset + 0x1DC), (void *)patch, 0x6E * 2); 
+				}
+			}
+		}
+    }
+
+	void morenumberisland(MenuEntry *entry) {
+		static const Address numbers(0xAD7158);
+		Process::Write8(numbers.addr, 2);
+		
+		if(!entry->IsActivated()) {
+			Process::Write8(numbers.addr, 0);
 		}
 	}
 
