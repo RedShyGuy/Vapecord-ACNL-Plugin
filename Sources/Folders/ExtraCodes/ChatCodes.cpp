@@ -1,7 +1,15 @@
 #include "cheats.hpp"
 #include "Helpers/GameKeyboard.hpp"
 #include "Helpers/Chat.hpp"
+#include "Helpers/Player.hpp"
 #include "Files.h"
+
+#include <optional>
+#include <span>
+#include <string_view>
+#include <utility>
+
+using namespace std::literals;
 
 namespace CTRPluginFramework {
 //Chat Bubbles Don't Disappear /*Credits to Levi*/
@@ -274,6 +282,452 @@ namespace CTRPluginFramework {
 				break;
 				default:
 				break;
+			}
+		}
+	}
+
+	namespace {
+
+		constexpr size_t URLEncode(std::span<char> out, std::u8string_view in) {
+			constexpr const char* hex = "0123456789abcdef";
+			const size_t outSize = out.size();
+			size_t pos = 0;
+			for (size_t i = 0; i < in.size(); i++) {
+				auto& c = in[i];
+				if (('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9')) {
+					if (pos < outSize) {
+						out[pos] = static_cast<char>(c);
+					}
+					pos++;
+				}
+				else {
+					if (pos < outSize) {
+						out[pos] = '%';
+					}
+					pos++;
+					if (pos < outSize) {
+						out[pos] = hex[(c >> 4) & 0xf];
+					}
+					pos++;
+					if (pos < outSize) {
+						out[pos] = hex[c & 0xf];
+					}
+					pos++;
+				}
+			}
+			if (pos < outSize) {
+				out[pos] = '\0';
+			}
+			pos++;
+			return pos;
+		}
+
+		class Httpc {
+		public:
+			static std::optional<Httpc> TryCreate() {
+				if (initCounter == 0) {
+					Result result = httpcInit(0);
+					if (R_FAILED(result)) {
+						OSD::Notify(Utils::Format("http init error: %08X", result));
+						return std::nullopt;
+					}
+					#if DEVMODE
+					else {
+						OSD::Notify("http initialized");
+					}
+					#endif
+				}
+				++initCounter;
+				return Httpc {};
+			}
+
+			Httpc(const Httpc&) = delete;
+			Httpc& operator=(const Httpc&) = delete;
+
+			Httpc(Httpc&&) {
+				++initCounter;
+			}
+
+			Httpc& operator=(Httpc&&) {
+				return *this;
+			}
+
+			~Httpc() {
+				if (--initCounter == 0) {
+					httpcExit();
+				}
+			}
+
+		private:
+			constexpr Httpc() = default;
+
+			static inline u32 initCounter {};
+		};
+
+		class TranslateContext {
+		public:
+			constexpr TranslateContext() = default;
+			TranslateContext(const TranslateContext&) = delete;
+			TranslateContext& operator=(const TranslateContext&) = delete;
+
+			constexpr TranslateContext(TranslateContext&& other) {
+				hasCtx = std::exchange(other.hasCtx, {});
+			}
+
+			constexpr TranslateContext& operator=(TranslateContext&& other) {
+				if (this == &other) {
+					return *this;
+				}
+				this->~TranslateContext();
+				hasCtx = std::exchange(other.hasCtx, {});
+				return *this;
+			}
+
+			~TranslateContext() {
+				if (hasCtx) {
+					httpcCloseContext(&ctx);
+					ctx = {0, 0};
+				}
+			}
+
+			bool BeginRequest(std::u8string_view input, std::string_view targetLanguage) {
+				if (IsBusy()) {
+					return false;
+				}
+
+				std::vector<char> buf;
+				buf.resize(input.size() * 3 + 1);
+				URLEncode(buf, input);
+				Result result;
+				{
+					std::string url = Utils::Format("https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=%s&dt=t&q=",
+						targetLanguage.data()) + buf.data();
+					result = httpcOpenContext(&ctx, HTTPC_METHOD_GET, url.data(), 0);
+				}
+
+				if (R_FAILED(result)) {
+					ctx = {0, 0};
+					OSD::Notify(Utils::Format("httpcOpenContext: %08x", result));
+					return false;
+				}
+
+				hasCtx = true;
+
+				result = httpcBeginRequest(&ctx);
+				if (R_FAILED(result)) {
+					OSD::Notify(Utils::Format("httpcBeginRequest: %08x", result));
+					return false;
+				}
+				return true;
+			}
+
+			std::string ReceiveResponse(bool& done, bool& error) {
+				done = true;
+				error = true;
+
+				Result result;
+				std::underlying_type_t<HTTPC_RequestStatus> status {};
+				result = httpcGetRequestState(&ctx, reinterpret_cast<HTTPC_RequestStatus*>(&status));
+				if (R_FAILED(result)) {
+					OSD::Notify(Utils::Format("httpcGetRequestState: %08x, %u", result, status));
+					return {};
+				}
+
+				if (status < 0x8) {
+					done = false;
+					error = false;
+					return {};
+				}
+
+				std::array<char, 0x400> recv;
+				recv.back() = 0;
+				result = httpcReceiveData(&ctx, reinterpret_cast<u8*>(recv.data()), recv.size());
+				if (R_FAILED(result)) {
+					OSD::Notify(Utils::Format("httpcReceiveData: %08x", result));
+					return {};
+				}
+
+				//if the result structure ever changes, this will break...
+				std::string_view recvView = {recv.data() + 4};
+				size_t len = recvView.find("\",\""sv);
+				if (len == std::string_view::npos) {
+					OSD::Notify("received unexpected data");
+					return {};
+				}
+				recv[len + 4] = 0;
+				error = false;
+				return {recvView.data(), len};
+			}
+
+			static bool IsBusy() { return ctx.servhandle != 0 || ctx.httphandle != 0; }
+
+		private:
+			//only one context at a time for now
+			static inline constinit httpcContext ctx {0, 0};
+
+			bool hasCtx = false;
+		};
+
+		const std::vector languageCodes {
+			"ja"s,
+			"en"s,
+			"fr"s,
+			"de"s,
+			"it"s,
+			"es"s,
+			"zh-CN"s,
+			"ko"s,
+			"nl"s,
+			"pt"s,
+			"ru"s,
+			"zh-TW"s,
+		};
+	}
+
+	void ChatTranslationOptions(MenuEntry* entry) {
+		static LanguageId targetLanguage = LanguageId::Japanese;
+		static LanguageId myLanguage = LanguageId::English;
+
+		struct ScriptWordPtr {
+			const void* vtable;
+			char16_t* m_pText;
+			size_t m_Size;
+		};
+
+		struct TranslateMessage {
+			void Update() {
+				if (state == 0) {
+					if (translate.IsBusy()) {
+						return;
+					}
+
+					const LanguageId target = IsTranslateOther() ? myLanguage : targetLanguage;
+					const auto& targetCode = languageCodes[static_cast<u32>(target)];
+
+					std::array<char8_t, std::tuple_size_v<decltype(text)> * 4> msg;
+					const auto len = utf16_to_utf8(reinterpret_cast<u8*>(msg.data()), reinterpret_cast<const u16*>(text.data()), msg.size());
+
+					if (len < 0) {
+						OSD::Notify("utf16 to utf8 conversion failed");
+						state = 2;
+						return;
+					}
+
+					state = translate.BeginRequest({msg.data(), std::min(static_cast<size_t>(len), msg.size())}, targetCode) ? 1 : 2;
+				}
+				else if (state == 1) {
+					bool done;
+					bool error;
+					std::string result = translate.ReceiveResponse(done, error);
+
+					if (!done) {
+						return;
+					}
+
+					if (error) {
+						state = 2;
+						return;
+					}
+
+					if (IsTranslateOther()) {
+						if (u32 player = Player::GetSaveOffset(sender)) {
+							const auto& playerName = *reinterpret_cast<const std::array<u16, 9>*>(player + 0x55A8);
+							std::array<char, 9 * 4> playerNameUtf8 {};
+							utf16_to_utf8(reinterpret_cast<u8*>(playerNameUtf8.data()), playerName.data(), playerNameUtf8.size());
+							OSDExtras::Notify((Player::GetColor(sender) << std::string(playerNameUtf8.data()) << Color::White) + ": " + result);
+						}
+						else OSDExtras::Notify(result);
+					}
+					else {
+						static Address submitChat(0x218104);
+						static Address bsBalloonChatInstance(0x94FD84);
+						static Address wordPtrVtable(0x90B664);
+
+						ssize_t resultLen = utf8_to_utf16(reinterpret_cast<u16*>(text.data()), reinterpret_cast<const u8*>(result.data()), text.size());
+						if (resultLen < 0) {
+							OSD::Notify("utf8 to utf16 conversion failed");
+							state = 2;
+							return;
+						}
+						size_t len = std::min(static_cast<size_t>(resultLen), text.size() - 1);
+						text[len] = 0;
+						ScriptWordPtr word(reinterpret_cast<const void*>(wordPtrVtable.addr), text.data(), len + 1);
+						submitChat.Call<void>(*(u32*)bsBalloonChatInstance.addr, &word);
+					}
+					state = 2;
+				}
+			}
+
+			bool IsDone() const {
+				return state == 2;
+			}
+
+			bool IsTranslateOther() const {
+				return sender < 4;
+			}
+
+			std::array<char16_t, 65> text;
+			u8 sender = 4;
+			u8 state = 0;
+			TranslateContext translate {};
+		};
+		
+		class TranslateCommon : public Httpc {
+		public:
+			TranslateCommon(Httpc&& http) : Httpc(std::move(http)) { }
+
+			void Update()
+			{
+				Lock _ {lock};
+				for (auto& msg : messages) msg.Update();
+				std::erase_if(messages, [](const auto& msg) { return msg.IsDone(); });
+			}
+
+		protected:
+			LightLock lock {};
+			std::vector<TranslateMessage> messages;
+		};
+
+		class TranslateOthersMessages : public TranslateCommon {
+		public:
+			static std::optional<TranslateOthersMessages>& GetInstance() {
+				static std::optional<TranslateOthersMessages> instance {};
+				return instance;
+			}
+
+			TranslateOthersMessages(Httpc&& http) : TranslateCommon(std::move(http)) { }
+
+			~TranslateOthersMessages() {
+				getMessage.Disable();
+			}
+
+		private:
+			struct Packet {
+				s64 timestamp;
+				u32 param;
+				u8 type;
+				std::array<char16_t, 65> message;
+			};
+			static_assert(sizeof(Packet) == 0x90);
+
+			static void GetMessageHook(const Packet* pkt, void* out) {
+				register u8 senderR4 asm("r4");
+				const auto sender = senderR4;
+				auto& instance = GetInstance();
+
+				//apparently other types don't contain text, so skip those
+				if (pkt->type == 0 || pkt->type == 3 || pkt->type == 4) {
+					Lock _(instance->lock);
+					instance->messages.emplace_back(pkt->message, sender);
+				}
+
+				const HookContext &curr = HookContext::GetCurrent();
+				static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
+				func.Call<void>(pkt, out);
+			}
+
+			Hook getMessage = [] {
+				static Address getMessageFromPacket(0x21724C);
+				Hook result;
+				result.Initialize(getMessageFromPacket.addr, (u32)GetMessageHook);
+				result.SetFlags(USE_LR_TO_RETURN);
+				result.Enable();
+				return result;
+			}();
+		};
+
+		class TranslateOwnMessages : public TranslateCommon {
+		public:
+			static std::optional<TranslateOwnMessages>& GetInstance() {
+				static std::optional<TranslateOwnMessages> instance {};
+				return instance;
+			}
+
+			TranslateOwnMessages(Httpc&& http) : TranslateCommon(std::move(http)) { }
+
+			~TranslateOwnMessages() {
+				sendMessage.Disable();
+			}
+
+		private:
+			static void SendMessageHook(void*, const ScriptWordPtr* chat) {
+				auto& instance = GetInstance();
+				Lock _(instance->lock);
+				instance->messages.emplace_back();
+				std::char_traits<char16_t>::copy(instance->messages.back().text.data(), chat->m_pText, chat->m_Size);
+			}
+
+			Hook sendMessage = [] {
+				static Address sendChatCall(0x1939D4);
+				Hook result;
+				result.Initialize(sendChatCall.addr, (u32)SendMessageHook);
+				result.SetFlags(USE_LR_TO_RETURN);
+				result.Enable();
+				return result;
+			}();
+		};
+
+		if (auto& instance = TranslateOthersMessages::GetInstance()) {
+			instance->Update();
+		}
+		if (auto& instance = TranslateOwnMessages::GetInstance()) {
+			instance->Update();
+		}
+
+		if (!entry->IsActivated()) {
+			TranslateOthersMessages::GetInstance().reset();
+			TranslateOwnMessages::GetInstance().reset();
+		}
+
+		if (!entry->Hotkeys[0].IsPressed()) {
+			return;
+		}
+
+		auto* lang = Language::getInstance();
+
+		const std::vector<std::string> options = {
+			lang->get(TextID::CHAT_TRANSLATION_OPTION_TRANSLATE_OTHER) + ": " + (TranslateOthersMessages::GetInstance()
+				? lang->get(TextID::STATE_ON) : lang->get(TextID::STATE_OFF)),
+			lang->get(TextID::CHAT_TRANSLATION_OPTION_TRANSLATE_OWN) + ": " + (TranslateOwnMessages::GetInstance()
+				? lang->get(TextID::STATE_ON) : lang->get(TextID::STATE_OFF)),
+			lang->get(TextID::CHAT_TRANSLATION_OPTION_SET_TARGET_LANGUAGE) + ": " + languageCodes[static_cast<u32>(targetLanguage)],
+			lang->get(TextID::CHAT_TRANSLATION_OPTION_SET_OWN_LANGUAGE) + ": " + languageCodes[static_cast<u32>(myLanguage)],
+		};
+
+		Keyboard KB(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION), options);
+		
+		if (int choice = KB.Open(); choice == 0) {
+			auto& instance = TranslateOthersMessages::GetInstance();
+			if (instance) {
+				instance.reset();
+			}
+			else {
+				if (auto http = Httpc::TryCreate()) {
+					instance.emplace(std::move(*http));
+				}
+			}
+		}
+		else if (choice == 1) {
+			auto& instance = TranslateOwnMessages::GetInstance();
+			if (instance) {
+				instance.reset();
+			}
+			else {
+				if (auto http = Httpc::TryCreate()) {
+					instance.emplace(std::move(*http));
+				}
+			}
+		}
+		else if (choice == 2) {
+			KB.Populate(languageCodes);
+			if (int index = KB.Open(); index >= 0) {
+				targetLanguage = static_cast<LanguageId>(index);
+			}
+		}
+		else if (choice == 3) {
+			KB.Populate(languageCodes);
+			if (int index = KB.Open(); index >= 0) {
+				myLanguage = static_cast<LanguageId>(index);
 			}
 		}
 	}
