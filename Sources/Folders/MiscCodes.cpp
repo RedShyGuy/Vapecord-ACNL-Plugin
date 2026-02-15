@@ -326,11 +326,12 @@ namespace CTRPluginFramework {
 		}
 	}
 
-//Fast Mode	
+//Fast Mode
 	void fast(MenuEntry *entry) {
-		if(entry->Hotkeys[0].IsPressed()) { //Key::R + Key::DPadDown
-			RuntimeContext::getInstance()->setTurbo(!RuntimeContext::getInstance()->isTurbo());
-			OSDExtras::Notify(Language::getInstance()->get(TextID::FAST_MODE) + " " << (RuntimeContext::getInstance()->isTurbo() ? Color::Green << Language::getInstance()->get(TextID::STATE_ON) : Color::Red << Language::getInstance()->get(TextID::STATE_OFF)));
+		if (entry->WasJustActivated()) {
+			RuntimeContext::getInstance()->setTurbo(true);
+		} else if (!entry->IsActivated()) {
+			RuntimeContext::getInstance()->setTurbo(false);
 		}
 	}
 
@@ -353,7 +354,8 @@ namespace CTRPluginFramework {
 			fastt2.Unpatch();
 		}	
 	}
-//Fast Game Speed	
+
+//Fast Game Speed
 	void speedentry(MenuEntry *entry) {
 		gSpeedEnabled = entry->IsActivated();
 

@@ -420,9 +420,7 @@ namespace CTRPluginFramework {
 		MISC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::BEANS_PARTICLE, BeansParticleChanger, TextID::BEANS_PARTICLE_NOTE), {
 			HotkeyExtras(Key::L | Key::DPadLeft, TextID::BEANS_PARTICLE)
 		})),
-		MISC->Append(EntryWithHotkey(new MenuEntryExtras(TextID::FAST_MODE, fast, TextID::FAST_MODE_NOTE), {
-			HotkeyExtras(Key::R | Key::DPadDown, TextID::FAST_MODE)
-		})),
+		MISC->Append(new MenuEntryExtras(TextID::FAST_MODE, fast, TextID::FAST_MODE_NOTE)),
 		MISC->Append(new MenuEntryExtras(TextID::FAST_TEXT_SPEED, fasttalk, TextID::FAST_TEXT_SPEED_NOTE)),
 		MISC->Append(new MenuEntryExtras(TextID::FAST_GAME_SPEED, speedentry, TextID::FAST_GAME_SPEED_NOTE)),
 		MISC->Append(new MenuEntryExtras(TextID::FAST_ISABELLE, fastisabelle, TextID::FAST_ISABELLE_NOTE)),
