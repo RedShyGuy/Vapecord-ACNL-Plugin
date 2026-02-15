@@ -98,12 +98,77 @@ namespace CTRPluginFramework {
 		}	
 	}
 
-	void Chat::CommandLoop() {
+	bool Chat::AnimationContext(const std::string &ID_8Bit) {
+		animID = StringToHex<u8>(ID_8Bit, 6); //sets animation
+		if(!IDList::AnimationValid(animID, GetPlayerIndex())) {
+			OSDExtras::Notify(TextID::CHAT_INVALID_ANIMATION, Color::Red);
+			return false;
+		}
+		AnimationCommand();
+		return true;
+	}
+
+	bool Chat::EmotionContext(const std::string &ID_8Bit) {
+		emotionID = StringToHex<u8>(ID_8Bit, 1); //sets emotion
+		if(!IDList::EmotionValid(emotionID)) {
+			OSDExtras::Notify(TextID::CHAT_INVALID_EMOTION, Color::Red);
+			return false;
+		}
+		EmotionCommand();
+		return true;
+	}
+
+	bool Chat::SnakeContext(const std::string &ID_12Bit) {
+		snakeID = StringToHex<u16>(ID_12Bit, 1); //sets snake
+		if(!IDList::SnakeValid(snakeID)) {
+			OSDExtras::Notify(TextID::CHAT_INVALID_SNAKE, Color::Red);
+			return false;
+		}
+		SnakeCommand();
+		return true;
+	}
+
+	bool Chat::MusicContext(const std::string &ID_12Bit) {
+		musicID = StringToHex<u16>(ID_12Bit, 0x660); //sets music
+		if(!IDList::MusicValid(musicID)) {
+			OSDExtras::Notify(TextID::CHAT_INVALID_MUSIC, Color::Red);
+			return false;
+		}
+		MusicCommand();
+		return true;
+	}
+
+	bool Chat::ItemContext(const std::string &ID_16Bit, const std::string &SPCommand, const std::string &SPID_16Bit) {
+		itemID.ID = StringToHex<u16>(ID_16Bit, 0x2001); //sets item
+		if(!itemID.isValid()) {
+			OSDExtras::Notify(TextID::INVALID_ITEM, Color::Red);
+			return false;
+		}
+		if(SPCommand == "f:") {
+			itemID.Flags = StringToHex<u16>(SPID_16Bit, 0); //sets flag
+		}
+		ItemCommand();
+		return true;
+	}
+
+	bool Chat::NameContext(std::string &ItemName) {
+		UtilsExtras::Trim(ItemName);
+		ItemNamePack match;
+		if (!Item::searchByKeyword(ItemName, match)) {
+			OSDExtras::Notify(TextID::CHAT_NO_ITEM_FOUND, Color::Red);
+			return false;
+		}
 		
-		//macro to clean up
-		#define CLEAR_RET \
-		ClearPlayerMessage(); \
-		return;
+		itemID = Item(match.ID); //sets item
+		if(!itemID.isValid()) { //should always be true if orig file is used
+			OSDExtras::Notify(TextID::INVALID_ITEM, Color::Red);
+			return false;
+		}
+		ItemCommand();
+		return false;
+	}
+
+	void Chat::CommandLoop() {
 		
 		if(!IsPlayerMessageOnScreen()) {
 			return;
@@ -133,82 +198,25 @@ namespace CTRPluginFramework {
 
 	//Item Name
 		std::string ItemName = PlayerText.substr(2, 23);
-
-		if(Command == "a:") {
-			animID = StringToHex<u8>(ID_8Bit, 6); //sets animation
-			if(IDList::AnimationValid(animID, GetPlayerIndex())) {
-				AnimationCommand();
-			}
-			else {
-				OSDExtras::Notify(TextID::CHAT_INVALID_ANIMATION, Color::Red);
-				CLEAR_RET
-            }
-		}
-
-		else if(Command == "e:") {
-			emotionID = StringToHex<u8>(ID_8Bit, 1); //sets emotion
-			if(IDList::EmotionValid(emotionID)) {
-				EmotionCommand();
-			}
-			else {
-				OSDExtras::Notify(TextID::CHAT_INVALID_EMOTION, Color::Red);
-				CLEAR_RET
-            }
-		}
-
-		else if(Command == "s:") {
-			snakeID = StringToHex<u16>(ID_12Bit, 1); //sets snake
-			if(IDList::SnakeValid(snakeID)) {
-				SnakeCommand();
-			}
-			else {
-				OSDExtras::Notify(TextID::CHAT_INVALID_SNAKE, Color::Red);
-				CLEAR_RET
-            }
-		}
-
-		else if(Command == "m:") {
-			musicID = StringToHex<u16>(ID_12Bit, 0x660); //sets music
-			if(IDList::MusicValid(musicID)) {
-				MusicCommand();
-			}
-			else {
-				OSDExtras::Notify(TextID::CHAT_INVALID_MUSIC, Color::Red);
-				CLEAR_RET
-            }
-		}
-
-		else if(Command == "i:") {
-			itemID.ID = StringToHex<u16>(ID_16Bit, 0x2001); //sets item
-			if(itemID.isValid()) {
-				if(SPCommand == "f:") {
-					itemID.Flags = StringToHex<u16>(SPID_16Bit, 0); //sets flag
-				}
-				ItemCommand();
-			}
-			else {
-				OSDExtras::Notify(TextID::INVALID_ITEM, Color::Red);
-				CLEAR_RET
-			}
-		}
-
-		else if(Command == "n:") {
-			UtilsExtras::Trim(ItemName);
-			ItemNamePack match;
-			if (!Item::searchByKeyword(ItemName, match)) {
-				OSDExtras::Notify(TextID::CHAT_NO_ITEM_FOUND, Color::Red);
-				CLEAR_RET
-			}
-
-			itemID = Item(match.ID); //sets item
-			if(!itemID.isValid()) { //should always be true if orig file is used
-				OSDExtras::Notify(TextID::INVALID_ITEM, Color::Red);
-				CLEAR_RET
-			}
-
-			ItemCommand();
-		}
 		
+		if(Command == "a:") {
+			AnimationContext(ID_8Bit);
+		}
+		else if(Command == "e:") {
+			EmotionContext(ID_8Bit);
+		}
+		else if(Command == "s:") {
+			SnakeContext(ID_12Bit);
+		}
+		else if(Command == "m:") {
+			MusicContext(ID_12Bit);
+		}
+		else if(Command == "i:") {
+			ItemContext(ID_16Bit, SPCommand, SPID_16Bit);
+		}
+		else if(Command == "n:") {
+			NameContext(ItemName);
+		}
 		else { //any other message
 			return;
 		}
