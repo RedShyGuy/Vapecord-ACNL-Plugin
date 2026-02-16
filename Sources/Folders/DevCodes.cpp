@@ -334,7 +334,7 @@ namespace CTRPluginFramework {
 				playerFlag->CelesteIntroduced = set; 
 			break;
 			case 31:
-				playerFlag->Unknown32 = set; 
+				playerFlag->CyrusIntroduced = set; 
 			break;
 			case 32:
 				playerFlag->Unknown33 = set; 
