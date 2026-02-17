@@ -347,7 +347,7 @@
     "HOUSE_EDITOR_ALREADY_FINISHED": "房屋已完工！",
     "HOUSE_EDITOR_FINISH_SUCCESS": "房屋建造完成成功！",
     "HOUSE_EDITOR_DOOR_CUSTOM_LABEL": "房门自定义设置",
-    "HOUSE_EDITOR_DOOR_CUSTOM_NOTE": "房门设置为拱形还是方形？\n\拱形 = 是\n方形 = 否（或按 B 键）",
+    "HOUSE_EDITOR_DOOR_CUSTOM_NOTE": "房门设置为拱形还是方形？\n拱形 = 是\n方形 = 否（或按 B 键）",
     "HOUSE_EDITOR_EXTERIOR_SUCCESS": "外部结构编辑成功！",
     "HOUSE_EDITOR_PLAYER_NOT_READY": "%s 需要先完成游戏第一天！",
     "HOUSE_EDITOR_BUILD_HOUSE": "建造房屋",
@@ -366,8 +366,7 @@
     "FILL_MUSEUM_NAME": "博物馆修改器",
     "FILL_MUSEUM_NOTE": "填充/清空博物馆内的所有展品。",
     "MAYOR_PERMIT_NAME": "将居民期望值改为100%",
-    "MAYOR_PERMIT_NOTE": "您可以将居民的期望提高到 100%。
-",
+    "MAYOR_PERMIT_NOTE": "您可以将居民的期望提高到 100%。",
     "REAL_TIME_ACRE": "村庄地形变更",
     "REAL_TIME_ACRE_NOTE": "点击地图上的一个方格即可改变其地形。\\n当您根据自己的喜好编辑地形后，保存并关闭游戏。重新打开游戏后即可查看结果。",
     "MAP_EDITOR_TYPE_ID": "输入地形 ID %d",
@@ -533,8 +532,7 @@
     "DREAM_CODE_NOTE": "让您更改现有的梦境码。",
     "DREAM_CODE_ENTER_ID": "输入梦境码: \\请连续输入三组四位数字，中间不加空格。",
     "DEBUG_MENU": "玩家信息统计菜单",
-    "DEBUG_MENU_NOTE": "将一个名为“Census Menu”的未使用菜单解锁到您的游戏中，您可以在其中查看一些游戏统计数据。
-",
+    "DEBUG_MENU_NOTE": "将一个名为“Census Menu”的未使用菜单解锁到您的游戏中，您可以在其中查看一些游戏统计数据。",
     "SONG_LIST_NAME": "K.K.歌单",
     "SONG_LIST_NOTE": "解锁/清除您的 K.K. 歌曲列表。",
     "FILL_CATALOG_NAME": "T&T商品目录列表",
@@ -544,15 +542,14 @@
     "NECK_POSITION": "玩家颈部位置",
     "NECK_POSITION_NOTE": "以怪异的方式改变颈部位置",
     "CUSTOM_HAIR_EYE": "自定义发色和瞳色",
-    "CUSTOM_HAIR_EYE_NOTE": "自定义发色和瞳色，只需输入您想要的新颜色的 RGB 值即可\\n在点击"Save"后，自定义的颜色就会被保存，并在每次启动此插件时启用。\\n注意: 自定义颜色目前仅适用于发色ID为 0，瞳色ID为 1的情况！",
+    "CUSTOM_HAIR_EYE_NOTE": "自定义发色和瞳色，只需输入您想要的新颜色的 RGB 值即可\\n在点击Save后，自定义的颜色就会被保存，并在每次启动此插件时启用。\\n注意: 自定义颜色目前仅适用于发色ID为 0，瞳色ID为 1的情况！",
     "CUSTOM_SET_HAIR": "设置头发颜色",
     "CUSTOM_SET_EYE": "设置瞳色",
     "CUSTOM_SAVE": "保存颜色",
     "CUSTOM_ENTER_HAIR": "输入发色的 RGB 颜色代码：",
     "CUSTOM_ENTER_EYE": "请输入眼睛颜色的 RGB 代码：",
     "CUSTOM_FILE_SAVED": "颜色已保存至文件！",
-    "CUSTOM_HAIR_EYE_KEY1": "随机发色/随机瞳色
-",
+    "CUSTOM_HAIR_EYE_KEY1": "随机发色/随机瞳色",
     "WEAR_HELMET": "同时佩戴帽子和配饰",
     "WEAR_HELMET_NOTE": "让您可以同时佩戴帽子和配饰。请确保先装备配饰！\\n感谢 Levi 提供此功能。",
     "PLAYER_LOADER": "角色加载器",
@@ -718,7 +715,7 @@
     "ISLAND_ACRE_NOTE": "点击白色键盘图标打开键盘,输入16位土地面积ID。地形数按从左到右、从上到下的顺序计算。需要在到达新岛屿前启用此插件,仅限主机用户使用。",
     "ISLAND_ACRE_ENTER_ID": "输入地形数的ID %d：",
     "ISLAND_BUILDING": "南岛建筑修改器",
-    "ISLAND_BUILDING_NOTE": "点击白色键盘图标即可输入岛上两座建筑的建造数据。请在抵达新岛屿前启用此作弊码。此作弊码仅对主机有效。\n(要了解需要输入哪些坐标,请参阅玩家信息作弊中的"世界坐标")",
+    "ISLAND_BUILDING_NOTE": "点击白色键盘图标即可输入岛上两座建筑的建造数据。请在抵达新岛屿前启用此作弊码。此作弊码仅对主机有效。\n(要了解需要输入哪些坐标,请参阅玩家信息作弊中的\"世界坐标)",
     "ISLAND_BUILDING_ENTER_ID": "输入建筑ID：",
     "ISLAND_BUILDING_ENTER_X": "请输入建筑坐标X：",
     "ISLAND_BUILDING_ENTER_Y": "请输入建筑坐标Y：",
@@ -918,3 +915,4 @@
   }
 
 }
+
