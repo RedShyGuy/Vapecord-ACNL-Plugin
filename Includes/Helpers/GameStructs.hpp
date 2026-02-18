@@ -3,9 +3,20 @@
 #include <CTRPluginFramework.hpp>
 #include "Item/Item.hpp"
 
+/*
+Lots of Credits go to https://github.com/Slattz/ACNL_Research/blob/master/010%20Templates/garden_plus.dat.bt
+*/
+
 #pragma pack(push, 1)
 
 typedef char16_t wchar; ///< Wide character type
+using EncVal = u64;
+
+/*
+Nanoseconds are used for time values in the save (not always).
+They get calculated not by checking the elapsed time since 01.01.1970, but since 01.01.2000
+*/
+using Nanoseconds = u64;
 
 namespace CTRPluginFramework {
 
@@ -180,8 +191,6 @@ namespace CTRPluginFramework {
         Invalid //Game internally actually has this for many checks
     };
 
-    /*All Credits go to https://github.com/Slattz/ACNL_Research/blob/master/010%20Templates/garden_plus.dat.bt*/
-
     struct Emoticons {
         u8 emoticons[40];
     };
@@ -273,30 +282,30 @@ namespace CTRPluginFramework {
     };
 
     /*struct BDGValues {
-        u64 Badge_Fishes_Value; //Encrypted Value
-        u64 Badge_Bugs_Value; //Encrypted Value
-        u64 Badge_Marine_Value; //Encrypted Value
-        u64 Badge_FishColl_Value; //Encrypted Value
-        u64 Badge_BugColl_Value; //Encrypted Value
-        u64 Badge_MarineColl_Value; //Encrypted Value
-        u64 Badge_Balloons_Value; //Encrypted Value
-        u64 Badge_Visiting_Value; //Encrypted Value
-        u64 Badge_Hosting_Value; //Encrypted Value
-        u64 Badge_Gardening_Value; //Encrypted Value
-        u64 Badge_Bank_Value; //Encrypted Value
-        u64 Badge_Turnips_Value; //Encrypted Value
-        u64 Badge_Medals_Value; //Encrypted Value
-        u64 Badge_Streetpass_Value; //Encrypted Value
-        u64 Badge_Weeding_Valu; //Encrypted Value
-        u64 Badge_Shopping_Value; //Encrypted Value
-        u64 Badge_LetterWriter_Value; //Encrypted Value
-        u64 Badge_Refurbish_Value; //Encrypted Value
-        u64 Badge_Catalog_Value; //Encrypted Value
-        u64 Badge_KK_Value; //Encrypted Value
-        u64 Badge_HHAScore_Value; //Encrypted Value
-        u64 Badge_PlayTime_Value; //Encrypted Value
-        u64 Badge_Helper_Value; //Encrypted Value
-        u64 Badge_Dream_Value; //Encrypted Value      
+        EncVal Badge_Fishes_Value;
+        EncVal Badge_Bugs_Value;
+        EncVal Badge_Marine_Value;
+        EncVal Badge_FishColl_Value;
+        EncVal Badge_BugColl_Value;
+        EncVal Badge_MarineColl_Value;
+        EncVal Badge_Balloons_Value;
+        EncVal Badge_Visiting_Value;
+        EncVal Badge_Hosting_Value;
+        EncVal Badge_Gardening_Value;
+        EncVal Badge_Bank_Value;
+        EncVal Badge_Turnips_Value;
+        EncVal Badge_Medals_Value;
+        EncVal Badge_Streetpass_Value;
+        EncVal Badge_Weeding_Valu;
+        EncVal Badge_Shopping_Value;
+        EncVal Badge_LetterWriter_Value;
+        EncVal Badge_Refurbish_Value;
+        EncVal Badge_Catalog_Value;
+        EncVal Badge_KK_Value;
+        EncVal Badge_HHAScore_Value;
+        EncVal Badge_PlayTime_Value;
+        EncVal Badge_Helper_Value;
+        EncVal Badge_Dream_Value;      
     };
 
     struct BDG {
@@ -328,10 +337,10 @@ namespace CTRPluginFramework {
     };*/
 
     struct PlayerBadges {
-        u64 BadgeValues[24]; //0x567C: 24 badges (encrypted values)
+        EncVal BadgeValues[24]; //0x567C: 24 badges
         u8 Badges[24]; //0x573C: 24 badges
-        u64 Unknown1; //0x5754 -> 0x575B: Encrypted Value
-        u64 Unknown1_1; //0x575C -> 0x5763: Encrypted Value
+        EncVal Unknown1; //0x5754 -> 0x575B
+        EncVal Unknown1_1; //0x575C -> 0x5763
     };
 
     struct HHAHouseInfo {
@@ -889,119 +898,269 @@ namespace CTRPluginFramework {
         u8 _pad : 3;
     };
 
+    //Starting Point, Top Left
+    //Naming Convention: Field_X_Y -> X = Row, Y = Column
+    struct SnowmanBingoCard {
+        u8 Field_0_0 : 1;
+        u8 Field_0_1 : 1;
+        u8 Field_0_2 : 1;
+        u8 Field_0_3 : 1;
+        u8 Field_0_4 : 1;
+        u8 Field_1_0 : 1;
+        u8 Field_1_1 : 1;
+        u8 Field_1_2 : 1;
+        u8 Field_1_3 : 1;
+        u8 Field_1_4 : 1;
+        u8 Field_2_0 : 1;
+        u8 Field_2_1 : 1;
+        u8 Field_2_2 : 1;
+        u8 Field_2_4 : 1;
+        u8 Field_3_0 : 1;
+        u8 Field_3_1 : 1;
+        u8 Field_3_2 : 1;
+        u8 Field_3_3 : 1;
+        u8 Field_3_4 : 1;
+        u8 Field_4_0 : 1;
+        u8 Field_4_1 : 1;
+        u8 Field_4_2 : 1;
+        u8 Field_4_3 : 1;
+        u8 Field_4_4 : 1;
+        u8 Field_5_0 : 1;
+        u8 Field_5_1 : 1;
+        u8 Field_5_2 : 1;
+        u8 Field_5_3 : 1;
+        u8 Field_5_4 : 1;
+        u8 _pad : 3;
+    };
+
     /*
-    Starts at 0x8ADC in player struct
     This handles letters and their gifts from special npcs
     needs a lot of research!
+
+    24CA98 31F2FA5C, 0
     */
-    struct UnknownStruct1 { 
-        u32 Unk1; //0 //Set to 0 in Player ctor
-        Item GulliverGift; //4
-        GulliverLetterType GulliverLetter; //8 //received the next day
-        u8 Unk4; //9 //Set to 0x80 in Player ctor
-        u16 Unk5; //0xA //Set to 0 in Player ctor
-        u8 Unk6; //0xC //Set to 0xFF in Player ctor
-        u32 Unk7; //0xD //Set to 0 in Player ctor (Set later, before 1st loop)
-        u8 Unk8; //0x11 //Set to 0 in Player ctor
-        u8 Unk9; //0x12 //Set to 0 in Player ctor (Set in 1st loop)
-        u8 Padding1; //0x13 //Padding: Not set in Player ctor
-        u16 Unk11; //0x14 //Set to 0 in Player ctor (Set in 1st loop)
-        u8 Unk12; //0x16 //Set to 0 in Player ctor (Set in 1st loop)
-        u8 Padding2; //0x17 //Padding: Not set in Player ctor
-        u16 Unk14; //0x18 //Set to 0 in Player ctor (Set in 1st loop)
-        u8 Unk15; //0x1A //Set to 0 in Player ctor (Set in 1st loop)
-        u8 Padding3; //0x1B //Padding: Not set in Player ctor
-        u16 Unk17; //0x1C //Set to 0 in Player ctor (Set in 1st loop)
-        u8 Unk18; //0x1E //Set to 0 in Player ctor (Set in 1st loop)
-        u8 Padding4; //0x1F //Padding: Not set in Player ctor
-        u16 Unk20; //0x20 //Set to 0 in Player ctor (Set in 1st loop)
-        u8 Unk21; //0x22 //Set to 0 in Player ctor (Set in 1st loop)
-        u8 Padding5; //0x23 //Padding: Not set in Player ctor
-        u16 Unk23; //0x24 //Set to 0 in Player ctor (Set in 1st loop)
-        u8 Unk24; //0x26 //Set to 0 in Player ctor (Set in 1st loop)
-        u8 Padding6; //0x27 //Padding: Not set in Player ctor
-        u16 Unk26; //0x28 //Set to 0 in Player ctor (Set in 1st loop)
-        u8 Unk27; //0x2A //Set to 0 in Player ctor
-        u8 Padding7; //0x2B //Padding: Not set in Player ctor
-        u16 Unk29; //0x2C //Set to 0 in Player ctor (Set in 1st loop)
-        u8 Unk30; //0x2E //Set to 0 in Player ctor
-        u8 Unk31; //0x2F //Set to 0 in Player ctor
-        u16 CurrentYear; //0x30 //not sure for what
-        u16 UnknownYear2; //0x32 //not sure for what
-        u32 Unk34; //0x34 //Set to 0 in Player ctor
-        u8 JingleLetter; //0x38 //received the next day //1 for receiving, 0 for not receiving
-        u8 Unk36; //0x39 //Set to 0 in Player ctor
-        u16 Unk37; //0x3A //Set to 0 in Player ctor
-        u8 Unk38; //0x3C //Set to 0 in Player ctor
-        u8 Unk39; //0x3D //Set to 0 in Player ctor
-        u16 Unk40; //0x3E //Set to 0 in Player ctor
-        PrizeLetterType ChipLetter; //0x40 //received the next day
-        u8 Unk42; //0x41 //Set to 1 in Player ctor
-        u16 Unk43; //0x42 //Set to 0 in Player ctor
-        PrizeLetterType NatLetter; //0x44 //received the next day
-        SnowmanLetterType SnowmanLetter; //0x45 //received the next day
-        Item SnowmanGift; //0x46 //only used if the item is dynamic (like snowboy gifts)
-        u16 UnknownYear3; //0x4A //Set to 0 in Player ctor
-        u32 Unk49; //0x4C //Set to 0 in Player ctor
-        u8 Unk50; //0x50 //Set to 0 in Player ctor
-        u8 Unk51; //0x51 //Set to 0 in Player ctor
-        u16 Unk52; //0x52 //Set to 0 in Player ctor
-        u8 Unk53; //0x54 //Set to 0 in Player ctor
-        u8 Unk54; //0x55 //Set to 0 in Player ctor
-        u8 Unk55; //0x56 //Set to 0 in Player ctor
-        u8 Unk56; //0x57 //Set to 0 in Player ctor
-        u8 Unk57; //0x58 //Set to 5 in Player ctor
-        u8 Unk58; //0x59 //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
-        u8 Unk59; //0x5A //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
-        u8 Unk60; //0x5B //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
-        u8 Unk61; //0x5C //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
-        u8 Unk62; //0x5D //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
-        u8 Unk63; //0x5E //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
-        u8 Unk64; //0x5F //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
-        u8 Unk65; //0x60 //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
-        u8 Unk66; //0x61 //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
-        u8 Unk67; //0x62 //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
-        u8 Unk68; //0x63 //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
-        u8 Unk69; //0x64 //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
-        u8 Unk70; //0x65 //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
-        u8 Unk71; //0x66 //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
-        u8 KatieLetter; //0x67 //if 9 letter will be received the next day
-        u8 Unk73; //0x68 //Set to 0 in Player ctor
-        u8 Unk74; //0x69 //Set to 0 in Player ctor
-        TownID KatieTraveledToTownData; //0x6A -> 0x7F //Will be shown in katies letter
+    struct UnknownStruct1 { //Size: 0x80
+        u32 Unk1; //0x8ADC //Set to 0 in Player ctor
+        Item GulliverGift; //0x8AE0
+        GulliverLetterType GulliverLetter; //0x8AE4 //received the next day
+        u8 Unk4; //0x8AE5 //Set to 0x80 in Player ctor
+        u16 Unk5; //0x8AE6 //Set to 0 in Player ctor
+        u8 Unk6; //0x8AE8 //Set to 0xFF in Player ctor
+        u32 Unk7; //0x8AE9 //Set to 0 in Player ctor (Set later, before 1st loop)
+        u8 Unk8; //0x8AED //Set to 0 in Player ctor
+        u8 Unk9; //0x8AEE //Set to 0 in Player ctor (Set in 1st loop)
+        u8 Padding1; //0x8AEF //Padding: Not set in Player ctor
+        u16 Unk11; //0x8AF0 //Set to 0 in Player ctor (Set in 1st loop)
+        u8 Unk12; //0x8AF2 //Set to 0 in Player ctor (Set in 1st loop)
+        u8 Padding2; //0x8AF3 //Padding: Not set in Player ctor
+        u16 Unk14; //0x8AF4 //Set to 0 in Player ctor (Set in 1st loop)
+        u8 Unk15; //0x8AF6 //Set to 0 in Player ctor (Set in 1st loop)
+        u8 Padding3; //0x8AF7 //Padding: Not set in Player ctor
+        u16 Unk17; //0x8AF8 //Set to 0 in Player ctor (Set in 1st loop)
+        u8 Unk18; //0x8AFA //Set to 0 in Player ctor (Set in 1st loop)
+        u8 Padding4; //0x8AFB //Padding: Not set in Player ctor
+        u16 Unk20; //0x8AFC //Set to 0 in Player ctor (Set in 1st loop)
+        u8 Unk21; //0x8AFE //Set to 0 in Player ctor (Set in 1st loop)
+        u8 Padding5; //0x8AFF //Padding: Not set in Player ctor
+        u16 Unk23; //0x8B00 //Set to 0 in Player ctor (Set in 1st loop)
+        u8 Unk24; //0x8B02 //Set to 0 in Player ctor (Set in 1st loop)
+        u8 Padding6; //0x8B03 //Padding: Not set in Player ctor
+        u16 Unk26; //0x8B04 //Set to 0 in Player ctor (Set in 1st loop)
+        u8 Unk27; //0x8B06 //Set to 0 in Player ctor
+        u8 Padding7; //0x8B07 //Padding: Not set in Player ctor
+        u16 Unk29; //0x8B08 //Set to 0 in Player ctor (Set in 1st loop)
+        u8 Unk30; //0x8B0A //Set to 0 in Player ctor
+        u8 Unk31; //0x8B0B //Set to 0 in Player ctor
+        u16 UnknownCurrentYear; //0x8B0C //not sure for what
+        u16 UnknownYear2; //0x8B0E //not sure for what
+        u32 Unk34; //0x8B10 //Set to 0 in Player ctor
+        u8 JingleLetter; //0x8B14 //received the next day //1 for receiving, 0 for not receiving
+        u8 Unk36; //0x8B15 //Set to 0 in Player ctor
+        u16 Unk37; //0x8B16 //Set to 0 in Player ctor
+        u8 Unk38; //0x8B18 //Set to 0 in Player ctor
+        u8 Unk39; //0x8B19 //Set to 0 in Player ctor
+        u16 Unk40; //0x8B1A //Set to 0 in Player ctor
+        PrizeLetterType ChipLetter; //0x8B1C //received the next day
+        u8 Unk42; //0x8B1D //Set to 1 in Player ctor
+        u16 Unk43; //0x8B1E //Set to 0 in Player ctor
+        PrizeLetterType NatLetter; //0x8B20 //received the next day
+        SnowmanLetterType SnowmanLetter; //0x8B21 //received the next day
+        Item SnowmanGift; //0x8B22 //only used if the item is dynamic (like snowboy gifts)
+        u16 UnknownYear3; //0x8B26 //Set to 0 in Player ctor
+        SnowmanBingoCard BingoCard; //0x8B28 
+        u8 CurrrentBingoCard; //0x8B2C //BingoCards are not random, they are calculated based on this number (0 - 255)
+        u8 Unk51; //0x8B2D //Set to 0 in Player ctor
+        u16 Unk52; //0x8B2E //Set to 0 in Player ctor
+        u8 Unk53; //0x8B30 //Set to 0 in Player ctor
+        u8 Unk54; //0x8B31 //Set to 0 in Player ctor
+        u8 Unk55; //0x8B32 //Set to 0 in Player ctor
+        u8 Unk56; //0x8B33 //Set to 0 in Player ctor
+        u8 Unk57; //0x8B34 //Set to 5 in Player ctor
+        u8 Unk58; //0x8B35 //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
+        u8 Unk59; //0x8B36 //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
+        u8 Unk60; //0x8B37 //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
+        u8 Unk61; //0x8B38 //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
+        u8 Unk62; //0x8B39 //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
+        u8 Unk63; //0x8B3A //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
+        u8 Unk64; //0x8B3B //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
+        u8 Unk65; //0x8B3C //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
+        u8 Unk66; //0x8B3D //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
+        u8 Unk67; //0x8B3E //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
+        u8 Unk68; //0x8B3F //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
+        u8 Unk69; //0x8B40 //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
+        u8 Unk70; //0x8B41 //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
+        u8 Unk71; //0x8B42 //Set to 0 in Player ctor (Set in 2nd loop, BIC R2 R2 0xF)
+        u8 KatieLetter; //0x8B43 //if 9 letter will be received the next day
+        u8 Unk73; //0x8B44 //Set to 0 in Player ctor
+        u8 Unk74; //0x8B45 //Set to 0 in Player ctor
+        TownID KatieTraveledToTownData; //0x8B46 //Will be shown in katies letter
+    };
+
+    /*
+    Starting with FashionForward and ending with SmallTalk
+    */
+    static const uint16_t InitiativeGoals[102] = {
+        0x0000, 0x0001, 0x0001, 0x0014, 0x0001, 0x2710, 0x0014, 0x0001, 0x0001, 
+        0x0001, 0x0005, 0xC350, 0x0001, 0x0003, 0x0014, 0x0014, 0x000A, 0x0001, 
+        0x0001, 0x0003, 0x0001, 0x0001, 0x0001, 0x0003, 0x0003, 0x000A, 0x0001, 
+        0x0001, 0x0001, 0x0003, 0x0003, 0x0008, 0x0001, 0x0001, 0x1388, 0x0001, 
+        0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 
+        0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 
+        0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 
+        0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0005, 
+        0x0001, 0x0001, 0x0001, 0x1388, 0x0064, 0x0001, 0x0005, 0x0001, 0x0001, 
+        0x0001, 0x0001, 0x0096, 0x0001, 0x01F4, 0x0001, 0x0005, 0x000A, 0x0001, 
+        0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0003, 0x0001, 0x0001, 
+        0x0001, 0x0001, 0x0005
+    };
+
+    enum Initiative : u8 {
+        None = 0,
+        FashionForward,
+        CouponKickoff,
+        GardenGrooming,
+        ClearWater,
+        PublicWorks,
+        Rainmaker,
+        TPCRefresh,
+        LookFabulous,
+        IslandTime,
+        FossilRecord,
+        RetailTherapy,
+        ProDesign,
+        GameOn,
+        ReelEm,
+        BugBoss,
+        DiveDeep,
+        RideTheRails,
+        HostTheMost,
+        StockpileSweets,
+        InteriorDesign,
+        EquityBuilding,
+        ArtAppreciation,
+        TreeHugger,
+        CicadaResearch,
+        Salmon,
+        GiantSnakehead,
+        NibbleFish,
+        OutsideOptions,
+        ShipIt,
+        FortuneSeeker,
+        StrikeItRich,
+        LuckyItem,
+        Beekeeper,
+        InvestInYourself,
+        LetItSnowman,
+        MoleCricket,
+        BandedDragonfly,
+        PetaltailDragonfly,
+        Tarantula,
+        Scorpion,
+        WalkingLeaf,
+        TigerBeetle,
+        OrchidMantis,
+        BirdwingButterfly,
+        DivingBeetle,
+        Stringfish,
+        Koi,
+        Soft_ShelledTurtle,
+        KingSalmon,
+        MittenCrab,
+        Pike,
+        Dorado,
+        SaddledBichir,
+        Coelacanth,
+        Tuna,
+        Napoleonfish,
+        BlueMarlin,
+        OceanSunfish,
+        Oarfish,
+        MorayEel,
+        SpiderCrab,
+        HorseshoeCrab,
+        HQHornedBeetle,
+        HQStagBeetle,
+        Shark,
+        GiantIsopod,
+        InGoodGracie,
+        CurbAppeal,
+        SouvenirSales,
+        PayItForward,
+        ShellingOut,
+        BaristaBooster,
+        KeeeHaMo_ata,
+        DreamSharing,
+        PaybackTime,
+        TurnipProfit,
+        CashForClutter,
+        LocalFruit,
+        BugBoost,
+        FishItForward,
+        FossilBoss,
+        JokesOnYou,
+        TropicalShop,
+        PyrotechnicPro,
+        GoodFit,
+        LocalMusic,
+        SmallTalk,
+        IslandImport,
+        RockOn,
+        ResettiOutreach,
+        Mushroom,
+        SnagASnowflake,
+        TropicalGarden,
+        GreenThumb,
+        FlowerPower,
+        HappiestHomes,
+        SlingshotSniper,
+        AxeCollector,
+        FertileLand,
+        FashionForward,
+        SmallTalk
     };
 
     /*
     Monday is ID 1
     */
     struct Daily_Initiative { //Size: 0x7
-        u8 MondayInitiative; //0x0
-        u8 TuesdayInitiative; //0x1
-        u8 WednesdayInitiative; //0x2
-        u8 ThursdayInitiative; //0x3
-        u8 FridayInitiative; //0x4
-        u8 SaturdayInitiative; //0x5
-        u8 SundayInitiative; //0x6
-    };
-
-    struct ACNL_InitiativeList {
-        //there are 102 initiatives in total
+        Initiative MondayInitiative; //0x0
+        Initiative TuesdayInitiative; //0x1
+        Initiative WednesdayInitiative; //0x2
+        Initiative ThursdayInitiative; //0x3
+        Initiative FridayInitiative; //0x4
+        Initiative SaturdayInitiative; //0x5
+        Initiative SundayInitiative; //0x6
     };
 
     struct ACNL_Initiative { //Initiatives
-        u64 Unknown5; //0x8B80 //???; Set to 0, then 0x7FFFFFFFFFFFFFFF in player ctor
-        u8 WeeklyInitiatives[2]; //0x8B88 //Set to 0 in player ctor
+        u64 Unknown0; //0x8B80 //???; Set to 0, then 0x7FFFFFFFFFFFFFFF in player ctor
+        Initiative WeeklyInitiatives[2]; //0x8B88 //Set to 0 in player ctor
         Daily_Initiative DailyInitiatives[2]; //0x8B8A //Set to 0 in player ctor
-        u16 Unknown10; //0x8B8E //???; Set to 0 in player ctor
-        u8 Unknown11; //0x8B90 //???; Set to 0 in player ctor
-        u32 Unknown12; //0x8B91 //???; Set to 0 in player ctor
-        u16 Unknown13; //0x8B95 //???; Set to 0 in player ctor
-        u8 Unknown14; //0x8B97 //???; Set to 0 in player ctor
-        u8 Unknown15; //0x8B98 //???; Set to 0x65 in player ctor
-        u8 Unknown16; //0x8B99 //???; Set to 0 in player ctor
-        u8 Unknown17; //0x8B9A //???; Set to 0 in player ctor
+        u8 Unknown1; //0x8B98 //???; Set to 0x65 in player ctor
+        u8 Unknown2; //0x8B99 //???; Set to 0 in player ctor
+        u8 Unknown3; //0x8B9A //???; Set to 0 in player ctor
         u8 Padding1; //0x8B9B //Padding: Not set in player ctor
-        u8 Unknown19[0x198]; //0x8B9C //???; 0x198 buffer size set to 0 in player ctor
+        u32 InitiativeProgress[102]; //0x8B9C //If current progress is the same or higher than initiative goal, then initiative is completed
         u8 Unknown20[0x66]; //0x8D34 //???; 0x66 buffer size set to 0 in player ctor
         u8 Padding2; //0x8B9A //Padding: Not set in player ctor
         u8 Padding3; //0x8B9B //Padding: Not set in player ctor
@@ -1037,7 +1196,7 @@ namespace CTRPluginFramework {
         u8 Unknown8; //0x8DFB //???; Set to 0xFF in player ctor
     };
 
-    struct UnknownStruct5 {//Similar to UnknownStruct3
+    struct UnknownStruct5 { //Similar to UnknownStruct3
         s64 Unknown1; //0x8DEC //???; Set to 0, then 0x7FFFFFFFFFFFFFFF in player ctor
         u8 Unknown2; //0x8DF4 //???; Set to 0x21 in player ctor
         u8 Unknown3; //0x8DF5 //???; Set to 0xFF in player ctor
@@ -1167,85 +1326,85 @@ namespace CTRPluginFramework {
         Player_Appearance PlayerAppearance; //0xA4
         u8 Padding_0 = 0; //0xCB
         ACNL_Pattern Patterns[10]; //0xCC //10 Patterns
-        u8 PatternOrder[10]; //0x552C -> 0x5535 //Order of patterns from 0x0 - 0x9
+        u8 PatternOrder[10]; //0x552C //Order of patterns from 0x0 - 0x9
         u16 Padding_1; //0x5536 //U16 Zero Padding; Always 0x0000
         MiiData PlayerMii;
         u8 HasMii; //0x55E0 //Values: 0 = No Mii, 1 = Has Mii, <1 = Has Mii, face doesn't show
         u8 Padding_2; //0x55E1 //Not Verified: U8 Zero Padding; Always 0x00
-        u16 Padding_3; //0x55E2 -> 0x55E3 //Not Verified: U16 Zero Padding; Always 0x0000
+        u16 Padding_3; //0x55E2 //Not Verified: U16 Zero Padding; Always 0x0000
         Mannequin Mannequin1;
         Mannequin Mannequin2;
         Mannequin Mannequin3;
         Mannequin Mannequin4;
         u16 Padding_4; //0x5644
-        PersonalID PlayerInfo; //0x5646 -> 0x5671
+        PersonalID PlayerInfo; //0x5646
         u8 BirthMonth; //0x5674
         u8 BirthDay; //0x5675
         u16 YearRegistered; //0x5676
         u8 MonthRegistered; //0x5678
         u8 DayRegistered; //0x5679
         u16 Padding_5; //0x567A: Zero Padding; Always 0x0000  
-        PlayerBadges Badges; //0x567C -> 0x5763
-        HHAHouseInfo HHAHouse; //0x5764 -> 0x5789
-        ACNL_DreamAddress DreamCode;  //0x5790 -> 0x579B
-        u32 Padding_6; //0x579C -> 0x579F
-        Player_Flags PlayerFlags; //0x57A0 -> 0x57D3
-        u32 HasTPCPic; //0x57D4 -> 0x57D7
-        u8 TPCPic[0x1400]; //0x57D8 -> 0x6BD7
-        wchar TPCText[33]; //0x6BD8 -> 0x6C19
+        PlayerBadges Badges; //0x567C
+        HHAHouseInfo HHAHouse; //0x5764
+        ACNL_DreamAddress DreamCode;  //0x5790
+        u32 Padding_6; //0x579C
+        Player_Flags PlayerFlags; //0x57A0
+        u32 HasTPCPic; //0x57D4
+        u8 TPCPic[0x1400]; //0x57D8
+        wchar TPCText[33]; //0x6BD8
         u8 Unknown1; //0x6C1A //Unknown: Was 1 on a save, 2 on another
         u8 Unknown2; //0x6C1B
-        u32 Unknown3; //0x6C1C -> 0x6C19
-        u32 Unknown4; //0x6C20 -> 0x6C23
-        u32 Padding_7; //0x6C24 -> 0x6C27
-        u32 Checksum2; //0x6C28 -> 0x6C2B
-        u64 BankAmount; //0x6C2C -> 0x6C33: Encrypted Value
-        u64 DebtAmount; //0x6C34 -> 0x6C3B: Encrypted Value
-        u64 MedalAmount; //0x6C3C -> 0x6C43: Encrypted Value
-        u64 BellsFromReeseAmount; //0x6C44 -> 0x6C4B: Encrypted Value
-        u32 Padding_8; //0x6C4C -> 0x6C4F
-        s64 Playtime; //0x6C50 -> 0x6C57
-        TownID TownData2; //0x6C68 -> 0x6C5D
-        u16 Padding_10; //0x6C6E -> 0x6C6F
-        Item Inventory[16]; //0x6C70 -> 0x6CAF
-        u8 InventoryItemLocks[16]; //0x6CB0 -> 0x6CBF
-        u32 UnlockedItems[0xBA]; //0x6CC0 -> 0x6FA7 //Game uses one big bitfield for items 'unlocked'. Bits correspond to item ids. Used for catalog, encyclopedia, etc
-        u64 PocketMoney; //0x6FA8 -> 0x6FAF: Encrypted Value
-        Item IslandBox[40]; //0x6FB0 -> 0x704F
-        Item IslandInventory[16]; //0x7050 -> 0x708F
-        u8 IslandInventoryItemLocks[16]; //0x7090 -> 0x709F: may be Padding also, needs testing
-        Item UnknownItem1; //0x70A0 -> 0x70A3
-        Item UnknownItem2; //0x70A4 -> 0x70A7
-        ACNL_Letter Letters[10]; //0x70A8 -> 0x89A7
-        wchar LetterHeader[0x20]; //0x89A8 -> 0x89E7
-        u16 Padding_11; //0x89E8 -> 0x89E9
-        wchar FutureLetterHeader[0x20]; //0x89EA -> 0x8A29
-        u16 Padding_12; //0x8A2A -> 0x8A2B
-        wchar LetterSignature[0x20]; //0x8A2C -> 0x8A6B
-        u16 Padding_13; //0x8A6C -> 0x8A6D
-        u8 DefaultLtrRecieverNameIndent; //0x8A6E -> 0x8A6E
-        u8 DefaultFutureLtrRecieverNameIndent; //0x8A6F -> 0x8A6F //Cannot be >= 0x20
-        Emoticons Emotes; //0x8A70 -> 0x8A97 //Players Emotes (40 slots)
-        s8 EmotePage; //0x8A98 -> 0x8A98 //0xFF = Page 1, 0x00 = Page 2
-        u8 Padding_14; //0x8A99 -> 0x8A99
-        u16 SpotpassDLCRecievedIds[32]; //0x8A9A -> 0x8AD9 //Not Verified; 0xFFFF is default, then 0xXXXX is ID of DLC recieved
-        u16 Padding_15; //0x8ADA -> 0x8ADB
-        UnknownStruct1 UnkBuffer1; //0x8ADC -> 0x8B5B
-        u16 Padding_16; //0x8B5C -> 0x8B5D
+        u32 Unknown3; //0x6C1C
+        u32 Unknown4; //0x6C20
+        u32 Padding_7; //0x6C24
+        u32 Checksum2; //0x6C28
+        EncVal BankAmount; //0x6C2C
+        EncVal DebtAmount; //0x6C34
+        EncVal MedalAmount; //0x6C3C
+        EncVal BellsFromReeseAmount; //0x6C44
+        u32 Padding_8; //0x6C4C
+        s64 Playtime; //0x6C50
+        TownID TownData2; //0x6C68
+        u16 Padding_10; //0x6C6E
+        Item Inventory[16]; //0x6C70
+        u8 InventoryItemLocks[16]; //0x6CB0
+        u32 UnlockedItems[0xBA]; //0x6CC0 //Game uses one big bitfield for items 'unlocked'. Bits correspond to item ids. Used for catalog, encyclopedia, etc
+        EncVal PocketMoney; //0x6FA8
+        Item IslandBox[40]; //0x6FB0
+        Item IslandInventory[16]; //0x7050
+        u8 IslandInventoryItemLocks[16]; //0x7090: may be Padding also, needs testing
+        Item UnknownItem1; //0x70A0
+        Item UnknownItem2; //0x70A4
+        ACNL_Letter Letters[10]; //0x70A8
+        wchar LetterHeader[0x20]; //0x89A8
+        u16 Padding_11; //0x89E8
+        wchar FutureLetterHeader[0x20]; //0x89EA
+        u16 Padding_12; //0x8A2A
+        wchar LetterSignature[0x20]; //0x8A2C
+        u16 Padding_13; //0x8A6C
+        u8 DefaultLtrRecieverNameIndent; //0x8A6E
+        u8 DefaultFutureLtrRecieverNameIndent; //0x8A6F //Cannot be >= 0x20
+        Emoticons Emotes; //0x8A70 //Players Emotes (40 slots)
+        s8 EmotePage; //0x8A98 //0xFF = Page 1, 0x00 = Page 2
+        u8 Padding_14; //0x8A99
+        u16 SpotpassDLCRecievedIds[32]; //0x8A9A //Not Verified; 0xFFFF is default, then 0xXXXX is ID of DLC recieved
+        u16 Padding_15; //0x8ADA
+        UnknownStruct1 UnkBuffer1; //0x8ADC
+        u16 Padding_16; //0x8B5C
         LyleFlags LyleFlag; //0x8B5E
         u8 HasDeductions__; //0x8B5F //Not 100% sure; something to do with items facing a wall, therefore deductions; Reads HouseUnk9 later in code
         u8 HHAAwardsUnlockedDupe; //0x8B60
         u8 GoldExteriorsUnlockedDupe; //0x8B61
         u8 HHAUnk1; //0x8B62
         u8 HHAUnk2; //0x8B63 //READU8(CurrentHouseTheme+1) | 0x80; Only When Exterior/Theme???
-        u8 HHAUnk3[0x1C]; //0x8B63 -> //0x8B7F //Come back to later
-        ACNL_Initiative Initiative; //0x8B80 -> 0x8DBB
-        u64 MeowCoupons; //0x8DBC -> 0x8DC3: Encrypted Value
-        u64 Unk2; //0x8DC4 -> 0x8DCB: Encrypted Value
-        u64 Unk3; //0x8DCC -> 0x8DD3: Encrypted Value
-        u64 Unk4; //0x8DD4 -> 0x8DDB: Encrypted Value
-        u64 Unk5; //0x8DDC -> 0x8DE3: Encrypted Value
-        u64 Unk6; //0x8DE4 -> 0x8DEB: Encrypted Value
+        u8 HHAUnk3[0x1C]; //0x8B63 //Come back to later
+        ACNL_Initiative Initiative; //0x8B80
+        EncVal MeowCoupons; //0x8DBC
+        EncVal Unk2; //0x8DC4
+        EncVal Unk3; //0x8DCC
+        EncVal Unk4; //0x8DD4
+        EncVal Unk5; //0x8DDC
+        EncVal Unk6; //0x8DE4
         UnknownStruct3 UnkBuffer3;
         UnknownStruct4 UnkBuffer4;
         UnknownStruct5 UnkBuffer5;
@@ -1271,10 +1430,10 @@ namespace CTRPluginFramework {
         u8 Unk_u8_3; //Set to 0 in player ctor
         u16 Padding_18;
         u32 AddedSongs[3]; //Bitfield for added songs
-        Item SantaBagInv[10]; //0x9048 -> 0x906F
+        Item SantaBagInv[10]; //0x9048
         u8 PlayerZero_Filler[0x320]; //Always 0?? Game just memclr's in player ctor
         Item Dressers[180]; //Each dresser is 60 long
-        wchar BDayWish[0x22]; //0x9660 -> 0x96A4
+        wchar BDayWish[0x22]; //0x9660
         /*
         ACNL_Letter Letter1; 
         ACNL_Letter Letter2;
@@ -1287,8 +1446,8 @@ namespace CTRPluginFramework {
         u8 UnknownNotSetYet8[0xA4];
         */
         u8 UnknownBuffer[0xC84]; 
-        Encyclopedia_Sizes EncyclopediaSizes; //0xA328 -> 0xA484
-        u8 UnkBuffer11[0x84]; //0xA485 -> 0xA507
+        Encyclopedia_Sizes EncyclopediaSizes; //0xA328
+        u8 UnkBuffer11[0x84]; //0xA485
         UnknownStruct10 UnkStruct10_1; //0xA508
         UnknownStruct10 UnkStruct10_2;
         UnknownStruct10 UnkStruct10_3;
@@ -1887,7 +2046,7 @@ namespace CTRPluginFramework {
 
     struct Future_Letter { //Size: 0x288
         ACNL_Letter LetterForFutureSelf;
-        u64 ReceiveDateInNanoSeconds; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        Nanoseconds ReceiveDate; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
     };
 
     struct Player_Letters { //Size: 0x1B88
@@ -1899,31 +2058,42 @@ namespace CTRPluginFramework {
         Item StorageItems[360];
     };
 
+    /*
+    When a snowmen is built, 0x7FF8 is placed as a town item
+    */
+    struct SnowmanData { //Size: 0xC
+        Nanoseconds DayOfDeath; //0x6FE78 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u8 BingoNumberOfTheDay; //0x6FE80 //Will be set when talking to the snowman
+        u8 Unknown1; //0x6FE81 //Seems to change when playing bingo?
+        u8 TopSnowBallSize; //0x6FE82
+        u8 BottomSnowBallSize; //0x6FE83
+    };
+
     struct ACNL_TownData {
         u32 Checksum; //0x53424; Checksum of the 0x1E4D8 of this data
-        u8 Unknown1[88];
-        u8 OceanSide; //[0-1]; 0: Left, 1: Right; Museum and Camping Ground and the starting position of the train driving by are all on the opposite side to this.; Ctor sets to 3
-        u8 TownGrassType; //[0-2]; 0: Triangle / Square (Winter) | 1: Circle / Star (Winter) | 2: Square / Circle (Winter); Ctor sets to 2
-        u8 CliffType; //[0-2]; This is unused/scrapped. All 3 cliff texture in the ROM are the exact same.; Ctor sets to 2
-        u8 Padding1;
-        u16 TownAcres[7*6]; //42 acres in total; 7 colunms, 6 rows. Game reads Acre IDs as u16; ctor sets each to 265 (0x109)
-        Item TownItems[(16*16)*(5*4)]; //16*16 items per acre; Items only cover map acres (5*4); 0x1400 of items
-        u8 MapGrassToday[(16*16)*(5*4)]; //0x584d8 //16*16 slots per acre; Grass deterioration only affects map acres (5*4); 0x1400 of grass
-        u8 Unused2[40]; //Town data ctor never initializes this, so likely not used. Where the code would branch to do so, there is a NOP (both in WA and Orig).
+        u8 Unknown1[88]; //0x53428
+        u8 OceanSide; //0x53480 //[0-1]; 0: Left, 1: Right; Museum and Camping Ground and the starting position of the train driving by are all on the opposite side to this.; Ctor sets to 3
+        u8 TownGrassType; //0x53481 //[0-2]; 0: Triangle / Square (Winter) | 1: Circle / Star (Winter) | 2: Square / Circle (Winter); Ctor sets to 2
+        u8 CliffType; //0x53482 //[0-2]; This is unused/scrapped. All 3 cliff texture in the ROM are the exact same.; Ctor sets to 2
+        u8 Padding1; //0x53483
+        u16 TownAcres[7*6]; //0x53484 //42 acres in total; 7 colunms, 6 rows. Game reads Acre IDs as u16; ctor sets each to 265 (0x109)
+        Item TownItems[(16*16)*(5*4)]; //0x534AE //16*16 items per acre; Items only cover map acres (5*4); 0x1400 of items
+        u8 MapGrassToday[(16*16)*(5*4)]; //0x584D8 //16*16 slots per acre; Grass deterioration only affects map acres (5*4); 0x1400 of grass
+        u8 Unused2[40]; //0x598D8 //Town data ctor never initializes this, so likely not used. Where the code would branch to do so, there is a NOP (both in WA and Orig).
         u8 MapGrass[(16*16)*(8*6)]; //0x59900
         u8 Unused3[0x1000]; //Town data actually includes it with MapGrass (0x8000 in total), despite this portion not being used
         ACNL_PlayerHouse PlayerHouse[4]; //0x5D900
         s64 CurrentTime; //0x621A0
-        s64 Unknown2;
+        s64 Unknown2; //0x621A8
         s64 Playtime; //0x621B0
-        TownID TownData1;
-        u8 Unknown3;
+        TownID TownData1; //0x621B8
+        u8 Unknown3; //0x621CE
         Town_Flags TownFlags; //0x621CF
-        u16 Unknown4; //Likely padding+ //0x621E0
+        u16 Unknown4; //0x621E0 //Likely padding
         Item LostAndFoundItems[16]; //0x621E2
-        u8 Unknown5[16]; //0x62222; likely padding
-        u64 Unknown6; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
-        Item TownFruit; //Yes, the game uses an item id to represent the town fruit lol
+        u8 Unknown5[16]; //0x62222 //likely padding
+        u64 Unknown6; //0x62232 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        Item TownFruit; //0x6223A
         u16 DaysPlayed; //0x6223E
         u8 Unknown7[0xC]; //0x62240
         u8 Unknown8; //0x6224C //Group 1
@@ -1933,63 +2103,56 @@ namespace CTRPluginFramework {
         u64 Unknown11; //0x62250 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
         u64 Unknown12; //0x62258 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
         u8 Unknown13[4]; //0x62260
-        u8 NooklingState; //level of nookling shop
-        u8 NooklingStateUnknown;
-        u8 Unknown14[2];
-        u64 NooklingBellsSpent; //encrypted value
-        Item NooklingsItems[24];
-        u8 Unknown15[28]; //likely padding
-        Item AblesItems[5];
-        Item AblesPatternItems[8];
-        u64 Unknown16; //encrypted value
-        u8 Unknown17[0x10]; //likely padding
-        ACNL_Pattern AbleDisplayPattern[8];
-        Item LabellesItems[7]; //Accessories in right of shop
-        u8 Unknown18[8]; //likely padding
-        u64 Unknown19; //encrypted value
-        wchar ScrappedString[4];
-        u64 Unknown20; //encrypted value
-        u8 LeifUnlockStatus; //0 = locked; 1 = Being Built; X = Levels
-        u8 Unknown21; 
-        Item LeifItems[11];
-        u8 Unknown22[14]; //likely padding
-        Item ReddItems[4];
-        u8 Unknown23[4]; //likely padding
-        PersonalID UnknownPID1[4]; //unused?
-        u64 Unknown24; //encrypted value
-        u64 Unknown25; //encrypted value
-        u64 Unknown26; //encrypted value
-        u64 Unknown27; //encrypted value
-        u8 Unknown28[8];
-        u64 Unknown29; //encrypted value
-        u8 KickUnlockStatus; //0 = locked; 1 = Being Built; 2 = Built/Unlocked
-        u8 Padding4;
-        Item KicksItems[6];
-        u8 Unknown31[6];
-        Item UnkItems1[4]; //ctor does this and below seperately, 4 at a time
-        Item UnkItems2[4];
-        u32 Padding5;
-        u64 Unknown32; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
-        u64 Unknown33; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
-        u64 Unknown34; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
-        u64 Unknown35; //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
-        u8 Unknown36[0x10]; //likely padding
-        Item UnkItems3[5];
-        Item UnkItems4[8];
-        u8 Unknown37[8];
-        u64 Unknown38; //encrypted value
-        u64 Unknown39; //encrypted value
-        u64 Unknown40; //encrypted value
-        u64 Unknown41; //encrypted value
-        u64 Unknown42; //encrypted value
-        u64 Unknown43; //encrypted value
-        u64 Unknown44; //encrypted value
-        u64 Unknown45; //encrypted value
-        ACNL_Pattern UnknownPattern[8];
-        u64 Unknown46; //encrypted value
-        u64 Unknown47; //encrypted value
-        u64 Unknown48; //encrypted value
-        u64 Unknown49; //encrypted value
+        u8 NooklingState; //0x62264 //level of nookling shop 
+        u8 NooklingStateUnknown; //0x62265
+        u8 Unknown14[2]; //0x62266
+        EncVal NooklingBellsSpent; //0x62268
+        Item NooklingsItems[24]; //0x62270
+        u8 Unknown15[28]; //0x622D0 //likely padding
+        Item AblesItems[5]; //0x622EC
+        Item AblesPatternItems[8]; //0x62300
+        EncVal Unknown16; //0x62320
+        u8 Unknown17[0x10]; //0x62328 //likely padding 
+        ACNL_Pattern AbleDisplayPattern[8]; //0x62338
+        Item LabellesItems[7]; //0x666B8 //Accessories in right of shop
+        u8 Unknown18[8]; //0x666D4 //likely padding
+        EncVal Unknown19; //0x666DC
+        wchar ScrappedString[4]; //0x666E4
+        EncVal Unknown20; //0x666EC
+        u8 LeifUnlockStatus; //0x666F4 //0 = locked; 1 = Being Built; X = Levels 
+        u8 Unknown21; //0x666F5
+        Item LeifItems[11]; //0x666F6
+        u8 Unknown22[14]; //0x66722 //likely padding
+        Item ReddItems[4]; //0x66730
+        u8 Unknown23[4]; //0x66740 //likely padding
+        PersonalID UnknownPID1[4]; //0x66744 //unused? 
+        EncVal Unknown24; //0x667FC
+        EncVal Unknown25; //0x66804 
+        EncVal Unknown26; //0x6680C 
+        EncVal Unknown27; //0x66814 
+        u8 Unknown28[8]; //0x6681C
+        EncVal Unknown29; //0x66824 
+        u8 KickUnlockStatus; //0x6682C //0 = locked; 1 = Being Built; 2 = Built/Unlocked 
+        u8 Padding4; //0x6682D
+        Item KicksItems[6]; //0x6682E
+        u8 Unknown31[6]; //0x66846
+        Item UnkItems1[4]; //0x6684C //ctor does this and below seperately, 4 at a time 
+        Item UnkItems2[4]; //0x6685C
+        u32 Padding5; //0x6686C
+        u64 Unknown32; //0x66870 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64) 
+        u64 Unknown33; //0x66878 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64) 
+        u64 Unknown34; //0x66880 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64) 
+        u64 Unknown35; //0x66888 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64) 
+        u8 Unknown36[0x10]; //0x66890 //likely padding 
+        Item ReTailPremiumItems[5]; //0x668A0 //if wealthy town, 2 items are shown, if people on streetpass are seen, even more
+        Item ReTailItems[8]; //0x668B4
+        u8 ReTailItemsPlayerIndex[8]; //0x668D4 //Which player put the item up for sale, unsure what the values are for villagers
+        EncVal ReTailItemPrices[8]; //0x668DC
+        ACNL_Pattern ReTailItemDesign[8]; //0x6691C //if furniture was customized with a design, the design will be stored here if the item is put for sale
+        EncVal Unknown46;
+        EncVal Unknown47;
+        EncVal Unknown48;
+        EncVal Unknown49;
         u8 MuseumShopUnlockState; //0x6ACBC
         u8 Unknown50;
         Item MuseumItems[3]; //0x6ACBE
@@ -2012,9 +2175,9 @@ namespace CTRPluginFramework {
         u8 ShampoodleUnlockStatus; //0x6ADB4
         u8 Unknown57[3];
         Item IslandShopItems[4];
-        u64 Unknown58; //encrypted value
-        u64 Unknown59[2]; //encrypted value
-        u64 TurnipPrices[12]; //0x6ADE0; encrypted value; first 6 are AM, second 6 are PM
+        EncVal Unknown58;
+        EncVal Unknown59[2];
+        EncVal TurnipPrices[12]; //0x6ADE0; first 6 are AM, second 6 are PM
         u8 Unknown60[8]; 
         Item UnkItem6;
         Item UnkItems7[2]; //new year hats?
@@ -2057,14 +2220,16 @@ namespace CTRPluginFramework {
         PersonalID UnknownPID2[3];
         u8 Unknown78[0x96];
         Item UnkItems10[3];
-        u8 Unknown79[0x184]; //0x6FD32 //start of unknown
-        u8 IslandGrassType; //[0-2]; 0: Triangle | 1: Circle | 2: Square;
-        u8 Padding7;
+        u8 Unknown79[0x146]; //0x6FD32
+        SnowmanData Snowmans[4]; //0x6FE78
+        u8 Unknown80[0xE]; //0x6FEA8
+        u8 IslandGrassType; //0x6FEB6 //[0-2]; 0: Triangle | 1: Circle | 2: Square;
+        u8 Padding7; //0x6FEB7
         u16 IslandAcres[4*4]; //0x6FEB8; 16 acres in total; 4 colunms, 4 rows. Game reads Acre IDs as u16;
         Item IslandItems[(16*16)*(2*2)]; //0x6FED8; 16*16 items per acre; Items only cover map acres (2*2); 0x400 of items
         ACNL_Building IslandBuildings[2]; //Island Hut and Lloid
         ACNL_Pattern TownFlag; //0x70F1C
-        u8 Unknown80[0x174]; //0x7178C
+        u8 Unknown81[0x174]; //0x7178C
     };
 
     struct ACNL_Cenus_Data_Type { //Size: 0x14 
@@ -2315,23 +2480,6 @@ namespace CTRPluginFramework {
         ACNL_Player_StorageBox StorageBox;
         u8 Unknown14[32];
     };
-
-    /*
-    Snowman data probably lies in UnknownStruct1 & Unknown79 in TownData
-
-    Snowman:
-    Built:
-    0x31F2FAA4 0x07E9000D (Old: 0x0000000D)
-    0x31F2FAAC 0x07E9003C (Old: 0x07E9004C)
-    0x31F7D894 0x00007FF8 (Old: 0x00007FFE)
-    0x31F96DF8 0xCED7F0C0 (Old: 0xFFFFFFFF)
-    0x31F96DFC 0x0B6708EB (Old: 0x7FFFFFFF)
-    0x31F96E00 0x2F09FFFF (Old: 0x00000000)
-    0x31F99904 0x00000001 (Old: 0x00000000)
-    0x31F99908 0x00000001 (Old: 0x00000000)
-
-    0x31f96e00 seems to store the number of the day and if it was set already
-    */
 
     struct SecureValueHeader {
         u64 SecureValue; //0x0 //Unused in ACNL WA
