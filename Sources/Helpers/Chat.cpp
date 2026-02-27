@@ -165,7 +165,7 @@ namespace CTRPluginFramework {
 			return false;
 		}
 		ItemCommand();
-		return false;
+		return true;
 	}
 
 	void Chat::CommandLoop() {
