@@ -79,7 +79,7 @@ namespace CTRPluginFramework {
 
 //C-Stick Coordinate Modifier
 	void cStickCoordinate(MenuEntry *entry) {
-		u16 max_pos = 146; //seems to be the max value
+		const u16 max_pos = 146; //seems to be the max value
 		
 		circlePosition pos{0, 0};
 		hidCstickRead(&pos);
@@ -464,4 +464,5 @@ namespace CTRPluginFramework {
 
 //5B6848 Func for Return To Town + Arrive At Hut
 //5B6660 Actual Func which does room warp
+
 
