@@ -490,6 +490,8 @@
     "COORD_MOD_KEY4": "Muoviti giu",
     "COORD_MOD_KEY5": "Muoviti su",
     "COORD_MOD_ENTER_SPEED": "Inserisci velocita':\nLa velocita' di base e' 5",
+    "CSTICK_COORD_MOD": "C-Stick Coordinate Control",
+    "CSTICK_COORD_MOD_NOTE": "Similar to Coordinate Control but it uses the new 3DS' C-Stick.",
     "MOON_JUMP": "Moonjump (ascensore)",
     "MOON_JUMP_NOTE": "Premi il tasto di scelta rapida per andare su!",
     "MOON_JUMP_KEY1": "Vai su",

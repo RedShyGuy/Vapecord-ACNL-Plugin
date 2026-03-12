@@ -514,6 +514,8 @@
     "COORD_MOD_KEY4": "下に移動",
     "COORD_MOD_KEY5": "上に移動",
     "COORD_MOD_ENTER_SPEED": "速度を入力してください。\nデフォルト値 [5]",
+    "CSTICK_COORD_MOD": "C-Stick Coordinate Control",
+    "CSTICK_COORD_MOD_NOTE": "Similar to Coordinate Control but it uses the new 3DS' C-Stick.",
     "MOON_JUMP": "ムーンジャンプ",
     "MOON_JUMP_NOTE": "MoonJumpできます。",
     "MOON_JUMP_KEY1": "浮く",

@@ -501,6 +501,8 @@
     "COORD_MOD_KEY4": "남쪽으로 움직이기",
     "COORD_MOD_KEY5": "북쪽으로 움직이기",
     "COORD_MOD_ENTER_SPEED": "스피드 입력:\n%d 는 스피드 기본값입니다.",
+    "CSTICK_COORD_MOD": "C-Stick Coordinate Control",
+    "CSTICK_COORD_MOD_NOTE": "Similar to Coordinate Control but it uses the new 3DS' C-Stick.",
     "MOON_JUMP": "달 점프",
     "MOON_JUMP_NOTE": "위 아래로 움직이기 위한 단축키를 설정하세요.",
     "MOON_JUMP_KEY1": "위로",

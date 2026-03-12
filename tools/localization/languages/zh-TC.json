@@ -486,6 +486,8 @@
     "COORD_MOD_KEY4": "下移",
     "COORD_MOD_KEY5": "上移",
     "COORD_MOD_ENTER_SPEED": "輸入速度:\n%d 是預設速度",
+    "CSTICK_COORD_MOD": "C-Stick Coordinate Control",
+    "CSTICK_COORD_MOD_NOTE": "Similar to Coordinate Control but it uses the new 3DS' C-Stick.",
     "MOON_JUMP": "月球跳",
     "MOON_JUMP_NOTE": "您可以進行月球跳。",
     "MOON_JUMP_KEY1": "漂浮",

@@ -513,6 +513,8 @@
     "COORD_MOD_KEY4": "Moverse hacia abajo",
     "COORD_MOD_KEY5": "Moverse hacia arriba",
     "COORD_MOD_ENTER_SPEED": "Escribe velocidad:\n5 es la velocidad predeterminada",
+    "CSTICK_COORD_MOD": "C-Stick Coordinate Control",
+    "CSTICK_COORD_MOD_NOTE": "Similar to Coordinate Control but it uses the new 3DS' C-Stick.",
     "MOON_JUMP": "Moonjump",
     "MOON_JUMP_NOTE": "Pulsa la combinación de teclas para subir",
     "MOON_JUMP_KEY1": "Arriba",
