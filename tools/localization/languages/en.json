@@ -489,6 +489,8 @@
     "COORD_MOD_KEY4": "Move Down",
     "COORD_MOD_KEY5": "Move Up",
     "COORD_MOD_ENTER_SPEED": "Enter movement speed:\n%d is the default.",
+    "CSTICK_COORD_MOD": "C-Stick Coordinate Control",
+    "CSTICK_COORD_MOD_NOTE": "Similar to Coordinate Control but it uses the new 3DS' C-Stick.",
     "MOON_JUMP": "Moon Jump",
     "MOON_JUMP_NOTE": "Use the hotkeys to move up or down.",
     "MOON_JUMP_KEY1": "Go up",
@@ -1010,4 +1012,5 @@
     "FILE_RES2": "Error\nCouldn't find any files to delete.",
     "FILE_RES3": "Error\nCouldn't delete file."
   }
+
 }
