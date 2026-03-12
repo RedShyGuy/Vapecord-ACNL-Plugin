@@ -66,6 +66,7 @@ namespace CTRPluginFramework {
 		constexpr u32 MovementSpeedMod = Make(GroupMovement, 0x000A);
 		constexpr u32 MovementRoomWarping = Make(GroupMovement, 0x000B);
 		constexpr u32 MovementShovelKnockback = Make(GroupMovement, 0x000C);
+		constexpr u32 MovementCstickCoordMod = Make(GroupMovement, 0x000D);
 
 		// Inventory folder
 		constexpr u32 InventoryText2Item = Make(GroupInventory, 0x0001);
@@ -294,3 +295,4 @@ namespace CTRPluginFramework {
 		constexpr u32 PluginExtBegin = Make(GroupPlugin, 0x0100);
 	}
 }
+
