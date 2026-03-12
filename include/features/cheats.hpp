@@ -34,6 +34,7 @@ namespace CTRPluginFramework {
 	void coordspeed(MenuEntry *entry);
 	void CoordSpeedApplySaved(MenuEntry *entry, u32 savedValue);
 	void coordinate(MenuEntry *entry);
+	void cStickCoordinate(MenuEntry *entry);
 	void moonjump(MenuEntry *entry);
 	void tch_warp(MenuEntry *entry);
 	void walkOver(MenuEntry *entry);
@@ -282,4 +283,5 @@ namespace CTRPluginFramework {
   //Located in cheats.cpp
 	void SendPlayerData(Time time);
 	bool TryGetFolderInfo(MenuFolder *folder, FolderType &folderType, SubFolder &subFolder);
+
 }
