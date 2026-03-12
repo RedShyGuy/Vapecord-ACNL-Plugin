@@ -77,6 +77,28 @@ namespace CTRPluginFramework {
 		}
 	}
 
+//C-Stick Coordinate Modifier
+	void cStickCoordinate(MenuEntry *entry) {
+		u16 max_pos = 146; //seems to be the max value
+		
+		circlePosition pos{0, 0};
+		hidCstickRead(&pos);
+		
+		float *pCoords = PlayerClass::GetInstance()->GetCoordinates();
+		
+		if(pCoords != nullptr && !MapEditorActive) {
+			//(circlePosition / max_pos) * 100 = percent_pushed
+			float percent_pushedx = (float)pos.dx / max_pos * 100;
+			float percent_pushedy = (float)pos.dy / max_pos * 100;
+			//(percent_pushed / 100) * cspeed = speed
+			float speedx = (percent_pushedx / 100) * cspeed;
+			float speedy = (percent_pushedy / 100) * cspeed;
+			
+			pCoords[0] += speedx;
+			pCoords[2] += (speedy * -1); //negate y
+		}
+	}
+
 //Moonjump
 	void moonjump(MenuEntry *entry) {
 		u32 i = PlayerClass::GetInstance()->Offset(0x8C6);
@@ -442,3 +464,4 @@ namespace CTRPluginFramework {
 
 //5B6848 Func for Return To Town + Arrive At Hut
 //5B6660 Actual Func which does room warp
+
