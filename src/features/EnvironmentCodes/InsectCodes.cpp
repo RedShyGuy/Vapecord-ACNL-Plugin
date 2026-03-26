@@ -113,12 +113,13 @@ namespace CTRPluginFramework {
 		}
 
         /*
+        229a bee breaks player loading
         229e mantis crashes
         229f orchid mantis crashes
         22ab ant crashes
         22b7 ladybug crashes
         */
-        if (insectIdLocal == 0x10 || insectIdLocal == 0x11 || insectIdLocal == 0x1D || insectIdLocal == 0x29) {
+        if (insectIdLocal == 0xC || insectIdLocal == 0x10 || insectIdLocal == 0x11 || insectIdLocal == 0x1D || insectIdLocal == 0x29) {
             Item insectItem = ConvertInsectIdToItemId(insectIdLocal);
             OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::INSECT_CANT_SPAWN).c_str(), insectItem.GetName().c_str()), Color::Red);
 			return;
