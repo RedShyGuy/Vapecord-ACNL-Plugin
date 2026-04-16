@@ -73,7 +73,12 @@ namespace CTRPluginFramework
 	std::vector<std::string> notes;
 	
 	void titlesChange(Keyboard& keyboard, KeyboardEvent& event) {
-		int index = keyboard.GetLastSelectedEntry();
+		if(event.type != KeyboardEvent::SelectionChanged) {
+			return;
+		}
+		OSD::Notify("callback");
+		int index = event.selectedIndex;
+		//int index = keyboard.GetLastSelectedEntry();
 		if(index < 0) {
 			return;
 		}
@@ -95,6 +100,7 @@ namespace CTRPluginFramework
 		}
 		
 		std::vector<std::string> titles;
+		notes.clear();
 		
 		auto* connectionInfoTable = *piaConnectionInfoTableAddr;
 		auto* identificationInfoTable = *piaIdentificationInfoTableAddr;
@@ -183,11 +189,17 @@ namespace CTRPluginFramework
 		
 		int index = -1;
 		do {
-			if(index >= 0) {
-				optKb.ChangeSelectedEntry(index);
-			}
+			OSD::Notify("run");
 			index = optKb.Open();
+			if(index < 0) {
+				continue;
+			}
+			optKb.GetMessage() =
+				Language::getInstance()->get(TextID::PLAYERS_IN_SESSION) +
+				"\n\n" +
+				notes.at(index);
 		} while(index >= 0);
+		OSD::Notify("done");
 	}
 
 	void initPiaLogger(PatternManager& pm) {
