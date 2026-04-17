@@ -59,16 +59,6 @@ namespace CTRPluginFramework
 		piaIdentificationInfoTableAddr = *(nn::pia::transport::IdentificationInfoTable***)(addr + 0x14);
 		return true;
 	}
-
-	/*bool onPiaPlayersFolderAction(MenuFolder& folder, ActionType type) {
-		if (type == ActionType::Opening) {
-
-		} else if (type == ActionType::Closing) {
-			folder.Clear();
-		}
-
-		return true;
-	}*/
 	
 	static std::vector<std::string> notes;
 	
