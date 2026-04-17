@@ -70,7 +70,7 @@ namespace CTRPluginFramework
 		return true;
 	}*/
 	
-	std::vector<std::string> notes;
+	static std::vector<std::string> notes;
 	
 	void titlesChange(Keyboard& keyboard, KeyboardEvent& event) {
 		if(event.type != KeyboardEvent::SelectionChanged) {
