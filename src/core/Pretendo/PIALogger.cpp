@@ -62,19 +62,22 @@ namespace CTRPluginFramework
 	
 	static std::vector<std::string> notes;
 	
-	void titlesChange(Keyboard& keyboard, KeyboardEvent& event) {
-		if(event.type != KeyboardEvent::SelectionChanged) {
-			return;
-		}
-		//OSD::Notify("callback");
-		int index = event.selectedIndex;
-		if(index < 0) {
-			return;
-		}
+	void setMessageNotes(Keyboard& keyboard, const int& index) {
 		keyboard.GetMessage() =
 			Language::getInstance()->get(TextID::PLAYERS_IN_SESSION) +
 			"\n\n" +
 			notes.at(index);
+	}
+	
+	void titlesChange(Keyboard& keyboard, KeyboardEvent& event) {
+		if(event.type != KeyboardEvent::SelectionChanged) {
+			return;
+		}
+		int index = event.selectedIndex;
+		if(index < 0) {
+			return;
+		}
+		setMessageNotes(keyboard, index);
 	}
 	
     void PretendoPlayersInSessionEntry(MenuEntry *entry) {
@@ -184,10 +187,7 @@ namespace CTRPluginFramework
 			if(index < 0) {
 				continue;
 			}
-			optKb.GetMessage() =
-				Language::getInstance()->get(TextID::PLAYERS_IN_SESSION) +
-				"\n\n" +
-				notes.at(index);
+			setMessageNotes(optKb, index);
 		} while(index >= 0);
 	}
 
