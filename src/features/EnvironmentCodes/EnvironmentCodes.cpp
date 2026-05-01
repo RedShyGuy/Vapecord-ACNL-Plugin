@@ -639,6 +639,7 @@ namespace CTRPluginFramework {
 			}
 			case 1:
 				ApplyFoliageSeason(SEASON_COUNT+1);
+				entry->SetSavedValue(SEASON_COUNT+1);
 				MessageBox(Language::getInstance()->get(TextID::FOLIAGE_SEASON_DISABLED))();
 				break;
 			default:
