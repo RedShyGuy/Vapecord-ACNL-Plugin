@@ -431,7 +431,7 @@ namespace CTRPluginFramework {
 			static Address startFindRandomMatch{0x61E3B0};
 			static Address disconnectAndFiniNet{0x627368};
 			static Address getRandomMatchingResult{0x75F09C};
-			static Address endAdmissionDemo{0x61E3E8};
+			static Address endAdmissionDemo{startFindRandomMatch.MoveOffset(0x38)};
 
 			enum class State : u32 {
 				Init,
@@ -627,26 +627,6 @@ namespace CTRPluginFramework {
 			)" : : "i" (HandleBrowseSessionsCommand));
 		}
 
-		// static NAKED void DispatchAutoMatchmakeSetParamHook() {
-		// 	asm(R"(
-		// 		LDR R3, .sessionIdPtr
-		// 		LDR R1, [R3] @ R1 = joinSessionId
-		// 		STR R0, [R3] @ joinSessionId = 0
-		// 		STR R1, [SP, #4]
-		// 		BX LR
-		// 	.sessionIdPtr:
-		// 		.word %a0
-		// 	)" : : "i" (&GetInstance().joinSessionId));
-		// }
-
-		// static NAKED void JoinRandomSessionCallHook() {
-		// 	asm(R"(
-		// 		LDR R3, [R4, #0x2B8] @ R3 = cmd
-		// 		LDR R2, [R3, #0xC] @ R2 = param2 (session ID to join)
-		// 		BX LR
-		// 	)" : :);
-		// }
-
 		static bool JoinRandomSessionCallHook(u32 netImpl, u32 countryCode) {
 			auto& instance = GetInstance();
 			if (u32 sessionId = instance.joinSessionId; sessionId != 0) {
@@ -661,7 +641,7 @@ namespace CTRPluginFramework {
 
 		static constexpr u32 sessionBufSize = 18;
 
-		Address setIslandFieldHeapSize{0x10C40E};
+		Address setIslandFieldHeapSize{Address(0x10C404).MoveOffset(0xa)};
 		Address setIslandFieldHeapSize2 = setIslandFieldHeapSize.MoveOffset(6);
 		Address netCmdStub25{0x5188D0};
 		Address joinRandomSessionCall{0x5177C4};
