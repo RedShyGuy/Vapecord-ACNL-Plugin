@@ -384,10 +384,12 @@ namespace CTRPluginFramework {
 			setIslandFieldHeapSize.Patch(0xB0852445);
 			setIslandFieldHeapSize2.Patch(0xA10A0324);
 
+			//BrowseSessions utilizes unused net command 0x25 
 			netCmdHook.Initialize(netCmdStub25.addr, (u32)NetCommand25Hook);
 			netCmdHook.SetFlags(USE_LR_TO_RETURN);
 			netCmdHook.Enable();
 
+			//replaces the JoinRandomSession call with JoinSessionById if joinSessionId is set
 			joinRandomSessionCallHook.Initialize(joinRandomSessionCall.addr, (u32)JoinRandomSessionCallHook);
 			joinRandomSessionCallHook.SetFlags(USE_LR_TO_RETURN);
 			joinRandomSessionCallHook.Enable();
@@ -405,8 +407,8 @@ namespace CTRPluginFramework {
 
 		void OpenOptions() {
 			const std::vector<std::string> options = {
-				"Quick join", //Language::getInstance()->get(TextID::ISLAND_QUICK_JOIN),
-				"Browse sessions", //Language::getInstance()->get(TextID::ISLAND_BROWSE_SESSIONS),
+				Language::getInstance()->get(TextID::ISLAND_QUICK_JOIN),
+				Language::getInstance()->get(TextID::ISLAND_BROWSE_SESSIONS),
 			};
 
 			Keyboard KB(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION), options);
@@ -431,7 +433,7 @@ namespace CTRPluginFramework {
 			static Address startFindRandomMatch{0x61E3B0};
 			static Address disconnectAndFiniNet{0x627368};
 			static Address getRandomMatchingResult{0x75F09C};
-			static Address endAdmissionDemo{startFindRandomMatch.MoveOffset(0x38)};
+			static Address endSeaDepartureDemo{startFindRandomMatch.MoveOffset(0x38)};
 
 			enum class State : u32 {
 				Init,
@@ -450,22 +452,22 @@ namespace CTRPluginFramework {
 
 				if (state == Init) {
 					if (*(netGameMgr + 0x13266) != 6) {
-						OSD::NotifySysFont("Already in a session!", Color::Red);
+						OSD::NotifySysFont(language->get(TextID::ALREADY_IN_SESSION), Color::Red);
 						instance.joinSessionId = 0;
 						return true;
 					}
 
 					if (!initNet.Call<bool>()) {
-						OSD::NotifySysFont("Failed to initialize network!", Color::Red);
+						OSD::NotifySysFont(language->get(TextID::NET_INIT_FAILED), Color::Red);
 						instance.joinSessionId = 0;
 						return true;
 					}
 
-					OSD::NotifySysFont("Connecting...", Color::Yellow);
+					OSD::NotifySysFont(language->get(TextID::CONNECTING), Color::Yellow);
 					state = Connect;
 				} else if (state == Connect) {
 					if (netIsError.Call<bool>(netInstance.addr)) {
-						OSD::NotifySysFont("Network error!", Color::Red);
+						OSD::NotifySysFont(language->get(TextID::NET_ERROR), Color::Red);
 						state = Error;
 						return false;
 					}
@@ -474,7 +476,7 @@ namespace CTRPluginFramework {
 						void* islandFieldHeap = *reinterpret_cast<void**>(islandFieldHeapPtr.addr);
 						void* stageHeap = *reinterpret_cast<void**>(stageHeapPtr.addr);
 						if (islandFieldHeap == nullptr && createIslandFieldHeap.Call<void*>(stageHeap) == nullptr) {
-							OSD::NotifySysFont("Not enough memory! Try again from a different room.", Color::Red);
+							OSD::NotifySysFont(language->get(TextID::OUT_OF_MEMORY), Color::Red);
 							state = Error;
 							return false;
 						}
@@ -482,7 +484,7 @@ namespace CTRPluginFramework {
 						resetTripRequestInfo.Call<void>(); //called from ModuleEventDemo+0x9778
 						Game::ChangeGameMode(Game::GameMode::RANDOM_MATCH);
 						startFindRandomMatch.Call<bool>(netGameMgr + 0x27a0); //always returns true
-						OSD::NotifySysFont("Joining, please wait...", Color::Yellow);
+						OSD::NotifySysFont(language->get(TextID::JOINING), Color::Yellow);
 						state = Match;
 					}
 				} else if (state == Error && disconnectAndFiniNet.Call<bool>()) {
@@ -493,11 +495,11 @@ namespace CTRPluginFramework {
 					u8* islandMgr = netGameMgr + 0x27a0;
 
 					if (s32 result = getRandomMatchingResult.Call<s32>(islandMgr); result < 0) {
-						OSD::NotifySysFont("Failed to join island!", Color::Red);
+						OSD::NotifySysFont(language->get(TextID::FAILED_TO_JOIN_ISLAND), Color::Red);
 						state = Error;
 					} else if (result > 0) {
-						endAdmissionDemo.Call<bool>(islandMgr, false); //always returns true
-						OSD::NotifySysFont("Joined successfully!", Color::Green);
+						endSeaDepartureDemo.Call<bool>(islandMgr, false); //always returns true
+						OSD::NotifySysFont(language->get(TextID::JOIN_SUCCESS), Color::Green);
 						state = Init;
 						return true;
 					}
@@ -522,16 +524,18 @@ namespace CTRPluginFramework {
 			static State state = Init;
 
 			GameLoopHook::GetInstance()->Add(+[] {
+				auto* language = Language::getInstance();
+
 				if (state == Init) {
 					if (!connectBestFriend.Call<bool>()) {
-						OSD::NotifySysFont("Failed to initialize network!", Color::Red);
+						OSD::NotifySysFont(language->get(TextID::NET_INIT_FAILED), Color::Red);
 						return true;
 					}
-					OSD::NotifySysFont("Browsing, please wait...", Color::Yellow);
+					OSD::NotifySysFont(language->get(TextID::BROWSING), Color::Yellow);
 					state = Connect;
 				} else if (state == Connect) {
 					if (netIsError.Call<bool>(netInstance.addr)) {
-						OSD::NotifySysFont("Network error!", Color::Red);
+						OSD::NotifySysFont(language->get(TextID::NET_ERROR), Color::Red);
 						state = Init;
 						return true;
 					}
@@ -546,7 +550,7 @@ namespace CTRPluginFramework {
 			});
 		}
 
-		static void OnBrowseSessionsFinish() {
+		static void OnBrowseSessionsDone() {
 			auto& instance = GetInstance();
 
 			static constexpr auto makeMsg = [](size_t index) {
@@ -554,14 +558,14 @@ namespace CTRPluginFramework {
 				const auto& session = instance.sessionInfos[index];
 
 				return Utils::Format(
-					"Found %zu sessions.\n"
+					(Language::getInstance()->get(TextID::FOUND_SESSIONS) + "\n"
 					"Session ID: %08x %s\n"
 					"GameMode: %u\n"
 					"Host: %08x\n"
 					"Attributes:\n"
 					"[0]: %08x, [1]: %08x\n"
 					"[2]: %08x, [3]: %08x\n"
-					"[4]: %08x, [5]: %08x\n",
+					"[4]: %08x, [5]: %08x\n").data(),
 					instance.foundSessionCount, *(u32*)(session + 0x8), *(bool*)(session + 0x18) ? "" : "Closed",
 					*(u32*)(session + 0x4), *(u32*)(session + 0x444),
 					*(u32*)(session + 0x1c), *(u32*)(session + 0x20),
@@ -589,7 +593,7 @@ namespace CTRPluginFramework {
 				QuickJoinIsland();
 			}
 
-			*PluginMenu::GetRunningInstance() -= OnBrowseSessionsFinish;
+			*PluginMenu::GetRunningInstance() -= OnBrowseSessionsDone;
 		}
 
 		static void HandleBrowseSessionsCommand(u32 netSystem) {
@@ -613,11 +617,11 @@ namespace CTRPluginFramework {
 					instance.sessionInfos.data(), instance.sessionInfos.size());
 
 			if (instance.foundSessionCount == 0) {
-				OSD::NotifySysFont("No sessions found.", Color::Red);
+				OSD::NotifySysFont(Language::getInstance()->get(TextID::NO_SESSIONS_FOUND), Color::Red);
 				return;
 			}
 
-			PluginMenu::GetRunningInstance()->Callback(OnBrowseSessionsFinish);
+			PluginMenu::GetRunningInstance()->Callback(OnBrowseSessionsDone);
 		}
 
 		static NAKED void NetCommand25Hook() {
