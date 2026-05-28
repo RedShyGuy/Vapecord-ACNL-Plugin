@@ -118,7 +118,7 @@ namespace CTRPluginFramework {
 				default: return;
 			//Full Square
 				case 0: {
-					if(PluginUtils::Input::PromptNumber<u8>({ Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\n" << Language::getInstance()->get(TextID::DROP_RADIUS_MAX_VALUE) << " " << "0x15", true, 1, 0 }, val)) {
+					if(PluginUtils::Input::PromptNumber<u8>({ Language::getInstance()->get(TextID::DROP_MODS_RADIUS) << "\n" << Language::getInstance()->get(TextID::DROP_RADIUS_MAX_VALUE) << " " << "0x15", true, 2, 0 }, val)) {
 						if(val > 0x15) {
 							val = 0x15;
 						}
