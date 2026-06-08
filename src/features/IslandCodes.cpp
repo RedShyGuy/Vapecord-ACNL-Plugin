@@ -5,12 +5,15 @@
 #include "core/checks/IDChecks.hpp"
 #include "core/infrastructure/PluginUtils.hpp"
 #include "core/game_api/PlayerClass.hpp"
+#include "core/hooks/GameLoopHook.hpp"
 #include "core/ItemSequence.hpp"
 #include "core/game_api/Dropper.hpp"
 #include "core/game_api/Save.hpp"
 #include "core/game_api/Player.hpp"
 #include "Color.h"
 #include "Files.h"
+
+#include <array>
 
 extern "C" void PATCH_KappnBypass1(void);
 extern "C" void PATCH_KappnBypass2(void);
@@ -362,6 +365,310 @@ namespace CTRPluginFramework {
 					".dat"
 				);
 			} break;
+		}
+	}
+
+	class OnlineIslandOptions {
+	public:
+		static OnlineIslandOptions& GetInstance() {
+			static OnlineIslandOptions instance;
+			return instance;
+		}
+
+		void Enable() {
+			//needs setSessionInfoListBufferSize(0x512EB8) to be patched as well (already patched in FixPretendoFindSessionByOwnerCall)
+	
+			//change IslandFieldHeap size from 0x100000 to 0x45000
+			//creating this heap normally fails when joining the island from outside, since there is not enough space in parent heap
+			//decrease the size to allow that to work (seems like it doesn't actually need the full 0x100000)
+			setIslandFieldHeapSize.Patch(0xB0852445);
+			setIslandFieldHeapSize2.Patch(0xA10A0324);
+
+			//BrowseSessions utilizes unused net command 0x25 
+			netCmdHook.Initialize(netCmdStub25.addr, (u32)NetCommand25Hook);
+			netCmdHook.SetFlags(USE_LR_TO_RETURN);
+			netCmdHook.Enable();
+
+			//replaces the JoinRandomSession call with JoinSessionById if joinSessionId is set
+			joinRandomSessionCallHook.Initialize(joinRandomSessionCall.addr, (u32)JoinRandomSessionCallHook);
+			joinRandomSessionCallHook.SetFlags(USE_LR_TO_RETURN);
+			joinRandomSessionCallHook.Enable();
+		}
+
+		void Disable() {
+			setIslandFieldHeapSize.Unpatch();
+			setIslandFieldHeapSize2.Unpatch();
+
+			netCmdHook.Disable();
+			joinRandomSessionCallHook.Disable();
+
+			joinSessionId = 0;
+		}
+
+		void OpenOptions() {
+			const std::vector<std::string> options = {
+				Language::getInstance()->get(TextID::ISLAND_QUICK_JOIN),
+				Language::getInstance()->get(TextID::ISLAND_BROWSE_SESSIONS),
+			};
+
+			Keyboard KB(Language::getInstance()->get(TextID::KEY_CHOOSE_OPTION), options);
+			if (int index = KB.Open(); index == 0) {
+				QuickJoinIsland();
+			} else if (index == 1) {
+				BrowseSessions();
+			}
+		}
+
+	private:
+		static void QuickJoinIsland() {
+			static Address netGameMgrInstance{0x954648};
+			static Address netInstance{0xA23020};
+			static Address initNet{0x617BE8};
+			static Address netIsError{0x747C44};
+			static Address connectRandomMatch{0x61937C};
+			static Address islandFieldHeapPtr{0x953C60};
+			static Address stageHeapPtr{0x953C4C};
+			static Address createIslandFieldHeap{0x10C404};
+			static Address resetTripRequestInfo{0x283328};
+			static Address startFindRandomMatch{0x61E3B0};
+			static Address disconnectAndFiniNet{0x627368};
+			static Address getRandomMatchingResult{0x75F09C};
+			static Address endSeaDepartureDemo{startFindRandomMatch.MoveOffset(0x38)};
+
+			enum class State : u32 {
+				Init,
+				Connect,
+				Error,
+				Match
+			};
+
+			using enum State;
+			static State state = Init;
+
+			GameLoopHook::GetInstance()->Add(+[] {
+				auto& instance = GetInstance();
+				auto* language = Language::getInstance();
+				u8* netGameMgr = *reinterpret_cast<u8**>(netGameMgrInstance.addr);
+
+				if (state == Init) {
+					if (*(netGameMgr + 0x13266) != 6) {
+						OSD::NotifySysFont(language->get(TextID::ALREADY_IN_SESSION), Color::Red);
+						instance.joinSessionId = 0;
+						return true;
+					}
+
+					if (!initNet.Call<bool>()) {
+						OSD::NotifySysFont(language->get(TextID::NET_INIT_FAILED), Color::Red);
+						instance.joinSessionId = 0;
+						return true;
+					}
+
+					OSD::NotifySysFont(language->get(TextID::CONNECTING), Color::Yellow);
+					state = Connect;
+				} else if (state == Connect) {
+					if (netIsError.Call<bool>(netInstance.addr)) {
+						OSD::NotifySysFont(language->get(TextID::NET_ERROR), Color::Red);
+						state = Error;
+						return false;
+					}
+
+					if (connectRandomMatch.Call<bool>(netGameMgr)) {
+						void* islandFieldHeap = *reinterpret_cast<void**>(islandFieldHeapPtr.addr);
+						void* stageHeap = *reinterpret_cast<void**>(stageHeapPtr.addr);
+						if (islandFieldHeap == nullptr && createIslandFieldHeap.Call<void*>(stageHeap) == nullptr) {
+							OSD::NotifySysFont(language->get(TextID::OUT_OF_MEMORY), Color::Red);
+							state = Error;
+							return false;
+						}
+
+						resetTripRequestInfo.Call<void>(); //called from ModuleEventDemo+0x9778
+						Game::ChangeGameMode(Game::GameMode::RANDOM_MATCH);
+						startFindRandomMatch.Call<bool>(netGameMgr + 0x27a0); //always returns true
+						OSD::NotifySysFont(language->get(TextID::JOINING), Color::Yellow);
+						state = Match;
+					}
+				} else if (state == Error && disconnectAndFiniNet.Call<bool>()) {
+					state = Init;
+					instance.joinSessionId = 0;
+					return true;
+				} else if (state == Match) {
+					u8* islandMgr = netGameMgr + 0x27a0;
+
+					if (s32 result = getRandomMatchingResult.Call<s32>(islandMgr); result < 0) {
+						OSD::NotifySysFont(language->get(TextID::FAILED_TO_JOIN_ISLAND), Color::Red);
+						state = Error;
+					} else if (result > 0) {
+						endSeaDepartureDemo.Call<bool>(islandMgr, false); //always returns true
+						OSD::NotifySysFont(language->get(TextID::JOIN_SUCCESS), Color::Green);
+						state = Init;
+						return true;
+					}
+				}
+				return false;
+			});
+		}
+
+		static void BrowseSessions() {
+			static Address netInstance(0xA23020);
+			static Address netIsError(0x747C44);
+			static Address connectBestFriend(0x62739C); //initializes network automatically
+			static Address isConnectedBestFriend(0x626218);
+			static Address netFrameworkProcessCmd(0x132AC8);
+
+			enum class State : u32 {
+				Init,
+				Connect,
+			};
+
+			using enum State;
+			static State state = Init;
+
+			GameLoopHook::GetInstance()->Add(+[] {
+				auto* language = Language::getInstance();
+
+				if (state == Init) {
+					if (!connectBestFriend.Call<bool>()) {
+						OSD::NotifySysFont(language->get(TextID::NET_INIT_FAILED), Color::Red);
+						return true;
+					}
+					OSD::NotifySysFont(language->get(TextID::BROWSING), Color::Yellow);
+					state = Connect;
+				} else if (state == Connect) {
+					if (netIsError.Call<bool>(netInstance.addr)) {
+						OSD::NotifySysFont(language->get(TextID::NET_ERROR), Color::Red);
+						state = Init;
+						return true;
+					}
+
+					u32 framework = *reinterpret_cast<u32*>(netInstance.addr + 0xb8);
+					if (isConnectedBestFriend.Call<bool>() && netFrameworkProcessCmd.Call<bool>(framework, 0x25, nullptr)) {
+						state = Init;
+						return true;
+					}
+				}
+				return false;
+			});
+		}
+
+		static void OnBrowseSessionsDone() {
+			auto& instance = GetInstance();
+
+			static constexpr auto makeMsg = [](size_t index) {
+				const auto& instance = GetInstance();
+				const auto& session = instance.sessionInfos[index];
+
+				return Utils::Format(
+					(Language::getInstance()->get(TextID::FOUND_SESSIONS) + "\n"
+					"Session ID: %08x %s\n"
+					"GameMode: %u\n"
+					"Host: %08x\n"
+					"Attributes:\n"
+					"[0]: %08x, [1]: %08x\n"
+					"[2]: %08x, [3]: %08x\n"
+					"[4]: %08x, [5]: %08x\n").data(),
+					instance.foundSessionCount, *(u32*)(session + 0x8), *(bool*)(session + 0x18) ? "" : "Closed",
+					*(u32*)(session + 0x4), *(u32*)(session + 0x444),
+					*(u32*)(session + 0x1c), *(u32*)(session + 0x20),
+					*(u32*)(session + 0x24), *(u32*)(session + 0x28),
+					*(u32*)(session + 0x2c), *(u32*)(session + 0x30)
+				);
+			};
+
+			std::vector<std::string> options;
+			options.reserve(instance.foundSessionCount);
+			for (size_t i = 0; i < instance.foundSessionCount; i++) {
+				const auto& session = instance.sessionInfos[i];
+				const bool isOpened = *(bool*)(session + 0x18);
+				options.push_back(Utils::Format("%08x: [%u/4] %s", *(u32*)(session + 0x8), *(u32*)(session + 0xc), isOpened ? " " : "-"));
+			}
+
+			Keyboard KB(makeMsg(0), options);
+			KB.OnKeyboardEvent(+[](Keyboard& kb, KeyboardEvent& event) {
+				if (event.type != KeyboardEvent::SelectionChanged) return;
+				kb.GetMessage() = makeMsg(static_cast<size_t>(event.selectedIndex));
+			});
+
+			if (int index = KB.Open(); index >= 0) {
+				instance.joinSessionId = *(u32*)(instance.sessionInfos[index] + 0x8);
+				QuickJoinIsland();
+			}
+
+			*PluginMenu::GetRunningInstance() -= OnBrowseSessionsDone;
+		}
+
+		static void HandleBrowseSessionsCommand(u32 netSystem) {
+			static Address nexSessionSearchCriteriaConstructor(0x40BC10);
+			static Address setMaxParticipants(0x40B358);
+			static Address setMinParticipants(setMaxParticipants.MoveOffset(0x20));
+			static Address setOpenedOnly(setMaxParticipants.MoveOffset(-0x54));
+			static Address searchSessions(0x51173C);
+			static Address joinSessionById(0x514BAC);
+			auto& instance = GetInstance();
+
+			u8 searchCriteria[0xa18];
+			nexSessionSearchCriteriaConstructor.Call<void>(searchCriteria);
+			searchCriteria[4] = 2;
+			*(u32*)&searchCriteria[0xc] = sessionBufSize;
+			setMinParticipants.Call<void>(searchCriteria, 1);
+			setMaxParticipants.Call<void>(searchCriteria, 4);
+			setOpenedOnly.Call<void>(searchCriteria, false);
+
+			instance.foundSessionCount = searchSessions.Call<size_t>(netSystem + 0xc, searchCriteria,
+					instance.sessionInfos.data(), instance.sessionInfos.size());
+
+			if (instance.foundSessionCount == 0) {
+				OSD::NotifySysFont(Language::getInstance()->get(TextID::NO_SESSIONS_FOUND), Color::Red);
+				return;
+			}
+
+			PluginMenu::GetRunningInstance()->Callback(OnBrowseSessionsDone);
+		}
+
+		static NAKED void NetCommand25Hook() {
+			asm(R"(
+				MOV R0, R4
+				B %a0
+			)" : : "i" (HandleBrowseSessionsCommand));
+		}
+
+		static bool JoinRandomSessionCallHook(u32 netImpl, u32 countryCode) {
+			auto& instance = GetInstance();
+			if (u32 sessionId = instance.joinSessionId; sessionId != 0) {
+				instance.joinSessionId = 0;
+				return instance.joinSessionById.Call<u32>(netImpl, sessionId) == 0;
+			}
+
+			const HookContext& curr = HookContext::GetCurrent();
+			static Address func = Address::decodeARMBranch(curr.targetAddress, curr.overwrittenInstr);
+			return func.Call<bool>(netImpl, countryCode);
+		}
+
+		static constexpr u32 sessionBufSize = 18;
+
+		Address setIslandFieldHeapSize{Address(0x10C404).MoveOffset(0xa)};
+		Address setIslandFieldHeapSize2 = setIslandFieldHeapSize.MoveOffset(6);
+		Address netCmdStub25{0x5188D0};
+		Address joinRandomSessionCall{0x5177C4};
+		Address joinSessionById{0x514BAC};
+		Hook netCmdHook;
+		Hook dispatchAutoMatchmakeHook;
+		Hook joinRandomSessionCallHook;
+
+		std::array<u8*, sessionBufSize> sessionInfos;
+		size_t foundSessionCount = 0;
+		u32 joinSessionId = 0;
+	};
+
+	void IslandOnlineOptions(MenuEntry *entry) {
+		if (entry->WasJustActivated()) {
+			OnlineIslandOptions::GetInstance().Enable();
+		} else if (!entry->IsActivated()) {
+			OnlineIslandOptions::GetInstance().Disable();
+			return;
+		}
+
+		if (entry->Hotkeys[0].IsPressed()) {
+			OnlineIslandOptions::GetInstance().OpenOptions();
 		}
 	}
 }

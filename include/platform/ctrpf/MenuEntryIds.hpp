@@ -156,6 +156,7 @@ namespace CTRPluginFramework {
 		constexpr u32 IslandAcre = Make(GroupIsland, 0x0007);
 		constexpr u32 IslandBuilding = Make(GroupIsland, 0x0008);
 		constexpr u32 IslandSaver = Make(GroupIsland, 0x0009);
+		constexpr u32 IslandOnlineOptions = Make(GroupIsland, 0x000A);
 
 		// NPC folder
 		constexpr u32 NpcSelector = Make(GroupNpc, 0x0001);
