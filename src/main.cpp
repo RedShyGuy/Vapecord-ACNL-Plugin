@@ -147,7 +147,7 @@ Translators: NeitherHateNorLike(Chinese Simplified & Traditional), みるえも�
 
 	//Patch Pretendo + RCE fix + PIA Logger
         PatternManager pm;
-		//initPiaLogger(pm);
+		initPiaLogger(pm);
         initPretendoPatches(pm);
 
 		pm.Perform();
