@@ -1,3 +1,5 @@
+<img src="./assets/icon/vapecord optimized.svg" alt="drawing" width="200"/>
+
 # Vapecord-ACNL-Plugin
 
 ## Plugin
