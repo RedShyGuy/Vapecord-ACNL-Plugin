@@ -445,6 +445,11 @@ namespace CTRPluginFramework {
 			using enum State;
 			static State state = Init;
 
+			if (!PlayerClass::GetInstance()->IsLoaded()) {
+				OSD::NotifySysFont(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
+				return;
+			}
+
 			GameLoopHook::GetInstance()->Add(+[] {
 				auto& instance = GetInstance();
 				auto* language = Language::getInstance();
