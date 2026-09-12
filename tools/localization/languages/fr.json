@@ -1033,7 +1033,7 @@
     "FILE_RES2": "Aucun fichier trouvé!",
     "FILE_RES3": "Erreur\nFichier non effacé.",
     "SAVE_REMINDER_SETTINGS": "Rappels de sauvegarde",
-    "SAVE_REMINDER_MESSAGE": "Rappel : N'oublie pas de sauvegarder ta partie ! \uE008",
+    "SAVE_REMINDER_MESSAGE": "Rappel : N'oublie pas de sauvegarder ta partie ! :)",
     "SAVE_REMINDER_INTERVAL": "Intervalle : %d min",
     "SAVE_REMINDER_INTERVAL_PROMPT": "Entre l'intervalle en minutes (5-120) :",
     "SCAM_TITLE": "! Avis important !",

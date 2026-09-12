@@ -1032,7 +1032,7 @@
     "FILE_RES2": "Error\nCouldn't find any files to delete.",
     "FILE_RES3": "Error\nCouldn't delete file.",
     "SAVE_REMINDER_SETTINGS": "Save Reminders",
-    "SAVE_REMINDER_MESSAGE": "Reminder: Don't forget to save your game! \uE008",
+    "SAVE_REMINDER_MESSAGE": "Reminder: Don't forget to save your game! :)",
     "SAVE_REMINDER_INTERVAL": "Interval: %d min",
     "SAVE_REMINDER_INTERVAL_PROMPT": "Enter interval in minutes (5-120):",
     "SCAM_TITLE": "! Important Notice !",

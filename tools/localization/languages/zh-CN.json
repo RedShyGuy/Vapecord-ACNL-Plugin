@@ -1033,7 +1033,7 @@
     "FILE_RES2": "错误\n找不到任何要删除的文件",
     "FILE_RES3": "错误\n无法删除文件",
     "SAVE_REMINDER_SETTINGS": "存档提醒",
-    "SAVE_REMINDER_MESSAGE": "提醒：别忘了保存游戏！ \uE008",
+    "SAVE_REMINDER_MESSAGE": "提醒：别忘了保存游戏！ :)",
     "SAVE_REMINDER_INTERVAL": "间隔: %d 分钟",
     "SAVE_REMINDER_INTERVAL_PROMPT": "请输入间隔分钟数 (5-120):",
     "SCAM_TITLE": "！ 重要通知 ！",

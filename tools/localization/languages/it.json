@@ -1033,7 +1033,7 @@
     "FILE_RES2": "Nessun file trovato!",
     "FILE_RES3": "Errore\nImpossibile eliminare il file.",
     "SAVE_REMINDER_SETTINGS": "Promemoria di salvataggio",
-    "SAVE_REMINDER_MESSAGE": "Promemoria: Non dimenticare di salvare il gioco! \uE008",
+    "SAVE_REMINDER_MESSAGE": "Promemoria: Non dimenticare di salvare il gioco! :)",
     "SAVE_REMINDER_INTERVAL": "Intervallo: %d min",
     "SAVE_REMINDER_INTERVAL_PROMPT": "Inserisci l'intervallo in minuti (5-120):",
     "SCAM_TITLE": "! Avviso importante !",

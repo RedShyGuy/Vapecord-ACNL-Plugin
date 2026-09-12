@@ -66,6 +66,7 @@ namespace CTRPluginFramework {
 		}
 
 		std::vector<std::string> strings1 = { "", "", "", "", "", "" };
+		HUD::TagColor pColors[4] = { HUD::Blue, HUD::Red, HUD::Green, HUD::Orange };
 
 		void GetPlayerInfoData(void) {
 			u8 pIndex = Game::GetOnlinePlayerIndex();
@@ -115,16 +116,16 @@ namespace CTRPluginFramework {
 				return true;
 			}
 
-			std::string text = Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_PLAYER).c_str(), pIndex + 1);
+			HUD::Text text = pColors[pIndex] << Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_PLAYER).c_str(), pIndex + 1) << HUD::White;
 
 			for (int i = 0; i < 6; ++i) {
 				if(!strings1.at(i).empty()) {
-					text += "\n";
-					text += strings1.at(i);
+					text << "\n";
+					text << strings1.at(i);
 				}
 			}
 
-			HUD::Draw(0.0f, 0.0f, text, Color::White);
+			HUD::Draw(0.0f, 0.0f, text);
 
 			return true;
 		}

@@ -75,8 +75,7 @@ namespace HUD {
         struct State {
             gardenex::MessageDisplay notify;
             PersistSlot slots[PERSIST_SLOTS];
-            DrawSlot drawSlots[DRAW_SLOTS];
-            u32 drawSlotCount = 0;
+            DrawSlot drawScratch;
             LightLock callbackLock{};
             std::vector<Callback> callbacks;
             std::vector<Callback> callbacksTrash;
@@ -99,11 +98,7 @@ namespace HUD {
                 return;
             }
 
-            if (s_State->drawSlotCount >= DRAW_SLOTS) {
-                return;
-            }
-
-            auto& slot = s_State->drawSlots[s_State->drawSlotCount++];
+            auto& slot = s_State->drawScratch;
             slot.Set(text, x, y, bottomScreen, rgbColor);
 
             ssys::ma::lyt::LayoutMgr::Get()->DrawBegin(bottomScreen);
@@ -114,8 +109,6 @@ namespace HUD {
             if (!s_State) {
                 return;
             }
-
-            s_State->drawSlotCount = 0;
 
         //Transient notifications on the top screen
             ssys::ma::lyt::LayoutMgr::Get()->DrawBegin(false);
@@ -186,6 +179,12 @@ namespace HUD {
             }
             return buf;
         }
+
+        std::u16string WithResetTag(const Text& text) {
+            std::u16string buf = text.str();
+            buf.append(White.tag); // reset color so following draws are not affected
+            return buf;
+        }
     }
 
     void Init() {
@@ -215,8 +214,7 @@ namespace HUD {
         if (!s_State) {
             return;
         }
-        std::u16string buf = text.str();
-        buf.append(White.tag); //we reset the color back to white so no color leaking occurs
+        std::u16string buf = WithResetTag(text);
         s_State->notify.Show(std::u16string_view{buf});
     }
 
@@ -264,7 +262,8 @@ namespace HUD {
             return;
         }
 
-        DrawImmediate(x, y, std::u16string_view{text.str()}, bottomScreen);
+        std::u16string buf = WithResetTag(text);
+        DrawImmediate(x, y, std::u16string_view{buf}, bottomScreen);
     }
 
     Handle Show(float x, float y, const std::string& str, const Color& color, bool bottomScreen) {
@@ -287,10 +286,11 @@ namespace HUD {
         if (!s_State) {
             return INVALID;
         }
+        std::u16string buf = WithResetTag(text);
         for (u32 i = 0; i < PERSIST_SLOTS; i++) {
             if (!s_State->slots[i].active) {
             //a==0 = tag-mode, inline tags in the text
-                s_State->slots[i].Set(std::u16string_view{text.str()}, x, y, bottomScreen);
+                s_State->slots[i].Set(std::u16string_view{buf}, x, y, bottomScreen);
                 return i;
             }
         }
@@ -322,6 +322,7 @@ namespace HUD {
         }
 
         auto& slot = s_State->slots[h];
-        slot.Set(std::u16string_view{text.str()}, slot.pos.x, slot.pos.y, slot.bottomScreen);
+        std::u16string buf = WithResetTag(text);
+        slot.Set(std::u16string_view{buf}, slot.pos.x, slot.pos.y, slot.bottomScreen);
     }
 }
