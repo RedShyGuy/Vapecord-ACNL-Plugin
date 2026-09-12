@@ -1,5 +1,5 @@
 #include "features/cheats.hpp"
-
+#include "core/HUD.hpp"
 #include "core/game_api/Game.hpp"
 #include "core/game_api/PlayerClass.hpp"
 #include "core/checks/IDChecks.hpp"
@@ -85,21 +85,21 @@ namespace CTRPluginFramework {
 			if(pChoice >= 0) {
 				if(validPlayerOption[pChoice]) {
 					TogglePlayerSelect(pChoice);
-					OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::PLAYER_SELECT_CONTROLLING_ENABLED).c_str(), pChoice + 1));
+					HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::PLAYER_SELECT_CONTROLLING_ENABLED).c_str(), pChoice + 1));
 				}
 				else {
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::PLAYER_SELECT_PLAYER_NOT_EXISTS), Color::Red);
+					HUD::Notify(Language::getInstance()->get(TextID::PLAYER_SELECT_PLAYER_NOT_EXISTS), Color::Red);
 				}
 			}
 		}
 
 		else if(entry->Hotkeys[1].IsPressed()) {
 			if(IsPlayerSelectEnabled) {
-				OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::PLAYER_SELECT_CONTROLLING_DISABLED).c_str(), *(u8 *)(Address(0x75F010).addr + 0x10) + 1));
+				HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::PLAYER_SELECT_CONTROLLING_DISABLED).c_str(), *(u8 *)(Address(0x75F010).addr + 0x10) + 1));
 				TogglePlayerSelect(4);
 				return;
 			}
-			OSD::NotifySysFont(Language::getInstance()->get(TextID::PLAYER_SELECT_NOT_SELECTED), Color::Red);
+			HUD::Notify(Language::getInstance()->get(TextID::PLAYER_SELECT_NOT_SELECTED), Color::Red);
 		}
 
 		if(!entry->IsActivated()) {
@@ -202,32 +202,32 @@ namespace CTRPluginFramework {
 			switch(mode) {
 				default: break;
 				case 0:
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::ANIM_MOD_ANIM_MODE), Color::Red);
+					HUD::Notify(Language::getInstance()->get(TextID::ANIM_MOD_ANIM_MODE), Color::Red);
 					mode++;
 					setmode = 1;
 				break;
 				case 1:
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::ANIM_MOD_TOOL_MODE), Color::Orange);
+					HUD::Notify(Language::getInstance()->get(TextID::ANIM_MOD_TOOL_MODE), Color::Orange);
 					mode++;
 					setmode = 2;
 				break;
 				case 2:
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::ANIM_MOD_SNAKE_MODE), Color::Lime);
+					HUD::Notify(Language::getInstance()->get(TextID::ANIM_MOD_SNAKE_MODE), Color::Lime);
 					mode++;
 					setmode = 3;
 				break;
 				case 3:
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::ANIM_MOD_EMOTION_MODE), Color::Cyan);
+					HUD::Notify(Language::getInstance()->get(TextID::ANIM_MOD_EMOTION_MODE), Color::Cyan);
 					mode++;
 					setmode = 4;
 				break;
 				case 4:
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::ANIM_MOD_SOUND_MODE), Color::Magenta);
+					HUD::Notify(Language::getInstance()->get(TextID::ANIM_MOD_SOUND_MODE), Color::Magenta);
 					mode++;
 					setmode = 5;
 				break;
 				case 5:
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::ANIM_MOD_APPEARANCE_MODE), Color::Yellow);
+					HUD::Notify(Language::getInstance()->get(TextID::ANIM_MOD_APPEARANCE_MODE), Color::Yellow);
 					mode = mode - 5;
 					setmode = 6;
 				break;
@@ -263,7 +263,7 @@ namespace CTRPluginFramework {
 
 		else if(entry->Hotkeys[2].IsPressed()) {
 			speedmode = !speedmode;
-			OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::ANIM_MOD_SPEED_MODE).c_str(), (speedmode ? Color::Green << Language::getInstance()->get(TextID::STATE_ON) : Color::Red << Language::getInstance()->get(TextID::STATE_OFF))));
+			HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::ANIM_MOD_SPEED_MODE).c_str(), (speedmode ? HUD::Green << Language::getInstance()->get(TextID::STATE_ON) : HUD::Red << Language::getInstance()->get(TextID::STATE_OFF))));
 		}
 
 		if(entry->Hotkeys[3].IsPressed()) {

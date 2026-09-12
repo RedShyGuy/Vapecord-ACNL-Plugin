@@ -1,5 +1,5 @@
 #include "features/cheats.hpp"
-
+#include "core/HUD.hpp"
 #include "core/infrastructure/PluginUtils.hpp"
 #include "core/checks/IDChecks.hpp"
 #include "core/game_api/Inventory.hpp"
@@ -145,12 +145,12 @@ namespace CTRPluginFramework {
 			if(!pickItemHook.IsEnabled()) {
 				pickItemHook.Enable();
 				closeholeItemHook.Enable();
-				OSD::NotifySysFont(Color::Magenta << Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_ITEM) << Color::Green << " " + Language::getInstance()->get(TextID::STATE_ON)); //Enabled Seeding
+				HUD::Notify(HUD::Pink << Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_ITEM) << HUD::Green << " " + Language::getInstance()->get(TextID::STATE_ON)); //Enabled Seeding
 			}
 			else {
 				pickItemHook.Disable();
 				closeholeItemHook.Disable();
-				OSD::NotifySysFont(Color::Turquoise << Language::getInstance()->get(TextID::PICKUP_SEEDER_REMOVE_ITEM) << Color::Green << " " + Language::getInstance()->get(TextID::STATE_ON)); //Disabled Seeding
+				HUD::Notify(HUD::Blue << Language::getInstance()->get(TextID::PICKUP_SEEDER_REMOVE_ITEM) << HUD::Green << " " + Language::getInstance()->get(TextID::STATE_ON)); //Disabled Seeding
 			}
         }
 
@@ -165,7 +165,7 @@ namespace CTRPluginFramework {
 				speedHook.Disable();
 			}
 
-			OSD::NotifySysFont(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_SPEED) << (speedHook.IsEnabled() ? Color::Green << " " + Language::getInstance()->get(TextID::STATE_ON) : Color::Red << " " + Language::getInstance()->get(TextID::STATE_OFF)));
+			HUD::Notify(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_SPEED) << (speedHook.IsEnabled() ? HUD::Green << " " + Language::getInstance()->get(TextID::STATE_ON) : HUD::Red << " " + Language::getInstance()->get(TextID::STATE_OFF)));
 		}
 
 	//Switches Modes of Pickup
@@ -177,27 +177,27 @@ namespace CTRPluginFramework {
 				case 0:
 					Mode++;
 					Index = 0;
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_TYPE) + Language::getInstance()->get(TextID::PICKUP_SEEDER_TYPE_PICKUP), Color::Red);
+					HUD::Notify(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_TYPE) + Language::getInstance()->get(TextID::PICKUP_SEEDER_TYPE_PICKUP), Color::Red);
 				break;
 				case 1:
 					Mode++;
 					Index = 1;
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_TYPE) + Language::getInstance()->get(TextID::PICKUP_SEEDER_TYPE_PLUCK), Color::Orange);
+					HUD::Notify(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_TYPE) + Language::getInstance()->get(TextID::PICKUP_SEEDER_TYPE_PLUCK), Color::Orange);
 				break;
 				case 2:
 					Mode++;
 					Index = 2;
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_TYPE) + Language::getInstance()->get(TextID::PICKUP_SEEDER_TYPE_FLIPDROP), Color::Green);
+					HUD::Notify(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_TYPE) + Language::getInstance()->get(TextID::PICKUP_SEEDER_TYPE_FLIPDROP), Color::Green);
 				break;
 				case 3:
 					Mode++;
 					Index = 3;
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_TYPE) + Language::getInstance()->get(TextID::PICKUP_SEEDER_TYPE_ROCKBREAK), Color::Blue);
+					HUD::Notify(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_TYPE) + Language::getInstance()->get(TextID::PICKUP_SEEDER_TYPE_ROCKBREAK), Color::Blue);
 				break;
 				case 4:
 					Mode = 0;
 					Index = 4;
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_TYPE) + Language::getInstance()->get(TextID::PICKUP_SEEDER_TYPE_DIGHOLE), Color::Purple);
+					HUD::Notify(Language::getInstance()->get(TextID::PICKUP_SEEDER_SEED_TYPE) + Language::getInstance()->get(TextID::PICKUP_SEEDER_TYPE_DIGHOLE), Color::Purple);
 				break;
 			}
 
@@ -214,7 +214,7 @@ namespace CTRPluginFramework {
 				AutoPick[i].Patch(AutoPatch[IsON][i]);
 			}
 
-            OSD::NotifySysFont(Language::getInstance()->get(TextID::PICKUP_SEEDER_AUTO_PICKUP) << (IsON ? Color::Red << Language::getInstance()->get(TextID::STATE_OFF) : Color::Green << Language::getInstance()->get(TextID::STATE_ON)));
+            HUD::Notify(Language::getInstance()->get(TextID::PICKUP_SEEDER_AUTO_PICKUP) << (IsON ? HUD::Red << Language::getInstance()->get(TextID::STATE_OFF) : HUD::Green << Language::getInstance()->get(TextID::STATE_ON)));
 		}
 
 		if(!entry->IsActivated()) {
@@ -249,12 +249,12 @@ namespace CTRPluginFramework {
 		if(entry->Hotkeys[0].IsPressed()) {
 			if (!set) {
 				walkseed.Patch(0xEA000014);
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::WALK_SEEDER_DELETE_ITEMS) << Color::Green << Language::getInstance()->get(TextID::STATE_ON));
+				HUD::Notify(Language::getInstance()->get(TextID::WALK_SEEDER_DELETE_ITEMS) << HUD::Green << Language::getInstance()->get(TextID::STATE_ON));
 				set = true;
 			}
 			else {
 				walkseed.Unpatch();
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::WALK_SEEDER_DELETE_ITEMS) << Color::Red << Language::getInstance()->get(TextID::STATE_OFF));
+				HUD::Notify(Language::getInstance()->get(TextID::WALK_SEEDER_DELETE_ITEMS) << HUD::Red << Language::getInstance()->get(TextID::STATE_OFF));
 				set = false;
 			}
 		}
@@ -367,7 +367,7 @@ namespace CTRPluginFramework {
 				OSD::Run(editorID);
 
 				Process::Patch(Address(0x1A51C8).addr, 0xE8BD81F0);
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::MAP_EDITOR) + " " << Color::Green << Language::getInstance()->get(TextID::STATE_ON));
+				HUD::Notify(Language::getInstance()->get(TextID::MAP_EDITOR) + " " << HUD::Green << Language::getInstance()->get(TextID::STATE_ON));
 				MapEditorActive = true;
 
 				*(float *)(Camera::GetInstance() + 4) = (float)(selectedX * 0x20 + 0x10);
@@ -427,7 +427,7 @@ namespace CTRPluginFramework {
 					size = 0;
 				}
 
-				OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::MAP_EDITOR_SIZE_SET).c_str(), size));
+				HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::MAP_EDITOR_SIZE_SET).c_str(), size));
 			}
 
 			if(RuntimeContext::getInstance()->isTurbo() ? entry->Hotkeys[6].IsDown() : entry->Hotkeys[6].IsPressed()) { //Place (A)
@@ -487,7 +487,7 @@ namespace CTRPluginFramework {
 			OSD::Stop(editorID);
 
 			Process::Patch(Address(0x1A51C8).addr, 0xE2805C01);
-			OSD::NotifySysFont(Language::getInstance()->get(TextID::MAP_EDITOR) + " " << Color::Red << Language::getInstance()->get(TextID::STATE_OFF));
+			HUD::Notify(Language::getInstance()->get(TextID::MAP_EDITOR) + " " << HUD::Red << Language::getInstance()->get(TextID::STATE_OFF));
 
 			MapEditorActive = false;
 		}

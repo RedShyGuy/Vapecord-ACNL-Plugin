@@ -1,5 +1,5 @@
 #include "core/Config.hpp"
-
+#include "core/HUD.hpp"
 #include "Files.h"
 #include "core/infrastructure/Address.hpp"
 
@@ -364,7 +364,7 @@ namespace CTRPluginFramework {
     void Config::HandleConfigMigration() {
 		if (IsConfigOutdated()) {
 			UpdateConfig();
-            OSD::NotifySysFont("Plugin configuration was migrated", Color::Purple);
+            HUD::Notify("Plugin configuration was migrated", Color::Purple);
 		}
 
 		const std::string region = Address::regionName;

@@ -4,6 +4,7 @@
 #include "Files.h"
 #include "core/Config.hpp"
 #include "features/cheats.hpp"
+#include "core/HUD.hpp"
 
 namespace CTRPluginFramework {
 	namespace {
@@ -51,8 +52,8 @@ namespace CTRPluginFramework {
 			}
 
 			if (options.showRangeNotifications) {
-				OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::WRAPPER_ADDRESS).c_str(), range.address));
-				OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::WRAPPER_LENGTH).c_str(), range.length));
+				HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::WRAPPER_ADDRESS).c_str(), range.address));
+				HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::WRAPPER_LENGTH).c_str(), range.length));
 			}
 		}
 

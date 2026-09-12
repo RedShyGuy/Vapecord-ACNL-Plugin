@@ -1,28 +1,30 @@
+#include "core/HUD.hpp"
 #include "core/game_api/Game.hpp"
 
 namespace CTRPluginFramework {
 
-	int UI_Pos = 0;
+	static const char* s_SpinnerFrames[] = {
+		"|", "/", "-", "\\",
+		"|", "/", "-", "\\"
+	};
+	static constexpr int SPINNER_FRAMES = 8;
 
-	std::string GetLoad(void) {
-		switch(UI_Pos) {
-			case 0: return "\uE020";
-			case 1: return "\uE021";		
-			case 2: return "\uE022";		
-			case 3: return "\uE023";		
-			case 4: return "\uE024";		
-			case 5: return "\uE025";
-			case 6: return "\uE026";
-			case 7: return "\uE027";
-		}
-		return "";
-	}
+	void SleepTime(void) {
+		constexpr int tick_ms = 150;
+		static constexpr Color spinnerColor{255, 0, 247};
 
-	bool OSD_SplashScreen(const Screen &Splash) {
-		if(Splash.IsTop) {
-			Splash.DrawSysfont("Waiting for game to load " << GetLoad(), 7, 10, Color(255, 0, 247));
+		std::string text = "Waiting for game to load |";
+		HUD::Handle handle = HUD::Show(7.0f, 10.0f, text, spinnerColor);
+
+		int frame = 0;
+		while (Game::IsRoomLoading()) {
+			frame = (frame + 1) % SPINNER_FRAMES;
+			text = "Waiting for game to load ";
+			text += s_SpinnerFrames[frame];
+			HUD::Update(handle, text, spinnerColor);
+			Sleep(Milliseconds(tick_ms));
 		}
-			
-		return true;
+
+		HUD::Hide(handle);
 	}
 }

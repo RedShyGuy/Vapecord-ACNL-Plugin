@@ -10,6 +10,7 @@
 #include "core/RuntimeContext.hpp"
 #include "core/infrastructure/Language.hpp"
 #include "core/infrastructure/TextID.hpp"
+#include "core/HUD.hpp"
 
 namespace CTRPluginFramework {
 	namespace Game {
@@ -329,7 +330,7 @@ namespace CTRPluginFramework {
 
 							Controller::Update();
 							if(Controller::IsKeyPressed(Key::B) && allowAbort) {
-								OSD::NotifySysFont(Language::getInstance()->get(TextID::SEARCH_REPLACE_ABORT));
+								HUD::Notify(Language::getInstance()->get(TextID::SEARCH_REPLACE_ABORT));
 								goto end;
 							}
 						}
@@ -362,7 +363,7 @@ namespace CTRPluginFramework {
 			}
 
 			if(counting) {
-				OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::SEARCH_REPLACE_REPLACED).c_str(), count));
+				HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::SEARCH_REPLACE_REPLACED).c_str(), count));
 			}
 
 			return true;

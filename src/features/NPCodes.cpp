@@ -6,6 +6,7 @@
 #include "core/game_api/PlayerClass.hpp"
 #include "core/game_api/Dropper.hpp"
 #include "core/RuntimeContext.hpp"
+#include "core/HUD.hpp"
 
 namespace CTRPluginFramework {
     static u32 CurrAddress = 0;
@@ -152,7 +153,7 @@ namespace CTRPluginFramework {
 			pCoords[0] = coords[0];
 			pCoords[1] = coords[1];
 			pCoords[2] = coords[2];
-			OSD::NotifySysFont(Language::getInstance()->get(TextID::NPC_TELEPORTED_TO_YOU), Color(0x00FA9AFF));
+			HUD::Notify(Language::getInstance()->get(TextID::NPC_TELEPORTED_TO_YOU), Color(0x00FA9AFF));
 		}
 	}
 

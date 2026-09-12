@@ -1,6 +1,7 @@
 #include "core/Config.hpp"
 #include "core/infrastructure/Language.hpp"
 #include "core/game_api/Game.hpp"
+#include "core/HUD.hpp"
 #include "Color.h"
 
 namespace CTRPluginFramework {
@@ -24,7 +25,7 @@ namespace CTRPluginFramework {
         }
 
         s_reminderClock.Restart();
-        OSD::NotifySysFont(Language::getInstance()->get(TextID::SAVE_REMINDER_MESSAGE), Color(0xADFF2FFF));
+        HUD::Notify(Language::getInstance()->get(TextID::SAVE_REMINDER_MESSAGE), Color(0xADFF2FFF));
     }
 
     void InitSaveReminder(void) {

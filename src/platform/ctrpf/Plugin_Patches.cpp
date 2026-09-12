@@ -4,6 +4,7 @@
 #include "core/game_api/Player.hpp"
 #include "core/RuntimeContext.hpp"
 #include "features/cheats.hpp"
+#include "core/HUD.hpp"
 
 namespace CTRPluginFramework {
 //This patch the NFC disabling the touchscreen when scanning an amiibo, which prevents ctrpf to be used
@@ -81,7 +82,7 @@ namespace CTRPluginFramework {
 		
 		Dropper::RestorePattern();
 		DropPatternON = false;
-		OSD::NotifySysFont(Language::getInstance()->get(TextID::DROP_PATTERN_RESTORED), Color::Orange);
+		HUD::Notify(Language::getInstance()->get(TextID::DROP_PATTERN_RESTORED), Color::Orange);
 	}	
 
 }

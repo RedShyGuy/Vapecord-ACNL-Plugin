@@ -1,5 +1,5 @@
 #include "features/cheats.hpp"
-
+#include "core/HUD.hpp"
 #include "core/game_api/Game.hpp"
 #include "core/game_api/Player.hpp"
 #include "core/game_api/Dropper.hpp"
@@ -106,16 +106,16 @@ namespace CTRPluginFramework {
 			default: break;
 			case 0: {
 				if(Game::CreateLockedSpot(0x12, x, y, Game::GetRoom(), true) == 0xFFFFFFFF) {
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::SPOT_STATE_TOO_MANY));
+					HUD::Notify(Language::getInstance()->get(TextID::SPOT_STATE_TOO_MANY));
 				}
 				else {
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::SPOT_STATE_LOCK));
+					HUD::Notify(Language::getInstance()->get(TextID::SPOT_STATE_LOCK));
 				}
 			} break;
 
 			case 1: {
 				Game::ClearLockedSpot(x, y, Game::GetRoom(), 4);
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::SPOT_STATE_UNLOCK));
+				HUD::Notify(Language::getInstance()->get(TextID::SPOT_STATE_UNLOCK));
 			} break;
 
 			case 2: {
@@ -129,7 +129,7 @@ namespace CTRPluginFramework {
 
 					Sleep(Milliseconds(40));
 				}
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::SPOT_STATE_MAP_LOCK));
+				HUD::Notify(Language::getInstance()->get(TextID::SPOT_STATE_MAP_LOCK));
 			} break;
 
 			case 3: {
@@ -157,7 +157,7 @@ namespace CTRPluginFramework {
 						res = false;
 					}
 				}
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::SPOT_STATE_MAP_UNLOCK));
+				HUD::Notify(Language::getInstance()->get(TextID::SPOT_STATE_MAP_UNLOCK));
 			} break;
 		}
 

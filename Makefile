@@ -23,6 +23,62 @@ INCLUDES	:= 	include \
 				include/core/checks \
 				include/core/infrastructure \
 				include/core/Pretendo \
+				include/core/libgarden \
+				include/core/libgarden/garden \
+				include/core/libgarden/garden/ac \
+				include/core/libgarden/garden/applet \
+				include/core/libgarden/garden/audio \
+				include/core/libgarden/garden/bs \
+				include/core/libgarden/garden/camera \
+				include/core/libgarden/garden/controller \
+				include/core/libgarden/garden/demo \
+				include/core/libgarden/garden/fgobj \
+				include/core/libgarden/garden/field \
+				include/core/libgarden/garden/font \
+				include/core/libgarden/garden/framework \
+				include/core/libgarden/garden/g3d \
+				include/core/libgarden/garden/human \
+				include/core/libgarden/garden/island \
+				include/core/libgarden/garden/item \
+				include/core/libgarden/garden/math \
+				include/core/libgarden/garden/net \
+				include/core/libgarden/garden/netgame \
+				include/core/libgarden/garden/npc \
+				include/core/libgarden/garden/oml \
+				include/core/libgarden/garden/player \
+				include/core/libgarden/garden/proc \
+				include/core/libgarden/garden/sc \
+				include/core/libgarden/garden/script \
+				include/core/libgarden/garden/sound \
+				include/core/libgarden/garden/ssys \
+				include/core/libgarden/garden/stage \
+				include/core/libgarden/garden/sv \
+				include/core/libgarden/garden/tour \
+				include/core/libgarden/gardenex \
+				include/core/libgarden/gardenex/bs \
+				include/core/libgarden/gardenex/detail \
+				include/core/libgarden/gardenex/field \
+				include/core/libgarden/gardenex/script \
+				include/core/libgarden/gardenex/state \
+				include/core/libgarden/gardenex/util \
+				include/core/libgarden/GLES2 \
+				include/core/libgarden/nn \
+				include/core/libgarden/nn/gx \
+				include/core/libgarden/nn/math \
+				include/core/libgarden/nn/os \
+				include/core/libgarden/nn/pia \
+				include/core/libgarden/nn/pia/common \
+				include/core/libgarden/nn/pia/inet \
+				include/core/libgarden/nn/pia/session \
+				include/core/libgarden/nn/pia/transport \
+				include/core/libgarden/nw \
+				include/core/libgarden/nw/font \
+				include/core/libgarden/nw/gfx \
+				include/core/libgarden/nw/lyt \
+				include/core/libgarden/nw/os \
+				include/core/libgarden/nw/ut \
+				include/core/libgarden/sead \
+				include/core/libgarden/sead/math \
 
 SOURCES 	:= 	src \
                 src/features \
@@ -60,7 +116,7 @@ CFLAGS		:=	$(ARCH) -Os -mword-relocations \
 
 CFLAGS		+=	$(INCLUDE) -D__3DS__
 
-CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++20 -DDEVMODE=$(DEVMODE)
+CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++23 -DDEVMODE=$(DEVMODE)
 
 ASFLAGS		:=	$(ARCH)
 LDFLAGS		:= -T $(TOPDIR)/3gx.ld $(ARCH) -Os -Wl,--gc-sections,--strip-discarded,--strip-debug

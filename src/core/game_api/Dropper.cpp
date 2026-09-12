@@ -2,7 +2,7 @@
 #include "core/game_api/PlayerClass.hpp"
 #include "core/ItemSequence.hpp"
 #include "core/game_api/Game.hpp"
-
+#include "core/HUD.hpp"
 #include "core/checks/IDChecks.hpp"
 #include "core/game_api/AnimData.hpp"
 #include "core/game_api/Animation.hpp"
@@ -111,7 +111,7 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 		}		
 		
 		if(DisplayMSG) {
-			OSD::NotifySysFont(Utils::Format("%d %s", count, msg.c_str()));
+			HUD::Notify(Utils::Format("%d %s", count, msg.c_str()));
 		}
 
 	//OFF
@@ -162,7 +162,7 @@ Restores Drop Pattern if drop radius changer has been used to prevent any crashe
 			return 0;
 
 		if(!ItemToPlace->isValid()) {
-			OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::DROPPER_INVALID_ITEM).c_str(), *(u32 *)ItemToPlace));
+			HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::DROPPER_INVALID_ITEM).c_str(), *(u32 *)ItemToPlace));
 			return 0;
 		}
 

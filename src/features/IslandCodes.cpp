@@ -1,7 +1,6 @@
 #include "features/cheats.hpp"
 #include "core/game_api/Game.hpp"
 #include "core/infrastructure/CROEditing.hpp"
-
 #include "core/checks/IDChecks.hpp"
 #include "core/infrastructure/PluginUtils.hpp"
 #include "core/game_api/PlayerClass.hpp"
@@ -11,6 +10,7 @@
 #include "core/game_api/Player.hpp"
 #include "Color.h"
 #include "Files.h"
+#include "core/HUD.hpp"
 
 extern "C" void PATCH_KappnBypass1(void);
 extern "C" void PATCH_KappnBypass2(void);
@@ -255,7 +255,7 @@ namespace CTRPluginFramework {
 
 		if(fileData.size() != IslandTileCount) {
 			restoreState();
-			OSD::NotifySysFont("Invalid island backup.", Color::Red);
+			HUD::Notify("Invalid island backup.", Color::Red);
 			return;
 		}
 
@@ -285,7 +285,7 @@ namespace CTRPluginFramework {
 			}
 		}
 
-		OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::ISLAND_RESTORE_PLACED_COUNT).c_str(), count));
+		HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::ISLAND_RESTORE_PLACED_COUNT).c_str(), count));
 		restoreState();
 	}
 

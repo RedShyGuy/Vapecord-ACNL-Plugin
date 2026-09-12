@@ -16,6 +16,7 @@
 #include "core/checks/IDChecks.hpp"
 #include "core/game_api/Inventory.hpp"
 #include "core/game_api/House/House.hpp"
+#include "core/HUD.hpp"
 
 #include "Color.h"
 #include "Files.h"
@@ -138,7 +139,7 @@ namespace CTRPluginFramework {
 
 					if(KB.Open(p[i]) == -1) {
 						size = i--;
-						OSD::NotifySysFont(Utils::Format("Set Function: %08X with %02d parameters!", funcaddress, size));
+						HUD::Notify(Utils::Format("Set Function: %08X with %02d parameters!", funcaddress, size));
 						return;
 					}
 
@@ -179,7 +180,7 @@ namespace CTRPluginFramework {
 				case 10: result = func.Call<u32>(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8], p[9]); break;
 				case 11: result = func.Call<u32>(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8], p[9], p[10]); break;
 			}
-			OSD::NotifySysFont(Utils::Format("Returned Value: %08X", result));
+			HUD::Notify(Utils::Format("Returned Value: %08X", result));
 		}
     }
 
@@ -1543,7 +1544,7 @@ namespace CTRPluginFramework {
 			for (int bit = 0; bit < 8; bit++) {
 				if (diff & (1 << bit)) {
 					int flagIndex = byte * 8 + bit;
-					OSD::NotifySysFont(Utils::Format("Player Flag %d changed to %d", flagIndex+1, GetFlag(flags, flagIndex)));
+					HUD::Notify(Utils::Format("Player Flag %d changed to %d", flagIndex+1, GetFlag(flags, flagIndex)));
 				}
 			}
 		}
@@ -1577,7 +1578,7 @@ namespace CTRPluginFramework {
 			for (int bit = 0; bit < 8; bit++) {
 				if (diff & (1 << bit)) {
 					int flagIndex = byte * 8 + bit;
-					OSD::NotifySysFont(Utils::Format("Town Flag %d changed to %d", flagIndex+1, GetTownFlag(flags, flagIndex)));
+					HUD::Notify(Utils::Format("Town Flag %d changed to %d", flagIndex+1, GetTownFlag(flags, flagIndex)));
 				}
 			}
 		}
@@ -1597,23 +1598,23 @@ namespace CTRPluginFramework {
 		}
 
 		if (town->PlayerHouse[0].exterior2.HouseSize != lastExterior.HouseSize)
-			OSD::NotifySysFont(Utils::Format("House Size changed to %02X", town->PlayerHouse[0].exterior2.HouseSize));
+			HUD::Notify(Utils::Format("House Size changed to %02X", town->PlayerHouse[0].exterior2.HouseSize));
 		if (town->PlayerHouse[0].exterior2.HouseStyle != lastExterior.HouseStyle)
-			OSD::NotifySysFont(Utils::Format("House Style changed to %02X", town->PlayerHouse[0].exterior2.HouseStyle));
+			HUD::Notify(Utils::Format("House Style changed to %02X", town->PlayerHouse[0].exterior2.HouseStyle));
 		if (town->PlayerHouse[0].exterior2.HouseDoorShape != lastExterior.HouseDoorShape)
-			OSD::NotifySysFont(Utils::Format("House Door Shape changed to %02X", town->PlayerHouse[0].exterior2.HouseDoorShape));
+			HUD::Notify(Utils::Format("House Door Shape changed to %02X", town->PlayerHouse[0].exterior2.HouseDoorShape));
 		if (town->PlayerHouse[0].exterior2.HouseBrick != lastExterior.HouseBrick)
-			OSD::NotifySysFont(Utils::Format("House Brick changed to %02X", town->PlayerHouse[0].exterior2.HouseBrick));
+			HUD::Notify(Utils::Format("House Brick changed to %02X", town->PlayerHouse[0].exterior2.HouseBrick));
 		if (town->PlayerHouse[0].exterior2.HouseRoof != lastExterior.HouseRoof)
-			OSD::NotifySysFont(Utils::Format("House Roof changed to %02X", town->PlayerHouse[0].exterior2.HouseRoof));
+			HUD::Notify(Utils::Format("House Roof changed to %02X", town->PlayerHouse[0].exterior2.HouseRoof));
 		if (town->PlayerHouse[0].exterior2.HouseDoor != lastExterior.HouseDoor)
-			OSD::NotifySysFont(Utils::Format("House Door changed to %02X", town->PlayerHouse[0].exterior2.HouseDoor));
+			HUD::Notify(Utils::Format("House Door changed to %02X", town->PlayerHouse[0].exterior2.HouseDoor));
 		if (town->PlayerHouse[0].exterior2.HouseFence != lastExterior.HouseFence)
-			OSD::NotifySysFont(Utils::Format("House Fence changed to %02X", town->PlayerHouse[0].exterior2.HouseFence));
+			HUD::Notify(Utils::Format("House Fence changed to %02X", town->PlayerHouse[0].exterior2.HouseFence));
 		if (town->PlayerHouse[0].exterior2.HousePavement != lastExterior.HousePavement)
-			OSD::NotifySysFont(Utils::Format("House Pavement changed to %02X", town->PlayerHouse[0].exterior2.HousePavement));
+			HUD::Notify(Utils::Format("House Pavement changed to %02X", town->PlayerHouse[0].exterior2.HousePavement));
 		if (town->PlayerHouse[0].exterior2.HouseMailBox != lastExterior.HouseMailBox)
-			OSD::NotifySysFont(Utils::Format("House MailBox changed to %02X", town->PlayerHouse[0].exterior2.HouseMailBox));
+			HUD::Notify(Utils::Format("House MailBox changed to %02X", town->PlayerHouse[0].exterior2.HouseMailBox));
 
 		lastExterior = town->PlayerHouse[0].exterior2;
 	}
@@ -1636,73 +1637,73 @@ namespace CTRPluginFramework {
 		}
 
 		if (room->flags.BrightLight != lastRoomflags[roomIndex].BrightLight)
-			OSD::NotifySysFont(Utils::Format("Bright Light changed to %02X for %s", room->flags.BrightLight, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Bright Light changed to %02X for %s", room->flags.BrightLight, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown2 != lastRoomflags[roomIndex].Unknown2)
-			OSD::NotifySysFont(Utils::Format("Unknown2 changed to %02X for %s", room->flags.Unknown2, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown2 changed to %02X for %s", room->flags.Unknown2, roomNames.at(roomIndex).c_str()));
 		if (room->flags.RegularLight != lastRoomflags[roomIndex].RegularLight)
-			OSD::NotifySysFont(Utils::Format("Regular Light changed to %02X for %s", room->flags.RegularLight, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Regular Light changed to %02X for %s", room->flags.RegularLight, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown4 != lastRoomflags[roomIndex].Unknown4)
-			OSD::NotifySysFont(Utils::Format("Unknown4 changed to %02X for %s", room->flags.Unknown4, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown4 changed to %02X for %s", room->flags.Unknown4, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown5 != lastRoomflags[roomIndex].Unknown5)
-			OSD::NotifySysFont(Utils::Format("Unknown5 changed to %02X for %s", room->flags.Unknown5, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown5 changed to %02X for %s", room->flags.Unknown5, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown6 != lastRoomflags[roomIndex].Unknown6)
-			OSD::NotifySysFont(Utils::Format("Unknown6 changed to %02X for %s", room->flags.Unknown6, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown6 changed to %02X for %s", room->flags.Unknown6, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown7 != lastRoomflags[roomIndex].Unknown7)
-			OSD::NotifySysFont(Utils::Format("Unknown7 changed to %02X for %s", room->flags.Unknown7, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown7 changed to %02X for %s", room->flags.Unknown7, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown8 != lastRoomflags[roomIndex].Unknown8)
-			OSD::NotifySysFont(Utils::Format("Unknown8 changed to %02X for %s", room->flags.Unknown8, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown8 changed to %02X for %s", room->flags.Unknown8, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown9 != lastRoomflags[roomIndex].Unknown9)
-			OSD::NotifySysFont(Utils::Format("Unknown9 changed to %02X for %s", room->flags.Unknown9, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown9 changed to %02X for %s", room->flags.Unknown9, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown10 != lastRoomflags[roomIndex].Unknown10)
-			OSD::NotifySysFont(Utils::Format("Unknown10 changed to %02X for %s", room->flags.Unknown10, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown10 changed to %02X for %s", room->flags.Unknown10, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown11 != lastRoomflags[roomIndex].Unknown11)
-			OSD::NotifySysFont(Utils::Format("Unknown11 changed to %02X for %s", room->flags.Unknown11, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown11 changed to %02X for %s", room->flags.Unknown11, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown12 != lastRoomflags[roomIndex].Unknown12)
-			OSD::NotifySysFont(Utils::Format("Unknown12 changed to %02X for %s", room->flags.Unknown12, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown12 changed to %02X for %s", room->flags.Unknown12, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown13 != lastRoomflags[roomIndex].Unknown13)
-			OSD::NotifySysFont(Utils::Format("Unknown13 changed to %02X for %s", room->flags.Unknown13, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown13 changed to %02X for %s", room->flags.Unknown13, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown14 != lastRoomflags[roomIndex].Unknown14)
-			OSD::NotifySysFont(Utils::Format("Unknown14 changed to %02X for %s", room->flags.Unknown14, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown14 changed to %02X for %s", room->flags.Unknown14, roomNames.at(roomIndex).c_str()));
 		if (room->flags.LowLight != lastRoomflags[roomIndex].LowLight)
-			OSD::NotifySysFont(Utils::Format("Low Light changed to %02X for %s", room->flags.LowLight, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Low Light changed to %02X for %s", room->flags.LowLight, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown16 != lastRoomflags[roomIndex].Unknown16)
-			OSD::NotifySysFont(Utils::Format("Unknown16 changed to %02X for %s", room->flags.Unknown16, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown16 changed to %02X for %s", room->flags.Unknown16, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown17 != lastRoomflags[roomIndex].Unknown17)
-			OSD::NotifySysFont(Utils::Format("Unknown17 changed to %02X for %s", room->flags.Unknown17, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown17 changed to %02X for %s", room->flags.Unknown17, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown18 != lastRoomflags[roomIndex].Unknown18)
-			OSD::NotifySysFont(Utils::Format("Unknown18 changed to %02X for %s", room->flags.Unknown18, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown18 changed to %02X for %s", room->flags.Unknown18, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown19 != lastRoomflags[roomIndex].Unknown19)
-			OSD::NotifySysFont(Utils::Format("Unknown19 changed to %02X for %s", room->flags.Unknown19, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown19 changed to %02X for %s", room->flags.Unknown19, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown20 != lastRoomflags[roomIndex].Unknown20)
-			OSD::NotifySysFont(Utils::Format("Unknown20 changed to %02X for %s", room->flags.Unknown20, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown20 changed to %02X for %s", room->flags.Unknown20, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown21 != lastRoomflags[roomIndex].Unknown21)
-			OSD::NotifySysFont(Utils::Format("Unknown21 changed to %02X for %s", room->flags.Unknown21, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown21 changed to %02X for %s", room->flags.Unknown21, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown22 != lastRoomflags[roomIndex].Unknown22)
-			OSD::NotifySysFont(Utils::Format("Unknown22 changed to %02X for %s", room->flags.Unknown22, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown22 changed to %02X for %s", room->flags.Unknown22, roomNames.at(roomIndex).c_str()));
 		if (room->flags.LightSwitchState != lastRoomflags[roomIndex].LightSwitchState)
-			OSD::NotifySysFont(Utils::Format("Light Switch State changed to %02X for %s", room->flags.LightSwitchState, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Light Switch State changed to %02X for %s", room->flags.LightSwitchState, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown24 != lastRoomflags[roomIndex].Unknown24)
-			OSD::NotifySysFont(Utils::Format("Unknown24 changed to %02X for %s", room->flags.Unknown24, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown24 changed to %02X for %s", room->flags.Unknown24, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown25 != lastRoomflags[roomIndex].Unknown25)
-			OSD::NotifySysFont(Utils::Format("Unknown25 changed to %02X for %s", room->flags.Unknown25, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown25 changed to %02X for %s", room->flags.Unknown25, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown26 != lastRoomflags[roomIndex].Unknown26)
-			OSD::NotifySysFont(Utils::Format("Unknown26 changed to %02X for %s", room->flags.Unknown26, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown26 changed to %02X for %s", room->flags.Unknown26, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown27 != lastRoomflags[roomIndex].Unknown27)
-			OSD::NotifySysFont(Utils::Format("Unknown27 changed to %02X for %s", room->flags.Unknown27, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown27 changed to %02X for %s", room->flags.Unknown27, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown28 != lastRoomflags[roomIndex].Unknown28)
-			OSD::NotifySysFont(Utils::Format("Unknown28 changed to %02X for %s", room->flags.Unknown28, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown28 changed to %02X for %s", room->flags.Unknown28, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown29 != lastRoomflags[roomIndex].Unknown29)
-			OSD::NotifySysFont(Utils::Format("Unknown29 changed to %02X for %s", room->flags.Unknown29, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown29 changed to %02X for %s", room->flags.Unknown29, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown30 != lastRoomflags[roomIndex].Unknown30)
-			OSD::NotifySysFont(Utils::Format("Unknown30 changed to %02X for %s", room->flags.Unknown30, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown30 changed to %02X for %s", room->flags.Unknown30, roomNames.at(roomIndex).c_str()));
 		if (room->flags.RoomSize != lastRoomflags[roomIndex].RoomSize)
-			OSD::NotifySysFont(Utils::Format("Room Size changed to %02X for %s", room->flags.RoomSize, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Room Size changed to %02X for %s", room->flags.RoomSize, roomNames.at(roomIndex).c_str()));
 		if (room->flags.IsRoomUpgrading != lastRoomflags[roomIndex].IsRoomUpgrading)
-			OSD::NotifySysFont(Utils::Format("IsRoomUpgrading changed to %02X for %s", room->flags.IsRoomUpgrading, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("IsRoomUpgrading changed to %02X for %s", room->flags.IsRoomUpgrading, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown33 != lastRoomflags[roomIndex].Unknown33)
-			OSD::NotifySysFont(Utils::Format("Unknown33 changed to %02X for %s", room->flags.Unknown33, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown33 changed to %02X for %s", room->flags.Unknown33, roomNames.at(roomIndex).c_str()));
 		if (room->flags.Unknown34 != lastRoomflags[roomIndex].Unknown34)
-			OSD::NotifySysFont(Utils::Format("Unknown34 changed to %02X for %s", room->flags.Unknown34, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("Unknown34 changed to %02X for %s", room->flags.Unknown34, roomNames.at(roomIndex).c_str()));
 
 		lastRoomflags[roomIndex] = room->flags;
 	}
@@ -1721,7 +1722,7 @@ namespace CTRPluginFramework {
 		}
 
 		if (room->UnkItem4 != lastRoom[roomIndex].UnkItem4)
-			OSD::NotifySysFont(Utils::Format("UnkItem4 changed to %04X for %s", room->UnkItem4.ID, roomNames.at(roomIndex).c_str()));
+			HUD::Notify(Utils::Format("UnkItem4 changed to %04X for %s", room->UnkItem4.ID, roomNames.at(roomIndex).c_str()));
 
 		lastRoom[roomIndex] = *room;
 	}
@@ -1853,7 +1854,7 @@ namespace CTRPluginFramework {
 			if(PluginUtils::Input::PromptNumber<std::string>({ "Enter Cro Name:", false, 15, str }, str)) {
 				if(CRO::GetMemAddress(str.c_str(), buffer)) {
 					if(CRO::WritePermToggle(buffer, true)) {
-						OSD::NotifySysFont(Utils::Format("Unlocked %s | Address: %08X", str.c_str(), buffer));
+						HUD::Notify(Utils::Format("Unlocked %s | Address: %08X", str.c_str(), buffer));
 					}
 				}
 			}
@@ -1861,7 +1862,7 @@ namespace CTRPluginFramework {
 		else if(Controller::IsKeysPressed(Key::R + Key::DPadDown)) {
 			if(CRO::GetMemAddress(str.c_str(), buffer)) {
 				if(CRO::WritePermToggle(buffer, false)) {
-					OSD::NotifySysFont(Utils::Format("Locked %s | Address: %08X", str.c_str(), buffer));
+					HUD::Notify(Utils::Format("Locked %s | Address: %08X", str.c_str(), buffer));
 				}
 			}
 		}
