@@ -185,6 +185,12 @@ namespace HUD {
             buf.append(White.tag); // reset color so following draws are not affected
             return buf;
         }
+
+        std::u16string WithResetTag(const std::string& str, const Color& color) {
+            std::u16string buf = Tagged(ToTag(color), str);
+            buf.append(White.tag); // reset color so following draws are not affected
+            return buf;
+        }
     }
 
     void Init() {
@@ -252,9 +258,8 @@ namespace HUD {
             return;
         }
 
-        std::u16string buf = ToWide(str);
-        nw::ut::Color8 c8{color.r, color.g, color.b, color.a};
-        DrawImmediate(x, y, std::u16string_view{buf}, bottomScreen, c8);
+        std::u16string buf = WithResetTag(str, color);
+        DrawImmediate(x, y, std::u16string_view{buf}, bottomScreen);
     }
 
     void Draw(float x, float y, const Text& text, bool bottomScreen) {
@@ -271,11 +276,10 @@ namespace HUD {
             return INVALID;
         }
 
-        std::u16string buf = ToWide(str);
-        nw::ut::Color8 c8{color.r, color.g, color.b, color.a};
+        std::u16string buf = WithResetTag(str, color);
         for (u32 i = 0; i < PERSIST_SLOTS; i++) {
             if (!s_State->slots[i].active) {
-                s_State->slots[i].Set(std::u16string_view{buf}, x, y, bottomScreen, c8);
+                s_State->slots[i].Set(std::u16string_view{buf}, x, y, bottomScreen);
                 return i;
             }
         }
@@ -309,11 +313,9 @@ namespace HUD {
             return;
         }
 
-        std::u16string buf = ToWide(str);
-
-        nw::ut::Color8 c8{color.r, color.g, color.b, color.a};
+        std::u16string buf = WithResetTag(str, color);
         auto& slot = s_State->slots[h];
-        slot.Set(std::u16string_view{buf}, slot.pos.x, slot.pos.y, slot.bottomScreen, c8);
+        slot.Set(std::u16string_view{buf}, slot.pos.x, slot.pos.y, slot.bottomScreen);
     }
 
     void Update(Handle h, const Text& text) {
