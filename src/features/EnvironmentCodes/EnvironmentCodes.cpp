@@ -350,6 +350,7 @@ namespace CTRPluginFramework {
 
 		static Hook neverWiltHook;
 		static Address neverWiltFunc(0x2FCA24);
+		static Address treesDontDisappearAtTheRails(0x104752);
 
 		if(entry->WasJustActivated()) {
 			neverWiltHook.InitializeForMitm(neverWiltFunc.addr, (u32)&NeverWiltSeedItems);
@@ -357,11 +358,19 @@ namespace CTRPluginFramework {
 
 			itemDeletePatch.Patch(0xE3A00000);
 			dontDeleteSeedItemsOnInvalidPositions.Patch(0xE1A00000);
+
+			for (int i = 0; i < 4; ++i) {
+				treesDontDisappearAtTheRails.MoveOffset(i * 4).Write<u16>(0x4600);
+			}
 		}
 		else if(!entry->IsActivated()) {
 			itemDeletePatch.Unpatch();
 			neverWiltHook.Disable();
 			dontDeleteSeedItemsOnInvalidPositions.Unpatch();
+
+			for (int i = 0; i < 4; ++i) {
+				treesDontDisappearAtTheRails.MoveOffset(i * 4).Unpatch();
+			}
 		}
 	}
 
@@ -478,11 +487,11 @@ namespace CTRPluginFramework {
 			{ 0x0082, 0x14, 2, { 0x15, 0x03 } },       						   // holly
 		};
 
-		enum class FoliageState : u8 { 
-			Flower, 
-			Bloom, 
-			Default, 
-			Snowy 
+		enum class FoliageState : u8 {
+			Flower,
+			Bloom,
+			Default,
+			Snowy
 		};
 
 		static bool isSeasonSnowy(u8 season) {
@@ -553,7 +562,7 @@ namespace CTRPluginFramework {
 				else if (season == 0x04 || season == 0x05) {
 					state = Color(0xFFB7C5FF) << Language::getInstance()->get(TextID::SET_FOLIAGE_CHERRY_BLOSSOM);
 				}
-				
+
 				Item item = { 0x0026, 0 }; //tree
 				msg += item.GetName();
 				msg += " : ";
