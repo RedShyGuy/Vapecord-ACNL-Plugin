@@ -1,26 +1,24 @@
 #!/usr/bin/env python3
 """
-Port ACNL memory addresses between the 8 known region ELF binaries.
+Port memory addresses between ELF binaries with the same architecture.
 
-This tool is designed for address-porting workflows where you start from one
-known region (default: USA 1.5), extract a robust byte-pattern around the
-address, and locate the equivalent address in other region binaries.
+Starts from one source ELF and resolves one source virtual address into one or
+many target ELFs using deterministic matching first, then stricter fallback
+heuristics.
 
-Strategies (in order):
-1) Section-relative pattern match (works for .text/.rodata/.data most of time)
-2) For difficult cases (e.g. .bss), fallback literal/xref heuristic:
-   - find 32-bit occurrences of source address in source ELF
-   - locate equivalent literal site by context in target ELF
-   - read new pointer value from target literal site
+Resolver order (high level):
+1) Direct masked pattern match (section-aware)
+2) .bss/NOBITS: literal-xref first, then section-offset/page-delta fallback
+3) .text ARM disambiguation: callsite-xref, then caller-majority vote
+4) Optional text heuristics: local micro-window, adaptive direct-window,
+     ARM/Thumb block match, thunk-target, nearby-anchor refinement
+5) Byte-backed non-text: literal-xref before nearby-data-anchor
 
-Optional (disabled by default because they can produce false positives):
-- ARM thunk-target heuristic
-- nearby text-anchor heuristic
-
-Notes:
-- ARM branch instructions often differ between regions due to relative offsets.
-  The matcher masks likely ARM B/BL instruction words to reduce false negatives.
-- This is a best-effort static matcher. Ambiguous matches are reported.
+Key behavior:
+- ARM/Thumb branch words and embedded pointers are masked in signatures.
+- Text clone/sibling ambiguities are resolved via mapped caller evidence when
+    possible.
+- Ambiguous or unsupported cases return unresolved instead of blind guesses.
 """
 
 from __future__ import annotations
@@ -33,41 +31,6 @@ from pathlib import Path
 from typing import Iterable, List, Optional, Sequence, Tuple
 
 from elftools.elf.elffile import ELFFile
-
-
-REGION_TO_FILE = {
-    "USA_1_5": "ACNL_USA_1_5.elf",
-    "USA_WA": "ACNL_USA_WA.elf",
-    "EUR_1_5": "ACNL_EUR_1_5.elf",
-    "EUR_WA": "ACNL_EUR_WA.elf",
-    "JPN_1_5": "ACNL_JPN_1_5.elf",
-    "JPN_WA": "ACNL_JPN_WA.elf",
-    "KOR_1_5": "ACNL_KOR_1_5.elf",
-    "KOR_WA": "ACNL_KOR_WA.elf",
-}
-
-REGION_ALIASES = {
-    "USA1.5": "USA_1_5",
-    "USA_1.5": "USA_1_5",
-    "USA-1.5": "USA_1_5",
-    "USA15": "USA_1_5",
-    "USAWA": "USA_WA",
-    "EUR1.5": "EUR_1_5",
-    "EUR_1.5": "EUR_1_5",
-    "EUR-1.5": "EUR_1_5",
-    "EUR15": "EUR_1_5",
-    "EURWA": "EUR_WA",
-    "JPN1.5": "JPN_1_5",
-    "JPN_1.5": "JPN_1_5",
-    "JPN-1.5": "JPN_1_5",
-    "JPN15": "JPN_1_5",
-    "JPNWA": "JPN_WA",
-    "KOR1.5": "KOR_1_5",
-    "KOR_1.5": "KOR_1_5",
-    "KOR-1.5": "KOR_1_5",
-    "KOR15": "KOR_1_5",
-    "KORWA": "KOR_WA",
-}
 
 
 @dataclass(frozen=True)
@@ -102,7 +65,7 @@ class Match:
 
 @dataclass
 class PortResult:
-    region: str
+    target: str
     address: Optional[int]
     method: str
     confidence: str
@@ -159,23 +122,6 @@ def parse_address(text: str) -> int:
         return int(text, 0)
     except ValueError as exc:
         raise argparse.ArgumentTypeError(f"Invalid address: {text}") from exc
-
-
-def normalize_region(region: str) -> str:
-    key = region.strip().upper().replace(" ", "").replace("-", "_")
-    if key in REGION_TO_FILE:
-        return key
-
-    key_compact = key.replace("_", "")
-    if key_compact in REGION_ALIASES:
-        return REGION_ALIASES[key_compact]
-
-    if key in REGION_ALIASES:
-        return REGION_ALIASES[key]
-
-    raise ValueError(
-        f"Unknown region '{region}'. Valid: {', '.join(sorted(REGION_TO_FILE))}"
-    )
 
 
 def bytes_match_at(buf: bytes, pattern: bytes, strict_positions: Sequence[int], offset: int) -> bool:
@@ -554,7 +500,7 @@ def port_by_thumb_block_match(
         return None, "thumb-block", "source address not mapped"
     src_sec, src_off = located
 
-    # ACNL tables often store Thumb sites as even addresses (LSB not set).
+    # Tables often store Thumb sites as even addresses (LSB not set).
     # Use halfword/word alignment to classify Thumb-like positions.
     if ".text" not in src_sec.name or (source_va & 0x2) == 0:
         return None, "thumb-block", "not Thumb-aligned source"
@@ -1801,22 +1747,45 @@ def format_addr(value: Optional[int]) -> str:
     return "-" if value is None else f"0x{value:08X}"
 
 
-def build_elf_paths(elf_dir: Path) -> dict[str, Path]:
-    paths = {}
-    for region, name in REGION_TO_FILE.items():
-        p = elf_dir / name
-        if not p.exists():
-            raise FileNotFoundError(f"Missing ELF for {region}: {p}")
-        paths[region] = p
-    return paths
+def resolve_targets(
+    source_elf_path: Path,
+    target_elf_paths: Iterable[Path],
+    source_va: int,
+    context_before: int,
+    context_after: int,
+    max_literal_refs: int,
+    allow_risky_heuristics: bool,
+) -> List[PortResult]:
+    source_elf = ElfImage(source_elf_path)
+
+    results: List[PortResult] = []
+    for target_path in target_elf_paths:
+        dst = ElfImage(target_path)
+        mapped, method, confidence, note = port_address_to_region(
+            src=source_elf,
+            dst=dst,
+            source_va=source_va,
+            context_before=max(8, context_before),
+            context_after=max(8, context_after),
+            max_literal_refs=max(1, max_literal_refs),
+            allow_risky_heuristics=allow_risky_heuristics,
+        )
+        results.append(
+            PortResult(
+                target=target_path.name,
+                address=mapped,
+                method=method,
+                confidence=confidence,
+                note=note,
+            )
+        )
+
+    return results
 
 
 def parse_args(argv: Sequence[str]) -> argparse.Namespace:
-    default_root = Path(__file__).resolve().parents[2]
-    default_elf_dir = default_root / "ELF_FILES_ACNL"
-
     p = argparse.ArgumentParser(
-        description="Port ACNL memory addresses between 8 region ELF files",
+        description="Port one source address from one ELF to one or many target ELFs",
     )
     p.add_argument(
         "address",
@@ -1824,21 +1793,17 @@ def parse_args(argv: Sequence[str]) -> argparse.Namespace:
         help="Source virtual address (e.g. 0x00123456)",
     )
     p.add_argument(
-        "--source-region",
-        default="USA_1_5",
-        help="Source region (default: USA_1_5)",
-    )
-    p.add_argument(
-        "--target-regions",
-        nargs="*",
-        default=[],
-        help="Optional list of target regions. Default: all others",
-    )
-    p.add_argument(
-        "--elf-dir",
+        "--source-elf",
         type=Path,
-        default=default_elf_dir,
-        help=f"ELF directory (default: {default_elf_dir})",
+        required=True,
+        help="Path to source ELF",
+    )
+    p.add_argument(
+        "--target-elfs",
+        type=Path,
+        nargs="+",
+        required=True,
+        help="One or many target ELF paths",
     )
     p.add_argument(
         "--context-before",
@@ -1869,37 +1834,19 @@ def parse_args(argv: Sequence[str]) -> argparse.Namespace:
 def main(argv: Sequence[str]) -> int:
     args = parse_args(argv)
 
-    try:
-        src_region = normalize_region(args.source_region)
-    except ValueError as exc:
-        print(f"ERROR: {exc}")
+    if not args.source_elf.exists():
+        print(f"ERROR: source ELF not found: {args.source_elf}")
         return 2
 
-    all_regions = list(REGION_TO_FILE.keys())
-
-    if args.target_regions:
-        target_regions: List[str] = []
-        for item in args.target_regions:
-            try:
-                reg = normalize_region(item)
-            except ValueError as exc:
-                print(f"ERROR: {exc}")
-                return 2
-            if reg == src_region:
-                continue
-            if reg not in target_regions:
-                target_regions.append(reg)
-    else:
-        target_regions = [r for r in all_regions if r != src_region]
-
-    try:
-        elf_paths = build_elf_paths(args.elf_dir)
-    except FileNotFoundError as exc:
-        print(f"ERROR: {exc}")
+    missing = [p for p in args.target_elfs if not p.exists()]
+    if missing:
+        print("ERROR: Missing target ELF file(s):")
+        for p in missing:
+            print(f"  - {p}")
         return 2
 
-    source_elf = ElfImage(elf_paths[src_region])
-    print(f"Source region: {src_region} ({elf_paths[src_region].name})")
+    source_elf = ElfImage(args.source_elf)
+    print(f"Source ELF: {args.source_elf}")
     print(f"Source address: 0x{args.address:08X}")
 
     src_loc = source_elf.find_section_for_va(args.address)
@@ -1911,34 +1858,22 @@ def main(argv: Sequence[str]) -> int:
     print(f"Source section: {src_sec.name} +0x{src_off:X}")
     print()
 
-    results: List[PortResult] = []
-    for region in target_regions:
-        dst = ElfImage(elf_paths[region])
-        mapped, method, confidence, note = port_address_to_region(
-            src=source_elf,
-            dst=dst,
-            source_va=args.address,
-            context_before=max(8, args.context_before),
-            context_after=max(8, args.context_after),
-            max_literal_refs=max(1, args.max_literal_refs),
-            allow_risky_heuristics=not args.strict,
-        )
-        results.append(
-            PortResult(
-                region=region,
-                address=mapped,
-                method=method,
-                confidence=confidence,
-                note=note,
-            )
-        )
+    results = resolve_targets(
+        source_elf_path=args.source_elf,
+        target_elf_paths=args.target_elfs,
+        source_va=args.address,
+        context_before=args.context_before,
+        context_after=args.context_after,
+        max_literal_refs=args.max_literal_refs,
+        allow_risky_heuristics=not args.strict,
+    )
 
-    region_w = max(10, max(len(r.region) for r in results))
-    print(f"{'Region':<{region_w}}  {'Address':<12}  {'Method':<22}  {'Conf':<6}  Note")
-    print(f"{'-' * region_w}  {'-' * 12}  {'-' * 22}  {'-' * 6}  {'-' * 40}")
+    target_w = max(10, max(len(r.target) for r in results))
+    print(f"{'Target ELF':<{target_w}}  {'Address':<12}  {'Method':<24}  {'Conf':<6}  Note")
+    print(f"{'-' * target_w}  {'-' * 12}  {'-' * 24}  {'-' * 6}  {'-' * 40}")
     for r in results:
         print(
-            f"{r.region:<{region_w}}  {format_addr(r.address):<12}  {r.method:<22}"
+            f"{r.target:<{target_w}}  {format_addr(r.address):<12}  {r.method:<24}"
             f"  {r.confidence:<6}  {r.note}"
         )
 
