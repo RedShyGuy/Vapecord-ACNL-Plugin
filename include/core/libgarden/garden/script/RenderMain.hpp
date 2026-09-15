@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/infrastructure/Address.hpp"
 #include "RenderBase.hpp"
 
 namespace script
@@ -11,12 +12,12 @@ namespace script
 
 		RenderMain(size_t textBufCapacity = 0, size_t storeBufCapacity = 0, size_t tagBufCount = 0) {
 			using FN_Ctor = void (*)(RenderMain* self, size_t textBufCapacity, size_t storeBufCapacity, size_t tagBufCount);
-			static const FN_Ctor ctor = reinterpret_cast<FN_Ctor>(0x005d7338);
+			static const FN_Ctor ctor = reinterpret_cast<FN_Ctor>(Address(0x5D7338).addr);
 			ctor(this, textBufCapacity, storeBufCapacity, tagBufCount);
 		}
 		virtual ~RenderMain() override {
 			using FN_Destructor = void (*)(RenderMain* self);
-			static const FN_Destructor destructor = reinterpret_cast<FN_Destructor>(0x005d7434);
+			static const FN_Destructor destructor = reinterpret_cast<FN_Destructor>(Address(0x5D7434).addr);
 			destructor(this);
 		}
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/infrastructure/Address.hpp"
 #include <core/libgarden/garden/font/Mgr.hpp>
 #include <core/libgarden/garden/ssys/ma/lyt/LayoutMgr.hpp>
 #include <core/libgarden/garden/script/RenderMain.hpp>
@@ -13,7 +14,7 @@ namespace gardenex
 {
 	inline uint32_t*& GetCmdBuffer()
 	{
-		return *reinterpret_cast<uint32_t**>(0x975a9c);
+		return *reinterpret_cast<uint32_t**>(Address(0x975A9C).addr);
 	}
 
 	namespace detail
@@ -115,7 +116,7 @@ namespace gardenex
 		0.0f, 1.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f
 	};
-	
+
 	inline size_t DrawText(const nn::math::MTX34& viewMtx, nw::font::WideTextWriter& writer, bool bottomScreen = false)
 	{
 		auto& drawer = ssys::ma::lyt::LayoutMgr::Get()->GetDrawer();

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/infrastructure/Address.hpp"
 #include "Layout.hpp"
 #include "../../st/List.hpp"
 
@@ -24,7 +25,7 @@ namespace ssys::ma::lyt
 
 		//static LayoutMgr* Get() { return s_pInstance; }
 		static LayoutMgr* Get() {
-			return *reinterpret_cast<LayoutMgr**>(0x976C40);
+			return *reinterpret_cast<LayoutMgr**>(Address(0x976C40).addr);
 		}
 
 		auto& GetResource() { return m_Resource; }
@@ -32,7 +33,7 @@ namespace ssys::ma::lyt
 
 		void DrawBegin(u32 width, u32 height) {
 			using FN_DrawBegin = void (*)(LayoutMgr* self, u32 width, u32 height);
-			auto drawBegin = reinterpret_cast<FN_DrawBegin>(0x0056a9a4);
+			auto drawBegin = reinterpret_cast<FN_DrawBegin>(Address(0x56A9A4).addr);
         	drawBegin(this, width, height);
 		}
 
@@ -42,14 +43,14 @@ namespace ssys::ma::lyt
 
 		void Register(Base2D* b2d, bool bottomScreen) {
 			using FN_Register = void (*)(LayoutMgr* self, Base2D* b2d, bool bottomScreen);
-			auto _register = reinterpret_cast<FN_Register>(0x0056a954);
+			auto _register = reinterpret_cast<FN_Register>(Address(0x56A954).addr);
         	_register(this, b2d, bottomScreen);
 		}
 
 	private:
 		virtual ~LayoutMgr() {
 			using FN_Destructor = void (*)(LayoutMgr* self);
-			auto destructor = reinterpret_cast<FN_Destructor>(0x0056ac34);
+			auto destructor = reinterpret_cast<FN_Destructor>(Address(0x56AC34).addr);
 			destructor(this);
 		}
 

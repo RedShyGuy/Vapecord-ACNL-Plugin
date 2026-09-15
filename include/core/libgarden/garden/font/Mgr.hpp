@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/infrastructure/Address.hpp"
 #include "core/libgarden/nw/font/Font.hpp"
 #include "core/libgarden/sead/String.hpp"
 
@@ -26,8 +27,8 @@ namespace font
 
 	public:
 
-		static Mgr* Get() { 
-			return *reinterpret_cast<Mgr**>(0x9539CC);
+		static Mgr* Get() {
+			return *reinterpret_cast<Mgr**>(Address(0x9539CC).addr);
 		}
 
 		static FontInfo GetFontInfo(FontID font = FontID::GARDEN_MSG_16)
@@ -38,13 +39,13 @@ namespace font
 
 		const sead::FixedSafeString<32>* GetFontName(FontID font) const {
 			using FN_GetFontName = const sead::FixedSafeString<32>* (*)(const Mgr* self, FontID font);
-			static const FN_GetFontName getFontName = reinterpret_cast<FN_GetFontName>(0x00748d88);
+			static const FN_GetFontName getFontName = reinterpret_cast<FN_GetFontName>(Address(0x748d88).addr);
 			return getFontName(this, font);
 		}
 
 		const nw::font::Font* GetFont(FontID font) const {
 			using FN_GetFont = const nw::font::Font* (*)(const Mgr* self, FontID font);
-			static const FN_GetFont getFont = reinterpret_cast<FN_GetFont>(0x0052ED74);
+			static const FN_GetFont getFont = reinterpret_cast<FN_GetFont>(Address(0x52ED74).addr);
 			return getFont(this, font);
 		}
 

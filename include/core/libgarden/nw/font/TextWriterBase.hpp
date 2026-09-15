@@ -20,7 +20,7 @@ namespace nw::font
 
 		TextWriterBase() {
 			using FN_Ctor = void (*)(TextWriterBase* self);
-			static const FN_Ctor ctor = reinterpret_cast<FN_Ctor>(0x007e9ce8);
+			static const FN_Ctor ctor = reinterpret_cast<FN_Ctor>(Address(0x7E9CE8).addr);
 			ctor(this);
 		}
 
@@ -33,7 +33,7 @@ namespace nw::font
 
 		float Print(const T* str, s32 len) const {
 			using FN_Print = float (*)(const TextWriterBase* self, const T* str, s32 len);
-			static const FN_Print print = reinterpret_cast<FN_Print>(0x007e97a8);
+			static const FN_Print print = reinterpret_cast<FN_Print>(Address(0x7E97A8).addr);
 			return print(this, str, len);
 		}
 

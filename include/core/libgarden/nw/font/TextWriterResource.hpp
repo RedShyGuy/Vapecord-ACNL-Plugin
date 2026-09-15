@@ -8,7 +8,7 @@ namespace nw::font
 
 	class TextWriterResource
 	{
-	
+
 	public:
 
 		void UseProgram()
@@ -18,7 +18,7 @@ namespace nw::font
 
 		void SetViewMtx(const nn::math::MTX34& mtx) {
 			using FN_SetViewMtx = void (*)(TextWriterResource* self, const nn::math::MTX34& mtx);
-			static const FN_SetViewMtx setViewMtx = reinterpret_cast<FN_SetViewMtx>(0x007adec8);
+			static const FN_SetViewMtx setViewMtx = reinterpret_cast<FN_SetViewMtx>(Address(0x7ADEC8).addr);
 			setViewMtx(this, mtx);
 		}
 

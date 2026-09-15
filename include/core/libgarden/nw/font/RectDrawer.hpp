@@ -21,7 +21,7 @@ namespace nw::font
 
 		u32* SetProjectionMtx(u32* cmdbuf, const nn::math::MTX44& proj) {
 			using FN_SetProjectionMtx = u32* (*)(RectDrawer* self, u32* cmdbuf, const nn::math::MTX44& proj);
-			static const FN_SetProjectionMtx setProjectionMtx = reinterpret_cast<FN_SetProjectionMtx>(0x004d7fb0);
+			static const FN_SetProjectionMtx setProjectionMtx = reinterpret_cast<FN_SetProjectionMtx>(Address(0x4D7FB0).addr);
 			return setProjectionMtx(this, cmdbuf, proj);
 		}
 
@@ -34,13 +34,13 @@ namespace nw::font
 
 		u32* AddUniformMtx(u32* cmdbuf) {
 			using FN_AddUniformMtx = u32* (*)(RectDrawer* self, u32* cmdbuf);
-			static const FN_AddUniformMtx addUniformMtx = reinterpret_cast<FN_AddUniformMtx>(0x004d6fd0);
+			static const FN_AddUniformMtx addUniformMtx = reinterpret_cast<FN_AddUniformMtx>(Address(0x4D6FD0).addr);
 			return addUniformMtx(this, cmdbuf);
 		}
 
 		void BuildTextCommand(CharWriter* writer) {
 			using FN_BuildTextCommand = void (*)(RectDrawer* self, CharWriter* writer);
-			static const FN_BuildTextCommand buildTextCommand = reinterpret_cast<FN_BuildTextCommand>(0x004d7890);
+			static const FN_BuildTextCommand buildTextCommand = reinterpret_cast<FN_BuildTextCommand>(Address(0x4D7890).addr);
 			buildTextCommand(this, writer);
 		}
 

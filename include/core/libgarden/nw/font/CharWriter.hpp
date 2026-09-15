@@ -30,7 +30,7 @@ namespace nw::font
 		void SetDispStringBuffer(DispStringBuffer* buf) { m_pDispBuffer = buf; }
  		void SetFontSize(float width, float height) {
 			using FN_SetFontSize = void (*)(CharWriter* self, float width, float height);
-			static const FN_SetFontSize setFontSize = reinterpret_cast<FN_SetFontSize>(0x004d64d0);
+			static const FN_SetFontSize setFontSize = reinterpret_cast<FN_SetFontSize>(Address(0x4D64D0).addr);
 			setFontSize(this, width, height);
 		}
 
@@ -53,12 +53,12 @@ namespace nw::font
 
 		void StartPrint() {
 			using FN_StartPrint = void (*)(CharWriter* self);
-			static const FN_StartPrint startPrint = reinterpret_cast<FN_StartPrint>(0x004d64b4);
+			static const FN_StartPrint startPrint = reinterpret_cast<FN_StartPrint>(Address(0x4D64B4).addr);
 			startPrint(this);
 		}
 		u32* UseCommandBuffer(u32* cmdbuf, class RectDrawer* drawer) {
 			using FN_UseCommandBuffer = u32* (*)(CharWriter* self, u32* cmdbuf, void* drawer);
-			static const FN_UseCommandBuffer useCmdBuf = reinterpret_cast<FN_UseCommandBuffer>(0x004d652c);
+			static const FN_UseCommandBuffer useCmdBuf = reinterpret_cast<FN_UseCommandBuffer>(Address(0x4D652C).addr);
 			return useCmdBuf(this, cmdbuf, drawer);
 		}
 
@@ -70,14 +70,14 @@ namespace nw::font
 
 		static DispStringBuffer* InitDispStringBuffer(void *mem, u32 charCount) {
 			using FN_InitDispStringBuffer = void* (*)(void* mem, u32 charCount);
-			static const FN_InitDispStringBuffer initDispBuf = reinterpret_cast<FN_InitDispStringBuffer>(0x004d6790);
+			static const FN_InitDispStringBuffer initDispBuf = reinterpret_cast<FN_InitDispStringBuffer>(Address(0x4D6790).addr);
 			return reinterpret_cast<DispStringBuffer*>(initDispBuf(mem, charCount));
 		}
 
 	private:
 		void UpdateVertexColors() {
 			using FN_UpdateVertexColors = void (*)(CharWriter* self);
-			static const FN_UpdateVertexColors updateVertexColors = reinterpret_cast<FN_UpdateVertexColors>(0x004d6738);
+			static const FN_UpdateVertexColors updateVertexColors = reinterpret_cast<FN_UpdateVertexColors>(Address(0x4D6738).addr);
 			updateVertexColors(this);
 		}
 

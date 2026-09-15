@@ -77,3 +77,5 @@ namespace CTRPluginFramework {
 			static std::unordered_map<u32, u32> origValList;
 	};
 }
+
+using CTRPluginFramework::Address;

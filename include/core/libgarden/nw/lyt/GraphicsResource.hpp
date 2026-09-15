@@ -14,24 +14,24 @@ namespace nw::lyt
 
 		void ResetGlState() {
 			using FN_ResetGlState = void (*)(GraphicsResource* self);
-			static const FN_ResetGlState resetGlState = reinterpret_cast<FN_ResetGlState>(0x004b5a1c);
+			static const FN_ResetGlState resetGlState = reinterpret_cast<FN_ResetGlState>(Address(0x4B5A1C).addr);
 			resetGlState(this);
 		}
 		void ResetGlProgramState() {
 			using FN_ResetGlProgramState = void (*)(GraphicsResource* self);
-			static const FN_ResetGlProgramState resetGlProgramState = reinterpret_cast<FN_ResetGlProgramState>(0x004b5b84);
+			static const FN_ResetGlProgramState resetGlProgramState = reinterpret_cast<FN_ResetGlProgramState>(Address(0x4B5B84).addr);
 			resetGlProgramState(this);
 		}
 
 		void SetProjectionMtx(const nn::math::MTX44 &mtx) {
 			using FN_SetProjectionMtx = void (*)(GraphicsResource* self, const nn::math::MTX44& mtx);
-			static const FN_SetProjectionMtx setProjectionMtx = reinterpret_cast<FN_SetProjectionMtx>(0x004b5b10);
+			static const FN_SetProjectionMtx setProjectionMtx = reinterpret_cast<FN_SetProjectionMtx>(Address(0x4B5B10).addr);
 			setProjectionMtx(this, mtx);
 		}
 
 		static void FinalizeGraphics() {
 			using FN_FinalizeGraphics = void (*)();
-			static const FN_FinalizeGraphics finalizeGraphics = reinterpret_cast<FN_FinalizeGraphics>(0x004bee70);
+			static const FN_FinalizeGraphics finalizeGraphics = reinterpret_cast<FN_FinalizeGraphics>(Address(0x4BEE70).addr);
 			finalizeGraphics();
 		}
 
