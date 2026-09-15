@@ -201,7 +201,7 @@ namespace HUD {
         LightLock_Init(&s_State->callbackLock);
 
         static Hook hook;
-        hook.Initialize(0x1B7354, (u32)DrawCb);
+        hook.Initialize(Address(0x1B7354).addr, (u32)DrawCb);
         hook.SetFlags(USE_LR_TO_RETURN);
         hook.Enable();
     }
