@@ -24,7 +24,7 @@ namespace gardenex
 				if (m_Lines[i].timer == 0) expired++;
 			}
 			if (expired == 0) return;
-		
+
 			u16 offset = m_Lines[expired - 1].end;
 			u16 newLen = m_Lines[m_LineCount - 1].end - offset;
 			Traits::move(m_Text.data(), m_Text.data() + offset, newLen);
@@ -61,8 +61,17 @@ namespace gardenex
 
 		void Show(std::u16string_view str)
 		{
+			if (m_LineCount == maxLineCount)
+				DropOldestLine();
+
 			size_t offset = GetNewLineOffset();
 			size_t end = offset + str.size();
+			while (end >= textBufSize && m_LineCount > 0)
+			{
+				DropOldestLine();
+				offset = GetNewLineOffset();
+				end = offset + str.size();
+			}
 			if (end >= textBufSize) return;
 			if (offset > 0) m_Text[offset - 1] = u'\n';
 
@@ -72,7 +81,17 @@ namespace gardenex
 
 		void Show(const char16* fmt, std::va_list args)
 		{
+			if (m_LineCount == maxLineCount)
+				DropOldestLine();
+
 			size_t offset = GetNewLineOffset();
+			while (offset >= textBufSize && m_LineCount > 0)
+			{
+				DropOldestLine();
+				offset = GetNewLineOffset();
+			}
+			if (offset >= textBufSize) return;
+
 			int n = vswprintf((wchar_t*)m_Text.data() + offset, textBufSize - offset, (const wchar_t*)fmt, args);
 			if (n < 0) return;
 			if (offset > 0) m_Text[offset - 1] = u'\n';
@@ -83,8 +102,31 @@ namespace gardenex
 
 		size_t GetNewLineOffset()
 		{
-			if (m_LineCount == maxLineCount) m_LineCount--;
 			return m_LineCount == 0 ? 0 : m_Lines[m_LineCount - 1].end + 1;
+		}
+
+		void DropOldestLine()
+		{
+			if (m_LineCount == 0)
+				return;
+			if (m_LineCount == 1)
+			{
+				m_LineCount = 0;
+				m_Dirty = true;
+				return;
+			}
+
+			u16 offset = m_Lines[0].end + 1;
+			u16 totalLen = m_Lines[m_LineCount - 1].end;
+			u16 newLen = totalLen - offset;
+
+			Traits::move(m_Text.data(), m_Text.data() + offset, newLen);
+
+			for (size_t i = 1; i < m_LineCount; i++)
+				m_Lines[i - 1].end = static_cast<u16>(m_Lines[i].end - offset);
+
+			m_LineCount--;
+			m_Dirty = true;
 		}
 
 		void AppendLine(size_t end)
