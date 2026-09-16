@@ -2,6 +2,8 @@
 
 #include <CTRPluginFramework.hpp>
 #include <string>
+#include <string_view>
+#include <vector>
 
 namespace HUD {
     using Handle = u32;
@@ -24,20 +26,31 @@ namespace HUD {
     class Text {
     public:
         Text() = default;
+
+        static void AppendUtf8(std::u16string& out, std::string_view s) {
+            if (s.empty()) {
+                return;
+            }
+
+            std::vector<u16> buffer(s.size() + 1, 0);
+            utf8_to_utf16(buffer.data(), reinterpret_cast<const u8*>(s.data()), s.size());
+            out.append(reinterpret_cast<const char16_t*>(buffer.data()));
+        }
+
         Text& operator<<(TagColor c) {
             m_buf.append(c.tag);
             return *this;
         }
         Text& operator<<(const char* s) {
-            while (*s) {
-                m_buf.push_back(static_cast<char16_t>(static_cast<unsigned char>(*s++)));
+            if (s == nullptr) {
+                return *this;
             }
+
+            AppendUtf8(m_buf, s);
             return *this;
         }
         Text& operator<<(const std::string& s) {
-            for (unsigned char ch : s) {
-                m_buf.push_back(static_cast<char16_t>(ch));
-            }
+            AppendUtf8(m_buf, s);
             return *this;
         }
         Text& operator<<(const Text& other) {

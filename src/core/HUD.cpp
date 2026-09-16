@@ -7,6 +7,7 @@
 #include <CTRPluginFramework.hpp>
 #include <algorithm>
 #include <array>
+#include <cctype>
 #include <cstdarg>
 #include <vector>
 
@@ -86,10 +87,13 @@ namespace HUD {
 
         std::u16string ToWide(const std::string& str) {
             std::u16string buf;
-            buf.reserve(str.size());
-            for (unsigned char ch : str) {
-                buf.push_back(static_cast<char16_t>(ch));
+            if (str.empty()) {
+                return buf;
             }
+
+            std::vector<u16> tmp(str.size() + 1, 0);
+            utf8_to_utf16(tmp.data(), reinterpret_cast<const u8*>(str.data()), str.size());
+            buf.append(reinterpret_cast<const char16_t*>(tmp.data()));
             return buf;
         }
 
@@ -172,12 +176,198 @@ namespace HUD {
 
         std::u16string Tagged(std::u16string_view tag, const std::string& str) {
             std::u16string buf;
-            buf.reserve(tag.size() + str.size());
+            std::u16string wide = ToWide(str);
+            buf.reserve(tag.size() + wide.size());
             buf.append(tag);
-            for (unsigned char ch : str) {
-                buf.push_back(static_cast<char16_t>(ch));
-            }
+            buf.append(wide);
             return buf;
+        }
+
+        std::vector<std::string> SplitNotifyLines(const std::string& text) {
+            static constexpr size_t MAX_UNITS_PER_LINE = 62;
+            static constexpr std::string_view CONT = "...";
+
+            auto IsAsciiWhitespace = [](unsigned char c) {
+                return std::isspace(c) != 0;
+            };
+
+            struct Decoded {
+                u32 codepoint;
+                size_t next;
+            };
+
+            auto DecodeUtf8 = [](const std::string& s, size_t i) -> Decoded {
+                if (i >= s.size()) {
+                    return {0, s.size()};
+                }
+
+                const unsigned char c0 = static_cast<unsigned char>(s[i]);
+                if ((c0 & 0x80) == 0x00) {
+                    return {c0, i + 1};
+                }
+
+                if ((c0 & 0xE0) == 0xC0 && i + 1 < s.size()) {
+                    const unsigned char c1 = static_cast<unsigned char>(s[i + 1]);
+                    if ((c1 & 0xC0) == 0x80) {
+                        u32 cp = ((c0 & 0x1F) << 6) | (c1 & 0x3F);
+                        return {cp, i + 2};
+                    }
+                }
+
+                if ((c0 & 0xF0) == 0xE0 && i + 2 < s.size()) {
+                    const unsigned char c1 = static_cast<unsigned char>(s[i + 1]);
+                    const unsigned char c2 = static_cast<unsigned char>(s[i + 2]);
+                    if ((c1 & 0xC0) == 0x80 && (c2 & 0xC0) == 0x80) {
+                        u32 cp = ((c0 & 0x0F) << 12) | ((c1 & 0x3F) << 6) | (c2 & 0x3F);
+                        return {cp, i + 3};
+                    }
+                }
+
+                if ((c0 & 0xF8) == 0xF0 && i + 3 < s.size()) {
+                    const unsigned char c1 = static_cast<unsigned char>(s[i + 1]);
+                    const unsigned char c2 = static_cast<unsigned char>(s[i + 2]);
+                    const unsigned char c3 = static_cast<unsigned char>(s[i + 3]);
+                    if ((c1 & 0xC0) == 0x80 && (c2 & 0xC0) == 0x80 && (c3 & 0xC0) == 0x80) {
+                        u32 cp = ((c0 & 0x07) << 18) | ((c1 & 0x3F) << 12) | ((c2 & 0x3F) << 6) | (c3 & 0x3F);
+                        return {cp, i + 4};
+                    }
+                }
+
+                return {c0, i + 1};
+            };
+
+            auto IsWideCodepoint = [](u32 cp) {
+                return (cp >= 0x1100 && cp <= 0x115F)
+                    || (cp >= 0x2E80 && cp <= 0xA4CF)
+                    || (cp >= 0xAC00 && cp <= 0xD7A3)
+                    || (cp >= 0xF900 && cp <= 0xFAFF)
+                    || (cp >= 0xFE10 && cp <= 0xFE6F)
+                    || (cp >= 0xFF00 && cp <= 0xFF60)
+                    || (cp >= 0xFFE0 && cp <= 0xFFE6);
+            };
+
+            auto UnitWidth = [&](u32 cp) {
+                if (cp < 0x80) {
+                    return static_cast<size_t>(1);
+                }
+                return static_cast<size_t>(IsWideCodepoint(cp) ? 2 : 1);
+            };
+
+            auto WrapLine = [&](const std::string& rawLine) {
+                std::vector<std::string> out;
+                size_t start = 0;
+
+                while (start < rawLine.size()) {
+                    const bool firstLine = out.empty();
+                    const size_t prefixLen = firstLine ? 0 : CONT.size();
+                    const size_t reserved = prefixLen + CONT.size();
+                    const size_t bodyLimit = (MAX_UNITS_PER_LINE > reserved) ? (MAX_UNITS_PER_LINE - reserved) : 1;
+
+                    size_t end = start;
+                    size_t units = 0;
+                    while (end < rawLine.size()) {
+                        Decoded d = DecodeUtf8(rawLine, end);
+                        const size_t w = UnitWidth(d.codepoint);
+                        if (units + w > bodyLimit) {
+                            break;
+                        }
+                        units += w;
+                        end = d.next;
+                    }
+
+                    if (end == start) {
+                        end = DecodeUtf8(rawLine, start).next;
+                    }
+
+                    bool reachedEnd = (end >= rawLine.size());
+                    size_t cut = reachedEnd ? rawLine.size() : end;
+
+                    if (!reachedEnd) {
+                        size_t lastSpace = std::string::npos;
+                        for (size_t i = start; i < end; i++) {
+                            unsigned char ch = static_cast<unsigned char>(rawLine[i]);
+                            if (ch < 0x80 && IsAsciiWhitespace(ch)) {
+                                lastSpace = i;
+                            }
+                        }
+                        if (lastSpace != std::string::npos && lastSpace > start) {
+                            cut = lastSpace;
+                        }
+                    }
+
+                    while (cut > start) {
+                        unsigned char ch = static_cast<unsigned char>(rawLine[cut - 1]);
+                        if (ch < 0x80 && IsAsciiWhitespace(ch)) {
+                            cut--;
+                        }
+                        else {
+                            break;
+                        }
+                    }
+
+                    if (cut == start) {
+                        cut = end;
+                    }
+
+                    std::string chunk = rawLine.substr(start, cut - start);
+                    start = cut;
+
+                    while (start < rawLine.size()) {
+                        unsigned char ch = static_cast<unsigned char>(rawLine[start]);
+                        if (ch < 0x80 && IsAsciiWhitespace(ch)) {
+                            start++;
+                        }
+                        else {
+                            break;
+                        }
+                    }
+
+                    const bool hasMore = start < rawLine.size();
+                    std::string line;
+                    line.reserve(prefixLen + chunk.size() + (hasMore ? CONT.size() : 0));
+                    if (!firstLine) {
+                        line.append(CONT.data(), CONT.size());
+                    }
+                    line += chunk;
+                    if (hasMore) {
+                        line.append(CONT.data(), CONT.size());
+                    }
+
+                    if (!line.empty()) {
+                        out.push_back(std::move(line));
+                    }
+                }
+
+                if (out.empty()) {
+                    out.push_back("");
+                }
+
+                return out;
+            };
+
+            std::vector<std::string> lines;
+            size_t lineStart = 0;
+            while (lineStart <= text.size()) {
+                size_t lineEnd = text.find('\n', lineStart);
+                if (lineEnd == std::string::npos) {
+                    lineEnd = text.size();
+                }
+
+                std::string rawLine = text.substr(lineStart, lineEnd - lineStart);
+                if (!rawLine.empty() && rawLine.back() == '\r') {
+                    rawLine.pop_back();
+                }
+
+                auto wrapped = WrapLine(rawLine);
+                lines.insert(lines.end(), wrapped.begin(), wrapped.end());
+
+                if (lineEnd == text.size()) {
+                    break;
+                }
+                lineStart = lineEnd + 1;
+            }
+
+            return lines;
         }
 
         std::u16string WithResetTag(const Text& text) {
@@ -210,10 +400,13 @@ namespace HUD {
         if (!s_State) {
             return;
         }
-    //rgb to tag approximation
-        auto buf = Tagged(ToTag(color), str);
-        buf.append(White.tag); //we reset the color back to white so no color leaking occurs
-        s_State->notify.Show(std::u16string_view{buf});
+
+        for (const auto& line : SplitNotifyLines(str)) {
+        //rgb to tag approximation
+            auto buf = Tagged(ToTag(color), line);
+            buf.append(White.tag); //we reset the color back to white so no color leaking occurs
+            s_State->notify.Show(std::u16string_view{buf});
+        }
     }
 
     void Notify(const Text& text) {
