@@ -56,6 +56,13 @@ namespace CTRPluginFramework {
 
 //FwkSettings Patch Process/Gets called even if the game is not supported
 	void PatchProcess(FwkSettings &settings) {
+        Address::LoadRegion();
+
+        static Address fontHeapSize(0x120770);
+        fontHeapSize.Patch(0xE1A00004);
+        fontHeapSize.MoveOffset(4).Patch(0xE1A00000);
+        fontHeapSize.MoveOffset(0xC).Patch(0x145000 + 0x24000);
+
 		ToggleTouchscreenForceOn();
 		settings.ThreadPriority = 0x30;
 
@@ -74,15 +81,15 @@ namespace CTRPluginFramework {
 		DisableAllPatches();
     }
 
-//check for indoor items	
+//check for indoor items
 	void IndoorsSeedItemCheck(void) {
 		if(!DropPatternON || !Player::IsIndoors()) {
             return;
         }
-		
+
 		Dropper::RestorePattern();
 		DropPatternON = false;
 		HUD::Notify(Language::getInstance()->get(TextID::DROP_PATTERN_RESTORED), Color::Orange);
-	}	
+	}
 
 }

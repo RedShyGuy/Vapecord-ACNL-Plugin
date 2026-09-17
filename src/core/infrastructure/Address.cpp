@@ -6,7 +6,7 @@ namespace CTRPluginFramework {
 	std::string Address::regionName = "";
 	Address::Region Address::regionId;
 
-	std::string Address::LoadRegion(void) {
+	void Address::LoadRegion(void) {
 		switch(Process::GetTitleID()) {
 			case TID_USA:
 				regionName = "USA";
@@ -45,6 +45,9 @@ namespace CTRPluginFramework {
 				regionName = "";
 			break;
 		}
+	}
+
+	std::string Address::GetRegionName(void) {
 		return regionName;
 	}
 

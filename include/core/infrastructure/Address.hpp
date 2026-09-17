@@ -35,7 +35,9 @@ namespace CTRPluginFramework {
 
 			static bool IsRegion(Region region);
 
-            static std::string LoadRegion(void);
+            static void LoadRegion(void);
+
+			static std::string GetRegionName(void);
 
 			u32 addr;
 			u32 origVal;

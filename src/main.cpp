@@ -84,7 +84,7 @@ Translators: NeitherHateNorLike(Chinese Simplified & Traditional), みるえも�
 	void ShowAntiScamScreen(void);
 
 	int	main(void) {
-		std::string region = Address::LoadRegion();
+		std::string region = Address::GetRegionName();
 
 		PluginMenu *menu = new PluginMenu(Color::White << "ACNL Vapecord Plugin " << region, majorV, minorV, revisV, NOTE);
 		menu->SynchronizeWithFrame(true);
