@@ -163,13 +163,13 @@ namespace CTRPluginFramework {
 				for(int i = 0; i < 8; ++i) {
 					WalkOver[i].Patch(WalkOverPatch[i]);
 				}
-				HUD::Notify(Language::getInstance()->get(TextID::WALK_OVER) + " 京京 " << HUD::Green << Language::getInstance()->get(TextID::STATE_ON));
+				HUD::Notify(Language::getInstance()->get(TextID::WALK_OVER) + " " << HUD::Green << Language::getInstance()->get(TextID::STATE_ON));
 			}
 			else {
 				for(int i = 0; i < 8; ++i) {
 					WalkOver[i].Unpatch();
 				}
-				HUD::Notify(Language::getInstance()->get(TextID::WALK_OVER) + " 京京 " << HUD::Red << Language::getInstance()->get(TextID::STATE_OFF));
+				HUD::Notify(Language::getInstance()->get(TextID::WALK_OVER) + " " << HUD::Red << Language::getInstance()->get(TextID::STATE_OFF));
 			}
         }
 

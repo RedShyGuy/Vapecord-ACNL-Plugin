@@ -17,6 +17,7 @@
 #include "core/game_api/Inventory.hpp"
 #include "core/game_api/House/House.hpp"
 #include "core/HUD.hpp"
+#include "platform/ctrpf/SystemFontProviderBridge.hpp"
 
 #include "Color.h"
 #include "Files.h"
@@ -24,6 +25,118 @@
 extern "C" void PATCH_CustomButtons(void);
 
 namespace CTRPluginFramework {
+	static bool DrawSysFontGlyphTunerOSD(const Screen &screen) {
+		if(!screen.IsTop) {
+			return true;
+		}
+
+		const SystemFontGlyphDebugTuning tuning = GetSystemFontGlyphDebugTuning();
+		Color panel(16, 16, 16, 180);
+		screen.DrawRect(2, 2, 396, 148, panel, true);
+		screen.DrawRect(2, 2, 396, 148, Color(255, 255, 255, 170), false);
+
+		// Linux/default font info block for live debug values.
+		screen.Draw("SysFont Glyph Live Tuner (Linux font block)", 8, 8, Color::White, Color::Black);
+		screen.Draw(Utils::Format("L+Left/Right: ScaleX   %d%%", tuning.scaleXPercent), 8, 24, Color::White, Color::Black);
+		screen.Draw(Utils::Format("L+Down/Up:    ScaleY   %d%%", tuning.scaleYPercent), 8, 36, Color::White, Color::Black);
+		screen.Draw(Utils::Format("R+Left/Right: X offset %.2f", tuning.xOffsetBias), 8, 48, Color::White, Color::Black);
+		screen.Draw(Utils::Format("R+Down/Up:    Advance  %d%%", tuning.xAdvancePercent), 8, 60, Color::White, Color::Black);
+		screen.Draw(Utils::Format("ZL+Down/Up:   ExtraLift %d", tuning.extraLiftRows), 8, 72, Color::White, Color::Black);
+		screen.Draw(Utils::Format("ZR+Down/Up:   MaxLift   %d", tuning.maxLiftRows), 8, 84, Color::White, Color::Black);
+		screen.Draw(Utils::Format("X+Down/Up:    AlphaTrim %d", tuning.alphaTrim), 8, 96, Color::White, Color::Black);
+		screen.Draw("X+Y: Reset defaults", 8, 108, Color::Yellow, Color::Black);
+
+		// Whole-word preview where only 'a' is custom by provider path.
+		screen.DrawSysfontWithBackground("Sysfont sample: planet", 8, 124, Color::White, Color(0, 0, 0, 170));
+		screen.Draw("Linux sample: planet", 8, 140, Color(LimeGreen), Color::Black);
+		return true;
+	}
+
+	void SysFontGlyphTuner(MenuEntry *entry) {
+		if(entry->WasJustActivated()) {
+			OSD::Run(DrawSysFontGlyphTunerOSD);
+			HUD::Notify("SysFont glyph tuner ON", Color(LimeGreen));
+		}
+
+		if(!entry->IsActivated()) {
+			OSD::Stop(DrawSysFontGlyphTunerOSD);
+			return;
+		}
+
+		SystemFontGlyphDebugTuning tuning = GetSystemFontGlyphDebugTuning();
+		bool changed = false;
+
+		if(Controller::IsKeysPressed(Key::L | Key::DPadRight)) {
+			tuning.scaleXPercent += 5;
+			changed = true;
+		}
+		if(Controller::IsKeysPressed(Key::L | Key::DPadLeft)) {
+			tuning.scaleXPercent -= 5;
+			changed = true;
+		}
+		if(Controller::IsKeysPressed(Key::L | Key::DPadUp)) {
+			tuning.scaleYPercent += 5;
+			changed = true;
+		}
+		if(Controller::IsKeysPressed(Key::L | Key::DPadDown)) {
+			tuning.scaleYPercent -= 5;
+			changed = true;
+		}
+
+		if(Controller::IsKeysPressed(Key::R | Key::DPadRight)) {
+			tuning.xOffsetBias += 0.25f;
+			changed = true;
+		}
+		if(Controller::IsKeysPressed(Key::R | Key::DPadLeft)) {
+			tuning.xOffsetBias -= 0.25f;
+			changed = true;
+		}
+		if(Controller::IsKeysPressed(Key::R | Key::DPadUp)) {
+			tuning.xAdvancePercent += 5;
+			changed = true;
+		}
+		if(Controller::IsKeysPressed(Key::R | Key::DPadDown)) {
+			tuning.xAdvancePercent -= 5;
+			changed = true;
+		}
+
+		if(Controller::IsKeysPressed(Key::ZL | Key::DPadUp)) {
+			tuning.extraLiftRows += 1;
+			changed = true;
+		}
+		if(Controller::IsKeysPressed(Key::ZL | Key::DPadDown)) {
+			tuning.extraLiftRows -= 1;
+			changed = true;
+		}
+		if(Controller::IsKeysPressed(Key::ZR | Key::DPadUp)) {
+			tuning.maxLiftRows += 1;
+			changed = true;
+		}
+		if(Controller::IsKeysPressed(Key::ZR | Key::DPadDown)) {
+			tuning.maxLiftRows -= 1;
+			changed = true;
+		}
+
+		if(Controller::IsKeysPressed(Key::X | Key::DPadUp)) {
+			tuning.alphaTrim += 4;
+			changed = true;
+		}
+		if(Controller::IsKeysPressed(Key::X | Key::DPadDown)) {
+			tuning.alphaTrim -= 4;
+			changed = true;
+		}
+
+		if(Controller::IsKeysPressed(Key::X | Key::Y)) {
+			ResetSystemFontGlyphDebugTuning();
+			HUD::Notify("SysFont glyph tuner reset", Color::Yellow);
+			return;
+		}
+
+		if(changed) {
+			SetSystemFontGlyphDebugTuning(tuning);
+		}
+	}
+
 //Integer For Custom Dumper
 	static MemoryRange cdump;
 	static std::string filetype = "dat";
