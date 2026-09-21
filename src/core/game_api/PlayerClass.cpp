@@ -54,7 +54,7 @@ namespace CTRPluginFramework {
 	
 	float *PlayerClass::GetCoordinates() { //FUN_5C37B0
         if(m_PlayerOffset != 0) {
-			return (float *)(m_PlayerOffset += m_CoordinateX);
+			return (float *)(m_PlayerOffset + m_CoordinateX);
 		}
 		
 		return nullptr;
@@ -82,7 +82,7 @@ namespace CTRPluginFramework {
 	
 	u16 PlayerClass::GetRotation() {
         if(m_PlayerOffset != 0) {
-			return *(u16 *)(m_PlayerOffset += m_Rotation);
+			return *(u16 *)(m_PlayerOffset + m_Rotation);
 		}
 		
 		return 0;
@@ -90,7 +90,7 @@ namespace CTRPluginFramework {
 	
 	float *PlayerClass::GetVelocity() {
         if(m_PlayerOffset != 0) {
-			return (float *)(m_PlayerOffset += m_Velocity);
+			return (float *)(m_PlayerOffset + m_Velocity);
 		}
 		
 		return nullptr;
@@ -98,7 +98,7 @@ namespace CTRPluginFramework {
 	
 	float *PlayerClass::GetCollisionSize() {
 		if(m_PlayerOffset != 0) {
-			return (float *)(m_PlayerOffset += m_Collision);
+			return (float *)(m_PlayerOffset + m_Collision);
 		}
 		
 		return nullptr;
@@ -106,7 +106,7 @@ namespace CTRPluginFramework {
 	
 	u8 *PlayerClass::GetAnimation() {
 		if(m_PlayerOffset != 0) {
-			return (u8 *)(m_PlayerOffset += m_Animation);
+			return (u8 *)(m_PlayerOffset + m_Animation);
 		}
 		
 		return nullptr;
@@ -114,15 +114,26 @@ namespace CTRPluginFramework {
 	
 	u16 *PlayerClass::GetSnake() {
 		if(m_PlayerOffset != 0) {
-			return (u16 *)(m_PlayerOffset += m_Snake);
+			return (u16 *)(m_PlayerOffset + m_Snake);
 		}
 		
 		return nullptr;
 	}
 
 	void PlayerClass::CalculateMapCoordinates(u32& x, u32& y) {
+		if(m_PlayerOffset == 0) {
+			x = 0;
+			y = 0;
+			return;
+		}
+
 		bool IsInfoOpen = *(bool *)(*(u32 *)(Address(0x950C30).addr + 0x1C) + 0x5D8);
 		float* coords = GetCoordinates();
+		if(coords == nullptr) {
+			x = 0;
+			y = 0;
+			return;
+		}
 
 	//Town Map | Can open info menu
 		if(Player::GetRoom(m_PlayerIndex) == 0) {
