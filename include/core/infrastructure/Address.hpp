@@ -25,6 +25,7 @@ namespace CTRPluginFramework {
 				JPNWA,
 				KOR,
 				KORWA,
+				INVALID = 0xFF,
 			};
 
 			Address(void);

@@ -64,8 +64,13 @@ namespace CTRPluginFramework {
 
 	float *PlayerClass::GetCoordinates(u32 wX, u32 wY) {
 		if(m_PlayerOffset != 0) {
+			float *coords = GetCoordinates();
+			if(coords == nullptr) {
+				return m_Coords;
+			}
+
 			m_Coords[0] = (float)(wX * 0x20 + 0x10);
-			m_Coords[1] = GetCoordinates()[1]; //world coords don't hold Z coord
+			m_Coords[1] = coords[1]; //world coords don't hold Z coord
 			m_Coords[2] = (float)(wY * 0x20 + 0x10);
 			return m_Coords;
 		}
@@ -127,7 +132,17 @@ namespace CTRPluginFramework {
 			return;
 		}
 
-		bool IsInfoOpen = *(bool *)(*(u32 *)(Address(0x950C30).addr + 0x1C) + 0x5D8);
+		bool IsInfoOpen = false;
+		u32 infoRoot = 0;
+		u32 infoPtr = 0;
+		if(Process::Read32(Address(0x950C30).addr, infoRoot) && infoRoot != 0 &&
+			Process::Read32(infoRoot + 0x1C, infoPtr) && infoPtr != 0) {
+			u8 isOpen = 0;
+			if(Process::Read8(infoPtr + 0x5D8, isOpen)) {
+				IsInfoOpen = (isOpen != 0);
+			}
+		}
+
 		float* coords = GetCoordinates();
 		if(coords == nullptr) {
 			x = 0;
@@ -233,7 +248,17 @@ namespace CTRPluginFramework {
 		static UIntRect MainStreet(4, 43, 312, 159);
 		static UIntRect Tour(65, 34, 190, 170);
 
-		bool IsInfoOpen = *(bool *)(*(u32 *)(Address(0x950C30).addr + 0x1C) + 0x5D8);
+		bool IsInfoOpen = false;
+		u32 infoRoot = 0;
+		u32 infoPtr = 0;
+		if(Process::Read32(Address(0x950C30).addr, infoRoot) && infoRoot != 0 &&
+			Process::Read32(infoRoot + 0x1C, infoPtr) && infoPtr != 0) {
+			u8 isOpen = 0;
+			if(Process::Read8(infoPtr + 0x5D8, isOpen)) {
+				IsInfoOpen = (isOpen != 0);
+			}
+		}
+
 		FloatVector fPos(touchPos);
 
 		float x = 0, y = 0;
