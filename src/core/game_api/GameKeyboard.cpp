@@ -219,7 +219,7 @@ namespace CTRPluginFramework {
 	};
 
 	void SetCustomOnlineStack(OnlineStack *stack, const std::string& str) {
-		static const Address point(0x90B38C);
+		static Address point(0x90B38C);
 
 		stack->unknownPointer1 = &stack->unknownPointer2;
 		stack->unknownPointer2 = (u32 *)point.addr;

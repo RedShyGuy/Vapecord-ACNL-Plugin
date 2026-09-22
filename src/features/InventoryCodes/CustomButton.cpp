@@ -459,8 +459,8 @@ namespace CTRPluginFramework {
 
 	void SettingsButtonASD(MenuEntry *entry) {
 	//3rd Custom button | replaces remove wet suit button
-		static const Address WetSuitButton(0x19DBA4);
-		static const Address SocksButton(0x19DC78);
+		static Address WetSuitButton(0x19DBA4);
+		static Address SocksButton(0x19DC78);
 
 		Process::Patch(WetSuitButton.addr, 0xE1A00000); //Always Remove Wet Suit
 		Process::Patch(SocksButton.addr, 0xEA000009); //Disable Remove Socks

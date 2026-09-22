@@ -13,29 +13,29 @@ namespace CTRPluginFramework {
 	u32 Animation::GetAnimationInstance(u32 playerInstance, u8 someVal1, u8 someVal2, u32 encVal) {
 		static Address getaniminst(0x6576F8);
 		return getaniminst.Call<u32>(playerInstance, someVal1, someVal2, encVal);
-	} 
+	}
 
-//Animation Wrapper	
-	bool Animation::ExecuteAnimationWrapper(u8 pIndex, u8 animID, Item animItem, u8 emotion, u16 snake, u16 sound, bool u0, u8 wX, u8 wY, bool directSend, u8 appearance[]) {	
+//Animation Wrapper
+	bool Animation::ExecuteAnimationWrapper(u8 pIndex, u8 animID, Item animItem, u8 emotion, u16 snake, u16 sound, bool u0, u8 wX, u8 wY, bool directSend, u8 appearance[]) {
 	//Gets actual PlayerIndex
 		u8 AIndex = Game::GetActualPlayerIndex();
-		
+
 	//If PlayerIndex is not the same as yours
 		bool forced = (pIndex != AIndex) && (AIndex <= 3);
 	//This gets used if the player you want to force is not the player you selected
 		bool needOverwrite = (Game::GetOnlinePlayerIndex() != pIndex);
-		
+
 	//Gets Player Instance
 		u32 playerInstance = PlayerClass::GetInstance(pIndex)->Offset();
-		
+
 	//If selected player is not loaded return false
 		if(!PlayerClass::GetInstance(pIndex)->IsLoaded()) {
 			return 0;
 		}
-		
+
 	//Gets Animation Instance to append anim data
 		u32 animInstance = Animation::GetAnimationInstance(playerInstance, 0, 0, 0);
-		
+
 	//If animation instance returns 0, probably means animation can't be executed
 		if(animInstance == 0) {
 			return 0;
@@ -43,18 +43,18 @@ namespace CTRPluginFramework {
 
 		AnimData data;
 		data.Init(animInstance, playerInstance, pIndex);
-		
+
 	//Gets used to write the coordinates of the animation
 		float coords[3];
 		static Address coordoffset(0x5D4C88);
-		coordoffset.Call<void>(animInstance + 2, PlayerClass::GetInstance(pIndex)->GetCoordinates(wX, wY)); 
-		
+		coordoffset.Call<void>(animInstance + 2, PlayerClass::GetInstance(pIndex)->GetCoordinates(wX, wY));
+
 	//Knock Door patch
-		static const Address knock(0x655400);
-		
-	//sets animation data for each animation correctly	
+		static Address knock(0x655400);
+
+	//sets animation data for each animation correctly
 		switch(animID) {
-		//item anims	
+		//item anims
 			case 0xB7:
 			case 0x71:
 			case 0x72:
@@ -99,7 +99,7 @@ namespace CTRPluginFramework {
 			break;
 		//knock door
 			case 0x45: {
-				Process::Patch(knock.addr, 0xE8BD8FF0); //patch so knocking doesn't happen   
+				Process::Patch(knock.addr, 0xE8BD8FF0); //patch so knocking doesn't happen
 				data.KnockDoor_45(sound);
 			} break;
 		//put item out
@@ -132,7 +132,7 @@ namespace CTRPluginFramework {
 		//a lot of random ones
 			case 0x1C:
 			case 0x25:
-			case 0x1D: 
+			case 0x1D:
 			case 0xE2:
 			case 0xE5:
 			case 0xA8:
@@ -249,7 +249,7 @@ namespace CTRPluginFramework {
 				data.Congrats_2A();
 			break;
 		//toy hammer
-			case 0x9C: 
+			case 0x9C:
 				data.ToyHammerHit_9C(Coord{ wX, wY });
 			break;
 		//every other animation
@@ -260,21 +260,21 @@ namespace CTRPluginFramework {
 
 		if(!directSend) {
 		//If animation is forced and needs overwrite patch code
-			static const Address OverWriteInstance(0x1ABADC);	
+			static Address OverWriteInstance(0x1ABADC);
 			if(forced && needOverwrite) {
 				Process::Patch(Address(0x5C3EA0).addr + 0x10, 0xE3A00000 + pIndex); //Patches code so player instance returns Index Address of selected player
 				Process::Patch(OverWriteInstance.addr, 0xE3A00000 + pIndex); //Patches code so instead of own player selected player gets used
 			}
 		//If animation is forced on someone else patch code
-			static const Address PlayerDataCondition(0x2FEB64);
-			static const Address IndexCondition(0x677530);
-			static const Address InstanceCondition(0x677537);	
-			static const Address Condition1(0x677454);
-			static const Address Condition2(0x6774F0);
+			static Address PlayerDataCondition(0x2FEB64);
+			static Address IndexCondition(0x677530);
+			static Address InstanceCondition(0x677537);
+			static Address Condition1(0x677454);
+			static Address Condition2(0x6774F0);
 
 			if(forced) {
 				Process::Patch(PlayerDataCondition.addr, 0xE1A00000); //removes condition
-				
+
 				Process::Patch(IndexCondition.addr, 0xE1A01006); //removes condition
 				Process::Write8(InstanceCondition.addr, 0xEB); //removes condition
 				Process::Patch(Condition1.addr, 0xE1A00000); //removes condition
@@ -285,20 +285,20 @@ namespace CTRPluginFramework {
 			}
 		//Executes Animation
 			data.ExecuteAnimation(animID);
-			
+
 		//If animation is forced on someone else undo patches
 			if(forced) {
 				Sleep(Milliseconds(5));
-				
+
 				Process::Patch(PlayerDataCondition.addr, 0x1A000002); //Undo Patch
 
 				Process::Patch(IndexCondition.addr, 0x01A01006); //Undo Patch
 				Process::Write8(InstanceCondition.addr, 0x0B); //Undo Patch
-				Process::Patch(Condition1.addr, 0x0A000038); //Undo Patch	
+				Process::Patch(Condition1.addr, 0x0A000038); //Undo Patch
 				Process::Patch(Condition2.addr, 0x0A00001C); //Undo Patch
 				Process::Patch(Address(0x677504).addr, 0x1A000017); //Undo Patch
 				Process::Patch(Address(0x628B54).addr, 0xE5D11268); //Undo Patch
-		
+
 				u32 res = PluginUtils::Branch::CalculateBranchInstruction(Address(0x5C3EA0).addr + 0x10, Address(0x305EF0).addr);
 				Process::Patch(Address(0x5C3EA0).addr + 0x10, 0x2B000000 + res); //Undo Patch
 				Process::Patch(OverWriteInstance.addr, 0xE3A00004); //Undo Patch
@@ -313,16 +313,16 @@ namespace CTRPluginFramework {
 				data.ExecuteAnimation(animID); //Executes Animation on yourself
 			}
 		}
-		
+
 		//After it's over undo the patch with the Knock Animation
-		Process::Patch(knock.addr, 0xE24DD00C);    
-		
+		Process::Patch(knock.addr, 0xE24DD00C);
+
 		Sleep(Milliseconds(25));
 		return 1;
 	}
 //Send Animation Packet
 	void Animation::SendAnimPacket(u8 senderIndex, u32 animObj, u8 animID, u8 roomID, u8 targetPlayerIndex) {
- 		static const Address PatchIndex(0x5C3CAC);
+ 		static Address PatchIndex(0x5C3CAC);
 
 		Process::Write8(animObj, roomID);
 		Process::Write8(animObj + 1, animID);
@@ -332,7 +332,7 @@ namespace CTRPluginFramework {
 		Sleep(Milliseconds(5));
 
 		static Address SendPacketFunc(0x5C3C7C);
-		SendPacketFunc.Call<void>(targetPlayerIndex, animObj); 
+		SendPacketFunc.Call<void>(targetPlayerIndex, animObj);
 
 		Sleep(Milliseconds(5));
 		Process::Patch(Address(0x628B54).addr, 0xE5D11268);
@@ -344,7 +344,7 @@ namespace CTRPluginFramework {
 		if(!PlayerClass::GetInstance(pID)->GetWorldCoords(&x, &y)) {
 			return;
 		}
-		
+
 		Animation::ExecuteAnimationWrapper(pID, 6, {0, 0}, 0, 0, 0, 0, x, y, 0);
 	}
 }

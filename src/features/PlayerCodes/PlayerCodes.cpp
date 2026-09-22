@@ -216,7 +216,7 @@ namespace CTRPluginFramework {
 			}
 
 			if(!g_appColorHookInitialized) {
-				static const Address address(0x4A33C8);
+				static Address address(0x4A33C8);
 				g_appColorHook.Initialize(address.addr, (u32)BGRHook);
 				g_appColorHook.SetFlags(USE_LR_TO_RETURN);
 				g_appColorHookInitialized = true;
@@ -636,7 +636,7 @@ namespace CTRPluginFramework {
 //Show Players On The Map
 	void map(MenuEntry *entry) {
 		PluginMenu *menu = PluginMenu::GetRunningInstance();
-		static const Address writePatch(0x2215B0);
+		static Address writePatch(0x2215B0);
 		static Hook hook;
 
 		if(entry->WasJustActivated()) {

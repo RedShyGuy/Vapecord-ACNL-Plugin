@@ -53,7 +53,7 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 
 	std::string NPC::GetNName(u16 VID) {
 		static Address SetUp(0x308210);
-		static const Address NNPCModelData(0xA84AF0);
+		static Address NNPCModelData(0xA84AF0);
 
 		u32 Stack[44];
 		u32 add = Address(0x81F9D0).Call<u32>(Stack);
@@ -190,7 +190,7 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 	u32 NPC::GetPlayerSave(u32 npcData) {
 		return *(u32 *)(npcData + 0x9AC);
 	}
-  
+
   	void NPC::GetLoadedSPNPC(std::vector<NPCdata> &vec) {
 		vec.clear();
 		u32 data = 0;
@@ -204,13 +204,13 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 			}
 		}
 
-	//Special Case (Boat SPNPC (Kappn))	
+	//Special Case (Boat SPNPC (Kappn))
 		data = GetData(0x18C);
 		if(data != 0) {
 			vec.push_back(NPCdata{ GetSPName(0x15), data }); //0x15 is Kappn's SPVID (it isn't in the RAM when he is loaded there)
 		}
 
-	//Special Case (Tour Tortimer (specifically at the tour results))	
+	//Special Case (Tour Tortimer (specifically at the tour results))
 		data = GetData(0x18B);
 		if(data != 0) {
 			vec.push_back(NPCdata{ GetSPName(0x41), data }); //0x41 is Tortimers's SPVID (it isn't in the RAM when he is loaded there)
@@ -260,7 +260,7 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 			if(data != 0) {
 				save = GetPlayerSave(data);
 				str = "";
-				Process::ReadString(save + 0x55A8, str, 16, StringFormat::Utf16); 
+				Process::ReadString(save + 0x55A8, str, 16, StringFormat::Utf16);
 				vec.push_back(NPCdata{ str, data });
 			}
 		}
@@ -271,7 +271,7 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 			if(data != 0) {
 				save = GetPlayerSave(data);
 				str = "";
-				Process::ReadString(save + 0x55A8, str, 16, StringFormat::Utf16); 
+				Process::ReadString(save + 0x55A8, str, 16, StringFormat::Utf16);
 				vec.push_back(NPCdata{ str, data });
 			}
 		}
@@ -282,7 +282,7 @@ Gets npc data for anim mods, coord mods, etc 0xB6F9B4
 			if(data != 0) {
 				save = GetPlayerSave(data);
 				str = "";
-				Process::ReadString(save + 0x55A8, str, 16, StringFormat::Utf16); 
+				Process::ReadString(save + 0x55A8, str, 16, StringFormat::Utf16);
 				vec.push_back(NPCdata{ str, data });
 			}
 		}

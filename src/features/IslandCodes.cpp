@@ -114,7 +114,7 @@ namespace CTRPluginFramework {
 	}
 //Island Shop
 	void IslandShop(MenuEntry *entry) {
-		static const Address IslandShopPointer(0x954238);
+		static Address IslandShopPointer(0x954238);
 		if(*(u32 *)IslandShopPointer.addr == 0) {
 			return;
 		}
@@ -128,7 +128,7 @@ namespace CTRPluginFramework {
 
 //All Tours
 	void alltour(MenuEntry *entry) {
-		static const Address TourPatch(0x76FCC0);
+		static Address TourPatch(0x76FCC0);
 		if(entry->WasJustActivated()) {
 			Process::Patch(TourPatch.addr, 0xE1A00000); //unsure? (still keeping it for safety)
 			Process::Patch(TourPatch.addr + 0x54, 0xE1A00000);  //Adds tour difficulty
@@ -205,8 +205,8 @@ namespace CTRPluginFramework {
 
 	void FreeKappn(MenuEntry *entry) {
 		static Hook hook1, hook2;
-		static const Address kappn1(0x5DC048);
-		static const Address kappn2(0x5DAF98);
+		static Address kappn1(0x5DC048);
+		static Address kappn2(0x5DAF98);
 
 		if(entry->WasJustActivated()) {
 			hook1.Initialize(kappn1.addr, (u32)PATCH_KappnBypass1);

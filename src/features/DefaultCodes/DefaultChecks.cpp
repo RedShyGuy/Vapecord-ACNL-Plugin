@@ -301,7 +301,7 @@ namespace CTRPluginFramework {
 
     /*
 		static Hook suspendHook;
-		static const Address suspendAddress(0x124EB8);
+		static Address suspendAddress(0x124EB8);
 		SetHook(suspendHook, suspendAddress.addr, (u32)SuspendCallBack, USE_LR_TO_RETURN);
 		*/
 

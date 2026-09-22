@@ -161,7 +161,7 @@ namespace CTRPluginFramework {
         static Address addr1(0x522520);
         static Address addr2(0x5667A8);
         static Address addr3(0x57C4F0);
-        static const Address point1(0x94FDE8);
+        static Address point1(0x94FDE8);
 
 		float fVar914 = 0;
 		u16 uVar918 = 0;

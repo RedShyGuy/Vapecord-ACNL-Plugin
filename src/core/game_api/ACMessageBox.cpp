@@ -7,7 +7,7 @@ namespace CTRPluginFramework {
 	static Clock clock;
 
     void SetMSGData(u32 mData, const std::string& str) {
-		static const Address point(0x90AACC);
+		static Address point(0x90AACC);
 		Process::Write32(mData, point.addr);
 		Process::Write32(mData + 4, mData + 0x18);
 		Process::Write32(mData + 8, 0x78);
@@ -24,7 +24,7 @@ namespace CTRPluginFramework {
 			first = false;
 		}
 
-		if(clock.HasTimePassed(ACMSG::LifeSpan) || !ACMSG::IsRunning()) { 
+		if(clock.HasTimePassed(ACMSG::LifeSpan) || !ACMSG::IsRunning()) {
 			ACMSG::Stop();
 
 			first = true;
@@ -36,12 +36,12 @@ namespace CTRPluginFramework {
 
     void ACMSG::Stop(void) {
 		clock.Restart();
-        static const Address point(0x951702);
+        static Address point(0x951702);
         Process::Write8(point.addr, 1);
     }
 
     bool ACMSG::IsRunning(void) {
-        static const Address point(0x951702);
+        static Address point(0x951702);
         return *(u8 *)point.addr == 0;
     }
 
@@ -51,17 +51,17 @@ namespace CTRPluginFramework {
 
 		static Address func1(0x5E3768);
 		static Address func2(0x5E3920);
-		static Address func3(0x5E3A64);	
-		static Address func4(0x75BDAC);	
+		static Address func3(0x5E3A64);
+		static Address func4(0x75BDAC);
 		static Address func5(0x81C104);
-		static const Address point(0x8578A0);
+		static Address point(0x8578A0);
 
 		u32 mData = PlayerClass::GetInstance()->Offset(0x5750);
 
 		func1.Call<void>(mData + 0x458, *(u32 *)(mData + 0x44C), 0);
 
 		SetMSGData(mData + 0x51C, str);
-		
+
 		u32 uVar2 = mData + 0x458;
 		func2.Call<void>(uVar2, mData + 0x51C);
 		func3.Call<void>(uVar2);

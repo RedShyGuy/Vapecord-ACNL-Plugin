@@ -220,7 +220,7 @@ namespace CTRPluginFramework {
     }
 //Walk Particle
 	void Walkparticle(MenuEntry *entry) {
-		static const Address WalkParticlePatch(0x652694);
+		static Address WalkParticlePatch(0x652694);
 		static Hook hook;
 
 		if(entry->WasJustActivated()) {

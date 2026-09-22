@@ -1869,8 +1869,8 @@ namespace CTRPluginFramework {
 	}
 
 	void lightswitch(MenuEntry *entry) {
-		static const Address TargetAddress(0x190EA8);
-		static const Address Patch(0x1E7AD8);
+		static Address TargetAddress(0x190EA8);
+		static Address Patch(0x1E7AD8);
 
 		if(entry->WasJustActivated()) {
 		//this disables the "non switchable light" flag to be written

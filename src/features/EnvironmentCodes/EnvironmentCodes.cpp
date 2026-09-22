@@ -291,8 +291,8 @@ namespace CTRPluginFramework {
 
 	void BuriedInspector(MenuEntry *entry) {
 		static Hook BuriedHook, PickBuriedHook;
-		static const Address BuriedAddress(0x665534);
-		static const Address PickBuriedAddress(0x59A0BC);
+		static Address BuriedAddress(0x665534);
+		static Address PickBuriedAddress(0x59A0BC);
 
 		if(entry->WasJustActivated()) {
 			BuriedHook.Initialize(BuriedAddress.addr, (u32)ThinkToBuriedItems);

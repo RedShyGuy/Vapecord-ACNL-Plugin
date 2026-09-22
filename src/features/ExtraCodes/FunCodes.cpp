@@ -198,7 +198,7 @@ namespace CTRPluginFramework {
 			}
 
 			static Address CreateTPC(0x5B3594);
-			static const Address TPCPoint(0x954F10);
+			static Address TPCPoint(0x954F10);
 
 			CreateTPC.Call<void>(*(u32 *)TPCPoint.addr, &player->HasTPCPic);
 			Game::PlaySound(0x4A7);

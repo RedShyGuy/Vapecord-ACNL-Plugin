@@ -216,8 +216,8 @@ namespace CTRPluginFramework {
 		}
 
 		u32 KeyData = *(u32 *)(Game::BaseInvPointer() + 0xC) + 0x1328;
-		static const Address KeyEnter(0xAD7253);
-		static const Address KeyAt(0xAD75C0);
+		static Address KeyEnter(0xAD7253);
+		static Address KeyAt(0xAD75C0);
 
 		Process::Write8(KeyData + 0xC, 0x41);
 		Process::Write8(KeyData + 0x12B, 0x44);
@@ -242,11 +242,11 @@ namespace CTRPluginFramework {
 			0xE076, 0xE077
         };
 
-		static const Address IsOpen(0xAD7050);
+		static Address IsOpen(0xAD7050);
 
         if(*(u16 *)IsOpen.addr == 0x0103) {
 			u32 offset = 0;
-			static const Address customKey(0xAD7630);
+			static Address customKey(0xAD7630);
             offset = *(u32 *)customKey.addr;
             if(offset != 0) {
                 Process::Read32(offset + 0x224, offset);
@@ -265,7 +265,7 @@ namespace CTRPluginFramework {
     }
 
 	void morenumberisland(MenuEntry *entry) {
-		static const Address numbers(0xAD7158);
+		static Address numbers(0xAD7158);
 		Process::Write8(numbers.addr, 2);
 
 		if(!entry->IsActivated()) {

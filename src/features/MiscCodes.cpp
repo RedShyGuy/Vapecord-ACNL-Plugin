@@ -152,14 +152,14 @@ namespace CTRPluginFramework {
 
 //Move Furniture
 	void roomSeeder(MenuEntry *entry) {
-		static const Address movingFurniture(0x4E1720);
-		static const Address pickingUpFurniture(0x678AC0);
-		static const Address placingFurniture1(0x76B880);
-		static const Address placingFurniture2(0x26FED8);
-		static const Address placingFurniture3(0x4E78A8);
-		static const Address lightswitchVisible(0x3279CC);
-		static const Address lightswitchFunction(0x3277E8);
-		static const Address moveFurnButton(0x326B98);
+		static Address movingFurniture(0x4E1720);
+		static Address pickingUpFurniture(0x678AC0);
+		static Address placingFurniture1(0x76B880);
+		static Address placingFurniture2(0x26FED8);
+		static Address placingFurniture3(0x4E78A8);
+		static Address lightswitchVisible(0x3279CC);
+		static Address lightswitchFunction(0x3277E8);
+		static Address moveFurnButton(0x326B98);
 
 		static Hook movingFurnitureHook;
 		static Hook pickingUpFurnitureHook;
