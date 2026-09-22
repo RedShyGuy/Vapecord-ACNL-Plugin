@@ -21,7 +21,7 @@ jobs:
     container: devkitpro/devkitarm
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
     - name: Download 3gxtool
       run: |
@@ -58,13 +58,13 @@ jobs:
         done
 
     - name: Upload Package Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: Vapecord.Public
         path: package/
 
     - name: Upload ELF Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: Vapecord.Public.elf
         path: Vapecord_Public.elf
