@@ -55,6 +55,9 @@ jobs:
             mkdir -p package/luma/plugins/$folder/snd
             cp Vapecord_Public.3gx package/luma/plugins/$folder/Vapecord_Public.3gx
             cp -r assets/snd/* package/luma/plugins/$folder/snd/
+
+            mkdir -p package/luma/titles/$folder/romfs/Font
+            cp -r assets/romfs/Font/* package/luma/titles/$folder/romfs/Font/
         done
 
     - name: Upload Package Artifact
