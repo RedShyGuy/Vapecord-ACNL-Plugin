@@ -6,6 +6,7 @@
 #include "core/checks/IDChecks.hpp"
 #include "core/infrastructure/PluginUtils.hpp"
 #include "core/game_api/Dropper.hpp"
+#include "core/HUD.hpp"
 #include "Color.h"
 #include <cstring>
 
@@ -162,13 +163,13 @@ namespace CTRPluginFramework {
 				for(int i = 0; i < 8; ++i) {
 					WalkOver[i].Patch(WalkOverPatch[i]);
 				}
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::WALK_OVER) + " " << Color::Green << Language::getInstance()->get(TextID::STATE_ON));
+				HUD::Notify(Language::getInstance()->get(TextID::WALK_OVER) + " " << HUD::Green << Language::getInstance()->get(TextID::STATE_ON));
 			}
 			else {
 				for(int i = 0; i < 8; ++i) {
 					WalkOver[i].Unpatch();
 				}
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::WALK_OVER) + " " << Color::Red << Language::getInstance()->get(TextID::STATE_OFF));
+				HUD::Notify(Language::getInstance()->get(TextID::WALK_OVER) + " " << HUD::Red << Language::getInstance()->get(TextID::STATE_OFF));
 			}
         }
 
@@ -200,10 +201,10 @@ namespace CTRPluginFramework {
 
 		if(entry->Hotkeys[0].IsPressed()) {
 			if(isWalking) {
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::MOVEMENT_CHANGE_SWIM), Color::Blue);
+				HUD::Notify(Language::getInstance()->get(TextID::MOVEMENT_CHANGE_SWIM), Color::Blue);
 			}
 		    else {
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::MOVEMENT_CHANGE_WALK), Color::Green);
+				HUD::Notify(Language::getInstance()->get(TextID::MOVEMENT_CHANGE_WALK), Color::Green);
 			}
 
 			for(int i = 0; i < 6; ++i) {
@@ -252,7 +253,7 @@ namespace CTRPluginFramework {
 				pos = -1;
 			}
 
-			OSD::NotifySysFont(allforce ? Language::getInstance()->get(TextID::PLAYER_TELEPORT_ALL) : Utils::Format(Language::getInstance()->get(TextID::PLAYER_TELEPORT_PLAYER).c_str(), pos + 1));
+			HUD::Notify(allforce ? Language::getInstance()->get(TextID::PLAYER_TELEPORT_ALL) : Utils::Format(Language::getInstance()->get(TextID::PLAYER_TELEPORT_PLAYER).c_str(), pos + 1));
 		}
 
 		else if(entry->Hotkeys[1].IsPressed()) {
@@ -260,13 +261,13 @@ namespace CTRPluginFramework {
 			if(PlayerClass::GetInstance()->GetWorldCoords(&x, &y)) {
 				if(!allforce && pos >= 0) {
 					Animation::ExecuteAnimationWrapper(pos, 0x34, {1, 0}, 1, 1, 1, 0, x, y, true);
-					OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::PLAYER_TELEPORT_PLAYER_TELEPORTED).c_str(), pos + 1));
+					HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::PLAYER_TELEPORT_PLAYER_TELEPORTED).c_str(), pos + 1));
 				}
 				else {
 					for(u8 i = 0; i < 4; ++i) {
 						Animation::ExecuteAnimationWrapper(i, 0x34, {1, 0}, 1, 1, 1, 0, x, y, true);
 					}
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::PLAYER_TELEPORT_ALL_TELEPORTED));
+					HUD::Notify(Language::getInstance()->get(TextID::PLAYER_TELEPORT_ALL_TELEPORTED));
 				}
 			}
 		}
@@ -293,15 +294,15 @@ namespace CTRPluginFramework {
 			switch(*(u32 *)visi2.addr) {
 				case 0xE1A07002:
 					mode = 0;
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::VISIBILITY_STATIONARY), Color::Blue);
+					HUD::Notify(Language::getInstance()->get(TextID::VISIBILITY_STATIONARY), Color::Blue);
 				break;
 				case 0xE3A07006:
 					mode = 1;
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::VISIBILITY_INVISIBLE), Color::Yellow);
+					HUD::Notify(Language::getInstance()->get(TextID::VISIBILITY_INVISIBLE), Color::Yellow);
 				break;
 				case 0xE3A07000:
 					mode = 2;
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::VISIBILITY_DEFAULT), Color::Green);
+					HUD::Notify(Language::getInstance()->get(TextID::VISIBILITY_DEFAULT), Color::Green);
 				break;
 			}
 
@@ -387,7 +388,7 @@ namespace CTRPluginFramework {
 	void roomWarp(MenuEntry *entry) {
 		if(entry->Hotkeys[0].IsPressed()) {
 			if(!PlayerClass::GetInstance()->IsLoaded()) {
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
+				HUD::Notify(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
 				return;
 			}
 
@@ -395,16 +396,16 @@ namespace CTRPluginFramework {
 			if(PluginUtils::Input::PromptNumber<u8>({ Language::getInstance()->get(TextID::ROOM_WARPING_ENTER_ID), true, 2, 0, onRoomChange }, val)) {
 				s8 res = Game::TeleportToRoom(val, 1, 1, 0);
 				if(res == 1) {
-					OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::ROOM_LOADER_WARPING_TO_ROOM).c_str(), val));
+					HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::ROOM_LOADER_WARPING_TO_ROOM).c_str(), val));
 				}
 				else if(res == -1) {
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
+					HUD::Notify(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
 				}
 				else if(res == -2) {
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::ONLY_OFFLINE), Color::Red);
+					HUD::Notify(Language::getInstance()->get(TextID::ONLY_OFFLINE), Color::Red);
 				}
 				else {
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::ROOM_LOADER_ERROR), Color::Red);
+					HUD::Notify(Language::getInstance()->get(TextID::ROOM_LOADER_ERROR), Color::Red);
 				}
 			}
 		}

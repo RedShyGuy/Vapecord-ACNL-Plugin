@@ -1,5 +1,5 @@
 #include <CTRPluginFramework.hpp>
-
+#include "core/HUD.hpp"
 #include "core/game_api/Game.hpp"
 #include "core/infrastructure/Address.hpp"
 #include "core/infrastructure/Language.hpp"
@@ -203,7 +203,7 @@ namespace CTRPluginFramework {
 				PluginMenu *menu = PluginMenu::GetRunningInstance();
 				if (menu != nullptr) {
 					if (menu->IsOpen()) {
-						OSD::NotifySysFont(Language::getInstance()->get(TextID::KEEP_CONN_PLAYER_LEAVING), Color::Purple);
+						HUD::Notify(Language::getInstance()->get(TextID::KEEP_CONN_PLAYER_LEAVING), Color::Purple);
 						menu->ForceClose();
 
 						static Address usersWhoWantToLeave(0x94EE0C);
@@ -254,7 +254,7 @@ namespace CTRPluginFramework {
 		PluginMenu *menu = PluginMenu::GetRunningInstance();
 		if (menu != nullptr) {
 			if (menu->IsOpen()) {
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::KEEP_CONN_PLAYER_JOINING), Color::Purple);
+				HUD::Notify(Language::getInstance()->get(TextID::KEEP_CONN_PLAYER_JOINING), Color::Purple);
 				menu->ForceClose();
 			}
 		}

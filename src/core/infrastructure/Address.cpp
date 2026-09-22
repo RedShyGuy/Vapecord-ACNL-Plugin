@@ -4,9 +4,9 @@
 namespace CTRPluginFramework {
 	std::unordered_map<u32, u32> Address::origValList;
 	std::string Address::regionName = "";
-	Address::Region Address::regionId;
+	Address::Region Address::regionId = Region::INVALID;
 
-	std::string Address::LoadRegion(void) {
+	void Address::LoadRegion(void) {
 		switch(Process::GetTitleID()) {
 			case TID_USA:
 				regionName = "USA";
@@ -43,12 +43,21 @@ namespace CTRPluginFramework {
 			break;
 			default:
 				regionName = "";
+				regionId = Region::INVALID;
 			break;
 		}
+	}
+
+	std::string Address::GetRegionName(void) {
 		return regionName;
 	}
 
 	Address::Address(u32 address) {
+		if (regionId == Region::INVALID || regionId > Region::KORWA) {
+			SetAddressData(address);
+			return;
+		}
+
 		if (regionId == Region::USA) {
 			SetAddressData(address);
 			return;
@@ -74,7 +83,9 @@ namespace CTRPluginFramework {
 			return;
 		}
 		//If not, read and store it
-		origVal = *(u32 *)addr;
+		if(!Process::Read32(addr, origVal)) {
+			origVal = 0;
+		}
 		origValList.emplace(addr, origVal);
 	}
 
@@ -111,6 +122,11 @@ namespace CTRPluginFramework {
 	}
 
 	bool Address::IsPatched(void) {
-		return (*(u32*)addr != origVal);
+		u32 currentVal = 0;
+		if(!Process::Read32(addr, currentVal)) {
+			return false;
+		}
+
+		return (currentVal != origVal);
 	}
 }

@@ -1048,7 +1048,7 @@
     "FILE_RES2": "Erro\nNão foi possível encontrar arquivos para excluir.",
     "FILE_RES3": "Erro\nNão foi possível excluir o arquivo.",
     "SAVE_REMINDER_SETTINGS": "Lembretes de salvamento",
-    "SAVE_REMINDER_MESSAGE": "Lembrete: Não se esqueça de salvar o jogo! \uE008",
+    "SAVE_REMINDER_MESSAGE": "Lembrete: Não se esqueça de salvar o jogo! :)",
     "SAVE_REMINDER_INTERVAL": "Intervalo: %d min",
     "SAVE_REMINDER_INTERVAL_PROMPT": "Digite o intervalo em minutos (5-120):",
     "SCAM_TITLE": "! Aviso importante !",

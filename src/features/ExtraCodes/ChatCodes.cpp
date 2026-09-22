@@ -4,7 +4,7 @@
 #include "core/game_api/Player.hpp"
 #include "core/game_api/Inventory.hpp"
 #include "Files.h"
-
+#include "core/HUD.hpp"
 #include <charconv>
 #include <optional>
 #include <span>
@@ -154,7 +154,7 @@ namespace CTRPluginFramework {
 
 						f_board.Flush();
 						f_board.Close();
-						OSD::NotifySysFont(Language::getInstance()->get(TextID::CHAT_BUTTON_COPIED), Color(0xFF0077FF));
+						HUD::Notify(Language::getInstance()->get(TextID::CHAT_BUTTON_COPIED), Color(0xFF0077FF));
 					}
 				}
 				break;
@@ -190,7 +190,7 @@ namespace CTRPluginFramework {
 						f_board.Flush();
 						f_board.Close();
 
-						OSD::NotifySysFont(Language::getInstance()->get(TextID::CHAT_BUTTON_CUT), Color(0x00FF6FFF));
+						HUD::Notify(Language::getInstance()->get(TextID::CHAT_BUTTON_CUT), Color(0x00FF6FFF));
 					}
 				}
 				break;
@@ -591,9 +591,9 @@ namespace CTRPluginFramework {
 							const auto& playerName = *reinterpret_cast<const std::array<u16, 9>*>(player + 0x55A8);
 							std::array<char, 9 * 4> playerNameUtf8 {};
 							utf16_to_utf8(reinterpret_cast<u8*>(playerNameUtf8.data()), playerName.data(), playerNameUtf8.size());
-							OSD::NotifySysFont((Player::GetColor(sender) << std::string(playerNameUtf8.data()) << Color::White) + ": " + result);
+							HUD::Notify((Player::GetColor(sender) << std::string(playerNameUtf8.data()) << Color::White) + ": " + result);
 						}
-						else OSD::NotifySysFont(result);
+						else HUD::Notify(result);
 					}
 					else {
 						static Address submitChat(0x218104);

@@ -1,5 +1,6 @@
 #include <CTRPluginFramework.hpp>
 #include "core/game_api/Chat.hpp"
+#include "core/HUD.hpp"
 #include <cstring>
 
 namespace CTRPluginFramework {
@@ -183,7 +184,7 @@ namespace CTRPluginFramework {
         void HandleAnimationCommand(const ParsedCommand &parsed, const u8 playerIndex) {
             const u8 animID = StringToHex<u8>(parsed.ID_8Bit, 6);
             if (!IDChecks::AnimationValid(animID, playerIndex)) {
-                OSD::NotifySysFont(
+                HUD::Notify(
                     Language::getInstance()->get(TextID::CHAT_INVALID_ANIMATION),
                     Color::Red
                 );
@@ -191,7 +192,7 @@ namespace CTRPluginFramework {
             }
 
             if (TryExecuteAnimationCommand(playerIndex, animID, 0, 0, 0, 2000)) {
-                OSD::NotifySysFont(
+                HUD::Notify(
                     Utils::Format(
                         Language::getInstance()->get(TextID::CHAT_ANIMATION).c_str(),
                         animID
@@ -204,7 +205,7 @@ namespace CTRPluginFramework {
         void HandleEmotionCommand(const ParsedCommand &parsed, const u8 playerIndex) {
             const u8 emotionID = StringToHex<u8>(parsed.ID_8Bit, 1);
             if (!IDChecks::EmotionValid(emotionID)) {
-                OSD::NotifySysFont(
+                HUD::Notify(
                     Language::getInstance()->get(TextID::CHAT_INVALID_EMOTION),
                     Color::Red
                 );
@@ -212,7 +213,7 @@ namespace CTRPluginFramework {
             }
 
             if (TryExecuteAnimationCommand(playerIndex, 0xAF, emotionID, 0, 0, 2000)) {
-                OSD::NotifySysFont(
+                HUD::Notify(
                     Utils::Format(
                         Language::getInstance()->get(TextID::CHAT_EMOTION).c_str(),
                         emotionID
@@ -225,7 +226,7 @@ namespace CTRPluginFramework {
         void HandleSnakeCommand(const ParsedCommand &parsed, const u8 playerIndex) {
             const u16 snakeID = StringToHex<u16>(parsed.ID_12Bit, 1);
             if (!IDChecks::SnakeValid(snakeID)) {
-                OSD::NotifySysFont(
+                HUD::Notify(
                     Language::getInstance()->get(TextID::CHAT_INVALID_SNAKE),
                     Color::Red
                 );
@@ -233,7 +234,7 @@ namespace CTRPluginFramework {
             }
 
             if (TryExecuteAnimationCommand(playerIndex, 0xC5, 0, snakeID, 0, 2000)) {
-                OSD::NotifySysFont(
+                HUD::Notify(
                     Utils::Format(
                         Language::getInstance()->get(TextID::CHAT_SNAKE).c_str(),
                         snakeID
@@ -246,7 +247,7 @@ namespace CTRPluginFramework {
         void HandleMusicCommand(const ParsedCommand &parsed, const u8 playerIndex) {
             const u16 musicID = StringToHex<u16>(parsed.ID_12Bit, 0x660);
             if (!IDChecks::MusicValid(musicID)) {
-                OSD::NotifySysFont(
+                HUD::Notify(
                     Language::getInstance()->get(TextID::CHAT_INVALID_MUSIC),
                     Color::Red
                 );
@@ -254,7 +255,7 @@ namespace CTRPluginFramework {
             }
 
             if (TryExecuteAnimationCommand(playerIndex, 0xC4, 0, 0, musicID, 100)) {
-                OSD::NotifySysFont(
+                HUD::Notify(
                     Utils::Format(
                         Language::getInstance()->get(TextID::CHAT_MUSIC).c_str(),
                         musicID
@@ -267,7 +268,7 @@ namespace CTRPluginFramework {
         void HandleItemCommand(const ParsedCommand &parsed) {
             gState.item.ID = StringToHex<u16>(parsed.ID_16Bit, 0x2001);
             if (!gState.item.isValid()) {
-                OSD::NotifySysFont(
+                HUD::Notify(
                     Language::getInstance()->get(TextID::INVALID_ITEM),
                     Color::Red
                 );
@@ -279,7 +280,7 @@ namespace CTRPluginFramework {
             }
 
             if (TryExecuteItemCommand(gState.item)) {
-                OSD::NotifySysFont(
+                HUD::Notify(
                     Utils::Format(
                         Language::getInstance()->get(TextID::CHAT_ITEM).c_str(),
                         PackItemForDisplay(gState.item)
@@ -294,7 +295,7 @@ namespace CTRPluginFramework {
 
             ItemNamePack match;
             if (!Item::searchByKeyword(parsed.itemName, match)) {
-                OSD::NotifySysFont(
+                HUD::Notify(
                     Language::getInstance()->get(TextID::CHAT_NO_ITEM_FOUND),
                     Color::Red
                 );
@@ -303,7 +304,7 @@ namespace CTRPluginFramework {
 
             gState.item = Item(match.ID);
             if (!gState.item.isValid()) {
-                OSD::NotifySysFont(
+                HUD::Notify(
                     Language::getInstance()->get(TextID::INVALID_ITEM),
                     Color::Red
                 );
@@ -311,7 +312,7 @@ namespace CTRPluginFramework {
             }
 
             if (TryExecuteItemCommand(gState.item)) {
-                OSD::NotifySysFont(
+                HUD::Notify(
                     Utils::Format(
                         Language::getInstance()->get(TextID::CHAT_ITEM).c_str(),
                         PackItemForDisplay(gState.item)

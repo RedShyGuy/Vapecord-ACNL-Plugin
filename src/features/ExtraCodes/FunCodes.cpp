@@ -1,7 +1,7 @@
 #include "features/cheats.hpp"
 #include "core/game_api/Player.hpp"
 #include "core/game_api/Game.hpp"
-
+#include "core/HUD.hpp"
 #include "core/infrastructure/PluginUtils.hpp"
 #include "core/game_api/PlayerClass.hpp"
 #include "core/game_api/Animation.hpp"
@@ -193,7 +193,7 @@ namespace CTRPluginFramework {
 		if(entry->Hotkeys[0].IsPressed()) {
 			ACNL_Player *player = Player::GetSaveData();
 			if(!player) {
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
+				HUD::Notify(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
 				return;
 			}
 
@@ -405,12 +405,12 @@ namespace CTRPluginFramework {
             if(Controller::IsKeysPressed(Key::R + Key::Y)) {
 				switch(isOn) {
 					case 0:
-						OSD::NotifySysFont(Language::getInstance()->get(TextID::CAMERA_MOD_PLAYER) << " " << Color::Red << Language::getInstance()->get(TextID::CAMERA_MOD_LOCKED));
+						HUD::Notify(Language::getInstance()->get(TextID::CAMERA_MOD_PLAYER) << " " << HUD::Red << Language::getInstance()->get(TextID::CAMERA_MOD_LOCKED));
 						Animation::ExecuteAnimationWrapper(4, 0xF, {0, 0}, 0, 0, 0, 0, 0, 0, 0);
 						isOn = true;
 					break;
 					case 1:
-						OSD::NotifySysFont(Language::getInstance()->get(TextID::CAMERA_MOD_PLAYER) << " " << Color::Green << Language::getInstance()->get(TextID::CAMERA_MOD_UNLOCKED));
+						HUD::Notify(Language::getInstance()->get(TextID::CAMERA_MOD_PLAYER) << " " << HUD::Green << Language::getInstance()->get(TextID::CAMERA_MOD_UNLOCKED));
 						Animation::ExecuteAnimationWrapper(4, 6, {0, 0}, 0, 0, 0, 0, 0, 0, 0);
 						isOn = false;
 					break;
@@ -460,7 +460,7 @@ namespace CTRPluginFramework {
         patch:
             if(!isPatched) {
             //disable camera following
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::CAMERA_MOD_CAM_FOLLOWING) << " " << Color::Red << Language::getInstance()->get(TextID::STATE_OFF));
+				HUD::Notify(Language::getInstance()->get(TextID::CAMERA_MOD_CAM_FOLLOWING) << " " << HUD::Red << Language::getInstance()->get(TextID::STATE_OFF));
 				cameraAsm.Patch(0xEA000020);
                 isPatched = true;
             }
@@ -468,7 +468,7 @@ namespace CTRPluginFramework {
         unpatch:
             if(isPatched) {
 			//reenable camera followig
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::CAMERA_MOD_CAM_FOLLOWING) << " " << Color::Green << Language::getInstance()->get(TextID::STATE_ON));
+				HUD::Notify(Language::getInstance()->get(TextID::CAMERA_MOD_CAM_FOLLOWING) << " " << HUD::Green << Language::getInstance()->get(TextID::STATE_ON));
 				cameraAsm.Unpatch();
                 isPatched = false;
             }

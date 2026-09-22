@@ -13,6 +13,7 @@
 #include "core/RuntimeContext.hpp"
 #include "Color.h"
 #include "Files.h"
+#include "core/HUD.hpp"
 
 #include <array>
 #include <optional>
@@ -65,6 +66,7 @@ namespace CTRPluginFramework {
 		}
 
 		std::vector<std::string> strings1 = { "", "", "", "", "", "" };
+		HUD::TagColor pColors[4] = { HUD::Blue, HUD::Red, HUD::Green, HUD::Orange };
 
 		void GetPlayerInfoData(void) {
 			u8 pIndex = Game::GetOnlinePlayerIndex();
@@ -107,29 +109,25 @@ namespace CTRPluginFramework {
 			strings1[4] = menuID != 0xFF ? Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_MENU_ID).c_str(), menuID) : Language::getInstance()->get(TextID::PLAYER_INFO_MENU_ID_NO);
 			strings1[5] = (Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_ROOM).c_str(), Player::GetRoom(pIndex)));
 		}
-	//debug OSD
-		bool debugOSD(const Screen &screen) {
+
+		bool debugHUD() {
 			u8 pIndex = Game::GetOnlinePlayerIndex();
 			if(!PlayerClass::GetInstance(pIndex)->IsLoaded()) {
-				return 0;
+				return true;
 			}
 
-			if(!screen.IsTop) {
-				return 0;
-			}
-
-			static constexpr u8 YPositions1[7] = { 16, 32, 48, 64, 80, 96, 112 };
-
-			Color darkGrey(40, 40, 40, 175);
-
-		//gets player
-			screen.DrawSysfontWithBackground(Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_PLAYER).c_str(), pIndex + 1), 0, 0, Player::GetColor(pIndex), darkGrey);
+			HUD::Text text = pColors[pIndex] << Utils::Format(Language::getInstance()->get(TextID::PLAYER_INFO_PLAYER).c_str(), pIndex + 1) << HUD::White;
 
 			for (int i = 0; i < 6; ++i) {
-				screen.DrawSysfontWithBackground(strings1.at(i), 0, YPositions1[i], Color::White, darkGrey);
+				if(!strings1.at(i).empty()) {
+					text << "\n";
+					text << strings1.at(i);
+				}
 			}
 
-			return 1;
+			HUD::Draw(0.0f, 0.0f, text);
+
+			return true;
 		}
 
 		u32 SwapRgbBgr(u32 value) {
@@ -176,7 +174,7 @@ namespace CTRPluginFramework {
 			g_appColorsLoaded = true;
 
 			if(notify) {
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::COLOR_MOD_PLAYER_LOADED), Color::Orange);
+				HUD::Notify(Language::getInstance()->get(TextID::COLOR_MOD_PLAYER_LOADED), Color::Orange);
 			}
 
 			return true;
@@ -284,16 +282,15 @@ namespace CTRPluginFramework {
 	}
 
 	void debug(MenuEntry *entry) {
-		PluginMenu *menu = PluginMenu::GetRunningInstance();
-
 		if(entry->WasJustActivated()) {
-			*menu += GetPlayerInfoData;
-			OSD::Run(debugOSD);
+			HUD::Run(debugHUD);
 		}
 		else if(!entry->IsActivated()) {
-			*menu -= GetPlayerInfoData;
-			OSD::Stop(debugOSD);
+			HUD::Stop(debugHUD);
+			return;
 		}
+
+		GetPlayerInfoData();
 	}
 
 //player loader | for now disabled

@@ -1,6 +1,7 @@
 #include <CTRPluginFramework.hpp>
 #include "core/infrastructure/SaveBackupManager.hpp"
 #include "core/infrastructure/Language.hpp"
+#include "core/HUD.hpp"
 #include <vector>
 #include <string>
 
@@ -11,7 +12,7 @@ namespace CTRPluginFramework {
 	void PerformAutoSaveBackup(void) {
 		const Language *lang = Language::getInstance();
 
-		OSD::NotifySysFont(lang->get(TextID::AUTOBACKUP_START), Color::Gray);
+		HUD::Notify(lang->get(TextID::AUTOBACKUP_START), Color::Gray);
 
 		const FwkSettings &settings = FwkSettings::Get();
 		u32 maxSlots = settings.SaveBackupMaxSlots;
@@ -30,13 +31,13 @@ namespace CTRPluginFramework {
 
 		std::string folderName;
 		if (SaveBackupManager::BackupAllToCheckpoint(AUTOBACKUP_PREFIX, folderName)) {
-			OSD::NotifySysFont(Utils::Format("%s", folderName.c_str()), Color::LimeGreen);
+			HUD::Notify(Utils::Format("%s", folderName.c_str()), Color::LimeGreen);
 		}
 		else if (!folderName.empty()) {
-			OSD::NotifySysFont(Utils::Format(lang->get(TextID::AUTOBACKUP_PARTIAL).c_str(), folderName.c_str()), Color::Orange);
+			HUD::Notify(Utils::Format(lang->get(TextID::AUTOBACKUP_PARTIAL).c_str(), folderName.c_str()), Color::Orange);
 		}
 		else {
-			OSD::NotifySysFont(lang->get(TextID::AUTOBACKUP_FAIL), Color::Red);
+			HUD::Notify(lang->get(TextID::AUTOBACKUP_FAIL), Color::Red);
 		}
 	}
 }

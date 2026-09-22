@@ -1048,7 +1048,7 @@
     "FILE_RES2": "Error\nCouldn't find any files to delete.",
     "FILE_RES3": "Error\nNo se pudo borrar el archivo.",
     "SAVE_REMINDER_SETTINGS": "Recordatorios de guardado",
-    "SAVE_REMINDER_MESSAGE": "Recordatorio: ¡No olvides guardar tu partida! \uE008",
+    "SAVE_REMINDER_MESSAGE": "Recordatorio: ¡No olvides guardar tu partida! :)",
     "SAVE_REMINDER_INTERVAL": "Intervalo: %d min",
     "SAVE_REMINDER_INTERVAL_PROMPT": "Introduce el intervalo en minutos (5-120):",
     "SCAM_TITLE": "! Aviso importante !",

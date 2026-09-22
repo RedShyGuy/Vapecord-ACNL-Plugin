@@ -2,7 +2,7 @@
 #include <algorithm>
 #include "features/cheats.hpp"
 #include "core/ItemSequence.hpp"
-
+#include "core/HUD.hpp"
 #include "core/game_api/Dropper.hpp"
 #include "core/infrastructure/PluginUtils.hpp"
 #include "core/game_api/Game.hpp"
@@ -105,7 +105,7 @@ namespace CTRPluginFramework {
 	//Modify Drop Radius
 		if(entry->Hotkeys[1].IsPressed()) {
 			if(Player::IsIndoors()) {
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::DROP_RADIUS_ONLY_OUTDOORS), Color::Red);
+				HUD::Notify(Language::getInstance()->get(TextID::DROP_RADIUS_ONLY_OUTDOORS), Color::Red);
 				return;
 			}
 
@@ -276,7 +276,7 @@ namespace CTRPluginFramework {
 	//set replace item
 		if(entry->Hotkeys[2].IsPressed()) {
 			if(PluginUtils::Input::PromptNumber<u32>({ Language::getInstance()->get(TextID::DROP_MODS_ENTER_ID), true, 8, 0x7FFE }, *(u32 *)&ItemIDToReplace)) {
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::DROP_RADIUS_NOW_REPLACING) << (ItemIDToReplace == ReplaceEverything ? Language::getInstance()->get(TextID::DROP_RADIUS_NOW_REPLACING_EVERYTHING) : Utils::Format("%08X", ItemIDToReplace)));
+				HUD::Notify(Language::getInstance()->get(TextID::DROP_RADIUS_NOW_REPLACING) << (ItemIDToReplace == ReplaceEverything ? Language::getInstance()->get(TextID::DROP_RADIUS_NOW_REPLACING_EVERYTHING) : Utils::Format("%08X", ItemIDToReplace)));
 			}
 		}
 
@@ -331,7 +331,7 @@ namespace CTRPluginFramework {
 
 		else if(entry->Hotkeys[1].IsPressed()) {
 			enabled = !enabled;
-			OSD::NotifySysFont(Language::getInstance()->get(TextID::AUTO_DROP) << " " << (enabled ? Color::Green << Language::getInstance()->get(TextID::STATE_ON) : Color::Red << Language::getInstance()->get(TextID::STATE_OFF)));
+			HUD::Notify(Language::getInstance()->get(TextID::AUTO_DROP) << " " << (enabled ? HUD::Green << Language::getInstance()->get(TextID::STATE_ON) : HUD::Red << Language::getInstance()->get(TextID::STATE_OFF)));
 		}
 
 		if(enabled) {
@@ -383,7 +383,7 @@ namespace CTRPluginFramework {
 	//Auto Drop Hotkeys
 		if(entry->Hotkeys[0].IsPressed()) {
 			enabled = !enabled;
-			OSD::NotifySysFont(Language::getInstance()->get(TextID::ITEM_SLOT_MULTI_DROPPER) << " " << (enabled ? Color::Green << Language::getInstance()->get(TextID::STATE_ON) : Color::Red << Language::getInstance()->get(TextID::STATE_OFF)));
+			HUD::Notify(Language::getInstance()->get(TextID::ITEM_SLOT_MULTI_DROPPER) << " " << (enabled ? HUD::Green << Language::getInstance()->get(TextID::STATE_ON) : HUD::Red << Language::getInstance()->get(TextID::STATE_OFF)));
 		}
 
 		u8 slot = 0;

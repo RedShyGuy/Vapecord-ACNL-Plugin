@@ -1048,7 +1048,7 @@
     "FILE_RES2": "에러!\n삭제할 파일을 찾지 못함.",
     "FILE_RES3": "에러!\n파일을 삭제할 수 없음.",
     "SAVE_REMINDER_SETTINGS": "저장 알림",
-    "SAVE_REMINDER_MESSAGE": "알림: 게임을 저장하는 것을 잊지 마세요! \uE008",
+    "SAVE_REMINDER_MESSAGE": "알림: 게임을 저장하는 것을 잊지 마세요! :)",
     "SAVE_REMINDER_INTERVAL": "간격: %d분",
     "SAVE_REMINDER_INTERVAL_PROMPT": "간격을 분 단위로 입력 (5-120):",
     "SCAM_TITLE": "! 중요 안내 !",

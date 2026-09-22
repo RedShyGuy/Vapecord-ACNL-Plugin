@@ -1048,7 +1048,7 @@
     "FILE_RES2": "Fehler: keine Datei zum löschen gefunden.",
     "FILE_RES3": "Fehler: kann Datei nicht löschen.",
     "SAVE_REMINDER_SETTINGS": "Speicher-Erinnerungen",
-    "SAVE_REMINDER_MESSAGE": "Erinnerung: Vergiss nicht, dein Spiel zu speichern! \uE008",
+    "SAVE_REMINDER_MESSAGE": "Erinnerung: Vergiss nicht, dein Spiel zu speichern! :)",
     "SAVE_REMINDER_INTERVAL": "Intervall: %d Min.",
     "SAVE_REMINDER_INTERVAL_PROMPT": "Intervall in Minuten eingeben (5-120):",
     "SCAM_TITLE": "! Wichtiger Hinweis !",

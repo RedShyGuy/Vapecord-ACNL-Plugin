@@ -11,6 +11,7 @@
 #include "core/game_api/NPC.hpp"
 #include "core/game_api/Town.hpp"
 #include "Color.h"
+#include "core/HUD.hpp"
 
 namespace CTRPluginFramework {
     //Always Daytime /*Made by Jay*/
@@ -47,7 +48,7 @@ namespace CTRPluginFramework {
 			auroraPatch3.Write<float>(1.0); //Brightness of aurora lights
 
 			if(PlayerClass::GetInstance()->IsLoaded()) {
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::AURORALIGHTS_RELOAD_ROOM), Color(0xC430BAFF));
+				HUD::Notify(Language::getInstance()->get(TextID::AURORALIGHTS_RELOAD_ROOM), Color(0xC430BAFF));
 			}
 		}
 
@@ -228,14 +229,14 @@ namespace CTRPluginFramework {
 
 		if(entry->Hotkeys[0].IsPressed()) {
 			if(!Game::IsGameInRoom(0)) {
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::GRASS_EDITOR_ONLY_IN_TOWN), Color::Red);
+				HUD::Notify(Language::getInstance()->get(TextID::GRASS_EDITOR_ONLY_IN_TOWN), Color::Red);
 				return;
 			}
 
 			u32 x, y;
 			if(PlayerClass::GetInstance()->GetWorldCoords(&x, &y)) {
 				Process::Write8(GetTileOffset(x, y), type);
-				OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::GRASS_EDITOR_CHANGED_GRASS).c_str(), (u8)x, (u8)y));
+				HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::GRASS_EDITOR_CHANGED_GRASS).c_str(), (u8)x, (u8)y));
 			}
 		}
 
@@ -247,12 +248,12 @@ namespace CTRPluginFramework {
 			switch(opt) {
 				case 0:
 					type = 0xFF;
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::GRASS_EDITOR_FILL_MODE), Color(0x228B22FF));
+					HUD::Notify(Language::getInstance()->get(TextID::GRASS_EDITOR_FILL_MODE), Color(0x228B22FF));
 					opt = true;
 				break;
 				case 1:
 					type = 0;
-					OSD::NotifySysFont(Language::getInstance()->get(TextID::GRASS_EDITOR_CLEAR_MODE), Color(0xCD853FFF));
+					HUD::Notify(Language::getInstance()->get(TextID::GRASS_EDITOR_CLEAR_MODE), Color(0xCD853FFF));
 					opt = false;
 				break;
 			}
@@ -349,6 +350,7 @@ namespace CTRPluginFramework {
 
 		static Hook neverWiltHook;
 		static Address neverWiltFunc(0x2FCA24);
+		static Address treesDontDisappearAtTheRails(0x104752);
 
 		if(entry->WasJustActivated()) {
 			neverWiltHook.InitializeForMitm(neverWiltFunc.addr, (u32)&NeverWiltSeedItems);
@@ -356,11 +358,19 @@ namespace CTRPluginFramework {
 
 			itemDeletePatch.Patch(0xE3A00000);
 			dontDeleteSeedItemsOnInvalidPositions.Patch(0xE1A00000);
+
+			for (int i = 0; i < 4; ++i) {
+				treesDontDisappearAtTheRails.MoveOffset(i * 4).Write<u16>(0x4600);
+			}
 		}
 		else if(!entry->IsActivated()) {
 			itemDeletePatch.Unpatch();
 			neverWiltHook.Disable();
 			dontDeleteSeedItemsOnInvalidPositions.Unpatch();
+
+			for (int i = 0; i < 4; ++i) {
+				treesDontDisappearAtTheRails.MoveOffset(i * 4).Unpatch();
+			}
 		}
 	}
 
@@ -385,17 +395,17 @@ namespace CTRPluginFramework {
 		}
 
 		if(!ItemToReplace.isValid()) {
-			OSD::NotifySysFont(Language::getInstance()->get(TextID::INVALID_ITEM), Color::Red);
+			HUD::Notify(Language::getInstance()->get(TextID::INVALID_ITEM), Color::Red);
 			return;
 		}
 
 		int res = Dropper::Search_Replace(300, { ItemToSearch }, ItemToReplace, 0x3D, true, Language::getInstance()->get(TextID::SEARCH_REPLACE_ITEMS_REPLACED), true);
 		if(res == -1) {
-			OSD::NotifySysFont(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
+			HUD::Notify(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
 			return;
 		}
 		else if(res == -2) {
-			OSD::NotifySysFont(Language::getInstance()->get(TextID::ONLY_OUTDOORS), Color::Red);
+			HUD::Notify(Language::getInstance()->get(TextID::ONLY_OUTDOORS), Color::Red);
 			return;
 		}
 	}
@@ -477,11 +487,11 @@ namespace CTRPluginFramework {
 			{ 0x0082, 0x14, 2, { 0x15, 0x03 } },       						   // holly
 		};
 
-		enum class FoliageState : u8 { 
-			Flower, 
-			Bloom, 
-			Default, 
-			Snowy 
+		enum class FoliageState : u8 {
+			Flower,
+			Bloom,
+			Default,
+			Snowy
 		};
 
 		static bool isSeasonSnowy(u8 season) {
@@ -552,7 +562,7 @@ namespace CTRPluginFramework {
 				else if (season == 0x04 || season == 0x05) {
 					state = Color(0xFFB7C5FF) << Language::getInstance()->get(TextID::SET_FOLIAGE_CHERRY_BLOSSOM);
 				}
-				
+
 				Item item = { 0x0026, 0 }; //tree
 				msg += item.GetName();
 				msg += " : ";

@@ -5,12 +5,24 @@
 #define RANGE(X, START, END)	(X >= START && X <= END)
 
 namespace CTRPluginFramework {
+	namespace {
+		bool TryGetKeyboardInstance(u32 &instance) {
+			if(!Process::Read32(Address(0x95F11C).addr, instance)) {
+				instance = 0;
+				return false;
+			}
+
+			return instance != 0;
+		}
+	}
+
 	bool GameKeyboard::Write(const std::string& str) {
 		if(!GameKeyboard::IsOpen()) {
 			return false;
 		}
 
-		if(*(u32 *)Address(0x95F11C).addr == 0) {
+		u32 keyboardInstance = 0;
+		if(!TryGetKeyboardInstance(keyboardInstance)) {
 			return false;
 		}
 
@@ -20,11 +32,11 @@ namespace CTRPluginFramework {
 		static Address WriteFunc(0x5231D0);
 
 		const u16* hex = (const u16 *)buffer;
-		u8 i = *(u8 *)(*(u32 *)(Address(0x95F11C).addr) + 0x14);
+		u8 i = *(u8 *)(keyboardInstance + 0x14);
 
 		while(*hex) {
 			u16 character = (u16)*hex++;
-			WriteFunc.Call<void>(*(u32 *)Address(0x95F11C).addr, character, i, 0, 0);
+			WriteFunc.Call<void>(keyboardInstance, character, i, 0, 0);
 			i++;
 		}
 
@@ -41,10 +53,14 @@ namespace CTRPluginFramework {
 		}
 
 		static Address DeleteFunc(0x523780);
+		u32 keyboardInstance = 0;
+		if(!TryGetKeyboardInstance(keyboardInstance)) {
+			return false;
+		}
 
-		DeleteFunc.Call<void>(*(u32 *)Address(0x95F11C).addr, 0, 100);
+		DeleteFunc.Call<void>(keyboardInstance, 0, 100);
 
-		*(bool *)(*(u32 *)(Address(0x95F11C).addr) + 0x20) = 0; //unselects
+		*(bool *)(keyboardInstance + 0x20) = 0; //unselects
 		return true;
 	}
 
@@ -53,14 +69,19 @@ namespace CTRPluginFramework {
 			return false;
 		}
 
-		bool IsSelected = *(bool *)(*(u32 *)(Address(0x95F11C).addr) + 0x20); //95F11C
+		u32 keyboardInstance = 0;
+		if(!TryGetKeyboardInstance(keyboardInstance)) {
+			return false;
+		}
+
+		bool IsSelected = *(bool *)(keyboardInstance + 0x20); //95F11C
 		if(!IsSelected) {
 			return false;
 		}
 
-		u32	ChatText = *(u32 *)(*(u32 *)(Address(0x95F11C).addr) + 0x10);
-		u8	CurrentPos = *(u8 *)(*(u32 *)(Address(0x95F11C).addr) + 0x14);
-		u8	SelectStart = *(u8 *)(*(u32 *)(Address(0x95F11C).addr) + 0x1C);
+		u32	ChatText = *(u32 *)(keyboardInstance + 0x10);
+		u8	CurrentPos = *(u8 *)(keyboardInstance + 0x14);
+		u8	SelectStart = *(u8 *)(keyboardInstance + 0x1C);
 
 		if(CurrentPos < SelectStart) {
 			Process::ReadString(ChatText + (CurrentPos * 2), res, (SelectStart * 2) - (CurrentPos * 2), StringFormat::Utf16);
@@ -79,23 +100,27 @@ namespace CTRPluginFramework {
 		}
 
 		static Address DeleteFunc(0x523780);
+		u32 keyboardInstance = 0;
+		if(!TryGetKeyboardInstance(keyboardInstance)) {
+			return false;
+		}
 
-		bool IsSelected = *(bool *)(*(u32 *)(Address(0x95F11C).addr) + 0x20);
+		bool IsSelected = *(bool *)(keyboardInstance + 0x20);
 		if(!IsSelected) {
 			return false;
 		}
 
-		u8	CurrentPos = *(u8 *)(*(u32 *)(Address(0x95F11C).addr) + 0x14);
-		u8	SelectStart = *(u8 *)(*(u32 *)(Address(0x95F11C).addr) + 0x1C);
+		u8	CurrentPos = *(u8 *)(keyboardInstance + 0x14);
+		u8	SelectStart = *(u8 *)(keyboardInstance + 0x1C);
 
 		if(CurrentPos < SelectStart) {
-			DeleteFunc.Call<void>(*(u32 *)Address(0x95F11C).addr, CurrentPos, SelectStart - CurrentPos);
+			DeleteFunc.Call<void>(keyboardInstance, CurrentPos, SelectStart - CurrentPos);
 		}
 		if(CurrentPos > SelectStart) {
-			DeleteFunc.Call<void>(*(u32 *)Address(0x95F11C).addr, SelectStart, CurrentPos - SelectStart);
+			DeleteFunc.Call<void>(keyboardInstance, SelectStart, CurrentPos - SelectStart);
 		}
 
-		*(bool *)(*(u32 *)(Address(0x95F11C).addr) + 0x20) = 0; //unselects
+		*(bool *)(keyboardInstance + 0x20) = 0; //unselects
 		return true;
 	}
 
@@ -104,7 +129,13 @@ namespace CTRPluginFramework {
 		static Address KeyBool(0x523F48);
 		bool res = KeyBool.Call<bool>();
 		if(res) {
-			if(*(u32 *)(*(u32 *)(*(u32 *)(Address(0x95F11C).addr) + 4) + 0x50) == 0) {
+			u32 keyboardInstance = 0;
+			if(!TryGetKeyboardInstance(keyboardInstance)) {
+				return false;
+			}
+
+			u32 keyboardLayout = *(u32 *)(keyboardInstance + 4);
+			if(keyboardLayout == 0 || *(u32 *)(keyboardLayout + 0x50) == 0) {
 				return false;
 			}
 		}
@@ -116,7 +147,17 @@ namespace CTRPluginFramework {
 			return true;
 		}
 
-		return *(bool *)(*(u32 *)(*(u32 *)(Address(0x95F11C).addr) + 0x10) + 0x98 + 0x11B1) != true;
+		u32 keyboardInstance = 0;
+		if(!TryGetKeyboardInstance(keyboardInstance)) {
+			return true;
+		}
+
+		u32 chatText = *(u32 *)(keyboardInstance + 0x10);
+		if(chatText == 0) {
+			return true;
+		}
+
+		return *(bool *)(chatText + 0x98 + 0x11B1) != true;
 	}
 
 	bool GameKeyboard::Copy(std::string& str, int pos, int length) {
@@ -128,7 +169,15 @@ namespace CTRPluginFramework {
 			return false;
 		}
 
-		u32 ChatText = *(u32 *)(*(u32 *)(Address(0x95F11C).addr) + 0x10);
+		u32 keyboardInstance = 0;
+		if(!TryGetKeyboardInstance(keyboardInstance)) {
+			return false;
+		}
+
+		u32 ChatText = *(u32 *)(keyboardInstance + 0x10);
+		if(ChatText == 0) {
+			return false;
+		}
 
 		return Process::ReadString(ChatText + pos, str, length, StringFormat::Utf16);
 	}
@@ -138,7 +187,7 @@ namespace CTRPluginFramework {
 			c = std::tolower(c);
 		}
 
-		u32 rawItem;
+		u32 rawItem = 0;
 
 		const u8* hex = (const u8*)str.c_str();
 		while(*hex) {
@@ -175,8 +224,7 @@ namespace CTRPluginFramework {
 		stack->unknownPointer1 = &stack->unknownPointer2;
 		stack->unknownPointer2 = (u32 *)point.addr;
 
-		std::vector<char> cstr(str.c_str(), str.c_str() + str.size() + 1);
-		stack->message = &cstr[0];
+		stack->message = const_cast<char *>(str.c_str());
 	}
 
 	void GameKeyboard::SendMessage(const std::string& str) {
@@ -194,9 +242,9 @@ namespace CTRPluginFramework {
 		u8 pIndex = Game::GetOnlinePlayerIndex();
 
 		u32 Stack[12];
-		OnlineStack *onlineStack = new OnlineStack();
+		OnlineStack onlineStack;
 
-		SetCustomOnlineStack(onlineStack, str);
+		SetCustomOnlineStack(&onlineStack, str);
 
 		if(*(u8 *)(msgData + 0x858) != 0) {
 			*(u16 *)(msgData + 0x854) = 0;
@@ -222,9 +270,7 @@ namespace CTRPluginFramework {
 
 		u32 val = func5.Call<u32>(); //Checks if playing online
 		if(val != 0) {
-			func6.Call<void>(0x8C + pIndex, onlineStack, 1); //Sends temporary Online "Stack" to others
+			func6.Call<void>(0x8C + pIndex, &onlineStack, 1); //Sends temporary Online "Stack" to others
 		}
-
-		delete[] onlineStack;
 	}
 }

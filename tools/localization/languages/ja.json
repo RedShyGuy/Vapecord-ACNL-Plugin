@@ -1048,7 +1048,7 @@
     "FILE_RES2": "ファイルが見つかりません。",
     "FILE_RES3": "エラー\nファイルを削除できませんでした。",
     "SAVE_REMINDER_SETTINGS": "セーブリマインダー",
-    "SAVE_REMINDER_MESSAGE": "リマインダー：ゲームのセーブをお忘れなく！ \uE008",
+    "SAVE_REMINDER_MESSAGE": "リマインダー：ゲームのセーブをお忘れなく！ :)",
     "SAVE_REMINDER_INTERVAL": "間隔: %d分",
     "SAVE_REMINDER_INTERVAL_PROMPT": "間隔を分単位で入力 (5-120):",
     "SCAM_TITLE": "！ 重要なお知らせ ！",

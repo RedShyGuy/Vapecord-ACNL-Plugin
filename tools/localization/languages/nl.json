@@ -1048,7 +1048,7 @@
     "FILE_RES2": "Fout\nKon geen bestanden vinden om te verwijderen.",
     "FILE_RES3": "Fout\nKon bestand niet verwijderen.",
     "SAVE_REMINDER_SETTINGS": "Opslagherinneringen",
-    "SAVE_REMINDER_MESSAGE": "Herinnering: Vergeet niet je spel op te slaan! \uE008",
+    "SAVE_REMINDER_MESSAGE": "Herinnering: Vergeet niet je spel op te slaan! :)",
     "SAVE_REMINDER_INTERVAL": "Interval: %d min",
     "SAVE_REMINDER_INTERVAL_PROMPT": "Voer het interval in minuten in (5-120):",
     "SCAM_TITLE": "! Belangrijke mededeling !",
