@@ -2,6 +2,14 @@ name: Build 3GX Plugin
 
 on:
   push:
+    paths-ignore:
+      - '**.md'
+      - '**.sh'
+      - '**.bat'
+      - '**.png'
+      - '**.svg'
+      - '**.xcf'
+      - '.gitignore'
     branches: ["master"]
   pull_request:
     branches: ["master"]
@@ -13,7 +21,7 @@ jobs:
     container: devkitpro/devkitarm
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
     - name: Download 3gxtool
       run: |
@@ -47,16 +55,19 @@ jobs:
             mkdir -p package/luma/plugins/$folder/snd
             cp Vapecord_Public.3gx package/luma/plugins/$folder/Vapecord_Public.3gx
             cp -r assets/snd/* package/luma/plugins/$folder/snd/
+
+            mkdir -p package/luma/titles/$folder/romfs/Font
+            cp -r assets/romfs/Font/* package/luma/titles/$folder/romfs/Font/
         done
 
     - name: Upload Package Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: Vapecord.Public
         path: package/
 
     - name: Upload ELF Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: Vapecord.Public.elf
         path: Vapecord_Public.elf

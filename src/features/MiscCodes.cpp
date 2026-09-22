@@ -11,6 +11,7 @@
 #include "core/game_api/Player.hpp"
 #include "core/RuntimeContext.hpp"
 #include "Color.h"
+#include "core/HUD.hpp"
 
 extern "C" void PATCH_MoveFurnButton(void);
 
@@ -62,9 +63,9 @@ namespace CTRPluginFramework {
 
 		u16 musicID = *(u16 *)(musicData + 8);
 		if ((u8)musicID <= 0xFF) {
-			OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::PLAYING_MUSIC_NOW_PLAYING_STRING).c_str(), IDChecks::GetMusicName(musicID).c_str()), Color(0x00FF00FF));
+			HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::PLAYING_MUSIC_NOW_PLAYING_STRING).c_str(), IDChecks::GetMusicName(musicID).c_str()), Color(0x00FF00FF));
 		} else {
-			OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::PLAYING_MUSIC_NOW_PLAYING_ID).c_str(), musicID), Color(0x00FF00FF));
+			HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::PLAYING_MUSIC_NOW_PLAYING_ID).c_str(), musicID), Color(0x00FF00FF));
 		}
 
 		const HookContext &curr = HookContext::GetCurrent();
@@ -87,7 +88,7 @@ namespace CTRPluginFramework {
 //reload room
 	void ReloadRoomCheat(MenuEntry *entry) {
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			OSD::NotifySysFont(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
+			HUD::Notify(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
 			return;
 		}
 
@@ -151,14 +152,14 @@ namespace CTRPluginFramework {
 
 //Move Furniture
 	void roomSeeder(MenuEntry *entry) {
-		static const Address movingFurniture(0x4E1720);
-		static const Address pickingUpFurniture(0x678AC0);
-		static const Address placingFurniture1(0x76B880);
-		static const Address placingFurniture2(0x26FED8);
-		static const Address placingFurniture3(0x4E78A8);
-		static const Address lightswitchVisible(0x3279CC);
-		static const Address lightswitchFunction(0x3277E8);
-		static const Address moveFurnButton(0x326B98);
+		static Address movingFurniture(0x4E1720);
+		static Address pickingUpFurniture(0x678AC0);
+		static Address placingFurniture1(0x76B880);
+		static Address placingFurniture2(0x26FED8);
+		static Address placingFurniture3(0x4E78A8);
+		static Address lightswitchVisible(0x3279CC);
+		static Address lightswitchFunction(0x3277E8);
+		static Address moveFurnButton(0x326B98);
 
 		static Hook movingFurnitureHook;
 		static Hook pickingUpFurnitureHook;
@@ -275,7 +276,7 @@ namespace CTRPluginFramework {
 //Fast Isabelle (Fast Text + Game Speed when in the Isabelle greeting room)
 	void fastisabelle(MenuEntry *entry) {
 		if (entry->WasJustActivated() && Game::GetRoom() == 0x63) {
-			OSD::NotifySysFont(Language::getInstance()->get(TextID::FAST_PLAYER_SELECT_INFO), Color::Red);
+			HUD::Notify(Language::getInstance()->get(TextID::FAST_PLAYER_SELECT_INFO), Color::Red);
 			entry->Disable();
 			return;
 		}

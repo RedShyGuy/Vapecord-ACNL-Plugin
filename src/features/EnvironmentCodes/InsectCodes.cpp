@@ -7,6 +7,7 @@
 #include "core/game_api/Player.hpp"
 #include "core/checks/IDChecks.hpp"
 #include "core/hooks/GameLoopHook.hpp"
+#include "core/HUD.hpp"
 
 namespace CTRPluginFramework {
     u8 ConvertItemIdToInsectId(u8 itemId) {
@@ -29,7 +30,7 @@ namespace CTRPluginFramework {
 
         u32 dataOffset = *(u32 *)dataPointer.addr;
         if (dataOffset == 0) {
-            OSD::NotifySysFont(Language::getInstance()->get(TextID::INSECT_DATA_NOT_LOADED), Color::Red);
+            HUD::Notify(Language::getInstance()->get(TextID::INSECT_DATA_NOT_LOADED), Color::Red);
             return;
         }
 
@@ -95,7 +96,7 @@ namespace CTRPluginFramework {
 		u32 dataOffset = *(u32 *)dataPointer.addr;
 
 		if (dataOffset == 0) {
-            OSD::NotifySysFont(Language::getInstance()->get(TextID::INSECT_DATA_NOT_LOADED), Color::Red);
+            HUD::Notify(Language::getInstance()->get(TextID::INSECT_DATA_NOT_LOADED), Color::Red);
 			return;
 		}
 
@@ -108,7 +109,7 @@ namespace CTRPluginFramework {
 		}
 
 		if (insectIdLocal > 0x50) {
-			OSD::NotifySysFont(Language::getInstance()->get(TextID::INSECT_INVALID_ID), Color::Red);
+			HUD::Notify(Language::getInstance()->get(TextID::INSECT_INVALID_ID), Color::Red);
 			return;
 		}
 
@@ -122,13 +123,13 @@ namespace CTRPluginFramework {
          */
         if (insectIdLocal == 0xC || insectIdLocal == 0x10 || insectIdLocal == 0x11 || insectIdLocal == 0x1D || insectIdLocal == 0x29) {
             Item insectItem = ConvertInsectIdToItemId(insectIdLocal);
-            OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::INSECT_CANT_SPAWN).c_str(), insectItem.GetName().c_str()), Color::Red);
+            HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::INSECT_CANT_SPAWN).c_str(), insectItem.GetName().c_str()), Color::Red);
 			return;
         }
 
 		u32 *table = (u32 *)functionTable.addr;
 		if (!table) {
-            OSD::NotifySysFont(Language::getInstance()->get(TextID::INSECT_DATA_NOT_LOADED), Color::Red);
+            HUD::Notify(Language::getInstance()->get(TextID::INSECT_DATA_NOT_LOADED), Color::Red);
 			return;
 		}
 		Address dataFunction(table[insectIdLocal]);
@@ -145,7 +146,7 @@ namespace CTRPluginFramework {
 
 		float *pCoords = PlayerClass::GetInstance()->GetCoordinates();
 		if (!pCoords) {
-            OSD::NotifySysFont(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
+            HUD::Notify(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
             return;
 		}
 
@@ -155,12 +156,12 @@ namespace CTRPluginFramework {
 
 		spawnInsect.Call<void>(dataOffset, insectIdLocal, coords, u0);
 
-        //OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::INSECT_SPAWNED).c_str(), *(u32 *)(*(u32 *)(dataOffset + 0x1C))));
+        //HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::INSECT_SPAWNED).c_str(), *(u32 *)(*(u32 *)(dataOffset + 0x1C))));
 
         //u32 insectData = *(u32 *)(*(u32 *)(dataOffset + 0x1C));
         //u8 insectIdLocal = *(u8 *)(insectData + 8);
         //Item insectItem = ConvertInsectIdToItemId(insectIdLocal);
-        //OSD::NotifySysFont(Utils::Format("Spawned %s (%08X)", insectItem.GetName().c_str(), insectData), Color::Green);
+        //HUD::Notify(Utils::Format("Spawned %s (%08X)", insectItem.GetName().c_str(), insectData), Color::Green);
 	}
 
     void DespawnAllInsects() {
@@ -168,7 +169,7 @@ namespace CTRPluginFramework {
 
 		u32 dataOffset = *(u32 *)dataPointer.addr;
         if (dataOffset == 0) {
-            OSD::NotifySysFont(Language::getInstance()->get(TextID::INSECT_DATA_NOT_LOADED), Color::Red);
+            HUD::Notify(Language::getInstance()->get(TextID::INSECT_DATA_NOT_LOADED), Color::Red);
             return;
         }
 
@@ -198,7 +199,7 @@ namespace CTRPluginFramework {
             count++;
         }
 
-        OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::INSECT_DESPAWNED).c_str(), count), Color::Green);
+        HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::INSECT_DESPAWNED).c_str(), count), Color::Green);
     }
 
 	void SetInsectIdEntry(MenuEntry *entry) {

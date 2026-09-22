@@ -142,6 +142,7 @@ namespace CTRPluginFramework {
 	void menuBuildingMod(MenuEntry *entry);
 	void FreeKappn(MenuEntry *entry);
 	void IslandSaver(MenuEntry *entry);
+	void IslandOnlineOptions(MenuEntry *entry);
 
 //Fun Codes
 	void sizecodes(MenuEntry *entry);

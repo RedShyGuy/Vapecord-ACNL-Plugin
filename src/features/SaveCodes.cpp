@@ -18,6 +18,7 @@
 #include "Color.h"
 #include "Files.h"
 #include "core/infrastructure/SaveBackupManager.hpp"
+#include "core/HUD.hpp"
 
 namespace CTRPluginFramework {
 //Town Name Changer | player specific save code
@@ -1467,17 +1468,17 @@ namespace CTRPluginFramework {
 
 	bool IsAcreOkay(u8& AcreID) {
 		if(!IDChecks::IsInRange(AcreID, 0, 0xD6)) {
-			OSD::NotifySysFont(Language::getInstance()->get(TextID::ACRE_EDITOR_INVALID), Color::Red);
+			HUD::Notify(Language::getInstance()->get(TextID::ACRE_EDITOR_INVALID), Color::Red);
 			return false;
 		}
 
 		if(IDChecks::IsHalfAcre(AcreID)) {
-			OSD::NotifySysFont(Language::getInstance()->get(TextID::ACRE_EDITOR_HALF_ACRE_ERROR), Color::Red);
+			HUD::Notify(Language::getInstance()->get(TextID::ACRE_EDITOR_HALF_ACRE_ERROR), Color::Red);
 			return false;
 		}
 
 		if(!SetAcre(AcreID)) {
-			OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::ACRE_EDITOR_PATH_MISSING).c_str(), Utils::Format(PATH_ACRE, AcreID)), Color::Red);
+			HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::ACRE_EDITOR_PATH_MISSING).c_str(), Utils::Format(PATH_ACRE, AcreID)), Color::Red);
 			return 1;
 		}
 
@@ -1508,7 +1509,7 @@ namespace CTRPluginFramework {
 				}
 
 				if(!SetAcre(AcreID)) {
-					OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::ACRE_EDITOR_PATH_MISSING).c_str(), Utils::Format(PATH_ACRE, AcreID)), Color::Red);
+					HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::ACRE_EDITOR_PATH_MISSING).c_str(), Utils::Format(PATH_ACRE, AcreID)), Color::Red);
 					break;
 				}
 			}
@@ -1520,7 +1521,7 @@ namespace CTRPluginFramework {
 				}
 
 				if(!SetAcre(AcreID)) {
-					OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::ACRE_EDITOR_PATH_MISSING).c_str(), Utils::Format(PATH_ACRE, AcreID)), Color::Red);
+					HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::ACRE_EDITOR_PATH_MISSING).c_str(), Utils::Format(PATH_ACRE, AcreID)), Color::Red);
 					break;
 				}
 			}
@@ -1555,7 +1556,7 @@ namespace CTRPluginFramework {
 
 		town->TownAcres[offset] = AcreID;
 
-		OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::ACRE_EDITOR_ACRE_2).c_str(), acre, AcreID));
+		HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::ACRE_EDITOR_ACRE_2).c_str(), acre, AcreID));
 
 		u32 pInstance = PlayerClass::GetInstance()->Offset();
 		u32 aInstance = Animation::GetAnimationInstance(pInstance, 0, 0, 0);
@@ -1565,7 +1566,7 @@ namespace CTRPluginFramework {
 		data.Congrats_2A();
 		data.ExecuteAnimation(0x2A);
 
-		OSD::NotifySysFont(Language::getInstance()->get(TextID::ACRE_EDITOR_SAVE_QUIT));
+		HUD::Notify(Language::getInstance()->get(TextID::ACRE_EDITOR_SAVE_QUIT));
 	}
 
 //Map Editor

@@ -10,6 +10,7 @@
 #include "core/RuntimeContext.hpp"
 #include "core/infrastructure/Language.hpp"
 #include "core/infrastructure/TextID.hpp"
+#include "core/HUD.hpp"
 
 namespace CTRPluginFramework {
 	namespace Game {
@@ -61,7 +62,7 @@ namespace CTRPluginFramework {
 		}
 
 		void ReloadRoom(float *coords) {
-			static const Address u0Data(0x976C0E);
+			static Address u0Data(0x976C0E);
 
 			static Address ReloadFunc(0x5B6660);
 			ReloadFunc.Call<void>(GetRoomData(), GetRoom(), coords, (u32 *)u0Data.addr, 6, 0, 0, 1, 1);
@@ -79,22 +80,22 @@ namespace CTRPluginFramework {
 		}
 
 		/*u32 GameHelper::GetExhibition() {
-			static const Address d_exhibition(0x9B4AC0);
+			static Address d_exhibition(0x9B4AC0);
 			return *(u32 *)d_exhibition.addr;
 		}
 
 		u32 GameHelper::GetFriend() {
-			static const Address d_friend(0x983038);
+			static Address d_friend(0x983038);
 			return *(u32 *)d_friend.addr;
 		}
 
 		u32 GameHelper::GetDesign() {
-			static const Address d_design(0x983088);
+			static Address d_design(0x983088);
 			return *(u32 *)d_design.addr;
 		}
 
 		u32 GameHelper::GetMail() {
-			static const Address d_mail(0x983050);
+			static Address d_mail(0x983050);
 			return *(u32 *)d_mail.addr;
 		}*/
 
@@ -133,7 +134,7 @@ namespace CTRPluginFramework {
 
 			u64 Time = SMinute + SHour + SDay + SMonth + SYear;
 
-			static const Address RealTime(0x95D508);
+			static Address RealTime(0x95D508);
 
 		//makes time negative
 			if(!forward) {
@@ -211,7 +212,7 @@ namespace CTRPluginFramework {
 		}
 
 		u32 BaseInvPointer() {
-			static const Address InvMenu(0x98D500);
+			static Address InvMenu(0x98D500);
 			return *(u32 *)InvMenu.addr;
 		}
 
@@ -239,12 +240,12 @@ namespace CTRPluginFramework {
 		}
 
 		bool IsRoomLoading() {
-			static const Address LoadCheck(0x94F451);
+			static Address LoadCheck(0x94F451);
 			return *(bool *)LoadCheck.addr;
 		}
 
 		bool IsMapOpened() {
-			static const Address mapBool(0x950C30);
+			static Address mapBool(0x950C30);
 			return *(bool *)mapBool.addr;
 		}
 
@@ -329,7 +330,7 @@ namespace CTRPluginFramework {
 
 							Controller::Update();
 							if(Controller::IsKeyPressed(Key::B) && allowAbort) {
-								OSD::NotifySysFont(Language::getInstance()->get(TextID::SEARCH_REPLACE_ABORT));
+								HUD::Notify(Language::getInstance()->get(TextID::SEARCH_REPLACE_ABORT));
 								goto end;
 							}
 						}
@@ -362,7 +363,7 @@ namespace CTRPluginFramework {
 			}
 
 			if(counting) {
-				OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::SEARCH_REPLACE_REPLACED).c_str(), count));
+				HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::SEARCH_REPLACE_REPLACED).c_str(), count));
 			}
 
 			return true;
@@ -370,8 +371,8 @@ namespace CTRPluginFramework {
 
 		void SpawnParticlesAtCoords(u32 particleID, float *coords) {
 			static Address particleclass(0x207B90);
-			static const Address u0(0x976C0E);
-			static const Address u1(0xAE6870);
+			static Address u0(0x976C0E);
+			static Address u1(0xAE6870);
 			if(coords == nullptr) {
 				return;
 			}
@@ -395,7 +396,7 @@ namespace CTRPluginFramework {
 
 		u32 CreateLockedSpot(u8 DropID, u8 wX, u8 wY, u8 roomID, bool sendPkt) {
 			static Address createLocked(0x5A13C4);
-			static const Address lockspot1(0x5A13C8);
+			static Address lockspot1(0x5A13C8);
 			u32 lockspot2 = lockspot1.addr + 4;
 			u32 index;
 
@@ -455,12 +456,12 @@ namespace CTRPluginFramework {
 
 	//Get instance of camera
 	u32 Camera::GetInstance() {
-		static const Address camera1(0x951884);
+		static Address camera1(0x951884);
 		return *(u32 *)camera1.addr;
 	}
 
 	float* Camera::GetCoordinates() {
-		static const Address camcoord(0x9866F4);
+		static Address camcoord(0x9866F4);
 		return (float *)camcoord.addr;
 	}
 

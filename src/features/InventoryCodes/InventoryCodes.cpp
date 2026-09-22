@@ -8,6 +8,7 @@
 #include "core/game_api/GameKeyboard.hpp"
 #include "core/game_api/Animation.hpp"
 #include "core/RuntimeContext.hpp"
+#include "core/HUD.hpp"
 
 #include "Color.h"
 #include "Files.h"
@@ -111,13 +112,13 @@ namespace CTRPluginFramework {
 
 		if(entry->Hotkeys[0].IsPressed()) {
 			if(!player) {
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
+				HUD::Notify(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
 				return;
 			}
 
 			u8 slot = 0;
 			if(!Inventory::GetNextItem({0x7FFE, 0}, slot)) {
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::INVENTORY_SEARCH_INV_FULL), Color::Red);
+				HUD::Notify(Language::getInstance()->get(TextID::INVENTORY_SEARCH_INV_FULL), Color::Red);
 				return;
 			}
 
@@ -128,7 +129,7 @@ namespace CTRPluginFramework {
 
 		else if(entry->Hotkeys[1].IsPressed()) {
 			if(!player) {
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
+				HUD::Notify(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
 				return;
 			}
 
@@ -138,12 +139,12 @@ namespace CTRPluginFramework {
 				if(item) {
 					u8 slot = 0;
 					if(!Inventory::GetNextItem({0x7FFE, 0}, slot)) {
-						OSD::NotifySysFont(Language::getInstance()->get(TextID::INVENTORY_SEARCH_INV_FULL), Color::Red);
+						HUD::Notify(Language::getInstance()->get(TextID::INVENTORY_SEARCH_INV_FULL), Color::Red);
 						return;
 					}
 
 					Inventory::WriteSlot(slot, *item);
-					OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::INVENTORY_T2I_SET).c_str(), *(u32 *)item));
+					HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::INVENTORY_T2I_SET).c_str(), *(u32 *)item));
 				}
 			}
 		}
@@ -175,10 +176,10 @@ namespace CTRPluginFramework {
 
 		if(Game::SetItem(&CurrentItem)) {
 			std::string itemName = CurrentItem.GetName();
-			OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::INVENTORY_CATALOG_SET_ITEM).c_str(), itemName.c_str(), CurrentItem.ID));
+			HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::INVENTORY_CATALOG_SET_ITEM).c_str(), itemName.c_str(), CurrentItem.ID));
 		}
 		else {
-			OSD::NotifySysFont(Language::getInstance()->get(TextID::INVENTORY_SEARCH_INV_FULL), Color::Red);
+			HUD::Notify(Language::getInstance()->get(TextID::INVENTORY_SEARCH_INV_FULL), Color::Red);
 		}
 
 		static Address argData(0x8499E4);
@@ -210,7 +211,7 @@ namespace CTRPluginFramework {
 
 		if(entry->Hotkeys[0].IsPressed()) {
 			if(!PlayerClass::GetInstance()->IsLoaded()) {
-				OSD::NotifySysFont(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
+				HUD::Notify(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
 				return;
 			}
 
@@ -246,17 +247,17 @@ namespace CTRPluginFramework {
 		}
 
 		if(!PlayerClass::GetInstance()->IsLoaded()) {
-			OSD::NotifySysFont(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
+			HUD::Notify(Language::getInstance()->get(TextID::SAVE_PLAYER_NO), Color::Red);
 			return;
 		}
 
 		if(!GameKeyboard::IsOpen()) {
-			OSD::NotifySysFont(Language::getInstance()->get(TextID::CHAT_TEXT_2_I_OPEN_KEYBOARD), Color::Red);
+			HUD::Notify(Language::getInstance()->get(TextID::CHAT_TEXT_2_I_OPEN_KEYBOARD), Color::Red);
 			return;
 		}
 
 		if(GameKeyboard::IsEmpty()) {
-			OSD::NotifySysFont(Language::getInstance()->get(TextID::CHAT_TEXT_2_I_KEYBOARD_EMPTY), Color::Red);
+			HUD::Notify(Language::getInstance()->get(TextID::CHAT_TEXT_2_I_KEYBOARD_EMPTY), Color::Red);
 			return;
 		}
 
@@ -264,30 +265,30 @@ namespace CTRPluginFramework {
 		Item itemID;
 
 		if(!GameKeyboard::Copy(chatStr, 0, 0x16)) {
-			OSD::NotifySysFont(Language::getInstance()->get(TextID::CHAT_TEXT_2_I_COPY_ERROR), Color::Red);
+			HUD::Notify(Language::getInstance()->get(TextID::CHAT_TEXT_2_I_COPY_ERROR), Color::Red);
 			return;
 		}
 
 		if(!GameKeyboard::ConvertToItemID(chatStr, itemID)) {
-			OSD::NotifySysFont(Language::getInstance()->get(TextID::CHAT_TEXT_2_I_INVALID), Color::Red);
+			HUD::Notify(Language::getInstance()->get(TextID::CHAT_TEXT_2_I_INVALID), Color::Red);
 			return;
 		}
 
 		u8 slot = 0;
 		if(!Inventory::GetNextItem({0x7FFE, 0}, slot)) {
-			OSD::NotifySysFont(Language::getInstance()->get(TextID::INVENTORY_SEARCH_INV_FULL), Color::Red);
+			HUD::Notify(Language::getInstance()->get(TextID::INVENTORY_SEARCH_INV_FULL), Color::Red);
 			return;
 		}
 
 		if(!itemID.isValid(false)) {
-			OSD::NotifySysFont(Language::getInstance()->get(TextID::INVENTORY_SEARCH_INVALID), Color::Red);
+			HUD::Notify(Language::getInstance()->get(TextID::INVENTORY_SEARCH_INVALID), Color::Red);
 			return;
 		}
 
 		Inventory::WriteSlot(slot, itemID);
 
 		std::string itemName = itemID.GetName();
-		OSD::NotifySysFont(Utils::Format(Language::getInstance()->get(TextID::CHAT_TEXT_2_I_SPAWNED).c_str(), itemName.c_str(), itemID));
+		HUD::Notify(Utils::Format(Language::getInstance()->get(TextID::CHAT_TEXT_2_I_SPAWNED).c_str(), itemName.c_str(), itemID));
 	}
 //Clear Inventory
 	void ClearInventory(MenuEntry *entry) {

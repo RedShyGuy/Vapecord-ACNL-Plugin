@@ -431,7 +431,10 @@ namespace CTRPluginFramework {
 		ISLC->Append(CreateEntry(TextID::ALL_TOURS, alltour, TextID::ALL_TOURS_NOTE, MenuEntryId::IslandAllTours)),
 		ISLC->Append(CreateEntry(TextID::ISLAND_ACRE, acreMod, menuAcreMod, TextID::ISLAND_ACRE_NOTE, MenuEntryId::IslandAcre)),
 		ISLC->Append(CreateEntry(TextID::ISLAND_BUILDING, buildingMod, menuBuildingMod, TextID::ISLAND_BUILDING_NOTE, MenuEntryId::IslandBuilding)),
-		ISLC->Append(CreateEntry(TextID::ISLAND_SAVER, nullptr, IslandSaver, TextID::ISLAND_SAVER_NOTE, MenuEntryId::IslandSaver));
+		ISLC->Append(CreateEntry(TextID::ISLAND_SAVER, nullptr, IslandSaver, TextID::ISLAND_SAVER_NOTE, MenuEntryId::IslandSaver)),
+		ISLC->Append(EntryWithHotkey(CreateEntry(TextID::ISLAND_ONLINE_OPTIONS, IslandOnlineOptions, TextID::ISLAND_ONLINE_OPTIONS_NOTE, MenuEntryId::IslandOnlineOptions), {
+			NamedHotkey(Key::Y | Key::DPadUp, TextID::ISLAND_ONLINE_OPTIONS)
+		}));
 		menu->Append(ISLC);
 
 	//////////////
@@ -649,7 +652,7 @@ namespace CTRPluginFramework {
 	///////////////////
 	/*Pretendo Folder*/
 	///////////////////
-		//MenuFolder *PRET = CreateFolder(FolderType::Pretendo);
+		MenuFolder *PRET = CreateFolder(FolderType::Pretendo);
 	////////////////////////////////
 	/*Players In Session SubFolder*/
 	////////////////////////////////
@@ -663,13 +666,14 @@ namespace CTRPluginFramework {
 	////////////////////////////////
 	/*PIA logger Options SubFolder*/
 	////////////////////////////////
-	/*
+	///*
 		MenuFolder *PIALOG = CreateFolder(FolderType::Pretendo, SubFolder::PIALoggerOptions);
+		PRET->Append(CreateEntry(TextID::PLAYERS_IN_SESSION, nullptr, PretendoPlayersInSessionEntry, TextID::NONE, MenuEntryId::PretendoPlayersInSession)),
 	    PIALOG->OnAction = onPiaLoggerOptionsFolderAction;
 		PRET->Append(PIALOG);
-
+		
 		menu->Append(PRET);
-	*/
+	//*/
 	}
 }
 

@@ -8,6 +8,7 @@
 #include "core/Pretendo/Pretendo.hpp"
 #include "core/Pretendo/PatternManager.hpp"
 #include "core/Pretendo/PIALogger.hpp"
+#include "core/HUD.hpp"
 
 namespace CTRPluginFramework {
 	static const std::string NOTE =
@@ -25,8 +26,7 @@ Translators: NeitherHateNorLike(Chinese Simplified & Traditional), みるえも�
 	static const std::string GameVersion = "1.5";
 	static const std::string GameVersionUSAWA = "1.0"; //seems to be an exception
 
-	extern int UI_Pos;
-	bool OSD_SplashScreen(const Screen &Splash);
+	void SleepTime(void);
 	void IndoorsSeedItemCheck(void);
 	void InitMenu(PluginMenu *menu);
 
@@ -71,7 +71,7 @@ Translators: NeitherHateNorLike(Chinese Simplified & Traditional), みるえも�
 		}
 
 		else if(res == STRING_NOT_FOUND) {
-			OSD::NotifySysFont("Game Version Not Found!");
+			HUD::Notify("Game Version Not Found!", Color::Red);
 			return false;
 		}
 
@@ -79,40 +79,22 @@ Translators: NeitherHateNorLike(Chinese Simplified & Traditional), みるえも�
 	}
 
 
-	void SleepTime(void) {
-		OSD::Run(OSD_SplashScreen);
-
-		constexpr int tick_ms  = 150;
-		constexpr int ui_cycle = 8;
-
-		while(Game::IsRoomLoading()) {
-			UI_Pos = (UI_Pos + 1) % ui_cycle;
-			Sleep(Milliseconds(tick_ms));
-		}
-
-		OSD::Stop(OSD_SplashScreen);
-	}
-
 	void LaunchGameKeyboardAsCustomQwerty(Keyboard &keyboard);
 	void PerformAutoSaveBackup(void);
 	void ShowAntiScamScreen(void);
 
 	int	main(void) {
-		std::string region = Address::LoadRegion();
+		std::string region = Address::GetRegionName();
 
 		PluginMenu *menu = new PluginMenu(Color::White << "ACNL Vapecord Plugin " << region, majorV, minorV, revisV, NOTE);
 		menu->SynchronizeWithFrame(true);
 		menu->ShowWelcomeMessage(false);
 
-	//If title isn't ACNL
-		if(region.empty()) {
-			OSD::NotifySysFont("Plugin ready!");
-			menu->Run();
-			return 0;
-		}
+		HUD::Init();
 
+	//If title isn't ACNL
 		if (!CheckGameVersion()) {
-			OSD::NotifySysFont("Plugin ready!");
+			HUD::Notify("Plugin ready!");
 			menu->Run();
 			return 0;
 		}
@@ -126,7 +108,7 @@ Translators: NeitherHateNorLike(Chinese Simplified & Traditional), みるえも�
 		EnableAllPatches();
 
 		if (!Config::EnsureConfigFile()) {
-			OSD::NotifySysFont("Failed to create config file!", Color::Red);
+			HUD::Notify("Failed to create config file!", Color::Red);
 			menu->Run();
 			return 0;
 		}
@@ -147,7 +129,7 @@ Translators: NeitherHateNorLike(Chinese Simplified & Traditional), みるえも�
 
 	//Patch Pretendo + RCE fix + PIA Logger
         PatternManager pm;
-		//initPiaLogger(pm);
+		initPiaLogger(pm);
         initPretendoPatches(pm);
 
 		pm.Perform();
@@ -166,7 +148,7 @@ Translators: NeitherHateNorLike(Chinese Simplified & Traditional), みるえも�
 	//Set custom keyboard
 		Keyboard::SetCustomQwertyCallback(LaunchGameKeyboardAsCustomQwerty);
 
-		OSD::NotifySysFont("ACNL Vapecord Plugin ready!");
+		HUD::Notify("ACNL Vapecord Plugin ready!");
 	//Run Menu Loop
 		menu->Run();
 		return 0;

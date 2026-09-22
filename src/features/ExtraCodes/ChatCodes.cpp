@@ -4,7 +4,7 @@
 #include "core/game_api/Player.hpp"
 #include "core/game_api/Inventory.hpp"
 #include "Files.h"
-
+#include "core/HUD.hpp"
 #include <charconv>
 #include <optional>
 #include <span>
@@ -154,7 +154,7 @@ namespace CTRPluginFramework {
 
 						f_board.Flush();
 						f_board.Close();
-						OSD::NotifySysFont(Language::getInstance()->get(TextID::CHAT_BUTTON_COPIED), Color(0xFF0077FF));
+						HUD::Notify(Language::getInstance()->get(TextID::CHAT_BUTTON_COPIED), Color(0xFF0077FF));
 					}
 				}
 				break;
@@ -190,7 +190,7 @@ namespace CTRPluginFramework {
 						f_board.Flush();
 						f_board.Close();
 
-						OSD::NotifySysFont(Language::getInstance()->get(TextID::CHAT_BUTTON_CUT), Color(0x00FF6FFF));
+						HUD::Notify(Language::getInstance()->get(TextID::CHAT_BUTTON_CUT), Color(0x00FF6FFF));
 					}
 				}
 				break;
@@ -216,8 +216,8 @@ namespace CTRPluginFramework {
 		}
 
 		u32 KeyData = *(u32 *)(Game::BaseInvPointer() + 0xC) + 0x1328;
-		static const Address KeyEnter(0xAD7253);
-		static const Address KeyAt(0xAD75C0);
+		static Address KeyEnter(0xAD7253);
+		static Address KeyAt(0xAD75C0);
 
 		Process::Write8(KeyData + 0xC, 0x41);
 		Process::Write8(KeyData + 0x12B, 0x44);
@@ -242,11 +242,11 @@ namespace CTRPluginFramework {
 			0xE076, 0xE077
         };
 
-		static const Address IsOpen(0xAD7050);
+		static Address IsOpen(0xAD7050);
 
         if(*(u16 *)IsOpen.addr == 0x0103) {
 			u32 offset = 0;
-			static const Address customKey(0xAD7630);
+			static Address customKey(0xAD7630);
             offset = *(u32 *)customKey.addr;
             if(offset != 0) {
                 Process::Read32(offset + 0x224, offset);
@@ -265,7 +265,7 @@ namespace CTRPluginFramework {
     }
 
 	void morenumberisland(MenuEntry *entry) {
-		static const Address numbers(0xAD7158);
+		static Address numbers(0xAD7158);
 		Process::Write8(numbers.addr, 2);
 
 		if(!entry->IsActivated()) {
@@ -591,9 +591,9 @@ namespace CTRPluginFramework {
 							const auto& playerName = *reinterpret_cast<const std::array<u16, 9>*>(player + 0x55A8);
 							std::array<char, 9 * 4> playerNameUtf8 {};
 							utf16_to_utf8(reinterpret_cast<u8*>(playerNameUtf8.data()), playerName.data(), playerNameUtf8.size());
-							OSD::NotifySysFont((Player::GetColor(sender) << std::string(playerNameUtf8.data()) << Color::White) + ": " + result);
+							HUD::Notify((Player::GetColor(sender) << std::string(playerNameUtf8.data()) << Color::White) + ": " + result);
 						}
-						else OSD::NotifySysFont(result);
+						else HUD::Notify(result);
 					}
 					else {
 						static Address submitChat(0x218104);

@@ -26,17 +26,18 @@
 
 namespace CTRPluginFramework
 {
-    static const std::string PiaNatMapping[] = {
-        "Unknown", "Endpoint independent mapping", "Endpoint dependent mapping"
-    };
+	static const std::string PiaNatMapping[] = {
+		"Unknown", "Endpoint independent mapping", "Endpoint dependent mapping"
+	};
 
-    static const std::string PiaNatFiltering[] = {
-        "Unknown", "Port independent filtering", "Port dependent filtering"
-    };
+	static const std::string PiaNatFiltering[] = {
+		"Unknown", "Port independent filtering", "Port dependent filtering"
+	};
 
-    bool onPiaPlayersFolderAction(MenuFolder& folder, ActionType type);
-    bool onPiaLoggerOptionsFolderAction(MenuFolder& folder, ActionType type);
+	//bool onPiaPlayersFolderAction(MenuFolder& folder, ActionType type);
+	void PretendoPlayersInSessionEntry(MenuEntry *entry);
+	bool onPiaLoggerOptionsFolderAction(MenuFolder& folder, ActionType type);
 
-    void initPiaLogger(PatternManager& pm);
-    PatternStatus getPiaLoggerStatus();
+	void initPiaLogger(PatternManager& pm);
+	PatternStatus getPiaLoggerStatus();
 }

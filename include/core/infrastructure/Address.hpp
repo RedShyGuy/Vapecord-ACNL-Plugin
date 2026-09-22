@@ -25,6 +25,7 @@ namespace CTRPluginFramework {
 				JPNWA,
 				KOR,
 				KORWA,
+				INVALID = 0xFF,
 			};
 
 			Address(void);
@@ -35,7 +36,9 @@ namespace CTRPluginFramework {
 
 			static bool IsRegion(Region region);
 
-            static std::string LoadRegion(void);
+            static void LoadRegion(void);
+
+			static std::string GetRegionName(void);
 
 			u32 addr;
 			u32 origVal;
@@ -77,3 +80,5 @@ namespace CTRPluginFramework {
 			static std::unordered_map<u32, u32> origValList;
 	};
 }
+
+using CTRPluginFramework::Address;
