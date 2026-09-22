@@ -2,6 +2,14 @@ name: Build 3GX Plugin
 
 on:
   push:
+    paths-ignore:
+      - '**.md'
+      - '**.sh'
+      - '**.bat'
+      - '**.png'
+      - '**.svg'
+      - '**.xcf'
+      - '.gitignore'
     branches: ["master"]
   pull_request:
     branches: ["master"]
