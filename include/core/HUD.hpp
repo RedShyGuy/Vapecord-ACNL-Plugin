@@ -129,7 +129,7 @@ namespace HUD {
 
     /*
         Draw one line for the current frame only.
-        Intended for use from HUD callbacks registered with HUD::Run.
+        Only works from HUD callbacks registered with HUD::Run (calls outside of them are ignored).
     */
     void Draw(float x, float y, const std::string& str, const CTRPluginFramework::Color& color = CTRPluginFramework::Color::White, bool bottomScreen = false);
     void Draw(float x, float y, const Text& text, bool bottomScreen = false);

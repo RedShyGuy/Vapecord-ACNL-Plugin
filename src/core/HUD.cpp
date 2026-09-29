@@ -73,6 +73,12 @@ namespace HUD {
         using PersistSlot = TextSlot<PERSIST_BUF>;
         using DrawSlot = TextSlot<DRAW_BUF>;
 
+        struct DrawRequest {
+            std::u16string text;
+            nn::math::VEC2 pos{};
+            bool bottomScreen = false;
+        };
+
         struct State {
             gardenex::MessageDisplay notify;
             PersistSlot slots[PERSIST_SLOTS];
@@ -80,6 +86,10 @@ namespace HUD {
             LightLock callbackLock{};
             std::vector<Callback> callbacks;
             std::vector<Callback> callbacksTrash;
+        //HUD::Draw requests: collected while callbacks run, drawn by every render pass of the frame
+            std::vector<DrawRequest> drawQueue;
+            std::vector<DrawRequest> drawList;
+            bool collecting = false;
         };
 
         alignas(State) static u8 s_Buf[sizeof(State)];
@@ -97,34 +107,17 @@ namespace HUD {
             return buf;
         }
 
-        void DrawImmediate(float x, float y, std::u16string_view text, bool bottomScreen, nw::ut::Color8 rgbColor = {}) {
-            if (!s_State || text.empty()) {
+        void QueueDraw(float x, float y, std::u16string&& text, bool bottomScreen) {
+            if (!s_State || !s_State->collecting || text.empty() || s_State->drawQueue.size() >= DRAW_SLOTS) {
                 return;
             }
 
-            auto& slot = s_State->drawScratch;
-            slot.Set(text, x, y, bottomScreen, rgbColor);
-
-            ssys::ma::lyt::LayoutMgr::Get()->DrawBegin(bottomScreen);
-            slot.Draw();
+            s_State->drawQueue.push_back({std::move(text), {x, y}, bottomScreen});
         }
 
-        void DrawCb(void*) {
-            if (!s_State) {
-                return;
-            }
-
-        //Transient notifications on the top screen
-            ssys::ma::lyt::LayoutMgr::Get()->DrawBegin(false);
+    //Runs once per frame (top-left pass): timers + HUD::Run callbacks
+        void Tick() {
             s_State->notify.Update();
-            s_State->notify.Draw();
-
-        //Persistent text slots
-            for (auto& slot : s_State->slots) {
-                if (!slot.active) continue;
-                ssys::ma::lyt::LayoutMgr::Get()->DrawBegin(slot.bottomScreen);
-                slot.Draw();
-            }
 
             std::vector<Callback> callbacks;
             LightLock_Lock(&s_State->callbackLock);
@@ -140,10 +133,67 @@ namespace HUD {
             callbacks = s_State->callbacks;
             LightLock_Unlock(&s_State->callbackLock);
 
+            s_State->drawQueue.clear();
+            s_State->collecting = true;
             for (Callback cb : callbacks) {
                 if (cb) {
                     cb();
                 }
+            }
+            s_State->collecting = false;
+            s_State->drawList.swap(s_State->drawQueue);
+        }
+
+    //Runs once per render pass (top-left, top-right, bottom), only draws what belongs to that screen
+        void DrawPass(bool bottomScreen) {
+            auto* layoutMgr = ssys::ma::lyt::LayoutMgr::Get();
+
+        //Transient notifications on the top screen
+            if (!bottomScreen) {
+                layoutMgr->DrawBegin(false);
+                s_State->notify.Draw();
+            }
+
+        //Persistent text slots
+            for (auto& slot : s_State->slots) {
+                if (!slot.active || slot.bottomScreen != bottomScreen) continue;
+                layoutMgr->DrawBegin(bottomScreen);
+                slot.Draw();
+            }
+
+        //Per-frame HUD::Draw requests
+            auto& scratch = s_State->drawScratch;
+            for (const auto& req : s_State->drawList) {
+                if (req.bottomScreen != bottomScreen) continue;
+                scratch.Set(req.text, req.pos.x, req.pos.y, bottomScreen);
+                layoutMgr->DrawBegin(bottomScreen);
+                scratch.Draw();
+            }
+        }
+
+    //Top screen, left eye (also the only top pass when 3D is off)
+        void DrawTopLeftCb(void*) {
+            if (!s_State) {
+                return;
+            }
+            Tick();
+            DrawPass(false);
+        }
+
+    //Top screen, right eye (3D)
+        void DrawTopRightCb(void*) {
+            if (!s_State) {
+                return;
+            }
+            DrawPass(false);
+        }
+
+    //Bottom screen: MITM on the bottom layout draw, HUD is drawn on top of the game's layouts
+        void DrawBottomCb(ssys::ma::lyt::LayoutMgr* layoutMgr) {
+            HookContext& ctx = HookContext::GetCurrent();
+            ctx.OriginalFunction<void>(layoutMgr);
+            if (s_State) {
+                DrawPass(true);
             }
         }
 
@@ -390,10 +440,22 @@ namespace HUD {
         s_State = new (s_Buf) State{};
         LightLock_Init(&s_State->callbackLock);
 
-        static Hook hook;
-        hook.Initialize(Address(0x1B7354).addr, (u32)DrawCb);
-        hook.SetFlags(USE_LR_TO_RETURN);
-        hook.Enable();
+    //The game renders each screen/eye in its own pass (0x400 top-left, 0x410 top-right, 0x401 bottom),
+    //so we need one hook per pass or the HUD only shows up in one of them (e.g. one eye in 3D)
+        static Hook topLeftHook;
+        topLeftHook.Initialize(Address(0x1B7354).addr, (u32)DrawTopLeftCb);
+        topLeftHook.SetFlags(USE_LR_TO_RETURN);
+        topLeftHook.Enable();
+
+        static Hook topRightHook;
+        topRightHook.Initialize(Address(0x1B7438).addr, (u32)DrawTopRightCb);
+        topRightHook.SetFlags(USE_LR_TO_RETURN);
+        topRightHook.Enable();
+
+        static Hook bottomHook;
+        bottomHook.Initialize(Address(0x56A660).addr, (u32)DrawBottomCb);
+        bottomHook.SetFlags(MITM_MODE);
+        bottomHook.Enable();
     }
 
     void Notify(const std::string& str, const Color& color) {
@@ -451,8 +513,7 @@ namespace HUD {
             return;
         }
 
-        std::u16string buf = WithResetTag(str, color);
-        DrawImmediate(x, y, std::u16string_view{buf}, bottomScreen);
+        QueueDraw(x, y, WithResetTag(str, color), bottomScreen);
     }
 
     void Draw(float x, float y, const Text& text, bool bottomScreen) {
@@ -460,8 +521,7 @@ namespace HUD {
             return;
         }
 
-        std::u16string buf = WithResetTag(text);
-        DrawImmediate(x, y, std::u16string_view{buf}, bottomScreen);
+        QueueDraw(x, y, WithResetTag(text), bottomScreen);
     }
 
     Handle Show(float x, float y, const std::string& str, const Color& color, bool bottomScreen) {

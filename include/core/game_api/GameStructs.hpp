@@ -20,6 +20,39 @@ using Nanoseconds = u64;
 
 namespace CTRPluginFramework {
 
+    enum class FgKind : u8 {
+        HoleOrBroken = 0, // hole, seed, broken flowers/holes
+        WiltedPlant, // wilted bush, trees, cedar, palm, bamboo
+        StumpOrCutTree, // cut trees/cedars/palms/bamboo regrowing + all stumps
+        TreeSapling, // normal/fruit/money tree, growth stage 1
+        Tree, // normal/fruit/money tree, growth stage 2-4 + fully grown variants
+        PalmSapling, // coconut/banana palm, growth stage 1
+        PalmTree, // coconut/banana palm, growth stage 2-4 + fully grown
+        CedarSapling, // cedar, growth stage 1
+        CedarTree, // cedar, growth stage 2-4 + fully grown variants
+        Weed,
+        Rock,
+        Tulip,
+        Pansy,
+        Cosmos,
+        Rose,
+        GoldRose,
+        Carnation,
+        JacobsLadder,
+        Rafflesia, // incl. wilted rafflesia
+        WiltedFlower, // all wilted flowers except rafflesia
+        Dandelion, // dandelions + dandelion puffs
+        Clover, // lucky clovers + clover weeds
+        BushSapling, // all bushes, growth stage 1
+        Bush, // all bushes, growth stage 2 + fully grown, unused bush
+        Pattern,
+        Bamboo, // bamboo growth stage 2-3 + fully grown
+        BambooShoot, // bamboo growth stage 1
+        Lily,
+        Violet,
+        Invalid,
+    };
+
     enum class PlayerStatus : u8 {
         Town_00 = 0,
         Town_01 = 1,
@@ -56,12 +89,12 @@ namespace CTRPluginFramework {
         ToyHammer, //(0x3364 -> 0x3365)
         Megaphone, //(0x3366)
         Timer, //(0x3367)
-        HandheldFireworks, //(0x3368 -> 0x3369) 
+        HandheldFireworks, //(0x3368 -> 0x3369)
         FountainFirework, //(0x339F)
-        Umbrellas, //(0x27E6 -> 0x280A) 
+        Umbrellas, //(0x27E6 -> 0x280A)
         PartyPopper, //(0x336A)
         BubbleWands, //(0x336B)
-        Balloons, //(0x336C -> 0x3383) 
+        Balloons, //(0x336C -> 0x3383)
         Pinwheels, //(0x3384 -> 0x338B)
         Beans, //(0x338E)
         Good_LuckRoll, //(0x338F)
@@ -195,7 +228,7 @@ namespace CTRPluginFramework {
         u8 emoticons[40];
     };
 
-    struct Mannequin {
+    struct Mannequin { //Size: 0x18
         Item Hat; //Item ID < 0xXXXX
         Item Accessory; //Item ID < 0xXXXX
         Item TopWear; //Item ID < 0xXXXX
@@ -211,9 +244,9 @@ namespace CTRPluginFramework {
         u8 Unknown02;
 
         bool operator==(const TownID& townID) const {
-            return TID == townID.TID && 
-                    std::equal(std::begin(DataTownName), std::end(DataTownName), std::begin(townID.DataTownName)) && 
-                    Unknown01 == townID.Unknown01 && 
+            return TID == townID.TID &&
+                    std::equal(std::begin(DataTownName), std::end(DataTownName), std::begin(townID.DataTownName)) &&
+                    Unknown01 == townID.Unknown01 &&
                     Unknown02 == townID.Unknown02;
         }
 
@@ -234,9 +267,9 @@ namespace CTRPluginFramework {
         u8 ZeroPad;
 
         bool operator==(const PlayerID& playerID) const {
-            return PID == playerID.PID && 
-                    std::equal(std::begin(PlayerName), std::end(PlayerName), std::begin(playerID.PlayerName)) && 
-                    Gender == playerID.Gender && 
+            return PID == playerID.PID &&
+                    std::equal(std::begin(PlayerName), std::end(PlayerName), std::begin(playerID.PlayerName)) &&
+                    Gender == playerID.Gender &&
                     ZeroPad == playerID.ZeroPad;
         }
 
@@ -257,9 +290,9 @@ namespace CTRPluginFramework {
         u8 TPC_County;
 
         bool operator==(const PersonalID& personalID) const {
-            return PlayerData == personalID.PlayerData && 
-                    TownData == personalID.TownData && 
-                    TPC_Country == personalID.TPC_Country && 
+            return PlayerData == personalID.PlayerData &&
+                    TownData == personalID.TownData &&
+                    TPC_Country == personalID.TPC_Country &&
                     TPC_County == personalID.TPC_County;
         }
     };
@@ -305,7 +338,7 @@ namespace CTRPluginFramework {
         EncVal Badge_HHAScore_Value;
         EncVal Badge_PlayTime_Value;
         EncVal Badge_Helper_Value;
-        EncVal Badge_Dream_Value;      
+        EncVal Badge_Dream_Value;
     };
 
     struct BDG {
@@ -333,17 +366,17 @@ namespace CTRPluginFramework {
         u8 Badge_PlayTime;
         u8 Badge_Helper;
 
-        u8 Badge_Dream;   
+        u8 Badge_Dream;
     };*/
 
-    struct PlayerBadges {
+    struct PlayerBadges { //Size: 0xE8
         EncVal BadgeValues[24]; //0x567C: 24 badges
         u8 Badges[24]; //0x573C: 24 badges
         EncVal Unknown1; //0x5754 -> 0x575B
         EncVal Unknown1_1; //0x575C -> 0x5763
     };
 
-    struct HHAHouseInfo {
+    struct HHAHouseInfo { //Size: 0x2C
         s32 HHAHousePoints; //0x5764 -> 0x5767
         u16 HHAItem1; //0x5768 -> 0x5777 //Only used if no theme
         u16 HHAItem2; //0x5768 -> 0x5777 //Only used if no theme
@@ -474,7 +507,7 @@ namespace CTRPluginFramework {
         u8 Unknown83 : 1; //Villager related
         u8 Unknown84 : 1; //Villager related
         u8 Unknown85 : 1; //Villager related
-        u8 Unknown86 : 1; 
+        u8 Unknown86 : 1;
         u8 Unknown87 : 1; //isabelle welcomed you in your tent (actually also gets set when placing any item in house for first time, if never been in tent)
         u8 PeteIntroduction : 1;
         u8 Unknown89 : 1; //Reese and Tommy conversation (ReTail)
@@ -486,7 +519,7 @@ namespace CTRPluginFramework {
         u8 Unknown95 : 1; //Gets set when you talk to tom nook after your house was built = 0
         u8 HouseUpgradeFinished : 1; //next day when house upgrade is finished = 1 | when you talk to tom nook after your house was built = 0
         u8 Unknown97 : 1;
-        u8 Unknown98 : 1; 
+        u8 Unknown98 : 1;
         u8 Unknown99 : 1;
         u8 Unknown100 : 1;
         u8 Unknown101 : 1;
@@ -532,7 +565,7 @@ namespace CTRPluginFramework {
         u8 Unknown141 : 1;
         u8 Unknown142 : 1;
         u8 Unknown143 : 1;
-        u8 Unknown144 : 1; 
+        u8 Unknown144 : 1;
         u8 Unknown145 : 1;
         u8 Unknown146 : 1;
         u8 TalkToLyleForTheFirstTime : 1;
@@ -608,7 +641,7 @@ namespace CTRPluginFramework {
         u8 Permit_Points8 : 1; //mayor permit? (128 points?)
         u8 Permit_Points9 : 1; //mayor permit? (256 points?)
         u8 Permit_Points10 : 1; //mayor permit? (512 points?)
-        u8 Unknown220 : 1; 
+        u8 Unknown220 : 1;
         u8 Unknown221 : 1;
         u8 Unknown222 : 1;
         u8 Unknown223 : 1;
@@ -640,7 +673,7 @@ namespace CTRPluginFramework {
         u8 Unknown249 : 1; //Gets set and unset at a new day
         u8 Unknown250 : 1;
         u8 HasClubTortimerMembership : 1;
-        u8 ClubTortimerFirstAsked : 1; //Kappn asks user for the first time 
+        u8 ClubTortimerFirstAsked : 1; //Kappn asks user for the first time
         u8 ClubTortimerRulesExplained : 1;
         u8 Unknown254 : 1;
         u8 Unknown255 : 1;
@@ -812,7 +845,7 @@ namespace CTRPluginFramework {
         u16 ZeroPad_1; //0x2E
         u16 ReceiverID; //0x30
         u8 ZeroPad_2[50]; //0x32
-        u16 Unknown2; //0x64 //Some form of ID? 
+        u16 Unknown2; //0x64 //Some form of ID?
         u16 ZeroPad_3; //0x66
         wchar Header[32]; //0x68 //Max amount is 32 UTF-16 characters
         u16 ZeroPad_4; //0xA8
@@ -894,7 +927,7 @@ namespace CTRPluginFramework {
         u8 Snowtyke_SnowBunny : 1; //when building 3 of his family members
         u8 Snowtyke_SmallIgloo : 1; //when building 2 of his family members
         u8 Snowtyke_SnowmanMatryoshka : 1; //when getting whole family together
-        u8 Snowboy_Gift : 1; 
+        u8 Snowboy_Gift : 1;
         u8 _pad : 3;
     };
 
@@ -987,7 +1020,7 @@ namespace CTRPluginFramework {
         SnowmanLetterType SnowmanLetter; //0x8B21 //received the next day
         Item SnowmanGift; //0x8B22 //only used if the item is dynamic (like snowboy gifts)
         u16 UnknownYear3; //0x8B26 //Set to 0 in Player ctor
-        SnowmanBingoCard BingoCard; //0x8B28 
+        SnowmanBingoCard BingoCard; //0x8B28
         u8 CurrrentBingoCard; //0x8B2C //BingoCards are not random, they are calculated based on this number (0 - 255)
         u8 Unk51; //0x8B2D //Set to 0 in Player ctor
         u16 Unk52; //0x8B2E //Set to 0 in Player ctor
@@ -1020,17 +1053,17 @@ namespace CTRPluginFramework {
     Starting with FashionForward and ending with SmallTalk
     */
     static const u32 InitiativeGoals[102] = {
-        0, 1, 1, 20, 1, 10000, 20, 1, 1, 
-        1, 5, 50000, 1, 3, 20, 20, 10, 1, 
-        1, 3, 1, 1, 1, 3, 3, 10, 1, 
-        1, 1, 3, 3, 8, 1, 1, 5000, 1, 
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 
-        1, 1, 1, 1, 1, 1, 1, 1, 5, 
-        1, 1, 1, 5000, 100, 1, 5, 1, 1, 
-        1, 1, 150, 1, 500, 1, 5, 10, 1, 
-        1, 1, 1, 1, 1, 1, 3, 1, 1, 
+        0, 1, 1, 20, 1, 10000, 20, 1, 1,
+        1, 5, 50000, 1, 3, 20, 20, 10, 1,
+        1, 3, 1, 1, 1, 3, 3, 10, 1,
+        1, 1, 3, 3, 8, 1, 1, 5000, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 5,
+        1, 1, 1, 5000, 100, 1, 5, 1, 1,
+        1, 1, 150, 1, 500, 1, 5, 10, 1,
+        1, 1, 1, 1, 1, 1, 3, 1, 1,
         1, 1, 5
     };
 
@@ -1160,10 +1193,10 @@ namespace CTRPluginFramework {
         u8 Unknown2; //0x8B99 //???; Set to 0 in player ctor
         u8 Unknown3; //0x8B9A //???; Set to 0 in player ctor
         u8 Padding1; //0x8B9B //Padding: Not set in player ctor
-        
+
         u32 InitiativeProgress[102]; //0x8B9C //If current progress is the same or higher than initiative goal, then initiative is completed
         u8 Unknown20[0x66]; //0x8D34 //???; 0x66 buffer size set to 0 in player ctor
-        
+
         u8 Padding2; //0x8B9A //Padding: Not set in player ctor
         u8 Padding3; //0x8B9B //Padding: Not set in player ctor
         u32 Unknown23; //0x8D9C //???; Set to 0 in player ctor
@@ -1217,7 +1250,7 @@ namespace CTRPluginFramework {
         TownID TownData1; //0x0
         TownID TownData2; //0x16
         u16 VillagerID; //0x2C //Set to 0xFFFF in player ctor
-        u8 VillagerPersonality; //0x2E //Set to 0x8 in player ctor 
+        u8 VillagerPersonality; //0x2E //Set to 0x8 in player ctor
         u8 Padding; //0x2F //Padding: Not set in ctor
     };
 
@@ -1283,7 +1316,7 @@ namespace CTRPluginFramework {
         u8 LyleWhatsNew : 5;
     };
 
-    struct MiiData {
+    struct MiiData { //Size: 0xA8
         u8 MiiFace[92]; //0x5538 -> 0x5595 //Based on https://3dbrew.org/wiki/Mii#Mii_format
         u16 ZeroPad_1 = 0;  //0x5594 //U16 Zero Padding; Always 0x0000
         u16 Mii_CRC16;
@@ -1337,7 +1370,7 @@ namespace CTRPluginFramework {
         ACNL_Pattern Patterns[10]; //0xCC //10 Patterns
         u8 PatternOrder[10]; //0x552C //Order of patterns from 0x0 - 0x9
         u16 Padding_1; //0x5536 //U16 Zero Padding; Always 0x0000
-        MiiData PlayerMii;
+        MiiData PlayerMii; //0x5538
         u8 HasMii; //0x55E0 //Values: 0 = No Mii, 1 = Has Mii, <1 = Has Mii, face doesn't show
         u8 Padding_2; //0x55E1 //Not Verified: U8 Zero Padding; Always 0x00
         u16 Padding_3; //0x55E2 //Not Verified: U16 Zero Padding; Always 0x0000
@@ -1352,7 +1385,7 @@ namespace CTRPluginFramework {
         u16 YearRegistered; //0x5676
         u8 MonthRegistered; //0x5678
         u8 DayRegistered; //0x5679
-        u16 Padding_5; //0x567A: Zero Padding; Always 0x0000  
+        u16 Padding_5; //0x567A: Zero Padding; Always 0x0000
         PlayerBadges Badges; //0x567C
         HHAHouseInfo HHAHouse; //0x5764
         ACNL_DreamAddress DreamCode;  //0x5790
@@ -1447,7 +1480,7 @@ namespace CTRPluginFramework {
         Item Dressers[180]; //Each dresser is 60 long
         wchar BDayWish[0x22]; //0x9660
         /*
-        ACNL_Letter Letter1; 
+        ACNL_Letter Letter1;
         ACNL_Letter Letter2;
         ACNL_Letter Letter3;
         ACNL_Letter Letter4;
@@ -1457,7 +1490,7 @@ namespace CTRPluginFramework {
         u8 UnkBuffer12[0x40];
         u8 UnknownNotSetYet8[0xA4];
         */
-        u8 UnknownBuffer[0xC84]; 
+        u8 UnknownBuffer[0xC84];
         Encyclopedia_Sizes EncyclopediaSizes; //0xA328
         u8 UnkBuffer11[0x84]; //0xA485
         UnknownStruct10 UnkStruct10_1; //0xA508
@@ -1529,7 +1562,7 @@ namespace CTRPluginFramework {
         u8 Unknown9 : 1;
         u8 Unknown10 : 1;
         u8 Unknown11 : 1;
-        u8 Unknown12 : 1; 
+        u8 Unknown12 : 1;
         u8 Unknown13 : 1;
         u8 RelatedToBelowButUnk : 1;
         u8 MovingToAnotherTown : 1;
@@ -1618,7 +1651,7 @@ namespace CTRPluginFramework {
     9 => Might be default
     0xA
     0xB => Villager finished telling you they dug the time capsule up themselves
-    
+
     */
     struct Unknown_VillagerData1_Bitfield {
         u8 Unknown0 : 1;
@@ -2095,7 +2128,7 @@ namespace CTRPluginFramework {
         u64 Unknown11; //0x62250 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
         u64 Unknown12; //0x62258 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
         u8 Unknown13[4]; //0x62260
-        u8 NooklingState; //0x62264 //level of nookling shop 
+        u8 NooklingState; //0x62264 //level of nookling shop
         u8 NooklingStateUnknown; //0x62265
         u8 Unknown14[2]; //0x62266
         EncVal NooklingBellsSpent; //0x62268
@@ -2104,38 +2137,38 @@ namespace CTRPluginFramework {
         Item AblesItems[5]; //0x622EC
         Item AblesPatternItems[8]; //0x62300
         EncVal Unknown16; //0x62320
-        u8 Unknown17[0x10]; //0x62328 //likely padding 
+        u8 Unknown17[0x10]; //0x62328 //likely padding
         ACNL_Pattern AbleDisplayPattern[8]; //0x62338
         Item LabellesItems[7]; //0x666B8 //Accessories in right of shop
         u8 Unknown18[8]; //0x666D4 //likely padding
         EncVal Unknown19; //0x666DC
         wchar ScrappedString[4]; //0x666E4
         EncVal Unknown20; //0x666EC
-        u8 LeifUnlockStatus; //0x666F4 //0 = locked; 1 = Being Built; X = Levels 
+        u8 LeifUnlockStatus; //0x666F4 //0 = locked; 1 = Being Built; X = Levels
         u8 Unknown21; //0x666F5
         Item LeifItems[11]; //0x666F6
         u8 Unknown22[14]; //0x66722 //likely padding
         Item ReddItems[4]; //0x66730
         u8 Unknown23[4]; //0x66740 //likely padding
-        PersonalID UnknownPID1[4]; //0x66744 //unused? 
+        PersonalID UnknownPID1[4]; //0x66744 //unused?
         EncVal Unknown24; //0x667FC
-        EncVal Unknown25; //0x66804 
-        EncVal Unknown26; //0x6680C 
-        EncVal Unknown27; //0x66814 
+        EncVal Unknown25; //0x66804
+        EncVal Unknown26; //0x6680C
+        EncVal Unknown27; //0x66814
         u8 Unknown28[8]; //0x6681C
-        EncVal Unknown29; //0x66824 
-        u8 KickUnlockStatus; //0x6682C //0 = locked; 1 = Being Built; 2 = Built/Unlocked 
+        EncVal Unknown29; //0x66824
+        u8 KickUnlockStatus; //0x6682C //0 = locked; 1 = Being Built; 2 = Built/Unlocked
         u8 Padding4; //0x6682D
         Item KicksItems[6]; //0x6682E
         u8 Unknown31[6]; //0x66846
-        Item UnkItems1[4]; //0x6684C //ctor does this and below seperately, 4 at a time 
+        Item UnkItems1[4]; //0x6684C //ctor does this and below seperately, 4 at a time
         Item UnkItems2[4]; //0x6685C
         u32 Padding5; //0x6686C
-        u64 Unknown32; //0x66870 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64) 
-        u64 Unknown33; //0x66878 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64) 
-        u64 Unknown34; //0x66880 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64) 
-        u64 Unknown35; //0x66888 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64) 
-        u8 Unknown36[0x10]; //0x66890 //likely padding 
+        u64 Unknown32; //0x66870 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u64 Unknown33; //0x66878 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u64 Unknown34; //0x66880 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u64 Unknown35; //0x66888 //ctor sets 0x7FFFFFFFFFFFFFFF (max positive U64)
+        u8 Unknown36[0x10]; //0x66890 //likely padding
         Item ReTailPremiumItems[5]; //0x668A0 //if wealthy town, 2 items are shown, if people on streetpass are seen, even more
         Item ReTailItems[8]; //0x668B4
         u8 ReTailItemsPlayerIndex[8]; //0x668D4 //Which player put the item up for sale, unsure what the values are for villagers
@@ -2170,7 +2203,7 @@ namespace CTRPluginFramework {
         EncVal Unknown58;
         EncVal Unknown59[2];
         EncVal TurnipPrices[12]; //0x6ADE0; first 6 are AM, second 6 are PM
-        u8 Unknown60[8]; 
+        u8 Unknown60[8];
         Item UnkItem6;
         Item UnkItems7[2]; //new year hats?
         Item CampgroundShopItems[2];
@@ -2179,7 +2212,7 @@ namespace CTRPluginFramework {
         u8 Unknown62[8];
         //This is likely town tree stuff
         ACNL_Date Unknown63;
-        ACNL_Date Unknown64; 
+        ACNL_Date Unknown64;
         u8 Unknown65[0x44];
     /*
         ACNL_Date FossilDonationDate[0x43]; //0x6AEB8
@@ -2226,12 +2259,12 @@ namespace CTRPluginFramework {
         u8 Padding7; //0x6FEB7
         u16 IslandAcres[4*4]; //0x6FEB8; 16 acres in total; 4 colunms, 4 rows. Game reads Acre IDs as u16;
         Item IslandItems[(16*16)*(2*2)]; //0x6FED8; 16*16 items per acre; Items only cover map acres (2*2); 0x400 of items
-        ACNL_Building IslandBuildings[2]; //Island Hut and Lloid
-        ACNL_Pattern TownFlag; //0x70F1C
-        u8 Unknown81[0x174]; //0x7178C
+        ACNL_Building IslandBuildings[2]; //0x70ED8 //Island Hut and Lloid
+        ACNL_Pattern TownFlag; //0x70EE0
+        u8 Unknown81[0x1B0]; //0x71750
     };
 
-    struct ACNL_Cenus_Data_Type { //Size: 0x14 
+    struct ACNL_Cenus_Data_Type { //Size: 0x14
         u32 TotalPlayerStat; //All player stats combined
         u32 PlayerStats[4]; //For each player
     };
@@ -2266,7 +2299,7 @@ namespace CTRPluginFramework {
         int iVar1;
         undefined4 uVar2;
         undefined4 uVar3;
-        
+
         if (*(int *)(*(int *)(param_1 + 0x30) + 0x3b0) != -1) {
             iVar1 = FUN_002B8858();
             if (iVar1 != 0) {
@@ -2280,7 +2313,7 @@ namespace CTRPluginFramework {
             }
             FUN_0000e728(param_1,*DAT_00013a00,DAT_00013a00[1]);
         }
-        
+
         DAT_00013a00 = 0xC0920C (BFD5D0) which is FUN_000135d0
         DAT_00013a00[1] = 0xC09210 (0)
     }
@@ -2289,7 +2322,7 @@ namespace CTRPluginFramework {
         int iVar1;
         int iVar2;
         undefined4 *puVar3;
-        
+
         iVar1 = FUN_0000e548(*(undefined4 *)(param_1 + 0x40));
         if ((iVar1 == 0) && (iVar1 = FUN_0000f7e0(*(undefined4 *)(param_1 + 0x30)), iVar1 == 0)) {
             if (*(int *)(param_1 + 0x40) != 0) {
@@ -2523,8 +2556,7 @@ namespace CTRPluginFramework {
         u32 WaterEggCaught; //0x73744 //The other eggs are not listed as a stat, idk why
     };
 
-    struct ACNL_Census_Player_Stats { //Size: 0x1448
-        u32 Checksum; //0x7250C
+    struct ACNL_Census_Player_Stats { //Size: 0x1444
         ACNL_Cenus_Data_Type BellsEarned; //0x72510
         ACNL_Cenus_Data_Type ABDBalance; //0x72524
         ACNL_Cenus_Data_Type BellsSpent; //0x72538
@@ -2605,7 +2637,7 @@ namespace CTRPluginFramework {
         ACNL_Cenus_Data_Type MEOWCouponsEarned; //0x72B14
         ACNL_Cenus_Data_Type MEOWCouponsSpent; //0x72B28
         /*0x62C*/ACNL_Cenus_Data_Type Unused; //0x72B3C //NON_PLAYER_SPECIFIC //KOKT82
-        
+
         /*
         These are only used for initiatives
         They are NOT present in the Census Menu
@@ -2613,7 +2645,7 @@ namespace CTRPluginFramework {
         Insect_Caught InsectsCaughtData; //0x72B50
 
         u32 Unknown3[288]; //0x72C70
-        
+
         Fish_Caught FishCaughtData; //0x730F0
 
         u32 Unknown4[288]; //0x73210
@@ -2708,7 +2740,8 @@ namespace CTRPluginFramework {
     struct ACNL_Player_SharedData { //Size: 0x181FF //Starts at 0x71900
         ACNL_Player_SharedData_Unknown0 Unknown0; //0x71900
         ACNL_Player_SharedData_Unknown1 Unknown1; //0x71924
-        ACNL_Census_Player_Stats PlayerStats; //0x7250C
+        u32 Unknown2; //0x7250C
+        ACNL_Census_Player_Stats PlayerStats; //0x72510
         ACNL_Player_StorageBox StorageBox; //0x73954
         u8 Unknown14[32]; //0x89AE0
     };
@@ -2719,7 +2752,7 @@ namespace CTRPluginFramework {
         u8 HeaderPadding[0x74]; //Always 0
     };
 
-    struct ACNL_SaveHeader {
+    struct ACNL_SaveHeader { //Size: 0x20
         u32 HeaderChecksum; //0x80 Checksum of the next 0x1C of header data
         u16 SaveVerifier1; //Always 0x009E; 0x00F8 pre-WA
         u8 SaveVerifier2; //Has to be exactly 0x2; 0x2 pre-WA
