@@ -588,10 +588,14 @@ namespace CTRPluginFramework {
 
 					if (IsTranslateOther()) {
 						if (u32 player = Player::GetSaveOffset(sender)) {
+							HUD::TagColor pColors[4] = { HUD::Blue, HUD::Red, HUD::Green, HUD::Orange };
+
 							const auto& playerName = *reinterpret_cast<const std::array<u16, 9>*>(player + 0x55A8);
 							std::array<char, 9 * 4> playerNameUtf8 {};
 							utf16_to_utf8(reinterpret_cast<u8*>(playerNameUtf8.data()), playerName.data(), playerNameUtf8.size());
-							HUD::Notify((Player::GetColor(sender) << std::string(playerNameUtf8.data()) << Color::White) + ": " + result);
+
+							HUD::Text message = pColors[sender] << std::string(playerNameUtf8.data()) << HUD::White << ": " << result;
+							HUD::Notify(message);
 						}
 						else HUD::Notify(result);
 					}

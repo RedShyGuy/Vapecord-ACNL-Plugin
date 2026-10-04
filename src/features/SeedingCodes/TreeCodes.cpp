@@ -17,6 +17,7 @@ namespace CTRPluginFramework {
 			fruitstay.Unpatch();
 		}
 	}
+
 //Axe Tree Shake
 	void shakechop(MenuEntry *entry) {
 		static Address shake1(0x5971D4);
@@ -37,6 +38,7 @@ namespace CTRPluginFramework {
 			shake4.Unpatch();
 		}
     }
+	
 //Fruit Tree Item Modifier
 	void fruititemmod(MenuEntry *entry) {
 		static Address fruitmod(0x2FE6A0);
