@@ -84,17 +84,22 @@ Translators: NeitherHateNorLike(Chinese Simplified & Traditional), みるえも�
 	void ShowAntiScamScreen(void);
 
 	int	main(void) {
-		std::string region = Address::GetRegionName();
+		bool isACNL = CheckGameVersion();
+		std::string region = "";
+		
+		if (isACNL) {
+			region = Address::GetRegionName();
+		}
 
 		PluginMenu *menu = new PluginMenu(Color::White << "ACNL Vapecord Plugin " << region, majorV, minorV, revisV, NOTE);
 		menu->SynchronizeWithFrame(true);
 		menu->ShowWelcomeMessage(false);
-
-		HUD::Init();
-
-	//If title isn't ACNL
-		if (!CheckGameVersion()) {
-			HUD::Notify("Plugin ready!");
+		
+		if (isACNL) {
+			HUD::Init();
+		}
+		else {
+			OSD::Notify("Plugin ready!");
 			menu->Run();
 			return 0;
 		}
